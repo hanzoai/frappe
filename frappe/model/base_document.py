@@ -115,6 +115,10 @@ class BaseDocument:
 		(
 			"doctype",
 			"meta",
+<<<<<<< HEAD
+=======
+			"_meta",
+>>>>>>> c7847395da (fix: remove thread-unsafe class attributes (#22097))
 			"flags",
 			"parent_doc",
 			"_table_fields",
@@ -122,7 +126,10 @@ class BaseDocument:
 			"_doc_before_save",
 			"_table_fieldnames",
 			"_reserved_keywords",
+<<<<<<< HEAD
 			"permitted_fieldnames",
+=======
+>>>>>>> c7847395da (fix: remove thread-unsafe class attributes (#22097))
 			"dont_update_if_missing",
 		)
 	)
