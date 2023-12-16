@@ -279,6 +279,12 @@ def add_years(date, years):
 
 
 def date_diff(string_ed_date, string_st_date):
+	"""Returns the difference between given two dates in days."""
+	return days_diff(string_ed_date, string_st_date)
+
+
+def days_diff(string_ed_date, string_st_date):
+	"""Returns the difference between given two dates in days."""
 	return (getdate(string_ed_date) - getdate(string_st_date)).days
 
 
