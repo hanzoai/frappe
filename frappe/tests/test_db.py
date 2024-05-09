@@ -17,6 +17,7 @@ from frappe.query_builder.functions import Concat_ws
 from frappe.tests.test_query_builder import db_type_is, run_only_if
 from frappe.tests.utils import FrappeTestCase, timeout
 from frappe.utils import add_days, now, random_string, set_request
+from frappe.utils.data import now_datetime
 from frappe.utils.testutils import clear_custom_fields
 
 
@@ -491,8 +492,23 @@ class TestDB(FrappeTestCase):
 
 		self.assertEqual(frappe.db.exists(dt, [["name", "=", dn]]), dn)
 
+<<<<<<< HEAD
 	def test_estimated_count(self):
 		self.assertGreater(frappe.db.estimate_count("DocField"), 100)
+=======
+	def test_datetime_serialization(self):
+		dt = now_datetime()
+		dt = dt.replace(microsecond=0)
+		self.assertEqual(str(dt), str(frappe.db.sql("select %s", dt)[0][0]))
+
+		frappe.db.exists("User", {"creation": (">", dt)})
+		self.assertIn(str(dt), str(frappe.db.last_query))
+
+		before = now_datetime()
+		note = frappe.get_doc(doctype="Note", title=frappe.generate_hash(), content="something").insert()
+		after = now_datetime()
+		self.assertEqual(note.name, frappe.db.exists("Note", {"creation": ("between", (before, after))}))
+>>>>>>> 5de5e25df6 (fix: datetime comparison in QB (#26364))
 
 	def test_bulk_insert(self):
 		current_count = frappe.db.count("ToDo")
