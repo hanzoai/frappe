@@ -87,7 +87,12 @@ class User(Document):
 		if self.name not in STANDARD_USERS:
 			self.email = self.name
 			self.validate_email_type(self.name)
+<<<<<<< HEAD
 		self.add_system_manager_role()
+=======
+
+		self.move_role_profile_name_to_role_profiles()
+>>>>>>> 4a7de16019 (fix: don't automatically add system manager (#26540))
 		self.populate_role_profile_roles()
 		self.check_roles_added()
 		self.set_system_user()
@@ -175,47 +180,12 @@ class User(Document):
 		if not cint(self.enabled) and self.name in STANDARD_USERS:
 			frappe.throw(_("User {0} cannot be disabled").format(self.name))
 
-		if not cint(self.enabled):
-			self.a_system_manager_should_exist()
-
 		# clear sessions if disabled
 		if not cint(self.enabled) and getattr(frappe.local, "login_manager", None):
 			frappe.local.login_manager.logout(user=self.name)
 
 		# toggle notifications based on the user's status
 		toggle_notifications(self.name, enable=cint(self.enabled))
-
-	def add_system_manager_role(self):
-		if self.is_system_manager_disabled():
-			return
-
-		# if adding system manager, do nothing
-		if not cint(self.enabled) or (
-			"System Manager" in [user_role.role for user_role in self.get("roles")]
-		):
-			return
-
-		if (
-			self.name not in STANDARD_USERS
-			and self.user_type == "System User"
-			and not self.get_other_system_managers()
-			and cint(frappe.db.get_single_value("System Settings", "setup_complete"))
-		):
-			msgprint(_("Adding System Manager to this User as there must be atleast one System Manager"))
-			self.append("roles", {"doctype": "Has Role", "role": "System Manager"})
-
-		if self.name == "Administrator":
-			# Administrator should always have System Manager Role
-			self.extend(
-				"roles",
-				[
-					{"doctype": "Has Role", "role": "System Manager"},
-					{"doctype": "Has Role", "role": "Administrator"},
-				],
-			)
-
-	def is_system_manager_disabled(self):
-		return frappe.db.get_value("Role", {"name": "System Manager"}, ["disabled"])
 
 	def email_new_password(self, new_password=None):
 		if new_password and not self.flags.in_insert:
@@ -330,6 +300,7 @@ class User(Document):
 
 		return link
 
+<<<<<<< HEAD
 	def get_other_system_managers(self):
 		user_doctype = DocType("User").as_("user")
 		user_role_doctype = DocType("Has Role").as_("user_role")
@@ -346,6 +317,8 @@ class User(Document):
 			.distinct()
 		).run()
 
+=======
+>>>>>>> 4a7de16019 (fix: don't automatically add system manager (#26540))
 	def get_fullname(self):
 		"""get first_name space last_name"""
 		return (self.first_name or "") + (self.first_name and " " or "") + (self.last_name or "")
@@ -411,19 +384,10 @@ class User(Document):
 			retry=3,
 		)
 
-	def a_system_manager_should_exist(self):
-		if self.is_system_manager_disabled():
-			return
-
-		if not self.get_other_system_managers():
-			throw(_("There should remain at least one System Manager"))
-
 	def on_trash(self):
 		frappe.clear_cache(user=self.name)
 		if self.name in STANDARD_USERS:
 			throw(_("User {0} cannot be deleted").format(self.name))
-
-		self.a_system_manager_should_exist()
 
 		# disable the user and log him/her out
 		self.enabled = 0
