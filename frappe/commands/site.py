@@ -111,6 +111,7 @@ def new_site(
 		force=force,
 		db_password=db_password,
 		db_type=db_type,
+		db_socket=db_socket,
 		db_host=db_host,
 		db_port=db_port,
 		setup_db=setup_db,
