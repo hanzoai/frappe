@@ -19,6 +19,7 @@ html, body {
 }
 {% endif %}
 </style>
+<<<<<<< HEAD
 <div class='page-card'>
 	<h5 class='page-card-head'>
 		<span class='indicator {{ indicator_color or "blue" }}'>
@@ -34,6 +35,27 @@ html, body {
 			{{ primary_label or _("Home") }}</a></div>
 		{% endif %}
 	{% endblock %}
+=======
+<div class='error-page'>
+	<div>
+		{% if title %}
+		<h4 class='page-card-head'>{{ title }}</h4>
+		{% endif %}
+		<div class="details">
+		{% block message_body %}
+			{% if message %}
+				<p>{{ message }}</p>
+				{% if error_code %}
+				<p class='text-muted text-center small' style='margin-top: -20px;'>{{ _("Status: {0}").format(error_code) }}</p>
+				{% endif %}
+			{% endif %}
+			{% if primary_action %}
+			<div><a href='{{ primary_action or "/" }}' class='btn btn-primary btn-sm btn-block'>
+				{{ primary_label or _("Home") }}</a></div>
+			{% endif %}
+		{% endblock %}
+		</div>
+>>>>>>> cef8c12ee4 (fix(style): fix oauth authorisation page and standardise error responses)
 	</div>
 </div>
 {% if error_code %}

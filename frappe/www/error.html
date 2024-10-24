@@ -27,7 +27,25 @@
 	</div>
 	<p>{{ error_message }}</p>
 	<div>
+<<<<<<< HEAD
 		<a href="/" class="btn btn-primary btn-sm">{{ _("Home") }}</a>
+=======
+		<h4>
+			{{ title or _("Server Error") }}
+		</h4>
+		<div class="details">
+			<p>{{ http_status_code }}: {{ message }}</p>
+
+			<button class="btn btn-xs btn-secondary text-muted small view-error" >
+				{{ _("Show Error") }}
+			</button>
+
+			<div class="error-content hidden">
+				<pre><code>{{ error }}</code></pre>
+			</div>
+
+		</div>
+>>>>>>> cef8c12ee4 (fix(style): fix oauth authorisation page and standardise error responses)
 	</div>
 </div>
 <p class="text-muted text-center small" style="margin-top: -20px;">
