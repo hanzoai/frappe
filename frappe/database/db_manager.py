@@ -65,19 +65,18 @@ class DbManager:
 
 	@staticmethod
 	def restore_database(target, source, user, password):
+		import os
+		from distutils.spawn import find_executable
+
 		from frappe.utils import make_esc
 
 		esc = make_esc("$ ")
-
-		from distutils.spawn import find_executable
-
 		pv = find_executable("pv")
+
 		if pv:
-			pipe = "{pv} {source} |".format(pv=pv, source=source)
-			source = ""
+			pipe = f"{pv} {source} | " + r"sed '/\/\*M\{0,1\}!999999\\- enable the sandbox mode \*\//d' |"
 		else:
-			pipe = ""
-			source = "< {source}".format(source=source)
+			pipe = f"cat {source} | " + r"sed '/\/\*M\{0,1\}!999999\\- enable the sandbox mode \*\//d' |"
 
 		if pipe:
 			print("Restoring Database file...")
@@ -85,15 +84,17 @@ class DbManager:
 		command = (
 			"{pipe} mysql -u {user} -p{password} -h{host} "
 			+ ("-P{port}" if frappe.db.port else "")
-			+ " {target} {source}"
+			+ " {target}"
 		)
+
 		command = command.format(
 			pipe=pipe,
 			user=esc(user),
 			password=esc(password),
 			host=esc(frappe.db.host),
 			target=esc(target),
-			source=source,
 			port=frappe.db.port,
 		)
+
 		os.system(command)
+		frappe.cache().delete_keys("")  # Delete all keys associated with this site.
