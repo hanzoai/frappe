@@ -174,12 +174,7 @@ class User(Document):
 		if self.name not in STANDARD_USERS:
 			self.email = self.name
 			self.validate_email_type(self.name)
-<<<<<<< HEAD
-		self.add_system_manager_role()
-=======
 
-		self.move_role_profile_name_to_role_profiles()
->>>>>>> 4a7de16019 (fix: don't automatically add system manager (#26540))
 		self.populate_role_profile_roles()
 		self.check_roles_added()
 		self.set_system_user()
