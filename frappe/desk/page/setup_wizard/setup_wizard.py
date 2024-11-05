@@ -199,6 +199,7 @@ def update_user_name(args):
 				"last_name": last_name,
 			}
 		)
+		doc.append_roles("System Manager")
 		doc.flags.no_welcome_mail = True
 		doc.insert()
 		frappe.flags.mute_emails = _mute_emails
