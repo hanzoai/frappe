@@ -193,11 +193,11 @@ def decrypt(txt, encryption_key=None):
 		# encryption_key in site_config is changed and not valid
 		frappe.throw(
 			_("Encryption key is invalid! Please check site_config.json")
-			+ "<br>"
+			+ "<br> "
 			+ _(
-				"If you have recently restored the site you may need to copy the site config contaning original Encryption Key."
+				"If you have recently restored the site, you may need to copy the site_config.json containing original Encryption Key."
 			)
-			+ "<br>"
+			+ "<br> "
 			+ _(
 				"Please visit https://frappecloud.com/docs/sites/migrate-an-existing-site#encryption-key for more information."
 			),
