@@ -1466,6 +1466,14 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			.map((fieldname) => {
 				const docfield = frappe.query_report.get_filter(fieldname).df;
 				const value = applied_filters[fieldname];
+<<<<<<< HEAD
+=======
+
+				if (docfield.hidden_due_to_dependency) {
+					return null;
+				}
+
+>>>>>>> f2dfa13fbf (fix: remove `frappe.utils.is_empty`)
 				return `<div class="filter-row">
 					<b>${__(docfield.label, null, docfield.parent)}:</b> ${frappe.format(value, docfield)}
 				</div>`;
