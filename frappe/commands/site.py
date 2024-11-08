@@ -87,10 +87,6 @@ def new_site(
 
 	frappe.init(site=site, new_site=True)
 
-<<<<<<< HEAD
-	mariadb_user_host_login_scope = None
-=======
->>>>>>> 5e5a332cec (fix(new-site): `mariadb_user_host_login_scope` was broken since it was added)
 	if no_mariadb_socket:
 		click.secho(
 			"--no-mariadb-socket is DEPRECATED; "
