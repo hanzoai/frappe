@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
-"POT-Creation-Date: 2024-10-27 09:33+0000\n"
-"PO-Revision-Date: 2024-10-29 09:27\n"
+"POT-Creation-Date: 2024-11-03 09:33+0000\n"
+"PO-Revision-Date: 2024-11-05 11:49\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Esperanto\n"
 "MIME-Version: 1.0\n"
@@ -1590,7 +1590,7 @@ msgstr "crwdns128106:0crwdne128106:0"
 #. Option for the 'Sign ups' (Select) field in DocType 'Social Login Key'
 #: frappe/core/doctype/user_permission/user_permission.json
 #: frappe/integrations/doctype/social_login_key/social_login_key.json
-#: frappe/templates/includes/oauth_confirmation.html:15
+#: frappe/templates/includes/oauth_confirmation.html:16
 msgid "Allow"
 msgstr "crwdns91028:0crwdne91028:0"
 
@@ -1990,7 +1990,7 @@ msgstr "crwdns91192:0crwdne91192:0"
 msgid "An icon file with .ico extension. Should be 16 x 16 px. Generated using a favicon generator. [favicon-generator.org]"
 msgstr "crwdns128210:0crwdne128210:0"
 
-#: frappe/templates/includes/oauth_confirmation.html:35
+#: frappe/templates/includes/oauth_confirmation.html:38
 msgid "An unexpected error occurred while authorizing {}."
 msgstr "crwdns91196:0crwdne91196:0"
 
@@ -2731,7 +2731,7 @@ msgstr "crwdns128322:0crwdne128322:0"
 msgid "Authorization URI"
 msgstr "crwdns128324:0crwdne128324:0"
 
-#: frappe/templates/includes/oauth_confirmation.html:32
+#: frappe/templates/includes/oauth_confirmation.html:35
 msgid "Authorization error for {}."
 msgstr "crwdns91516:0crwdne91516:0"
 
@@ -4062,7 +4062,7 @@ msgstr "crwdns92078:0crwdne92078:0"
 msgid "Cannot create a {0} against a child document: {1}"
 msgstr "crwdns92080:0{0}crwdnd92080:0{1}crwdne92080:0"
 
-#: frappe/desk/doctype/workspace/workspace.py:264
+#: frappe/desk/doctype/workspace/workspace.py:268
 msgid "Cannot create private workspace of other users"
 msgstr "crwdns92082:0crwdne92082:0"
 
@@ -4162,7 +4162,7 @@ msgstr "crwdns92126:0crwdne92126:0"
 msgid "Cannot link cancelled document: {0}"
 msgstr "crwdns92128:0{0}crwdne92128:0"
 
-#: frappe/model/mapper.py:192
+#: frappe/model/mapper.py:181
 msgid "Cannot map because following condition fails:"
 msgstr "crwdns92130:0crwdne92130:0"
 
@@ -6945,7 +6945,7 @@ msgstr "crwdns128920:0crwdne128920:0"
 
 #. Option for the 'Sign ups' (Select) field in DocType 'Social Login Key'
 #: frappe/integrations/doctype/social_login_key/social_login_key.json
-#: frappe/templates/includes/oauth_confirmation.html:14
+#: frappe/templates/includes/oauth_confirmation.html:17
 msgid "Deny"
 msgstr "crwdns93392:0crwdne93392:0"
 
@@ -9266,10 +9266,6 @@ msgstr "crwdns149060:0{0}crwdne149060:0"
 #: frappe/model/base_document.py:762
 msgid "Error: Value missing for {0}: {1}"
 msgstr "crwdns94434:0{0}crwdnd94434:0{1}crwdne94434:0"
-
-#: frappe/www/error.html:36
-msgid "Error: {0}"
-msgstr "crwdns149062:0{0}crwdne149062:0"
 
 #: frappe/model/base_document.py:756
 msgid "Error: {0} Row #{1}: Value missing for: {2}"
@@ -11974,7 +11970,7 @@ msgstr "crwdns95642:0crwdne95642:0"
 #: frappe/website/doctype/website_settings/website_settings.json
 #: frappe/website/web_template/primary_navbar/primary_navbar.html:9
 #: frappe/www/contact.py:22 frappe/www/login.html:151 frappe/www/me.html:76
-#: frappe/www/message.html:27
+#: frappe/www/message.html:29
 msgid "Home"
 msgstr "crwdns95644:0crwdne95644:0"
 
@@ -13271,7 +13267,7 @@ msgstr "crwdns96212:0{0}crwdne96212:0"
 msgid "Invalid json added in the custom options: {0}"
 msgstr "crwdns96216:0{0}crwdne96216:0"
 
-#: frappe/model/naming.py:481
+#: frappe/model/naming.py:480
 msgid "Invalid name type (integer) for varchar name column"
 msgstr "crwdns96218:0crwdne96218:0"
 
@@ -13287,7 +13283,7 @@ msgstr "crwdns96222:0crwdne96222:0"
 msgid "Invalid redirect regex in row #{}: {}"
 msgstr "crwdns96224:0crwdne96224:0"
 
-#: frappe/app.py:336
+#: frappe/app.py:337
 msgid "Invalid request arguments"
 msgstr "crwdns96226:0crwdne96226:0"
 
@@ -15435,7 +15431,7 @@ msgstr "crwdns97172:0crwdne97172:0"
 #: frappe/public/js/frappe/ui/messages.js:175
 #: frappe/public/js/frappe/views/communication.js:114
 #: frappe/workflow/doctype/workflow_document_state/workflow_document_state.json
-#: frappe/www/message.html:3 frappe/www/message.html:16
+#: frappe/www/message.html:3
 msgid "Message"
 msgstr "crwdns97174:0crwdne97174:0"
 
@@ -16105,7 +16101,7 @@ msgstr "crwdns111010:0crwdne111010:0"
 msgid "Name already taken, please set a new name"
 msgstr "crwdns97518:0crwdne97518:0"
 
-#: frappe/model/naming.py:495
+#: frappe/model/naming.py:494
 msgid "Name cannot contain special characters like {0}"
 msgstr "crwdns97520:0{0}crwdne97520:0"
 
@@ -16117,7 +16113,7 @@ msgstr "crwdns97522:0crwdne97522:0"
 msgid "Name of the new Print Format"
 msgstr "crwdns97524:0crwdne97524:0"
 
-#: frappe/model/naming.py:490
+#: frappe/model/naming.py:489
 msgid "Name of {0} cannot be {1}"
 msgstr "crwdns97526:0{0}crwdnd97526:0{1}crwdne97526:0"
 
@@ -16217,7 +16213,7 @@ msgstr "crwdns97568:0crwdne97568:0"
 msgid "Navigation Settings"
 msgstr "crwdns130268:0crwdne130268:0"
 
-#: frappe/desk/doctype/workspace/workspace.py:311
+#: frappe/desk/doctype/workspace/workspace.py:315
 msgid "Need Workspace Manager role to edit private workspace of other users"
 msgstr "crwdns97572:0crwdne97572:0"
 
@@ -16683,7 +16679,7 @@ msgstr "crwdns111044:0crwdne111044:0"
 msgid "No Letterhead"
 msgstr "crwdns97736:0crwdne97736:0"
 
-#: frappe/model/naming.py:472
+#: frappe/model/naming.py:471
 msgid "No Name Specified for {0}"
 msgstr "crwdns97738:0{0}crwdne97738:0"
 
@@ -17020,7 +17016,7 @@ msgstr "crwdns97850:0crwdne97850:0"
 msgid "Not Equals"
 msgstr "crwdns97852:0crwdne97852:0"
 
-#: frappe/app.py:393 frappe/www/404.html:3
+#: frappe/app.py:388 frappe/www/404.html:3
 msgid "Not Found"
 msgstr "crwdns97854:0crwdne97854:0"
 
@@ -17046,7 +17042,7 @@ msgstr "crwdns97862:0crwdne97862:0"
 msgid "Not Nullable"
 msgstr "crwdns130314:0crwdne130314:0"
 
-#: frappe/__init__.py:1013 frappe/app.py:384 frappe/desk/calendar.py:26
+#: frappe/__init__.py:1013 frappe/app.py:381 frappe/desk/calendar.py:26
 #: frappe/geo/utils.py:97 frappe/public/js/frappe/web_form/webform_script.js:15
 #: frappe/website/doctype/web_form/web_form.py:605
 #: frappe/website/page_renderers/not_permitted_page.py:20
@@ -17506,10 +17502,6 @@ msgstr "crwdns98048:0crwdne98048:0"
 #: frappe/email/doctype/email_account/email_account.js:221
 msgid "OAuth has been enabled but not authorised. Please use \"Authorise API Access\" button to do the same."
 msgstr "crwdns98050:0crwdne98050:0"
-
-#: frappe/templates/includes/oauth_confirmation.html:39
-msgid "OK"
-msgstr "crwdns98052:0crwdne98052:0"
 
 #. Option for the 'Method' (Select) field in DocType 'Recorder'
 #: frappe/core/doctype/recorder/recorder.json
@@ -19211,7 +19203,7 @@ msgstr "crwdns98772:0crwdne98772:0"
 msgid "Please set filters value in Report Filter table."
 msgstr "crwdns98774:0crwdne98774:0"
 
-#: frappe/model/naming.py:565
+#: frappe/model/naming.py:564
 msgid "Please set the document name"
 msgstr "crwdns98776:0crwdne98776:0"
 
@@ -23346,7 +23338,8 @@ msgstr "crwdns100642:0{0}crwdnd100642:0{1}crwdne100642:0"
 msgid "Server Action"
 msgstr "crwdns131128:0crwdne131128:0"
 
-#: frappe/public/js/frappe/request.js:607
+#: frappe/app.py:397 frappe/public/js/frappe/request.js:607
+#: frappe/www/error.html:36 frappe/www/error.py:18
 msgid "Server Error"
 msgstr "crwdns100646:0crwdne100646:0"
 
@@ -23408,7 +23401,7 @@ msgstr "crwdns100674:0crwdne100674:0"
 msgid "Session Defaults Saved"
 msgstr "crwdns100678:0crwdne100678:0"
 
-#: frappe/app.py:375
+#: frappe/app.py:374
 msgid "Session Expired"
 msgstr "crwdns100680:0crwdne100680:0"
 
@@ -24757,7 +24750,7 @@ msgstr "crwdns101242:0crwdne101242:0"
 msgid "Status Updated. The email will be picked up in the next scheduled run."
 msgstr "crwdns148708:0crwdne148708:0"
 
-#: frappe/www/message.html:22
+#: frappe/www/message.html:24
 msgid "Status: {0}"
 msgstr "crwdns101244:0{0}crwdne101244:0"
 
@@ -25961,7 +25954,7 @@ msgstr "crwdns101696:0crwdne101696:0"
 msgid "The reset password link has either been used before or is invalid"
 msgstr "crwdns101698:0crwdne101698:0"
 
-#: frappe/app.py:394 frappe/public/js/frappe/request.js:148
+#: frappe/app.py:389 frappe/public/js/frappe/request.js:148
 msgid "The resource you are looking for is not available"
 msgstr "crwdns101700:0crwdne101700:0"
 
@@ -26081,7 +26074,7 @@ msgstr "crwdns111280:0{0}crwdne111280:0"
 msgid "There must be atleast one permission rule."
 msgstr "crwdns101742:0crwdne101742:0"
 
-#: frappe/www/error.py:16
+#: frappe/www/error.py:20
 msgid "There was an error building this page"
 msgstr "crwdns101746:0crwdne101746:0"
 
@@ -26101,7 +26094,7 @@ msgstr "crwdns101752:0crwdne101752:0"
 msgid "There were errors while sending email. Please try again."
 msgstr "crwdns101754:0crwdne101754:0"
 
-#: frappe/model/naming.py:485
+#: frappe/model/naming.py:484
 msgid "There were some errors setting the name, please contact the administrator"
 msgstr "crwdns101756:0crwdne101756:0"
 
@@ -27437,9 +27430,9 @@ msgstr "crwdns102342:0{0}crwdne102342:0"
 msgid "Unassign Condition"
 msgstr "crwdns131662:0crwdne131662:0"
 
-#: frappe/www/error.py:15
-msgid "Uncaught Server Exception"
-msgstr "crwdns102346:0crwdne102346:0"
+#: frappe/app.py:397
+msgid "Uncaught Exception"
+msgstr "crwdns151458:0crwdne151458:0"
 
 #: frappe/public/js/frappe/form/toolbar.js:95
 msgid "Unchanged"
@@ -28199,7 +28192,7 @@ msgstr "crwdns102682:0{0}crwdne102682:0"
 msgid "User {0} does not have doctype access via role permission for document {1}"
 msgstr "crwdns102684:0{0}crwdnd102684:0{1}crwdne102684:0"
 
-#: frappe/desk/doctype/workspace/workspace.py:267
+#: frappe/desk/doctype/workspace/workspace.py:271
 msgid "User {0} does not have the permission to create a Workspace."
 msgstr "crwdns127898:0{0}crwdne127898:0"
 
@@ -29741,7 +29734,7 @@ msgstr "crwdns103348:0crwdne103348:0"
 msgid "You do not have enough permissions to access this resource. Please contact your manager to get access."
 msgstr "crwdns103350:0crwdne103350:0"
 
-#: frappe/app.py:385
+#: frappe/app.py:382
 msgid "You do not have enough permissions to complete the action"
 msgstr "crwdns103352:0crwdne103352:0"
 
@@ -29858,6 +29851,10 @@ msgstr "crwdns103400:0crwdne103400:0"
 #: frappe/website/doctype/web_form/web_form.py:505
 msgid "You must login to submit this form"
 msgstr "crwdns103402:0crwdne103402:0"
+
+#: frappe/desk/doctype/workspace/workspace.py:123
+msgid "You need to be Workspace Manager to delete a public workspace."
+msgstr "crwdns151460:0crwdne151460:0"
 
 #: frappe/desk/doctype/workspace/workspace.py:76
 msgid "You need to be Workspace Manager to edit this document"
@@ -30029,7 +30026,7 @@ msgstr "crwdns131910:0crwdne131910:0"
 msgid "Your query has been received. We will reply back shortly. If you have any additional information, please reply to this mail."
 msgstr "crwdns103468:0crwdne103468:0"
 
-#: frappe/app.py:376
+#: frappe/app.py:375
 msgid "Your session has expired, please login again to continue."
 msgstr "crwdns103470:0crwdne103470:0"
 
