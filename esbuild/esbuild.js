@@ -66,12 +66,12 @@ const argv = yargs
 	.example("node esbuild --apps frappe,erpnext", "Run build only for frappe and erpnext")
 	.example(
 		"node esbuild --files frappe/website.bundle.js,frappe/desk.bundle.js",
-		"Run build only for specified bundles"
+		"Run build only for specified bundles",
 	)
 	.version(false).argv;
 
 const APPS = (!argv.apps ? app_list : argv.apps.split(",")).filter(
-	(app) => !(argv.skip_frappe && app == "frappe")
+	(app) => !(argv.skip_frappe && app == "frappe"),
 );
 const FILES_TO_BUILD = argv.files ? argv.files.split(",") : [];
 const WATCH_MODE = Boolean(argv.watch);
@@ -83,7 +83,7 @@ const NODE_PATHS = [].concat(
 	// node_modules of apps directly importable
 	app_list.map((app) => path.resolve(apps_path, app, "node_modules")).filter(fs.existsSync),
 	// import js file of any app if you provide the full path
-	app_list.map((app) => path.resolve(apps_path, app)).filter(fs.existsSync)
+	app_list.map((app) => path.resolve(apps_path, app)).filter(fs.existsSync),
 );
 
 execute().catch((e) => {
@@ -189,11 +189,11 @@ function get_all_files_to_build(apps) {
 	for (let app of apps) {
 		let public_path = get_public_path(app);
 		include_patterns.push(
-			path.resolve(public_path, "**", "*.bundle.{js,ts,css,sass,scss,less,styl,jsx}")
+			path.resolve(public_path, "**", "*.bundle.{js,ts,css,sass,scss,less,styl,jsx}"),
 		);
 		ignore_patterns.push(
 			path.resolve(public_path, "node_modules"),
-			path.resolve(public_path, "dist")
+			path.resolve(public_path, "dist"),
 		);
 	}
 
@@ -214,7 +214,7 @@ function get_files_to_build(files) {
 		include_patterns.push(path.resolve(public_path, "**", bundle));
 		ignore_patterns.push(
 			path.resolve(public_path, "node_modules"),
-			path.resolve(public_path, "dist")
+			path.resolve(public_path, "dist"),
 		);
 	}
 
@@ -280,7 +280,7 @@ function get_watch_config() {
 					notify_redis({ error });
 				} else {
 					let { new_assets_json, prev_assets_json } = await write_assets_json(
-						result.metafile
+						result.metafile,
 					);
 
 					let changed_files;
@@ -318,7 +318,7 @@ function log_built_assets(results) {
 		{
 			text: chalk.cyan.bold("Size"),
 			width: column_widths[1],
-		}
+		},
 	);
 	cliui.div("");
 
@@ -361,7 +361,7 @@ function log_built_assets(results) {
 				{
 					text: file.size,
 					width: column_widths[1],
-				}
+				},
 			);
 		}
 		cliui.div("");
@@ -436,9 +436,12 @@ function run_build_command_for_apps(apps) {
 	let { execSync } = require("child_process");
 
 	for (let app of apps) {
-		if (app === "frappe") continue;
+		// if (app === "frappe") continue;
 
-		let root_app_path = path.resolve(apps_path, app);
+		let root_app_path =
+			app === "frappe"
+				? path.resolve(apps_path, app, "billing")
+				: path.resolve(apps_path, app);
 		let package_json = path.resolve(root_app_path, "package.json");
 		if (fs.existsSync(package_json)) {
 			let { scripts } = require(package_json);
@@ -488,7 +491,7 @@ async function notify_redis({ error, success, changed_files }) {
 		JSON.stringify({
 			event: "build_event",
 			message: payload,
-		})
+		}),
 	);
 }
 
