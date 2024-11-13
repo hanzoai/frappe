@@ -822,8 +822,6 @@ def frappe_get_test_records(doctype):
 	import frappe
 	from frappe.tests.utils.generators import load_test_records_for
 
-	frappe.flags.deprecation_dumpster_invoked = True
-
 	records = load_test_records_for(doctype)
 	if isinstance(records, dict):
 		_records = []
