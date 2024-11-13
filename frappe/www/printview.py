@@ -74,6 +74,9 @@ def get_context(context):
 		"doctype": frappe.form_dict.doctype,
 		"name": frappe.form_dict.name,
 		"key": frappe.form_dict.get("key"),
+		"print_format": print_format.name,
+		"letterhead": letterhead,
+		"no_letterhead": frappe.form_dict.no_letterhead,
 	}
 
 
