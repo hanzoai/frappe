@@ -85,7 +85,6 @@ class ParallelTestRunner:
 			print("running tests from", "/".join(file_info))
 			return
 
-		frappe.set_user("Administrator")
 		path, filename = file_info
 		module = self.get_module(path, filename)
 		test_suite = unittest.TestSuite()
