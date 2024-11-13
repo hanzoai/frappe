@@ -39,10 +39,9 @@ export default defineConfig({
 		commonjsOptions: {
 			include: [/tailwind.config.js/, /node_modules/],
 		},
-		// minify: false,
 		sourcemap: true,
 	},
 	optimizeDeps: {
-		include: ['tailwind.config.js'],
+		include: ['feather-icons', 'showdown', 'tailwind.config.js'],
 	},
 })
