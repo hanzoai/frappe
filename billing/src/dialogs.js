@@ -25,6 +25,7 @@ export let Dialogs = {
 							dialog.message &&
 								h('p', { class: 'text-p-base text-gray-700' }, dialog.message),
 							dialog.html && h('div', { innerHTML: dialog.html }),
+							dialog.component && h(dialog.component),
 							h(ErrorMessage, { class: 'mt-2', message: dialog.error }),
 						]
 					},
