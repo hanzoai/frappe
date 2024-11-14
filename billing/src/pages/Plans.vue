@@ -63,7 +63,7 @@
 			v-if="showUpgradePlanStepsModal"
 			v-model="showUpgradePlanStepsModal"
 			:defaultStep="defaultStep"
-			:planName="planName"
+			:plan="plan"
 			@success="() => emit('success')"
 		/>
 	</div>
@@ -84,8 +84,9 @@ import {
 	Tooltip,
 	createResource,
 } from 'frappe-ui'
-import { parseSize } from '@/utils.js'
-import { ref, computed, provide, inject } from 'vue'
+import { createDialog } from '@/dialogs'
+import { parseSize, ConfirmMessage } from '@/utils'
+import { ref, computed, provide, inject, markRaw, h } from 'vue'
 
 const emit = defineEmits(['success'])
 
@@ -178,7 +179,7 @@ const rows = computed(() => {
 				isCurrent: plan.name === currentPlan.value,
 				downgradable: plan.allow_downgrading_from_other_plan,
 				downgrade: currentPlanIndex > i,
-				onClick: () => changePlan(plan.name),
+				onClick: () => changePlan(plan, price.toString()),
 			}
 		})
 		.filter(
@@ -189,24 +190,48 @@ const rows = computed(() => {
 
 const defaultStep = ref(1)
 const showUpgradePlanStepsModal = ref(false)
-const planName = ref('')
+const plan = ref({
+	name: '',
+	price: '',
+	currency: '',
+})
 
-function changePlan(_planName) {
+function changePlan(_plan, price) {
 	if (!billingDetails.data?.country || !team.data.payment_mode) {
 		defaultStep.value = billingDetails.data.country ? 2 : 1
 		showUpgradePlanStepsModal.value = true
-		planName.value = _planName
+		plan.value = {
+			name: _plan.name,
+			price,
+			currency: currency.value === 'INR' ? '₹' : '$',
+		}
 		return
 	}
 
+	createDialog({
+		title: 'Change plan',
+		component: markRaw(
+			h(ConfirmMessage, { price, currency: currency.value === 'INR' ? '₹' : '$' }),
+		),
+		actions: [
+			{
+				label: 'Change plan',
+				variant: 'solid',
+				onClick: (close) => changePlanRequest(_plan.name, close),
+			},
+		],
+	})
+}
+
+function changePlanRequest(planName, close) {
 	createResource({
 		url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
-		params: { method: 'site.change_plan', data: { plan: _planName } },
+		params: { method: 'site.change_plan', data: { plan: planName } },
 		auto: true,
 		onSuccess: () => {
 			site.reload()
 			plans.reload()
-			emit('success')
+			close()
 		},
 	})
 }

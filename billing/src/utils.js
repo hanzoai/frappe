@@ -4,6 +4,7 @@ import Amex from './logo/Amex.vue'
 import JCB from './logo/JCB.vue'
 import UnionPay from './logo/UnionPay.vue'
 import Generic from './logo/Generic.vue'
+import { FeatherIcon } from 'frappe-ui'
 import { h } from 'vue'
 
 export function calculateTrialEndDays(trialEndDate) {
@@ -48,4 +49,27 @@ export function parseSize(sizeInMB) {
 	} else {
 		return `${(sizeInMB / 1024).toFixed(0)} GB`
 	}
+}
+
+export const ConfirmMessage = {
+	name: 'ConfirmMessage',
+	props: {
+		price: String,
+		currency: String,
+	},
+	render() {
+		return h('div', { class: 'text-base' }, [
+			h('div', {}, [
+				'Are you sure you want to change your plan to ',
+				h('b', {}, `${this.currency}${this.price}`),
+				'/mo?',
+			]),
+			h(
+				'div',
+				{ class: 'text-gray-600 inline-flex gap-1 mt-3' },
+				h(FeatherIcon, { name: 'info', class: 'h-4' }),
+				'Your site will be in maintenance mode for some time.',
+			),
+		])
+	},
 }

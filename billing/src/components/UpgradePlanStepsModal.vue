@@ -57,19 +57,21 @@
 	</Dialog>
 </template>
 <script setup>
-import BillingDetails from './BillingDetails.vue'
-import CardForm from './CardForm.vue'
-import PrepaidCreditsForm from './PrepaidCreditsForm.vue'
+import BillingDetails from '@/components/BillingDetails.vue'
+import CardForm from '@/components/CardForm.vue'
+import PrepaidCreditsForm from '@/components/PrepaidCreditsForm.vue'
+import { createDialog } from '@/dialogs'
+import { ConfirmMessage } from '@/utils'
 import { Dialog, Button, FeatherIcon, TabButtons, createResource } from 'frappe-ui'
-import { ref, computed, inject } from 'vue'
+import { ref, computed, inject, markRaw, h } from 'vue'
 
 const props = defineProps({
 	defaultStep: {
 		type: Number,
 		default: 1,
 	},
-	planName: {
-		type: String,
+	plan: {
+		type: Object,
 		required: true,
 	},
 })
@@ -99,6 +101,7 @@ const paymentModes = [
 ]
 
 function updateMode() {
+	show.value = false
 	createResource({
 		url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
 		params: {
@@ -111,14 +114,30 @@ function updateMode() {
 }
 
 function upgradePlan() {
+	createDialog({
+		title: 'Change plan',
+		component: markRaw(
+			h(ConfirmMessage, { price: props.plan.price, currency: props.plan.currency }),
+		),
+		actions: [
+			{
+				label: 'Change plan',
+				variant: 'solid',
+				onClick: (close) => changePlanRequest(close),
+			},
+		],
+	})
+}
+
+function changePlanRequest(close) {
 	createResource({
 		url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
-		params: { method: 'site.change_plan', data: { plan: props.planName } },
+		params: { method: 'site.change_plan', data: { plan: props.plan.name } },
 		auto: true,
 		onSuccess: () => {
 			reloadSite()
 			reloadPlans()
-			show.value = false
+			close()
 			emit('success')
 		},
 	})
