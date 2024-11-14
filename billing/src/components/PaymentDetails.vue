@@ -42,25 +42,14 @@
 						class="inline-flex items-center gap-2 text-gray-700"
 					>
 						<FeatherIcon class="h-4" name="info" />
-						{{
-							paymentModeOptions.find((o) => o.value === team.payment_mode)
-								.description
-						}}
+						{{ paymentMode.description }}
 					</div>
 					<span v-else class="text-gray-700">Not set</span>
 				</div>
 				<div class="shrink-0">
 					<Dropdown :options="paymentModeOptions">
 						<template #default="{ open }">
-							<Button
-								:label="
-									team.payment_mode
-										? paymentModeOptions.find(
-												(o) => o.value === team.payment_mode,
-											).label
-										: 'Set mode'
-								"
-							>
+							<Button :label="team.payment_mode ? paymentMode.label : 'Set mode'">
 								<template #suffix>
 									<FeatherIcon
 										:name="open ? 'chevron-up' : 'chevron-down'"
@@ -225,6 +214,10 @@ const paymentModeOptions = [
 			}),
 	},
 ]
+
+const paymentMode = computed(() => {
+	return paymentModeOptions.find((o) => o.value === team.value.payment_mode)
+})
 
 const showMessage = ref(false)
 function updatePaymentMode(mode) {

@@ -280,7 +280,7 @@ async function submit() {
 					},
 				},
 			},
-		},
+		}
 	)
 	if (error) {
 		addingCard.value = false

@@ -189,7 +189,7 @@ const rows = computed(() => {
 		})
 		.filter(
 			(row) =>
-				row.name !== 'Trial' || (row.name === 'Trial' && row.name === currentPlan.value),
+				row.name !== 'Trial' || (row.name === 'Trial' && row.name === currentPlan.value)
 		)
 })
 

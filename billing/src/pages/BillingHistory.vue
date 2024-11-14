@@ -1,8 +1,5 @@
 <template>
 	<div class="flex h-full flex-col py-11 px-[68px] gap-8 overflow-y-auto">
-		<!-- <div class="text-lg font-semibold text-gray-900">
-			{{ 'Billing history' }}
-		</div> -->
 		<h2 class="flex gap-2 text-xl font-semibold leading-5">
 			{{ 'Billing history' }}
 		</h2>
@@ -144,8 +141,8 @@ const rows = computed(() => {
 					invoice.status === 'Paid'
 						? 'green'
 						: invoice.status == 'Unpaid'
-							? 'yellow'
-							: 'gray',
+						? 'yellow'
+						: 'gray',
 			},
 			due_date: due_date,
 			total: formatCurrency(invoice.total),

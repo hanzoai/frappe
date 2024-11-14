@@ -21,7 +21,7 @@ export default defineConfig({
                 {% endfor %}
             </script>
             </body>
-            `,
+            `
 					)
 				}
 				return html

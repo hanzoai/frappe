@@ -28,7 +28,7 @@ export let Dialogs = {
 							h(ErrorMessage, { class: 'mt-2', message: dialog.error }),
 						]
 					},
-				},
+				}
 			)
 		})
 	},

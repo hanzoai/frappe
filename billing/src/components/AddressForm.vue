@@ -70,7 +70,7 @@ watch(
 	() => billingInformation.value.gstin,
 	(gstin) => {
 		gstApplicable.value = gstin && gstin !== 'Not Applicable'
-	},
+	}
 )
 
 async function validate() {
