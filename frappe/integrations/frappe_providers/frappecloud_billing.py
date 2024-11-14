@@ -81,3 +81,7 @@ def api(method, data=None):
 		return request.json().get("message")
 	else:
 		frappe.throw(_("Failed while calling API {0}", method))
+
+@frappe.whitelist()
+def is_fc_site():
+	return frappe.conf.get("fc_communication_secret")
