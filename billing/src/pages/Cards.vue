@@ -95,6 +95,7 @@ const showAddCardModal = ref(false)
 const cards = createResource({
 	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
 	params: { method: 'billing.get_payment_methods' },
+	cache: 'cards',
 	auto: true,
 })
 
