@@ -1,42 +1,27 @@
-# Frappe UI Starter
+# Billing
 
-This template should help get you started developing custom frontend for Frappe
-apps with Vue 3 and the Frappe UI package.
+Billing page is built to manage the billing of both desk based (ERPNext, HRMS) and portal based apps (Frappe CRM, Insights, Gameplan, Builder etc.)
 
-This boilerplate sets up Vue 3, Vue Router, TailwindCSS, and Frappe UI out of
-the box.
+> Billing page is only built for sites hosted on Frappe Cloud.
+
+## Features
+
+- **Current Plan**: View the current plan of the site.
+- **Manage Subscription**: Upgrade, downgrade your subscription plan.
+- **Plans & Pricing**: View and compare all the available plans and decide which one is best for you.
+- **Billing History**: View your billing history and download invoices.
+- **Prepaid Credits**: Add prepaid credits to your account to pay for your subscription.
+- **Payment Methods**: Add, remove your payment methods (Credit Card, Debit Card) and set a default payment method.
+- **Billing Address**: Add/Update your billing address.
 
 ## Usage
 
-This template is meant to be cloned inside an existing Frappe App. Assuming your
-apps name is `todo`. Clone this template in the root folder of your app using `degit`.
-
-```
-cd apps/todo
-npx degit netchampfaris/frappe-ui-starter frontend
-cd frontend
-yarn
-yarn dev
-```
-
-In a development environment, you need to put the below key-value pair in your `site_config.json` file:
-
-```
-"ignore_csrf": 1
-```
-
-This will prevent `CSRFToken` errors while using the vite dev server. In production environment, the `csrf_token` is attached to the `window` object in `index.html` for you.
-
-The Vite dev server will start on the port `8080`. This can be changed from `vite.config.js`.
-The development server is configured to proxy your frappe app (usually running on port `8000`). If you have a site named `todo.test`, open `http://todo.test:8080` in your browser. If you see a button named "Click to send 'ping' request", congratulations!
-
-If you notice the browser URL is `/frontend`, this is the base URL where your frontend app will run in production.
-To change this, open `src/router.js` and change the base URL passed to `createWebHistory`.
-
-## Resources
-
-- [Vue 3](https://v3.vuejs.org/guide/introduction.html)
-- [Vue Router](https://next.router.vuejs.org/guide/)
-- [Frappe UI](https://github.com/frappe/frappe-ui)
-- [TailwindCSS](https://tailwindcss.com/docs/utility-first)
-- [Vite](https://vitejs.dev/guide/)
+1. Go to Billing page typing `/billing` in the URL. You can also access it from your app installed on the site.
+2. Billing page will open with the current plan details and other options.
+3. Click on the `Upgrade plan` button to upgrade or downgrade your subscription plan.
+4. It will redirect you to the `Plans` page where you can select the plan you want to subscribe to.
+5. Click on the `Upgrade` or `Downgrade` button to confirm the subscription.
+6. Before confirming the subscription, you should add prepaid credits to your account to pay for the subscription or you can add a payment method. Check `Payment details` section in the `Billing` page to add prepaid credits or select payment method.
+7. Once you have added prepaid credits or payment method, you can confirm the subscription.
+8. You can view your billing history and download invoices from the `Invoices` page.
+9. You can add, remove payment methods and set a default payment method from the `Cards` page.
