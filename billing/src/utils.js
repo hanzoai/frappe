@@ -68,7 +68,7 @@ export const ConfirmMessage = {
 				'div',
 				{ class: 'text-gray-600 inline-flex gap-1 mt-3' },
 				h(FeatherIcon, { name: 'info', class: 'h-4' }),
-				'Your site will be in maintenance mode for some time.',
+				'Your site will be in maintenance mode for some time.'
 			),
 		])
 	},

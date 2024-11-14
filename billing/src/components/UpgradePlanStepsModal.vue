@@ -117,7 +117,7 @@ function upgradePlan() {
 	createDialog({
 		title: 'Change plan',
 		component: markRaw(
-			h(ConfirmMessage, { price: props.plan.price, currency: props.plan.currency }),
+			h(ConfirmMessage, { price: props.plan.price, currency: props.plan.currency })
 		),
 		actions: [
 			{

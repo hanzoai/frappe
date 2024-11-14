@@ -11,7 +11,10 @@
 				<div class="flex flex-col gap-1.5">
 					<div class="font-medium">{{ 'Active card' }}</div>
 					<div class="overflow-hidden text-gray-700 text-ellipsis">
-						<div v-if="team.data.payment_method" class="inline-flex items-center gap-2">
+						<div
+							v-if="team.data.payment_method"
+							class="inline-flex items-center gap-2"
+						>
 							<component :is="cardBrandIcon(team.data.payment_method.brand)" />
 							<div class="text-gray-700">
 								<span>{{ team.data.payment_method.name_on_card }}</span>
@@ -49,7 +52,9 @@
 				<div class="shrink-0">
 					<Dropdown :options="paymentModeOptions">
 						<template #default="{ open }">
-							<Button :label="team.data.payment_mode ? paymentMode.label : 'Set mode'">
+							<Button
+								:label="team.data.payment_mode ? paymentMode.label : 'Set mode'"
+							>
 								<template #suffix>
 									<FeatherIcon
 										:name="open ? 'chevron-up' : 'chevron-down'"
