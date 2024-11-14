@@ -23,7 +23,7 @@
 									<Badge
 										v-if="card.is_default"
 										class="ml-1.5"
-										label="Primary"
+										label="Default"
 										variant="outline"
 										theme="green"
 									/>
@@ -36,19 +36,18 @@
 											: card.expiry_month
 									}}/{{ card.expiry_year }}
 								</div>
-								<div v-if="!card.is_default" class="-ml-2 mt-2">
-									<Button
-										class="!text-gray-700"
-										label="Set as primary"
-										variant="ghost"
-										@click="setAsPrimary(card)"
-									/>
-								</div>
 							</div>
 						</div>
 						<div v-if="cards.data.length > 1 && !card.is_default">
 							<Dropdown
-								:options="[{ label: 'Remove', onClick: () => removeCard(card) }]"
+								:options="[
+									{
+										label: 'Set as default',
+										onClick: () => setAsDefault(card.name),
+										condition: () => !card.is_default,
+									},
+									{ label: 'Remove', onClick: () => removeCard(card.name) },
+								]"
 							>
 								<Button icon="more-horizontal" variant="ghost" />
 							</Dropdown>
@@ -87,10 +86,10 @@ const cards = createResource({
 	auto: true,
 })
 
-const setAsPrimary = (card) => {
+const setAsDefault = (card) => {
 	createResource({
 		url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
-		params: { method: 'billing.set_as_default', data: { name: card.name } },
+		params: { method: 'billing.set_as_default', data: { name: card } },
 		auto: true,
 		onSuccess: () => {
 			cards.reload()
@@ -115,7 +114,7 @@ const removeCard = (card) => {
 						url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
 						params: {
 							method: 'billing.remove_payment_method',
-							data: { name: card.name },
+							data: { name: card },
 						},
 						auto: true,
 						onSuccess: () => {
