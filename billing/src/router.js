@@ -14,7 +14,7 @@ const routes = [
 	{
 		path: '/invoices',
 		name: 'Invoices',
-		component: () => import('./pages/BillingHistory.vue'),
+		component: () => import('./pages/Invoices.vue'),
 	},
 	{
 		path: '/cards',

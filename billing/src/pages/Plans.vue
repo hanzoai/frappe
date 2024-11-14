@@ -1,62 +1,61 @@
 <template>
-	<div class="flex h-full flex-col py-11 px-[68px] gap-8 overflow-y-auto">
-		<h2 class="flex gap-2 text-xl font-semibold leading-5">
+	<div class="flex h-full flex-col overflow-hidden px-60">
+		<h2 class="flex items-center h-7 text-xl font-semibold leading-5 my-8">
 			{{ 'Plans' }}
 		</h2>
-		<div v-if="rows.length">
-			<ListView
-				:columns="columns"
-				:rows="rows"
-				row-key="name"
-				:options="{
-					selectable: false,
-					showTooltip: false,
-				}"
-			>
-				<ListHeader />
-				<ListRows>
-					<ListRow
-						v-for="row in rows"
-						:key="row.name"
-						v-slot="{ column, item }"
-						:row="row"
-						:class="{ 'bg-gray-50 rounded': row.isCurrent }"
-					>
-						<ListRowItem :item="item" :align="column.align">
-							<Badge
-								v-if="column.key == 'upgrade' && row.isCurrent"
-								class="shrink-0 bg-white"
-								label="Current plan"
-								variant="outline"
-								size="lg"
-							/>
-							<Button
-								v-else-if="column.key == 'upgrade' && !row.isCurrent"
-								:label="row.downgrade ? 'Downgrade' : 'Upgrade'"
-								@click="row.onClick"
-								:disabled="!row.downgradable && row.downgrade"
-							/>
-							<div
-								v-if="column.key == 'price'"
-								class="text-base text-gray-900 font-semibold"
-							>
-								<span v-if="item.isTrial" class=""> Free trial </span>
-								<span v-else>
-									<span>{{ item.currency }} {{ item.label }}</span>
-									<span class="text-gray-700 font-normal">/mo</span>
-								</span>
-							</div>
-							<Tooltip v-if="column.key == 'info'">
-								<template #body>
-									<PlanDetails :plan="item" />
-								</template>
-								<FeatherIcon class="h-4 cursor-pointer" name="info" />
-							</Tooltip>
-						</ListRowItem>
-					</ListRow>
-				</ListRows>
-			</ListView>
-		</div>
+		<ListView
+			v-if="rows.length"
+			:columns="columns"
+			:rows="rows"
+			row-key="name"
+			:options="{
+				selectable: false,
+				showTooltip: false,
+			}"
+		>
+			<ListHeader />
+			<ListRows>
+				<ListRow
+					v-for="row in rows"
+					:key="row.name"
+					v-slot="{ column, item }"
+					:row="row"
+					:class="{ 'bg-gray-50 rounded': row.isCurrent }"
+				>
+					<ListRowItem :item="item" :align="column.align">
+						<Badge
+							v-if="column.key == 'upgrade' && row.isCurrent"
+							class="shrink-0 bg-white"
+							label="Current plan"
+							variant="outline"
+							size="lg"
+						/>
+						<Button
+							v-else-if="column.key == 'upgrade' && !row.isCurrent"
+							:label="row.downgrade ? 'Downgrade' : 'Upgrade'"
+							@click="row.onClick"
+							:disabled="!row.downgradable && row.downgrade"
+						/>
+						<div
+							v-if="column.key == 'price'"
+							class="text-base text-gray-900 font-semibold"
+						>
+							<span v-if="item.isTrial" class=""> Free trial </span>
+							<span v-else>
+								<span>{{ item.currency }} {{ item.label }}</span>
+								<span class="text-gray-700 font-normal">/mo</span>
+							</span>
+						</div>
+						<Tooltip v-if="column.key == 'info'">
+							<template #body>
+								<PlanDetails :plan="item" />
+							</template>
+							<FeatherIcon class="h-4 cursor-pointer" name="info" />
+						</Tooltip>
+					</ListRowItem>
+				</ListRow>
+			</ListRows>
+		</ListView>
 		<div v-else class="flex flex-1 items-center justify-center">
 			<Spinner class="size-8" />
 		</div>
@@ -184,7 +183,7 @@ const rows = computed(() => {
 		})
 		.filter(
 			(row) =>
-				row.name !== 'Trial' || (row.name === 'Trial' && row.name === currentPlan.value)
+				row.name !== 'Trial' || (row.name === 'Trial' && row.name === currentPlan.value),
 		)
 })
 

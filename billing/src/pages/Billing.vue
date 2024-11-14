@@ -1,9 +1,9 @@
 <template>
-	<div class="flex h-full flex-col py-11 px-[68px] gap-8 overflow-y-auto">
-		<h2 class="flex gap-2 text-xl font-semibold leading-5">
+	<div class="flex h-full flex-col overflow-hidden">
+		<h2 class="flex items-center h-7 text-xl font-semibold leading-5 px-60 my-8">
 			{{ 'Billing' }}
 		</h2>
-		<div v-if="team.data">
+		<div v-if="team.data" class="px-60 overflow-y-auto">
 			<CurrentPlan @changePlan="router.push({ name: 'Plans' })" />
 			<div class="bg-gray-100 h-px my-7" />
 			<PaymentDetails />

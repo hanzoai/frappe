@@ -1,6 +1,6 @@
 <template>
-	<div class="flex h-full flex-col py-11 px-[68px] gap-8 overflow-y-auto">
-		<div class="flex justify-between items-center">
+	<div class="flex h-full flex-col overflow-hidden px-60">
+		<div class="flex justify-between items-center my-8">
 			<h2 class="flex gap-2 text-xl font-semibold leading-5">
 				{{ 'Cards' }}
 			</h2>
@@ -17,53 +17,46 @@
 				</Button>
 			</div>
 		</div>
-		<div>
-			<ListView
-				:columns="columns"
-				:rows="rows"
-				row-key="id"
-				:options="{
-					selectable: false,
-					showTooltip: false,
-				}"
-			>
-				<ListHeader />
-				<ListRows>
-					<ListRow
-						v-for="row in rows"
-						:key="row.id"
-						v-slot="{ column, item }"
-						:row="row"
-					>
-						<ListRowItem :item="item" :align="column.align">
-							<div
-								v-if="column.key == 'last_4'"
-								class="flex items-center gap-2 text-base"
+		<ListView
+			:columns="columns"
+			:rows="rows"
+			row-key="id"
+			:options="{
+				selectable: false,
+				showTooltip: false,
+			}"
+		>
+			<ListHeader />
+			<ListRows>
+				<ListRow v-for="row in rows" :key="row.id" v-slot="{ column, item }" :row="row">
+					<ListRowItem :item="item" :align="column.align">
+						<div
+							v-if="column.key == 'last_4'"
+							class="flex items-center gap-2 text-base"
+						>
+							<component :is="cardBrandIcon(item.brand)" class="h-6 w-6" />
+							<div>{{ item.last_4 }}</div>
+							<Badge
+								v-if="item.default"
+								label="Default"
+								variant="outline"
+								theme="green"
+							/>
+						</div>
+						<Dropdown
+							v-else-if="column.key == 'actions' && !item.is_default"
+							:options="item.options"
+						>
+							<button
+								class="flex items-center rounded bg-gray-100 px-1 py-0.5 hover:bg-gray-200"
 							>
-								<component :is="cardBrandIcon(item.brand)" class="h-6 w-6" />
-								<div>{{ item.last_4 }}</div>
-								<Badge
-									v-if="item.default"
-									label="Default"
-									variant="outline"
-									theme="green"
-								/>
-							</div>
-							<Dropdown
-								v-else-if="column.key == 'actions' && !item.is_default"
-								:options="item.options"
-							>
-								<button
-									class="flex items-center rounded bg-gray-100 px-1 py-0.5 hover:bg-gray-200"
-								>
-									<FeatherIcon name="more-horizontal" class="h-4 w-4" />
-								</button>
-							</Dropdown>
-						</ListRowItem>
-					</ListRow>
-				</ListRows>
-			</ListView>
-		</div>
+								<FeatherIcon name="more-horizontal" class="h-4 w-4" />
+							</button>
+						</Dropdown>
+					</ListRowItem>
+				</ListRow>
+			</ListRows>
+		</ListView>
 	</div>
 	<AddCardModal
 		v-if="showAddCardModal"
@@ -113,34 +106,36 @@ const columns = [
 	{
 		label: 'Card',
 		key: 'last_4',
-		width: 1.5,
+		width: 1.3,
 	},
 	{
 		label: 'Expiry',
 		key: 'expiry_month',
-		width: 0.5,
+		width: 0.7,
 	},
 	{
 		label: 'Mandated',
 		key: 'stripe_mandate_id',
 		align: 'center',
-		width: 1,
+		width: 0.5,
 	},
 	{
 		label: '',
 		key: 'alert',
 		align: 'right',
+		width: 0.3,
 	},
 	{
 		label: '',
 		key: 'creation',
 		align: 'right',
+		width: 0.7,
 	},
 	{
 		label: '',
 		key: 'actions',
 		align: 'right',
-		width: 0.5,
+		width: 0.3,
 	},
 ]
 

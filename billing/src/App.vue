@@ -3,7 +3,7 @@
 		<div class="h-full border-r bg-gray-50">
 			<AppSidebar />
 		</div>
-		<div class="flex-1 flex flex-col h-full overflow-auto px-28">
+		<div class="flex-1 flex flex-col h-full overflow-x-hidden">
 			<router-view />
 		</div>
 		<Dialogs />

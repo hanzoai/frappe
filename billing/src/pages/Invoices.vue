@@ -1,47 +1,40 @@
 <template>
-	<div class="flex h-full flex-col py-11 px-[68px] gap-8 overflow-y-auto">
-		<h2 class="flex gap-2 text-xl font-semibold leading-5">
-			{{ 'Billing history' }}
+	<div class="flex h-full flex-col overflow-hidden px-60">
+		<h2 class="flex items-center h-7 text-xl font-semibold leading-5 my-8">
+			{{ 'Invoices' }}
 		</h2>
-		<div>
-			<ListView
-				:columns="columns"
-				:rows="rows"
-				row-key="id"
-				:options="{
-					selectable: false,
-				}"
-			>
-				<ListHeader />
-				<ListRows>
-					<ListRow
-						v-for="row in rows"
-						:key="row.id"
-						v-slot="{ column, item }"
-						:row="row"
-					>
-						<ListRowItem :item="item" :align="column.align">
-							<template #prefix>
-								<InvoiceIcon v-if="column.key == 'name'" class="h-4" />
-							</template>
-							<Badge
-								v-if="column.key == 'status'"
-								:label="item.label"
-								variant="subtle"
-								:theme="item.color"
-								size="md"
-							/>
-							<Button
-								v-if="column.key == 'download' && item.url"
-								variant="ghost"
-								icon="download"
-								@click.stop="item.onClick"
-							/>
-						</ListRowItem>
-					</ListRow>
-				</ListRows>
-			</ListView>
-		</div>
+		<ListView
+			:columns="columns"
+			:rows="rows"
+			row-key="id"
+			:options="{
+				selectable: false,
+			}"
+		>
+			<ListHeader />
+			<ListRows>
+				<ListRow v-for="row in rows" :key="row.id" v-slot="{ column, item }" :row="row">
+					<ListRowItem :item="item" :align="column.align">
+						<template #prefix>
+							<InvoiceIcon v-if="column.key == 'name'" class="h-4" />
+						</template>
+						<Badge
+							v-if="column.key == 'status'"
+							:label="item.label"
+							variant="subtle"
+							:theme="item.color"
+							size="md"
+						/>
+						<Button
+							v-if="column.key == 'download' && item.url"
+							variant="ghost"
+							icon="download"
+							@click.stop="item.onClick"
+						/>
+					</ListRowItem>
+				</ListRow>
+			</ListRows>
+		</ListView>
 	</div>
 </template>
 <script setup>
@@ -136,8 +129,8 @@ const rows = computed(() => {
 					invoice.status === 'Paid'
 						? 'green'
 						: invoice.status == 'Unpaid'
-						? 'yellow'
-						: 'gray',
+							? 'yellow'
+							: 'gray',
 			},
 			due_date: due_date,
 			total: formatCurrency(invoice.total),
