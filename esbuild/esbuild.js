@@ -503,12 +503,9 @@ function run_build_command_for_apps(apps) {
 	let { execSync } = require("child_process");
 
 	for (let app of apps) {
-		// if (app === "frappe") continue;
+		if (app === "frappe") continue;
 
-		let root_app_path =
-			app === "frappe"
-				? path.resolve(apps_path, app, "billing")
-				: path.resolve(apps_path, app);
+		let root_app_path = path.resolve(apps_path, app);
 		let package_json = path.resolve(root_app_path, "package.json");
 		let node_modules = path.resolve(root_app_path, "node_modules");
 
