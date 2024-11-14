@@ -18,16 +18,11 @@ import CurrentPlan from '@/components/CurrentPlan.vue'
 import PaymentDetails from '@/components/PaymentDetails.vue'
 import { Spinner, createResource } from 'frappe-ui'
 import { useRouter } from 'vue-router'
-import { computed, provide } from 'vue'
+import { computed, provide, inject } from 'vue'
 
 const router = useRouter()
 
-const team = createResource({
-	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
-	params: { method: 'team.info' },
-	cache: 'team',
-	auto: true,
-})
+const team = inject('team')
 
 const upcomingInvoice = createResource({
 	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
@@ -37,8 +32,6 @@ const upcomingInvoice = createResource({
 })
 
 provide('billing', {
-	team: computed(() => team.data),
-	reloadTeam: team.reload,
 	availableCredits: computed(() => upcomingInvoice.data?.available_credits),
 	currentBillingAmount: computed(() => upcomingInvoice.data?.upcoming_invoice.total),
 	reloadUpcomingInvoice: upcomingInvoice.reload,

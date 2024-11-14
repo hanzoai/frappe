@@ -56,14 +56,9 @@ import {
 	Badge,
 	createResource,
 } from 'frappe-ui'
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 
-const team = createResource({
-	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
-	params: { method: 'team.info' },
-	cache: 'team',
-	auto: true,
-})
+const team = inject('team')
 
 const invoices = createResource({
 	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',

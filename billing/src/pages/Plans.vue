@@ -86,21 +86,16 @@ import {
 	createResource,
 } from 'frappe-ui'
 import { parseSize } from '@/utils.js'
-import { ref, computed, provide } from 'vue'
+import { ref, computed, provide, inject } from 'vue'
 
 const emit = defineEmits(['success'])
+
+const team = inject('team')
 
 const billingDetails = createResource({
 	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
 	params: { method: 'billing.get_information' },
 	cache: 'billingDetails',
-	auto: true,
-})
-
-const team = createResource({
-	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
-	params: { method: 'team.info' },
-	cache: 'team',
 	auto: true,
 })
 
@@ -218,7 +213,6 @@ function changePlan(_planName) {
 }
 
 provide('billing', {
-	team: computed(() => team.data),
 	reloadPlans: plans.reload,
 	reloadSite: site.reload,
 })

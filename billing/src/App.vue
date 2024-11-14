@@ -17,6 +17,14 @@ import PageNotFound from './pages/PageNotFound.vue'
 import AppSidebar from '@/components/AppSidebar.vue'
 import { Dialogs } from '@/dialogs.js'
 import { Toasts, createResource } from 'frappe-ui'
+import { provide } from 'vue'
+
+const team = createResource({
+	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
+	params: { method: 'team.info' },
+	cache: 'team',
+	auto: true,
+})
 
 const isFCSite = createResource({
 	url: 'frappe.integrations.frappe_providers.frappecloud_billing.is_fc_site',
@@ -24,4 +32,6 @@ const isFCSite = createResource({
 	auto: true,
 	transform: (data) => Boolean(data),
 })
+
+provide('team', team)
 </script>

@@ -88,7 +88,7 @@ import { ref, reactive, computed, inject, onMounted } from 'vue'
 
 const emit = defineEmits(['success'])
 
-const { team } = inject('billing')
+const team = inject('team')
 
 const stripe = ref(null)
 const elements = ref(null)
@@ -245,7 +245,7 @@ const verifyCardWithMicroCharge = createResource({
 
 async function setupStripeIntent() {
 	await getPublishedKeyAndSetupIntent.submit()
-	const { first_name, last_name = '' } = team.value?.user_info
+	const { first_name, last_name = '' } = team.data?.user_info
 	const fullname = first_name + ' ' + last_name
 	billingInformation.cardHolderName = fullname.trimEnd()
 }
@@ -276,7 +276,7 @@ async function submit() {
 						city: billingInformation.city,
 						state: billingInformation.state,
 						postal_code: billingInformation.postal_code,
-						country: getCountryCode(team.value?.country),
+						country: getCountryCode(team.data?.country),
 					},
 				},
 			},
@@ -305,7 +305,7 @@ async function submit() {
 }
 
 async function verifyWithMicroChargeIfApplicable(paymentMethodName) {
-	const teamCurrency = team.value?.currency
+	const teamCurrency = team.data?.currency
 	const verifyCardsWithMicroCharge = window.verify_cards_with_micro_charge
 	const isMicroChargeApplicable =
 		verifyCardsWithMicroCharge === 'Both INR and USD' ||
@@ -354,9 +354,9 @@ async function clearForm() {
 }
 
 const formattedMicroChargeAmount = computed(() => {
-	if (!team.value?.currency) {
+	if (!team.data?.currency) {
 		return 0
 	}
-	return currency(team.value?.billing_info?.micro_debit_charge_amount, team.value?.currency)
+	return currency(team.data?.billing_info?.micro_debit_charge_amount, team.data?.currency)
 })
 </script>

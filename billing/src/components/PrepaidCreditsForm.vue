@@ -13,13 +13,13 @@
 			>
 				<template #prefix>
 					<div class="grid w-4 place-items-center text-sm text-gray-700">
-						{{ team.currency === 'INR' ? '₹' : '$' }}
+						{{ team.data.currency === 'INR' ? '₹' : '$' }}
 					</div>
 				</template>
 			</FormControl>
 			<FormControl
-				v-if="team.currency === 'INR'"
-				:label="`Total Amount + GST (${team?.billing_info.gst_percentage * 100}%)`"
+				v-if="team.data.currency === 'INR'"
+				:label="`Total Amount + GST (${team.data?.billing_info.gst_percentage * 100}%)`"
 				disabled
 				:modelValue="totalAmount"
 				name="total"
@@ -28,7 +28,7 @@
 			>
 				<template #prefix>
 					<div class="grid w-4 place-items-center text-sm text-gray-700">
-						{{ team.currency === 'INR' ? '₹' : '$' }}
+						{{ team.data.currency === 'INR' ? '₹' : '$' }}
 					</div>
 				</template>
 			</FormControl>
@@ -39,7 +39,7 @@
 			<div class="text-xs text-gray-600">Select Payment Gateway</div>
 			<div class="mt-1.5 grid grid-cols-1 gap-2 sm:grid-cols-2">
 				<Button
-					v-if="team.currency === 'INR' || team.razorpay_enabled"
+					v-if="team.data.currency === 'INR' || team.data.razorpay_enabled"
 					size="lg"
 					:class="{
 						'border-gray-700 border-[1.5px]': paymentGateway === 'Razorpay',
@@ -88,7 +88,7 @@ import { ref, computed, inject } from 'vue'
 
 const emit = defineEmits(['success'])
 
-const { team } = inject('billing')
+const team = inject('team')
 
 const totalUnpaidAmount = createResource({
 	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
@@ -98,9 +98,9 @@ const totalUnpaidAmount = createResource({
 })
 
 const minimumAmount = computed(() => {
-	if (!team.value) return 0
+	if (!team.data) return 0
 	const unpaidAmount = totalUnpaidAmount.data || 0
-	const minimumDefault = team.value?.currency == 'INR' ? 410 : 5
+	const minimumDefault = team.data?.currency == 'INR' ? 410 : 5
 
 	return Math.ceil(unpaidAmount && unpaidAmount > 0 ? unpaidAmount : minimumDefault)
 })
@@ -110,10 +110,10 @@ const paymentGateway = ref('')
 
 const totalAmount = computed(() => {
 	let _creditsToBuy = creditsToBuy.value || 0
-	if (team.value?.currency === 'INR') {
+	if (team.data?.currency === 'INR') {
 		return (
 			_creditsToBuy +
-			_creditsToBuy * (team.value.billing_info.gst_percentage || 0)
+			_creditsToBuy * (team.data.billing_info.gst_percentage || 0)
 		).toFixed(2)
 	} else {
 		return _creditsToBuy

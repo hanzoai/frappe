@@ -37,7 +37,7 @@ import { FormControl, ErrorMessage, createResource, toast } from 'frappe-ui'
 import { ref, computed, inject, watch } from 'vue'
 
 const emit = defineEmits(['success'])
-const { team } = inject('billing')
+const team = inject('team')
 
 const billingInformation = defineModel()
 
@@ -135,7 +135,7 @@ const _countryList = createResource({
 	cache: 'countryList',
 	auto: true,
 	onSuccess: () => {
-		let userCountry = team.value?.country
+		let userCountry = team.data?.country
 		if (userCountry) {
 			let country = countryList.value?.find((d) => d.label === userCountry)
 			if (country) {

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<span
-			v-if="team.currency === 'INR'"
+			v-if="team.data.currency === 'INR'"
 			class="mt-2.5 inline-flex gap-2 text-base text-gray-700"
 		>
 			<FeatherIcon name="info" class="h-4 my-1" />
@@ -49,7 +49,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['success'])
-const { team } = inject('billing')
+const team = inject('team')
 
 const isPaymentComplete = ref(false)
 const isVerifyingPayment = ref(false)
@@ -95,7 +95,7 @@ function processOrder(data) {
 		order_id: data.order_id,
 		name: 'Frappe Cloud',
 		image: 'https://frappe.io/files/cloud.png',
-		prefill: { email: team.value?.user },
+		prefill: { email: team.data?.user },
 		handler: handlePaymentSuccess,
 		theme: { color: '#171717' },
 	}

@@ -5,18 +5,18 @@
 		</div>
 		<div class="flex flex-col">
 			<div
-				v-if="team.payment_mode == 'Card'"
+				v-if="team.data.payment_mode == 'Card'"
 				class="flex justify-between items-center text-base text-gray-900"
 			>
 				<div class="flex flex-col gap-1.5">
 					<div class="font-medium">{{ 'Active card' }}</div>
 					<div class="overflow-hidden text-gray-700 text-ellipsis">
-						<div v-if="team.payment_method" class="inline-flex items-center gap-2">
-							<component :is="cardBrandIcon(team.payment_method.brand)" />
+						<div v-if="team.data.payment_method" class="inline-flex items-center gap-2">
+							<component :is="cardBrandIcon(team.data.payment_method.brand)" />
 							<div class="text-gray-700">
-								<span>{{ team.payment_method.name_on_card }}</span>
+								<span>{{ team.data.payment_method.name_on_card }}</span>
 								<span> &middot; Card ending in •••• </span>
-								<span>{{ team.payment_method.last_4 }}</span>
+								<span>{{ team.data.payment_method.last_4 }}</span>
 							</div>
 						</div>
 						<span v-else class="text-gray-700">No card added</span>
@@ -24,21 +24,21 @@
 				</div>
 				<div class="shrink-0">
 					<Button
-						:label="team.payment_method ? 'Change card' : 'Add card'"
+						:label="team.data.payment_method ? 'Change card' : 'Add card'"
 						@click="changeMethod"
 					>
-						<template v-if="!team.payment_method" #prefix>
+						<template v-if="!team.data.payment_method" #prefix>
 							<FeatherIcon class="h-4" name="plus" />
 						</template>
 					</Button>
 				</div>
 			</div>
-			<div v-if="team.payment_mode == 'Card'" class="bg-gray-100 h-px my-3" />
+			<div v-if="team.data.payment_mode == 'Card'" class="bg-gray-100 h-px my-3" />
 			<div class="flex justify-between items-center text-base text-gray-900">
 				<div class="flex flex-col gap-1.5">
 					<div class="font-medium">{{ 'Mode of payment' }}</div>
 					<div
-						v-if="team.payment_mode"
+						v-if="team.data.payment_mode"
 						class="inline-flex items-center gap-2 text-gray-700"
 					>
 						<FeatherIcon class="h-4" name="info" />
@@ -49,7 +49,7 @@
 				<div class="shrink-0">
 					<Dropdown :options="paymentModeOptions">
 						<template #default="{ open }">
-							<Button :label="team.payment_mode ? paymentMode.label : 'Set mode'">
+							<Button :label="team.data.payment_mode ? paymentMode.label : 'Set mode'">
 								<template #suffix>
 									<FeatherIcon
 										:name="open ? 'chevron-up' : 'chevron-down'"
@@ -137,7 +137,7 @@
 			() => {
 				showMessage = false
 				showAddCardModal = false
-				reloadTeam()
+				team.reload()
 			}
 		"
 	/>
@@ -150,7 +150,7 @@
 				showAddCardModal = true
 			}
 		"
-		@success="() => reloadTeam()"
+		@success="() => team.reload()"
 	/>
 </template>
 <script setup>
@@ -163,14 +163,15 @@ import { Dropdown, Button, FeatherIcon, createResource } from 'frappe-ui'
 import { cardBrandIcon } from '../utils.js'
 import { computed, ref, inject, h } from 'vue'
 
-const { team, reloadTeam, availableCredits, reloadUpcomingInvoice } = inject('billing')
+const team = inject('team')
+const { availableCredits, reloadUpcomingInvoice } = inject('billing')
 
 const showBillingDetailsDialog = ref(false)
 const showAddPrepaidCreditsModal = ref(false)
 const showAddCardModal = ref(false)
 const showChangeCardModal = ref(false)
 
-const currency = computed(() => (team.value.currency == 'INR' ? '₹' : '$'))
+const currency = computed(() => (team.data.currency == 'INR' ? '₹' : '$'))
 
 const billingDetails = createResource({
 	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
@@ -198,7 +199,7 @@ const paymentModeOptions = [
 		component: () =>
 			h(DropdownItem, {
 				label: 'Card',
-				active: team.value.payment_mode === 'Card',
+				active: team.data.payment_mode === 'Card',
 				onClick: () => updatePaymentMode('Card'),
 			}),
 	},
@@ -209,14 +210,14 @@ const paymentModeOptions = [
 		component: () =>
 			h(DropdownItem, {
 				label: 'Prepaid credits',
-				active: team.value.payment_mode === 'Prepaid Credits',
+				active: team.data.payment_mode === 'Prepaid Credits',
 				onClick: () => updatePaymentMode('Prepaid Credits'),
 			}),
 	},
 ]
 
 const paymentMode = computed(() => {
-	return paymentModeOptions.find((o) => o.value === team.value.payment_mode)
+	return paymentModeOptions.find((o) => o.value === team.data.payment_mode)
 })
 
 const showMessage = ref(false)
@@ -227,11 +228,11 @@ function updatePaymentMode(mode) {
 		showBillingDetailsDialog.value = true
 		return
 	}
-	if (mode === 'Prepaid Credits' && team.value.balance === 0) {
+	if (mode === 'Prepaid Credits' && team.data.balance === 0) {
 		showMessage.value = true
 		showAddPrepaidCreditsModal.value = true
 		return
-	} else if (mode === 'Card' && !team.value.payment_method) {
+	} else if (mode === 'Card' && !team.data.payment_method) {
 		showMessage.value = true
 		showAddCardModal.value = true
 	}
@@ -242,12 +243,12 @@ function updatePaymentMode(mode) {
 			data: { mode },
 		},
 		auto: true,
-		onSuccess: () => reloadTeam(),
+		onSuccess: () => team.reload(),
 	})
 }
 
 function changeMethod() {
-	if (team.value.payment_method) {
+	if (team.data.payment_method) {
 		showChangeCardModal.value = true
 	} else {
 		showMessage.value = false

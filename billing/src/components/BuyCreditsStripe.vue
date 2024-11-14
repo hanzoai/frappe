@@ -56,7 +56,7 @@ const props = defineProps({
 
 const emit = defineEmits(['success'])
 
-const { team } = inject('billing')
+const team = inject('team')
 
 const step = ref('Get Amount')
 const clientSecret = ref(null)
@@ -78,7 +78,7 @@ const createPaymentIntent = createResource({
 		data: { amount: props.amount },
 	},
 	validate() {
-		if (props.amount < props.minimumAmount && !team.value.erpnext_partner) {
+		if (props.amount < props.minimumAmount && !team.data.erpnext_partner) {
 			return `Amount must be greater than or equal to ${props.minimumAmount}`
 		}
 	},

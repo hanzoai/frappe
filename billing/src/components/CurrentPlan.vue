@@ -95,7 +95,7 @@
 						<span>{{ currency }} {{ unpaidAmount.data?.toFixed(2) }}</span>
 					</div>
 				</div>
-				<div v-if="team.payment_mode == 'Prepaid Credits'">
+				<div v-if="team.data.payment_mode == 'Prepaid Credits'">
 					<Button
 						variant="outline"
 						label="Pay now"
@@ -125,7 +125,8 @@ import { ref, computed, inject } from 'vue'
 
 const emit = defineEmits(['changePlan'])
 
-const { team, currentBillingAmount, reloadUpcomingInvoice } = inject('billing')
+const team = inject('team')
+const { currentBillingAmount, reloadUpcomingInvoice } = inject('billing')
 
 const showAddPrepaidCreditsModal = ref(false)
 
@@ -143,7 +144,7 @@ const currentSiteInfo = createResource({
 })
 
 const price = ref(null)
-const currency = computed(() => (team.value.currency == 'INR' ? '₹' : '$'))
+const currency = computed(() => (team.data.currency == 'INR' ? '₹' : '$'))
 
 const currentPlan = computed(() => {
 	if (!currentSiteInfo.data) return null
