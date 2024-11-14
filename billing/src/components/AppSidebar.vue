@@ -45,11 +45,10 @@
 <script setup>
 import CollapseSidebarIcon from '@/icons/CollapseSidebarIcon.vue'
 import BillingIcon from '@/icons/BillingIcon.vue'
+import CardIcon from '@/icons/CardIcon.vue'
 import Plans from '@/icons/PlansIcon.vue'
 import InvoiceIcon from '@/icons/InvoiceIcon.vue'
 import SidebarLink from '@/components/SidebarLink.vue'
-import Generic from '@/logo/Generic.vue'
-import { FeatherIcon } from 'frappe-ui'
 import { useRouter } from 'vue-router'
 import { useStorage } from '@vueuse/core'
 import { onMounted } from 'vue'
@@ -82,7 +81,7 @@ const links = [
 	},
 	{
 		label: 'Cards',
-		icon: Generic,
+		icon: CardIcon,
 		to: 'Cards',
 	},
 ]

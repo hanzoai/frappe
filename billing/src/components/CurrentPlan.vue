@@ -71,7 +71,7 @@
 				</div>
 				<div class="flex justify-between items-center">
 					<div class="text-gray-700 flex gap-2">
-						<BillingIcon class="h-4 w-4" />
+						<CardIcon class="h-4 w-4" />
 						<div>
 							<span>Current billing amount so far </span>
 							<span class="text-gray-900 font-medium">
@@ -115,7 +115,7 @@
 	</div>
 </template>
 <script setup>
-import BillingIcon from '../icons/BillingIcon.vue'
+import CardIcon from '../icons/CardIcon.vue'
 import UnPaidBillIcon from '../icons/UnPaidBillIcon.vue'
 import PlanDetails from './PlanDetails.vue'
 import AddPrepaidCreditsModal from './AddPrepaidCreditsModal.vue'
