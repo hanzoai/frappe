@@ -195,10 +195,10 @@ def run(
 	parent_field=None,
 	are_default_filters=True,
 ):
-	validate_filters_permissions(report_name, filters, user)
-	report = get_report_doc(report_name)
 	if not user:
 		user = frappe.session.user
+	validate_filters_permissions(report_name, filters, user)
+	report = get_report_doc(report_name)
 	if not frappe.has_permission(report.ref_doctype, "report"):
 		frappe.msgprint(
 			_("Must have report permission to access this report."),
