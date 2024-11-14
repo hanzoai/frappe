@@ -107,7 +107,7 @@ const removeCard = (card) => {
 		message: 'Are you sure you want to remove this card?',
 		actions: [
 			{
-				label: 'Delete',
+				label: 'Remove',
 				variant: 'solid',
 				theme: 'red',
 				onClick: (close) => {

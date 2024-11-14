@@ -7,7 +7,7 @@
 			<ListView
 				:columns="columns"
 				:rows="rows"
-				row-key="name"
+				row-key="id"
 				:options="{
 					selectable: false,
 				}"
