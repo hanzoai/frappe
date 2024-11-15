@@ -33,10 +33,9 @@ function generateTrialSubscriptionBanner(trialEndDate) {
 					display: flex;
 					justify-content: space-between;
 					align-items: center;
-					background-color: #f9f9f9;
-					border-radius: 10px;
-					box-shadow: 0px 1px 2px 0px #0000001A;
-					z-index: 1;
+					background-color: var(--subtle-accent);
+					border-radius: var(--border-radius);
+					box-shadow: var(--shadow-sm);
 				}
 				.trial-banner > div {
 					display: flex;
@@ -51,25 +50,22 @@ function generateTrialSubscriptionBanner(trialEndDate) {
 					justify-content: center;
 				}
 				.trial-banner .title {
-					font-size: 14px;
-					font-weight: 600;
+					font-size: var(--text-base);
+					font-weight: var(--weight-semibold);
 				}
 				.trial-banner .description {
-					font-size: 13px;
-					color: #525252;
+					font-size: var(--text-sm);
+					color: var(--text-muted);
 				}
 				.trial-banner .upgrade-plan-button {
-					margin: auto;
 					height: fit-content;
-					background-color: #ffe7e7;
+					background-color: var(--blue-200);
 					border: none;
-					color: #cc2929;
-					border-radius: 8px;
-					margin-right: 0px;
-					font-size: 14px;
+					color: var(--blue-600);
+					border-radius: var(--border-radius);
 				}
 				.trial-banner .upgrade-plan-button:hover {
-					background-color: #ffcccc;
+					background-color: var(--blue-300);
 				}
 			</style>
 			<div class="trial-banner px-3 py-2 my-2">
