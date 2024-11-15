@@ -87,8 +87,4 @@ def api(method, data=None):
 def is_fc_site():
 	is_system_manager = frappe.get_roles(frappe.session.user).count("System Manager")
 	setup_completed = frappe.get_system_settings("setup_complete")
-	return (
-		is_system_manager
-		and setup_completed
-		and frappe.conf.get("fc_communication_secret")
-	)
+	return is_system_manager and setup_completed and frappe.conf.get("fc_communication_secret")
