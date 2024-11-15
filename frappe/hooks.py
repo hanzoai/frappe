@@ -483,6 +483,13 @@ standard_navbar_items = [
 		"is_standard": 1,
 	},
 	{
+		"item_label": "Manage Billing",
+		"item_type": "Route",
+		"route": "/billing",
+		"is_standard": 1,
+		"condition": "frappe.boot.fc_communication_secret && frappe.boot.setup_complete && !frappe.is_mobile() && frappe.user.has_role('System Manager')",
+	},
+	{
 		"item_label": "Session Defaults",
 		"item_type": "Action",
 		"action": "frappe.ui.toolbar.setup_session_defaults()",
