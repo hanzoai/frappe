@@ -1,5 +1,5 @@
 <template>
-	<div v-if="isFCSite.data" class="flex h-screen w-screen">
+	<div v-if="isFCSite.data && user.name" class="flex h-screen w-screen">
 		<div class="h-full border-r bg-gray-50">
 			<AppSidebar />
 		</div>
@@ -16,21 +16,17 @@
 import PageNotFound from './pages/PageNotFound.vue'
 import AppSidebar from '@/components/AppSidebar.vue'
 import { Dialogs } from '@/dialogs.js'
+import { getSession } from '@/session.js'
 import { Toasts, createResource } from 'frappe-ui'
 import { provide } from 'vue'
+
+const { isFCSite, user } = getSession()
 
 const team = createResource({
 	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
 	params: { method: 'team.info' },
 	cache: 'team',
 	auto: true,
-})
-
-const isFCSite = createResource({
-	url: 'frappe.integrations.frappe_providers.frappecloud_billing.is_fc_site',
-	cache: 'isFCSite',
-	auto: true,
-	transform: (data) => Boolean(data),
 })
 
 provide('team', team)

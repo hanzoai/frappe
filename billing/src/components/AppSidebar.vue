@@ -1,14 +1,15 @@
 <template>
 	<div
-		class="relative flex h-full flex-col justify-between transition-all duration-300 ease-in-out"
-		:class="isSidebarCollapsed ? 'w-12' : 'w-[220px]'"
+		class="relative flex h-full flex-col justify-between transition-all duration-300 ease-in-out w-[220px]"
 	>
-		<div class="flex-1 mt-3 overflow-y-auto">
+		<div>
+			<UserDropdown class="p-2" />
+		</div>
+		<div class="flex-1 overflow-y-auto">
 			<div class="mb-3 flex flex-col">
 				<SidebarLink
 					:label="previousRoute ? 'Back to app' : 'Back'"
-					icon="chevron-left"
-					:isCollapsed="isSidebarCollapsed"
+					icon="arrow-left"
 					@click="goBack"
 					class="relative mx-2 my-0.5"
 				/>
@@ -19,31 +20,17 @@
 					:icon="link.icon"
 					:label="link.label"
 					:to="link.to"
-					:isCollapsed="isSidebarCollapsed"
 					class="mx-2 my-0.5"
 				/>
 			</nav>
 		</div>
-		<div class="m-2 flex flex-col gap-1">
-			<SidebarLink
-				:label="isSidebarCollapsed ? 'Expand' : 'Collapse'"
-				:isCollapsed="isSidebarCollapsed"
-				@click="isSidebarCollapsed = !isSidebarCollapsed"
-			>
-				<template #icon>
-					<span class="grid h-4.5 w-4.5 flex-shrink-0 place-items-center">
-						<CollapseSidebarIcon
-							class="h-4.5 w-4.5 text-gray-700 duration-300 ease-in-out"
-							:class="{ '[transform:rotateY(180deg)]': isSidebarCollapsed }"
-						/>
-					</span>
-				</template>
-			</SidebarLink>
+		<div class="m-2 text-base text-gray-600 p-2 flex justify-center">
+			Powered by Frappe Cloud
 		</div>
 	</div>
 </template>
 <script setup>
-import CollapseSidebarIcon from '@/icons/CollapseSidebarIcon.vue'
+import UserDropdown from '@/components/UserDropdown.vue'
 import BillingIcon from '@/icons/BillingIcon.vue'
 import CardIcon from '@/icons/CardIcon.vue'
 import Plans from '@/icons/PlansIcon.vue'
@@ -54,7 +41,6 @@ import { useStorage } from '@vueuse/core'
 import { onMounted } from 'vue'
 
 const router = useRouter()
-const isSidebarCollapsed = useStorage('isSidebarCollapsed', false)
 const previousRoute = useStorage('previousRoute', null)
 
 onMounted(() => {
