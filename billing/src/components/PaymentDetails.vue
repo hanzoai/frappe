@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col gap-6">
+	<div class="flex flex-col gap-4">
 		<div class="text-lg font-semibold text-gray-900">
 			{{ 'Payment details' }}
 		</div>

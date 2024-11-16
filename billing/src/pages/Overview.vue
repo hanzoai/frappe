@@ -3,9 +3,8 @@
 		<h2 class="flex items-center h-7 text-xl font-semibold leading-5 px-60 my-8">
 			{{ 'Overview' }}
 		</h2>
-		<div v-if="team.data" class="px-60 overflow-y-auto">
+		<div v-if="team.data" class="flex flex-col gap-8 px-60 overflow-y-auto">
 			<CurrentPlan @changePlan="router.push({ name: 'Plans' })" />
-			<div class="bg-gray-100 h-px my-7" />
 			<PaymentDetails />
 		</div>
 		<div v-else class="flex flex-1 items-center justify-center">
