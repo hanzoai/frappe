@@ -186,7 +186,7 @@ const rows = computed(() => {
 		})
 		.filter(
 			(row) =>
-				row.name !== 'Trial' || (row.name === 'Trial' && row.name === currentPlan.value),
+				row.name !== 'Trial' || (row.name === 'Trial' && row.name === currentPlan.value)
 		)
 })
 
@@ -213,7 +213,7 @@ function changePlan(_plan, price) {
 	createDialog({
 		title: 'Change plan',
 		component: markRaw(
-			h(ConfirmMessage, { price, currency: currency.value === 'INR' ? '₹' : '$' }),
+			h(ConfirmMessage, { price, currency: currency.value === 'INR' ? '₹' : '$' })
 		),
 		actions: [
 			{
