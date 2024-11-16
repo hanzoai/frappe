@@ -75,7 +75,7 @@
 						<div>
 							<span>Current billing amount so far </span>
 							<span class="text-gray-900 font-medium">
-								{{ currency }} {{ currentBillingAmount?.toFixed(2) }}
+								{{ currency }} {{ currentBillingAmount?.toFixed(2) || '0.00' }}
 							</span>
 						</div>
 					</div>
@@ -118,8 +118,12 @@ import AddPrepaidCreditsModal from './AddPrepaidCreditsModal.vue'
 import { Button, Tooltip, Spinner, FeatherIcon, createResource } from 'frappe-ui'
 import { calculateTrialEndDays } from '../utils.js'
 import { ref, computed, inject } from 'vue'
+import { useRouter } from 'vue-router'
+import { createDialog } from '../dialogs.js'
 
 const emit = defineEmits(['changePlan'])
+
+const router = useRouter()
 
 const team = inject('team')
 const { currentBillingAmount, upcomingInvoice } = inject('billing')
@@ -167,12 +171,36 @@ const currentMonthEnd = () => {
 	})
 }
 
+const unpaidInvoices = createResource({
+	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
+	params: { method: 'billing.get_unpaid_invoices' },
+})
+
 function payNow() {
-	if (team.data.payment_mode == 'Prepaid Credits') {
-		showAddPrepaidCreditsModal.value = true
+	team.data.payment_mode == 'Prepaid Credits'
+		? (showAddPrepaidCreditsModal.value = true)
+		: payUnpaidInvoices()
+}
+
+async function payUnpaidInvoices() {
+	let _unpaidInvoices = await unpaidInvoices.reload()
+	if (_unpaidInvoices.length > 1) {
+		createDialog({
+			title: 'Multiple unpaid invoices',
+			message: 'You have multiple unpaid invoices. Please pay them from the invoices page',
+			actions: [
+				{
+					label: 'Go to invoices',
+					variant: 'solid',
+					onClick: (close) => {
+						router.push({ name: 'Invoices' })
+						close()
+					},
+				},
+			],
+		})
 	} else {
-		let invoice = upcomingInvoice.data?.upcoming_invoice
-		if (!invoice?.name) return
+		let invoice = _unpaidInvoices
 		if (invoice.stripe_invoice_url) {
 			window.open(invoice.stripe_invoice_url, '_blank')
 		} else {
