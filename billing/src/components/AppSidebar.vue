@@ -6,15 +6,13 @@
 			<UserDropdown class="p-2" />
 		</div>
 		<div class="flex-1 overflow-y-auto">
-			<div class="mb-3 flex flex-col">
+			<nav class="mb-3 flex flex-col">
 				<SidebarLink
 					:label="previousRoute ? 'Back to app' : 'Back'"
 					icon="arrow-left"
 					@click="goBack"
-					class="relative mx-2 my-0.5"
+					class="mx-2 my-0.5"
 				/>
-			</div>
-			<nav class="mb-3 flex flex-col">
 				<SidebarLink
 					v-for="link in links"
 					:icon="link.icon"

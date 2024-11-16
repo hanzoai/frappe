@@ -1,10 +1,10 @@
 <template>
-	<header class="flex h-10.5 border-b items-center justify-between py-2 px-5">
+	<header class="flex h-10.5 border-b items-center justify-between py-2 px-5 shrink-0">
 		<h2 class="text-lg font-semibold text-gray-900 leading-5">
 			{{ 'Cards' }}
 		</h2>
 	</header>
-	<div class="flex h-full flex-col overflow-hidden mx-60 mt-6">
+	<div class="flex flex-col overflow-hidden mx-60 mt-6">
 		<div class="flex justify-end gap-2 mb-3">
 			<Button :loading="cards.loading" @click="cards.reload()">
 				<template #icon>
