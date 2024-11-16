@@ -42,7 +42,7 @@ function generateTrialSubscriptionBanner(trialEndDate) {
 					gap: 8px;
 				}
 				.trial-banner .info-icon {
-					margin: 1px 0;
+					margin: 4px 0;
 				}
 				.trial-banner > div > div {
 					display: flex;

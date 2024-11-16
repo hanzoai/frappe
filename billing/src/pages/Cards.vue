@@ -27,7 +27,7 @@
 			}"
 		>
 			<ListHeader />
-			<ListRows>
+			<ListRows v-if="rows.length">
 				<ListRow v-for="row in rows" :key="row.id" v-slot="{ column, item }" :row="row">
 					<ListRowItem :item="item" :align="column.align">
 						<div
@@ -56,6 +56,16 @@
 					</ListRowItem>
 				</ListRow>
 			</ListRows>
+			<div v-else class="h-60 border border-dashed rounded">
+				<div class="flex flex-col gap-2 items-center justify-center h-full">
+					<p class="text-lg text-gray-500">No card found</p>
+					<Button label="Add Card" variant="outline" @click="showAddCardModal = true">
+						<template #prefix>
+							<FeatherIcon name="plus" class="h-4 w-4" />
+						</template>
+					</Button>
+				</div>
+			</div>
 		</ListView>
 	</div>
 	<AddCardModal
