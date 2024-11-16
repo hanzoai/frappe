@@ -28,11 +28,27 @@
 							size="md"
 						/>
 						<Button
-							v-if="column.key == 'download' && item.url"
-							variant="ghost"
-							icon="download"
-							@click.stop="item.onClick"
-						/>
+							v-if="
+								column.key == 'button' &&
+								item.status == 'Unpaid' &&
+								item.amount_due > 0
+							"
+							label="Pay now"
+							@click.stop="item.payNow"
+						>
+							<template #prefix>
+								<FeatherIcon name="external-link" class="h-4 w-4" />
+							</template>
+						</Button>
+						<Button
+							v-else-if="column.key == 'button' && item.url"
+							label="Download"
+							@click.stop="item.download"
+						>
+							<template #prefix>
+								<FeatherIcon name="download" class="h-4 w-4" />
+							</template>
+						</Button>
 					</ListRowItem>
 				</ListRow>
 			</ListRows>
@@ -47,6 +63,7 @@ import {
 	ListRows,
 	ListRow,
 	ListRowItem,
+	FeatherIcon,
 	Button,
 	Badge,
 	createResource,
@@ -66,6 +83,7 @@ const columns = [
 	{
 		label: 'Invoice',
 		key: 'name',
+		width: 1.2,
 	},
 	{
 		label: 'Status',
@@ -80,12 +98,13 @@ const columns = [
 	{
 		label: 'Total',
 		key: 'total',
-		width: 1.2,
+		width: 1,
 	},
 	{
 		label: '',
-		key: 'download',
-		width: 0.5,
+		key: 'button',
+		width: 1,
+		align: 'right',
 	},
 ]
 
@@ -131,18 +150,37 @@ const rows = computed(() => {
 					invoice.status === 'Paid'
 						? 'green'
 						: invoice.status == 'Unpaid'
-							? 'yellow'
+							? 'orange'
 							: 'gray',
 			},
 			due_date: due_date,
 			total: formatCurrency(invoice.total),
-			download: {
+			button: {
 				url: invoice.invoice_pdf,
-				onClick: () => downloadInvoice(invoice.name),
+				download: () => downloadInvoice(invoice.name),
+				status: invoice.status,
+				amount_due: invoice.amount_due,
+				payNow: () => payNow(invoice),
 			},
 		}
 	})
 })
+
+function payNow(invoice) {
+	if (invoice.stripe_invoice_url) {
+		window.open(invoice.stripe_invoice_url, '_blank')
+	} else {
+		createResource({
+			url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
+			params: {
+				method: 'billing.get_stripe_payment_url_for_invoice',
+				data: { name: invoice.name },
+			},
+			auto: true,
+			onSuccess: (url) => window.open(url, '_blank'),
+		})
+	}
+}
 
 function downloadInvoice(invoice) {
 	createResource({
