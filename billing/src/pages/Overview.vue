@@ -1,7 +1,7 @@
 <template>
 	<div class="flex h-full flex-col overflow-hidden">
 		<h2 class="flex items-center h-7 text-xl font-semibold leading-5 px-60 my-8">
-			{{ 'Billing' }}
+			{{ 'Overview' }}
 		</h2>
 		<div v-if="team.data" class="px-60 overflow-y-auto">
 			<CurrentPlan @changePlan="router.push({ name: 'Plans' })" />

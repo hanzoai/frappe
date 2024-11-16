@@ -51,9 +51,9 @@ onMounted(() => {
 
 const links = [
 	{
-		label: 'Billing',
+		label: 'Overview',
 		icon: BillingIcon,
-		to: 'Billing',
+		to: 'Overview',
 	},
 	{
 		label: 'Plans',
