@@ -34,7 +34,7 @@ function generateTrialSubscriptionBanner(trialEndDate) {
 					justify-content: space-between;
 					align-items: center;
 					background-color: var(--subtle-accent);
-					border-radius: var(--border-radius);
+					border-radius: var(--border-radius-md);
 					box-shadow: var(--shadow-sm);
 				}
 				.trial-banner > div {
@@ -59,13 +59,13 @@ function generateTrialSubscriptionBanner(trialEndDate) {
 				}
 				.trial-banner .upgrade-plan-button {
 					height: fit-content;
-					background-color: var(--blue-200);
-					border: none;
+					background-color: var(--fg-color);
+					border: 1px solid var(--blue-300);
 					color: var(--blue-600);
 					border-radius: var(--border-radius);
 				}
 				.trial-banner .upgrade-plan-button:hover {
-					background-color: var(--blue-300);
+					border-color: var(--blue-400);
 				}
 			</style>
 			<div class="trial-banner px-3 py-2 my-2">
