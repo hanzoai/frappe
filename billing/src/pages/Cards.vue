@@ -1,21 +1,21 @@
 <template>
-	<div class="flex h-full flex-col overflow-hidden px-60">
-		<div class="flex justify-between items-center my-8">
-			<h2 class="flex gap-2 text-xl font-semibold leading-5">
-				{{ 'Cards' }}
-			</h2>
-			<div class="flex gap-2">
-				<Button :loading="cards.loading" @click="cards.reload()">
-					<template #icon>
-						<RefreshIcon class="h-4 w-4" />
-					</template>
-				</Button>
-				<Button label="Add Card" variant="solid" @click="showAddCardModal = true">
-					<template #prefix>
-						<FeatherIcon name="plus" class="h-4 w-4" />
-					</template>
-				</Button>
-			</div>
+	<header class="flex h-10.5 border-b items-center justify-between py-2 px-5">
+		<h2 class="text-lg font-semibold text-gray-900 leading-5">
+			{{ 'Cards' }}
+		</h2>
+	</header>
+	<div class="flex h-full flex-col overflow-hidden mx-60 mt-6">
+		<div class="flex justify-end gap-2 mb-3">
+			<Button :loading="cards.loading" @click="cards.reload()">
+				<template #icon>
+					<RefreshIcon class="h-4 w-4" />
+				</template>
+			</Button>
+			<Button label="Add Card" variant="solid" @click="showAddCardModal = true">
+				<template #prefix>
+					<FeatherIcon name="plus" class="h-4 w-4" />
+				</template>
+			</Button>
 		</div>
 		<ListView
 			:columns="columns"
@@ -158,7 +158,7 @@ const rows = computed(() => {
 				? h(FeatherIcon, {
 						name: 'check-circle',
 						class: 'h-4 w-4 text-green-600',
-				  })
+					})
 				: null,
 			alert:
 				card.is_default && card.stripe_payment_method
@@ -171,8 +171,8 @@ const rows = computed(() => {
 								h(FeatherIcon, {
 									name: 'alert-circle',
 									class: 'h-4 w-4 text-red-600',
-								})
-					  )
+								}),
+						)
 					: null,
 			creation: useTimeAgo(card.creation).value,
 			actions: {

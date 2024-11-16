@@ -1,8 +1,10 @@
 <template>
-	<div class="flex h-full flex-col overflow-hidden px-60">
-		<h2 class="flex items-center h-7 text-xl font-semibold leading-5 my-8">
+	<header class="flex h-10.5 border-b items-center justify-between py-2 px-5">
+		<h2 class="text-lg font-semibold text-gray-900 leading-5">
 			{{ 'Invoices' }}
 		</h2>
+	</header>
+	<div class="flex h-full flex-col overflow-hidden mx-60 mt-6">
 		<ListView
 			:columns="columns"
 			:rows="rows"
@@ -129,8 +131,8 @@ const rows = computed(() => {
 					invoice.status === 'Paid'
 						? 'green'
 						: invoice.status == 'Unpaid'
-						? 'yellow'
-						: 'gray',
+							? 'yellow'
+							: 'gray',
 			},
 			due_date: due_date,
 			total: formatCurrency(invoice.total),
