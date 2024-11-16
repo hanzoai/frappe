@@ -95,12 +95,8 @@
 						<span>{{ currency }} {{ unpaidAmount.data?.toFixed(2) }}</span>
 					</div>
 				</div>
-				<div v-if="team.data.payment_mode == 'Prepaid Credits'">
-					<Button
-						variant="outline"
-						label="Pay now"
-						@click="showAddPrepaidCreditsModal = true"
-					/>
+				<div>
+					<Button variant="outline" label="Pay now" @click="payNow" />
 				</div>
 			</div>
 		</div>
@@ -110,7 +106,7 @@
 		<AddPrepaidCreditsModal
 			v-if="showAddPrepaidCreditsModal"
 			v-model="showAddPrepaidCreditsModal"
-			@success="reloadUpcomingInvoice()"
+			@success="upcomingInvoice.reload()"
 		/>
 	</div>
 </template>
@@ -126,7 +122,7 @@ import { ref, computed, inject } from 'vue'
 const emit = defineEmits(['changePlan'])
 
 const team = inject('team')
-const { currentBillingAmount, reloadUpcomingInvoice } = inject('billing')
+const { currentBillingAmount, upcomingInvoice } = inject('billing')
 
 const showAddPrepaidCreditsModal = ref(false)
 
@@ -169,5 +165,27 @@ const currentMonthEnd = () => {
 		month: 'short',
 		year: 'numeric',
 	})
+}
+
+function payNow() {
+	if (team.data.payment_mode == 'Prepaid Credits') {
+		showAddPrepaidCreditsModal.value = true
+	} else {
+		let invoice = upcomingInvoice.data?.upcoming_invoice
+		if (!invoice?.name) return
+		if (invoice.stripe_invoice_url) {
+			window.open(invoice.stripe_invoice_url, '_blank')
+		} else {
+			createResource({
+				url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
+				params: {
+					method: 'billing.get_stripe_payment_url_for_invoice',
+					data: { name: invoice.name },
+				},
+				auto: true,
+				onSuccess: (url) => window.open(url, '_blank'),
+			})
+		}
+	}
 }
 </script>

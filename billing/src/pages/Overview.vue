@@ -33,8 +33,8 @@ const upcomingInvoice = createResource({
 })
 
 provide('billing', {
+	upcomingInvoice,
 	availableCredits: computed(() => upcomingInvoice.data?.available_credits),
 	currentBillingAmount: computed(() => upcomingInvoice.data?.upcoming_invoice.total),
-	reloadUpcomingInvoice: upcomingInvoice.reload,
 })
 </script>

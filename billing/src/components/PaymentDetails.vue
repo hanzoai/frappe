@@ -132,7 +132,7 @@
 		v-if="showAddPrepaidCreditsModal"
 		v-model="showAddPrepaidCreditsModal"
 		:showMessage="showMessage"
-		@success="reloadUpcomingInvoice()"
+		@success="upcomingInvoice.reload()"
 	/>
 	<AddCardModal
 		v-if="showAddCardModal"
@@ -169,7 +169,7 @@ import { cardBrandIcon } from '../utils.js'
 import { computed, ref, inject, h } from 'vue'
 
 const team = inject('team')
-const { availableCredits, reloadUpcomingInvoice } = inject('billing')
+const { availableCredits, upcomingInvoice } = inject('billing')
 
 const showBillingDetailsDialog = ref(false)
 const showAddPrepaidCreditsModal = ref(false)
