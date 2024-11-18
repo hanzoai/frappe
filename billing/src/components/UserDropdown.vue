@@ -8,7 +8,7 @@
 				<FCLogo class="size-8 flex-shrink-0 rounded" />
 				<div class="flex flex-1 flex-col text-left duration-300 ease-in-out ml-2 w-auto">
 					<div class="text-base font-medium leading-none text-gray-900">
-						{{ 'Billing' }}
+						{{ 'Frappe Cloud' }}
 					</div>
 					<div class="mt-1 text-sm leading-none text-gray-700">
 						{{ user?.fullName }}
@@ -37,22 +37,33 @@ const { user, logout } = getSession()
 
 let dropdownOptions = ref([
 	{
-		group: 'Manage',
+		group: 'Apps',
 		hideLabel: true,
 		items: [
 			{
 				component: markRaw(Apps),
 			},
-			// {
-			// 	icon: 'life-buoy',
-			// 	label: computed(() => 'Support'),
-			// 	onClick: () => window.open('https://t.me/frappecrm', '_blank'),
-			// },
-			// {
-			// 	icon: 'book-open',
-			// 	label: computed(() => 'Docs'),
-			// 	onClick: () => window.open('https://docs.frappe.io/crm', '_blank'),
-			// },
+		],
+	},
+	{
+		group: 'Manage',
+		hideLabel: true,
+		items: [
+			{
+				icon: 'monitor',
+				label: computed(() => 'Frappe Cloud Dashboard'),
+				onClick: () => window.open('https://frappecloud.com/dashboard', '_blank'),
+			},
+			{
+				icon: 'book-open',
+				label: computed(() => 'About Us'),
+				onClick: () => window.open('https://frappe.io', '_blank'),
+			},
+			{
+				icon: 'phone',
+				label: computed(() => 'Contact Us'),
+				onClick: () => window.open('https://frappe.io/contact-us', '_blank'),
+			},
 		],
 	},
 	{

@@ -1,7 +1,7 @@
 <template>
 	<header class="flex h-10.5 border-b items-center justify-between py-2 px-5 shrink-0">
 		<h2 class="text-lg font-semibold text-gray-900 leading-5">
-			{{ 'Overview' }}
+			{{ 'Billing Overview' }}
 		</h2>
 	</header>
 	<div v-if="team.data" class="flex flex-1 flex-col px-60 pt-6 gap-8 overflow-y-auto">
