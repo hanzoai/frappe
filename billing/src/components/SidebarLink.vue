@@ -4,46 +4,39 @@
 		:class="isActive ? 'bg-white shadow-sm' : 'hover:bg-gray-100'"
 		@click="handleClick"
 	>
-		<div
-			class="flex w-full items-center justify-between duration-300 ease-in-out"
-			:class="isCollapsed ? 'ml-[3px] p-1' : 'px-2 py-1'"
-		>
+		<div class="flex px-2 py-1 w-full items-center justify-between duration-300 ease-in-out">
 			<div class="flex items-center truncate">
-				<Tooltip :text="label" placement="right" :disabled="!isCollapsed">
-					<slot name="icon">
-						<span class="grid flex-shrink-0 place-items-center">
-							<FeatherIcon
-								v-if="typeof icon == 'string'"
-								:name="icon"
-								class="size-4 text-gray-700"
-							/>
-							<component v-else :is="icon" class="size-4 text-gray-700" />
-						</span>
-					</slot>
-				</Tooltip>
-				<Tooltip :text="label" placement="right" :disabled="isCollapsed" :hoverDelay="1.5">
-					<span
-						class="flex-1 flex-shrink-0 truncate text-sm duration-300 ease-in-out"
-						:class="
-							isCollapsed
-								? 'ml-0 w-0 overflow-hidden opacity-0'
-								: 'ml-2 w-auto opacity-100'
-						"
-					>
-						{{ label }}
+				<slot name="icon">
+					<span class="grid flex-shrink-0 place-items-center">
+						<FeatherIcon
+							v-if="typeof icon == 'string'"
+							:name="icon"
+							class="size-4 text-gray-700"
+						/>
+						<component v-else :is="icon" class="size-4 text-gray-700" />
 					</span>
-				</Tooltip>
+				</slot>
+				<span
+					class="flex-1 ml-2 w-auto flex-shrink-0 truncate text-sm duration-300 ease-in-out"
+				>
+					{{ label }}
+				</span>
 			</div>
-			<slot name="right" />
+			<slot name="right">
+				<FeatherIcon
+					v-if="onClick && !noExternalLinkIcon"
+					name="external-link"
+					class="size-3 text-gray-500"
+				/>
+			</slot>
 		</div>
 	</button>
 </template>
 
 <script setup>
-import { Tooltip, FeatherIcon } from 'frappe-ui'
+import { FeatherIcon } from 'frappe-ui'
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-// import { isMobileView, mobileSidebarOpened } from '@/composables/settings'
 
 const router = useRouter()
 const route = useRoute()
@@ -60,22 +53,26 @@ const props = defineProps({
 		type: [Object, String],
 		default: '',
 	},
-	isCollapsed: {
+	onClick: {
+		type: Function,
+		default: null,
+	},
+	noExternalLinkIcon: {
 		type: Boolean,
 		default: false,
 	},
 })
 
 function handleClick() {
-	if (!props.to) return
+	if (!props.to && props.onClick) {
+		props.onClick()
+		return
+	}
 	if (typeof props.to === 'object') {
 		router.push(props.to)
 	} else {
 		router.push({ name: props.to })
 	}
-	// if (isMobileView.value) {
-	// 	mobileSidebarOpened.value = false
-	// }
 }
 
 let isActive = computed(() => {
