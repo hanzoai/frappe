@@ -60,12 +60,12 @@ function generateTrialSubscriptionBanner(trialEndDate) {
 				.trial-banner .upgrade-plan-button {
 					height: fit-content;
 					background-color: var(--fg-color);
-					border: 1px solid var(--blue-300);
-					color: var(--blue-600);
+					border: 1px solid var(--gray-300);
+					color: var(--gray-800);
 					border-radius: var(--border-radius);
 				}
 				.trial-banner .upgrade-plan-button:hover {
-					border-color: var(--blue-400);
+					border-color: var(--gray-400);
 				}
 			</style>
 			<div class="trial-banner px-3 py-2 my-2">
