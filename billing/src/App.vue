@@ -29,5 +29,12 @@ const team = createResource({
 	auto: true,
 })
 
+const currentSiteInfo = createResource({
+	url: 'frappe.integrations.frappe_providers.frappecloud_billing.current_site_info',
+	auto: true,
+	cache: 'currentSiteInfo',
+})
+
 provide('team', team)
+provide('currentSiteInfo', currentSiteInfo)
 </script>

@@ -93,6 +93,7 @@ import { ref, computed, provide, inject, markRaw, h } from 'vue'
 const emit = defineEmits(['success'])
 
 const team = inject('team')
+const currentSiteInfo = inject('currentSiteInfo')
 
 const billingDetails = createResource({
 	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
@@ -108,16 +109,9 @@ const plans = createResource({
 	auto: true,
 })
 
-const site = createResource({
-	url: 'frappe.integrations.frappe_providers.frappecloud_billing.api',
-	params: { method: 'site.info' },
-	cache: 'site',
-	auto: true,
-})
-
 const currentPlan = computed(() => {
-	if (!site.data) return null
-	return site.data.plan?.name || 'Trial'
+	if (!currentSiteInfo.data) return null
+	return currentSiteInfo.data.plan?.name || 'Trial'
 })
 
 const currency = computed(() => {
@@ -231,15 +225,12 @@ function changePlanRequest(planName, close) {
 		params: { method: 'site.change_plan', data: { plan: planName } },
 		auto: true,
 		onSuccess: () => {
-			site.reload()
+			currentSiteInfo.reload()
 			plans.reload()
 			close()
 		},
 	})
 }
 
-provide('billing', {
-	reloadPlans: plans.reload,
-	reloadSite: site.reload,
-})
+provide('plans', plans)
 </script>

@@ -126,6 +126,7 @@ const emit = defineEmits(['changePlan'])
 const router = useRouter()
 
 const team = inject('team')
+const currentSiteInfo = inject('currentSiteInfo')
 const { currentBillingAmount, upcomingInvoice } = inject('billing')
 
 const showAddPrepaidCreditsModal = ref(false)
@@ -135,12 +136,6 @@ const trialDescription = computed(() => {
 	return trialEndDays.value > 1
 		? 'Your trial plan ends in ' + trialEndDays.value + ' days'
 		: 'Your trial plan will end tomorrow'
-})
-
-const currentSiteInfo = createResource({
-	url: 'frappe.integrations.frappe_providers.frappecloud_billing.current_site_info',
-	auto: true,
-	cache: 'currentSiteInfo',
 })
 
 const price = ref(null)

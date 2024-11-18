@@ -78,7 +78,8 @@ const props = defineProps({
 
 const emit = defineEmits(['success'])
 
-const { reloadPlans, reloadSite } = inject('billing')
+const currentSiteInfo = inject('currentSiteInfo')
+const plans = inject('plans')
 
 const show = defineModel()
 const step = ref(props.defaultStep)
@@ -135,8 +136,8 @@ function changePlanRequest(close) {
 		params: { method: 'site.change_plan', data: { plan: props.plan.name } },
 		auto: true,
 		onSuccess: () => {
-			reloadSite()
-			reloadPlans()
+			currentSiteInfo.reload()
+			plans.reload()
 			close()
 			emit('success')
 		},
