@@ -51,6 +51,14 @@ jobs:
     needs: checkrun
     secrets: inherit
 
+  migrate:
+    name: Migration
+    needs: checkrun
+    uses: frappe/frappe/.github/workflows/patch-base.yml@develop
+    with:
+      python-version: '3.10'
+      node-version: 20
+      fake-success: ${{ needs.checkrun.outputs.build != 'strawberry' }}
 
   coverage:
     name: Coverage Wrap Up
