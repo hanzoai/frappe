@@ -16,7 +16,10 @@ import frappe
 import frappe.client
 from frappe import _, get_newargs, is_whitelisted
 from frappe.core.doctype.server_script.server_script_utils import get_server_script_map
+from frappe.desk.form.load import get_attachments, get_tags
+from frappe.desk.form.utils import remove_attach
 from frappe.handler import is_valid_http_method, run_server_script, upload_file
+from frappe.share import get_users as get_shared_users
 
 PERMISSION_MAP = {
 	"GET": "read",
@@ -114,51 +117,76 @@ def delete_doc(doctype: str, name: str):
 	frappe.response.http_status_code = 202
 	return "ok"
 
-def get_attachments(doctype: str, name: str):
-	from frappe.desk.form.load import get_attachments
-	return get_attachments(doctype, name)
 
 def add_attachment(doctype: str, name: str):
-	frappe.form_dict.update({
-		"doctype": doctype, 
-		"docname": name
-	})
+	frappe.form_dict.update({"doctype": doctype, "docname": name})
 	return upload_file()
 
-def remove_attachment():
-	from frappe.desk.form.utils import remove_attach
-	return remove_attach()
-
-def get_tags(doctype: str, name: str):
-	from frappe.desk.form.load import get_tags
-	return get_tags(doctype, name)
 
 def add_tag(doctype: str, name: str):
 	from frappe.desk.doctype.tag.tag import add_tag
-	return add_tag(tag=frappe.form_dict.tag, dt=doctype, dn=name)
+
+	return add_tag(frappe.form_dict.tag, doctype, name)
+
 
 def remove_tag(doctype: str, name: str):
 	from frappe.desk.doctype.tag.tag import remove_tag
-	return remove_tag(tag=frappe.form_dict.tag, dt=doctype, dn=name)
+
+	return remove_tag(frappe.form_dict.tag, doctype, name)
+
 
 def get_assignments(doctype: str, name: str):
-	from frappe.desk.form.assign_to import get as getAssignments
-	return getAssignments({
-		"doctype": doctype,
-		"name": name
-	})
+	from frappe.desk.form.assign_to import get
+
+	return get({"doctype": doctype, "name": name})
+
 
 def add_assignment(doctype: str, name: str):
-	from frappe.desk.form.assign_to import add as addAssignment
-	return addAssignment({
-		"doctype": doctype,
-		"name": name,
-		"assign_to": frappe.form_dict.assign_to,
-	})
+	from frappe.desk.form.assign_to import add
+
+	return add(
+		{
+			"doctype": doctype,
+			"name": name,
+			"assign_to": frappe.form_dict.assign_to,
+		}
+	)
+
 
 def remove_assignment(doctype: str, name: str):
-	from frappe.desk.form.assign_to import remove as removeAssignment
-	return removeAssignment(doctype, name, frappe.form_dict.assigned_to)
+	from frappe.desk.form.assign_to import remove
+
+	return remove(doctype, name, frappe.form_dict.assigned_to)
+
+
+def add_share(doctype: str, name: str):
+	from frappe.share import add as add_share
+
+	return add_share(
+		doctype,
+		name,
+		user=frappe.form_dict.user,
+		read=frappe.form_dict.read,
+		write=frappe.form_dict.write,
+		submit=frappe.form_dict.submit,
+		share=frappe.form_dict.share,
+		everyone=frappe.form_dict.everyone,
+		notify=frappe.form_dict.notify,
+	)
+
+
+def update_share(doctype: str, name: str):
+	from frappe.share import set_permission
+
+	return set_permission(
+		doctype,
+		name,
+		frappe.form_dict.user,
+		frappe.form_dict.permission_to,
+		frappe.form_dict.value,
+		frappe.form_dict.everyone,
+	)
+
 
 def get_meta(doctype: str):
 	frappe.only_for("All")
@@ -234,13 +262,16 @@ url_rules = [
 	Rule("/document/<doctype>/<path:name>/", methods=["DELETE"], endpoint=delete_doc),
 	Rule("/document/<doctype>/<path:name>/attachments", methods=["GET"], endpoint=get_attachments),
 	Rule("/document/<doctype>/<path:name>/attachment", methods=["POST"], endpoint=add_attachment),
-	Rule("/document/<doctype>/<path:name>/attachment", methods=["DELETE"], endpoint=remove_attachment),
+	Rule("/document/<doctype>/<path:name>/attachment", methods=["DELETE"], endpoint=remove_attach),
 	Rule("/document/<doctype>/<path:name>/tags", methods=["GET"], endpoint=get_tags),
 	Rule("/document/<doctype>/<path:name>/tag", methods=["POST"], endpoint=add_tag),
 	Rule("/document/<doctype>/<path:name>/tag", methods=["DELETE"], endpoint=remove_tag),
 	Rule("/document/<doctype>/<path:name>/assignments", methods=["GET"], endpoint=get_assignments),
 	Rule("/document/<doctype>/<path:name>/assignment", methods=["POST"], endpoint=add_assignment),
 	Rule("/document/<doctype>/<path:name>/assignment", methods=["DELETE"], endpoint=remove_assignment),
+	Rule("/document/<doctype>/<path:name>/shares", methods=["GET"], endpoint=get_shared_users),
+	Rule("/document/<doctype>/<path:name>/share", methods=["POST"], endpoint=add_share),
+	Rule("/document/<doctype>/<path:name>/share", methods=["PUT"], endpoint=update_share),
 	Rule(
 		"/document/<doctype>/<path:name>/method/<method>/",
 		methods=["GET", "POST"],
