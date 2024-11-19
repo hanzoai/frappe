@@ -27,6 +27,7 @@ app_include_js = [
 	"controls.bundle.js",
 	"report.bundle.js",
 	"telemetry.bundle.js",
+	"billing.bundle.js",
 ]
 
 app_include_css = [
@@ -58,6 +59,7 @@ website_route_rules = [
 	{"from_route": "/newsletters", "to_route": "Newsletter"},
 	{"from_route": "/profile", "to_route": "me"},
 	{"from_route": "/app/<path:app_path>", "to_route": "app"},
+	{"from_route": "/billing/<path:app_path>", "to_route": "billing"},
 ]
 
 website_redirects = [
@@ -480,6 +482,13 @@ standard_navbar_items = [
 		"item_type": "Action",
 		"action": "frappe.quick_edit('Workspace Settings')",
 		"is_standard": 1,
+	},
+	{
+		"item_label": "Manage Billing",
+		"item_type": "Route",
+		"route": "/billing",
+		"is_standard": 1,
+		"condition": "frappe.boot.fc_communication_secret && frappe.boot.setup_complete && !frappe.is_mobile() && frappe.user.has_role('System Manager')",
 	},
 	{
 		"item_label": "Session Defaults",
