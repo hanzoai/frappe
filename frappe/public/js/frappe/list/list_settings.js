@@ -75,14 +75,14 @@ export default class ListSettings {
 
 		if (!me.dialog.get_value("total_fields")) {
 			let field_count = this.settings.total_fields;
-			
-			if (!field_count){
+
+			if (!field_count) {
 				if (field_count < 4) {
 					field_count = 4;
 				} else if (field_count > 10) {
 					field_count = 10;
 				}
-		}
+			}
 
 			me.dialog.set_value("total_fields", field_count);
 		}
