@@ -77,6 +77,7 @@ export default class ListSettings {
 			let field_count = this.settings.total_fields;
 
 			if (!field_count) {
+				field_count = me.fields.length;
 				if (field_count < 4) {
 					field_count = 4;
 				} else if (field_count > 10) {
