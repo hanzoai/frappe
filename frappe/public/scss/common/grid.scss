@@ -577,13 +577,13 @@
 	overflow-x: scroll;
 	overflow-y: hidden;
 	white-space: nowrap;
-	.form-grid {
-		width: max-content;
-	}
 	.link-field-fixed-position {
 		position: fixed !important;
 		z-index: 9 !important;
 	}
+}
+.column-limit-reached .form-grid {
+	width: max-content;
 }
 .form-grid-container:has(.grid-row.grid-row-open) {
 	overflow-x: clip;
