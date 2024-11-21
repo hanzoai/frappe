@@ -216,8 +216,6 @@
 	}
 
 	.btn-open-row {
-		display: flex;
-		justify-content: center;
 		line-height: unset;
 		div {
 			margin-left: var(--margin-xs);
@@ -230,6 +228,7 @@
 		--input-disabled-bg: var(--gray-50);
 		.grid-static-col {
 			padding: 0px !important;
+			height: 32px;
 		}
 
 		.frappe-control[data-fieldtype="Select"].form-group .select-icon {
@@ -448,6 +447,7 @@
 	overflow: visible;
 	margin: 0px calc(-1 * var(--margin-md));
 	padding: var(--padding-sm) var(--padding-md);
+	max-width: 865px;
 }
 
 .grid-form-heading {
@@ -573,10 +573,48 @@
 	margin-bottom: 4px;
 }
 
+.form-grid-container {
+	overflow-x: scroll;
+	overflow-y: hidden;
+	white-space: nowrap;
+	.form-grid {
+		width: max-content;
+	}
+	.link-field-fixed-position {
+		position: fixed !important;
+		z-index: 9 !important;
+	}
+}
+.form-grid-container:has(.grid-row.grid-row-open) {
+	overflow-x: clip;
+}
+
+.data-row.row {
+	flex-wrap: nowrap;
+}
+
+.sortable-handle span {
+	width: 31px;
+	display: block;
+}
+
+.column-limit-reached .form-grid {
+	.grid-static-col.col-xs-1 {
+		flex: 0 0 60px;
+		max-width: 60px;
+	}
+	.grid-static-col.col-xs-2 {
+		flex: 0 0 75px;
+		max-width: 75px;
+	}
+	.grid-static-col.col-xs-3 {
+		flex: 0 0 90px;
+		max-width: 90px;
+	}
+}
+
 @media (max-width: map-get($grid-breakpoints, "md")) {
 	.form-grid-container {
-		overflow-x: clip;
-
 		.form-grid {
 			min-width: 738px;
 		}
@@ -591,8 +629,6 @@
 
 @media (min-width: map-get($grid-breakpoints, "md")) {
 	.form-grid-container {
-		overflow-x: unset !important;
-
 		.form-grid {
 			position: unset !important;
 		}

@@ -16,7 +16,7 @@ export default class GridRow {
 		let render_row = true;
 
 		this.wrapper = $('<div class="grid-row"></div>');
-		this.row = $('<div class="data-row row"></div>')
+		this.row = $('<div class="data-row row m-0"></div>')
 			.appendTo(this.wrapper)
 			.on("click", function (e) {
 				if (
@@ -362,7 +362,7 @@ export default class GridRow {
 
 		if (this.configure_columns && this.frm) {
 			this.configure_columns_button = $(`
-				<div class="col grid-static-col d-flex justify-content-center" style="cursor: pointer;">
+				<div class="col grid-static-col pointer">
 					<a>${frappe.utils.icon("setting-gear", "sm", "", "filter: opacity(0.5)")}</a>
 				</div>
 			`)
@@ -401,7 +401,6 @@ export default class GridRow {
 			});
 
 		this.grid_settings_dialog.set_primary_action(__("Update"), () => {
-			this.validate_columns_width();
 			this.columns = {};
 			this.update_user_settings_for_grid();
 			this.grid_settings_dialog.hide();
@@ -623,20 +622,6 @@ export default class GridRow {
 			});
 	}
 
-	validate_columns_width() {
-		let total_column_width = 0.0;
-
-		this.selected_columns_for_grid.forEach((row) => {
-			if (row.columns && row.columns > 0) {
-				total_column_width += cint(row.columns);
-			}
-		});
-
-		if (total_column_width && total_column_width > 10) {
-			frappe.throw(__("The total column width cannot be more than 10."));
-		}
-	}
-
 	remove_selected_column() {
 		$(this.fields_html_wrapper)
 			.find(".remove-field")
@@ -685,6 +670,11 @@ export default class GridRow {
 				? this.grid.user_defined_columns
 				: this.docfields;
 
+		let total_colsize = 0;
+		document.querySelector(".form-grid-container").addEventListener("mousedown", (e) => {
+			e.preventDefault(); // This might block scroll interaction
+		});
+
 		this.grid.visible_columns.forEach((col, ci) => {
 			// to get update df for the row
 			let df = fields.find((field) => field?.fieldname === col[0].fieldname);
@@ -693,6 +683,7 @@ export default class GridRow {
 
 			let colsize = col[1];
 
+			total_colsize += colsize;
 			let txt = this.doc
 				? frappe.format(this.doc[df.fieldname], df, null, this.doc)
 				: __(df.label, null, df.parent);
@@ -722,6 +713,10 @@ export default class GridRow {
 				}
 			}
 		});
+
+		if (total_colsize > 10) {
+			$(".form-grid-container").addClass("column-limit-reached");
+		}
 
 		if (this.show_search) {
 			// last empty column
@@ -940,59 +935,6 @@ export default class GridRow {
 			.attr("data-fieldtype", df.fieldtype)
 			.data("df", df)
 			.appendTo(this.row)
-			// initialize grid for horizontal scroll on mobile devices.
-			.on("touchstart", function (event) {
-				grid_container = $(event.currentTarget).closest(".form-grid-container")[0];
-				grid = $(event.currentTarget).closest(".form-grid")[0];
-
-				grid.style.position != "relative" && $(grid).css("position", "relative");
-				!grid.style.left && $(grid).css("left", 0);
-
-				start_x = event.touches[0].clientX;
-				start_y = event.touches[0].clientY;
-
-				inital_position_x = -parseFloat(grid.style.left || 0) + start_x;
-			})
-			// calculate X and Y movement based on touch events.
-			.on("touchmove", function (event) {
-				if (input_in_focus) return;
-
-				let moved_x;
-				let moved_y;
-
-				if (!horizontal && !vertical) {
-					moved_x = Math.abs(start_x - event.touches[0].clientX);
-					moved_y = Math.abs(start_y - event.touches[0].clientY);
-				}
-
-				if (!vertical && moved_x > 16) {
-					horizontal = true;
-				} else if (!horizontal && moved_y > 16) {
-					vertical = true;
-				}
-				if (horizontal) {
-					event.preventDefault();
-
-					let grid_start = inital_position_x - event.touches[0].clientX;
-					let grid_end = grid.clientWidth - grid_container.clientWidth + 2;
-
-					if (frappe.utils.is_rtl()) {
-						grid_start = -grid_start;
-					}
-
-					if (grid_start < 0) {
-						grid_start = 0;
-					} else if (grid_start > grid_end) {
-						grid_start = grid_end;
-					}
-
-					grid.style.left = `${frappe.utils.is_rtl() ? "" : "-"}${grid_start}px`;
-				}
-			})
-			.on("touchend", function () {
-				vertical = false;
-				horizontal = false;
-			})
 			.on("click", function (event) {
 				if (frappe.ui.form.editable_row !== me) {
 					var out = me.toggle_editable_row();
@@ -1001,11 +943,22 @@ export default class GridRow {
 				let first_input_field = $(col).find('input[type="Text"]:first');
 				let input_in_focus = false;
 
+				$(this).closest(".form-grid-container").css({
+					"padding-bottom": "0px",
+					"margin-bottom": "0px",
+				});
+
 				$(col)
 					.find("input[type='text']")
 					.each(function () {
 						if ($(this).is(":focus")) {
 							input_in_focus = true;
+						}
+						if ($(this).parent().parent().hasClass("link-field")) {
+							$(this).closest(".form-grid-container").css({
+								"padding-bottom": "200px",
+								"margin-bottom": "-200px",
+							});
 						}
 					});
 

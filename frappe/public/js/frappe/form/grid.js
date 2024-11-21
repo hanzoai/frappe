@@ -964,7 +964,6 @@ export default class Grid {
 				}
 
 				total_colsize += df.colsize;
-				if (total_colsize > 11) return false;
 				this.visible_columns.push([df, df.colsize]);
 			}
 		}
