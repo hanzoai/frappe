@@ -1046,18 +1046,16 @@ def user_query(doctype, txt, searchfield, start, page_len, filters):
 		filters.pop("ignore_user_type", None)
 		list_filters.update(filters)
 
-	return [
-		(user.name, user.full_name)
-		for user in frappe.get_list(
-			doctype,
-			filters=list_filters,
-			fields=["name", "full_name"],
-			limit_start=start,
-			limit_page_length=page_len,
-			order_by="name asc",
-			or_filters=or_filters,
-		)
-	]
+	return frappe.get_list(
+		doctype,
+		filters=list_filters,
+		fields=["name", "full_name"],
+		limit_start=start,
+		limit_page_length=page_len,
+		order_by="name asc",
+		or_filters=or_filters,
+		as_list=True,
+	)
 
 
 def get_total_users():
