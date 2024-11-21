@@ -181,8 +181,8 @@ class LoginManager:
 
 	def setup_boot_cache(self):
 		frappe.cache_manager.build_table_count_cache()
-		frappe.cache_manager.build_domain_restriced_doctype_cache()
-		frappe.cache_manager.build_domain_restriced_page_cache()
+		frappe.cache_manager.build_domain_restricted_doctype_cache()
+		frappe.cache_manager.build_domain_restricted_page_cache()
 
 	def set_user_info(self, resume=False):
 		# set sid again
