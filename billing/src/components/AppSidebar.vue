@@ -24,9 +24,6 @@
 				/>
 			</nav>
 		</div>
-		<div class="m-2 text-base text-gray-600 p-2 flex justify-center">
-			Powered by Frappe Cloud
-		</div>
 	</div>
 </template>
 <script setup>
@@ -118,6 +115,6 @@ async function openSupport() {
 		})
 		return
 	}
-	window.open('https://support.frappe.io', '_blank')
+	window.open('https://support.frappe.io/help', '_blank')
 }
 </script>
