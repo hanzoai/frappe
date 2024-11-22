@@ -1,8 +1,6 @@
 <template>
 	<header class="flex h-10.5 border-b items-center justify-between py-2 px-5 shrink-0">
-		<h2 class="text-lg font-semibold text-gray-900 leading-5">
-			{{ 'Plans' }}
-		</h2>
+		<Breadcrumbs :items="[{ label: 'Plans' }]" />
 	</header>
 	<div class="flex flex-col overflow-hidden px-60 pt-6">
 		<ListView
@@ -42,7 +40,7 @@
 							v-if="column.key == 'price'"
 							class="text-base text-gray-900 font-semibold"
 						>
-							<span v-if="item.isTrial" class=""> Free trial </span>
+							<span v-if="row.isTrial" class=""> Free trial </span>
 							<span v-else>
 								<span>{{ item.currency }} {{ item.label }}</span>
 								<span class="text-gray-700 font-normal">/mo</span>
@@ -85,6 +83,7 @@ import {
 	FeatherIcon,
 	Tooltip,
 	createResource,
+	Breadcrumbs,
 } from 'frappe-ui'
 import { createDialog } from '@/dialogs'
 import { parseSize, ConfirmMessage } from '@/utils'
@@ -165,7 +164,6 @@ const rows = computed(() => {
 				name: plan.name,
 				price: {
 					label: price.toString(),
-					isTrial: plan.name === 'Trial',
 					currency: currency.value === 'INR' ? '₹' : '$',
 				},
 				cpu: `${plan.cpu_time_per_day} ${cpu}`,
@@ -173,15 +171,13 @@ const rows = computed(() => {
 				disk: `${parseSize(plan.max_storage_usage)} Disk`,
 				info: plan,
 				isCurrent: plan.name === currentPlan.value,
+				isTrial: plan.is_trial_plan,
 				downgradable: plan.allow_downgrading_from_other_plan,
 				downgrade: currentPlanIndex > i,
 				onClick: () => changePlan(plan, price.toString()),
 			}
 		})
-		.filter(
-			(row) =>
-				row.name !== 'Trial' || (row.name === 'Trial' && row.name === currentPlan.value)
-		)
+		.filter((row) => !row.isTrial || (row.isTrial && row.name === currentPlan.value))
 })
 
 const defaultStep = ref(1)
