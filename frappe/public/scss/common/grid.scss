@@ -574,42 +574,52 @@
 }
 
 .form-grid-container {
-	overflow-x: scroll;
+	overflow-x: auto;
 	overflow-y: hidden;
 	white-space: nowrap;
+	scrollbar-width: auto;
+	scrollbar-color: auto;
 	.link-field-fixed-position {
 		position: fixed !important;
 		z-index: 9 !important;
 	}
 }
-.column-limit-reached .form-grid {
-	width: max-content;
-}
 .form-grid-container:has(.grid-row.grid-row-open) {
 	overflow-x: clip;
+	white-space: normal;
+	overflow-y: unset;
 }
-
 .data-row.row {
 	flex-wrap: nowrap;
 }
-
 .sortable-handle span {
 	width: 31px;
 	display: block;
 }
 
-.column-limit-reached .form-grid {
-	.grid-static-col.col-xs-1 {
-		flex: 0 0 60px;
-		max-width: 60px;
-	}
-	.grid-static-col.col-xs-2 {
-		flex: 0 0 75px;
-		max-width: 75px;
-	}
-	.grid-static-col.col-xs-3 {
-		flex: 0 0 90px;
-		max-width: 90px;
+.column-limit-reached {
+	background-color: var(--subtle-accent);
+	border-top-left-radius: var(--border-radius-md);
+	border-top-right-radius: var(--border-radius-md);
+	.form-grid {
+		display: grid;
+		grid-auto-rows: min-content;
+		.grid-static-col.col-xs-1 {
+			flex: 0 0 60px;
+			max-width: 60px;
+		}
+		.grid-static-col.col-xs-2 {
+			flex: 0 0 75px;
+			max-width: 75px;
+		}
+		.grid-static-col.col-xs-3 {
+			flex: 0 0 90px;
+			max-width: 90px;
+		}
+		.grid-row > .row .col:last-child,
+		.grid-row > .dialog-assignment-row .col:last-child {
+			min-width: 40px;
+		}
 	}
 }
 
