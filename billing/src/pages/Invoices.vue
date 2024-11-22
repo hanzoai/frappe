@@ -149,8 +149,8 @@ const rows = computed(() => {
 					invoice.status === 'Paid'
 						? 'green'
 						: invoice.status == 'Unpaid'
-							? 'orange'
-							: 'gray',
+						? 'orange'
+						: 'gray',
 			},
 			due_date: due_date,
 			total: formatCurrency(invoice.total),
