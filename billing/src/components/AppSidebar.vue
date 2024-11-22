@@ -24,9 +24,6 @@
 				/>
 			</nav>
 		</div>
-		<div class="m-2 text-base text-gray-600 p-2 flex justify-center">
-			Powered by Frappe Cloud
-		</div>
 	</div>
 </template>
 <script setup>
@@ -97,7 +94,7 @@ async function openSupport() {
 			'frappe.integrations.frappe_providers.frappecloud_billing.api',
 			{
 				method: 'site.get_first_support_plan',
-			}
+			},
 		)
 		if (!supportPlan) return
 		let currency = team.data.currency == 'INR' ? '₹' : '$'

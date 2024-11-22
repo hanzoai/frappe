@@ -1,8 +1,6 @@
 <template>
 	<header class="flex h-10.5 border-b items-center justify-between py-2 px-5 shrink-0">
-		<h2 class="text-lg font-semibold text-gray-900 leading-5">
-			{{ 'Billing Overview' }}
-		</h2>
+		<Breadcrumbs :items="[{ label: 'Billing Overview' }]" />
 	</header>
 	<div v-if="team.data" class="flex flex-1 flex-col px-60 pt-6 gap-8 overflow-y-auto">
 		<CurrentPlan @changePlan="router.push({ name: 'Plans' })" />
@@ -15,7 +13,7 @@
 <script setup>
 import CurrentPlan from '@/components/CurrentPlan.vue'
 import PaymentDetails from '@/components/PaymentDetails.vue'
-import { Spinner, createResource } from 'frappe-ui'
+import { Spinner, createResource, Breadcrumbs } from 'frappe-ui'
 import { useRouter } from 'vue-router'
 import { computed, provide, inject } from 'vue'
 

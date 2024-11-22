@@ -1,8 +1,6 @@
 <template>
 	<header class="flex h-10.5 border-b items-center justify-between py-2 px-5 shrink-0">
-		<h2 class="text-lg font-semibold text-gray-900 leading-5">
-			{{ 'Cards' }}
-		</h2>
+		<Breadcrumbs :items="[{ label: 'Cards' }]" />
 	</header>
 	<div class="flex flex-col overflow-hidden mx-60 mt-6">
 		<div class="flex justify-end gap-2 mb-3">
@@ -94,6 +92,7 @@ import {
 	Tooltip,
 	FeatherIcon,
 	createResource,
+	Breadcrumbs,
 } from 'frappe-ui'
 import { useTimeAgo } from '@vueuse/core'
 import { createDialog } from '@/dialogs.js'
@@ -168,7 +167,7 @@ const rows = computed(() => {
 				? h(FeatherIcon, {
 						name: 'check-circle',
 						class: 'h-4 w-4 text-green-600',
-				  })
+					})
 				: null,
 			alert:
 				card.is_default && card.stripe_payment_method
@@ -181,8 +180,8 @@ const rows = computed(() => {
 								h(FeatherIcon, {
 									name: 'alert-circle',
 									class: 'h-4 w-4 text-red-600',
-								})
-					  )
+								}),
+						)
 					: null,
 			creation: useTimeAgo(card.creation).value,
 			actions: {

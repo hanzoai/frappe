@@ -1,8 +1,6 @@
 <template>
 	<header class="flex h-10.5 border-b items-center justify-between py-2 px-5 shrink-0">
-		<h2 class="text-lg font-semibold text-gray-900 leading-5">
-			{{ 'Plans' }}
-		</h2>
+		<Breadcrumbs :items="[{ label: 'Plans' }]" />
 	</header>
 	<div class="flex flex-col overflow-hidden px-60 pt-6">
 		<ListView
@@ -85,6 +83,7 @@ import {
 	FeatherIcon,
 	Tooltip,
 	createResource,
+	Breadcrumbs,
 } from 'frappe-ui'
 import { createDialog } from '@/dialogs'
 import { parseSize, ConfirmMessage } from '@/utils'
@@ -180,7 +179,7 @@ const rows = computed(() => {
 		})
 		.filter(
 			(row) =>
-				row.name !== 'Trial' || (row.name === 'Trial' && row.name === currentPlan.value)
+				row.name !== 'Trial' || (row.name === 'Trial' && row.name === currentPlan.value),
 		)
 })
 
@@ -207,7 +206,7 @@ function changePlan(_plan, price) {
 	createDialog({
 		title: 'Change plan',
 		component: markRaw(
-			h(ConfirmMessage, { price, currency: currency.value === 'INR' ? '₹' : '$' })
+			h(ConfirmMessage, { price, currency: currency.value === 'INR' ? '₹' : '$' }),
 		),
 		actions: [
 			{
