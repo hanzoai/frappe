@@ -167,7 +167,7 @@ const rows = computed(() => {
 				? h(FeatherIcon, {
 						name: 'check-circle',
 						class: 'h-4 w-4 text-green-600',
-					})
+				  })
 				: null,
 			alert:
 				card.is_default && card.stripe_payment_method
@@ -180,8 +180,8 @@ const rows = computed(() => {
 								h(FeatherIcon, {
 									name: 'alert-circle',
 									class: 'h-4 w-4 text-red-600',
-								}),
-						)
+								})
+					  )
 					: null,
 			creation: useTimeAgo(card.creation).value,
 			actions: {

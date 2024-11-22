@@ -40,7 +40,7 @@
 							v-if="column.key == 'price'"
 							class="text-base text-gray-900 font-semibold"
 						>
-							<span v-if="item.isTrial" class=""> Free trial </span>
+							<span v-if="row.isTrial" class=""> Free trial </span>
 							<span v-else>
 								<span>{{ item.currency }} {{ item.label }}</span>
 								<span class="text-gray-700 font-normal">/mo</span>
@@ -164,7 +164,6 @@ const rows = computed(() => {
 				name: plan.name,
 				price: {
 					label: price.toString(),
-					isTrial: plan.name === 'Trial',
 					currency: currency.value === 'INR' ? '₹' : '$',
 				},
 				cpu: `${plan.cpu_time_per_day} ${cpu}`,
@@ -172,15 +171,13 @@ const rows = computed(() => {
 				disk: `${parseSize(plan.max_storage_usage)} Disk`,
 				info: plan,
 				isCurrent: plan.name === currentPlan.value,
+				isTrial: plan.is_trial_plan,
 				downgradable: plan.allow_downgrading_from_other_plan,
 				downgrade: currentPlanIndex > i,
 				onClick: () => changePlan(plan, price.toString()),
 			}
 		})
-		.filter(
-			(row) =>
-				row.name !== 'Trial' || (row.name === 'Trial' && row.name === currentPlan.value),
-		)
+		.filter((row) => !row.isTrial || (row.isTrial && row.name === currentPlan.value))
 })
 
 const defaultStep = ref(1)
@@ -206,7 +203,7 @@ function changePlan(_plan, price) {
 	createDialog({
 		title: 'Change plan',
 		component: markRaw(
-			h(ConfirmMessage, { price, currency: currency.value === 'INR' ? '₹' : '$' }),
+			h(ConfirmMessage, { price, currency: currency.value === 'INR' ? '₹' : '$' })
 		),
 		actions: [
 			{
