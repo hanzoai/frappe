@@ -24,6 +24,7 @@
 			</button>
 		</template>
 	</Dropdown>
+	<FCDashboardLoginModal v-if="showFCDashboardLoginModal" v-model="showFCDashboardLoginModal" />
 </template>
 
 <script setup>
@@ -32,8 +33,10 @@ import Apps from '@/components/Apps.vue'
 import { getSession } from '@/session.js'
 import { Dropdown, FeatherIcon } from 'frappe-ui'
 import { computed, ref, markRaw } from 'vue'
+import FCDashboardLoginModal from './FCDashboardLoginModal.vue'
 
 const { user, logout } = getSession()
+const showFCDashboardLoginModal = ref(false)
 
 let dropdownOptions = ref([
 	{
@@ -52,7 +55,7 @@ let dropdownOptions = ref([
 			{
 				icon: 'monitor',
 				label: computed(() => 'Frappe Cloud Dashboard'),
-				onClick: () => window.open('https://frappecloud.com/dashboard', '_blank'),
+				onClick: () => (showFCDashboardLoginModal.value = true),
 			},
 			{
 				icon: 'book-open',
