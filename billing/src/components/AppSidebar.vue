@@ -115,6 +115,6 @@ async function openSupport() {
 		})
 		return
 	}
-	window.open('https://support.frappe.io', '_blank')
+	window.open('https://support.frappe.io/help', '_blank')
 }
 </script>
