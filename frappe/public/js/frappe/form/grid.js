@@ -74,6 +74,9 @@ export default class Grid {
 							<div class="grid-empty text-center text-extra-muted">
 								${__("No rows")}
 							</div>
+							<div class="grid-scroll-bar">
+								<div class="grid-scroll-bar-rows"></div>
+							</div>
 						</div>
 					</div>
 				</div>

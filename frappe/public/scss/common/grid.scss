@@ -573,21 +573,13 @@
 	margin-bottom: 4px;
 }
 
-.form-grid-container {
-	overflow-x: auto;
-	overflow-y: hidden;
-	white-space: nowrap;
-	scrollbar-width: auto;
-	scrollbar-color: auto;
-	.link-field-fixed-position {
-		position: fixed !important;
-		z-index: 9 !important;
-	}
-}
 .form-grid-container:has(.grid-row.grid-row-open) {
 	overflow-x: clip;
 	white-space: normal;
 	overflow-y: unset;
+	.form-grid {
+		left: 0px !important;
+	}
 }
 .data-row.row {
 	flex-wrap: nowrap;
@@ -597,6 +589,12 @@
 	display: block;
 }
 
+.form-grid-container {
+	overflow-x: clip;
+}
+.data-row.row {
+	flex-wrap: nowrap;
+}
 .column-limit-reached {
 	background-color: var(--subtle-accent);
 	border-top-left-radius: var(--border-radius-md);
@@ -622,6 +620,21 @@
 		}
 	}
 }
+.grid-scroll-bar {
+	overflow-x: auto;
+	height: 12px;
+	position: relative;
+	scrollbar-width: auto;
+	scrollbar-color: auto;
+}
+
+.grid-scroll-bar::-webkit-scrollbar {
+	height: 11px !important;
+}
+
+.grid-scroll-bar-rows {
+	height: 100%;
+}
 
 @media (max-width: map-get($grid-breakpoints, "md")) {
 	.form-grid-container {
@@ -633,14 +646,6 @@
 	.form-column.col-sm-6 .form-grid {
 		.row-index {
 			display: block;
-		}
-	}
-}
-
-@media (min-width: map-get($grid-breakpoints, "md")) {
-	.form-grid-container {
-		.form-grid {
-			position: unset !important;
 		}
 	}
 }

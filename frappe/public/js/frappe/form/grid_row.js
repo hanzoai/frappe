@@ -671,9 +671,6 @@ export default class GridRow {
 				: this.docfields;
 
 		let total_colsize = 0;
-		document.querySelector(".form-grid-container").addEventListener("mousedown", (e) => {
-			e.preventDefault(); // This might block scroll interaction
-		});
 
 		this.grid.visible_columns.forEach((col, ci) => {
 			// to get update df for the row
@@ -943,22 +940,11 @@ export default class GridRow {
 				let first_input_field = $(col).find('input[type="Text"]:first');
 				let input_in_focus = false;
 
-				$(this).closest(".form-grid-container").css({
-					"padding-bottom": "0px",
-					"margin-bottom": "0px",
-				});
-
 				$(col)
 					.find("input[type='text']")
 					.each(function () {
 						if ($(this).is(":focus")) {
 							input_in_focus = true;
-						}
-						if ($(this).parent().parent().hasClass("link-field")) {
-							$(this).closest(".form-grid-container").css({
-								"padding-bottom": "200px",
-								"margin-bottom": "-200px",
-							});
 						}
 					});
 
@@ -977,6 +963,30 @@ export default class GridRow {
 
 		$col.field_area = $('<div class="field-area"></div>').appendTo($col).toggle(false);
 		$col.static_area = $('<div class="static-area ellipsis"></div>').appendTo($col).html(txt);
+
+		$(document).ready(function () {
+			let $scrollBar = $(".grid-scroll-bar");
+			let form_grid = $(".form-grid");
+			let grid_container = $(".form-grid-container");
+			let grid_scroll_bar_rows = $(".grid-scroll-bar-rows");
+			// Make sure the grid container is scrollable
+			$scrollBar.on("scroll", function (event) {
+				grid_container = $(event.currentTarget).closest(".form-grid-container");
+				form_grid = $(event.currentTarget).closest(".form-grid");
+				grid_scroll_bar_rows = $(event.currentTarget).closest(".grid-scroll-bar-rows");
+
+				var scroll_left = $(this).scrollLeft();
+
+				// Sync the form grid's left position with the scroll bar
+				form_grid.css("position", "relative");
+				form_grid.css("left", -scroll_left + "px");
+				$(this).css("margin-left", scroll_left + "px");
+			});
+
+			$scrollBar.css("width", grid_container.width());
+
+			grid_scroll_bar_rows.css("width", form_grid[0].scrollWidth);
+		});
 
 		// set title attribute to see full label for columns in the heading row
 		if (!this.doc) {
