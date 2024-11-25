@@ -35,20 +35,6 @@ jobs:
         run: |
           indices=$(seq -s ',' 1 ${{ inputs.parallel-runs }}); echo "indices=[${indices}]" >> $GITHUB_OUTPUT
 
-  # This satisfies the required checks on pull requests if tests are intentionally skipped
-  ui-test-fake:
-    needs: gen-idx-integration
-    name: Integration
-    runs-on: ubuntu-latest
-    if: ${{ inputs.fake-success != false }}
-    strategy:
-      matrix:
-        db: ["mariadb"]
-        index: ${{ fromJson(needs.gen-idx-integration.outputs.indices) }}
-    steps:
-      - name: Pass skipped tests unconditionally
-        run: "echo Skipped"
-
   ui-test:
     needs: gen-idx-integration
     name: Integration
@@ -160,3 +146,25 @@ jobs:
             echo "Printing log: $f";
             cat $f
           done
+
+  # TIP: Use these for checks, e.g. UI / Tests (Cypress) / Success
+  success:
+    name: Success
+    needs: [ui-test]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: UI Test '${{ needs.ui-test.result }}'
+        shell: python
+        run: |
+          stati = [
+            '${{ needs.ui-test.result }}',
+          ]
+
+          nopass = ["failure", "cancelled"]
+          dopass = ["success", "skipped"]
+          if any(r in nopass for r in stati):
+            exit(1)
+          if all(r in dopass for r in stati):
+            exit(0)
+          exit(1)

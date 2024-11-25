@@ -37,7 +37,6 @@ jobs:
         run: |
           echo "Evolution towards a set of (fast) unit tests which run without a DB connection is being planned"
   gen-idx-integration:
-    needs: unit-test
     name: Gen Integration Test Matrix
     runs-on: ubuntu-latest
     outputs:
@@ -46,20 +45,6 @@ jobs:
       - id: set-indices
         run: |
           indices=$(seq -s ',' 1 ${{ inputs.parallel-runs }}); echo "indices=[${indices}]" >> $GITHUB_OUTPUT
-
-  # This satisfies the required checks on pull requests if tests are intentionally skipped
-  integration-test-fake:
-    needs: gen-idx-integration
-    name: Integration
-    runs-on: ubuntu-latest
-    if: ${{ inputs.fake-success != false }}
-    strategy:
-      matrix:
-        db: ${{ fromJson(inputs.enable-postgres && '["mariadb", "postgres"]' || '["mariadb"]') }}
-        index: ${{ fromJson(needs.gen-idx-integration.outputs.indices) }}
-    steps:
-      - name: Pass skipped tests unconditionally
-        run: "echo Skipped"
 
   integration-test:
     needs: gen-idx-integration
@@ -172,3 +157,28 @@ jobs:
             echo "Printing log: $f";
             cat $f
           done
+
+
+  # TIP: Use these for checks, e.g. Server / Tests / Success
+  success:
+    name: Success
+    needs: [unit-test, integration-test]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Unit '${{ needs.unit-test.result }}' / Integration '${{ needs.integration-test.result }}'
+        shell: python
+        run: |
+          stati = [
+            '${{ needs.unit-test.result }}',
+            '${{ needs.integration-test.result }}',
+          ]
+
+          nopass = ["failure", "cancelled"]
+          dopass = ["success", "skipped"]
+          if any(r in nopass for r in stati):
+            exit(1)
+          if all(r in dopass for r in stati):
+            exit(0)
+          exit(1)
+
