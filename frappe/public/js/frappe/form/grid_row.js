@@ -711,8 +711,21 @@ export default class GridRow {
 			}
 		});
 
+		let current_grid = $(
+			`div[data-fieldname="${this.grid.df.fieldname}"] .form-grid-container`
+		);
 		if (total_colsize > 10) {
-			$(".form-grid-container").addClass("column-limit-reached");
+			current_grid.addClass("column-limit-reached");
+		} else if (current_grid.hasClass("column-limit-reached")) {
+			if (Number($(current_grid).children(".form-grid").css("left")) != 0) {
+				$(current_grid).children(".form-grid").css("left", 0);
+				$(current_grid).children().find(".grid-scroll-bar").css({
+					width: "auto",
+					"margin-left": "0px",
+				});
+				$(current_grid).children().find(".grid-scroll-bar-rows").css("width", "auto");
+			}
+			current_grid.removeClass("column-limit-reached");
 		}
 
 		if (this.show_search) {
@@ -865,15 +878,7 @@ export default class GridRow {
 
 		let grid;
 		let grid_container;
-
-		let inital_position_x = 0;
-		let start_x = 0;
-		let start_y = 0;
-
 		let input_in_focus = false;
-
-		let vertical = false;
-		let horizontal = false;
 
 		// prevent random layout shifts caused by widgets and on click position elements inside view (UX).
 		function on_input_focus(el) {
