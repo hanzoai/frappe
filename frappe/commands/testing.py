@@ -482,7 +482,11 @@ def run_ui_tests(
 		formatted_command += " " + " ".join(cypressargs)
 
 	click.secho("Running Cypress...", fg="yellow")
-	frappe.commands.popen(formatted_command, cwd=app_base_path, raise_err=True)
+	try:
+		frappe.commands.popen(formatted_command, cwd=app_base_path, raise_err=True)
+	except subprocess.CalledProcessError:
+		click.secho("Cypress tests failed", fg="red")
+		sys.exit(1)
 
 
 commands = [
