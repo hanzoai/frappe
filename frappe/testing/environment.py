@@ -25,7 +25,7 @@ import logging
 import pkgutil
 import unittest
 
-import tomllib
+import tomli
 
 import frappe
 import frappe.utils.scheduler
@@ -91,7 +91,7 @@ def _decorate_all_methods_and_functions_with_type_checker():
 	def _get_config_from_pyproject(app_path):
 		try:
 			with open(f"{app_path}/pyproject.toml", "rb") as f:
-				config = tomllib.load(f)
+				config = tomli.load(f)
 				return (
 					config.get("tool", {})
 					.get("frappe", {})
@@ -100,7 +100,7 @@ def _decorate_all_methods_and_functions_with_type_checker():
 				)
 		except FileNotFoundError:
 			return {}
-		except tomllib.TOMLDecodeError:
+		except tomli.TOMLDecodeError:
 			logger.warning(f"Failed to parse pyproject.toml for app {app_path}")
 			return {}
 
