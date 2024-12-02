@@ -129,7 +129,7 @@ def get_root_connection():
 			frappe.flags.root_login = (
 				frappe.conf.get("mariadb_root_login")
 				or frappe.conf.get("root_login")
-				or input("Enter mysql super user [root]: ")
+				or (sys.__stdin__.isatty() and input("Enter mysql super user [root]: "))
 				or "root"
 			)
 
