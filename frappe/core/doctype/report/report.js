@@ -29,6 +29,14 @@ frappe.ui.form.on("Report", {
 			"fa fa-table"
 		);
 
+		if (!doc.prepared_report || doc.disable_prepared_report) {
+			frm.add_custom_button(__("Enable Prepared Report"), function () {
+				frm.call("enable_prepared_report").then(() => {
+					frm.reload_doc();
+				});
+			});
+		}
+
 		if (doc.is_standard === "Yes" && frm.perm[0].write) {
 			frm.add_custom_button(
 				doc.disabled ? __("Enable Report") : __("Disable Report"),
