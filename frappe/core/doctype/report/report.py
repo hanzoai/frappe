@@ -343,6 +343,11 @@ class Report(Document):
 
 		self.db_set("disabled", cint(disable))
 
+	@frappe.whitelist()
+	def enable_prepared_report(self):
+		enable_prepared_report(self.name)
+		frappe.msgprint(_("Prepared Report Enabled"))
+
 
 def is_prepared_report_disabled(report):
 	return (
