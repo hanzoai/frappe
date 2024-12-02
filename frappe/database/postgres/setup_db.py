@@ -60,13 +60,14 @@ def import_db_from_sql(source_sql=None, verbose=False):
 
 def get_root_connection():
 	if not frappe.local.flags.root_connection:
+		import sys
 		from getpass import getpass
 
 		if not frappe.flags.root_login:
 			frappe.flags.root_login = (
 				frappe.conf.get("postgres_root_login")
 				or frappe.conf.get("root_login")
-				or input("Enter postgres super user [postgres]: ")
+				or (sys.__stdin__.isatty() and input("Enter postgres super user [postgres]: "))
 				or "postgres"
 			)
 
