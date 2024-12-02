@@ -1486,8 +1486,8 @@ def reload_doc(
 @whitelist(methods=["POST", "PUT"])
 def rename_doc(
 	doctype: str,
-	old: str,
-	new: str,
+	old: str | int,
+	new: str | int,
 	force: bool = False,
 	merge: bool = False,
 	*,
