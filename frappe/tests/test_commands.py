@@ -248,7 +248,7 @@ class TestCommands(BaseTestCommands):
 		global_config = {
 			"admin_password": frappe.conf.admin_password,
 			"root_login": frappe.conf.root_login,
-			"root_password": frappe.conf.root_password,
+			"root_password": frappe.conf.mariadb_root_password or frappe.conf.root_password,
 			"db_type": frappe.conf.db_type,
 		}
 		site_data = {"test_site": TEST_SITE, **global_config}

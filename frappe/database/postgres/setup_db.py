@@ -64,12 +64,17 @@ def get_root_connection():
 
 		if not frappe.flags.root_login:
 			frappe.flags.root_login = (
-				frappe.conf.get("root_login") or input("Enter postgres super user [postgres]: ") or "postgres"
+				frappe.conf.get("postgres_root_login")
+				or frappe.conf.get("root_login")
+				or input("Enter postgres super user [postgres]: ")
+				or "postgres"
 			)
 
 		if not frappe.flags.root_password:
-			frappe.flags.root_password = frappe.conf.get("root_password") or getpass(
-				"Postgres super user password: "
+			frappe.flags.root_password = (
+				frappe.conf.get("postgres_root_password")
+				or frappe.conf.get("root_password")
+				or getpass("Postgres super user password: ")
 			)
 
 		frappe.local.flags.root_connection = frappe.database.get_db(

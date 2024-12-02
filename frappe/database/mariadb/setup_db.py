@@ -127,11 +127,18 @@ def get_root_connection():
 
 		if not frappe.flags.root_login:
 			frappe.flags.root_login = (
-				frappe.conf.get("root_login") or input("Enter mysql super user [root]: ") or "root"
+				frappe.conf.get("mariadb_root_login")
+				or frappe.conf.get("root_login")
+				or input("Enter mysql super user [root]: ")
+				or "root"
 			)
 
 		if not frappe.flags.root_password:
-			frappe.flags.root_password = frappe.conf.get("root_password") or getpass("MySQL root password: ")
+			frappe.flags.root_password = (
+				frappe.conf.get("mariadb_root_password")
+				or frappe.conf.get("root_password")
+				or getpass("MySQL root password: ")
+			)
 
 		frappe.local.flags.root_connection = frappe.database.get_db(
 			socket=frappe.conf.db_socket,
