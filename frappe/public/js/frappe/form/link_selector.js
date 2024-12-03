@@ -123,7 +123,7 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 										me.page_length = previous_start + previous_page_length;
 										me.search();
 										me.start = previous_start;
-										me.page_length = previous_page_length;					
+										me.page_length = previous_page_length;
 									});
 								} else {
 									if (me.target.doctype)
