@@ -35,16 +35,13 @@ class _dict(dict[_KT, _VT]):
 		return self
 
 	@overload  # type: ignore[override]
-	def update(self, m: Mapping[_KT, _VT], /, **kwargs: _VT) -> Self:
-		...
+	def update(self, m: Mapping[_KT, _VT], /, **kwargs: _VT) -> Self: ...
 
 	@overload
-	def update(self, m: Iterable[tuple[_KT, _VT]], /, **kwargs: _VT) -> Self:
-		...
+	def update(self, m: Iterable[tuple[_KT, _VT]], /, **kwargs: _VT) -> Self: ...
 
 	@overload
-	def update(self, /, **kwargs: _VT) -> Self:
-		...
+	def update(self, /, **kwargs: _VT) -> Self: ...
 
 	@override
 	def update(

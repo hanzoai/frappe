@@ -261,14 +261,14 @@ def trace_fields(
 # these can be general purpose context managers who do NOT depend on a particular
 # test class setup, such as for example the IntegrationTestCase's connection to site
 __all__ = [
-	"freeze_time",
-	"set_user",
-	"patch_hooks",
 	"change_settings",
-	"switch_site",
-	"enable_safe_exec",
 	"debug_on",
-	"timeout_context",
+	"enable_safe_exec",
+	"freeze_time",
+	"patch_hooks",
+	"set_user",
+	"switch_site",
 	"timeout",
+	"timeout_context",
 	"trace_fields",
 ]

@@ -334,10 +334,8 @@ def handle_exception(e):
 	http_status_code = getattr(e, "http_status_code", 500)
 	accept_header = frappe.get_request_header("Accept") or ""
 	respond_as_json = (
-		frappe.get_request_header("Accept")
-		and (frappe.local.is_ajax or "application/json" in accept_header)
-		or (frappe.local.request.path.startswith("/api/") and not accept_header.startswith("text"))
-	)
+		frappe.get_request_header("Accept") and (frappe.local.is_ajax or "application/json" in accept_header)
+	) or (frappe.local.request.path.startswith("/api/") and not accept_header.startswith("text"))
 
 	if not frappe.session.user:
 		# If session creation fails then user won't be unset. This causes a lot of code that
