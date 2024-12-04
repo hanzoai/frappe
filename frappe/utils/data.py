@@ -1066,8 +1066,7 @@ def flt(s: NumericType | str, precision: int | None = None) -> float: ...
 
 
 @typing.overload
-def flt(s: None) -> Literal[0.0]:
-	...
+def flt(s: None) -> Literal[0.0]: ...
 
 
 def flt(
@@ -1113,7 +1112,7 @@ def flt(
 	return num
 
 
-def cint(s: NumericType | str, default: int = 0) -> int:
+def cint(s: NumericType | str | None, default: int = 0) -> int:
 	"""Convert to integer.
 
 	:param s: Number in string or other numeric format.
@@ -1126,8 +1125,13 @@ def cint(s: NumericType | str, default: int = 0) -> int:
 	100
 	>>> cint("a")
 	0
+	>>> cint(None)
+	0
 
 	"""
+	if s is None:
+		return default
+
 	try:
 		return int(s)
 	except Exception:
