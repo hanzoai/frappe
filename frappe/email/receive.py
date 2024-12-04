@@ -1,6 +1,7 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+import _socket
 import datetime
 import email
 import email.utils
@@ -14,7 +15,6 @@ from email.errors import HeaderParseError
 from email.header import decode_header
 from urllib.parse import unquote
 
-import _socket
 import chardet
 from email_reply_parser import EmailReplyParser
 
@@ -596,7 +596,7 @@ class Email:
 	def get_thread_id(self):
 		"""Extract thread ID from `[]`"""
 		l = THREAD_ID_PATTERN.findall(self.subject)
-		return l and l[0] or None
+		return (l and l[0]) or None
 
 	def is_reply(self):
 		return bool(self.in_reply_to)
