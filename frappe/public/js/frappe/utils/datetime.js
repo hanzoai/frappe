@@ -167,10 +167,8 @@ $.extend(frappe.datetime, {
 	},
 
 	get_datetime_as_string: function (d) {
-		let sysdefaults = frappe.boot.sysdefaults;
-		let date_format = sysdefaults?.date_format || frappe.defaultDateFormat;
-		let time_format = sysdefaults?.time_format || frappe.defaultTimeFormat;
-		let datetime_format = date_format + " " + time_format;
+		let time_format = frappe?.boot?.sysdefaults?.time_format || frappe.defaultTimeFormat;
+		let datetime_format = frappe.defaultDateFormat + " " + time_format;
 		return moment(d).format(datetime_format);
 	},
 
