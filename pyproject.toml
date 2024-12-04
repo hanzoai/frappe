@@ -124,6 +124,7 @@ dev = [
     "types-six",
     "types-vobject",
     "types-zxcvbn",
+    "pypika-stubs",  # contributed
 ]
 test = [
     "unittest-xml-reporting~=3.2.0",
@@ -224,6 +225,7 @@ files = [
     "frappe/types/DF.py",
     "frappe/types/docref.py",
     "frappe/types/frappedict.py",
+    "frappe/types/filter.py",
 ]
 exclude = [
     # permanent excludes
