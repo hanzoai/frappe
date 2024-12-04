@@ -353,7 +353,10 @@ def export_query():
 	form_params["limit_page_length"] = None
 	form_params["as_list"] = True
 	doctype = form_params.pop("doctype")
-	form_params["fields"].append(f"`tab{doctype}`.`owner`")
+	if isinstance(form_params["fields"], list):
+		form_params["fields"].append("owner")
+	elif isinstance(form_params["fields"], tuple):
+		form_params["fields"] = form_params["fields"] + ("owner",)
 	file_format_type = form_params.pop("file_format_type")
 	title = form_params.pop("title", doctype)
 	csv_params = pop_csv_params(form_params)
