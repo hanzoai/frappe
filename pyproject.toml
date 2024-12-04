@@ -4,7 +4,7 @@ authors = [
     { name = "Frappe Technologies Pvt Ltd", email = "developers@frappe.io"}
 ]
 description = "Metadata driven, full-stack low code web framework"
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.10,<3.14"
 readme = "README.md"
 dynamic = ["version"]
 dependencies = [
@@ -24,7 +24,7 @@ dependencies = [
     "PyPika==0.48.9",
     "PyQRCode~=1.2.1",
     "PyYAML~=6.0.1",
-    "RestrictedPython~=7.0",
+    "RestrictedPython~=7.4",
     "WeasyPrint==59.0",
     "pydyf==0.10.0",
     "Werkzeug~=3.0.1",
@@ -54,7 +54,7 @@ dependencies = [
     "psutil~=5.9.5",
     "psycopg2-binary~=2.9.1",
     "pyOpenSSL~=24.2.1",
-    "pydantic~=2.7.0",
+    "pydantic~=2.10.2",
     "pyotp~=2.8.0",
     "python-dateutil~=2.8.2",
     "pytz==2023.3",
@@ -75,7 +75,7 @@ dependencies = [
     "traceback-with-variables~=2.0.4",
     "typing_extensions>=4.6.1,<5",
     "tomli~=2.0.1",
-    "uuid-utils~=0.6.1",
+    "uuid-utils~=0.10.0",
     "xlrd~=2.0.1",
     "zxcvbn~=4.4.28",
     "markdownify~=0.11.6",
