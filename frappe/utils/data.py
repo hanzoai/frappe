@@ -1078,7 +1078,14 @@ def flt(s: NumericType | str, precision: int | None = None) -> float:
 	...
 
 
-def flt(s: NumericType | str, precision: int | None = None, rounding_method: str | None = None) -> float:
+@typing.overload
+def flt(s: None) -> Literal[0.0]:
+	...
+
+
+def flt(
+	s: NumericType | str | None, precision: int | None = None, rounding_method: str | None = None
+) -> float:
 	"""Convert to float (ignoring commas in string).
 
 	:param s: Number in string or other numeric format.
@@ -1097,7 +1104,13 @@ def flt(s: NumericType | str, precision: int | None = None, rounding_method: str
 	10500.57
 	>>> flt("a")
 	0.0
+	>>> flt(None)
+	0.0
 	"""
+
+	if s is None:
+		return 0.0
+
 	if isinstance(s, str):
 		s = s.replace(",", "")
 
