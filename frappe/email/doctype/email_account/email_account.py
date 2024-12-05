@@ -775,7 +775,7 @@ class EmailAccount(Document):
 		try:
 			email_server = self.get_incoming_server(in_receive=True)
 			message = safe_encode(message)
-			sent_folder_name = "Sent" if self.sent_folder_name == "" else self.sent_folder_name
+			sent_folder_name = self.sent_folder_name or "Sent"
 			email_server.imap.append(
 				sent_folder_name, "\\Seen", imaplib.Time2Internaldate(time.time()), message
 			)
