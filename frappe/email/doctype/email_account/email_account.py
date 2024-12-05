@@ -102,7 +102,9 @@ class EmailAccount(Document):
 		send_notification_to: DF.SmallText | None
 		send_unsubscribe_message: DF.Check
 		sent_folder_name: DF.Data | None
-		service: DF.Literal["", "Frappe Mail", "GMail", "Sendgrid", "SparkPost", "Yahoo Mail", "Outlook.com", "Yandex.Mail"]
+		service: DF.Literal[
+			"", "Frappe Mail", "GMail", "Sendgrid", "SparkPost", "Yahoo Mail", "Outlook.com", "Yandex.Mail"
+		]
 		signature: DF.TextEditor | None
 		smtp_port: DF.Data | None
 		smtp_server: DF.Data | None
@@ -774,7 +776,9 @@ class EmailAccount(Document):
 			email_server = self.get_incoming_server(in_receive=True)
 			message = safe_encode(message)
 			sent_folder_name = "Sent" if self.sent_folder_name == "" else self.sent_folder_name
-			email_server.imap.append(sent_folder_name, "\\Seen", imaplib.Time2Internaldate(time.time()), message)
+			email_server.imap.append(
+				sent_folder_name, "\\Seen", imaplib.Time2Internaldate(time.time()), message
+			)
 		except Exception:
 			self.log_error("Unable to add to Sent folder")
 
