@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2024-12-01 09:33+0000\n"
-"PO-Revision-Date: 2024-12-03 19:36\n"
+"PO-Revision-Date: 2024-12-05 19:58\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -25405,7 +25405,7 @@ msgstr "Ändra Tema"
 
 #: frappe/templates/includes/navbar/navbar_login.html:17
 msgid "Switch To Desk"
-msgstr "Ändra till Skrivbord"
+msgstr "Växla till Skrivbord"
 
 #: frappe/public/js/frappe/ui/capture.js:281
 msgid "Switching Camera"
