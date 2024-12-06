@@ -15,7 +15,7 @@ from code import compile_command
 from enum import Enum
 from typing import Any, Literal, Optional, TypeVar
 from urllib.parse import parse_qsl, quote, urlencode, urljoin, urlparse, urlunparse
-from zoneinfo import ZoneInfo
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from click import secho
 from dateutil import parser
@@ -373,10 +373,11 @@ def get_system_timezone() -> str:
 def convert_utc_to_timezone(utc_timestamp: datetime.datetime, time_zone: str) -> datetime.datetime:
 	if utc_timestamp.tzinfo is None:
 		utc_timestamp = utc_timestamp.replace(tzinfo=ZoneInfo(time_zone))
-	else:
-		utc_timestamp = utc_timestamp.astimezone(ZoneInfo(time_zone))
 
-	return utc_timestamp
+	try:
+		return utc_timestamp.astimezone(ZoneInfo(time_zone))
+	except ZoneInfoNotFoundError:
+		return utc_timestamp
 
 
 def get_datetime_in_timezone(time_zone: str) -> datetime.datetime:
