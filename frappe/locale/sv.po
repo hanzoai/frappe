@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2024-12-01 09:33+0000\n"
-"PO-Revision-Date: 2024-12-05 19:58\n"
+"PO-Revision-Date: 2024-12-06 20:04\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -20766,7 +20766,7 @@ msgstr "Omdirigera URI"
 #: frappe/core/doctype/user/user.json
 #: frappe/integrations/doctype/social_login_key/social_login_key.json
 msgid "Redirect URL"
-msgstr "Omdirigering Adress"
+msgstr "Omdirigering URL"
 
 #. Description of the 'Default App' (Select) field in DocType 'System Settings'
 #. Description of the 'Default App' (Select) field in DocType 'User'
@@ -25174,7 +25174,7 @@ msgstr "Godkänn efter Import"
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:39
 msgid "Submit an Issue"
-msgstr "Anmäl Ärende"
+msgstr "Godkänn Ärende"
 
 #: frappe/website/doctype/web_form/templates/web_form.html:156
 msgctxt "Button in web form"
@@ -31417,7 +31417,7 @@ msgstr "{0} är inte Direkt Utskrift Mall."
 
 #: frappe/public/js/frappe/views/calendar/calendar.js:82
 msgid "{0} is not a valid Calendar. Redirecting to default Calendar."
-msgstr "{0} är inte en giltig kalender. Omdirigerar till standardkalendern."
+msgstr "{0} är inte giltig Kalender. Omdirigerar till standard Kalender."
 
 #: frappe/core/doctype/scheduled_job_type/scheduled_job_type.py:63
 msgid "{0} is not a valid Cron expression."
