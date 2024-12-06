@@ -814,15 +814,19 @@ def get_tests_CompatFrappeTestCase():
 
 		@contextmanager
 		def freeze_time(self, time_to_freeze, is_utc=False, *args, **kwargs):
-			import pytz
+			from zoneinfo import ZoneInfo
+
 			from freezegun import freeze_time
 
 			from frappe.utils.data import convert_utc_to_timezone, get_datetime, get_system_timezone
 
 			if not is_utc:
 				# Freeze time expects UTC or tzaware objects. We have neither, so convert to UTC.
-				timezone = pytz.timezone(get_system_timezone())
-				time_to_freeze = timezone.localize(get_datetime(time_to_freeze)).astimezone(pytz.utc)
+				time_to_freeze = (
+					get_datetime(time_to_freeze)
+					.replace(tzinfo=ZoneInfo(get_system_timezone()))
+					.astimezone(ZoneInfo("UTC"))
+				)
 
 			with freeze_time(time_to_freeze, *args, **kwargs):
 				yield
