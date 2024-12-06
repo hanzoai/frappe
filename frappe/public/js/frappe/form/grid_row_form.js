@@ -72,9 +72,9 @@ export default class GridRowForm {
 						<kbd>${__("Ctrl + Up")}</kbd> . <kbd>${__("Ctrl + Down")}</kbd> . <kbd>${__("ESC")}</kbd>
 					</div>
 					<span class="row-actions">
-					<button class="btn btn-secondary btn-sm pull-right grid-append-row">
-						${__("Insert Below")}
-					</button>
+						<button class="btn btn-secondary btn-sm pull-right grid-append-row">
+							${__("Insert Below")}
+						</button>
 					</span>
 				</div>
 			</div>`;
