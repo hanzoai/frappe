@@ -348,9 +348,14 @@ class Sites(_PathResolvable, ConfigHandler, _Serializable):
 
 	@site_name.setter
 	def site_name(self, value):
+		if self.site_name is not None and value == self.SCOPE_ALL_SITES:
+			raise BenchNotScopedError("Cannot scope back to SCOPE_ALL_SITES when already scoped")
+
 		import frappe
 
 		frappe.local.site_name = value
+		if hasattr(self, "_Sites__sites"):
+			del self.__sites
 
 	def add_site(self, site_name: str) -> None:
 		site_path = self.path.joinpath(site_name)
@@ -371,18 +376,6 @@ class Sites(_PathResolvable, ConfigHandler, _Serializable):
 			# Note: This doesn't actually delete the site directory, just removes it from the sites dict
 			# Actual deletion should be handled separately with proper safeguards
 
-	def scope(self, site_name: str | None = None) -> Site:
-		if site_name is None:
-			return self.site
-
-		del self.__sites  # trigger re-scan after scope
-		self.site_name = site_name
-
-		if self.site_name != self.SCOPE_ALL_SITES:
-			return self.site
-
-		raise BenchNotScopedError("Cannot scope to ALL_SITES")
-
 	@property
 	def scoped(self) -> bool:
 		return bool(self.site_name) and self.site_name != self.SCOPE_ALL_SITES
@@ -396,7 +389,7 @@ class Sites(_PathResolvable, ConfigHandler, _Serializable):
 
 	@property
 	def _sites(self) -> dict[str, Site]:
-		if not hasattr(self, "__sites"):
+		if not hasattr(self, "_Sites__sites"):
 			self.__sites = {}
 
 			# security & thread-safety: site_name is stored in thread-local storage
@@ -472,9 +465,6 @@ class Bench(_PathResolvable, _Serializable):
 	@property
 	def site(self) -> Site:
 		return self.sites.site
-
-	def scope(self, site_name: str) -> Site:
-		return self.sites.scope(site_name)
 
 	@property
 	def scoped(self) -> bool:
