@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2024-12-01 09:33+0000\n"
-"PO-Revision-Date: 2024-12-01 19:09\n"
+"PO-Revision-Date: 2024-12-08 20:00\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -4371,7 +4371,7 @@ msgstr "Hachage de chaînage"
 #: frappe/public/js/frappe/form/templates/form_sidebar.html:11
 #: frappe/tests/test_translate.py:98
 msgid "Change"
-msgstr "Changement"
+msgstr ""
 
 #: frappe/tests/test_translate.py:99
 msgctxt "Coins"
