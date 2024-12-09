@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2024-12-01 09:33+0000\n"
-"PO-Revision-Date: 2024-12-06 20:04\n"
+"PO-Revision-Date: 2024-12-09 20:00\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -8911,7 +8911,7 @@ msgstr "E-post meddelanden hämtas redan från detta konto."
 
 #: frappe/email/queue.py:137
 msgid "Emails are muted"
-msgstr "E-post är Dämpad"
+msgstr "E-post är dämpad"
 
 #. Description of the 'Send Email Alert' (Check) field in DocType 'Workflow'
 #: frappe/workflow/doctype/workflow/workflow.json
@@ -11280,7 +11280,7 @@ msgstr "Hämta Fält"
 
 #: frappe/printing/doctype/letter_head/letter_head.js:32
 msgid "Get Header and Footer wkhtmltopdf variables"
-msgstr "Hämta wkhtmltopdf variabler för sidhuvud och sidfot"
+msgstr "Hämta Sidhuvud och Sidfot wkhtmltopdf variabler"
 
 #: frappe/public/js/frappe/form/multi_select_dialog.js:87
 msgid "Get Items"
@@ -11852,7 +11852,7 @@ msgstr "Sidhuvud, Robotar"
 
 #: frappe/printing/doctype/letter_head/letter_head.js:30
 msgid "Header/Footer scripts can be used to add dynamic behaviours."
-msgstr "Skript för Brevhuvud/Sidfot kan användas för att lägga till dynamisk beteende."
+msgstr "Skript för Sidhuvud/Sidfot kan användas för att lägga till dynamisk beteende."
 
 #. Label of the webhook_headers (Table) field in DocType 'Webhook'
 #. Label of the headers (Code) field in DocType 'Webhook Request Log'
@@ -25174,7 +25174,7 @@ msgstr "Godkänn efter Import"
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:39
 msgid "Submit an Issue"
-msgstr "Godkänn Ärende"
+msgstr "Anmäl Ärende"
 
 #: frappe/website/doctype/web_form/templates/web_form.html:156
 msgctxt "Button in web form"
