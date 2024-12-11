@@ -15,8 +15,8 @@ from code import compile_command
 from enum import Enum
 from typing import Any, Literal, Optional, TypeVar
 from urllib.parse import parse_qsl, quote, urlencode, urljoin, urlparse, urlunparse
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-import pytz
 from click import secho
 from dateutil import parser
 from dateutil.parser import ParserError
@@ -25,6 +25,7 @@ from dateutil.relativedelta import relativedelta
 import frappe
 from frappe.desk.utils import slug
 from frappe.locale import get_date_format, get_first_day_of_the_week, get_number_format, get_time_format
+from frappe.types.filter import Filters, FilterSignature, FilterTuple
 from frappe.utils.deprecations import deprecated
 from frappe.utils.number_format import NUMBER_FORMAT_MAP, NumberFormat
 
@@ -52,6 +53,8 @@ TimespanOptions = Literal[
 
 
 if typing.TYPE_CHECKING:
+	from collections.abc import Mapping
+
 	from PIL.ImageFile import ImageFile as PILImageFile
 
 	T = TypeVar("T")
@@ -347,8 +350,7 @@ def time_diff_in_hours(string_ed_date: DateTimeLikeObject, string_st_date: DateT
 
 def now_datetime() -> datetime.datetime:
 	"""Return the current datetime in system timezone."""
-	dt = convert_utc_to_system_timezone(datetime.datetime.now(pytz.UTC))
-	return dt.replace(tzinfo=None)
+	return datetime.datetime.now(ZoneInfo(get_system_timezone())).replace(tzinfo=None)
 
 
 def get_timestamp(date: Optional["DateTimeLikeObject"] = None) -> float:
@@ -369,19 +371,18 @@ def get_system_timezone() -> str:
 
 
 def convert_utc_to_timezone(utc_timestamp: datetime.datetime, time_zone: str) -> datetime.datetime:
-	from pytz import UnknownTimeZoneError, timezone
-
 	if utc_timestamp.tzinfo is None:
-		utc_timestamp = timezone("UTC").localize(utc_timestamp)
+		utc_timestamp = utc_timestamp.replace(tzinfo=ZoneInfo("UTC"))
+
 	try:
-		return utc_timestamp.astimezone(timezone(time_zone))
-	except UnknownTimeZoneError:
+		return utc_timestamp.astimezone(ZoneInfo(time_zone))
+	except ZoneInfoNotFoundError:
 		return utc_timestamp
 
 
 def get_datetime_in_timezone(time_zone: str) -> datetime.datetime:
 	"""Return the current datetime in the given timezone (e.g. 'Asia/Kolkata')."""
-	utc_timestamp = datetime.datetime.now(pytz.UTC)
+	utc_timestamp = datetime.datetime.now(datetime.timezone.utc)
 	return convert_utc_to_timezone(utc_timestamp, time_zone)
 
 
@@ -1984,19 +1985,14 @@ operator_map = {
 }
 
 
-def evaluate_filters(doc, filters: dict | list | tuple):
+def evaluate_filters(doc: "Mapping", filters: FilterSignature):
 	"""Return True if doc matches filters."""
-	if isinstance(filters, dict):
-		for key, value in filters.items():
-			f = get_filter(None, {key: value})
-			if not compare(doc.get(f.fieldname), f.operator, f.value, f.fieldtype):
-				return False
-
-	elif isinstance(filters, list | tuple):
-		for d in filters:
-			f = get_filter(None, d)
-			if not compare(doc.get(f.fieldname), f.operator, f.value, f.fieldtype):
-				return False
+	if not isinstance(filters, Filters):
+		filters = Filters(filters, doctype=doc.get("doctype"))
+	for d in filters:
+		f = get_filter(None, d)
+		if not compare(doc.get(f.fieldname), f.operator, f.value, f.fieldtype):
+			return False
 
 	return True
 
@@ -2011,7 +2007,7 @@ def compare(val1: Any, condition: str, val2: Any, fieldtype: str | None = None):
 	return False
 
 
-def get_filter(doctype: str, f: dict | list | tuple, filters_config=None) -> "frappe._dict":
+def get_filter(doctype: str, filters: FilterSignature, filters_config=None) -> "frappe._dict":
 	"""Return a `_dict` like:
 
 	{
@@ -2025,29 +2021,17 @@ def get_filter(doctype: str, f: dict | list | tuple, filters_config=None) -> "fr
 	from frappe.database.utils import NestedSetHierarchy
 	from frappe.model import child_table_fields, default_fields, optional_fields
 
-	if isinstance(f, dict):
-		key, value = next(iter(f.items()))
-		f = make_filter_tuple(doctype, key, value)
+	ft: FilterTuple
+	if isinstance(filters, FilterTuple):
+		ft = filters
+	elif not isinstance(filters, Filters):
+		ft = Filters(filters, doctype=doctype)[0]
+	else:
+		ft = filters[0]
 
-	if not isinstance(f, list | tuple):
-		frappe.throw(frappe._("Filter must be a tuple or list (in a list)"))
-
-	if len(f) == 3:
-		f = (doctype, f[0], f[1], f[2])
-	elif len(f) > 4:
-		f = f[0:4]
-	elif len(f) != 4:
-		frappe.throw(
-			frappe._("Filter must have 4 values (doctype, fieldname, operator, value): {0}").format(str(f))
-		)
-
-	f = frappe._dict(doctype=f[0], fieldname=f[1], operator=f[2], value=f[3])
+	f = frappe._dict(doctype=ft[0], fieldname=ft[1], operator=ft[2], value=ft[3])
 
 	sanitize_column(f.fieldname)
-
-	if not f.operator:
-		# if operator is missing
-		f.operator = "="
 
 	valid_operators = (
 		"=",

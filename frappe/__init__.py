@@ -51,9 +51,11 @@ from frappe.query_builder.utils import (
 from frappe.utils.caching import request_cache
 from frappe.utils.data import cint, cstr, sbool
 
+from .bench_interface import Bench
+
 # Local application imports
 from .exceptions import *
-from .types.frappedict import _dict
+from .types import Filters, FilterSignature, FilterTuple, _dict
 from .utils.jinja import (
 	get_email_from_template,
 	get_jenv,
@@ -81,6 +83,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
 controllers: dict[str, "Document"] = {}
 local = Local()
+bench = Bench()
 cache: Optional["RedisWrapper"] = None
 STANDARD_USERS = ("Guest", "Administrator")
 
@@ -245,6 +248,7 @@ def init(site: str, sites_path: str = ".", new_site: bool = False, force: bool =
 	local.test_objects = defaultdict(list)
 
 	local.site = site
+	local.site_name = site  # implicitly scopes bench
 	local.sites_path = sites_path
 	local.site_path = os.path.join(sites_path, site)
 	local.all_apps = None
@@ -1383,7 +1387,13 @@ def get_doc(*args: Any, **kwargs: Any) -> "Document":
 	return doc
 
 
-def get_last_doc(doctype, filters=None, order_by="creation desc", *, for_update=False):
+def get_last_doc(
+	doctype,
+	filters: FilterSignature | None = None,
+	order_by="creation desc",
+	*,
+	for_update=False,
+):
 	"""Get last created document of this type."""
 	d = get_all(doctype, filters=filters, limit_page_length=1, order_by=order_by, pluck="name")
 	if d:
@@ -2380,7 +2390,9 @@ loggers: dict[str, "Logger"] = {}
 log_level: int | None = None
 
 
-def logger(module=None, with_more_info=False, allow_site=True, filter=None, max_size=100_000, file_count=20):
+def logger(
+	module=None, with_more_info=False, allow_site=True, filter=None, max_size=100_000, file_count=20
+) -> "Logger":
 	"""Return a python logger that uses StreamHandler."""
 	from frappe.utils.logger import get_logger
 
