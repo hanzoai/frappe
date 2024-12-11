@@ -231,6 +231,7 @@ def execute_job(site, method, event, job_name, kwargs, user=None, is_async=True,
 			# 1213 = deadlock
 			# 1205 = lock wait timeout
 			# or RetryBackgroundJobError is explicitly raised
+			frappe.job.after_job.reset()
 			frappe.destroy()
 			time.sleep(retry + 1)
 
