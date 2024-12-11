@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2024-12-01 09:33+0000\n"
-"PO-Revision-Date: 2024-12-09 20:00\n"
+"PO-Revision-Date: 2024-12-11 20:01\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -4604,7 +4604,7 @@ msgstr "Chatta"
 #: frappe/website/doctype/web_form_field/web_form_field.json
 #: frappe/website/doctype/web_template_field/web_template_field.json
 msgid "Check"
-msgstr "Check"
+msgstr "Markera"
 
 #: frappe/integrations/doctype/webhook/webhook.py:95
 msgid "Check Request URL"
