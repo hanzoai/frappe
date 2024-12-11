@@ -179,6 +179,7 @@ def get_boot_data():
 			"time_format": get_time_format(),
 			"first_day_of_the_week": get_first_day_of_the_week(),
 			"number_format": get_number_format().string,
+			"currency": frappe.get_system_settings("currency"),
 		},
 		"time_zone": {
 			"system": get_system_timezone(),
