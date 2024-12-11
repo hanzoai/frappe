@@ -22,7 +22,10 @@
    "default": "0",
    "fieldname": "skipped",
    "fieldtype": "Check",
+<<<<<<< HEAD
    "in_list_view": 1,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "label": "Skipped",
    "read_only": 1
   },
@@ -37,7 +40,11 @@
  "icon": "fa fa-cog",
  "idx": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-06-07 00:00:01.369265",
+=======
+ "modified": "2023-05-10 19:27:10.883330",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Patch Log",

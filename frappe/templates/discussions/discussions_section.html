@@ -5,6 +5,7 @@
 <div class="discussions-parent {% if single_thread %} is-single-thread {% endif %}"
 	data-doctype="{{ doctype | urlencode }}" data-docname="{{ docname | urlencode }}">
 
+<<<<<<< HEAD
 	{% if not single_thread %}
 	{% include "frappe/templates/discussions/topic_modal.html" %}
 	{% endif %}
@@ -15,6 +16,15 @@
 		{% include "frappe/templates/discussions/search.html" %}
 		{% endif %}
 
+=======
+	{% include "frappe/templates/discussions/topic_modal.html" %}
+
+	<div class="discussions-header">
+		<span class="discussion-heading">{{ _(title) }}</span>
+		{% if topics | length and not single_thread %}
+		{% include "frappe/templates/discussions/search.html" %}
+		{% endif %}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		{% if topics and not single_thread %}
 		{% include "frappe/templates/discussions/button.html" %}
 		{% endif %}
@@ -23,7 +33,11 @@
 	<div class="">
 		{% if topics and not single_thread %}
 
+<<<<<<< HEAD
 		<div class="discussions-sidebar">
+=======
+		<div class="discussions-sidebar card-style">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			{% for topic in topics %}
 			{% set replies = frappe.get_all("Discussion Reply", {"topic": topic.name})%}

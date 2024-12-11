@@ -1,9 +1,15 @@
 # Copyright (c) 2018, Frappe Technologies and contributors
 # License: MIT. See LICENSE
+<<<<<<< HEAD
 import gzip
 import json
 from contextlib import suppress
 from typing import Any
+=======
+
+
+import json
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 from rq import get_current_job
 
@@ -13,6 +19,7 @@ from frappe.desk.form.load import get_attachments
 from frappe.desk.query_report import generate_report_result
 from frappe.model.document import Document
 from frappe.monitor import add_data_to_monitor
+<<<<<<< HEAD
 from frappe.utils import add_to_date, now
 from frappe.utils.background_jobs import enqueue
 
@@ -40,6 +47,13 @@ class PreparedReport(Document):
 		status: DF.Literal["Error", "Queued", "Completed", "Started"]
 
 	# end: auto-generated types
+=======
+from frappe.utils import gzip_compress, gzip_decompress
+from frappe.utils.background_jobs import enqueue
+
+
+class PreparedReport(Document):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@property
 	def queued_by(self):
 		return self.owner
@@ -61,6 +75,7 @@ class PreparedReport(Document):
 	def before_insert(self):
 		self.status = "Queued"
 
+<<<<<<< HEAD
 	def on_trash(self):
 		"""Remove pending job from queue, if already running then kill the job."""
 		if self.status not in ("Started", "Queued"):
@@ -72,11 +87,18 @@ class PreparedReport(Document):
 
 	def after_insert(self):
 		timeout = frappe.get_value("Report", self.report_name, "timeout")
+=======
+	def after_insert(self):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		enqueue(
 			generate_report,
 			queue="long",
 			prepared_report=self.name,
+<<<<<<< HEAD
 			timeout=timeout or REPORT_TIMEOUT,
+=======
+			timeout=1500,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			enqueue_after_commit=True,
 		)
 
@@ -86,6 +108,7 @@ class PreparedReport(Document):
 			attached_file = frappe.get_doc("File", attachment.name)
 
 			if with_file_name:
+<<<<<<< HEAD
 				return (gzip.decompress(attached_file.get_content()), attachment.file_name)
 			return gzip.decompress(attached_file.get_content())
 
@@ -94,6 +117,16 @@ def generate_report(prepared_report):
 	update_job_id(prepared_report)
 
 	instance: PreparedReport = frappe.get_doc("Prepared Report", prepared_report)
+=======
+				return (gzip_decompress(attached_file.get_content()), attachment.file_name)
+			return gzip_decompress(attached_file.get_content())
+
+
+def generate_report(prepared_report):
+	update_job_id(prepared_report, get_current_job().id)
+
+	instance = frappe.get_doc("Prepared Report", prepared_report)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	report = frappe.get_doc("Report", instance.report_name)
 
 	add_data_to_monitor(report=instance.report_name)
@@ -111,7 +144,11 @@ def generate_report(prepared_report):
 					report.custom_columns = data["columns"]
 
 		result = generate_report_result(report=report, filters=instance.filters, user=instance.owner)
+<<<<<<< HEAD
 		create_json_gz_file(result, instance.doctype, instance.name, instance.report_name)
+=======
+		create_json_gz_file(result, instance.doctype, instance.name)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		instance.status = "Completed"
 	except Exception:
@@ -128,6 +165,14 @@ def generate_report(prepared_report):
 	)
 
 
+<<<<<<< HEAD
+=======
+def update_job_id(prepared_report, job_id):
+	frappe.db.set_value("Prepared Report", prepared_report, "job_id", job_id, update_modified=False)
+	frappe.db.commit()
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 @dangerously_reconnect_on_connection_abort
 def _save_error(instance, error):
 	instance.reload()
@@ -136,6 +181,7 @@ def _save_error(instance, error):
 	instance.save(ignore_permissions=True)
 
 
+<<<<<<< HEAD
 def update_job_id(prepared_report):
 	job = get_current_job()
 
@@ -151,6 +197,8 @@ def update_job_id(prepared_report):
 	frappe.db.commit()
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 @frappe.whitelist()
 def make_prepared_report(report_name, filters=None):
 	"""run reports in background"""
@@ -165,6 +213,7 @@ def make_prepared_report(report_name, filters=None):
 	return {"name": prepared_report.name}
 
 
+<<<<<<< HEAD
 def process_filters_for_prepared_report(filters: dict[str, Any] | str) -> str:
 	if isinstance(filters, str):
 		filters = json.loads(filters)
@@ -179,14 +228,27 @@ def process_filters_for_prepared_report(filters: dict[str, Any] | str) -> str:
 @frappe.whitelist()
 def get_reports_in_queued_state(report_name, filters):
 	return frappe.get_all(
+=======
+@frappe.whitelist()
+def get_reports_in_queued_state(report_name, filters):
+	reports = frappe.get_all(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"Prepared Report",
 		filters={
 			"report_name": report_name,
 			"filters": process_filters_for_prepared_report(filters),
+<<<<<<< HEAD
 			"status": ("in", ("Queued", "Started")),
 			"owner": frappe.session.user,
 		},
 	)
+=======
+			"status": "Queued",
+			"owner": frappe.session.user,
+		},
+	)
+	return reports
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_completed_prepared_report(filters, user, report_name):
@@ -201,6 +263,7 @@ def get_completed_prepared_report(filters, user, report_name):
 	)
 
 
+<<<<<<< HEAD
 def expire_stalled_report():
 	frappe.db.set_value(
 		"Prepared Report",
@@ -216,6 +279,8 @@ def expire_stalled_report():
 	)
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 @frappe.whitelist()
 def delete_prepared_reports(reports):
 	reports = frappe.parse_json(reports)
@@ -225,6 +290,7 @@ def delete_prepared_reports(reports):
 			prepared_report.delete(ignore_permissions=True, delete_permanently=True)
 
 
+<<<<<<< HEAD
 def create_json_gz_file(data, dt, dn, report_name):
 	# Storing data in CSV file causes information loss
 	# Reports like P&L Statement were completely unsuable because of this
@@ -233,6 +299,25 @@ def create_json_gz_file(data, dt, dn, report_name):
 	)
 	encoded_content = frappe.safe_encode(frappe.as_json(data, indent=None, separators=(",", ":")))
 	compressed_content = gzip.compress(encoded_content)
+=======
+def process_filters_for_prepared_report(filters):
+	if isinstance(filters, str):
+		filters = json.loads(filters)
+
+	# This looks like an insanity but, without this it'd be very hard to find Prepared Reports matching given condition
+	# We're ensuring that spacing is consistent. e.g. JS seems to put no spaces after ":", Python on the other hand does.
+	# We are also ensuring that order of keys is same so generated JSON string will be identical too.
+	# PS: frappe.as_json sorts keys
+	return frappe.as_json(filters, indent=None, separators=(",", ":"))
+
+
+def create_json_gz_file(data, dt, dn):
+	# Storing data in CSV file causes information loss
+	# Reports like P&L Statement were completely unsuable because of this
+	json_filename = "{}.json.gz".format(frappe.utils.data.format_datetime(frappe.utils.now(), "Y-m-d-H:M"))
+	encoded_content = frappe.safe_encode(frappe.as_json(data, indent=None, separators=(",", ":")))
+	compressed_content = gzip_compress(encoded_content)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# Call save() file function to upload and attach the file
 	_file = frappe.get_doc(

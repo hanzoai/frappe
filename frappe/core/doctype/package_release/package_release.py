@@ -11,6 +11,7 @@ from frappe.query_builder.functions import Max
 
 
 class PackageRelease(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -28,6 +29,8 @@ class PackageRelease(Document):
 		release_notes: DF.MarkdownEditor | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def set_version(self):
 		# set the next patch release by default
 		doctype = frappe.qb.DocType("Package Release")

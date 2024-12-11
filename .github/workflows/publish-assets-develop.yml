@@ -11,15 +11,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+<<<<<<< HEAD
       - uses: actions/checkout@v4
+=======
+      - uses: actions/checkout@v3
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
         with:
           path: 'frappe'
       - uses: actions/setup-node@v3
         with:
+<<<<<<< HEAD
           node-version: 18
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+=======
+          node-version: 16
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
       - name: Set up bench and build assets
         run: |
           npm install -g yarn

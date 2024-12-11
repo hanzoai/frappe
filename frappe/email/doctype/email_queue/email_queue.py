@@ -3,15 +3,27 @@
 
 import json
 import quopri
+<<<<<<< HEAD
+=======
+import smtplib
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import traceback
 from contextlib import suppress
 from email.parser import Parser
 from email.policy import SMTP
 
+<<<<<<< HEAD
 import frappe
 from frappe import _, safe_encode, task
 from frappe.core.utils import html2text
 from frappe.database.database import savepoint
+=======
+from rq.timeouts import JobTimeoutException
+
+import frappe
+from frappe import _, safe_encode, task
+from frappe.core.utils import html2text
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.email.doctype.email_account.email_account import EmailAccount
 from frappe.email.email_body import add_attachment, get_email, get_formatted_html
 from frappe.email.queue import get_unsubcribed_url, get_unsubscribe_message
@@ -31,6 +43,7 @@ from frappe.utils import (
 	sbool,
 	split_emails,
 )
+<<<<<<< HEAD
 from frappe.utils.deprecations import deprecated
 from frappe.utils.verified_command import get_signed_params
 
@@ -65,6 +78,11 @@ class EmailQueue(Document):
 		unsubscribe_method: DF.Data | None
 		unsubscribe_param: DF.Data | None
 	# end: auto-generated types
+=======
+
+
+class EmailQueue(Document):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	DOCTYPE = "Email Queue"
 
 	def set_recipients(self, recipients):
@@ -215,7 +233,10 @@ class EmailQueue(Document):
 
 
 @task(queue="short")
+<<<<<<< HEAD
 @deprecated
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def send_mail(email_queue_name, smtp_server_instance: SMTPServer = None):
 	"""This is equivalent to EmailQueue.send.
 
@@ -232,6 +253,14 @@ class SendMailContext:
 		smtp_server_instance: SMTPServer = None,
 	):
 		self.queue_doc: EmailQueue = queue_doc
+<<<<<<< HEAD
+=======
+
+		# if smtp_server_instance is passed, then retain smtp session
+		# Note: smtp session will have to be manually closed
+		self.retain_smtp_session = bool(smtp_server_instance)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.smtp_server: SMTPServer = smtp_server_instance
 		self.sent_to_atleast_one_recipient = any(
 			rec.recipient for rec in self.queue_doc.recipients if rec.is_mail_sent()
@@ -248,8 +277,30 @@ class SendMailContext:
 		return self
 
 	def __exit__(self, exc_type, exc_val, exc_tb):
+<<<<<<< HEAD
 		if exc_type:
 			update_fields = {"error": frappe.get_traceback()}
+=======
+		exceptions = [
+			smtplib.SMTPServerDisconnected,
+			smtplib.SMTPAuthenticationError,
+			smtplib.SMTPConnectError,
+			smtplib.SMTPHeloError,
+			JobTimeoutException,
+		]
+		trace = frappe.get_traceback()
+
+		if not self.retain_smtp_session:
+			self.smtp_server.quit()
+
+		if exc_type in exceptions:
+			update_fields = {
+				"status": "Partially Sent" if self.sent_to_atleast_one_recipient else "Not Sent",
+				"error": trace,
+			}
+		elif exc_type:
+			update_fields = {"error": trace}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if self.queue_doc.retry < get_email_retry_limit():
 				update_fields.update(
 					{
@@ -259,12 +310,16 @@ class SendMailContext:
 				)
 			else:
 				update_fields.update({"status": "Error"})
+<<<<<<< HEAD
 				self.notify_failed_email()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		else:
 			update_fields = {"status": "Sent"}
 
 		self.queue_doc.update_status(**update_fields, commit=True)
 
+<<<<<<< HEAD
 	@savepoint(catch=Exception)
 	def notify_failed_email(self):
 		# Parse the email body to extract the subject
@@ -280,6 +335,8 @@ class SendMailContext:
 		notification.subject = _("Failed to send email with subject:") + f" {subject}"
 		notification.insert()
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def update_recipient_status_to_sent(self, recipient):
 		self.sent_to_atleast_one_recipient = True
 		recipient.update_db(status="Sent", commit=True)
@@ -304,7 +361,11 @@ class SendMailContext:
 		if not message:
 			return ""
 
+<<<<<<< HEAD
 		message = message.replace(self.message_placeholder("tracker"), self.get_tracker_str(recipient_email))
+=======
+		message = message.replace(self.message_placeholder("tracker"), self.get_tracker_str())
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		message = message.replace(
 			self.message_placeholder("unsubscribe_url"), self.get_unsubscribe_str(recipient_email)
 		)
@@ -315,6 +376,7 @@ class SendMailContext:
 		message = self.include_attachments(message)
 		return message
 
+<<<<<<< HEAD
 	def get_tracker_str(self, recipient_email) -> str:
 		tracker_url = ""
 		if self.queue_doc.get("email_read_tracker_url"):
@@ -327,16 +389,25 @@ class SendMailContext:
 			tracker_url = get_url(f"{email_read_tracker_url}?{get_signed_params(params)}")
 
 		elif (
+=======
+	def get_tracker_str(self) -> str:
+		if (
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			self.email_account_doc
 			and self.email_account_doc.track_email_status
 			and self.queue_doc.communication
 		):
+<<<<<<< HEAD
 			tracker_url = f"{get_url()}/api/method/frappe.core.doctype.communication.email.mark_email_as_seen?name={self.queue_doc.communication}"
 
 		if tracker_url:
 			tracker_url_html = f'<img src="{tracker_url}"/>'
 			return quopri.encodestring(tracker_url_html.encode()).decode()
 
+=======
+			tracker_url_html = f'<img src="{get_url()}/api/method/frappe.core.doctype.communication.email.mark_email_as_seen?name={self.queue_doc.communication}"/>'
+			return quopri.encodestring(tracker_url_html.encode()).decode()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return ""
 
 	def get_unsubscribe_str(self, recipient_email: str) -> str:
@@ -413,7 +484,12 @@ class SendMailContext:
 		if frappe.db.exists("File", file_data):
 			return
 
+<<<<<<< HEAD
 		file = frappe.new_doc("File", **file_data)
+=======
+		file = frappe.new_doc("File")
+		file.update(file_data)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		file.content = content
 		file.insert()
 
@@ -497,7 +573,10 @@ class QueueBuilder:
 		header=None,
 		print_letterhead=False,
 		with_container=False,
+<<<<<<< HEAD
 		email_read_tracker_url=None,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	):
 		"""Add email to sending queue (Email Queue)
 
@@ -522,7 +601,10 @@ class QueueBuilder:
 		:param inline_images: List of inline images as {"filename", "filecontent"}. All src properties will be replaced with random Content-Id
 		:param header: Append header in email (boolean)
 		:param with_container: Wraps email inside styled container
+<<<<<<< HEAD
 		:param email_read_tracker_url: A URL for tracking whether an email is read by the recipient.
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""
 
 		self._unsubscribe_method = unsubscribe_method
@@ -557,7 +639,10 @@ class QueueBuilder:
 		self.is_notification = is_notification
 		self.inline_images = inline_images
 		self.print_letterhead = print_letterhead
+<<<<<<< HEAD
 		self.email_read_tracker_url = email_read_tracker_url
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@property
 	def unsubscribe_method(self):
@@ -712,13 +797,21 @@ class QueueBuilder:
 			mail.set_in_reply_to(self.in_reply_to)
 		return mail
 
+<<<<<<< HEAD
 	def process(self, send_now=False) -> EmailQueue | None:
+=======
+	def process(self, send_now=False):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""Build and return the email queues those are created.
 
 		Sends email incase if it is requested to send now.
 		"""
 		final_recipients = self.final_recipients()
+<<<<<<< HEAD
 		queue_separately = (final_recipients and self.queue_separately) or len(final_recipients) > 100
+=======
+		queue_separately = (final_recipients and self.queue_separately) or len(final_recipients) > 20
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if not (final_recipients + self.final_cc()):
 			return []
 
@@ -730,7 +823,10 @@ class QueueBuilder:
 			recipients = list(set(final_recipients + self.final_cc() + self.bcc))
 			q = EmailQueue.new({**queue_data, **{"recipients": recipients}}, ignore_permissions=True)
 			send_now and q.send()
+<<<<<<< HEAD
 			return q
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		else:
 			if send_now and len(final_recipients) >= 1000:
 				# force queueing if there are too many recipients to avoid timeouts
@@ -799,7 +895,10 @@ class QueueBuilder:
 			"show_as_cc": ",".join(self.final_cc()),
 			"show_as_bcc": ",".join(self.bcc),
 			"email_account": email_account_name or None,
+<<<<<<< HEAD
 			"email_read_tracker_url": self.email_read_tracker_url,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		if include_recipients:

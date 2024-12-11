@@ -14,16 +14,27 @@
 </div>
 
 <div align="center">
+<<<<<<< HEAD
 	<a target="_blank" href="#LICENSE" title="License: MIT"><img src="https://img.shields.io/badge/License-MIT-success.svg"></a>
 	<a target="_blank" href="https://www.python.org/downloads/" title="Python version"><img src="https://img.shields.io/badge/python-%3E=_3.10-success.svg"></a>
 	<a href="https://frappeframework.com/docs"><img src="https://img.shields.io/badge/docs-%F0%9F%93%96-success.svg"/></a>
 	<a href="https://github.com/frappe/frappe/actions/workflows/server-tests.yml"><img src="https://github.com/frappe/frappe/actions/workflows/server-tests.yml/badge.svg"></a>
 	<a href="https://github.com/frappe/frappe/actions/workflows/ui-tests.yml"><img src="https://github.com/frappe/frappe/actions/workflows/ui-tests.yml/badge.svg?branch=develop"></a>
+=======
+	<a href="https://github.com/frappe/frappe/actions/workflows/server-mariadb-tests.yml"><img src="https://github.com/frappe/frappe/actions/workflows/server-mariadb-tests.yml/badge.svg"></a>
+	<a href="https://github.com/frappe/frappe/actions/workflows/ui-tests.yml"><img src="https://github.com/frappe/frappe/actions/workflows/ui-tests.yml/badge.svg?branch=develop"></a>
+	<a href='https://frappeframework.com/docs'><img src='https://img.shields.io/badge/docs-📖-7575FF.svg?style=flat-square'/></a>
+	<a href='https://www.codetriage.com/frappe/frappe'><img src='https://www.codetriage.com/frappe/frappe/badges/users.svg'></a>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	<a href="https://codecov.io/gh/frappe/frappe"><img src="https://codecov.io/gh/frappe/frappe/branch/develop/graph/badge.svg?token=XoTa679hIj"/></a>
 </div>
 
 
+<<<<<<< HEAD
 Full-stack web application framework that uses Python and MariaDB on the server side and a tightly integrated client side library. Built for [ERPNext](https://erpnext.com).
+=======
+Full-stack web application framework that uses Python and MariaDB on the server side and a tightly integrated client side library. Built for [ERPNext](https://erpnext.com)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 <div align="center" style="max-height: 40px;">
 	<a href="https://frappecloud.com/frappe/signup"><img src=".github/try-on-f-cloud-button.svg" height="40"></a>
@@ -40,6 +51,7 @@ Full-stack web application framework that uses Python and MariaDB on the server 
 
 ## Installation
 
+<<<<<<< HEAD
 ### Production
 * [Managed Hosting on Frappe Cloud](https://frappecloud.com/)
 * [Easy install script using Docker images](https://github.com/frappe/bench/tree/develop#easy-install-script)
@@ -49,6 +61,12 @@ Full-stack web application framework that uses Python and MariaDB on the server 
 * [Easy install script using Docker images](https://github.com/frappe/bench/tree/develop#easy-install-script)
 * [Development installation on bare metal](https://frappeframework.com/docs/user/en/installation)
 
+=======
+* [Install via Docker](https://github.com/frappe/frappe_docker)
+* [Install via Frappe Bench](https://github.com/frappe/bench)
+* [Offical Documentation](https://frappeframework.com/docs/user/en/installation)
+* [Managed Hosting on Frappe Cloud](https://frappecloud.com/frappe/signup)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 ## Contributing
 
@@ -64,5 +82,8 @@ Full-stack web application framework that uses Python and MariaDB on the server 
 
 ## License
 This repository has been released under the [MIT License](LICENSE).
+<<<<<<< HEAD
 
 By contributing to Frappe, you agree that your contributions will be licensed under its MIT License.
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

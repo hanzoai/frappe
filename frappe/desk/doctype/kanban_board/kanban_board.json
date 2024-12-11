@@ -84,7 +84,11 @@
   }
  ],
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-08-28 22:29:29.569670",
+=======
+ "modified": "2022-04-13 12:10:20.284367",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Kanban Board",
@@ -93,14 +97,22 @@
  "permissions": [
   {
    "read": 1,
+<<<<<<< HEAD
    "role": "Desk User"
+=======
+   "role": "All"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "create": 1,
    "delete": 1,
    "if_owner": 1,
    "read": 1,
+<<<<<<< HEAD
    "role": "Desk User",
+=======
+   "role": "All",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "write": 1
   },
   {

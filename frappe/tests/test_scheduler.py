@@ -34,6 +34,7 @@ class TestScheduler(TestCase):
 		if not frappe.get_all("Scheduled Job Type", limit=1):
 			sync_jobs()
 
+<<<<<<< HEAD
 	def tearDown(self):
 		purge_pending_jobs()
 
@@ -47,6 +48,20 @@ class TestScheduler(TestCase):
 		self.assertIn(
 			"frappe.email.doctype.auto_email_report.auto_email_report.send_monthly",
 			enqueued_jobs,
+=======
+	def test_enqueue_jobs(self):
+		frappe.db.sql("update `tabScheduled Job Type` set last_execution = '2010-01-01 00:00:00'")
+
+		frappe.flags.execute_job = True
+		enqueue_events(site=frappe.local.site)
+		frappe.flags.execute_job = False
+
+		self.assertTrue("frappe.email.queue.set_expiry_for_email_queue", frappe.flags.enqueued_jobs)
+		self.assertTrue("frappe.utils.change_log.check_for_update", frappe.flags.enqueued_jobs)
+		self.assertTrue(
+			"frappe.email.doctype.auto_email_report.auto_email_report.send_monthly",
+			frappe.flags.enqueued_jobs,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 
 	def test_queue_peeking(self):

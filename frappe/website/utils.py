@@ -11,6 +11,7 @@ from werkzeug.wrappers import Response
 
 import frappe
 from frappe import _
+<<<<<<< HEAD
 from frappe.apps import get_apps, get_default_path, is_desk_apps
 from frappe.model.document import Document
 from frappe.utils import (
@@ -21,6 +22,10 @@ from frappe.utils import (
 	get_system_timezone,
 	md_to_html,
 )
+=======
+from frappe.model.document import Document
+from frappe.utils import cint, cstr, get_system_timezone, md_to_html
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 FRONTMATTER_PATTERN = re.compile(r"^\s*(?:---|\+\+\+)(.*?)(?:---|\+\+\+)\s*(.+)$", re.S | re.M)
 H1_TAG_PATTERN = re.compile("<h1>([^<]*)")
@@ -31,6 +36,7 @@ CLEANUP_PATTERN_3 = re.compile(r"(-)\1+")
 
 
 def delete_page_cache(path):
+<<<<<<< HEAD
 	frappe.cache.delete_value("full_index")
 	groups = ("website_page", "page_context")
 	if path:
@@ -39,6 +45,17 @@ def delete_page_cache(path):
 	else:
 		for name in groups:
 			frappe.cache.delete_key(name)
+=======
+	cache = frappe.cache()
+	cache.delete_value("full_index")
+	groups = ("website_page", "page_context")
+	if path:
+		for name in groups:
+			cache.hdel(name, path)
+	else:
+		for name in groups:
+			cache.delete_key(name)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def find_first_image(html):
@@ -134,7 +151,11 @@ def get_home_page():
 		# dont return cached homepage in development
 		return _get_home_page()
 
+<<<<<<< HEAD
 	return frappe.cache.hget("home_page", frappe.session.user, _get_home_page)
+=======
+	return frappe.cache().hget("home_page", frappe.session.user, _get_home_page)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_home_page_via_hooks():
@@ -166,6 +187,7 @@ def get_home_page_via_hooks():
 
 
 def get_boot_data():
+<<<<<<< HEAD
 	apps = get_apps() or []
 	return {
 		"lang": frappe.local.lang or "en",
@@ -174,24 +196,37 @@ def get_boot_data():
 			"is_desk_apps": 1 if bool(is_desk_apps(apps)) else 0,
 			"default_path": get_default_path(apps) or "",
 		},
+=======
+	return {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"sysdefaults": {
 			"float_precision": cint(frappe.get_system_settings("float_precision")) or 3,
 			"date_format": frappe.get_system_settings("date_format") or "yyyy-mm-dd",
 			"time_format": frappe.get_system_settings("time_format") or "HH:mm:ss",
+<<<<<<< HEAD
 			"first_day_of_the_week": frappe.get_system_settings("first_day_of_the_week") or "Sunday",
 			"number_format": frappe.get_system_settings("number_format") or "#,###.##",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		},
 		"time_zone": {
 			"system": get_system_timezone(),
 			"user": frappe.db.get_value("User", frappe.session.user, "time_zone") or get_system_timezone(),
 		},
+<<<<<<< HEAD
 		"assets_json": get_assets_json(),
 		"sitename": frappe.local.site,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 
 def is_signup_disabled():
+<<<<<<< HEAD
 	return frappe.get_website_settings("disable_signup")
+=======
+	return frappe.db.get_single_value("Website Settings", "disable_signup", True)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def cleanup_page_name(title: str) -> str:
@@ -208,6 +243,14 @@ def cleanup_page_name(title: str) -> str:
 	return name[:140]
 
 
+<<<<<<< HEAD
+=======
+def get_shade(color, percent=None):
+	frappe.msgprint(_("get_shade method has been deprecated."))
+	return color
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def abs_url(path):
 	"""Deconstructs and Reconstructs a URL into an absolute URL or a URL relative from root '/'"""
 	if not path:
@@ -249,11 +292,21 @@ def get_next_link(route, url_prefix=None, app=None):
 
 	if next_item:
 		if next_item.route and next_item.title:
+<<<<<<< HEAD
 			return (
+=======
+			html = (
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				'<p class="btn-next-wrapper">'
 				+ frappe._("Next")
 				+ ': <a class="btn-next" href="{url_prefix}{route}">{title}</a></p>'
 			).format(**next_item)
+<<<<<<< HEAD
+=======
+
+			return html
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return ""
 
 
@@ -304,7 +357,11 @@ def get_full_index(route=None, app=None):
 
 			return children_map
 
+<<<<<<< HEAD
 		children_map = frappe.cache.get_value("website_full_index", _build)
+=======
+		children_map = frappe.cache().get_value("website_full_index", _build)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		frappe.local.flags.children_map = children_map
 
@@ -368,12 +425,16 @@ def get_html_content_based_on_type(doc, fieldname, content_type):
 def clear_cache(path=None):
 	"""Clear website caches
 	:param path: (optional) for the given path"""
+<<<<<<< HEAD
 	from frappe.website.router import clear_routing_cache
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	for key in (
 		"website_generator_routes",
 		"website_pages",
 		"website_full_index",
+<<<<<<< HEAD
 		"languages_with_name",
 		"languages",
 	):
@@ -384,6 +445,17 @@ def clear_cache(path=None):
 	frappe.cache.delete_value("website_404")
 	if path:
 		frappe.cache.hdel("website_redirects", path)
+=======
+		"sitemap_routes",
+		"languages_with_name",
+		"languages",
+	):
+		frappe.cache().delete_value(key)
+
+	frappe.cache().delete_value("website_404")
+	if path:
+		frappe.cache().hdel("website_redirects", path)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		delete_page_cache(path)
 	else:
 		clear_sitemap()
@@ -397,7 +469,11 @@ def clear_cache(path=None):
 			"page_context",
 			"website_page",
 		):
+<<<<<<< HEAD
 			frappe.cache.delete_value(key)
+=======
+			frappe.cache().delete_value(key)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	for method in frappe.get_hooks("website_clear_cache"):
 		frappe.get_attr(method)(path)
@@ -453,7 +529,11 @@ def get_sidebar_items(parent_sidebar, basepath=None):
 
 
 def get_portal_sidebar_items():
+<<<<<<< HEAD
 	sidebar_items = frappe.cache.hget("portal_menu_items", frappe.session.user)
+=======
+	sidebar_items = frappe.cache().hget("portal_menu_items", frappe.session.user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if sidebar_items is None:
 		sidebar_items = []
 		roles = frappe.get_roles()
@@ -476,7 +556,11 @@ def get_portal_sidebar_items():
 				i["enabled"] = 1
 			add_items(sidebar_items, items_via_hooks)
 
+<<<<<<< HEAD
 		frappe.cache.hset("portal_menu_items", frappe.session.user, sidebar_items)
+=======
+		frappe.cache().hset("portal_menu_items", frappe.session.user, sidebar_items)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return sidebar_items
 
@@ -521,7 +605,11 @@ def cache_html(func):
 	def cache_html_decorator(*args, **kwargs):
 		if can_cache():
 			html = None
+<<<<<<< HEAD
 			page_cache = frappe.cache.hget("website_page", args[0].path)
+=======
+			page_cache = frappe.cache().hget("website_page", args[0].path)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if page_cache and frappe.local.lang in page_cache:
 				html = page_cache[frappe.local.lang]
 			if html:
@@ -530,9 +618,15 @@ def cache_html(func):
 		html = func(*args, **kwargs)
 		context = args[0].context
 		if can_cache(context.no_cache):
+<<<<<<< HEAD
 			page_cache = frappe.cache.hget("website_page", args[0].path) or {}
 			page_cache[frappe.local.lang] = html
 			frappe.cache.hset("website_page", args[0].path, page_cache)
+=======
+			page_cache = frappe.cache().hget("website_page", args[0].path) or {}
+			page_cache[frappe.local.lang] = html
+			frappe.cache().hset("website_page", args[0].path, page_cache)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		return html
 
@@ -577,6 +671,7 @@ def set_content_type(response, data, path):
 
 
 def add_preload_for_bundled_assets(response):
+<<<<<<< HEAD
 	links = [f"<{css}>; rel=preload; as=style" for css in frappe.local.preload_assets["style"]]
 	links.extend(f"<{js}>; rel=preload; as=script" for js in frappe.local.preload_assets["script"])
 
@@ -586,6 +681,15 @@ def add_preload_for_bundled_assets(response):
 		f"</assets/{svg}?v={version}>; rel=preload; as=fetch; crossorigin"
 		for svg in frappe.local.preload_assets["icons"]
 	)
+=======
+	links = []
+
+	for css in frappe.local.preload_assets["style"]:
+		links.append(f"<{css}>; rel=preload; as=style")
+
+	for js in frappe.local.preload_assets["script"]:
+		links.append(f"<{js}>; rel=preload; as=script")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if links:
 		response.headers["Link"] = ",".join(links)

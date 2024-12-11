@@ -104,9 +104,12 @@
 			margin-bottom: 3rem;
 			margin-top: 5rem;
 		}
+<<<<<<< HEAD
 		.from-markdown a {
 			text-decoration: underline;
 		}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	.blog-comments {
@@ -119,6 +122,7 @@
 	}
 
 	.blog-feedback {
+<<<<<<< HEAD
 		display: inline-flex;
 		.like-icon {
 			cursor: pointer;
@@ -132,6 +136,16 @@
 			use {
 				stroke: var(--gray-800);
 				--icon-stroke: var(--red-500);
+=======
+		display: flex;
+
+		.like-icon {
+			cursor: pointer;
+
+			&.gray use {
+				fill: var(--gray-600);
+				stroke: none;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		}
 	}

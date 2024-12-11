@@ -27,9 +27,12 @@ frappe.ui.form.on("Data Export", {
 			reset_filter_and_field(frm);
 		}
 	},
+<<<<<<< HEAD
 	export_without_main_header: (frm) => {
 		frm.refresh();
 	},
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 });
 
 const can_export = (frm) => {
@@ -61,9 +64,14 @@ const export_data = (frm) => {
 			select_columns: JSON.stringify(columns),
 			filters: frm.filter_list.get_filters().map((filter) => filter.slice(1, 4)),
 			file_type: frm.doc.file_type,
+<<<<<<< HEAD
 			template: !frm.doc.export_without_main_header,
 			with_data: 1,
 			export_without_column_meta: frm.doc.export_without_main_header ? true : false,
+=======
+			template: true,
+			with_data: 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		};
 	};
 
@@ -153,7 +161,11 @@ const add_doctype_field_multicheck_control = (doctype, parent_wrapper) => {
 
 	const options = fields.map((df) => {
 		return {
+<<<<<<< HEAD
 			label: __(df.label, null, df.parent),
+=======
+			label: df.label,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			value: df.fieldname,
 			danger: df.reqd,
 			checked: 1,

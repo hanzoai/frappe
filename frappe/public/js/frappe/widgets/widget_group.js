@@ -26,6 +26,10 @@ frappe.widget.make_widget = (opts) => {
 	if (widget_class) {
 		return new widget_class(opts);
 	} else {
+<<<<<<< HEAD
+=======
+		// eslint-disable-next-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		console.warn("Invalid Widget Name: " + opts.widget_type);
 	}
 };

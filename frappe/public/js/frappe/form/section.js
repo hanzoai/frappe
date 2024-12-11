@@ -4,7 +4,10 @@ export default class Section {
 		this.card_layout = card_layout;
 		this.parent = parent;
 		this.df = df || {};
+<<<<<<< HEAD
 		this.columns = [];
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.fields_list = [];
 		this.fields_dict = {};
 
@@ -29,8 +32,14 @@ export default class Section {
 		let make_card = this.card_layout;
 		this.wrapper = $(`<div class="row
 				${this.df.is_dashboard_section ? "form-dashboard-section" : "form-section"}
+<<<<<<< HEAD
 				${make_card ? "card-section" : ""}" data-fieldname="${this.df.fieldname}">
 			`).appendTo(this.parent);
+=======
+				${make_card ? "card-section" : ""}">
+			`).appendTo(this.parent);
+		this.layout && this.layout.sections.push(this);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if (this.df) {
 			if (this.df.label) {
@@ -63,7 +72,11 @@ export default class Section {
 	make_head() {
 		this.head = $(`
 			<div class="section-head">
+<<<<<<< HEAD
 				${__(this.df.label, null, this.df.parent)}
+=======
+				${__(this.df.label)}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				<span class="ml-2 collapse-indicator mb-1"></span>
 			</div>
 		`);
@@ -93,12 +106,15 @@ export default class Section {
 		}
 	}
 
+<<<<<<< HEAD
 	add_field(fieldobj) {
 		this.fields_list.push(fieldobj);
 		this.fields_dict[fieldobj.df.fieldname] = fieldobj;
 		fieldobj.section = this;
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	refresh(hide) {
 		if (!this.df) return;
 		// hide if explicitly hidden
@@ -129,7 +145,11 @@ export default class Section {
 	}
 
 	set_icon(hide) {
+<<<<<<< HEAD
 		let indicator_icon = hide ? "es-line-down" : "es-line-up";
+=======
+		let indicator_icon = hide ? "down" : "up-line";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.indicator && this.indicator.html(frappe.utils.icon(indicator_icon, "sm", "mb-1"));
 	}
 

@@ -175,7 +175,11 @@ class TestLinkedWith(FrappeTestCase):
 		linked_doc = frappe.new_doc(dt_name).insert().submit()
 
 		second_doc = (
+<<<<<<< HEAD
 			frappe.new_doc(dt_name, **{"from": linked_doc.doctype, "order": linked_doc.name})
+=======
+			frappe.get_doc(doctype=dt_name, **{"from": linked_doc.doctype, "order": linked_doc.name})
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			.insert()
 			.submit()
 		)

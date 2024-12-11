@@ -47,6 +47,10 @@ frappe.ui.form.make_control = function (opts) {
 	if (frappe.ui.form[control_class_name]) {
 		return new frappe.ui.form[control_class_name](opts);
 	} else {
+<<<<<<< HEAD
+=======
+		// eslint-disable-next-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		console.log("Invalid Control Name: " + opts.df.fieldtype);
 	}
 };

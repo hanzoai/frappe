@@ -11,6 +11,7 @@ from frappe.model.document import Document
 
 
 class NotificationLog(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -31,6 +32,8 @@ class NotificationLog(Document):
 		type: DF.Literal["", "Mention", "Energy Point", "Assignment", "Share", "Alert"]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def after_insert(self):
 		frappe.publish_realtime("notification", after_commit=True, user=self.for_user)
 		set_notifications_as_unseen(self.for_user)
@@ -62,7 +65,12 @@ def get_permission_query_conditions(for_user):
 def get_title(doctype, docname, title_field=None):
 	if not title_field:
 		title_field = frappe.get_meta(doctype).get_title_field()
+<<<<<<< HEAD
 	return docname if title_field == "name" else frappe.db.get_value(doctype, docname, title_field)
+=======
+	title = docname if title_field == "name" else frappe.db.get_value(doctype, docname, title_field)
+	return title
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_title_html(title):
@@ -126,6 +134,7 @@ def send_notification_email(doc: NotificationLog):
 	if not user:
 		return
 
+<<<<<<< HEAD
 	header = get_email_header(doc, user.language)
 	email_subject = strip_html(doc.subject)
 	args = {
@@ -138,12 +147,27 @@ def send_notification_email(doc: NotificationLog):
 		args["document_type"] = doc.document_type
 		args["document_name"] = doc.document_name
 		args["doc_link"] = get_url_to_form(doc.document_type, doc.document_name)
+=======
+	doc_link = get_url_to_form(doc.document_type, doc.document_name)
+	header = get_email_header(doc, user.language)
+	email_subject = strip_html(doc.subject)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	frappe.sendmail(
 		recipients=user.email,
 		subject=email_subject,
 		template="new_notification",
+<<<<<<< HEAD
 		args=args,
+=======
+		args={
+			"body_content": doc.subject,
+			"description": doc.email_content,
+			"document_type": doc.document_type,
+			"document_name": doc.document_name,
+			"doc_link": doc_link,
+		},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		header=[header, "orange"],
 		now=frappe.flags.in_test,
 	)
@@ -190,12 +214,18 @@ def mark_all_as_read():
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 def mark_as_read(docname: str):
 	if frappe.flags.read_only:
 		return
 
 	if docname:
 		frappe.db.set_value("Notification Log", str(docname), "read", 1, update_modified=False)
+=======
+def mark_as_read(docname):
+	if docname:
+		frappe.db.set_value("Notification Log", docname, "read", 1, update_modified=False)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()

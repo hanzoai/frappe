@@ -56,7 +56,11 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 		if (this.list_view_settings?.disable_auto_refresh) {
 			return;
 		}
+<<<<<<< HEAD
 		frappe.realtime.doctype_subscribe(this.doctype);
+=======
+		frappe.socketio.doctype_subscribe(this.doctype);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.realtime.on("list_update", (data) => this.on_update(data));
 	}
 
@@ -330,7 +334,11 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 						columns_in_picker = columns[this.doctype]
 							.filter((df) => !this.is_column_added(df))
 							.map((df) => ({
+<<<<<<< HEAD
 								label: __(df.label, null, df.parent),
+=======
+								label: __(df.label),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 								value: df.fieldname,
 							}));
 
@@ -340,7 +348,11 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 							columns[cdt]
 								.filter((df) => !this.is_column_added(df))
 								.map((df) => ({
+<<<<<<< HEAD
 									label: __(df.label, null, df.parent) + ` (${cdt})`,
+=======
+									label: __(df.label) + ` (${cdt})`,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 									value: df.fieldname + "," + cdt,
 								}))
 								.forEach((df) => columns_in_picker.push(df));
@@ -915,7 +927,11 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 	get_columns_for_picker() {
 		let out = {};
 
+<<<<<<< HEAD
 		const standard_fields_filter = (df) => !frappe.model.no_value_type.includes(df.fieldtype);
+=======
+		const standard_fields_filter = (df) => !in_list(frappe.model.no_value_type, df.fieldtype);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		let doctype_fields = frappe.meta
 			.get_docfields(this.doctype)
@@ -989,7 +1005,11 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 					return !df.hidden && df.fieldname !== "name";
 				})
 				.map((df) => ({
+<<<<<<< HEAD
 					label: __(df.label, null, df.parent),
+=======
+					label: __(df.label),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					value: df.fieldname,
 					checked: this.fields.find(
 						(f) => f[0] === df.fieldname && f[1] === this.doctype
@@ -1005,7 +1025,11 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 			const cdt = df.options;
 
 			dialog_fields.push({
+<<<<<<< HEAD
 				label: __(df.label, null, df.parent) + ` (${__(cdt)})`,
+=======
+				label: __(df.label) + ` (${__(cdt)})`,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				fieldname: df.options,
 				fieldtype: "MultiCheck",
 				columns: 2,
@@ -1014,7 +1038,11 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 						return !df.hidden;
 					})
 					.map((df) => ({
+<<<<<<< HEAD
 						label: __(df.label, null, df.parent),
+=======
+						label: __(df.label),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						value: df.fieldname,
 						checked: this.fields.find((f) => f[0] === df.fieldname && f[1] === cdt),
 					})),
@@ -1103,7 +1131,11 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 		}
 		if (!docfield || docfield.report_hide) return;
 
+<<<<<<< HEAD
 		let title = __(docfield.label, null, docfield.parent);
+=======
+		let title = __(docfield.label);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (doctype !== this.doctype) {
 			title += ` (${__(doctype)})`;
 		}
@@ -1582,7 +1614,11 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 					const args = this.get_args();
 					const selected_items = this.get_checked_items(true);
 
+<<<<<<< HEAD
 					let extra_fields = [];
+=======
+					let extra_fields = null;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					if (this.list_view_settings.disable_count) {
 						extra_fields = [
 							{
@@ -1602,6 +1638,7 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 							},
 						];
 					}
+<<<<<<< HEAD
 					if (frappe.boot.lang !== "en") {
 						extra_fields.push({
 							fieldtype: "Check",
@@ -1610,6 +1647,8 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 							default: 1,
 						});
 					}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 					const d = frappe.report_utils.get_export_dialog(
 						__(this.doctype),
@@ -1618,7 +1657,10 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 							args.cmd = "frappe.desk.reportview.export_query";
 							args.file_format_type = data.file_format;
 							args.title = this.report_name || this.doctype;
+<<<<<<< HEAD
 							args.translate_values = data.translate_values;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 							if (data.file_format == "CSV") {
 								args.csv_delimiter = data.csv_delimiter;
@@ -1699,7 +1741,11 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 		}
 
 		// user permissions
+<<<<<<< HEAD
 		if (this.report_name && frappe.user.has_role("System Manager")) {
+=======
+		if (this.report_name && frappe.model.can_set_user_permissions("Report")) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			items.push({
 				label: __("User Permissions"),
 				action: () => {
@@ -1720,6 +1766,7 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 
 		return items.map((i) => Object.assign(i, { standard: true }));
 	}
+<<<<<<< HEAD
 
 	get_search_params() {
 		let search_params = super.get_search_params();
@@ -1750,4 +1797,6 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 
 		return super.parse_filters_from_route_options();
 	}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 };

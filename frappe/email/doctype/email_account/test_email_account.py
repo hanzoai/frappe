@@ -63,8 +63,13 @@ class TestEmailAccount(FrappeTestCase):
 	def test_unread_notification(self):
 		todo = frappe.get_last_doc("ToDo")
 
+<<<<<<< HEAD
 		comm = frappe.new_doc(
 			"Communication",
+=======
+		comm = frappe.get_doc(
+			doctype="Communication",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			sender="test_sender@example.com",
 			subject="test unread reminder",
 			sent_or_received="Received",
@@ -623,6 +628,7 @@ class TestInboundMail(FrappeTestCase):
 		reference_doc = inbound_mail.reference_document()
 		self.assertEqual(todo.name, reference_doc.name)
 
+<<<<<<< HEAD
 	def test_reference_document_by_subject_match_with_accents(self):
 		subject = "Nouvelle tâche à faire 😃"
 		todo = self.new_todo(sender="test_sender@example.com", description=subject)
@@ -637,6 +643,8 @@ class TestInboundMail(FrappeTestCase):
 		reference_doc = inbound_mail.reference_document()
 		self.assertEqual(todo.name, reference_doc.name)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_create_communication_from_mail(self):
 		# Create email queue record
 		mail_content = self.get_test_mail(fname="incoming-2.raw")

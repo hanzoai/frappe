@@ -17,8 +17,12 @@
   "states",
   "transition_rules",
   "transitions",
+<<<<<<< HEAD
   "workflow_state_field",
   "workflow_data"
+=======
+  "workflow_state_field"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  ],
  "fields": [
   {
@@ -71,7 +75,12 @@
    "fieldname": "states",
    "fieldtype": "Table",
    "label": "Document States",
+<<<<<<< HEAD
    "options": "Workflow Document State"
+=======
+   "options": "Workflow Document State",
+   "reqd": 1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "description": "Rules for how states are transitions, like next state and which role is allowed to change state etc.",
@@ -84,7 +93,12 @@
    "fieldname": "transitions",
    "fieldtype": "Table",
    "label": "Transitions",
+<<<<<<< HEAD
    "options": "Workflow Transition"
+=======
+   "options": "Workflow Transition",
+   "reqd": 1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "default": "workflow_state",
@@ -93,18 +107,25 @@
    "fieldtype": "Data",
    "label": "Workflow State Field",
    "reqd": 1
+<<<<<<< HEAD
   },
   {
    "fieldname": "workflow_data",
    "fieldtype": "JSON",
    "hidden": 1,
    "label": "Workflow Data"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "icon": "fa fa-random",
  "idx": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-12-08 15:52:37.525003",
+=======
+ "modified": "2020-12-17 20:35:16.898040",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Workflow",
  "name": "Workflow",
@@ -123,7 +144,13 @@
  ],
  "show_name_in_global_search": 1,
  "sort_field": "modified",
+<<<<<<< HEAD
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
 }
+=======
+ "sort_order": "ASC",
+ "track_changes": 1
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

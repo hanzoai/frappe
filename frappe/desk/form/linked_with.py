@@ -214,7 +214,11 @@ def get_references_across_doctypes(
 	for k, v in references_by_dlink_fields.items():
 		references.setdefault(k, []).extend(v)
 
+<<<<<<< HEAD
 	for links in references.values():
+=======
+	for _doctype, links in references.items():
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		for link in links:
 			link["is_child"] = link["doctype"] in all_child_tables
 	return references
@@ -408,7 +412,14 @@ def validate_linked_doc(docinfo, ignore_doctypes_on_cancel_all=None):
 
 def get_exempted_doctypes():
 	"""Get list of doctypes exempted from being auto-cancelled"""
+<<<<<<< HEAD
 	return list(frappe.get_hooks("auto_cancel_exempted_doctypes"))
+=======
+	auto_cancel_exempt_doctypes = []
+	for doctypes in frappe.get_hooks("auto_cancel_exempted_doctypes"):
+		auto_cancel_exempt_doctypes.append(doctypes)
+	return auto_cancel_exempt_doctypes
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_linked_docs(doctype: str, name: str, linkinfo: dict | None = None) -> dict[str, list]:
@@ -520,13 +531,21 @@ def get_linked_doctypes(doctype, without_ignore_user_permissions_enabled=False):
 	        {"Address": {"fieldname": "customer"}..}
 	"""
 	if without_ignore_user_permissions_enabled:
+<<<<<<< HEAD
 		return frappe.cache.hget(
+=======
+		return frappe.cache().hget(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			"linked_doctypes_without_ignore_user_permissions_enabled",
 			doctype,
 			lambda: _get_linked_doctypes(doctype, without_ignore_user_permissions_enabled),
 		)
 	else:
+<<<<<<< HEAD
 		return frappe.cache.hget("linked_doctypes", doctype, lambda: _get_linked_doctypes(doctype))
+=======
+		return frappe.cache().hget("linked_doctypes", doctype, lambda: _get_linked_doctypes(doctype))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def _get_linked_doctypes(doctype, without_ignore_user_permissions_enabled=False):

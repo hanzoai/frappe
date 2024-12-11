@@ -1,7 +1,11 @@
 # Copyright (c) 2022, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+<<<<<<< HEAD
 import configparser
 import gzip
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import json
 import os
 import re
@@ -12,12 +16,16 @@ from contextlib import suppress
 from shutil import which
 
 import click
+<<<<<<< HEAD
 from semantic_version import Version
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 from frappe.defaults import _clear_cache
 from frappe.utils import cint, is_git_url
 from frappe.utils.dashboard import sync_dashboards
+<<<<<<< HEAD
 from frappe.utils.synchronization import filelock
 
 
@@ -25,6 +33,13 @@ def _is_scheduler_enabled(site) -> bool:
 	enable_scheduler = False
 	try:
 		frappe.init(site=site)
+=======
+
+
+def _is_scheduler_enabled() -> bool:
+	enable_scheduler = False
+	try:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.connect()
 		enable_scheduler = cint(frappe.db.get_single_value("System Settings", "enable_scheduler"))
 	except Exception:
@@ -45,11 +60,16 @@ def _new_site(
 	install_apps=None,
 	source_sql=None,
 	force=False,
+<<<<<<< HEAD
+=======
+	no_mariadb_socket=False,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	reinstall=False,
 	db_password=None,
 	db_type=None,
 	db_host=None,
 	db_port=None,
+<<<<<<< HEAD
 	setup_db=True,
 	mariadb_user_host_login_scope=None,
 	db_socket=None,
@@ -57,12 +77,22 @@ def _new_site(
 	"""Install a new Frappe site"""
 
 	from frappe.utils import scheduler
+=======
+):
+	"""Install a new Frappe site"""
+
+	from frappe.utils import get_site_path, scheduler, touch_file
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not force and os.path.exists(site):
 		print(f"Site {site} already exists")
 		sys.exit(1)
 
+<<<<<<< HEAD
 	if mariadb_user_host_login_scope and not db_type == "mariadb":
+=======
+	if no_mariadb_socket and not db_type == "mariadb":
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		print("--no-mariadb-socket requires db_type to be set to mariadb.")
 		sys.exit(1)
 
@@ -71,6 +101,7 @@ def _new_site(
 	if not db_name:
 		import hashlib
 
+<<<<<<< HEAD
 		db_name = (
 			"_"
 			+ hashlib.sha1(
@@ -81,11 +112,19 @@ def _new_site(
 	try:
 		# enable scheduler post install?
 		enable_scheduler = _is_scheduler_enabled(site)
+=======
+		db_name = "_" + hashlib.sha1(os.path.realpath(frappe.get_site_path()).encode()).hexdigest()[:16]
+
+	try:
+		# enable scheduler post install?
+		enable_scheduler = _is_scheduler_enabled()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	except Exception:
 		enable_scheduler = False
 
 	make_site_dirs()
 
+<<<<<<< HEAD
 	with filelock("bench_new_site", timeout=1):
 		install_db(
 			root_login=db_root_username,
@@ -118,6 +157,40 @@ def _new_site(
 
 		scheduler.toggle_scheduler(enable_scheduler)
 		frappe.db.commit()
+=======
+	installing = touch_file(get_site_path("locks", "installing.lock"))
+
+	install_db(
+		root_login=db_root_username,
+		root_password=db_root_password,
+		db_name=db_name,
+		admin_password=admin_password,
+		verbose=verbose,
+		source_sql=source_sql,
+		force=force,
+		reinstall=reinstall,
+		db_password=db_password,
+		db_type=db_type,
+		db_host=db_host,
+		db_port=db_port,
+		no_mariadb_socket=no_mariadb_socket,
+	)
+	apps_to_install = ["frappe"] + (frappe.conf.get("install_apps") or []) + (list(install_apps) or [])
+
+	for app in apps_to_install:
+		# NOTE: not using force here for 2 reasons:
+		# 	1. It's not really needed here as we've freshly installed a new db
+		# 	2. If someone uses a sql file to do restore and that file already had
+		# 		installed_apps then it might cause problems as that sql file can be of any previous version(s)
+		# 		which might be incompatible with the current version and using force might cause problems.
+		# 		Example: the DocType DocType might not have `migration_hash` column which will cause failure in the restore.
+		install_app(app, verbose=verbose, set_as_patched=not source_sql, force=False)
+
+	os.remove(installing)
+
+	scheduler.toggle_scheduler(enable_scheduler)
+	frappe.db.commit()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	scheduler_status = "disabled" if frappe.utils.scheduler.is_scheduler_disabled() else "enabled"
 	print("*** Scheduler is", scheduler_status, "***")
@@ -137,6 +210,7 @@ def install_db(
 	db_type=None,
 	db_host=None,
 	db_port=None,
+<<<<<<< HEAD
 	setup=True,
 	mariadb_user_host_login_scope=None,
 	db_socket=None,
@@ -146,6 +220,15 @@ def install_db(
 
 	if not db_type:
 		db_type = frappe.conf.db_type
+=======
+	no_mariadb_socket=False,
+):
+	import frappe.database
+	from frappe.database import setup_database
+
+	if not db_type:
+		db_type = frappe.conf.db_type or "mariadb"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not root_login and db_type == "mariadb":
 		root_login = "root"
@@ -157,7 +240,10 @@ def install_db(
 		site_config=site_config,
 		db_password=db_password,
 		db_type=db_type,
+<<<<<<< HEAD
 		db_socket=db_socket,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		db_host=db_host,
 		db_port=db_port,
 	)
@@ -165,6 +251,7 @@ def install_db(
 
 	frappe.flags.root_login = root_login
 	frappe.flags.root_password = root_password
+<<<<<<< HEAD
 
 	if setup:
 		setup_database(force, verbose, mariadb_user_host_login_scope)
@@ -173,6 +260,9 @@ def install_db(
 		verbose=verbose,
 		source_sql=source_sql,
 	)
+=======
+	setup_database(force, source_sql, verbose, no_mariadb_socket)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	frappe.conf.admin_password = frappe.conf.admin_password or admin_password
 
@@ -445,7 +535,11 @@ def _delete_modules(modules: list[str], dry_run: bool) -> list[str]:
 
 			if not dry_run:
 				if doctype.issingle:
+<<<<<<< HEAD
 					frappe.delete_doc("DocType", doctype.name, ignore_on_trash=True, force=True)
+=======
+					frappe.delete_doc("DocType", doctype.name, ignore_on_trash=True)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				else:
 					drop_doctypes.append(doctype.name)
 
@@ -500,7 +594,11 @@ def _delete_doctypes(doctypes: list[str], dry_run: bool) -> None:
 	for doctype in set(doctypes):
 		print(f"* dropping Table for '{doctype}'...")
 		if not dry_run:
+<<<<<<< HEAD
 			frappe.delete_doc("DocType", doctype, ignore_on_trash=True, force=True)
+=======
+			frappe.delete_doc("DocType", doctype, ignore_on_trash=True)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			frappe.db.sql_ddl(f"DROP TABLE IF EXISTS `tab{doctype}`")
 
 
@@ -541,6 +639,7 @@ def init_singles():
 			continue
 
 
+<<<<<<< HEAD
 def make_conf(
 	db_name=None,
 	db_password=None,
@@ -560,12 +659,18 @@ def make_conf(
 		db_port=db_port,
 		db_socket=db_socket,
 	)
+=======
+def make_conf(db_name=None, db_password=None, site_config=None, db_type=None, db_host=None, db_port=None):
+	site = frappe.local.site
+	make_site_config(db_name, db_password, site_config, db_type=db_type, db_host=db_host, db_port=db_port)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	sites_path = frappe.local.sites_path
 	frappe.destroy()
 	frappe.init(site, sites_path=sites_path)
 
 
 def make_site_config(
+<<<<<<< HEAD
 	db_name=None,
 	db_password=None,
 	site_config=None,
@@ -573,6 +678,9 @@ def make_site_config(
 	db_socket=None,
 	db_host=None,
 	db_port=None,
+=======
+	db_name=None, db_password=None, site_config=None, db_type=None, db_host=None, db_port=None
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 ):
 	frappe.create_folder(os.path.join(frappe.local.site_path))
 	site_file = get_site_config_path()
@@ -584,9 +692,12 @@ def make_site_config(
 			if db_type:
 				site_config["db_type"] = db_type
 
+<<<<<<< HEAD
 			if db_socket:
 				site_config["db_socket"] = db_socket
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if db_host:
 				site_config["db_host"] = db_host
 
@@ -663,6 +774,10 @@ def make_site_dirs():
 		os.path.join("public", "files"),
 		os.path.join("private", "backups"),
 		os.path.join("private", "files"),
+<<<<<<< HEAD
+=======
+		"error-snapshots",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"locks",
 		"logs",
 	]:
@@ -694,6 +809,35 @@ def remove_missing_apps():
 				frappe.db.set_global("installed_apps", json.dumps(installed_apps))
 
 
+<<<<<<< HEAD
+=======
+def extract_sql_from_archive(sql_file_path):
+	"""Return the path of an SQL file if the passed argument is the path of a gzipped
+	SQL file or an SQL file path. The path may be absolute or relative from the bench
+	root directory or the sites sub-directory.
+
+	Args:
+	        sql_file_path (str): Path of the SQL file
+
+	Returns:
+	        str: Path of the decompressed SQL file
+	"""
+	from frappe.utils import get_bench_relative_path
+
+	sql_file_path = get_bench_relative_path(sql_file_path)
+	# Extract the gzip file if user has passed *.sql.gz file instead of *.sql file
+	if sql_file_path.endswith(".gz"):
+		decompressed_file_name = extract_sql_gzip(sql_file_path)
+	else:
+		decompressed_file_name = sql_file_path
+
+	# convert archive sql to latest compatible
+	convert_archive_content(decompressed_file_name)
+
+	return decompressed_file_name
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def convert_archive_content(sql_file_path):
 	if frappe.conf.db_type == "mariadb":
 		# ever since mariaDB 10.6, row_format COMPRESSED has been deprecated and removed
@@ -727,13 +871,35 @@ def convert_archive_content(sql_file_path):
 		old_sql_file_path.unlink()
 
 
+<<<<<<< HEAD
+=======
+def extract_sql_gzip(sql_gz_path):
+	import subprocess
+
+	try:
+		original_file = sql_gz_path
+		decompressed_file = original_file.rstrip(".gz")
+		cmd = f"gzip --decompress --force < {original_file} > {decompressed_file}"
+		subprocess.check_call(cmd, shell=True)
+	except Exception:
+		raise
+
+	return decompressed_file
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def _guess_mariadb_version() -> tuple[int] | None:
 	# Using command-line because we *might* not have a connection yet and this command is required
 	# in non-interactive mode.
 	# Use db.sql("select version()") instead if connection is available.
 	with suppress(Exception):
+<<<<<<< HEAD
 		mariadb = which("mariadb") or which("mysql")
 		version_output = subprocess.getoutput(f"{mariadb} --version")
+=======
+		mysql = which("mysql")
+		version_output = subprocess.getoutput(f"{mysql} --version")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		version_regex = r"(?P<version>\d+\.\d+\.\d+)-MariaDB"
 
 		version = re.search(version_regex, version_output).group("version")
@@ -774,6 +940,7 @@ def extract_files(site_name, file_path):
 
 
 def is_downgrade(sql_file_path, verbose=False):
+<<<<<<< HEAD
 	"""Check if input db backup will get downgraded on current bench
 
 	This function is only tested with mariadb.
@@ -837,6 +1004,46 @@ def is_partial(sql_file_path: str) -> bool:
 
 def partial_restore(sql_file_path, verbose=False):
 	if frappe.conf.db_type == "mariadb":
+=======
+	"""checks if input db backup will get downgraded on current bench"""
+
+	# This function is only tested with mariadb
+	# TODO: Add postgres support
+	if frappe.conf.db_type not in (None, "mariadb"):
+		return False
+
+	from semantic_version import Version
+
+	with open(sql_file_path) as f:
+		header = f.readline()
+		# Example first line:
+		# -- Backup generated by Frappe 15.1.0 on branch fix-backup-restore
+
+		if match := re.search(r"Frappe (\d+\.\d+\.\d+)", header):
+			backup_version = Version(match.group(1))
+			current_version = Version(frappe.__version__)
+
+			downgrade = backup_version > current_version
+
+			if verbose and downgrade:
+				print(f"Your site will be downgraded from Frappe {backup_version} to {current_version}")
+
+			return downgrade
+
+
+def is_partial(sql_file_path):
+	with open(sql_file_path) as f:
+		header = " ".join(f.readline() for _ in range(5))
+		if "Partial Backup" in header:
+			return True
+	return False
+
+
+def partial_restore(sql_file_path, verbose=False):
+	sql_file = extract_sql_from_archive(sql_file_path)
+
+	if frappe.conf.db_type in (None, "mariadb"):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		from frappe.database.mariadb.setup_db import import_db_from_sql
 	elif frappe.conf.db_type == "postgres":
 		import warnings
@@ -849,6 +1056,7 @@ def partial_restore(sql_file_path, verbose=False):
 			fg="yellow",
 		)
 		warnings.warn(warn, stacklevel=1)
+<<<<<<< HEAD
 	else:
 		click.secho("Unsupported database type", fg="red")
 		return
@@ -858,11 +1066,24 @@ def partial_restore(sql_file_path, verbose=False):
 
 def validate_database_sql(path: str, _raise: bool = True) -> None:
 	"""Check if file has contents and if `__Auth` table exists
+=======
+
+	import_db_from_sql(source_sql=sql_file, verbose=verbose)
+
+	# Removing temporarily created file
+	if sql_file != sql_file_path:
+		os.remove(sql_file)
+
+
+def validate_database_sql(path, _raise=True):
+	"""Check if file has contents and if DefaultValue table exists
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	Args:
 	        path (str): Path of the decompressed SQL file
 	        _raise (bool, optional): Raise exception if invalid file. Defaults to True.
 	"""
+<<<<<<< HEAD
 
 	if path.endswith(".gz"):
 		executable_name = "zgrep"
@@ -882,10 +1103,32 @@ def validate_database_sql(path: str, _raise: bool = True) -> None:
 			error_message = "Table `__Auth` not found in file."
 	else:
 		error_message = f"{path} is an empty file!"
+=======
+	empty_file = False
+	missing_table = True
+
+	error_message = ""
+
+	if not os.path.getsize(path):
+		error_message = f"{path} is an empty file!"
+		empty_file = True
+
+	# dont bother checking if empty file
+	if not empty_file:
+		with open(path) as f:
+			for line in f:
+				if "tabDefaultValue" in line:
+					missing_table = False
+					break
+
+		if missing_table:
+			error_message = "Table `tabDefaultValue` not found in file."
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if error_message:
 		click.secho(error_message, fg="red")
 
+<<<<<<< HEAD
 	if _raise:
 		raise frappe.InvalidDatabaseFile
 
@@ -906,3 +1149,7 @@ def get_db_dump_header(file_path: str, file_bytes: int = 256) -> str:
 
 	with open(file_path, "rb") as f:
 		return f.read(file_bytes).decode()
+=======
+	if _raise and (missing_table or empty_file):
+		raise frappe.InvalidDatabaseFile
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

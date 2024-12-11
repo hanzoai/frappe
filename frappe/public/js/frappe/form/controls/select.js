@@ -1,6 +1,9 @@
 frappe.ui.form.ControlSelect = class ControlSelect extends frappe.ui.form.ControlData {
 	static html_element = "select";
+<<<<<<< HEAD
 	static trigger_change_on_input_event = false;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	make_input() {
 		super.make_input();
 
@@ -75,12 +78,16 @@ frappe.ui.form.ControlSelect = class ControlSelect extends frappe.ui.form.Contro
 		if (this.$input) {
 			var selected = this.$input.find(":selected").val();
 			this.$input.empty();
+<<<<<<< HEAD
 			frappe.ui.form.add_options(
 				this.$input,
 				options || [],
 				this.df.sort_options,
 				this.df.context || this.df.parent || this.doctype
 			);
+=======
+			frappe.ui.form.add_options(this.$input, options || [], this.df.sort_options);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			if (value === undefined && selected) {
 				this.$input.val(selected);
@@ -108,13 +115,21 @@ frappe.ui.form.ControlSelect = class ControlSelect extends frappe.ui.form.Contro
 	}
 };
 
+<<<<<<< HEAD
 frappe.ui.form.add_options = function (input, options_list, sort, doctype) {
+=======
+frappe.ui.form.add_options = function (input, options_list, sort) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	let $select = $(input);
 	if (!Array.isArray(options_list)) {
 		return $select;
 	}
 
+<<<<<<< HEAD
 	let options = options_list.map((raw_option) => parse_option(raw_option, doctype));
+=======
+	let options = options_list.map((raw_option) => parse_option(raw_option));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if (sort) {
 		options = options.sort((a, b) => cstr(a.label).localeCompare(cstr(b.label)));
 	}
@@ -155,7 +170,11 @@ frappe.ui.form.add_options = function (input, options_list, sort, doctype) {
 	};
 })(jQuery);
 
+<<<<<<< HEAD
 function parse_option(v, doctype) {
+=======
+function parse_option(v) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	let value = null;
 	let label = null;
 	let is_disabled = false;
@@ -167,12 +186,21 @@ function parse_option(v, doctype) {
 		is_disabled = Boolean(v.disabled);
 		is_selected = Boolean(v.selected);
 
+<<<<<<< HEAD
 		if (is_value_null && is_label_null && typeof v !== "object") {
 			value = v;
 			label = __(v, null, doctype);
 		} else {
 			value = is_value_null ? "" : v.value;
 			label = is_label_null ? __(value, null, doctype) : __(v.label, null, doctype);
+=======
+		if (is_value_null && is_label_null) {
+			value = v;
+			label = __(v);
+		} else {
+			value = is_value_null ? "" : v.value;
+			label = is_label_null ? __(value) : __(v.label);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 

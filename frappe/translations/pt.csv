@@ -9,6 +9,10 @@ Action,Ação,
 Actions,Ações,
 Active,Ativo,
 Add,Adicionar,
+<<<<<<< HEAD
+=======
+Add Comment,Adicionar Comentário,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,Adicionar linha,
 Address,Endereço,
 Address Line 2,Endereço Linha 2,
@@ -143,6 +147,10 @@ Monday,Segunda-feira,
 Monthly,Mensal,
 More,Mais,
 More Information,Mais Informação,
+<<<<<<< HEAD
+=======
+More...,Mais...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,Mover,
 My Account,Minha Conta,
 New Address,Novo endereço,
@@ -155,6 +163,10 @@ No items found.,Nenhum item encontrado.,
 None,Nenhum,
 Not Permitted,Não Permitido,
 Not active,Não está ativo,
+<<<<<<< HEAD
+=======
+Notes,Notas,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,Número,
 Online,Online,
 Operation,Operação,
@@ -164,12 +176,25 @@ Owner,Dono,
 Page Missing or Moved,Página em falta ou movida,
 Parameter,Parâmetro,
 Password,Senha,
+<<<<<<< HEAD
 Period,Período,
 Pincode,Código PIN,
+=======
+Payment Gateway,Portal de Pagamento,
+Payment Gateway Name,Nome do Gateway de Pagamento,
+Payments,Pagamentos,
+Period,Período,
+Pincode,Código PIN,
+Plan Name,Nome do Plano,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,"Por favor, ative os pop-ups",
 Please select Company,"Por favor, selecione a Empresa",
 Please select {0},"Por favor, selecione {0}",
 Please set Email Address,"Por favor, defina a ID do Email",
+<<<<<<< HEAD
+=======
+Portal,Portal,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,Definições do Portal,
 Preview,Pré-visualização,
 Primary,Principal,
@@ -214,6 +239,10 @@ Salutation,Saudação,
 Sample,Amostra,
 Saturday,Sábado,
 Saved,Salvo,
+<<<<<<< HEAD
+=======
+Scan Barcode,Scan Barcode,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,Programado,
 Search,Pesquisar,
 Secret Key,Chave secreta,
@@ -228,6 +257,10 @@ Settings,Configurações,
 Shipping,Envio,
 Short Name,Nome Curto,
 Slideshow,Slideshow,
+<<<<<<< HEAD
+=======
+Some information is missing,Algumas informações está faltando,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,Fonte,
 Source Name,Nome da Fonte,
 Standard,Padrão,
@@ -237,6 +270,10 @@ State,Estado,
 Stopped,Parado,
 Subject,Assunto,
 Submit,Submeter,
+<<<<<<< HEAD
+=======
+Successful,Bem sucedido,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,Resumo,
 Sunday,Domingo,
 System Manager,System Manager,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,Intervalo de tempo,
 To,Para,
 To Date,Até à Data,
+<<<<<<< HEAD
 Traceback,Traceback,
 URL,URL,
 Unsubscribed,Inscrição cancelada,
+=======
+Tools,Ferramentas,
+Traceback,Traceback,
+URL,URL,
+Unsubscribed,Inscrição cancelada,
+Use Sandbox,Use Sandbox,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,Do utilizador,
 User ID,ID de Utiliz.,
 Users,Utilizadores,
@@ -556,6 +601,10 @@ Bulk Delete,Excluir em massa,
 Bulk Edit {0},Edição em Massa {0},
 Bulk Rename,Alterar Nome em Massa,
 Bulk Update,Atualização em Massa,
+<<<<<<< HEAD
+=======
+Busy,Ocupado,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,Botão,
 Button Help,botão Ajuda,
 Button Label,Etiqueta do botão,
@@ -692,6 +741,10 @@ Compiled Successfully,Compilado com sucesso,
 Complete By,Concluído Por,
 Complete Registration,Registo Completo,
 Complete Setup,Instalação Concluída,
+<<<<<<< HEAD
+=======
+Completed By,Completado por,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,Escrever um email,
 Condition Detail,Detalhe da condição,
 Conditions,Condições,
@@ -1380,7 +1433,11 @@ Is Submittable,É Enviável,
 Is Table,É uma Tabela,
 Is Your Company Address,É o Seu Endereço Empresarial,
 It is risky to delete this file: {0}. Please contact your System Manager.,"É arriscado eliminar este ficheiro: {0}. Por favor, contate o administrador do sistema.",
+<<<<<<< HEAD
 Item cannot be added to its own descendants,O item não pode ser acrescentado para aos seus próprios subitens,
+=======
+Item cannot be added to its own descendents,O item não pode ser acrescentado para aos seus próprios subitens,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,JSON,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},Formato JavaScript:\nfrappe.query_reports['REPORTNAME'] = {},
@@ -1675,8 +1732,13 @@ Not a valid Workflow Action,Não é uma ação válida do fluxo de trabalho,
 Not a valid user,Não é um utilizador válido,
 Not a zip file,Não é um arquivo zip,
 Not allowed for {0}: {1},Não permitido para {0}: {1},
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}","Você não tem permissão para acessar {0} porque está vinculado a {1} '{2}' na linha {3}, campo {4}",
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},Você não tem permissão para acessar este registro {0} porque está vinculado a {1} '{2}' no campo {3},
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},Não permitido para {0}: {1} na linha {2}. Campo restrito: {3},
+Not allowed for {0}: {1}. Restricted field: {2},Não permitido para {0}: {1}. Campo restrito: {2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,Não é permitido Importar,
 Not allowed to change {0} after submission,Não é permitido alterar {0} após o seu envio,
 Not allowed to print cancelled documents,Não é permitido imprimir documentos cancelados,
@@ -1804,6 +1866,10 @@ Path to private Key File,Caminho para o arquivo de chaves privado,
 PayPal Settings,Configurações PayPal,
 PayPal payment gateway settings,configurações de gateway de pagamento PayPal,
 Payment Cancelled,pagamento Cancelado,
+<<<<<<< HEAD
+=======
+Payment Failed,Pagamento falhou,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,Sucesso de pagamento,
 Pending Approval,Aprovação pendente,
 Pending Verification,verificação pendente,
@@ -3200,6 +3266,10 @@ Click on the link below to approve the request,Clique no link abaixo para aprova
 Click on the lock icon to toggle public/private,Clique no ícone de cadeado para alternar entre público / privado,
 Click on {0} to generate Refresh Token.,Clique em {0} para gerar o Token de Atualização.,
 Close Condition,Fechar Condição,
+<<<<<<< HEAD
+=======
+Column {0},Coluna {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,Colunas / Campos,
 "Configure notifications for mentions, assignments, energy points and more.","Configure notificações para menções, atribuições, pontos de energia e muito mais.",
 Contact Email,Email de Contacto,
@@ -3281,6 +3351,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,Falha,
 Fetching default Global Search documents.,Buscando documentos padrão da Pesquisa Global.,
 Fetching posts...,Buscando postagens ...,
+<<<<<<< HEAD
+=======
+Field Mapping,Mapeamento de Campo,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,Campo a verificar,
 File Information,Informações do arquivo,
 Filter By,Filtrar por,
@@ -3435,6 +3509,10 @@ No posts yet,Ainda não há posts,
 No records will be exported,Nenhum registro será exportado,
 No results found for {0} in Global Search,Nenhum resultado encontrado para {0} na Pesquisa Global,
 No user found,Nenhum usuário encontrado,
+<<<<<<< HEAD
+=======
+Not Specified,Não especificado,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,Registro de Notificação,
 Notification Settings,Configurações de notificação,
 Notification Subscribed Document,Documento assinado de notificação,
@@ -3590,6 +3668,10 @@ Untitled Column,Coluna sem título,
 Untranslated,Não traduzido,
 Upcoming Events,próximos eventos,
 Update Existing Records,Atualizar registros existentes,
+<<<<<<< HEAD
+=======
+Update Type,Tipo de atualização,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,Atualizado para uma nova versão 🎉,
 "Updating {0} of {1}, {2}","Atualizando {0} de {1}, {2}",
 Upload file,Subir arquivo,
@@ -3696,16 +3778,28 @@ Designation,Designação,
 Disabled,Desativado,
 Doctype,Doctype,
 Download Template,Transferir Modelo,
+<<<<<<< HEAD
+=======
+Dr,Dr,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,Data de Vencimento,
 Duplicate,Duplicar,
 Edit Profile,Editar Perfil,
 Email,O email,
+<<<<<<< HEAD
+=======
+End Time,Data de Término,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,Insira o Valor,
 Entity Type,Tipo de entidade,
 Error,Erro,
 Expired,Expirado,
 Export,Exportar,
 Export not allowed. You need {0} role to export.,Não é permitido efetuar a exportação. Necessita ter a função {0} para poder efetuar a exportação.,
+<<<<<<< HEAD
+=======
+Fetching...,Buscando ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,Campo,
 File Manager,Gestor de Ficheiros,
 Filters,Filtros,
@@ -3720,8 +3814,16 @@ Import Data from CSV / Excel files.,Importar dados de arquivos CSV / Excel.,
 In Progress,Em progresso,
 Intermediate,Intermediário,
 Invite as User,Convidar como Utilizador,
+<<<<<<< HEAD
 Loading...,A Carregar...,
 Location,Localização,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.","Parece que há um problema com a configuração de distribuição do servidor. Em caso de falha, o valor será reembolsado em sua conta.",
+Loading...,A Carregar...,
+Location,Localização,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,"Parece que alguém lhe enviou a um URL incompleta. Por favor, pedir-lhes para olhar para ele.",
+Master,Mestre,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,mensagem,
 Missing Values Required,São Necessários os Valores em Falta,
 Mobile No,Nr. de Telemóvel,
@@ -3733,6 +3835,10 @@ Note,Nota,
 Offline,Off-line,
 Open,Abrir,
 Page {0} of {1},Página {0} de {1},
+<<<<<<< HEAD
+=======
+Pay,Pagar,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,Pendente,
 Phone,Telefone,
 Please click on the following link to set your new password,"Por favor, clique no link a seguir para definir a sua nova senha",
@@ -3782,6 +3888,10 @@ Welcome to {0},Bem-vindo ao {0},
 Year,Ano,
 Yearly,Anual,
 You,Você,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,Você também pode copiar e colar este link no seu navegador,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,e,
 {0} Name,Nome de {0},
 {0} is required,{0} é necessário,
@@ -4085,6 +4195,10 @@ Custom SCSS,SCSS personalizado,
 Navbar,Navbar,
 Source Message,Mensagem Fonte,
 Translated Message,Mensagem Traduzida,
+<<<<<<< HEAD
+=======
+Verified By,Verificado Por,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,O uso deste console pode permitir que invasores se façam passar por você e roubem suas informações. Não insira nem cole códigos que você não entende.,
 {0} m,{0} m,
 {0} h,{0} h,
@@ -4108,7 +4222,11 @@ No changes in document,Sem alterações no documento,
 by Role,por papel,
 Document is only editable by users with role,O documento só pode ser editado por usuários com função,
 {0}: Other permission rules may also apply,{0}: Outras regras de permissão também podem ser aplicadas,
+<<<<<<< HEAD
 {0} Web page views,{0} page views,
+=======
+{0} Page Views,{0} page views,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,Expandir,
 Collapse,Colapso,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.","Token de portador inválido, forneça um token de acesso válido com o prefixo &#39;Portador&#39;.",
@@ -4117,6 +4235,10 @@ Collapse,Colapso,
 {0} is not a valid Name,{0} não é um nome válido,
 Your system is being updated. Please refresh again after a few moments.,Seu sistema está sendo atualizado. Atualize novamente após alguns momentos.,
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}: O registro enviado não pode ser excluído. Você deve {2} cancelar {3} primeiro.,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},Série de nomenclatura inválida (. Ausente) para {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},Ocorreu um erro em {0},
 Status Updated,Status Atualizado,
 You can also copy-paste this {0} to your browser,Você também pode copiar e colar isto {0} no seu navegador,
@@ -4138,11 +4260,21 @@ Is Billing Contact,É contato de cobrança,
 Address And Contacts,Endereço e contatos,
 Lead Conversion Time,Lead Conversion Time,
 Due Date Based On,Data de vencimento baseada em,
+<<<<<<< HEAD
 Linked Documents,Documentos vinculados,
+=======
+Phone Number,Número de telefone,
+Linked Documents,Documentos vinculados,
+Account SID,SID da conta,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,Passos,
 email,o email,
 Component,Componente,
 Subtitle,Subtítulo,
+<<<<<<< HEAD
+=======
+Global Defaults,Padrões Gerais,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,Prefixo,
 Is Public,É público,
 This chart will be available to all Users if this is set,Este gráfico estará disponível para todos os usuários se estiver definido,
@@ -4329,6 +4461,10 @@ Dynamic Filters Section,Seção de Filtros Dinâmicos,
 Please create Card first,"Por favor, crie o cartão primeiro",
 Onboarding Permission,Permissão de integração,
 Onboarding Step,Etapa de integração,
+<<<<<<< HEAD
+=======
+Is Mandatory,É mandatório,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,É pulado,
 Create Entry,Criar entrada,
 Update Settings,Atualizar configurações,
@@ -4366,6 +4502,10 @@ Message (HTML),Mensagem (HTML),
 Send Attachments,Enviar anexos,
 Testing,Testando,
 System Notification,Notificação do sistema,
+<<<<<<< HEAD
+=======
+WhatsApp,Whatsapp,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,Número Twilio,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","Para usar o WhatsApp for Business, inicialize as <a href=""#Form/Twilio Settings"">configurações do Twilio</a> .",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","Para usar o Slack Channel, adicione um <a href=""#List/Slack%20Webhook%20URL/List"">URL do Slack Webhook</a> .",
@@ -4500,6 +4640,10 @@ Add to ToDo,Adicionar ao ToDo,
 {0} are currently {1},{0} são atualmente {1},
 Currently Replying,Atualmente respondendo,
 created {0},criado em {0},
+<<<<<<< HEAD
+=======
+Make a call,Faça uma ligação,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,mudança,Coins
 Too Many Requests,Muitos pedidos,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.","Cabeçalhos de autorização inválidos, adicione um token com um prefixo de um dos seguintes: {0}.",
@@ -4664,6 +4808,7 @@ Value cannot be negative for {0}: {1},O valor não pode ser negativo para {0}: {
 Negative Value,Valor Negativo,
 Authentication failed while receiving emails from Email Account: {0}.,Falha na autenticação ao receber e-mails da conta de e-mail: {0}.,
 Message from server: {0},Mensagem do servidor: {0},
+<<<<<<< HEAD
 Add Row,Adicionar linha,
 Analytics,Análise,
 Anonymous,Anônimo,
@@ -4796,3 +4941,5 @@ West Bengal,Bengala Ocidental,
 Published on,publicado em,
 Bottom,Inferior,
 Top,Topo,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

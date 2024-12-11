@@ -2,6 +2,7 @@
 # License: MIT. See LICENSE
 import json
 import time
+<<<<<<< HEAD
 from contextlib import contextmanager
 
 import frappe
@@ -9,6 +10,12 @@ from frappe.desk.query_report import generate_report_result, get_report_doc
 from frappe.query_builder.utils import db_type_is
 from frappe.tests.test_query_builder import run_only_if
 from frappe.tests.utils import FrappeTestCase, timeout
+=======
+
+import frappe
+from frappe.desk.query_report import generate_report_result, get_report_doc
+from frappe.tests.utils import FrappeTestCase
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class TestPreparedReport(FrappeTestCase):
@@ -19,6 +26,7 @@ class TestPreparedReport(FrappeTestCase):
 
 		frappe.db.commit()
 
+<<<<<<< HEAD
 	@timeout(seconds=20)
 	def wait_for_status(self, report, status):
 		frappe.db.commit()  # Flush changes first
@@ -34,6 +42,13 @@ class TestPreparedReport(FrappeTestCase):
 			{
 				"doctype": "Prepared Report",
 				"report_name": report or "Database Storage Usage By Tables",
+=======
+	def create_prepared_report(self, commit=False):
+		doc = frappe.get_doc(
+			{
+				"doctype": "Prepared Report",
+				"report_name": "Database Storage Usage By Tables",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		).insert()
 
@@ -43,6 +58,7 @@ class TestPreparedReport(FrappeTestCase):
 		return doc
 
 	def test_queueing(self):
+<<<<<<< HEAD
 		doc = self.create_prepared_report()
 		self.assertEqual("Queued", doc.status)
 		self.assertTrue(doc.queued_at)
@@ -58,10 +74,30 @@ class TestPreparedReport(FrappeTestCase):
 		self.wait_for_status(doc, "Completed")
 
 		prepared_data = json.loads(doc.get_prepared_data().decode("utf-8"))
+=======
+		doc_ = self.create_prepared_report()
+		self.assertEqual("Queued", doc_.status)
+		self.assertTrue(doc_.queued_at)
+
+		frappe.db.commit()
+		time.sleep(5)
+
+		doc_ = frappe.get_last_doc("Prepared Report")
+		self.assertEqual("Completed", doc_.status)
+		self.assertTrue(doc_.job_id)
+		self.assertTrue(doc_.report_end_time)
+
+	def test_prepared_data(self):
+		doc_ = self.create_prepared_report(commit=True)
+		time.sleep(5)
+
+		prepared_data = json.loads(doc_.get_prepared_data().decode("utf-8"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		generated_data = generate_report_result(get_report_doc("Database Storage Usage By Tables"))
 		self.assertEqual(len(prepared_data["columns"]), len(generated_data["columns"]))
 		self.assertEqual(len(prepared_data["result"]), len(generated_data["result"]))
 		self.assertEqual(len(prepared_data), len(generated_data))
+<<<<<<< HEAD
 
 	@run_only_if(db_type_is.MARIADB)
 	def test_start_status_and_kill_jobs(self):
@@ -90,3 +126,5 @@ def test_report(**args):
 		yield report
 	finally:
 		report.delete()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

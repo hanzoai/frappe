@@ -29,7 +29,11 @@
  ],
  "fields": [
   {
+<<<<<<< HEAD
    "description": "To print output use <code>print(text)</code>",
+=======
+   "description": "To print output use <code>log(text)</code>",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "console",
    "fieldtype": "Code",
    "label": "Console",
@@ -86,7 +90,11 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-11-03 13:02:00.706806",
+=======
+ "modified": "2022-04-15 14:15:58.398590",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "System Console",

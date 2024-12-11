@@ -11,9 +11,15 @@ import textwrap
 
 import click
 import git
+<<<<<<< HEAD
 import requests
 
 import frappe
+=======
+
+import frappe
+from frappe.utils import touch_file
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 APP_TITLE_PATTERN = re.compile(r"^(?![\W])[^\d_\s][\w -]+$", flags=re.UNICODE)
 
@@ -45,12 +51,17 @@ def _get_user_inputs(app_name):
 		},
 		"app_description": {"prompt": "App Description"},
 		"app_publisher": {"prompt": "App Publisher"},
+<<<<<<< HEAD
 		"app_email": {"prompt": "App Email", "validator": is_valid_email},
 		"app_license": {
 			"prompt": "App License",
 			"default": "mit",
 			"type": click.Choice(get_license_options()),
 		},
+=======
+		"app_email": {"prompt": "App Email"},
+		"app_license": {"prompt": "App License", "default": "MIT"},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"create_github_workflow": {
 			"prompt": "Create GitHub Workflow action for unittests",
 			"default": False,
@@ -76,6 +87,7 @@ def _get_user_inputs(app_name):
 	return hooks
 
 
+<<<<<<< HEAD
 def is_valid_email(email) -> bool:
 	from email.headerregistry import Address
 
@@ -87,6 +99,8 @@ def is_valid_email(email) -> bool:
 	return True
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def is_valid_title(title) -> bool:
 	if not APP_TITLE_PATTERN.match(title):
 		print(
@@ -96,6 +110,7 @@ def is_valid_title(title) -> bool:
 	return True
 
 
+<<<<<<< HEAD
 def get_license_options() -> list[str]:
 	url = "https://api.github.com/licenses"
 	try:
@@ -123,6 +138,8 @@ def get_license_text(license_name: str) -> str:
 	return license_name
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def _create_app_boilerplate(dest, hooks, no_git=False):
 	frappe.create_folder(
 		os.path.join(dest, hooks.app_name, hooks.app_name, frappe.scrub(hooks.app_title)),
@@ -155,9 +172,15 @@ def _create_app_boilerplate(dest, hooks, no_git=False):
 				f"## {hooks.app_title}\n\n{hooks.app_description}\n\n#### License\n\n{hooks.app_license}"
 			)
 		)
+<<<<<<< HEAD
 	license_body = get_license_text(license_name=hooks.app_license)
 	with open(os.path.join(dest, hooks.app_name, "license.txt"), "w") as f:
 		f.write(frappe.as_unicode(license_body))
+=======
+
+	with open(os.path.join(dest, hooks.app_name, "license.txt"), "w") as f:
+		f.write(frappe.as_unicode("License: " + hooks.app_license))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	with open(os.path.join(dest, hooks.app_name, hooks.app_name, "modules.txt"), "w") as f:
 		f.write(frappe.as_unicode(hooks.app_title))
@@ -170,8 +193,18 @@ def _create_app_boilerplate(dest, hooks, no_git=False):
 	with open(os.path.join(dest, hooks.app_name, hooks.app_name, "hooks.py"), "w") as f:
 		f.write(frappe.as_unicode(hooks_template.format(**hooks)))
 
+<<<<<<< HEAD
 	with open(os.path.join(dest, hooks.app_name, hooks.app_name, "patches.txt"), "w") as f:
 		f.write(frappe.as_unicode(patches_template.format(**hooks)))
+=======
+	touch_file(os.path.join(dest, hooks.app_name, hooks.app_name, "patches.txt"))
+
+	with open(os.path.join(dest, hooks.app_name, hooks.app_name, "config", "desktop.py"), "w") as f:
+		f.write(frappe.as_unicode(desktop_template.format(**hooks)))
+
+	with open(os.path.join(dest, hooks.app_name, hooks.app_name, "config", "docs.py"), "w") as f:
+		f.write(frappe.as_unicode(docs_template.format(**hooks)))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	app_directory = os.path.join(dest, hooks.app_name)
 
@@ -183,7 +216,11 @@ def _create_app_boilerplate(dest, hooks, no_git=False):
 			f.write(frappe.as_unicode(gitignore_template.format(app_name=hooks.app_name)))
 
 		# initialize git repository
+<<<<<<< HEAD
 		app_repo = git.Repo.init(app_directory, initial_branch="develop")
+=======
+		app_repo = git.Repo.init(app_directory)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		app_repo.git.add(A=True)
 		app_repo.index.commit("feat: Initialize App")
 
@@ -338,6 +375,7 @@ app_description = "{app_description}"
 app_email = "{app_email}"
 app_license = "{app_license}"
 
+<<<<<<< HEAD
 # Apps
 # ------------------
 
@@ -354,6 +392,8 @@ app_license = "{app_license}"
 # 	}}
 # ]
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 # Includes in <head>
 # ------------------
 
@@ -381,11 +421,14 @@ app_license = "{app_license}"
 # doctype_tree_js = {{"doctype" : "public/js/doctype_tree.js"}}
 # doctype_calendar_js = {{"doctype" : "public/js/doctype_calendar.js"}}
 
+<<<<<<< HEAD
 # Svg Icons
 # ------------------
 # include app icons in desk
 # app_include_icons = "{app_name}/public/icons.svg"
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 # Home Pages
 # ----------
 
@@ -567,6 +610,7 @@ app_license = "{app_license}"
 # auth_hooks = [
 # 	"{app_name}.auth.validate"
 # ]
+<<<<<<< HEAD
 
 # Automatically update python controller files with type annotations for this app.
 # export_python_type_annotations = True
@@ -575,6 +619,20 @@ app_license = "{app_license}"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }}
 
+=======
+"""
+
+desktop_template = """from frappe import _
+
+def get_data():
+	return [
+		{{
+			"module_name": "{app_title}",
+			"type": "module",
+			"label": _("{app_title}")
+		}}
+	]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 """
 
 gitignore_template = """.DS_Store
@@ -582,8 +640,26 @@ gitignore_template = """.DS_Store
 *.egg-info
 *.swp
 tags
+<<<<<<< HEAD
 node_modules
 __pycache__"""
+=======
+{app_name}/docs/current
+node_modules/"""
+
+docs_template = '''"""
+Configuration for docs
+"""
+
+# source_link = "https://github.com/[org_name]/{app_name}"
+# headline = "App that does everything"
+# sub_heading = "Yes, you got that right the first time, everything"
+
+def get_context(context):
+	context.brand_html = "{app_title}"
+'''
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 github_workflow_template = """
 name: CI
@@ -606,6 +682,7 @@ jobs:
     name: Server
 
     services:
+<<<<<<< HEAD
       redis-cache:
         image: redis:alpine
         ports:
@@ -614,17 +691,27 @@ jobs:
         image: redis:alpine
         ports:
           - 11000:6379
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
       mariadb:
         image: mariadb:10.6
         env:
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
+<<<<<<< HEAD
         options: --health-cmd="mariadb-admin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
     steps:
       - name: Clone
         uses: actions/checkout@v3
+=======
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
       - name: Find tests
         run: |
@@ -632,14 +719,24 @@ jobs:
           grep -rn "def test" > /dev/null
 
       - name: Setup Python
+<<<<<<< HEAD
         uses: actions/setup-python@v4
+=======
+        uses: actions/setup-python@v2
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
         with:
           python-version: '3.10'
 
       - name: Setup Node
+<<<<<<< HEAD
         uses: actions/setup-node@v3
         with:
           node-version: 18
+=======
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
           check-latest: true
 
       - name: Cache pip
@@ -653,9 +750,15 @@ jobs:
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
+<<<<<<< HEAD
         run: 'echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT'
 
       - uses: actions/cache@v3
+=======
+        run: 'echo "::set-output name=dir::$(yarn cache dir)"'
+
+      - uses: actions/cache@v2
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
         id: yarn-cache
         with:
           path: ${{{{ steps.yarn-cache-dir-path.outputs.dir }}}}
@@ -663,15 +766,23 @@ jobs:
           restore-keys: |
             ${{{{ runner.os }}}}-yarn-
 
+<<<<<<< HEAD
       - name: Install MariaDB Client
         run: sudo apt-get install mariadb-client-10.6
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
       - name: Setup
         run: |
           pip install frappe-bench
           bench init --skip-redis-config-generation --skip-assets --python "$(which python)" ~/frappe-bench
+<<<<<<< HEAD
           mariadb --host 127.0.0.1 --port 3306 -u root -proot -e "SET GLOBAL character_set_server = 'utf8mb4'"
           mariadb --host 127.0.0.1 --port 3306 -u root -proot -e "SET GLOBAL collation_server = 'utf8mb4_unicode_ci'"
+=======
+          mysql --host 127.0.0.1 --port 3306 -u root -proot -e "SET GLOBAL character_set_server = 'utf8mb4'"
+          mysql --host 127.0.0.1 --port 3306 -u root -proot -e "SET GLOBAL collation_server = 'utf8mb4_unicode_ci'"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
       - name: Install
         working-directory: /home/runner/frappe-bench
@@ -692,6 +803,7 @@ jobs:
         env:
           TYPE: server
 """
+<<<<<<< HEAD
 
 patches_template = """[pre_model_sync]
 # Patches added in this section will be executed before doctypes are migrated
@@ -699,3 +811,5 @@ patches_template = """[pre_model_sync]
 
 [post_model_sync]
 # Patches added in this section will be executed after doctypes are migrated"""
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

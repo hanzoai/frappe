@@ -132,7 +132,11 @@ frappe.ui.form.Review = class Review {
 					</span>
 				</div>
 			`);
+<<<<<<< HEAD
 			this.reviews.append(review_pill);
+=======
+			this.reviews.prepend(review_pill);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this.setup_detail_popover(review_pill, log);
 		});
 	}

@@ -30,6 +30,10 @@ $.extend(frappe.perm, {
 		"print",
 		"email",
 		"share",
+<<<<<<< HEAD
+=======
+		"set_user_permissions",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	],
 
 	doctype_perm: {},
@@ -240,7 +244,11 @@ $.extend(frappe.perm, {
 			// fields updated by workflow must be read-only
 			if (
 				cint(cur_frm.read_only) ||
+<<<<<<< HEAD
 				cur_frm.states.update_fields.includes(df.fieldname) ||
+=======
+				in_list(cur_frm.states.update_fields, df.fieldname) ||
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				df.fieldname == cur_frm.state_fieldname
 			) {
 				status = "Read";

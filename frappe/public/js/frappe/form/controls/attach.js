@@ -15,7 +15,11 @@ frappe.ui.form.ControlAttach = class ControlAttach extends frappe.ui.form.Contro
 		this.$value = $(
 			`<div class="attached-file flex justify-between align-center">
 				<div class="ellipsis">
+<<<<<<< HEAD
 				${frappe.utils.icon("es-line-link", "sm")}
+=======
+					<i class="fa fa-paperclip"></i>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					<a class="attached-file-link" target="_blank"></a>
 				</div>
 				<div>

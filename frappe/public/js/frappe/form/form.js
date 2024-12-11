@@ -78,12 +78,18 @@ frappe.ui.form.Form = class FrappeForm {
 		// wrapper
 		this.wrapper = this.parent;
 		this.$wrapper = $(this.wrapper);
+<<<<<<< HEAD
 
 		let is_single_column = this.doctype === "DocType" ? true : this.meta.hide_toolbar;
 
 		frappe.ui.make_app_page({
 			parent: this.wrapper,
 			single_column: is_single_column,
+=======
+		frappe.ui.make_app_page({
+			parent: this.wrapper,
+			single_column: this.meta.hide_toolbar,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		});
 		this.page = this.wrapper.page;
 		this.layout_main = this.page.main.get(0);
@@ -97,11 +103,14 @@ frappe.ui.form.Form = class FrappeForm {
 			page: this.page,
 		});
 
+<<<<<<< HEAD
 		this.viewers = new frappe.ui.form.FormViewers({
 			frm: this,
 			parent: $('<div class="form-viewers d-flex"></div>').prependTo(this.page.page_actions),
 		});
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		// navigate records keyboard shortcuts
 		this.add_form_keyboard_shortcuts();
 
@@ -155,12 +164,23 @@ frappe.ui.form.Form = class FrappeForm {
 			condition: () => !this.is_new(),
 		});
 
+<<<<<<< HEAD
 		// Alternate for redo, main shortcut are present in toolbar.js
+=======
+		// Undo and redo
+		frappe.ui.keys.add_shortcut({
+			shortcut: "ctrl+z",
+			action: () => this.undo_manager.undo(),
+			page: this.page,
+			description: __("Undo last action"),
+		});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.ui.keys.add_shortcut({
 			shortcut: "shift+ctrl+z",
 			action: () => this.undo_manager.redo(),
 			page: this.page,
 			description: __("Redo last action"),
+<<<<<<< HEAD
 			condition: () => !this.is_form_builder(),
 		});
 		frappe.ui.keys.add_shortcut({
@@ -168,6 +188,14 @@ frappe.ui.form.Form = class FrappeForm {
 			action: () => this.print_doc(),
 			description: __("Print document"),
 			condition: () => frappe.model.can_print(this.doctype, this) && !this.meta.issingle,
+=======
+		});
+		frappe.ui.keys.add_shortcut({
+			shortcut: "ctrl+y",
+			action: () => this.undo_manager.redo(),
+			page: this.page,
+			description: __("Redo last action"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		});
 
 		let grid_shortcut_keys = [
@@ -452,7 +480,10 @@ frappe.ui.form.Form = class FrappeForm {
 				.toggleClass("cancelled-form", this.doc.docstatus === 2);
 
 			this.show_conflict_message();
+<<<<<<< HEAD
 			this.show_submission_queue_banner();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			if (frappe.boot.read_only) {
 				this.disable_form();
@@ -508,7 +539,11 @@ frappe.ui.form.Form = class FrappeForm {
 
 				// feedback
 				frappe.msgprint({
+<<<<<<< HEAD
 					message: __("{} Complete", [__(action.label)]),
+=======
+					message: __("{} Complete", [action.label]),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					alert: true,
 				});
 			});
@@ -640,6 +675,7 @@ frappe.ui.form.Form = class FrappeForm {
 	}
 
 	focus_on_first_input() {
+<<<<<<< HEAD
 		const layout_wrapper = this.layout.wrapper;
 
 		// dont do anything if the current active element is inside the form
@@ -652,6 +688,12 @@ frappe.ui.form.Form = class FrappeForm {
 			.find(":input:visible:first")
 			.not("[data-fieldtype^='Date']")
 			.trigger("focus");
+=======
+		let first = this.form_wrapper.find(".form-layout :input:visible:first");
+		if (!in_list(["Date", "Datetime"], first.attr("data-fieldtype"))) {
+			first.focus();
+		}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	run_after_load_hook() {
@@ -721,7 +763,10 @@ frappe.ui.form.Form = class FrappeForm {
 			}
 			this.toolbar.refresh();
 		}
+<<<<<<< HEAD
 		this.viewers.refresh();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		this.dashboard.refresh();
 		frappe.breadcrumbs.update();
@@ -754,7 +799,11 @@ frappe.ui.form.Form = class FrappeForm {
 				me.show_success_action();
 			})
 			.catch((e) => {
+<<<<<<< HEAD
 				console.error(e);
+=======
+				console.error(e); // eslint-disable-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			});
 	}
 
@@ -1377,6 +1426,7 @@ frappe.ui.form.Form = class FrappeForm {
 		return this.doc.__islocal;
 	}
 
+<<<<<<< HEAD
 	is_form_builder() {
 		return (
 			["DocType", "Customize Form"].includes(this.doctype) &&
@@ -1384,6 +1434,8 @@ frappe.ui.form.Form = class FrappeForm {
 		);
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	get_perm(permlevel, access_type) {
 		return this.perm[permlevel] ? this.perm[permlevel][access_type] : null;
 	}
@@ -1478,10 +1530,14 @@ frappe.ui.form.Form = class FrappeForm {
 		$.each(fields_list, function (i, fname) {
 			var docfield = frappe.meta.docfield_map[doctype][fname];
 			if (docfield) {
+<<<<<<< HEAD
 				var label = __(docfield.label || "", null, docfield.parent).replace(
 					/\([^\)]*\)/g,
 					""
 				); // eslint-disable-line
+=======
+				var label = __(docfield.label || "").replace(/\([^\)]*\)/g, ""); // eslint-disable-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				if (parentfield) {
 					grid_field_label_map[doctype + "-" + fname] =
 						label.trim() + " (" + __(currency) + ")";
@@ -1556,7 +1612,11 @@ frappe.ui.form.Form = class FrappeForm {
 				if (this.fields_dict[fieldname].grid.grid_rows_by_docname[table_row_name]) {
 					this.fields_dict[fieldname].grid.grid_rows_by_docname[
 						table_row_name
+<<<<<<< HEAD
 					].refresh_field(table_field);
+=======
+					].refresh_field(fieldname);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				}
 			} else {
 				this.refresh_field(fieldname);
@@ -1714,6 +1774,7 @@ frappe.ui.form.Form = class FrappeForm {
 					if (opts.child) {
 						// update child doc
 						opts.child = locals[opts.child.doctype][opts.child.name];
+<<<<<<< HEAD
 						// if child row is deleted, don't update
 						if (opts.child) {
 							var std_field_list = ["doctype"]
@@ -1727,6 +1788,19 @@ frappe.ui.form.Form = class FrappeForm {
 
 							me.fields_dict[opts.child.parentfield].refresh();
 						}
+=======
+
+						var std_field_list = ["doctype"]
+							.concat(frappe.model.std_fields_list)
+							.concat(frappe.model.child_table_field_list);
+						for (var key in r.message) {
+							if (std_field_list.indexOf(key) === -1) {
+								opts.child[key] = r.message[key];
+							}
+						}
+
+						me.fields_dict[opts.child.parentfield].refresh();
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					} else {
 						// update parent doc
 						me.set_value(r.message);
@@ -1950,7 +2024,11 @@ frappe.ui.form.Form = class FrappeForm {
 		}
 
 		// uncollapse section
+<<<<<<< HEAD
 		if (field.section?.is_collapsed()) {
+=======
+		if (field.section.is_collapsed()) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			field.section.collapse(false);
 		}
 
@@ -1959,9 +2037,13 @@ frappe.ui.form.Form = class FrappeForm {
 
 		// focus if text field
 		if (focus) {
+<<<<<<< HEAD
 			setTimeout(() => {
 				$el.find("input, select, textarea").focus();
 			}, 500);
+=======
+			$el.find("input, select, textarea").focus();
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		// highlight control inside field
@@ -1978,7 +2060,11 @@ frappe.ui.form.Form = class FrappeForm {
 		let docname = this.docname;
 
 		if (this.doc && !this.is_new()) {
+<<<<<<< HEAD
 			frappe.realtime.doc_subscribe(doctype, docname);
+=======
+			frappe.socketio.doc_subscribe(doctype, docname);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		frappe.realtime.off("docinfo_update");
 		frappe.realtime.on("docinfo_update", ({ doc, key, action = "update" }) => {
@@ -2054,8 +2140,11 @@ frappe.ui.form.Form = class FrappeForm {
 			this.active_tab_map = {};
 		}
 		this.active_tab_map[this.docname] = tab;
+<<<<<<< HEAD
 
 		this.script_manager.trigger("on_tab_change");
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	get_active_tab() {
 		return this.active_tab_map && this.active_tab_map[this.docname];
@@ -2083,6 +2172,7 @@ frappe.ui.form.Form = class FrappeForm {
 			.filter((user) => !["Administrator", frappe.session.user].includes(user))
 			.filter(Boolean);
 	}
+<<<<<<< HEAD
 
 	show_submission_queue_banner() {
 		let wrapper = this.layout.wrapper.find(".submission-queue-banner");
@@ -2150,3 +2240,24 @@ frappe.ui.form.Form = class FrappeForm {
 };
 
 frappe.validated = 0;
+=======
+};
+
+frappe.validated = 0;
+// Proxy for frappe.validated
+Object.defineProperty(window, "validated", {
+	get: function () {
+		console.warn(
+			"Please use `frappe.validated` instead of `validated`. It will be deprecated soon."
+		); // eslint-disable-line
+		return frappe.validated;
+	},
+	set: function (value) {
+		console.warn(
+			"Please use `frappe.validated` instead of `validated`. It will be deprecated soon."
+		); // eslint-disable-line
+		frappe.validated = value;
+		return frappe.validated;
+	},
+});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

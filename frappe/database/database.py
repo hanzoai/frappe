@@ -2,18 +2,27 @@
 # License: MIT. See LICENSE
 
 import datetime
+<<<<<<< HEAD
 import itertools
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import json
 import random
 import re
 import string
 import traceback
+<<<<<<< HEAD
 from collections.abc import Iterable, Sequence
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from contextlib import contextmanager, suppress
 from time import time
 from typing import TYPE_CHECKING, Any, Union
 
+<<<<<<< HEAD
 from pypika.dialects import MySQLQueryBuilder, PostgreSQLQueryBuilder
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from pypika.terms import Criterion, NullValue
 
 import frappe
@@ -29,11 +38,19 @@ from frappe.database.utils import (
 	is_query_type,
 )
 from frappe.exceptions import DoesNotExistError, ImplicitCommitError
+<<<<<<< HEAD
 from frappe.monitor import get_trace_id
 from frappe.query_builder import Case
 from frappe.query_builder.functions import Count
 from frappe.utils import CallbackManager, cint, get_datetime, get_table_name, getdate, now, sbool
 from frappe.utils import cast as cast_fieldtype
+=======
+from frappe.model.utils.link_count import flush_local_link_count
+from frappe.monitor import get_trace_id
+from frappe.query_builder.functions import Count
+from frappe.utils import cast as cast_fieldtype
+from frappe.utils import cint, get_datetime, get_table_name, getdate, now, sbool
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils.deprecations import deprecated, deprecation_warning
 
 if TYPE_CHECKING:
@@ -68,6 +85,26 @@ class Database:
 	CHILD_TABLE_COLUMNS = ("parent", "parenttype", "parentfield")
 	MAX_WRITES_PER_TRANSACTION = 200_000
 
+<<<<<<< HEAD
+=======
+	# NOTE:
+	# FOR MARIADB - using no cache - as during backup, if the sequence was used in anyform,
+	# it drops the cache and uses the next non cached value in setval query and
+	# puts that in the backup file, which will start the counter
+	# from that value when inserting any new record in the doctype.
+	# By default the cache is 1000 which will mess up the sequence when
+	# using the system after a restore.
+	#
+	# Another case could be if the cached values expire then also there is a chance of
+	# the cache being skipped.
+	#
+	# FOR POSTGRES - The sequence cache for postgres is per connection.
+	# Since we're opening and closing connections for every request this results in skipping the cache
+	# to the next non-cached value hence not using cache in postgres.
+	# ref: https://stackoverflow.com/questions/21356375/postgres-9-0-4-sequence-skipping-numbers
+	SEQUENCE_CACHE = 0
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	class InvalidColumnName(frappe.ValidationError):
 		pass
 
@@ -76,6 +113,7 @@ class Database:
 		host=None,
 		user=None,
 		password=None,
+<<<<<<< HEAD
 		port=None,
 		cur_db_name=None,
 		socket=None,
@@ -101,6 +139,32 @@ class Database:
 		self.before_rollback = CallbackManager()
 		self.after_rollback = CallbackManager()
 
+=======
+		ac_name=None,
+		use_default=0,
+		port=None,
+	):
+		self.setup_type_map()
+		self.host = host or frappe.conf.db_host or "127.0.0.1"
+		self.port = port or frappe.conf.db_port or ""
+		self.user = user or frappe.conf.db_name
+		self.db_name = frappe.conf.db_name
+		self._conn = None
+
+		if ac_name:
+			self.user = ac_name or frappe.conf.db_name
+
+		if use_default:
+			self.user = frappe.conf.db_name
+
+		self.transaction_writes = 0
+		self.auto_commit_on_many_writes = 0
+
+		self.password = password or frappe.conf.db_password
+		self.value_cache = {}
+		self.logger = frappe.logger("database")
+		self.logger.setLevel("WARNING")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		# self.db_type: str
 		# self.last_query (lazy) attribute of last sql query executed
 
@@ -109,8 +173,15 @@ class Database:
 
 	def connect(self):
 		"""Connects to a database as set in `site_config.json`."""
+<<<<<<< HEAD
 		self._conn: "MariadbConnection" | "PostgresConnection" = self.get_connection()
 		self._cursor: "MariadbCursor" | "PostgresCursor" = self._conn.cursor()
+=======
+		self.cur_db_name = self.user
+		self._conn: "MariadbConnection" | "PostgresConnection" = self.get_connection()
+		self._cursor: "MariadbCursor" | "PostgresCursor" = self._conn.cursor()
+		frappe.local.rollback_observers = []
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		try:
 			if execution_timeout := get_query_execution_timeout():
@@ -126,7 +197,10 @@ class Database:
 	def use(self, db_name):
 		"""`USE` db_name."""
 		self._conn.select_db(db_name)
+<<<<<<< HEAD
 		self.cur_db_name = db_name
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def get_connection(self):
 		"""Returns a Database connection object that conforms with https://peps.python.org/pep-0249/#connection-objects"""
@@ -148,11 +222,20 @@ class Database:
 		self,
 		query: Query,
 		values: QueryValues = EmptyQueryValues,
+<<<<<<< HEAD
 		*,
 		as_dict=0,
 		as_list=0,
 		debug=0,
 		ignore_ddl=0,
+=======
+		as_dict=0,
+		as_list=0,
+		formatted=0,
+		debug=0,
+		ignore_ddl=0,
+		as_utf8=0,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		auto_commit=0,
 		update=None,
 		explain=False,
@@ -166,8 +249,15 @@ class Database:
 		:param values: Tuple / List / Dict of values to be escaped and substituted in the query.
 		:param as_dict: Return as a dictionary.
 		:param as_list: Always return as a list.
+<<<<<<< HEAD
 		:param debug: Print query and `EXPLAIN` in debug log.
 		:param ignore_ddl: Catch exception if table, column missing.
+=======
+		:param formatted: Format values like date etc.
+		:param debug: Print query and `EXPLAIN` in debug log.
+		:param ignore_ddl: Catch exception if table, column missing.
+		:param as_utf8: Encode values as UTF 8.
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		:param auto_commit: Commit after executing the query.
 		:param update: Update this dict to all rows (if returned `as_dict`).
 		:param run: Return query without executing it if False.
@@ -189,9 +279,12 @@ class Database:
 		                {"name": "a%", "owner":"test@example.com"})
 
 		"""
+<<<<<<< HEAD
 		if isinstance(query, MySQLQueryBuilder | PostgreSQLQueryBuilder):
 			frappe.log("Use run method to execute SQL queries generated by Query Builder")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		debug = debug or getattr(self, "debug", False)
 		query = str(query)
 		if not run:
@@ -230,7 +323,11 @@ class Database:
 			self._cursor.execute(query, values)
 		except Exception as e:
 			if self.is_syntax_error(e):
+<<<<<<< HEAD
 				frappe.log(f"Syntax error in query:\n{query} {values or ''}")
+=======
+				frappe.errprint(f"Syntax error in query:\n{query} {values or ''}")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			elif self.is_deadlocked(e):
 				raise frappe.QueryDeadlockError(e) from e
@@ -241,7 +338,11 @@ class Database:
 			elif self.is_read_only_mode_error(e):
 				frappe.throw(
 					_(
+<<<<<<< HEAD
 						"Site is running in read only mode for maintenance or site update, this action can not be performed right now. Please try again later."
+=======
+						"Site is running in read only mode, this action can not be performed right now. Please try again later."
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					),
 					title=_("In Read Only Mode"),
 					exc=frappe.InReadOnlyMode,
@@ -250,13 +351,21 @@ class Database:
 			# TODO: added temporarily
 			elif self.db_type == "postgres":
 				traceback.print_stack()
+<<<<<<< HEAD
 				frappe.log(f"Error in query:\n{e}")
+=======
+				frappe.errprint(f"Error in query:\n{e}")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				raise
 
 			elif isinstance(e, self.ProgrammingError):
 				if frappe.conf.developer_mode:
 					traceback.print_stack()
+<<<<<<< HEAD
 					frappe.log(f"Error in query:\n{query, values}")
+=======
+					frappe.errprint(f"Error in query:\n{query, values}")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				raise
 
 			if not (
@@ -267,7 +376,11 @@ class Database:
 
 		if debug:
 			time_end = time()
+<<<<<<< HEAD
 			frappe.log(f"Execution time: {time_end - time_start:.2f} sec")
+=======
+			frappe.errprint(f"Execution time: {time_end - time_start:.2f} sec")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.log_query(query, values, debug, explain)
 
@@ -286,6 +399,7 @@ class Database:
 			self._clean_up()
 			return last_result
 
+<<<<<<< HEAD
 		# scrub output if required
 		if as_dict:
 			last_result = self.fetch_as_dict(last_result)
@@ -295,6 +409,21 @@ class Database:
 
 		elif as_list:
 			last_result = self.convert_to_lists(last_result)
+=======
+		if as_utf8:
+			deprecation_warning("as_utf8 parameter is deprecated and will be removed in version 15.")
+		if formatted:
+			deprecation_warning("formatted parameter is deprecated and will be removed in version 15.")
+
+		# scrub output if required
+		if as_dict:
+			last_result = self.fetch_as_dict(last_result, as_utf8=as_utf8)
+			if update:
+				for r in last_result:
+					r.update(update)
+		elif as_list:
+			last_result = self.convert_to_lists(last_result, as_utf8=as_utf8)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self._clean_up()
 		return last_result
@@ -331,7 +460,11 @@ class Database:
 		"""Takes the query and logs it to various interfaces according to the settings."""
 		_query = None
 
+<<<<<<< HEAD
 		if frappe.conf.allow_tests and frappe.cache.get_value("flag_print_sql"):
+=======
+		if frappe.conf.allow_tests and frappe.cache().get_value("flag_print_sql"):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			_query = _query or str(mogrified_query)
 			print(_query)
 
@@ -339,7 +472,11 @@ class Database:
 			_query = _query or str(mogrified_query)
 			if explain and is_query_type(_query, "select"):
 				self.explain_query(_query)
+<<<<<<< HEAD
 			frappe.log(_query)
+=======
+			frappe.errprint(_query)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if frappe.conf.logging == 2:
 			_query = _query or str(mogrified_query)
@@ -387,6 +524,7 @@ class Database:
 
 	def explain_query(self, query, values=None):
 		"""Print `EXPLAIN` in error log."""
+<<<<<<< HEAD
 		frappe.log("--- query explain ---")
 		try:
 			self._cursor.execute(f"EXPLAIN {query}", values)
@@ -395,6 +533,16 @@ class Database:
 		else:
 			frappe.log(json.dumps(self.fetch_as_dict(), indent=1))
 			frappe.log("--- query explain end ---")
+=======
+		frappe.errprint("--- query explain ---")
+		try:
+			self._cursor.execute(f"EXPLAIN {query}", values)
+		except Exception as e:
+			frappe.errprint(f"error in query explain: {e}")
+		else:
+			frappe.errprint(json.dumps(self.fetch_as_dict(), indent=1))
+			frappe.errprint("--- query explain end ---")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def sql_list(self, query, values=(), debug=False, **kwargs):
 		"""Return data as list of single elements (first column).
@@ -413,7 +561,11 @@ class Database:
 		self.sql(query, debug=debug)
 
 	def check_transaction_status(self, query):
+<<<<<<< HEAD
 		"""Raises exception if more than 200,000 `INSERT`, `UPDATE` queries are
+=======
+		"""Raises exception if more than 20,000 `INSERT`, `UPDATE` queries are
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		executed in one transaction. This is to ensure that writes are always flushed otherwise this
 		could cause the system to hang."""
 		self.check_implicit_commit(query)
@@ -439,26 +591,79 @@ class Database:
 		):
 			raise ImplicitCommitError("This statement can cause implicit commit")
 
+<<<<<<< HEAD
 	def fetch_as_dict(self, result) -> list[frappe._dict]:
+=======
+	def fetch_as_dict(self, result, as_utf8=False) -> list[frappe._dict]:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""Internal. Convert results to dict."""
 		if result:
 			keys = [column[0] for column in self._cursor.description]
 
+<<<<<<< HEAD
 		return [frappe._dict(zip(keys, row, strict=False)) for row in result]
+=======
+		if not as_utf8:
+			return [frappe._dict(zip(keys, row, strict=False)) for row in result]
+
+		ret = []
+		for r in result:
+			values = []
+			for value in r:
+				if as_utf8 and isinstance(value, str):
+					value = value.encode("utf-8")
+				values.append(value)
+
+			ret.append(frappe._dict(zip(keys, values, strict=False)))
+		return ret
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@staticmethod
 	def clear_db_table_cache(query):
 		if query and is_query_type(query, ("drop", "create")):
+<<<<<<< HEAD
 			frappe.cache.delete_key("db_tables")
+=======
+			frappe.cache().delete_key("db_tables")
+
+	@staticmethod
+	def needs_formatting(result, formatted):
+		"""Returns true if the first row in the result has a Date, Datetime, Long Int."""
+		if result and result[0]:
+			for v in result[0]:
+				if isinstance(v, datetime.date | datetime.timedelta | datetime.datetime | int):
+					return True
+				if formatted and isinstance(v, int | float):
+					return True
+
+		return False
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def get_description(self):
 		"""Returns result metadata."""
 		return self._cursor.description
 
 	@staticmethod
+<<<<<<< HEAD
 	def convert_to_lists(res):
 		"""Convert tuple output to lists (internal)."""
 		return [[value for value in row] for row in res]
+=======
+	def convert_to_lists(res, formatted=0, as_utf8=0):
+		"""Convert tuple output to lists (internal)."""
+		if not as_utf8:
+			return [[value for value in row] for row in res]
+
+		nres = []
+		for r in res:
+			nr = []
+			for val in r:
+				if as_utf8 and isinstance(val, str):
+					val = val.encode("utf-8")
+				nr.append(val)
+			nres.append(nr)
+		return nres
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def get(self, doctype, filters=None, as_dict=True, cache=False):
 		"""Returns `get_value` with fieldname='*'"""
@@ -760,6 +965,7 @@ class Database:
 	def get_list(*args, **kwargs):
 		return frappe.get_list(*args, **kwargs)
 
+<<<<<<< HEAD
 	@staticmethod
 	def _get_update_dict(
 		fieldname: str | dict, value: Any, *, modified: str, modified_by: str, update_modified: bool
@@ -774,16 +980,23 @@ class Database:
 
 		return update_dict
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def set_single_value(
 		self,
 		doctype: str,
 		fieldname: str | dict,
 		value: str | int | None = None,
+<<<<<<< HEAD
 		*,
 		modified=None,
 		modified_by=None,
 		update_modified=True,
 		debug=False,
+=======
+		*args,
+		**kwargs,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	):
 		"""Set field value of Single DocType.
 
@@ -796,6 +1009,7 @@ class Database:
 		        # Update the `deny_multiple_sessions` field in System Settings DocType.
 		        frappe.db.set_single_value("System Settings", "deny_multiple_sessions", True)
 		"""
+<<<<<<< HEAD
 
 		to_update = self._get_update_dict(
 			fieldname, value, modified=modified, modified_by=modified_by, update_modified=update_modified
@@ -811,6 +1025,9 @@ class Database:
 
 		if doctype in self.value_cache:
 			del self.value_cache[doctype]
+=======
+		return self.set_value(doctype, doctype, fieldname, value, *args, **kwargs)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def get_single_value(self, doctype, fieldname, cache=True):
 		"""Get property of Single DocType. Cache locally by default
@@ -840,11 +1057,15 @@ class Database:
 		df = frappe.get_meta(doctype).get_field(fieldname)
 
 		if not df:
+<<<<<<< HEAD
 			frappe.throw(
 				_("Field {0} does not exist on {1}").format(
 					frappe.bold(fieldname), frappe.bold(doctype), self.InvalidColumnName
 				)
 			)
+=======
+			frappe.throw(_("Invalid field name: {0}").format(frappe.bold(fieldname)), self.InvalidColumnName)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		val = cast_fieldtype(df.fieldtype, val)
 
@@ -886,7 +1107,11 @@ class Database:
 			limit=limit,
 			validate_filters=True,
 		)
+<<<<<<< HEAD
 		if isinstance(fields, str) and fields == "*":
+=======
+		if fields == "*" and not isinstance(fields, list | tuple) and not isinstance(fields, Criterion):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			as_dict = True
 
 		return query.run(as_dict=as_dict, debug=debug, update=update, run=run, pluck=pluck)
@@ -923,6 +1148,14 @@ class Database:
 			).run(debug=debug, run=run, as_dict=as_dict, pluck=pluck)
 		return {}
 
+<<<<<<< HEAD
+=======
+	@deprecated
+	def update(self, *args, **kwargs):
+		"""Update multiple values. Alias for `set_value`."""
+		return self.set_value(*args, **kwargs)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def set_value(
 		self,
 		dt,
@@ -933,6 +1166,10 @@ class Database:
 		modified_by=None,
 		update_modified=True,
 		debug=False,
+<<<<<<< HEAD
+=======
+		for_update=True,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	):
 		"""Set a single value in the database, do not call the ORM triggers
 		but update the modified timestamp (unless specified not to).
@@ -940,13 +1177,18 @@ class Database:
 		**Warning:** this function will not call Document events and should be avoided in normal cases.
 
 		:param dt: DocType name.
+<<<<<<< HEAD
 		:param dn: Document name for updating single record or filters for updating many records.
+=======
+		:param dn: Document name.
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		:param field: Property / field name or dictionary of values to be updated
 		:param value: Value to be updated.
 		:param modified: Use this as the `modified` timestamp.
 		:param modified_by: Set this user as `modified_by`.
 		:param update_modified: default True. Set as false, if you don't want to update the timestamp.
 		:param debug: Print the query in the developer / js console.
+<<<<<<< HEAD
 		"""
 		from frappe.model.utils import is_single_doctype
 
@@ -988,10 +1230,59 @@ class Database:
 			query = query.set(column, value)
 
 		query.run(debug=debug)
+=======
+		:param for_update: [DEPRECATED] This function now performs updates in single query, locking is not required.
+		"""
+		is_single_doctype = not (dn and dt != dn)
+		to_update = field if isinstance(field, dict) else {field: val}
+
+		if is_single_doctype:
+			deprecation_warning(
+				"Calling db.set_value to set single doctype values is deprecated. This behaviour will be removed in version 15. Use db.set_single_value instead."
+			)
+
+		if update_modified:
+			modified = modified or now()
+			modified_by = modified_by or frappe.session.user
+			to_update.update({"modified": modified, "modified_by": modified_by})
+
+		if is_single_doctype:
+			frappe.db.delete(
+				"Singles", filters={"field": ("in", tuple(to_update)), "doctype": dt}, debug=debug
+			)
+
+			singles_data = ((dt, key, sbool(value)) for key, value in to_update.items())
+			query = (
+				frappe.qb.into("Singles").columns("doctype", "field", "value").insert(*singles_data)
+			).run(debug=debug)
+			frappe.clear_document_cache(dt, dt)
+
+		else:
+			query = frappe.qb.get_query(
+				table=dt,
+				filters=dn,
+				update=True,
+				validate_filters=True,
+			)
+
+			if isinstance(dn, str):
+				frappe.clear_document_cache(dt, dn)
+			else:
+				# TODO: Fix this; doesn't work rn - gavin@frappe.io
+				# frappe.cache().hdel_keys(dt, "document_cache")
+				# Workaround: clear all document caches
+				frappe.cache().delete_value("document_cache")
+
+			for column, value in to_update.items():
+				query = query.set(column, value)
+
+			query.run(debug=debug)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if dt in self.value_cache:
 			del self.value_cache[dt]
 
+<<<<<<< HEAD
 	def bulk_update(
 		self,
 		doctype: str,
@@ -1124,6 +1415,33 @@ class Database:
 				update_query = update_query.set(dt[column], value)
 
 		update_query.where(dt.name.isin(docnames)).run(debug=debug)
+=======
+	@staticmethod
+	@deprecated
+	def set(doc, field, val):
+		"""Set value in document. **Avoid**"""
+		doc.db_set(field, val)
+
+	@deprecated
+	def touch(self, doctype, docname):
+		"""Update the modified timestamp of this document."""
+		modified = now()
+		DocType = frappe.qb.DocType(doctype)
+		frappe.qb.update(DocType).set(DocType.modified, modified).where(DocType.name == docname).run()
+		return modified
+
+	@staticmethod
+	def set_temp(value):
+		"""Set a temperory value and return a key."""
+		key = frappe.generate_hash()
+		frappe.cache().hset("temp", key, value)
+		return key
+
+	@staticmethod
+	def get_temp(key):
+		"""Return the temperory value and delete it."""
+		return frappe.cache().hget("temp", key)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def set_global(self, key, val, user="__global"):
 		"""Save a global key value. Global values will be automatically set if they match fieldname."""
@@ -1167,14 +1485,20 @@ class Database:
 
 	def commit(self):
 		"""Commit current transaction. Calls SQL `COMMIT`."""
+<<<<<<< HEAD
 		self.before_rollback.reset()
 		self.after_rollback.reset()
 
 		self.before_commit.run()
+=======
+		for method in frappe.local.before_commit:
+			frappe.call(method[0], *(method[1] or []), **(method[2] or {}))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.sql("commit")
 		self.begin()  # explicitly start a new transaction
 
+<<<<<<< HEAD
 		self.after_commit.run()
 
 	def rollback(self, *, save_point=None):
@@ -1191,6 +1515,22 @@ class Database:
 			self.begin()
 
 			self.after_rollback.run()
+=======
+		frappe.local.rollback_observers = []
+		self.flush_realtime_log()
+		enqueue_jobs_after_commit()
+		flush_local_link_count()
+
+	def add_before_commit(self, method, args=None, kwargs=None):
+		frappe.local.before_commit.append([method, args, kwargs])
+
+	@staticmethod
+	def flush_realtime_log():
+		for args in frappe.local.realtime_log:
+			frappe.realtime.emit_via_redis(*args)
+
+		frappe.local.realtime_log = []
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def savepoint(self, save_point):
 		"""Savepoints work as a nested transaction.
@@ -1205,6 +1545,24 @@ class Database:
 	def release_savepoint(self, save_point):
 		self.sql(f"release savepoint {save_point}")
 
+<<<<<<< HEAD
+=======
+	def rollback(self, *, save_point=None):
+		"""`ROLLBACK` current transaction. Optionally rollback to a known save_point."""
+		if save_point:
+			self.sql(f"rollback to savepoint {save_point}")
+		else:
+			self.sql("rollback")
+			self.begin()
+			for obj in dict.fromkeys(frappe.local.rollback_observers):
+				if hasattr(obj, "on_rollback"):
+					obj.on_rollback()
+			frappe.local.rollback_observers = []
+
+			frappe.local.realtime_log = []
+			frappe.flags.enqueue_after_commit = []
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def field_exists(self, dt, fn):
 		"""Return true of field exists."""
 		return self.exists("DocField", {"fieldname": fn, "parent": dt})
@@ -1256,12 +1614,20 @@ class Database:
 			dt = dt.copy()  # don't modify the original dict
 			dt, dn = dt.pop("doctype"), dt
 
+<<<<<<< HEAD
 		return self.get_value(dt, dn, ignore=True, cache=cache, order_by=None)
+=======
+		return self.get_value(dt, dn, ignore=True, cache=cache)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def count(self, dt, filters=None, debug=False, cache=False, distinct: bool = True):
 		"""Returns `COUNT(*)` for given DocType and filters."""
 		if cache and not filters:
+<<<<<<< HEAD
 			cache_count = frappe.cache.get_value(f"doctype:count:{dt}")
+=======
+			cache_count = frappe.cache().get_value(f"doctype:count:{dt}")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if cache_count is not None:
 				return cache_count
 		count = frappe.qb.get_query(
@@ -1272,7 +1638,11 @@ class Database:
 			validate_filters=True,
 		).run(debug=debug)[0][0]
 		if not filters and cache:
+<<<<<<< HEAD
 			frappe.cache.set_value(f"doctype:count:{dt}", count, expires_in_sec=86400)
+=======
+			frappe.cache().set_value(f"doctype:count:{dt}", count, expires_in_sec=86400)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return count
 
 	@staticmethod
@@ -1280,7 +1650,11 @@ class Database:
 		return getdate(date).strftime("%Y-%m-%d")
 
 	@staticmethod
+<<<<<<< HEAD
 	def format_datetime(datetime):  # noqa: F811
+=======
+	def format_datetime(datetime):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if not datetime:
 			return FallBackDateTimeStr
 
@@ -1303,7 +1677,11 @@ class Database:
 
 	def get_db_table_columns(self, table) -> list[str]:
 		"""Returns list of column names from given table."""
+<<<<<<< HEAD
 		columns = frappe.cache.hget("table_columns", table)
+=======
+		columns = frappe.cache().hget("table_columns", table)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if columns is None:
 			information_schema = frappe.qb.Schema("information_schema")
 
@@ -1315,7 +1693,11 @@ class Database:
 			)
 
 			if columns:
+<<<<<<< HEAD
 				frappe.cache.hset("table_columns", table, columns)
+=======
+				frappe.cache().hset("table_columns", table, columns)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		return columns
 
@@ -1330,6 +1712,24 @@ class Database:
 		"""Returns True if column exists in database."""
 		return column in self.get_table_columns(doctype)
 
+<<<<<<< HEAD
+=======
+	def get_column_type(self, doctype, column):
+		"""Returns column type from database."""
+		information_schema = frappe.qb.Schema("information_schema")
+		table = get_table_name(doctype)
+
+		return (
+			frappe.qb.from_(information_schema.columns)
+			.select(information_schema.columns.column_type)
+			.where(
+				(information_schema.columns.table_name == table)
+				& (information_schema.columns.column_name == column)
+			)
+			.run(pluck=True)[0]
+		)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def has_index(self, table_name, index_name):
 		raise NotImplementedError
 
@@ -1409,6 +1809,13 @@ class Database:
 		"""
 		return self.sql_ddl(f"truncate `{get_table_name(doctype)}`")
 
+<<<<<<< HEAD
+=======
+	@deprecated
+	def clear_table(self, doctype):
+		return self.truncate(doctype)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def get_last_created(self, doctype):
 		last_record = self.get_all(doctype, ("creation"), limit=1, order_by="creation desc")
 		if last_record:
@@ -1424,7 +1831,11 @@ class Database:
 			# multi_word_regex is designed to match following patterns
 			# `tabXxx Xxx` and "tabXxx Xxx"
 
+<<<<<<< HEAD
 			# ([`"]?) Captures " or ` at the beginning of the table name (if provided)
+=======
+			# ([`"]?) Captures " or ` at the begining of the table name (if provided)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			# \1 matches the first captured group (quote character) at the end of the table name
 			# multi word table name must have surrounding quotes.
 
@@ -1440,6 +1851,7 @@ class Database:
 				frappe.flags.touched_tables = set()
 			frappe.flags.touched_tables.update(tables)
 
+<<<<<<< HEAD
 	def bulk_insert(
 		self,
 		doctype: str,
@@ -1449,11 +1861,15 @@ class Database:
 		*,
 		chunk_size=10_000,
 	):
+=======
+	def bulk_insert(self, doctype, fields, values, ignore_duplicates=False, *, chunk_size=10_000):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""
 		Insert multiple records at a time
 
 		:param doctype: Doctype name
 		:param fields: list of fields
+<<<<<<< HEAD
 		:params values: iterable of values
 		"""
 		table = frappe.qb.DocType(doctype)
@@ -1470,6 +1886,24 @@ class Database:
 		value_iterator = iter(values)
 		while value_chunk := tuple(itertools.islice(value_iterator, chunk_size)):
 			query.insert(*value_chunk).run()
+=======
+		:params values: list of list of values
+		"""
+		values = list(values)
+		table = frappe.qb.DocType(doctype)
+
+		for start_index in range(0, len(values), chunk_size):
+			query = frappe.qb.into(table)
+			if ignore_duplicates:
+				# Pypika does not have same api for ignoring duplicates
+				if self.db_type == "mariadb":
+					query = query.ignore()
+				elif self.db_type == "postgres":
+					query = query.on_conflict().do_nothing()
+
+			values_to_insert = values[start_index : start_index + chunk_size]
+			query.columns(fields).insert(*values_to_insert).run()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def create_sequence(self, *args, **kwargs):
 		from frappe.database.sequence import create_sequence
@@ -1486,9 +1920,35 @@ class Database:
 
 		return get_next_val(*args, **kwargs)
 
+<<<<<<< HEAD
 	def get_row_size(self, doctype: str) -> int:
 		"""Get estimated max row size of any table in bytes."""
 		raise NotImplementedError
+=======
+
+def enqueue_jobs_after_commit():
+	from frappe.utils.background_jobs import (
+		RQ_JOB_FAILURE_TTL,
+		RQ_RESULTS_TTL,
+		execute_job,
+		get_queue,
+		truncate_failed_registry,
+	)
+
+	if frappe.flags.enqueue_after_commit and len(frappe.flags.enqueue_after_commit) > 0:
+		for job in frappe.flags.enqueue_after_commit:
+			q = get_queue(job.get("queue"), is_async=job.get("is_async"))
+			q.enqueue_call(
+				execute_job,
+				timeout=job.get("timeout"),
+				kwargs=job.get("queue_args"),
+				failure_ttl=frappe.conf.get("rq_job_failure_ttl") or RQ_JOB_FAILURE_TTL,
+				result_ttl=frappe.conf.get("rq_results_ttl") or RQ_RESULTS_TTL,
+				job_id=job.get("job_id"),
+				on_failure=truncate_failed_registry,
+			)
+		frappe.flags.enqueue_after_commit = []
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def rename_column(self, doctype: str, old_column_name: str, new_column_name: str):
 		raise NotImplementedError

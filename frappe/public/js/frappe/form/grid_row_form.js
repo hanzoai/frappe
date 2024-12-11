@@ -136,7 +136,11 @@ export default class GridRowForm {
 				var first = me.form_area.find("input:first");
 				if (
 					first.length &&
+<<<<<<< HEAD
 					!["Date", "Datetime", "Time"].includes(first.attr("data-fieldtype"))
+=======
+					!in_list(["Date", "Datetime", "Time"], first.attr("data-fieldtype"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				) {
 					try {
 						first.get(0).focus();

@@ -14,6 +14,7 @@ from frappe.utils import get_files_path
 
 
 class PackageImport(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -28,6 +29,8 @@ class PackageImport(Document):
 		log: DF.Code | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		if self.activate:
 			self.import_package()

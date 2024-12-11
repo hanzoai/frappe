@@ -50,7 +50,12 @@ class TestCachingUtils(FrappeTestCase):
 
 		# ensure that external service was called only once
 		# thereby return value of request_specific_api is cached
+<<<<<<< HEAD
 		retval.extend(request_specific_api(120, 23) for _ in range(5))
+=======
+		for _ in range(5):
+			retval.append(request_specific_api(120, 23))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		external_service.assert_called_once()
 		self.assertTrue(same_output_received())
 
@@ -108,7 +113,11 @@ class TestRedisCache(FrappeAPITestCase):
 		self.assertEqual(calculate_area(10), 314)
 		self.assertEqual(function_call_count, 1)
 
+<<<<<<< HEAD
 		time.sleep(CACHE_TTL * 1.5)
+=======
+		time.sleep(CACHE_TTL)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertEqual(calculate_area(10), 314)
 		self.assertEqual(function_call_count, 2)
 
@@ -165,6 +174,7 @@ class TestRedisCache(FrappeAPITestCase):
 		# kwargs should hit cache too
 		self.assertEqual(function_call_count, 4)
 
+<<<<<<< HEAD
 	def test_global_clear_cache(self):
 		function_call_count = 0
 
@@ -184,6 +194,8 @@ class TestRedisCache(FrappeAPITestCase):
 		calculate_area(10)
 		self.assertEqual(function_call_count, 2)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_user_cache(self):
 		function_call_count = 0
 		PI = 3.1415
@@ -211,6 +223,7 @@ class TestRedisCache(FrappeAPITestCase):
 		with self.set_user("Mathematician"):
 			self.assertEqual(calculate_area(1), PI)
 			self.assertEqual(function_call_count, 2)
+<<<<<<< HEAD
 
 
 class TestDocumentCache(FrappeAPITestCase):
@@ -273,3 +286,5 @@ class TestRedisWrapper(FrappeAPITestCase):
 
 	def test_backward_compat_cache(self):
 		self.assertEqual(frappe.cache, frappe.cache())
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

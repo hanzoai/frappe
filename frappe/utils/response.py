@@ -6,8 +6,11 @@ import decimal
 import json
 import mimetypes
 import os
+<<<<<<< HEAD
 import sys
 import uuid
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from typing import TYPE_CHECKING
 from urllib.parse import quote
 
@@ -23,7 +26,11 @@ import frappe.sessions
 import frappe.utils
 from frappe import _
 from frappe.core.doctype.access_log.access_log import make_access_log
+<<<<<<< HEAD
 from frappe.utils import format_timedelta
+=======
+from frappe.utils import cint, format_timedelta
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 if TYPE_CHECKING:
 	from frappe.core.doctype.file.file import File
@@ -31,6 +38,7 @@ if TYPE_CHECKING:
 
 def report_error(status_code):
 	"""Build error. Show traceback in developer mode"""
+<<<<<<< HEAD
 	from frappe.api import ApiVersion, get_api_version
 
 	allow_traceback = (
@@ -71,6 +79,24 @@ def _link_error_with_message_log(error_log, exception, message_logs):
 			return
 
 
+=======
+	allow_traceback = cint(frappe.db.get_system_setting("allow_error_traceback")) if frappe.db else True
+	if (
+		allow_traceback
+		and (status_code != 404 or frappe.conf.logging)
+		and not frappe.local.flags.disable_traceback
+	):
+		traceback = frappe.utils.get_traceback()
+		if traceback:
+			frappe.errprint(traceback)
+			frappe.local.response.exception = traceback.splitlines()[-1]
+
+	response = build_response("json")
+	response.status_code = status_code
+	return response
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def build_response(response_type=None):
 	if "docs" in frappe.local.response and not frappe.local.response.docs:
 		del frappe.local.response["docs"]
@@ -128,7 +154,10 @@ def as_raw():
 
 def as_json():
 	make_logs()
+<<<<<<< HEAD
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	response = Response()
 	if frappe.local.response.http_status_code:
 		response.status_code = frappe.local.response["http_status_code"]
@@ -158,6 +187,7 @@ def as_binary():
 	return response
 
 
+<<<<<<< HEAD
 def make_logs():
 	"""make strings for msgprint and errprint"""
 
@@ -185,12 +215,29 @@ def _make_logs_v1():
 		response["_server_messages"] = json.dumps([json.dumps(d) for d in frappe.local.message_log])
 
 	if frappe.debug_log:
+=======
+def make_logs(response=None):
+	"""make strings for msgprint and errprint"""
+	if not response:
+		response = frappe.local.response
+
+	allow_traceback = frappe.get_system_settings("allow_error_traceback") if frappe.db else False
+
+	if frappe.error_log and allow_traceback:
+		response["exc"] = json.dumps([frappe.utils.cstr(d["exc"]) for d in frappe.local.error_log])
+
+	if frappe.local.message_log:
+		response["_server_messages"] = json.dumps([frappe.utils.cstr(d) for d in frappe.local.message_log])
+
+	if frappe.debug_log and frappe.conf.get("logging") or False:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		response["_debug_messages"] = json.dumps(frappe.local.debug_log)
 
 	if frappe.flags.error_message:
 		response["_error_message"] = frappe.flags.error_message
 
 
+<<<<<<< HEAD
 def _make_logs_v2():
 	response = frappe.local.response
 
@@ -201,6 +248,8 @@ def _make_logs_v2():
 		response["debug"] = [{"message": m} for m in frappe.local.debug_log]
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def json_handler(obj):
 	"""serialize non-serializable data for json"""
 	from collections.abc import Iterable
@@ -219,7 +268,13 @@ def json_handler(obj):
 		return str(obj)
 
 	elif isinstance(obj, frappe.model.document.BaseDocument):
+<<<<<<< HEAD
 		return obj.as_dict(no_nulls=True)
+=======
+		doc = obj.as_dict(no_nulls=True)
+		return doc
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	elif isinstance(obj, Iterable):
 		return list(obj)
 
@@ -232,9 +287,12 @@ def json_handler(obj):
 	elif callable(obj):
 		return repr(obj)
 
+<<<<<<< HEAD
 	elif isinstance(obj, uuid.UUID):
 		return str(obj)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	else:
 		raise TypeError(f"""Object of type {type(obj)} with value of {obj!r} is not JSON serializable""")
 

@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class PrintHeading(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -17,4 +18,6 @@ class PrintHeading(Document):
 		description: DF.SmallText | None
 		print_heading: DF.Data
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	pass

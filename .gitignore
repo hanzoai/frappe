@@ -2,6 +2,10 @@
 *.py~
 *.comp.js
 *.DS_Store
+<<<<<<< HEAD
+=======
+locale
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .wnf-lang-status
 *.swp
 *.egg-info
@@ -70,6 +74,10 @@ coverage.xml
 
 # Translations
 *.mo
+<<<<<<< HEAD
+=======
+*.pot
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 # Django stuff:
 *.log
@@ -192,8 +200,11 @@ cypress/videos
 
 # JetBrains IDEs
 .idea/
+<<<<<<< HEAD
 
 # frappecloud billing
 billing/node_modules
 frappe/public/billing
 frappe/www/billing.html
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

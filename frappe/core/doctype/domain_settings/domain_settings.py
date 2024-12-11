@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class DomainSettings(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -18,6 +19,8 @@ class DomainSettings(Document):
 		active_domains: DF.Table[HasDomain]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def set_active_domains(self, domains):
 		active_domains = [d.domain for d in self.active_domains]
 		added = False
@@ -85,7 +88,11 @@ def get_active_domains():
 		active_domains.append("")
 		return active_domains
 
+<<<<<<< HEAD
 	return frappe.cache.get_value("active_domains", _get_active_domains)
+=======
+	return frappe.cache().get_value("active_domains", _get_active_domains)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_active_modules():
@@ -99,4 +106,8 @@ def get_active_modules():
 				active_modules.append(m.name)
 		return active_modules
 
+<<<<<<< HEAD
 	return frappe.cache.get_value("active_modules", _get_active_modules)
+=======
+	return frappe.cache().get_value("active_modules", _get_active_modules)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

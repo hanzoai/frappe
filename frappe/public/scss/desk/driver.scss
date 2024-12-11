@@ -10,7 +10,11 @@ div#driver-popover-item {
 	box-shadow: var(--shadow-md);
 
 	.driver-popover-title {
+<<<<<<< HEAD
 		@include get_textstyle("lg", "regular");
+=======
+		font-size: var(--text-lg);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		color: var(--text-color);
 		margin-bottom: var(--margin-sm);
 	}
@@ -59,7 +63,10 @@ div#driver-popover-item {
 }
 
 #driver-highlighted-element-stage {
+<<<<<<< HEAD
 	background-color: var(--bg-color) !important;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	border-radius: var(--border-radius) !important;
 }
 

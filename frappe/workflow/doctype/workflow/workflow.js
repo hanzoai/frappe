@@ -5,6 +5,7 @@ frappe.ui.form.on("Workflow", {
 		frm.set_query("document_type", { issingle: 0, istable: 0 });
 	},
 	refresh: function (frm) {
+<<<<<<< HEAD
 		frm.layout.message.empty();
 		let title, note;
 		let workflow_builder_url = "/app/workflow-builder";
@@ -40,6 +41,8 @@ frappe.ui.form.on("Workflow", {
 
 		frm.layout.show_message(message);
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (frm.doc.document_type) {
 			frm.add_custom_button(__("Go to {0} List", [frm.doc.document_type]), () => {
 				frappe.set_route("List", frm.doc.document_type);
@@ -48,14 +51,20 @@ frappe.ui.form.on("Workflow", {
 
 		frm.events.update_field_options(frm);
 		frm.ignore_warning = frm.is_new() ? true : false;
+<<<<<<< HEAD
 		frm.state_status_mapping = {};
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if (frm.is_new()) {
 			return;
 		}
+<<<<<<< HEAD
 		frm.doc.states.forEach((row) => {
 			frm.state_status_mapping[row.state] = row.doc_status;
 		});
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		frm.states = null;
 		frm.trigger("make_state_table");
@@ -63,6 +72,7 @@ frappe.ui.form.on("Workflow", {
 			frm.trigger("render_state_table");
 		});
 	},
+<<<<<<< HEAD
 	validate: async (frm) => {
 		if (frm.doc.is_active && (!frm.doc.states.length || !frm.doc.transitions.length)) {
 			let message = "Workflow must have atleast one state and transition";
@@ -93,6 +103,12 @@ frappe.ui.form.on("Workflow", {
 			);
 		}
 
+=======
+	validate: (frm) => {
+		if (frm.ignore_warning) {
+			return;
+		}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return frm.trigger("get_orphaned_states_and_count").then(() => {
 			if (frm.states && frm.states.length) {
 				frappe.validated = false;
@@ -105,6 +121,7 @@ frappe.ui.form.on("Workflow", {
 	},
 	update_field_options: function (frm) {
 		var doc = frm.doc;
+<<<<<<< HEAD
 		if (!doc.document_type) {
 			return;
 		}
@@ -120,6 +137,19 @@ frappe.ui.form.on("Workflow", {
 				[""].concat(fieldnames)
 			);
 		});
+=======
+		if (doc.document_type) {
+			const get_field_method =
+				"frappe.workflow.doctype.workflow.workflow.get_fieldnames_for";
+			frappe.xcall(get_field_method, { doctype: doc.document_type }).then((resp) => {
+				frm.fields_dict.states.grid.update_docfield_property(
+					"update_field",
+					"options",
+					[""].concat(resp)
+				);
+			});
+		}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 	create_warning_dialog: function (frm) {
 		const warning_html = `<p class="bold">
@@ -218,17 +248,21 @@ frappe.ui.form.on("Workflow", {
 });
 
 frappe.ui.form.on("Workflow Document State", {
+<<<<<<< HEAD
 	state: function (_, cdt, cdn) {
 		var row = locals[cdt][cdn];
 		delete row.workflow_builder_id;
 	},
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	states_remove: function (frm) {
 		frm.trigger("get_orphaned_states_and_count").then(() => {
 			frm.trigger("render_state_table");
 		});
 	},
 });
+<<<<<<< HEAD
 
 frappe.ui.form.on("Workflow Transition", {
 	state: function (_, cdt, cdn) {
@@ -268,3 +302,5 @@ async function create_docstatus_change_warning(updated_states) {
 		);
 	});
 }
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

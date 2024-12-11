@@ -9,12 +9,16 @@ import frappe
 from frappe import _
 from frappe.core.doctype.data_import.exporter import Exporter
 from frappe.core.doctype.data_import.importer import Importer
+<<<<<<< HEAD
 from frappe.model import core_doctypes_list
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.model.document import Document
 from frappe.modules.import_file import import_file_by_path
 from frappe.utils.background_jobs import enqueue, is_job_enqueued
 from frappe.utils.csvutils import validate_google_sheets_url
 
+<<<<<<< HEAD
 BLOCKED_DOCTYPES = set(core_doctypes_list) - {"User", "Role"}
 
 
@@ -40,6 +44,10 @@ class DataImport(Document):
 		template_warnings: DF.Code | None
 	# end: auto-generated types
 
+=======
+
+class DataImport(Document):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		doc_before_save = self.get_doc_before_save()
 		if (
@@ -50,15 +58,21 @@ class DataImport(Document):
 			self.template_options = ""
 			self.template_warnings = ""
 
+<<<<<<< HEAD
 		self.validate_doctype()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.validate_import_file()
 		self.validate_google_sheets_url()
 		self.set_payload_count()
 
+<<<<<<< HEAD
 	def validate_doctype(self):
 		if self.reference_doctype in BLOCKED_DOCTYPES:
 			frappe.throw(_("Importing {0} is not allowed.").format(self.reference_doctype))
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate_import_file(self):
 		if self.import_file:
 			# validate template
@@ -90,6 +104,10 @@ class DataImport(Document):
 		return i.get_data_for_import_preview()
 
 	def start_import(self):
+<<<<<<< HEAD
+=======
+		from frappe.core.page.background_jobs.background_jobs import get_info
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		from frappe.utils.scheduler import is_scheduler_inactive
 
 		run_now = frappe.flags.in_test or frappe.conf.developer_mode
@@ -220,6 +238,12 @@ def get_import_status(data_import_name):
 
 @frappe.whitelist()
 def get_import_logs(data_import: str):
+<<<<<<< HEAD
+=======
+	if not isinstance(data_import, str):
+		raise ValueError("data_import must be a string")
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	doc = frappe.get_doc("Data Import", data_import)
 	doc.check_permission("read")
 
@@ -283,7 +307,11 @@ def export_json(doctype, path, filters=None, or_filters=None, name=None, order_b
 			for key in del_keys:
 				if key in doc:
 					del doc[key]
+<<<<<<< HEAD
 			for v in doc.values():
+=======
+			for _k, v in doc.items():
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				if isinstance(v, list):
 					for child in v:
 						for key in (*del_keys, "docstatus", "doctype", "modified", "name"):
@@ -312,7 +340,11 @@ def export_json(doctype, path, filters=None, or_filters=None, name=None, order_b
 		path = os.path.join("..", path)
 
 	with open(path, "w") as outfile:
+<<<<<<< HEAD
 		outfile.write(frappe.as_json(out, ensure_ascii=False))
+=======
+		outfile.write(frappe.as_json(out))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def export_csv(doctype, path):

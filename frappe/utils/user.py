@@ -41,6 +41,10 @@ class UserPermissions:
 		self.can_export = []
 		self.can_print = []
 		self.can_email = []
+<<<<<<< HEAD
+=======
+		self.can_set_user_permissions = []
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.allow_modules = []
 		self.in_create = []
 		self.setup_user()
@@ -60,7 +64,11 @@ class UserPermissions:
 			return user
 
 		if not frappe.flags.in_install_db and not frappe.flags.in_test:
+<<<<<<< HEAD
 			user_doc = frappe.cache.hget("user_doc", self.name, get_user_doc)
+=======
+			user_doc = frappe.cache().hget("user_doc", self.name, get_user_doc)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if user_doc:
 				self.doc = frappe.get_doc(user_doc)
 
@@ -155,7 +163,11 @@ class UserPermissions:
 			if p.get("read") or p.get("write") or p.get("create"):
 				if p.get("report"):
 					self.can_get_report.append(dt)
+<<<<<<< HEAD
 				for key in ("import", "export", "print", "email"):
+=======
+				for key in ("import", "export", "print", "email", "set_user_permissions"):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					if p.get(key):
 						getattr(self, "can_" + key).append(dt)
 
@@ -190,7 +202,11 @@ class UserPermissions:
 				filters={"property": "allow_import", "value": "1"},
 			)
 
+<<<<<<< HEAD
 		frappe.cache.hset("can_import", frappe.session.user, self.can_import)
+=======
+		frappe.cache().hset("can_import", frappe.session.user, self.can_import)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def get_defaults(self):
 		import frappe.defaults
@@ -226,7 +242,10 @@ class UserPermissions:
 				"send_me_a_copy",
 				"user_type",
 				"onboarding_status",
+<<<<<<< HEAD
 				"default_workspace",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			],
 			as_dict=True,
 		)
@@ -234,6 +253,7 @@ class UserPermissions:
 		if not self.can_read:
 			self.build_permissions()
 
+<<<<<<< HEAD
 		if d.get("default_workspace"):
 			workspace = frappe.get_cached_doc("Workspace", d.default_workspace)
 			d.default_workspace = {
@@ -242,6 +262,8 @@ class UserPermissions:
 				"title": workspace.title,
 			}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		d.name = self.name
 		d.onboarding_status = frappe.parse_json(d.onboarding_status)
 		d.roles = self.get_roles()
@@ -263,6 +285,10 @@ class UserPermissions:
 			"can_import",
 			"can_print",
 			"can_email",
+<<<<<<< HEAD
+=======
+			"can_set_user_permissions",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		):
 			d[key] = list(set(getattr(self, key)))
 
@@ -406,6 +432,7 @@ def is_system_user(username: str | None = None) -> str | None:
 def get_users() -> list[dict]:
 	from frappe.core.doctype.user.user import get_system_users
 
+<<<<<<< HEAD
 	system_managers = get_system_managers(only_name=True)
 
 	return [
@@ -416,6 +443,21 @@ def get_users() -> list[dict]:
 		}
 		for user in get_system_users()
 	]
+=======
+	users = []
+	system_managers = get_system_managers(only_name=True)
+
+	for user in get_system_users():
+		users.append(
+			{
+				"full_name": get_user_fullname(user),
+				"email": user,
+				"is_system_manager": user in system_managers,
+			}
+		)
+
+	return users
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_users_with_role(role: str) -> list[str]:

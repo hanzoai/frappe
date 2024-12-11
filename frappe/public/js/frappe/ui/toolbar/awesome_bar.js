@@ -29,6 +29,7 @@ frappe.search.AwesomeBar = class AwesomeBar {
 				};
 			},
 			item: function (item, term) {
+<<<<<<< HEAD
 				const d = this.get_item(item.value);
 				let target = "#";
 				if (d.route) {
@@ -42,14 +43,25 @@ frappe.search.AwesomeBar = class AwesomeBar {
 				}
 				let html = `<span>${__(d.label || d.value)}</span>`;
 
+=======
+				var d = this.get_item(item.value);
+				var name = __(d.label || d.value);
+				var html = "<span>" + name + "</span>";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				if (d.description && d.value !== d.description) {
 					html +=
 						'<br><span class="text-muted ellipsis">' + __(d.description) + "</span>";
 				}
+<<<<<<< HEAD
 
 				return $("<li></li>")
 					.data("item.autocomplete", d)
 					.html(`<a style="font-weight:normal" href="${target}">${html}</a>`)
+=======
+				return $("<li></li>")
+					.data("item.autocomplete", d)
+					.html(`<a style="font-weight:normal">${html}</a>`)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					.get(0);
 			},
 			sort: function (a, b) {
@@ -122,10 +134,13 @@ frappe.search.AwesomeBar = class AwesomeBar {
 				if (event.ctrlKey || event.metaKey) {
 					frappe.open_in_new_tab = true;
 				}
+<<<<<<< HEAD
 				if (item.route[0].startsWith("https://")) {
 					window.open(item.route[0], "_blank");
 					return;
 				}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				frappe.set_route(item.route);
 			}
 			$input.val("");
@@ -216,8 +231,12 @@ frappe.search.AwesomeBar = class AwesomeBar {
 				frappe.search.utils.get_workspaces(txt),
 				frappe.search.utils.get_dashboards(txt),
 				frappe.search.utils.get_recent_pages(txt || ""),
+<<<<<<< HEAD
 				frappe.search.utils.get_executables(txt),
 				frappe.search.utils.get_marketplace_apps(txt)
+=======
+				frappe.search.utils.get_executables(txt)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			);
 		if (txt.charAt(0) === "#") {
 			options = frappe.tags.utils.get_tags(txt);

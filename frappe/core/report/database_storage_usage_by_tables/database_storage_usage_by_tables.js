@@ -1,5 +1,6 @@
 // Copyright (c) 2022, Frappe Technologies and contributors
 // For license information, please see license.txt
+<<<<<<< HEAD
 
 frappe.query_reports["Database Storage Usage By Tables"] = {
 	filters: [],
@@ -48,4 +49,10 @@ frappe.query_reports["Database Storage Usage By Tables"] = {
 			__("Actions")
 		);
 	},
+=======
+/* eslint-disable */
+
+frappe.query_reports["Database Storage Usage By Tables"] = {
+	filters: [],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 };

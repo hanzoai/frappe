@@ -31,7 +31,11 @@ frappe.ui.form.on("DocType Layout", {
 			await frm.events.sync_fields(frm, false);
 
 			if (frm.is_new()) {
+<<<<<<< HEAD
 				frm.doc.__newname = document_name; // eslint-disable-line
+=======
+				frm.doc.__newname = document_name;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				frm.refresh_field("__newname");
 			}
 		}

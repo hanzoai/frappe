@@ -4,7 +4,10 @@ import json
 
 import frappe
 from frappe.desk.listview import get_group_by_count, get_list_settings, set_list_settings
+<<<<<<< HEAD
 from frappe.desk.reportview import get
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.tests.utils import FrappeTestCase
 
 
@@ -23,7 +26,10 @@ class TestListView(FrappeTestCase):
 
 		self.assertEqual(settings.disable_auto_refresh, 0)
 		self.assertEqual(settings.disable_count, 0)
+<<<<<<< HEAD
 		self.assertEqual(settings.disable_comment_count, 0)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertEqual(settings.disable_sidebar_stats, 0)
 
 	def test_get_list_settings_with_non_default_settings(self):
@@ -33,7 +39,10 @@ class TestListView(FrappeTestCase):
 
 		self.assertEqual(settings.disable_auto_refresh, 0)
 		self.assertEqual(settings.disable_count, 1)
+<<<<<<< HEAD
 		self.assertEqual(settings.disable_comment_count, 0)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertEqual(settings.disable_sidebar_stats, 0)
 
 	def test_set_list_settings_without_settings(self):
@@ -42,7 +51,10 @@ class TestListView(FrappeTestCase):
 
 		self.assertEqual(settings.disable_auto_refresh, 0)
 		self.assertEqual(settings.disable_count, 0)
+<<<<<<< HEAD
 		self.assertEqual(settings.disable_comment_count, 0)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertEqual(settings.disable_sidebar_stats, 0)
 
 	def test_set_list_settings_with_existing_settings(self):
@@ -52,7 +64,10 @@ class TestListView(FrappeTestCase):
 
 		self.assertEqual(settings.disable_auto_refresh, 1)
 		self.assertEqual(settings.disable_count, 0)
+<<<<<<< HEAD
 		self.assertEqual(settings.disable_comment_count, 0)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertEqual(settings.disable_sidebar_stats, 0)
 
 	def test_list_view_child_table_filter_with_created_by_filter(self):
@@ -79,6 +94,7 @@ class TestListView(FrappeTestCase):
 			'[["Note Seen By","user","=","Administrator"]]',
 			"invalid_field",
 		)
+<<<<<<< HEAD
 
 	def test_list_view_comment_count(self):
 		frappe.form_dict.doctype = "DocType"
@@ -94,3 +110,5 @@ class TestListView(FrappeTestCase):
 		for with_comment_count in (0, False, "0", None):
 			frappe.form_dict.with_comment_count = with_comment_count
 			self.assertEqual(len(get()["values"][0]), 1)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

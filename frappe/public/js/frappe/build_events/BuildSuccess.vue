@@ -6,6 +6,7 @@
 		</a>
 	</div>
 </template>
+<<<<<<< HEAD
 
 <script setup>
 import { ref } from "vue";
@@ -41,6 +42,42 @@ defineExpose({ show, hide });
 </script>
 
 <style scoped>
+=======
+<script>
+export default {
+	name: "BuildSuccess",
+	data() {
+		return {
+			is_shown: false,
+			live_reload: false,
+		};
+	},
+	methods: {
+		show(data) {
+			if (data.live_reload) {
+				this.live_reload = true;
+				this.reload();
+			}
+
+			this.is_shown = true;
+			if (this.timeout) {
+				clearTimeout(this.timeout);
+			}
+			this.timeout = setTimeout(() => {
+				this.hide();
+			}, 10000);
+		},
+		hide() {
+			this.is_shown = false;
+		},
+		reload() {
+			window.location.reload();
+		},
+	},
+};
+</script>
+<style>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .build-success-message {
 	position: fixed;
 	z-index: 9999;

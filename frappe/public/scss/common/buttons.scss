@@ -6,6 +6,7 @@
 
 .btn {
 	border: none;
+<<<<<<< HEAD
 	&:not(.btn-md):not(.btn-lg) {
 		padding: 4px 8px;
 	}
@@ -20,6 +21,11 @@
 		box-shadow: var(--focus-default) !important;
 	}
 
+=======
+	border-radius: var(--border-radius);
+	box-shadow: var(--btn-shadow);
+	font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	&.icon-btn {
 		height: var(--btn-height);
 		padding: 0px;
@@ -54,6 +60,7 @@
 
 .btn-primary-light {
 	@include button-variant(
+<<<<<<< HEAD
 		// not happy with this
 		$background: $gray-300,
 		$border: $gray-800,
@@ -61,6 +68,14 @@
 		$hover-border: $gray-300,
 		$active-background: $gray-300,
 		$active-border: $gray-200
+=======
+		$background: $primary-light,
+		$border: $primary-light,
+		$hover-background: lighten($primary-light, 1%),
+		$hover-border: $primary-light,
+		$active-background: lighten($primary-light, 1%),
+		$active-border: darken($primary-light, 12.5%)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	);
 
 	color: var(--primary);
@@ -70,7 +85,11 @@
 	}
 
 	&:focus {
+<<<<<<< HEAD
 		box-shadow: var(--focus-default);
+=======
+		box-shadow: 0 0 0 0.2rem var(--primary-light);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 }
 
@@ -79,22 +98,35 @@
 	color: var(--text-color);
 	&:hover,
 	&:active {
+<<<<<<< HEAD
 		background-color: var(--btn-default-hover-bg);
+=======
+		background-color: var(--gray-400);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		color: var(--text-color);
 	}
 }
 
 .btn.btn-default {
+<<<<<<< HEAD
 	background-color: var(--control-bg);
 	color: var(--text-color);
 	&:hover,
 	&:active {
 		background: var(--btn-default-hover-bg);
+=======
+	background-color: var(--fg-color);
+	color: var(--text-color);
+	&:hover,
+	&:active {
+		background: var(--fg-hover-color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		color: var(--text-color);
 	}
 }
 
 .btn.btn-primary {
+<<<<<<< HEAD
 	background-color: var(--btn-primary);
 	color: var(--neutral);
 	white-space: nowrap;
@@ -109,6 +141,17 @@
 
 .btn.btn-danger {
 	background-color: var(--danger);
+=======
+	background-color: var(--primary);
+	color: var(--white);
+	white-space: nowrap;
+	--icon-stroke: currentColor;
+	--icon-fill-bg: var(--primary);
+}
+
+.btn.btn-danger {
+	background-color: var(--red-400);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	color: $white;
 }
 
@@ -118,11 +161,15 @@
 	border: 0;
 	font-size: inherit;
 	background-color: inherit;
+<<<<<<< HEAD
 	text-align: inherit;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 [data-theme="dark"] {
 	.btn-primary-light {
+<<<<<<< HEAD
 		background-color: var(--bg-dark-gray);
 		box-shadow: none;
 	}
@@ -130,4 +177,9 @@
 		color: var(--gray-900) !important;
 		background-color: var(--invert-neutral) !important;
 	}
+=======
+		background-color: var(--bg-dark-blue);
+		box-shadow: none;
+	}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }

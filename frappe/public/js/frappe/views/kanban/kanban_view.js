@@ -136,6 +136,7 @@ frappe.views.KanbanView = class KanbanView extends frappe.views.ListView {
 		this.hide_card_layout = true;
 		this.hide_sort_selector = true;
 		super.setup_page();
+<<<<<<< HEAD
 
 		this.page.disable_sidebar_toggle = true;
 		this.page.setup_sidebar_toggle();
@@ -143,6 +144,12 @@ frappe.views.KanbanView = class KanbanView extends frappe.views.ListView {
 
 	setup_view() {
 		if (this.board.columns.filter((col) => col.status !== "Archived").length > 5) {
+=======
+	}
+
+	setup_view() {
+		if (this.board.columns.length > 5) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this.page.container.addClass("full-width");
 		}
 		this.setup_realtime_updates();
@@ -232,7 +239,11 @@ frappe.views.KanbanView = class KanbanView extends frappe.views.ListView {
 
 		this.meta.fields.forEach((df) => {
 			const is_valid_field =
+<<<<<<< HEAD
 				["Data", "Text", "Small Text", "Text Editor"].includes(df.fieldtype) && !df.hidden;
+=======
+				in_list(["Data", "Text", "Small Text", "Text Editor"], df.fieldtype) && !df.hidden;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			if (is_valid_field && !title_field) {
 				// can be mapped to textarea

@@ -79,8 +79,14 @@
 			@include flex(flex, null, null, null);
 
 			.stat-value {
+<<<<<<< HEAD
 				@include get_textstyle("lg", "medium");
 				color: var(--text-color);
+=======
+				font-size: var(--text-lg);
+				color: var(--text-color);
+				font-weight: var(--text-bold);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				line-height: 20px;
 			}
 

@@ -3,26 +3,43 @@ import os
 import socket
 import time
 from collections import defaultdict
+<<<<<<< HEAD
 from collections.abc import Callable
 from contextlib import suppress
 from functools import lru_cache
 from typing import Any, NoReturn
+=======
+from functools import lru_cache
+from typing import TYPE_CHECKING, Any, Literal, NoReturn, Union
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from uuid import uuid4
 
 import redis
 from redis.exceptions import BusyLoadingError, ConnectionError
+<<<<<<< HEAD
 from rq import Callback, Queue, Worker
 from rq.exceptions import NoSuchJobError
 from rq.job import Job, JobStatus
 from rq.logutils import setup_loghandlers
 from rq.worker import DequeueStrategy
 from rq.worker_pool import WorkerPool
+=======
+from rq import Connection, Queue, Worker
+from rq.exceptions import NoSuchJobError
+from rq.job import Job
+from rq.logutils import setup_loghandlers
+from rq.worker import RandomWorker, RoundRobinWorker
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 
 import frappe
 import frappe.monitor
 from frappe import _
+<<<<<<< HEAD
 from frappe.utils import CallbackManager, cint, get_bench_id
+=======
+from frappe.utils import cint, cstr, get_bench_id
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils.commands import log
 from frappe.utils.deprecations import deprecation_warning
 from frappe.utils.redis_queue import RedisQueue
@@ -55,6 +72,7 @@ def get_queues_timeout():
 
 
 def enqueue(
+<<<<<<< HEAD
 	method: str | Callable,
 	queue: str = "default",
 	timeout: int | None = None,
@@ -71,6 +89,21 @@ def enqueue(
 	deduplicate=False,
 	**kwargs,
 ) -> Job | Any:
+=======
+	method,
+	queue="default",
+	timeout=None,
+	event=None,
+	is_async=True,
+	job_name=None,
+	now=False,
+	enqueue_after_commit=False,
+	*,
+	at_front=False,
+	job_id=None,
+	**kwargs,
+) -> Union["Job", Any]:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""
 	Enqueue method to be executed using a background worker
 
@@ -82,12 +115,16 @@ def enqueue(
 	:param job_name: [DEPRECATED] can be used to name an enqueue call, which can be used to prevent duplicate calls
 	:param now: if now=True, the method is executed via frappe.call
 	:param kwargs: keyword arguments to be passed to the method
+<<<<<<< HEAD
 	:param deduplicate: do not re-queue job if it's already queued, requires job_id.
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	:param job_id: Assigning unique job id, which can be checked using `is_job_enqueued`
 	"""
 	# To handle older implementations
 	is_async = kwargs.pop("async", is_async)
 
+<<<<<<< HEAD
 	if deduplicate:
 		if not job_id:
 			frappe.throw(_("`job_id` paramater is required for deduplication."))
@@ -104,6 +141,11 @@ def enqueue(
 
 	# namespace job ids to sites
 	job_id = create_job_id(job_id)
+=======
+	if job_id:
+		# namespace job ids to sites
+		job_id = create_job_id(job_id)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if job_name:
 		deprecation_warning("Using enqueue with `job_name` is deprecated, use `job_id` instead.")
@@ -129,6 +171,7 @@ def enqueue(
 
 	if not timeout:
 		timeout = get_queues_timeout().get(queue) or 300
+<<<<<<< HEAD
 
 	# Prepare a more readable name than <function $name at $address>
 	if isinstance(method, Callable):
@@ -136,16 +179,23 @@ def enqueue(
 	else:
 		method_name = method
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	queue_args = {
 		"site": frappe.local.site,
 		"user": frappe.session.user,
 		"method": method,
 		"event": event,
+<<<<<<< HEAD
 		"job_name": job_name or method_name,
+=======
+		"job_name": job_name or cstr(method),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"is_async": is_async,
 		"kwargs": kwargs,
 	}
 
+<<<<<<< HEAD
 	on_failure = on_failure or truncate_failed_registry
 
 	def enqueue_call():
@@ -166,6 +216,33 @@ def enqueue(
 		return
 
 	return enqueue_call()
+=======
+	if enqueue_after_commit:
+		if not frappe.flags.enqueue_after_commit:
+			frappe.flags.enqueue_after_commit = []
+
+		frappe.flags.enqueue_after_commit.append(
+			{
+				"queue": queue,
+				"is_async": is_async,
+				"timeout": timeout,
+				"queue_args": queue_args,
+				"job_id": job_id,
+			}
+		)
+		return
+
+	return q.enqueue_call(
+		execute_job,
+		timeout=timeout,
+		kwargs=queue_args,
+		at_front=at_front,
+		failure_ttl=frappe.conf.get("rq_job_failure_ttl") or RQ_JOB_FAILURE_TTL,
+		result_ttl=frappe.conf.get("rq_results_ttl") or RQ_RESULTS_TTL,
+		job_id=job_id,
+		on_failure=truncate_failed_registry,
+	)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def enqueue_doc(doctype, name=None, method=None, queue="default", timeout=300, now=False, **kwargs):
@@ -189,10 +266,15 @@ def run_doc_method(doctype, name, doc_method, **kwargs):
 def execute_job(site, method, event, job_name, kwargs, user=None, is_async=True, retry=0):
 	"""Executes job in a worker, performs commit/rollback and logs if there is any error"""
 	retval = None
+<<<<<<< HEAD
 
 	if is_async:
 		frappe.init(site=site)
 		frappe.connect()
+=======
+	if is_async:
+		frappe.connect(site)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if os.environ.get("CI"):
 			frappe.flags.in_test = True
 
@@ -203,6 +285,7 @@ def execute_job(site, method, event, job_name, kwargs, user=None, is_async=True,
 		method_name = method
 		method = frappe.get_attr(method)
 	else:
+<<<<<<< HEAD
 		method_name = f"{method.__module__}.{method.__qualname__}"
 
 	frappe.local.job = frappe._dict(
@@ -213,6 +296,9 @@ def execute_job(site, method, event, job_name, kwargs, user=None, is_async=True,
 		user=user,
 		after_job=CallbackManager(),
 	)
+=======
+		method_name = cstr(method.__name__)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	for before_job_task in frappe.get_hooks("before_job"):
 		frappe.call(before_job_task, method=method_name, kwargs=kwargs, transaction_type="job")
@@ -254,7 +340,10 @@ def execute_job(site, method, event, job_name, kwargs, user=None, is_async=True,
 	finally:
 		for after_job_task in frappe.get_hooks("after_job"):
 			frappe.call(after_job_task, method=method_name, kwargs=kwargs, result=retval)
+<<<<<<< HEAD
 		frappe.local.job.after_job.run()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if is_async:
 			frappe.destroy()
@@ -266,6 +355,7 @@ def start_worker(
 	rq_username: str | None = None,
 	rq_password: str | None = None,
 	burst: bool = False,
+<<<<<<< HEAD
 	strategy: DequeueStrategy | None = DequeueStrategy.DEFAULT,
 ) -> None:  # pragma: no cover
 	"""Wrapper to start rq worker. Connects to redis and monitors these queues."""
@@ -275,6 +365,16 @@ def start_worker(
 
 	_start_sentry()
 	_freeze_gc()
+=======
+	strategy: Literal["round_robin", "random"] | None = None,
+) -> None:
+	"""Wrapper to start rq worker. Connects to redis and monitors these queues."""
+	DEQUEUE_STRATEGIES = {"round_robin": RoundRobinWorker, "random": RandomWorker}
+
+	if frappe._tune_gc:
+		gc.collect()
+		gc.freeze()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	with frappe.init_site():
 		# empty init is required to get redis_queue from common_site_config.json
@@ -288,17 +388,26 @@ def start_worker(
 		setup_loghandlers("ERROR")
 
 	set_niceness()
+<<<<<<< HEAD
+=======
+	WorkerKlass = DEQUEUE_STRATEGIES.get(strategy, Worker)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	logging_level = "INFO"
 	if quiet:
 		logging_level = "WARNING"
+<<<<<<< HEAD
 
 	worker = Worker(queues, connection=redis_connection)
+=======
+	worker = WorkerKlass(queues, connection=redis_connection)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	worker.work(
 		logging_level=logging_level,
 		burst=burst,
 		date_format="%Y-%m-%d %H:%M:%S",
 		log_format="%(asctime)s,%(msecs)03d %(message)s",
+<<<<<<< HEAD
 		dequeue_strategy=strategy,
 	)
 
@@ -357,6 +466,11 @@ def _freeze_gc():
 		gc.freeze()
 
 
+=======
+	)
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def get_worker_name(queue):
 	"""When limiting worker to a specific queue, also append queue name to default worker name"""
 	name = None
@@ -442,10 +556,16 @@ def validate_queue(queue, default_queue_list=None):
 
 
 @retry(
+<<<<<<< HEAD
 	retry=retry_if_exception_type((BusyLoadingError, ConnectionError)),
 	stop=stop_after_attempt(5),
 	wait=wait_fixed(1),
 	reraise=True,
+=======
+	retry=retry_if_exception_type(BusyLoadingError) | retry_if_exception_type(ConnectionError),
+	stop=stop_after_attempt(10),
+	wait=wait_fixed(1),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 )
 def get_redis_conn(username=None, password=None):
 	if not hasattr(frappe.local, "conf"):
@@ -471,7 +591,13 @@ def get_redis_conn(username=None, password=None):
 
 	try:
 		if not cred:
+<<<<<<< HEAD
 			return get_redis_connection_without_auth()
+=======
+			if not _redis_queue_conn:
+				_redis_queue_conn = RedisQueue.get_connection()
+			return _redis_queue_conn
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		else:
 			return RedisQueue.get_connection(**cred)
 	except redis.exceptions.AuthenticationError:
@@ -489,6 +615,7 @@ def get_redis_conn(username=None, password=None):
 		raise
 
 
+<<<<<<< HEAD
 def get_redis_connection_without_auth():
 	global _redis_queue_conn
 
@@ -497,6 +624,8 @@ def get_redis_connection_without_auth():
 	return _redis_queue_conn
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def get_queues(connection=None) -> list[Queue]:
 	"""Get all the queues linked to the current bench."""
 	queues = Queue.all(connection=connection or get_redis_conn())
@@ -532,6 +661,7 @@ def test_job(s):
 
 def create_job_id(job_id: str) -> str:
 	"""Generate unique job id for deduplication"""
+<<<<<<< HEAD
 
 	if not job_id:
 		job_id = str(uuid4())
@@ -554,6 +684,20 @@ def get_job(job_id: str) -> Job:
 		return Job.fetch(create_job_id(job_id), connection=get_redis_conn())
 	except NoSuchJobError:
 		return None
+=======
+	return f"{frappe.local.site}::{job_id}"
+
+
+def is_job_enqueued(job_id: str) -> str:
+	from rq.job import Job
+
+	try:
+		job = Job.fetch(create_job_id(job_id), connection=get_redis_conn())
+	except NoSuchJobError:
+		return False
+
+	return job.get_status() in ("queued", "started")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 BACKGROUND_PROCESS_NICENESS = 10
@@ -590,6 +734,7 @@ def truncate_failed_registry(job, connection, type, value, traceback):
 		for job_ids in create_batch(failed_jobs, 100):
 			for job_obj in Job.fetch_many(job_ids=job_ids, connection=connection):
 				job_obj and fail_registry.remove(job_obj, delete_job=True)
+<<<<<<< HEAD
 
 
 def flush_telemetry():
@@ -648,3 +793,5 @@ def _start_sentry():
 		_experiments=experiments,
 		**kwargs,
 	)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

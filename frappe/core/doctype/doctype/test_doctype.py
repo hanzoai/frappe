@@ -1,9 +1,14 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+<<<<<<< HEAD
 import os
 import random
 import string
 import unittest
+=======
+import random
+import string
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from unittest.mock import patch
 
 import frappe
@@ -19,11 +24,16 @@ from frappe.core.doctype.doctype.doctype import (
 	WrongOptionsDoctypeLinkError,
 	validate_links_table_fieldnames,
 )
+<<<<<<< HEAD
 from frappe.core.doctype.rq_job.test_rq_job import wait_for_completion
 from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 from frappe.desk.form.load import getdoc
 from frappe.model.delete_doc import delete_controllers
 from frappe.model.sync import remove_orphan_doctypes
+=======
+from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+from frappe.desk.form.load import getdoc
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.tests.utils import FrappeTestCase
 
 
@@ -178,9 +188,12 @@ class TestDocType(FrappeTestCase):
 				if condition:
 					self.assertFalse(re.match(pattern, condition))
 
+<<<<<<< HEAD
 	@unittest.skipUnless(
 		os.access(frappe.get_app_path("frappe"), os.W_OK), "Only run if frappe app paths is writable"
 	)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_sync_field_order(self):
 		import os
 
@@ -565,10 +578,27 @@ class TestDocType(FrappeTestCase):
 				"options": "Test Virtual DocType as Child Table",
 			},
 		)
+<<<<<<< HEAD
 		self.assertRaises(frappe.exceptions.ValidationError, parent_doc.insert)
 		parent_doc.is_virtual = 1
 		parent_doc.insert(ignore_permissions=True)
 		self.assertFalse(frappe.db.table_exists("Test Parent Virtual DocType"))
+=======
+		parent_doc.insert(ignore_permissions=True)
+
+		# create entry for parent doctype
+		parent_doc_entry = frappe.get_doc(
+			{"doctype": "Test Parent Virtual DocType", "some_fieldname": "Test"}
+		)
+		parent_doc_entry.insert(ignore_permissions=True)
+
+		# update the parent doc (should not abort because of any DB query to a virtual child table, as there is none)
+		parent_doc_entry.some_fieldname = "Test update"
+		parent_doc_entry.save(ignore_permissions=True)
+
+		# delete the parent doc (should not abort because of any DB query to a virtual child table, as there is none)
+		parent_doc_entry.delete()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_default_fieldname(self):
 		fields = [
@@ -638,6 +668,7 @@ class TestDocType(FrappeTestCase):
 
 		self.assertEqual(test_json.test_json_field["hello"], "world")
 
+<<<<<<< HEAD
 	def test_no_delete_doc(self):
 		self.assertRaises(frappe.ValidationError, frappe.delete_doc, "DocType", "Address")
 
@@ -685,6 +716,8 @@ class TestDocType(FrappeTestCase):
 	@unittest.skipUnless(
 		os.access(frappe.get_app_path("frappe"), os.W_OK), "Only run if frappe app paths is writable"
 	)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@patch.dict(frappe.conf, {"developer_mode": 1})
 	def test_custom_field_deletion(self):
 		"""Custom child tables whose doctype doesn't exist should be auto deleted."""
@@ -697,9 +730,12 @@ class TestDocType(FrappeTestCase):
 		frappe.delete_doc("DocType", child)
 		self.assertFalse(frappe.get_meta(doctype).get_field(field))
 
+<<<<<<< HEAD
 	@unittest.skipUnless(
 		os.access(frappe.get_app_path("frappe"), os.W_OK), "Only run if frappe app paths is writable"
 	)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@patch.dict(frappe.conf, {"developer_mode": 1})
 	def test_delete_doctype_with_customization(self):
 		from frappe.custom.doctype.property_setter.property_setter import make_property_setter
@@ -737,6 +773,7 @@ class TestDocType(FrappeTestCase):
 		self.assertEqual(frappe.get_meta(doctype).get_field(field).default, "DELETETHIS")
 		frappe.delete_doc("DocType", doctype)
 
+<<<<<<< HEAD
 	@unittest.skipUnless(
 		os.access(frappe.get_app_path("frappe"), os.W_OK), "Only run if frappe app paths is writable"
 	)
@@ -752,6 +789,8 @@ class TestDocType(FrappeTestCase):
 		frappe.db.rollback()
 		self.assertFalse(frappe.db.exists("DocType", doctype.name))
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_not_in_list_view_for_not_allowed_mandatory_field(self):
 		doctype = new_doctype(
 			fields=[

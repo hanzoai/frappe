@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+/* eslint-disable */
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import Quill from "quill";
 
 const Embed = Quill.import("blots/embed");

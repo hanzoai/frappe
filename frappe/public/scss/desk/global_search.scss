@@ -69,7 +69,12 @@
 
 			.result-title {
 				color: var(--text-color);
+<<<<<<< HEAD
 				@include get_textstyle("lg", "semibold");
+=======
+				font-size: var(--text-lg);
+				font-weight: 600;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 
 			.result-body {
@@ -105,7 +110,11 @@
 			.results-status {
 				padding: var(--padding-sm) 0;
 				color: var(--primary);
+<<<<<<< HEAD
 				@include get_textstyle("sm", "regular");
+=======
+				font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		}
 	}

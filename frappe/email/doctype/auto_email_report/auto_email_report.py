@@ -2,9 +2,13 @@
 # License: MIT. See LICENSE
 
 import calendar
+<<<<<<< HEAD
 import datetime
 from datetime import timedelta
 from email.utils import formataddr
+=======
+from datetime import timedelta
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 from frappe import _
@@ -15,6 +19,7 @@ from frappe.utils import (
 	add_to_date,
 	cint,
 	format_time,
+<<<<<<< HEAD
 	get_first_day,
 	get_first_day_of_week,
 	get_link_to_form,
@@ -22,6 +27,10 @@ from frappe.utils import (
 	get_url_to_report,
 	get_year_start,
 	getdate,
+=======
+	get_link_to_form,
+	get_url_to_report,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	global_date_format,
 	now,
 	now_datetime,
@@ -33,6 +42,7 @@ from frappe.utils.xlsxutils import make_xlsx
 
 
 class AutoEmailReport(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -65,6 +75,8 @@ class AutoEmailReport(Document):
 		user: DF.Link
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def autoname(self):
 		self.name = _(self.report)
 		if frappe.db.exists("Auto Email Report", self.name):
@@ -76,10 +88,13 @@ class AutoEmailReport(Document):
 		self.validate_report_format()
 		self.validate_mandatory_fields()
 
+<<<<<<< HEAD
 	@property
 	def sender_email(self):
 		return frappe.db.get_value("Email Account", self.sender, "email_id")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate_emails(self):
 		"""Cleanup list of emails"""
 		if "," in self.email_to:
@@ -121,9 +136,16 @@ class AutoEmailReport(Document):
 		# Check if all Mandatory Report Filters are filled by the User
 		filters = frappe.parse_json(self.filters) if self.filters else {}
 		filter_meta = frappe.parse_json(self.filter_meta) if self.filter_meta else {}
+<<<<<<< HEAD
 		throw_list = [
 			meta["label"] for meta in filter_meta if meta.get("reqd") and not filters.get(meta["fieldname"])
 		]
+=======
+		throw_list = []
+		for meta in filter_meta:
+			if meta.get("reqd") and not filters.get(meta["fieldname"]):
+				throw_list.append(meta["label"])
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if throw_list:
 			frappe.throw(
 				title=_("Missing Filters Required"),
@@ -212,6 +234,7 @@ class AutoEmailReport(Document):
 		self.filters = frappe.parse_json(self.filters)
 
 		to_date = today()
+<<<<<<< HEAD
 
 		if self.use_first_day_of_period:
 			from_date = to_date
@@ -243,6 +266,19 @@ class AutoEmailReport(Document):
 			self.set_date_filters(from_date, to_date)
 
 	def set_date_filters(self, from_date, to_date):
+=======
+		from_date_value = {
+			"Daily": ("days", -1),
+			"Weekly": ("weeks", -1),
+			"Monthly": ("months", -1),
+			"Quarterly": ("months", -3),
+			"Half Yearly": ("months", -6),
+			"Yearly": ("years", -1),
+		}[self.dynamic_date_period]
+
+		from_date = add_to_date(to_date, **{from_date_value[0]: from_date_value[1]})
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.filters[self.from_date_field] = from_date
 		self.filters[self.to_date_field] = to_date
 
@@ -265,7 +301,10 @@ class AutoEmailReport(Document):
 
 		frappe.sendmail(
 			recipients=self.email_to.split(),
+<<<<<<< HEAD
 			sender=formataddr((self.sender, self.sender_email)) if self.sender else "",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			subject=self.name,
 			message=message,
 			attachments=attachments,
@@ -361,6 +400,7 @@ def update_field_types(columns):
 			col.fieldtype = "Data"
 			col.options = ""
 	return columns
+<<<<<<< HEAD
 
 
 DATE_FORMAT = "%Y-%m-%d"
@@ -381,3 +421,5 @@ def get_half_year_start(as_str=False):
 	result_date = datetime.date(year, month, day)
 
 	return result_date if not as_str else result_date.strftime(DATE_FORMAT)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -34,12 +34,20 @@ def get_notifications():
 		return out
 
 	groups = list(config.get("for_doctype")) + list(config.get("for_module"))
+<<<<<<< HEAD
+=======
+	cache = frappe.cache()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	notification_count = {}
 	notification_percent = {}
 
 	for name in groups:
+<<<<<<< HEAD
 		count = frappe.cache.hget("notification_count:" + name, frappe.session.user)
+=======
+		count = cache.hget("notification_count:" + name, frappe.session.user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if count is not None:
 			notification_count[name] = count
 
@@ -82,7 +90,11 @@ def get_notifications_for_doctypes(config, notification_count):
 
 				else:
 					open_count_doctype[d] = result
+<<<<<<< HEAD
 					frappe.cache.hset("notification_count:" + d, frappe.session.user, result)
+=======
+					frappe.cache().hset("notification_count:" + d, frappe.session.user, result)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return open_count_doctype
 
@@ -140,6 +152,10 @@ def get_notifications_for_targets(config, notification_percent):
 def clear_notifications(user=None):
 	if frappe.flags.in_install:
 		return
+<<<<<<< HEAD
+=======
+	cache = frappe.cache()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	config = get_notification_config()
 
 	if not config:
@@ -151,6 +167,7 @@ def clear_notifications(user=None):
 
 	for name in groups:
 		if user:
+<<<<<<< HEAD
 			frappe.cache.hdel("notification_count:" + name, user)
 		else:
 			frappe.cache.delete_key("notification_count:" + name)
@@ -162,6 +179,19 @@ def clear_notification_config(user):
 
 def delete_notification_count_for(doctype):
 	frappe.cache.delete_key("notification_count:" + doctype)
+=======
+			cache.hdel("notification_count:" + name, user)
+		else:
+			cache.delete_key("notification_count:" + name)
+
+
+def clear_notification_config(user):
+	frappe.cache().hdel("notification_config", user)
+
+
+def delete_notification_count_for(doctype):
+	frappe.cache().delete_key("notification_count:" + doctype)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def clear_doctype_notifications(doc, method=None, *args, **kwargs):
@@ -230,14 +260,24 @@ def get_notification_config():
 						config[key].update(nc.get(key, {}))
 		return config
 
+<<<<<<< HEAD
 	return frappe.cache.hget("notification_config", user, _get)
+=======
+	return frappe.cache().hget("notification_config", user, _get)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_filters_for(doctype):
 	"""get open filters for doctype"""
 	config = get_notification_config()
 	doctype_config = config.get("for_doctype").get(doctype, {})
+<<<<<<< HEAD
 	return None if isinstance(doctype_config, str) else doctype_config
+=======
+	filters = doctype_config if not isinstance(doctype_config, str) else None
+
+	return filters
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()

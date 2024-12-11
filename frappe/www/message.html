@@ -30,7 +30,11 @@ html, body {
 		<p>{{ message }}</p>
 		{% endif %}
 		{% if primary_action %}
+<<<<<<< HEAD
 		<div><a href='{{ primary_action or "/" }}' class='btn btn-primary btn-sm btn-block'>
+=======
+		<div><a href='{{ primary_action or "/" }}' class='btn btn-primary btn-sm'>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			{{ primary_label or _("Home") }}</a></div>
 		{% endif %}
 	{% endblock %}
@@ -42,7 +46,11 @@ html, body {
 <script>
 	frappe.ready(function() {
 		if (window.location.hash || window.location.href.includes('/app')) {
+<<<<<<< HEAD
 			localStorage.setItem('session_last_route', window.location.pathname);
+=======
+			localStorage.setItem('session_last_route', window.location.pathname + window.location.hash + window.location.search);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		$('.btn-primary').focus();

@@ -9,6 +9,10 @@ Action,እርምጃ,
 Actions,እርምጃዎች,
 Active,ገቢር,
 Add,አክል,
+<<<<<<< HEAD
+=======
+Add Comment,አስተያየት ያክሉ,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,ረድፍ አክል,
 Address,አድራሻ,
 Address Line 2,የአድራሻ መስመር 2,
@@ -143,6 +147,10 @@ Monday,ሰኞ,
 Monthly,ወርሃዊ,
 More,ይበልጥ,
 More Information,ተጨማሪ መረጃ,
+<<<<<<< HEAD
+=======
+More...,ተጨማሪ ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,ተንቀሳቀሰ,
 My Account,አካውንቴ,
 New Address,አዲስ አድራሻ,
@@ -155,6 +163,10 @@ No items found.,ምንም ንጥሎች አልተገኙም.,
 None,ምንም,
 Not Permitted,አይፈቀድም,
 Not active,ገባሪ አይደለም,
+<<<<<<< HEAD
+=======
+Notes,ማስታወሻዎች,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,ቁጥር,
 Online,የመስመር ላይ,
 Operation,ቀዶ ጥገና,
@@ -164,12 +176,25 @@ Owner,ባለቤት,
 Page Missing or Moved,የጠፋ ወይም ተንቀሳቅሷል ገጽ,
 Parameter,የልኬት,
 Password,የይለፍ ቃል,
+<<<<<<< HEAD
 Period,ወቅት,
 Pincode,ፒን ኮድ,
+=======
+Payment Gateway,የክፍያ ጌትዌይ,
+Payment Gateway Name,የክፍያ በርዕስ ስም,
+Payments,ክፍያዎች,
+Period,ወቅት,
+Pincode,ፒን ኮድ,
+Plan Name,የዕቅድ ስም,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,ብቅ-ባዮችን ለማንቃት እባክዎ,
 Please select Company,ኩባንያ ይምረጡ,
 Please select {0},እባክዎ ይምረጡ {0},
 Please set Email Address,የኢሜይል አድራሻ ማዘጋጀት እባክዎ,
+<<<<<<< HEAD
+=======
+Portal,ፖርታል,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,ፖርታል ቅንብሮች,
 Preview,ቅድመ-እይታ,
 Primary,የመጀመሪያ,
@@ -214,6 +239,10 @@ Salutation,ሰላምታ,
 Sample,ናሙና,
 Saturday,ቅዳሜ,
 Saved,ተቀምጧል,
+<<<<<<< HEAD
+=======
+Scan Barcode,ባርኮድ ቅኝት,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,የተያዘለት,
 Search,ፍለጋ,
 Secret Key,ምስጢር ቁልፍ,
@@ -228,6 +257,10 @@ Settings,ቅንብሮች,
 Shipping,መላኪያ,
 Short Name,አጭር ስም,
 Slideshow,የተንሸራታች ትዕይንት,
+<<<<<<< HEAD
+=======
+Some information is missing,አንዳንድ መረጃ ይጎድለዋል,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,ምንጭ,
 Source Name,ምንጭ ስም,
 Standard,መለኪያ,
@@ -237,6 +270,10 @@ State,ግዛት,
 Stopped,አቁሟል,
 Subject,ትምህርት,
 Submit,አስገባ,
+<<<<<<< HEAD
+=======
+Successful,ስኬታማ,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,ማጠቃለያ,
 Sunday,እሁድ,
 System Manager,የስርዓት አስተዳዳሪ,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,የጊዜ ወሰን,
 To,ለ,
 To Date,ቀን ወደ,
+<<<<<<< HEAD
 Traceback,Traceback,
 URL,ዩ አር ኤል,
 Unsubscribed,ያልተመዘገበ,
+=======
+Tools,መሣሪያዎች,
+Traceback,Traceback,
+URL,ዩ አር ኤል,
+Unsubscribed,ያልተመዘገበ,
+Use Sandbox,ይጠቀሙ ማጠሪያ,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,ተጠቃሚው,
 User ID,የተጠቃሚው መለያ,
 Users,ተጠቃሚዎች,
@@ -556,6 +601,10 @@ Bulk Delete,የጅምላ ሰርዝ,
 Bulk Edit {0},የጅምላ አርትዕ {0},
 Bulk Rename,የጅምላ ይቀየር,
 Bulk Update,የጅምላ ዝማኔ,
+<<<<<<< HEAD
+=======
+Busy,ስራ የሚበዛበት,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,ቁልፍ,
 Button Help,የአዝራር እገዛ,
 Button Label,የአዝራር መለያ ስም,
@@ -692,6 +741,10 @@ Compiled Successfully,በተሳካ ሁኔታ ተቀድቷል።,
 Complete By,በ ተጠናቅቋል,
 Complete Registration,ሙሉ ምዝገባ,
 Complete Setup,ተጠናቋል,
+<<<<<<< HEAD
+=======
+Completed By,ተጠናቅቋል,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,ኢሜይል ፃፍ,
 Condition Detail,የሁኔታዎች ዝርዝር ሁኔታ,
 Conditions,ሁኔታዎች,
@@ -1380,7 +1433,11 @@ Is Submittable,Submittable ነው,
 Is Table,ማውጫ ነው,
 Is Your Company Address,የእርስዎ ኩባንያ አድራሻ ነው,
 It is risky to delete this file: {0}. Please contact your System Manager.,ይህ ፋይል መሰረዝ አደገኛ ነው: {0}. እባክዎ የስርዓት አስተዳዳሪዎን ያግኙ.,
+<<<<<<< HEAD
 Item cannot be added to its own descendants,ንጥል የራሱን ዘር ሊታከሉ አይችሉም,
+=======
+Item cannot be added to its own descendents,ንጥል የራሱን ዘር ሊታከሉ አይችሉም,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,JSON,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},ጃቫስክሪፕት ቅርጸት: frappe.query_reports [ &#39;REPORTNAME&#39;] = {},
@@ -1675,8 +1732,13 @@ Not a valid Workflow Action,ልክ የሆነ የስራ ፍሰት እርምጃ �
 Not a valid user,ትክክለኛ ተጠቃሚ,
 Not a zip file,አይደለም ዚፕ ፋይል,
 Not allowed for {0}: {1},ለ {0} አልተፈቀደም: {1},
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}",ከሰሌዳ {3} ውስጥ በታች የተገናኘው {1} '{2}' የሚገኙት በ {0} ውስጥ መግባት አይፈቀድም,
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},ከሰሌዳ {3} ውስጥ በታች የተገናኘው {1} '{2}' የሚገኙት በ {0} ውስጥ መግባት አይፈቀድም,
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},ለ {0}: {1} በረድፍ {2} አይፈቀድም። የተገደበ መስክ: {3},
+Not allowed for {0}: {1}. Restricted field: {2},ለ {0}: {1} አልተፈቀደም። የተገደበ መስክ: {2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,ያስመጡ አልተፈቀደልህም,
 Not allowed to change {0} after submission,ከገባ በኋላ {0} መቀየር አይፈቀድም,
 Not allowed to print cancelled documents,አይደለም የተሰረዙ ሰነዶችን ማተም አይፈቀድም,
@@ -1804,6 +1866,10 @@ Path to private Key File,ወደ የግል ቁልፍ ፋይል ዱካ።,
 PayPal Settings,የ PayPal ቅንብሮች,
 PayPal payment gateway settings,የ PayPal ክፍያ ፍኖት ቅንብሮች,
 Payment Cancelled,ክፍያ ተሰርዟል,
+<<<<<<< HEAD
+=======
+Payment Failed,ክፍያ አልተሳካም,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,የክፍያ ስኬት,
 Pending Approval,መጽደቅን በመጠባበቅ ላይ,
 Pending Verification,ማረጋገጫ በመጠባበቅ ላይ።,
@@ -3200,6 +3266,10 @@ Click on the link below to approve the request,ጥያቄውን ለማፅደቅ �
 Click on the lock icon to toggle public/private,ሕዝባዊ / የግልን ለመቀየር የቁልፍ አዶው ላይ ጠቅ ያድርጉ።,
 Click on {0} to generate Refresh Token.,Refresh Token ን ለማመንጨት {0} ላይ ጠቅ ያድርጉ።,
 Close Condition,ሁኔታን ዝጋ።,
+<<<<<<< HEAD
+=======
+Column {0},አምድ {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,አምዶች / እርሻዎች።,
 "Configure notifications for mentions, assignments, energy points and more.",ለመጥቀሻዎች ፣ ምደባዎች ፣ የኃይል ነጥቦች እና ሌሎችን በተመለከተ ማሳወቂያዎችን ያዋቅሩ።,
 Contact Email,የዕውቂያ ኢሜይል,
@@ -3281,6 +3351,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,አለመሳካት።,
 Fetching default Global Search documents.,ነባሪ የአለም አቀፍ ፍለጋ ሰነዶችን በማምጣት ላይ።,
 Fetching posts...,ልጥፎችን በማምጣት ላይ ...,
+<<<<<<< HEAD
+=======
+Field Mapping,የመስክ ካርታ,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,ለማጣራት መስክ,
 File Information,ፋይል መረጃ,
 Filter By,አጣራ በ,
@@ -3435,6 +3509,10 @@ No posts yet,እስካሁን ምንም ልጥፎች የሉም።,
 No records will be exported,ምንም መዝገቦች አይላኩም።,
 No results found for {0} in Global Search,በ {0} በአለም ፍለጋ ውስጥ ምንም ውጤቶች አልተገኙም,
 No user found,ምንም ተጠቃሚ አልተገኘም።,
+<<<<<<< HEAD
+=======
+Not Specified,አልተገለጸም ፡፡,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,የማሳወቂያ ምዝግብ ማስታወሻ,
 Notification Settings,የማሳወቂያ ቅንብሮች,
 Notification Subscribed Document,ማስታወቂያ የተመዘገበ ሰነድ,
@@ -3590,6 +3668,10 @@ Untitled Column,ርዕስ አልባ ዓምድ።,
 Untranslated,ያልተተረጎመ,
 Upcoming Events,መጪ ክስተቶች,
 Update Existing Records,ነባር መዛግብቶችን ያዘምኑ።,
+<<<<<<< HEAD
+=======
+Update Type,የዘመኑ ዓይነት,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,ወደ አዲስ ስሪት Updated ተዘምኗል,
 "Updating {0} of {1}, {2}",{0} ከ {1} ፣ {2} ማዘመን,
 Upload file,ፋይል ስቀል,
@@ -3696,16 +3778,28 @@ Designation,ስያሜ,
 Disabled,ተሰናክሏል,
 Doctype,DocType,
 Download Template,አውርድ አብነት,
+<<<<<<< HEAD
+=======
+Dr,ዶ,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,የመጨረሻ ማስረከቢያ ቀን,
 Duplicate,የተባዛ ነገር,
 Edit Profile,አርትዕ መገለጫ,
 Email,ኢሚል,
+<<<<<<< HEAD
+=======
+End Time,መጨረሻ ሰዓት,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,እሴት ያስገቡ,
 Entity Type,የህጋዊ አካል ዓይነት,
 Error,ስሕተት,
 Expired,ጊዜው አልፎበታል,
 Export,ወደ ውጪ ላክ,
 Export not allowed. You need {0} role to export.,ወደ ውጪ ላክ አይፈቀድም. እርስዎ ወደ ውጪ ወደ {0} ሚና ያስፈልገናል.,
+<<<<<<< HEAD
+=======
+Fetching...,በማምጣት ላይ ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,መስክ,
 File Manager,የፋይል አቀናባሪ,
 Filters,ማጣሪያዎች,
@@ -3720,8 +3814,16 @@ Import Data from CSV / Excel files.,ውሂብ ከ CSV / Excel ፋይሎች ያ�
 In Progress,በሂደት ላይ,
 Intermediate,መካከለኛ,
 Invite as User,የተጠቃሚ እንደ ጋብዝ,
+<<<<<<< HEAD
 Loading...,በመጫን ላይ ...,
 Location,አካባቢ,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.","በአገልጋዩ የሽቦ ውቅር ላይ ችግር ያለ ይመስላል. ካልተሳካ, ገንዘቡ ወደ ሂሳብዎ ተመላሽ ይደረጋል.",
+Loading...,በመጫን ላይ ...,
+Location,አካባቢ,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,አንድ ሰው ያልተሟላ ዩ አር ኤል ወደ እናንተ ላከ ይመስላል. ወደ ለማየት ጠይቃቸው.,
+Master,ባለቤት,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,መልእክት,
 Missing Values Required,የሚጎድሉ እሴቶች የሚያስፈልግ,
 Mobile No,የተንቀሳቃሽ ስልክ የለም,
@@ -3733,6 +3835,10 @@ Note,ማስታወሻ,
 Offline,ከመስመር ውጭ,
 Open,ክፈት,
 Page {0} of {1},ገጽ {0} ከ {1},
+<<<<<<< HEAD
+=======
+Pay,ይክፈሉ,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,በመጠባበቅ ላይ,
 Phone,ስልክ,
 Please click on the following link to set your new password,አዲሱን የይለፍ ቃል ለማዘጋጀት በሚከተለው አገናኝ ላይ ጠቅ ያድርጉ,
@@ -3782,6 +3888,10 @@ Welcome to {0},እንኳን በደህና መጡ {0},
 Year,አመት,
 Yearly,በየአመቱ,
 You,አንተ,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,በተጨማሪም በአሳሽዎ ውስጥ ይህን አገናኝ መቅዳት-መለጠፍ ይችላሉ,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,ና,
 {0} Name,{0} ስም,
 {0} is required,{0} ያስፈልጋል,
@@ -4085,6 +4195,10 @@ Custom SCSS,ብጁ SCSS,
 Navbar,ናቫባር,
 Source Message,ምንጭ መልእክት,
 Translated Message,የተተረጎመ መልእክት,
+<<<<<<< HEAD
+=======
+Verified By,በ የተረጋገጡ,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,ይህንን ኮንሶል መጠቀም አጥቂዎች እርስዎን ለመምሰል እና መረጃዎን ለመስረቅ ሊፈቅድላቸው ይችላል። ያልገባዎትን ኮድ አያስገቡ ወይም አይለጥፉ።,
 {0} m,{0} ሜ,
 {0} h,{0} ሰዓት,
@@ -4108,7 +4222,11 @@ No changes in document,በሰነድ ውስጥ ምንም ለውጦች የሉም,
 by Role,በ ሚና,
 Document is only editable by users with role,ሰነድ ሚና ባላቸው ተጠቃሚዎች ብቻ ሊስተካከል የሚችል ነው,
 {0}: Other permission rules may also apply,{0}: - ሌሎች የፈቃድ ሕጎችም ተፈጻሚ ሊሆኑ ይችላሉ,
+<<<<<<< HEAD
 {0} Web page views,{0} የገጽ እይታዎች,
+=======
+{0} Page Views,{0} የገጽ እይታዎች,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,ዘርጋ,
 Collapse,ሰብስብ,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.",ልክ ያልሆነ ተሸካሚ ማስመሰያ ፣ እባክዎን ትክክለኛ የመድረሻ ማስመሰያ በ ‹ተሸካሚ› ያቅርቡ ፡፡,
@@ -4117,6 +4235,10 @@ Collapse,ሰብስብ,
 {0} is not a valid Name,{0} ትክክለኛ ስም አይደለም,
 Your system is being updated. Please refresh again after a few moments.,ስርዓትዎ እየተዘመነ ነው። ከጥቂት ደቂቃዎች በኋላ እባክዎ እንደገና ያድሱ።,
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}: የቀረበው መዝገብ ሊሰረዝ አይችልም። መጀመሪያ እሱን {2} መሰረዝ {3} አለብዎት።,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},ለ {0} ልክ ያልሆነ የስም ዝርዝር ((የጠፋ)),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},ስህተት በ {0} ውስጥ ተከስቷል,
 Status Updated,ሁኔታ ተዘምኗል,
 You can also copy-paste this {0} to your browser,እንዲሁም ይህንን {0} በአሳሽዎ ላይ መገልበጥ-መለጠፍ ይችላሉ,
@@ -4138,11 +4260,21 @@ Is Billing Contact,የሂሳብ አከፋፈል ዕውቂያ ነው,
 Address And Contacts,አድራሻ እና አድራሻዎች,
 Lead Conversion Time,መሪነት የተቀየረበት ጊዜ,
 Due Date Based On,በመነሻ ላይ የተመሠረተ ቀን,
+<<<<<<< HEAD
 Linked Documents,የተገናኙ ሰነዶች,
+=======
+Phone Number,ስልክ ቁጥር,
+Linked Documents,የተገናኙ ሰነዶች,
+Account SID,መለያ SID።,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,ደረጃዎች,
 email,ኢሜል,
 Component,ክፍል,
 Subtitle,ንዑስ ርዕስ,
+<<<<<<< HEAD
+=======
+Global Defaults,ዓለም አቀፍ ነባሪዎች,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,ባዕድ መነሻ,
 Is Public,ይፋዊ ነው,
 This chart will be available to all Users if this is set,ይህ ሰንጠረዥ ይህ ከተዋቀረ ለሁሉም ተጠቃሚዎች ይገኛል,
@@ -4329,6 +4461,10 @@ Dynamic Filters Section,ተለዋዋጭ የማጣሪያዎች ክፍል,
 Please create Card first,እባክዎ መጀመሪያ ካርድ ይፍጠሩ,
 Onboarding Permission,የመሳፈሪያ ፈቃድ,
 Onboarding Step,የመሳፈሪያ ደረጃ,
+<<<<<<< HEAD
+=======
+Is Mandatory,አስገዳጅ ነው,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,ተዘሏል,
 Create Entry,መግቢያ ፍጠር,
 Update Settings,ቅንብሮችን ያዘምኑ,
@@ -4366,6 +4502,10 @@ Message (HTML),መልእክት (HTML),
 Send Attachments,አባሪዎችን ይላኩ,
 Testing,በመሞከር ላይ,
 System Notification,የስርዓት ማስታወቂያ,
+<<<<<<< HEAD
+=======
+WhatsApp,ዋትስአፕ,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,Twilio ቁጥር,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","ዋትስአፕን ለቢዝነስ ለመጠቀም የ <a href=""#Form/Twilio Settings"">Twilio ቅንጅቶችን ያስጀምሩ</a> ፡፡",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","Slack Channel ን ለመጠቀም ፣ <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a> ያክሉ።",
@@ -4500,6 +4640,10 @@ Add to ToDo,ወደ ToDo ያክሉ,
 {0} are currently {1},{0} በአሁኑ ጊዜ {1} ናቸው,
 Currently Replying,በአሁኑ ጊዜ ምላሽ በመስጠት ላይ,
 created {0},የተፈጠረው {0},
+<<<<<<< HEAD
+=======
+Make a call,ደውል,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,ለውጥ,Coins
 Too Many Requests,በጣም ብዙ ጥያቄዎች,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.",ልክ ያልሆነ የፈቃድ ራስጌዎች ፣ ከሚከተሉት በአንዱ ቅድመ ቅጥያ ያለው ማስመሰያ ያክሉ ፦ {0}።,
@@ -4664,6 +4808,7 @@ Value cannot be negative for {0}: {1},እሴት ለ {0} አሉታዊ ሊሆን �
 Negative Value,አሉታዊ እሴት,
 Authentication failed while receiving emails from Email Account: {0}.,ከኢሜል መለያ ኢሜሎችን በሚቀበሉበት ጊዜ ማረጋገጥ አልተሳካም ፦ {0}።,
 Message from server: {0},መልእክት ከአገልጋይ: {0},
+<<<<<<< HEAD
 Add Row,ረድፍ አክል,
 Analytics,ትንታኔ,
 Anonymous,ስም የለሽ,
@@ -4796,3 +4941,5 @@ West Bengal,ምዕራብ ቤንጋል,
 Published on,ታትሟል,
 Bottom,ታች,
 Top,ከላይ,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

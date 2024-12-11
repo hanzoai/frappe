@@ -5,6 +5,7 @@ from frappe.model.document import Document
 
 
 class ModuleProfile(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -18,6 +19,8 @@ class ModuleProfile(Document):
 		module_profile_name: DF.Data
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def onload(self):
 		from frappe.config import get_modules_from_all_apps
 

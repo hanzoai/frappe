@@ -27,12 +27,20 @@ def get_custom_linked_doctype():
 
 def get_custom_doc_for_address_and_contacts():
 	get_custom_linked_doctype()
+<<<<<<< HEAD
 	return frappe.get_doc(
+=======
+	linked_doc = frappe.get_doc(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		{
 			"doctype": "Test Custom Doctype",
 			"test_field": "Hello",
 		}
 	).insert()
+<<<<<<< HEAD
+=======
+	return linked_doc
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def create_linked_address(link_list):

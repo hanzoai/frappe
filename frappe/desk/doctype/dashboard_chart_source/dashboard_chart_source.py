@@ -21,6 +21,7 @@ def get_config(name):
 
 
 class DashboardChartSource(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -34,5 +35,7 @@ class DashboardChartSource(Document):
 		timeseries: DF.Check
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def on_update(self):
 		export_to_files(record_list=[[self.doctype, self.name]], record_module=self.module, create_init=True)

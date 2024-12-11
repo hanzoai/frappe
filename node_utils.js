@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+<<<<<<< HEAD
 const redis = require("@redis/client");
 let bench_path;
 if (process.env.FRAPPE_BENCH_ROOT) {
@@ -13,11 +14,20 @@ const dns = require("dns");
 // Since node17, node resolves to ipv6 unless system is configured otherwise.
 // In Frappe context using ipv4 - 127.0.0.1 is fine.
 dns.setDefaultResultOrder("ipv4first");
+=======
+const redis = require("redis");
+const bench_path = path.resolve(__dirname, "..", "..");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 function get_conf() {
 	// defaults
 	var conf = {
+<<<<<<< HEAD
 		socketio_port: 9000,
+=======
+		redis_async_broker_port: "redis://localhost:12311",
+		socketio_port: 3000,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	};
 
 	var read_config = function (file_path) {
@@ -37,6 +47,7 @@ function get_conf() {
 	read_config("config.json");
 	read_config("sites/common_site_config.json");
 
+<<<<<<< HEAD
 	// set overrides from environment
 	if (process.env.FRAPPE_SITE) {
 		conf.default_site = process.env.FRAPPE_SITE;
@@ -71,6 +82,23 @@ function get_redis_subscriber(kind = "redis_queue", options = {}) {
 		client = redis.createClient({ url: connStr, ...options });
 	}
 	return client;
+=======
+	// set default site
+	if (process.env.FRAPPE_SITE) {
+		conf.default_site = process.env.FRAPPE_SITE;
+	}
+	if (fs.existsSync("sites/currentsite.txt")) {
+		conf.default_site = fs.readFileSync("sites/currentsite.txt").toString().trim();
+	}
+
+	return conf;
+}
+
+function get_redis_subscriber(kind = "redis_socketio", options = {}) {
+	const conf = get_conf();
+	const host = conf[kind] || conf.redis_async_broker_port;
+	return redis.createClient({ url: host, ...options });
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 module.exports = {

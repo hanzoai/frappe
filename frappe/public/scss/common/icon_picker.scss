@@ -60,7 +60,11 @@
 		height: 22px;
 		border-radius: 5px;
 		position: absolute;
+<<<<<<< HEAD
 		top: calc(50% + 2px);
+=======
+		top: calc(50% + 1px);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		left: 8px;
 		content: " ";
 	}

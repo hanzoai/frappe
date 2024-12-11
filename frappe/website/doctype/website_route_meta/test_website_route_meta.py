@@ -29,10 +29,17 @@ class TestWebsiteRouteMeta(FrappeTestCase):
 
 		self.assertTrue(response.status_code, 200)
 
+<<<<<<< HEAD
 		html = self.normalize_html(response.get_data().decode())
 
 		self.assertIn(self.normalize_html("""<meta name="type" content="blog_post">"""), html)
 		self.assertIn(self.normalize_html("""<meta property="og:title" content="My Blog">"""), html)
+=======
+		html = response.get_data().decode()
+
+		self.assertTrue("""<meta name="type" content="blog_post">""" in html)
+		self.assertTrue("""<meta property="og:title" content="My Blog">""" in html)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def tearDown(self):
 		frappe.db.rollback()

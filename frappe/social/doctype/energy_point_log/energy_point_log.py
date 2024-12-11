@@ -19,6 +19,7 @@ from frappe.utils import cint, get_fullname, get_link_to_form, getdate
 
 
 class EnergyPointLog(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -39,6 +40,8 @@ class EnergyPointLog(Document):
 		user: DF.Link
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		self.map_milestone_reference()
 		if self.type in ["Appreciation", "Criticism"] and self.user == self.owner:
@@ -58,7 +61,11 @@ class EnergyPointLog(Document):
 				"energy_point_alert", message=alert_dict, user=self.user, after_commit=True
 			)
 
+<<<<<<< HEAD
 		frappe.cache.hdel("energy_points", self.user)
+=======
+		frappe.cache().hdel("energy_points", self.user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if self.type != "Review" and frappe.get_cached_value(
 			"Notification Settings", self.user, "energy_points_system_notifications"
@@ -95,7 +102,11 @@ class EnergyPointLog(Document):
 		self.reverted = 1
 		self.save(ignore_permissions=True)
 
+<<<<<<< HEAD
 		return frappe.get_doc(
+=======
+		revert_log = frappe.get_doc(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			{
 				"doctype": "Energy Point Log",
 				"points": -(self.points),
@@ -108,6 +119,11 @@ class EnergyPointLog(Document):
 			}
 		).insert(ignore_permissions=True)
 
+<<<<<<< HEAD
+=======
+		return revert_log
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def get_notification_message(doc):
 	owner_name = get_fullname(doc.owner)
@@ -238,6 +254,12 @@ def add_review_points(user, points):
 
 @frappe.whitelist()
 def get_energy_points(user):
+<<<<<<< HEAD
+=======
+	# points = frappe.cache().hget('energy_points', user,
+	# 	lambda: get_user_energy_and_review_points(user))
+	# TODO: cache properly
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	points = get_user_energy_and_review_points(user)
 	return frappe._dict(points.get(user, {}))
 

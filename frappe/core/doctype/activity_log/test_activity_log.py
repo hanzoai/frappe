@@ -8,16 +8,23 @@ from frappe.tests.utils import FrappeTestCase
 
 
 class TestActivityLog(FrappeTestCase):
+<<<<<<< HEAD
 	def setUp(self) -> None:
 		frappe.set_user("Administrator")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_activity_log(self):
 		# test user login log
 		frappe.local.form_dict = frappe._dict(
 			{
 				"cmd": "login",
 				"sid": "Guest",
+<<<<<<< HEAD
 				"pwd": self.ADMIN_PASSWORD or "admin",
+=======
+				"pwd": frappe.conf.admin_password or "admin",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				"usr": "Administrator",
 			}
 		)
@@ -54,13 +61,22 @@ class TestActivityLog(FrappeTestCase):
 		)
 
 		name = names[0]
+<<<<<<< HEAD
 		return frappe.get_doc("Activity Log", name)
+=======
+		auth_log = frappe.get_doc("Activity Log", name)
+		return auth_log
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_brute_security(self):
 		update_system_settings({"allow_consecutive_login_attempts": 3, "allow_login_after_fail": 5})
 
 		frappe.local.form_dict = frappe._dict(
+<<<<<<< HEAD
 			{"cmd": "login", "sid": "Guest", "pwd": self.ADMIN_PASSWORD, "usr": "Administrator"}
+=======
+			{"cmd": "login", "sid": "Guest", "pwd": "admin", "usr": "Administrator"}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 
 		frappe.local.request_ip = "127.0.0.1"

@@ -96,19 +96,32 @@
 
 .frappe-control[data-fieldtype="Color"] {
 	input {
+<<<<<<< HEAD
 		padding-left: 32px;
+=======
+		padding-left: 38px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	.control-input {
 		position: relative;
 	}
 	.selected-color {
 		cursor: pointer;
+<<<<<<< HEAD
 		width: 16px;
 		height: 16px;
 		border-radius: 5px;
 		background-color: red;
 		position: absolute;
 		top: 6px;
+=======
+		width: 22px;
+		height: 22px;
+		border-radius: 5px;
+		background-color: red;
+		position: absolute;
+		top: 5px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		left: 8px;
 		content: " ";
 		&.no-value {

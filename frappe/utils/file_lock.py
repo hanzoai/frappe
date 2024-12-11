@@ -65,7 +65,13 @@ def delete_lock(name):
 
 
 def get_lock_path(name):
+<<<<<<< HEAD
 	return get_site_path(LOCKS_DIR, f"{name.lower()}.lock")
+=======
+	name = name.lower()
+	lock_path = get_site_path(LOCKS_DIR, name + ".lock")
+	return lock_path
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def release_document_locks():

@@ -38,7 +38,10 @@ def export_data(
 	file_type="CSV",
 	template=False,
 	filters=None,
+<<<<<<< HEAD
 	export_without_column_meta=False,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 ):
 	_doctype = doctype
 	if isinstance(_doctype, list):
@@ -50,6 +53,7 @@ def export_data(
 		filters=filters,
 		method=parent_doctype,
 	)
+<<<<<<< HEAD
 
 	template_bool = template
 	if isinstance(template, str):
@@ -59,6 +63,8 @@ def export_data(
 	if isinstance(export_without_column_meta, str):
 		export_without_column_meta_bool = export_without_column_meta.lower() == "true"
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	exporter = DataExporter(
 		doctype=doctype,
 		parent_doctype=parent_doctype,
@@ -66,9 +72,14 @@ def export_data(
 		with_data=with_data,
 		select_columns=select_columns,
 		file_type=file_type,
+<<<<<<< HEAD
 		template=template_bool,
 		filters=filters,
 		export_without_column_meta=export_without_column_meta_bool,
+=======
+		template=template,
+		filters=filters,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	)
 	exporter.build_response()
 
@@ -84,7 +95,10 @@ class DataExporter:
 		file_type="CSV",
 		template=False,
 		filters=None,
+<<<<<<< HEAD
 		export_without_column_meta=False,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	):
 		self.doctype = doctype
 		self.parent_doctype = parent_doctype
@@ -94,7 +108,10 @@ class DataExporter:
 		self.file_type = file_type
 		self.template = template
 		self.filters = filters
+<<<<<<< HEAD
 		self.export_without_column_meta = export_without_column_meta
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.data_keys = get_data_keys()
 
 		self.prepare_args()
@@ -120,10 +137,16 @@ class DataExporter:
 		self.column_start_end = {}
 
 		if self.all_doctypes:
+<<<<<<< HEAD
 			self.child_doctypes = [
 				dict(doctype=df.options, parentfield=df.fieldname)
 				for df in frappe.get_meta(self.doctype).get_table_fields()
 			]
+=======
+			self.child_doctypes = []
+			for df in frappe.get_meta(self.doctype).get_table_fields():
+				self.child_doctypes.append(dict(doctype=df.options, parentfield=df.fieldname))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def build_response(self):
 		self.writer = UnicodeWriter()
@@ -132,10 +155,14 @@ class DataExporter:
 		if self.template:
 			self.add_main_header()
 
+<<<<<<< HEAD
 		# No need of empty row at the start
 		if not self.export_without_column_meta:
 			self.writer.writerow([""])
 
+=======
+		self.writer.writerow([""])
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.tablerow = [self.data_keys.doctype]
 		self.labelrow = [_("Column Labels:")]
 		self.fieldrow = [self.data_keys.columns]
@@ -306,7 +333,11 @@ class DataExporter:
 
 		self.tablerow.append("")
 		self.fieldrow.append(docfield.fieldname)
+<<<<<<< HEAD
 		self.labelrow.append(_(docfield.label, context=docfield.parent))
+=======
+		self.labelrow.append(_(docfield.label))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.mandatoryrow.append(docfield.reqd and "Yes" or "No")
 		self.typerow.append(docfield.fieldtype)
 		self.inforow.append(self.getinforow(docfield))
@@ -343,6 +374,7 @@ class DataExporter:
 			return ""
 
 	def add_field_headings(self):
+<<<<<<< HEAD
 		if not self.export_without_column_meta:
 			self.writer.writerow(self.tablerow)
 
@@ -355,6 +387,14 @@ class DataExporter:
 			self.writer.writerow(self.typerow)
 			self.writer.writerow(self.inforow)
 
+=======
+		self.writer.writerow(self.tablerow)
+		self.writer.writerow(self.labelrow)
+		self.writer.writerow(self.fieldrow)
+		self.writer.writerow(self.mandatoryrow)
+		self.writer.writerow(self.typerow)
+		self.writer.writerow(self.inforow)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if self.template:
 			self.writer.writerow([self.data_keys.data_separator])
 

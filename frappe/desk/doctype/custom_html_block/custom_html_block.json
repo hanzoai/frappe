@@ -93,7 +93,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-08-28 20:25:00.740795",
+=======
+ "modified": "2023-05-30 14:33:31.994738",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Custom HTML Block",
@@ -106,7 +110,11 @@
    "print": 1,
    "read": 1,
    "report": 1,
+<<<<<<< HEAD
    "role": "Desk User",
+=======
+   "role": "All",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "share": 1
   },
   {
@@ -118,7 +126,11 @@
    "print": 1,
    "read": 1,
    "report": 1,
+<<<<<<< HEAD
    "role": "Desk User",
+=======
+   "role": "All",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "share": 1,
    "write": 1
   },

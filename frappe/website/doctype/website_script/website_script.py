@@ -8,6 +8,7 @@ from frappe.model.document import Document
 
 
 class WebsiteScript(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -19,6 +20,8 @@ class WebsiteScript(Document):
 		javascript: DF.Code | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def on_update(self):
 		"""clear cache"""
 		frappe.clear_cache(user="Guest")

@@ -142,7 +142,11 @@ frappe.report_utils = {
 	},
 
 	get_filter_values(filters) {
+<<<<<<< HEAD
 		return filters
+=======
+		let filter_values = filters
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			.map((f) => {
 				var v = f.default;
 				return {
@@ -153,6 +157,10 @@ frappe.report_utils = {
 				Object.assign(acc, f);
 				return acc;
 			}, {});
+<<<<<<< HEAD
+=======
+		return filter_values;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 
 	get_result_of_fn(fn, values) {
@@ -234,7 +242,11 @@ frappe.report_utils = {
 			const is_query_report = frappe.get_route()[0] === "query-report";
 			const report = is_query_report ? frappe.query_report : cur_list;
 			const columns = report.columns.filter((col) => col.hidden !== 1);
+<<<<<<< HEAD
 			let PREVIEW_DATA = [
+=======
+			PREVIEW_DATA = [
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				columns.map((col) => __(is_query_report ? col.label : col.name)),
 				...report.data
 					.slice(0, 3)
@@ -255,14 +267,20 @@ frappe.report_utils = {
 
 		dialog.fields_dict["file_format"].df.onchange = () => update_csv_preview(dialog);
 		dialog.fields_dict["csv_quoting"].df.onchange = () => update_csv_preview(dialog);
+<<<<<<< HEAD
 		dialog.fields_dict["csv_delimiter"].df.onchange = () => update_csv_preview(dialog);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		dialog.fields_dict["csv_delimiter"].df.onchange = () => {
 			if (!dialog.get_value("csv_delimiter")) {
 				dialog.set_value("csv_delimiter", ",");
 			}
 			update_csv_preview(dialog);
 		};
+<<<<<<< HEAD
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return dialog;
 	},
 

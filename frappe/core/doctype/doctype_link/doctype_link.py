@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class DocTypeLink(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -26,4 +27,6 @@ class DocTypeLink(Document):
 		parenttype: DF.Data
 		table_fieldname: DF.Data | None
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	pass

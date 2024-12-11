@@ -2,7 +2,11 @@
  "actions": [],
  "allow_rename": 1,
  "creation": "2013-01-10 16:34:31",
+<<<<<<< HEAD
  "description": "Create and send emails to a specific group of subscribers periodically.",
+=======
+ "description": "Create and Send Newsletters",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "doctype": "DocType",
  "document_type": "Other",
  "engine": "InnoDB",
@@ -12,7 +16,10 @@
   "column_break_3",
   "total_recipients",
   "column_break_12",
+<<<<<<< HEAD
   "total_views",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "email_sent",
   "from_section",
   "sender_name",
@@ -29,7 +36,10 @@
   "message",
   "message_md",
   "message_html",
+<<<<<<< HEAD
   "campaign",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "attachments",
   "send_unsubscribe_link",
   "send_webview_link",
@@ -230,6 +240,7 @@
   {
    "fieldname": "column_break_3",
    "fieldtype": "Column Break"
+<<<<<<< HEAD
   },
   {
    "default": "0",
@@ -244,6 +255,8 @@
    "fieldtype": "Link",
    "label": "Campaign",
    "options": "Marketing Campaign"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "has_web_view": 1,
@@ -268,6 +281,10 @@
    "read": 1,
    "report": 1,
    "role": "Newsletter Manager",
+<<<<<<< HEAD
+=======
+   "set_user_permissions": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "share": 1,
    "write": 1
   }
@@ -275,7 +292,10 @@
  "route": "newsletters",
  "sort_field": "modified",
  "sort_order": "ASC",
+<<<<<<< HEAD
  "states": [],
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "title_field": "subject",
  "track_changes": 1
 }

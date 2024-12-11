@@ -8,6 +8,7 @@ from frappe.query_builder.functions import Now
 
 
 class ScheduledJobLog(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -22,6 +23,8 @@ class ScheduledJobLog(Document):
 		status: DF.Literal["Scheduled", "Complete", "Failed"]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@staticmethod
 	def clear_old_logs(days=90):
 		table = frappe.qb.DocType("Scheduled Job Log")

@@ -64,7 +64,11 @@
 .gantt-container .popup-wrapper {
 	min-width: 9rem;
 	border-radius: var(--border-radius);
+<<<<<<< HEAD
 	@include get_textstyle("sm", "regular");
+=======
+	font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	.title {
 		color: white;

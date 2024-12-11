@@ -10,6 +10,7 @@ from frappe.utils import cint, now_datetime
 
 
 class TransactionLog(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -30,6 +31,8 @@ class TransactionLog(Document):
 		transaction_hash: DF.SmallText | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def before_insert(self):
 		index = get_current_index()
 		self.row_index = index

@@ -121,6 +121,10 @@ class FullTextSearch:
 		ix = self.get_index()
 
 		results = None
+<<<<<<< HEAD
+=======
+		out = []
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		search_fields = self.get_fields_to_search()
 		fieldboosts = {}
@@ -142,7 +146,14 @@ class FullTextSearch:
 				filter_scoped = Prefix(self.id, scope)
 			results = searcher.search(query, limit=limit, filter=filter_scoped)
 
+<<<<<<< HEAD
 			return [self.parse_result(r) for r in results]
+=======
+			for r in results:
+				out.append(self.parse_result(r))
+
+		return out
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class FuzzyTermExtended(FuzzyTerm):

@@ -2,7 +2,10 @@
 // don't remove this line (used in test)
 
 window.disable_signup = {{ disable_signup and "true" or "false" }};
+<<<<<<< HEAD
 window.show_footer_on_login = {{ show_footer_on_login and "true" or "false" }};
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 window.login = {};
 
@@ -20,12 +23,20 @@ login.bind_events = function () {
 		args.cmd = "login";
 		args.usr = frappe.utils.xss_sanitise(($("#login_email").val() || "").trim());
 		args.pwd = $("#login_password").val();
+<<<<<<< HEAD
+=======
+		args.device = "desktop";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (!args.usr || !args.pwd) {
 			{# striptags is used to remove newlines, e is used for escaping #}
 			frappe.msgprint("{{ _('Both login and password required') | striptags | e }}");
 			return false;
 		}
+<<<<<<< HEAD
 		login.call(args, null, "/login");
+=======
+		login.call(args);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return false;
 	});
 
@@ -93,6 +104,10 @@ login.bind_events = function () {
 		args.cmd = "{{ ldap_settings.method }}";
 		args.usr = ($("#login_email").val() || "").trim();
 		args.pwd = $("#login_password").val();
+<<<<<<< HEAD
+=======
+		args.device = "desktop";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (!args.usr || !args.pwd) {
 			login.set_status({{ _("Both login and password required") | tojson }}, 'red');
 			return false;
@@ -168,12 +183,19 @@ login.signup = function () {
 
 
 // Login
+<<<<<<< HEAD
 login.call = function (args, callback, url="/") {
+=======
+login.call = function (args, callback) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	login.set_status({{ _("Verifying...") | tojson }}, 'blue');
 
 	return frappe.call({
 		type: "POST",
+<<<<<<< HEAD
 		url: url,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		args: args,
 		callback: callback,
 		freeze: true,
@@ -307,10 +329,13 @@ frappe.ready(function () {
 		$(window).trigger("hashchange");
 	}
 
+<<<<<<< HEAD
 	if (window.show_footer_on_login) {
 		$("body .web-footer").show();
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	$(".form-signup, .form-forgot, .form-login-with-email-link").removeClass("hide");
 	$(document).trigger('login_rendered');
 });
@@ -393,5 +418,8 @@ var continue_email = function (setup, prompt) {
 		$('#otp_div').prepend(email_div);
 	}
 }
+<<<<<<< HEAD
 
 login.route();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -4,6 +4,7 @@
 frappe.provide("frappe.model");
 
 $.extend(frappe.model, {
+<<<<<<< HEAD
 	all_fieldtypes: [
 		"Autocomplete",
 		"Attach",
@@ -46,6 +47,8 @@ $.extend(frappe.model, {
 		"Time",
 	],
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	no_value_type: [
 		"Section Break",
 		"Column Break",
@@ -108,6 +111,7 @@ $.extend(frappe.model, {
 		"docstatus",
 	],
 
+<<<<<<< HEAD
 	html_fieldtypes: [
 		"Text Editor",
 		"Text",
@@ -118,6 +122,8 @@ $.extend(frappe.model, {
 		"Code",
 	],
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	std_fields: [
 		{ fieldname: "name", fieldtype: "Link", label: __("ID") },
 		{ fieldname: "owner", fieldtype: "Link", label: __("Created By"), options: "User" },
@@ -288,6 +294,7 @@ $.extend(frappe.model, {
 
 	init_doctype: function (doctype) {
 		var meta = locals.DocType[doctype];
+<<<<<<< HEAD
 		for (const asset_key of [
 			"__list_js",
 			"__custom_list_js",
@@ -300,6 +307,23 @@ $.extend(frappe.model, {
 			}
 		}
 
+=======
+		if (meta.__list_js) {
+			eval(meta.__list_js);
+		}
+		if (meta.__custom_list_js) {
+			eval(meta.__custom_list_js);
+		}
+		if (meta.__calendar_js) {
+			eval(meta.__calendar_js);
+		}
+		if (meta.__map_js) {
+			eval(meta.__map_js);
+		}
+		if (meta.__tree_js) {
+			eval(meta.__tree_js);
+		}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (meta.__templates) {
 			$.extend(frappe.templates, meta.__templates);
 		}
@@ -358,9 +382,17 @@ $.extend(frappe.model, {
 	},
 
 	unscrub: function (txt) {
+<<<<<<< HEAD
 		return (txt || "").replace(/-|_/g, " ").replace(/\w*/g, function (keywords) {
 			return keywords.charAt(0).toUpperCase() + keywords.substr(1).toLowerCase();
 		});
+=======
+		return __(txt || "")
+			.replace(/-|_/g, " ")
+			.replace(/\w*/g, function (keywords) {
+				return keywords.charAt(0).toUpperCase() + keywords.substr(1).toLowerCase();
+			});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 
 	can_create: function (doctype) {
@@ -472,14 +504,30 @@ $.extend(frappe.model, {
 		return frappe.boot.user.can_share.indexOf(doctype) !== -1;
 	},
 
+<<<<<<< HEAD
+=======
+	can_set_user_permissions: function (doctype, frm) {
+		// system manager can always set user permissions
+		if (frappe.user_roles.includes("System Manager")) return true;
+
+		if (frm) return frm.perm[0].set_user_permissions === 1;
+		return frappe.boot.user.can_set_user_permissions.indexOf(doctype) !== -1;
+	},
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	has_value: function (dt, dn, fn) {
 		// return true if property has value
 		var val = locals[dt] && locals[dt][dn] && locals[dt][dn][fn];
 		var df = frappe.meta.get_docfield(dt, fn, dn);
 
+<<<<<<< HEAD
 		let ret;
 		if (frappe.model.table_fields.includes(df.fieldtype)) {
 			ret = false;
+=======
+		if (frappe.model.table_fields.includes(df.fieldtype)) {
+			var ret = false;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			$.each(locals[df.options] || {}, function (k, d) {
 				if (d.parent == dn && d.parenttype == dt && d.parentfield == df.fieldname) {
 					ret = true;
@@ -487,7 +535,11 @@ $.extend(frappe.model, {
 				}
 			});
 		} else {
+<<<<<<< HEAD
 			ret = !is_null(val);
+=======
+			var ret = !is_null(val);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		return ret ? true : false;
 	},
@@ -565,7 +617,11 @@ $.extend(frappe.model, {
 				tasks.push(() => frappe.model.trigger(key, value, doc, skip_dirty_trigger));
 			} else {
 				// execute link triggers (want to reselect to execute triggers)
+<<<<<<< HEAD
 				if (["Link", "Dynamic Link"].includes(fieldtype) && doc) {
+=======
+				if (in_list(["Link", "Dynamic Link"], fieldtype) && doc) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					tasks.push(() => frappe.model.trigger(key, value, doc, skip_dirty_trigger));
 				}
 			}
@@ -632,6 +688,7 @@ $.extend(frappe.model, {
 	},
 
 	get_children: function (doctype, parent, parentfield, filters) {
+<<<<<<< HEAD
 		let doc;
 		if ($.isPlainObject(doctype)) {
 			doc = doctype;
@@ -639,6 +696,14 @@ $.extend(frappe.model, {
 			parentfield = parent;
 		} else {
 			doc = frappe.get_doc(doctype, parent);
+=======
+		if ($.isPlainObject(doctype)) {
+			var doc = doctype;
+			var filters = parentfield;
+			var parentfield = parent;
+		} else {
+			var doc = frappe.get_doc(doctype, parent);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		var children = doc[parentfield] || [];
@@ -650,7 +715,12 @@ $.extend(frappe.model, {
 	},
 
 	clear_table: function (doc, parentfield) {
+<<<<<<< HEAD
 		for (const d of doc[parentfield] || []) {
+=======
+		for (var i = 0, l = (doc[parentfield] || []).length; i < l; i++) {
+			var d = doc[parentfield][i];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			delete locals[d.doctype][d.name];
 		}
 		doc[parentfield] = [];
@@ -669,8 +739,13 @@ $.extend(frappe.model, {
 
 		var parent = null;
 		if (doc.parenttype) {
+<<<<<<< HEAD
 			parent = doc.parent;
 			var parenttype = doc.parenttype,
+=======
+			var parent = doc.parent,
+				parenttype = doc.parenttype,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				parentfield = doc.parentfield;
 		}
 		delete locals[doctype][name];
@@ -856,9 +931,15 @@ $.extend(frappe.model, {
 			}
 
 			if (
+<<<<<<< HEAD
 				(frm.doc.fields?.find((i) => i.fieldname === "latitude") &&
 					frm.doc.fields?.find((i) => i.fieldname === "longitude")) ||
 				frm.doc.fields?.find(
+=======
+				(frm.doc.fields.find((i) => i.fieldname === "latitude") &&
+					frm.doc.fields.find((i) => i.fieldname === "longitude")) ||
+				frm.doc.fields.find(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					(i) => i.fieldname === "location" && i.fieldtype == "Geolocation"
 				)
 			) {

@@ -1,13 +1,22 @@
 .filter-icon.active {
+<<<<<<< HEAD
 	--icon-stroke: var(--primary);
+=======
+	--icon-stroke: var(--text-on-blue);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .filter-popover {
 	min-width: 500px;
 	min-height: 50px;
+<<<<<<< HEAD
 	@include get_textstyle("base", "regular");
 	z-index: 1019;
 	border: 1px solid var(--border-color);
+=======
+	font-size: var(--text-md);
+	z-index: 1019;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .filter-area {
@@ -31,6 +40,7 @@
 		}
 
 		.awesomplete {
+<<<<<<< HEAD
 			& > ul,
 			& > [role="listbox"] {
 				min-width: 100%;
@@ -38,6 +48,13 @@
 
 				& > li,
 				& > [role="option"] {
+=======
+			ul[role="listbox"] {
+				min-width: 100%;
+				width: auto;
+
+				li {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					max-width: 300px;
 				}
 			}
@@ -94,7 +111,11 @@
 			}
 
 			.remove-filter {
+<<<<<<< HEAD
 				@include get_textstyle("sm", "regular");
+=======
+				font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				color: var(--primary);
 			}
 

@@ -11,18 +11,24 @@ class SiteNotSpecifiedError(Exception):
 		super(Exception, self).__init__(self.message)
 
 
+<<<<<<< HEAD
 class UrlSchemeNotSupported(Exception):
 	pass
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 class ValidationError(Exception):
 	http_status_code = 417
 
 
+<<<<<<< HEAD
 class FrappeTypeError(TypeError):
 	http_status_code = 417
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 class AuthenticationError(Exception):
 	http_status_code = 401
 
@@ -64,8 +70,12 @@ class RequestToken(Exception):
 
 
 class Redirect(Exception):
+<<<<<<< HEAD
 	def __init__(self, http_status_code: int = 301):
 		self.http_status_code = http_status_code
+=======
+	http_status_code = 301
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class CSRFTokenError(Exception):
@@ -300,6 +310,7 @@ class InvalidKeyError(ValidationError):
 	http_status_code = 401
 	title = "Invalid Key"
 	message = "The document key is invalid"
+<<<<<<< HEAD
 
 
 class CommandFailedError(Exception):
@@ -307,3 +318,5 @@ class CommandFailedError(Exception):
 		super().__init__(message)
 		self.out = out
 		self.err = err
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

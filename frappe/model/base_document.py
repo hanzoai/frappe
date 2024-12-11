@@ -2,9 +2,14 @@
 # License: MIT. See LICENSE
 import datetime
 import json
+<<<<<<< HEAD
 import weakref
 from functools import cached_property
 from typing import TYPE_CHECKING, TypeVar
+=======
+import types
+from functools import cached_property
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 from frappe import _, _dict
@@ -34,12 +39,15 @@ from frappe.utils import (
 )
 from frappe.utils.html_utils import unescape_html
 
+<<<<<<< HEAD
 if TYPE_CHECKING:
 	from frappe.model.document import Document
 
 D = TypeVar("D", bound="Document")
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 max_positive_value = {"smallint": 2**15 - 1, "int": 2**31 - 1, "bigint": 2**63 - 1}
 
 DOCTYPE_TABLE_FIELDS = [
@@ -55,6 +63,7 @@ DOCTYPES_FOR_DOCTYPE = {"DocType", *TABLE_DOCTYPES_FOR_DOCTYPE.values()}
 
 
 def get_controller(doctype):
+<<<<<<< HEAD
 	"""
 	Returns the locally cached **class** object of the given DocType.
 	For `custom` type, returns `frappe.model.document.Document`.
@@ -68,10 +77,57 @@ def get_controller(doctype):
 	site_controllers = frappe.controllers.setdefault(frappe.local.site, {})
 	if doctype not in site_controllers:
 		site_controllers[doctype] = import_controller(doctype)
+=======
+	"""Returns the **class** object of the given DocType.
+	For `custom` type, returns `frappe.model.document.Document`.
+
+	:param doctype: DocType name as string."""
+
+	def _get_controller():
+		from frappe.model.document import Document
+		from frappe.utils.nestedset import NestedSet
+
+		module_name, custom = frappe.db.get_value(
+			"DocType", doctype, ("module", "custom"), cache=not frappe.flags.in_migrate
+		) or ("Core", False)
+
+		if custom:
+			is_tree = frappe.db.get_value("DocType", doctype, "is_tree", ignore=True, cache=True)
+			_class = NestedSet if is_tree else Document
+		else:
+			class_overrides = frappe.get_hooks("override_doctype_class")
+			if class_overrides and class_overrides.get(doctype):
+				import_path = class_overrides[doctype][-1]
+				module_path, classname = import_path.rsplit(".", 1)
+				module = frappe.get_module(module_path)
+				if not hasattr(module, classname):
+					raise ImportError(f"{doctype}: {classname} does not exist in module {module_path}")
+			else:
+				module = load_doctype_module(doctype, module_name)
+				classname = doctype.replace(" ", "").replace("-", "")
+
+			if hasattr(module, classname):
+				_class = getattr(module, classname)
+				if issubclass(_class, BaseDocument):
+					_class = getattr(module, classname)
+				else:
+					raise ImportError(doctype)
+			else:
+				raise ImportError(doctype)
+		return _class
+
+	if frappe.local.dev_server or frappe.flags.in_migrate:
+		return _get_controller()
+
+	site_controllers = frappe.controllers.setdefault(frappe.local.site, {})
+	if doctype not in site_controllers:
+		site_controllers[doctype] = _get_controller()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return site_controllers[doctype]
 
 
+<<<<<<< HEAD
 def import_controller(doctype):
 	from frappe.model.document import Document
 	from frappe.utils.nestedset import NestedSet
@@ -112,6 +168,11 @@ def import_controller(doctype):
 class BaseDocument:
 	_reserved_keywords = frozenset(
 		(
+=======
+class BaseDocument:
+	_reserved_keywords = frozenset(
+		{
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			"doctype",
 			"meta",
 			"flags",
@@ -123,7 +184,11 @@ class BaseDocument:
 			"_reserved_keywords",
 			"permitted_fieldnames",
 			"dont_update_if_missing",
+<<<<<<< HEAD
 		)
+=======
+		}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	)
 
 	def __init__(self, d):
@@ -163,7 +228,10 @@ class BaseDocument:
 
 		state.pop("meta", None)
 		state.pop("permitted_fieldnames", None)
+<<<<<<< HEAD
 		state.pop("_parent_doc", None)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def update(self, d):
 		"""Update multiple fields of a doctype using a dictionary of key-value pairs.
@@ -243,7 +311,11 @@ class BaseDocument:
 		if key in self.__dict__:
 			del self.__dict__[key]
 
+<<<<<<< HEAD
 	def append(self, key: str, value: D | dict | None = None) -> D:
+=======
+	def append(self, key, value=None):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""Append an item to a child table.
 
 		Example:
@@ -259,6 +331,7 @@ class BaseDocument:
 		if (table := self.__dict__.get(key)) is None:
 			self.__dict__[key] = table = []
 
+<<<<<<< HEAD
 		ret_value = self._init_child(value, key)
 		table.append(ret_value)
 
@@ -283,6 +356,15 @@ class BaseDocument:
 	@parent_doc.deleter
 	def parent_doc(self):
 		self._parent_doc = None
+=======
+		value = self._init_child(value, key)
+		table.append(value)
+
+		# reference parent document
+		value.parent_doc = self
+
+		return value
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def extend(self, key, value):
 		try:
@@ -346,7 +428,11 @@ class BaseDocument:
 
 	def get_valid_dict(
 		self, sanitize=True, convert_dates_to_str=False, ignore_nulls=False, ignore_virtual=False
+<<<<<<< HEAD
 	) -> _dict:
+=======
+	) -> dict:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		d = _dict()
 		field_values = self.__dict__
 
@@ -379,7 +465,11 @@ class BaseDocument:
 						)
 
 				if isinstance(value, list) and df.fieldtype not in table_fields:
+<<<<<<< HEAD
 					frappe.throw(_("Value for {0} cannot be a list").format(_(df.label, context=df.parent)))
+=======
+					frappe.throw(_("Value for {0} cannot be a list").format(_(df.label)))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 				if df.fieldtype == "Check":
 					value = 1 if cint(value) else 0
@@ -388,7 +478,11 @@ class BaseDocument:
 					value = cint(value)
 
 				elif df.fieldtype == "JSON" and isinstance(value, dict):
+<<<<<<< HEAD
 					value = json.dumps(value, separators=(",", ":"))
+=======
+					value = json.dumps(value, sort_keys=True, indent=4, separators=(",", ": "))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 				elif df.fieldtype in float_like_fields and not isinstance(value, float):
 					value = flt(value)
@@ -690,10 +784,14 @@ class BaseDocument:
 	def update_modified(self):
 		"""Update modified timestamp"""
 		self.set("modified", now())
+<<<<<<< HEAD
 		if getattr(self.meta, "issingle", False):
 			frappe.db.set_single_value(self.doctype, "modified", self.modified, update_modified=False)
 		else:
 			frappe.db.set_value(self.doctype, self.name, "modified", self.modified, update_modified=False)
+=======
+		frappe.db.set_value(self.doctype, self.name, "modified", self.modified, update_modified=False)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def _fix_numeric_types(self):
 		for df in self.meta.get("fields"):
@@ -715,9 +813,13 @@ class BaseDocument:
 
 		def get_msg(df):
 			if df.fieldtype in table_fields:
+<<<<<<< HEAD
 				return "{}: {}: {}".format(
 					_("Error"), _("Data missing in table"), _(df.label, context=df.parent)
 				)
+=======
+				return "{}: {}: {}".format(_("Error"), _("Data missing in table"), _(df.label))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			# check if parentfield exists (only applicable for child table doctype)
 			elif self.get("parentfield"):
@@ -727,10 +829,17 @@ class BaseDocument:
 					_("Row"),
 					self.idx,
 					_("Value missing for"),
+<<<<<<< HEAD
 					_(df.label, context=df.parent),
 				)
 
 			return _("Error: Value missing for {0}: {1}").format(_(df.parent), _(df.label, context=df.parent))
+=======
+					_(df.label),
+				)
+
+			return _("Error: Value missing for {0}: {1}").format(_(df.parent), _(df.label))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		def has_content(df):
 			value = cstr(self.get(df.fieldname))
@@ -765,9 +874,15 @@ class BaseDocument:
 		def get_msg(df, docname):
 			# check if parentfield exists (only applicable for child table doctype)
 			if self.get("parentfield"):
+<<<<<<< HEAD
 				return "{} #{}: {}: {}".format(_("Row"), self.idx, _(df.label, context=df.parent), docname)
 
 			return f"{_(df.label, context=df.parent)}: {docname}"
+=======
+				return "{} #{}: {}: {}".format(_("Row"), self.idx, _(df.label), docname)
+
+			return f"{_(df.label)}: {docname}"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		invalid_links = []
 		cancelled_links = []
@@ -1012,7 +1127,11 @@ class BaseDocument:
 
 		frappe.throw(
 			_("{0}: '{1}' ({3}) will get truncated, as max characters allowed is {2}").format(
+<<<<<<< HEAD
 				reference, frappe.bold(_(df.label, context=df.parent)), max_length, value
+=======
+				reference, frappe.bold(_(df.label)), max_length, value
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			),
 			frappe.CharacterLengthExceededError,
 			title=_("Value too big"),
@@ -1047,7 +1166,11 @@ class BaseDocument:
 					frappe.throw(
 						_("{0} Not allowed to change {1} after submission from {2} to {3}").format(
 							f"Row #{self.idx}:" if self.get("parent") else "",
+<<<<<<< HEAD
 							frappe.bold(_(df.label, context=df.parent)),
+=======
+							frappe.bold(_(df.label)),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							frappe.bold(db_value),
 							frappe.bold(self_value),
 						),
@@ -1233,15 +1356,26 @@ class BaseDocument:
 
 	def reset_values_if_no_permlevel_access(self, has_access_to, high_permlevel_fields):
 		"""If the user does not have permissions at permlevel > 0, then reset the values to original / default"""
+<<<<<<< HEAD
 		to_reset = [
 			df
 			for df in high_permlevel_fields
+=======
+		to_reset = []
+
+		for df in high_permlevel_fields:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if (
 				df.permlevel not in has_access_to
 				and df.fieldtype not in display_fieldtypes
 				and df.fieldname not in self.flags.get("ignore_permlevel_for_fields", [])
+<<<<<<< HEAD
 			)
 		]
+=======
+			):
+				to_reset.append(df)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if to_reset:
 			if self.is_new():
@@ -1249,7 +1383,11 @@ class BaseDocument:
 				ref_doc = frappe.new_doc(self.doctype)
 			else:
 				# get values from old doc
+<<<<<<< HEAD
 				if self.parent_doc:
+=======
+				if self.get("parent_doc"):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					parent_doc = self.parent_doc.get_latest()
 					child_docs = [d for d in parent_doc.get(self.parentfield) if d.name == self.name]
 					if not child_docs:
@@ -1308,7 +1446,11 @@ def _filter(data, filters, limit=None):
 
 	for d in data:
 		for f, fval in _filters.items():
+<<<<<<< HEAD
 			if not compare(getattr(d, f, None), fval[0], fval[1]):
+=======
+			if not frappe.compare(getattr(d, f, None), fval[0], fval[1]):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				break
 		else:
 			out.append(d)

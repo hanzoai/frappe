@@ -47,8 +47,11 @@ $.extend(frappe.model, {
 			// set title field / name as name
 			if (meta.autoname && meta.autoname.indexOf("field:") !== -1) {
 				doc[meta.autoname.substr(6)] = frappe.route_options.name_field;
+<<<<<<< HEAD
 			} else if (meta.autoname && meta.autoname === "prompt") {
 				doc.__newname = frappe.route_options.name_field;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			} else if (meta.title_field) {
 				doc[meta.title_field] = frappe.route_options.name_field;
 			}
@@ -62,7 +65,11 @@ $.extend(frappe.model, {
 				var df = frappe.meta.has_field(doctype, fieldname);
 				if (
 					df &&
+<<<<<<< HEAD
 					["Link", "Data", "Select", "Dynamic Link"].includes(df.fieldtype) &&
+=======
+					in_list(["Link", "Data", "Select", "Dynamic Link"], df.fieldtype) &&
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					!df.no_copy
 				) {
 					doc[fieldname] = value;
@@ -84,6 +91,7 @@ $.extend(frappe.model, {
 	},
 
 	set_default_values: function (doc, parent_doc) {
+<<<<<<< HEAD
 		let doctype = doc.doctype;
 		let docfields = frappe.meta.get_docfields(doctype);
 		let updated = [];
@@ -117,6 +125,32 @@ $.extend(frappe.model, {
 				doc[f.fieldname] = f.options.split("\n")[0];
 			}
 		});
+=======
+		var doctype = doc.doctype;
+		var docfields = frappe.meta.get_docfields(doctype);
+		var updated = [];
+		for (var fid = 0; fid < docfields.length; fid++) {
+			var f = docfields[fid];
+			if (!in_list(frappe.model.no_value_type, f.fieldtype) && doc[f.fieldname] == null) {
+				if (f.no_default) continue;
+				var v = frappe.model.get_default_value(f, doc, parent_doc);
+				if (v) {
+					if (in_list(["Int", "Check"], f.fieldtype)) v = cint(v);
+					else if (in_list(["Currency", "Float"], f.fieldtype)) v = flt(v);
+
+					doc[f.fieldname] = v;
+					updated.push(f.fieldname);
+				} else if (
+					f.fieldtype == "Select" &&
+					f.options &&
+					typeof f.options === "string" &&
+					!in_list(["[Select]", "Loading..."], f.options)
+				) {
+					doc[f.fieldname] = f.options.split("\n")[0];
+				}
+			}
+		}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return updated;
 	},
 
@@ -170,6 +204,10 @@ $.extend(frappe.model, {
 				if (!user_default) {
 					user_default = frappe.defaults.get_user_default(df.fieldname);
 				}
+<<<<<<< HEAD
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				if (
 					!user_default &&
 					df.remember_last_selected_value &&
@@ -228,10 +266,13 @@ $.extend(frappe.model, {
 			value = frappe.datetime.now_time();
 		}
 
+<<<<<<< HEAD
 		if (frappe.model.table_fields.includes(df.fieldtype)) {
 			value = [];
 		}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		// set it here so we know it was set as a default
 		df.__default_value = value;
 
@@ -293,7 +334,11 @@ $.extend(frappe.model, {
 			if (
 				df &&
 				key.substr(0, 2) != "__" &&
+<<<<<<< HEAD
 				!no_copy_list.includes(key) &&
+=======
+				!in_list(no_copy_list, key) &&
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				!(df && !from_amend && cint(df.no_copy) == 1)
 			) {
 				var value = doc[key] || [];

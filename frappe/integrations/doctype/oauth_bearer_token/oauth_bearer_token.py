@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class OAuthBearerToken(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -24,6 +25,8 @@ class OAuthBearerToken(Document):
 		user: DF.Link | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		if not self.expiration_time:
 			self.expiration_time = frappe.utils.datetime.datetime.strptime(

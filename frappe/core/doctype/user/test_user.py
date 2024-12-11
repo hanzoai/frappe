@@ -6,8 +6,11 @@ from contextlib import contextmanager
 from unittest.mock import patch
 from urllib.parse import parse_qs, urlparse
 
+<<<<<<< HEAD
 from werkzeug.http import parse_cookie
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import frappe
 import frappe.exceptions
 from frappe.core.doctype.user.user import (
@@ -22,7 +25,10 @@ from frappe.core.doctype.user.user import (
 from frappe.desk.notifications import extract_mentions
 from frappe.frappeclient import FrappeClient
 from frappe.model.delete_doc import delete_doc
+<<<<<<< HEAD
 from frappe.tests.test_api import FrappeAPITestCase
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.tests.utils import FrappeTestCase, change_settings
 from frappe.utils import get_url
 
@@ -286,7 +292,11 @@ class TestUser(FrappeTestCase):
 
 		# Clear rate limit tracker to start fresh
 		key = f"rl:{data['cmd']}:{data['user']}"
+<<<<<<< HEAD
 		frappe.cache.delete(key)
+=======
+		frappe.cache().delete(key)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		c = FrappeClient(url)
 		res1 = c.session.post(url, data=data, verify=c.verify, headers=c.headers)
@@ -333,7 +343,11 @@ class TestUser(FrappeTestCase):
 			sign_up(random_user, random_user_name, "/welcome"),
 			(1, "Please check your email for verification"),
 		)
+<<<<<<< HEAD
 		self.assertEqual(frappe.cache.hget("redirect_after_login", random_user), "/welcome")
+=======
+		self.assertEqual(frappe.cache().hget("redirect_after_login", random_user), "/welcome")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# re-register
 		self.assertTupleEqual(sign_up(random_user, random_user_name, "/welcome"), (0, "Already Registered"))
@@ -387,7 +401,13 @@ class TestUser(FrappeTestCase):
 
 		# reset password
 		update_password(old_password, old_password=new_password)
+<<<<<<< HEAD
 		self.assertRaises(TypeError, update_password, "test", 1, ["like", "%"])
+=======
+		self.assertRaisesRegex(
+			frappe.exceptions.ValidationError, "Invalid key type", update_password, "test", 1, ["like", "%"]
+		)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		password_strength_response = {
 			"feedback": {"password_policy_validation_passed": False, "suggestions": ["Fix password"]}
@@ -406,7 +426,11 @@ class TestUser(FrappeTestCase):
 
 		# test redirect URL for website users
 		frappe.set_user("test2@example.com")
+<<<<<<< HEAD
 		self.assertEqual(update_password(new_password, old_password=old_password), "me")
+=======
+		self.assertEqual(update_password(new_password, old_password=old_password), "/")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		# reset password
 		update_password(old_password, old_password=new_password)
 
@@ -418,10 +442,17 @@ class TestUser(FrappeTestCase):
 			test_user.reload()
 			link = sendmail.call_args_list[0].kwargs["args"]["link"]
 			key = parse_qs(urlparse(link).query)["key"][0]
+<<<<<<< HEAD
 			self.assertEqual(update_password(new_password, key=key), "me")
 			update_password(old_password, old_password=new_password)
 			self.assertEqual(
 				frappe.message_log[0].get("message"),
+=======
+			self.assertEqual(update_password(new_password, key=key), "/")
+			update_password(old_password, old_password=new_password)
+			self.assertEqual(
+				json.loads(frappe.message_log[0]).get("message"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				"Password reset instructions have been sent to your email",
 			)
 
@@ -458,6 +489,7 @@ class TestUser(FrappeTestCase):
 		)
 
 
+<<<<<<< HEAD
 class TestImpersonation(FrappeAPITestCase):
 	def test_impersonation(self):
 		with test_user(roles=["System Manager"], commit=True) as user:
@@ -469,6 +501,8 @@ class TestImpersonation(FrappeAPITestCase):
 			self.assertEqual(resp.json["message"], user.name)
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 @contextmanager
 def test_user(
 	*, first_name: str | None = None, email: str | None = None, roles: list[str], commit=False, **kwargs
@@ -476,8 +510,13 @@ def test_user(
 	try:
 		first_name = first_name or frappe.generate_hash()
 		email = email or (first_name + "@example.com")
+<<<<<<< HEAD
 		user: User = frappe.new_doc(
 			"User",
+=======
+		user: User = frappe.get_doc(
+			doctype="User",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			send_welcome_email=0,
 			email=email,
 			first_name=first_name,

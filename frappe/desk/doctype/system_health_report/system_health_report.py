@@ -23,17 +23,25 @@ import functools
 import os
 from collections import defaultdict
 from collections.abc import Callable
+<<<<<<< HEAD
 from contextlib import contextmanager
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 from frappe.core.doctype.scheduled_job_type.scheduled_job_type import ScheduledJobType
 from frappe.model.document import Document
+<<<<<<< HEAD
 from frappe.utils.background_jobs import get_queue, get_queue_list, get_redis_conn
+=======
+from frappe.utils.background_jobs import get_queue, get_queue_list
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils.caching import redis_cache
 from frappe.utils.data import add_to_date
 from frappe.utils.scheduler import get_scheduler_status, get_scheduler_tick
 
 
+<<<<<<< HEAD
 @contextmanager
 def no_wait(func):
 	"Disable tenacity waiting on some function"
@@ -47,6 +55,8 @@ def no_wait(func):
 		func.retry.stop = original_stop
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def health_check(step: str):
 	assert isinstance(step, str), "Invalid usage of decorator, Usage: @health_check('step name')"
 
@@ -56,11 +66,16 @@ def health_check(step: str):
 			try:
 				return func(*args, **kwargs)
 			except Exception as e:
+<<<<<<< HEAD
 				frappe.log(frappe.get_traceback())
 				# nosemgrep
 				frappe.msgprint(
 					f"System Health check step {frappe.bold(step)} failed: {e}", alert=True, indicator="red"
 				)
+=======
+				# nosemgrep
+				frappe.msgprint(f"System Health check step {frappe.bold(step)} failed: {e}", alert=True)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		return wrapper
 
@@ -68,6 +83,7 @@ def health_check(step: str):
 
 
 class SystemHealthReport(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -127,6 +143,8 @@ class SystemHealthReport(Document):
 		unhandled_emails: DF.Int
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def db_insert(self, *args, **kwargs):
 		raise NotImplementedError
 
@@ -149,10 +167,14 @@ class SystemHealthReport(Document):
 		self.fetch_user_stats()
 
 	@health_check("Background Jobs")
+<<<<<<< HEAD
 	@no_wait(get_redis_conn)
 	def fetch_background_jobs(self):
 		self.background_jobs_check = "failed"
 		# This just checks connection life
+=======
+	def fetch_background_jobs(self):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.test_job_id = frappe.enqueue("frappe.ping", at_front=True).id
 		self.background_jobs_check = "queued"
 		self.scheduler_status = get_scheduler_status().get("status")
@@ -273,8 +295,13 @@ class SystemHealthReport(Document):
 
 	@health_check("Cache")
 	def fetch_cache_details(self):
+<<<<<<< HEAD
 		self.cache_keys = len(frappe.cache.get_keys(""))
 		self.cache_memory_usage = frappe.cache.execute_command("INFO", "MEMORY").get("used_memory_human")
+=======
+		self.cache_keys = len(frappe.cache().get_keys(""))
+		self.cache_memory_usage = frappe.cache().execute_command("INFO", "MEMORY").get("used_memory_human")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@health_check("Storage")
 	def fetch_storage_details(self):
@@ -330,7 +357,10 @@ class SystemHealthReport(Document):
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 @no_wait(get_redis_conn)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def get_job_status(job_id: str | None = None):
 	frappe.only_for("System Manager")
 	try:

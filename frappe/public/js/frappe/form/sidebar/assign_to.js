@@ -139,6 +139,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 
 		me.dialog.set_value("assign_to", assign_to);
 	}
+<<<<<<< HEAD
 	user_group_list() {
 		let me = this;
 		let user_group = me.dialog.get_value("assign_to_user_group");
@@ -158,6 +159,8 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 				});
 		}
 	}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	set_description_from_doc() {
 		let me = this;
 
@@ -177,6 +180,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 				onchange: () => me.assign_to_me(),
 			},
 			{
+<<<<<<< HEAD
 				label: __("Assign To User Group"),
 				fieldtype: "Link",
 				fieldname: "assign_to_user_group",
@@ -184,6 +188,8 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 				onchange: () => me.user_group_list(),
 			},
 			{
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				fieldtype: "MultiSelectPills",
 				fieldname: "assign_to",
 				label: __("Assign To"),

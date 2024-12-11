@@ -1,5 +1,9 @@
 // Copyright (c) 2016, Frappe Technologies and contributors
 // For license information, please see license.txt
+<<<<<<< HEAD
+=======
+/* eslint-disable */
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 frappe.query_reports["Website Analytics"] = {
 	filters: [
@@ -27,6 +31,7 @@ frappe.query_reports["Website Analytics"] = {
 			default: "Daily",
 			reqd: 1,
 		},
+<<<<<<< HEAD
 		{
 			fieldname: "group_by",
 			label: __("Group By"),
@@ -61,4 +66,7 @@ frappe.query_reports["Website Analytics"] = {
 		}
 		return default_formatter(value, row, column, data);
 	},
+=======
+	],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 };

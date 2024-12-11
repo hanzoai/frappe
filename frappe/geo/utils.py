@@ -15,7 +15,12 @@ def get_coords(doctype, filters, type):
 	elif type == "coordinates":
 		coords = return_coordinates(doctype, filters_sql)
 
+<<<<<<< HEAD
 	return convert_to_geojson(type, coords)
+=======
+	out = convert_to_geojson(type, coords)
+	return out
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def convert_to_geojson(type, coords):

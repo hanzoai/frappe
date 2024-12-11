@@ -62,6 +62,7 @@ frappe.ui.Page = class Page {
 	}
 
 	get_empty_state(title, message, primary_action) {
+<<<<<<< HEAD
 		return $(`<div class="page-card-container">
   			<div class="page-card">
   				<div class="page-card-head">
@@ -74,6 +75,22 @@ frappe.ui.Page = class Page {
   				</div>
   			</div>
   		</div>`);
+=======
+		let $empty_state = $(`<div class="page-card-container">
+			<div class="page-card">
+				<div class="page-card-head">
+					<span class="indicator blue">
+						${title}</span>
+				</div>
+				<p>${message}</p>
+				<div>
+					<button class="btn btn-primary btn-sm">${primary_action}</button>
+				</div>
+			</div>
+		</div>`);
+
+		return $empty_state;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	load_lib(callback) {
@@ -161,6 +178,7 @@ frappe.ui.Page = class Page {
 		frappe.ui.keys
 			.get_shortcut_group(this.page_actions[0])
 			.add(action_btn, action_btn.find(".actions-btn-group-label"));
+<<<<<<< HEAD
 
 		// https://axesslab.com/skip-links
 		this.skip_link_to_main = $("<button>")
@@ -181,6 +199,8 @@ frappe.ui.Page = class Page {
 				);
 			})
 			.appendTo(this.sidebar);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	setup_sidebar_toggle() {
@@ -189,11 +209,15 @@ frappe.ui.Page = class Page {
 		if (this.disable_sidebar_toggle || !sidebar_wrapper.length) {
 			sidebar_toggle.last().remove();
 		} else {
+<<<<<<< HEAD
 			if (!frappe.is_mobile()) {
 				sidebar_toggle.attr("title", __("Toggle Sidebar"));
 			}
 			sidebar_toggle.attr("aria-label", __("Toggle Sidebar"));
 			sidebar_toggle.tooltip({
+=======
+			sidebar_toggle.attr("title", __("Toggle Sidebar")).tooltip({
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				delay: { show: 600, hide: 100 },
 				trigger: "hover",
 			});
@@ -235,10 +259,14 @@ frappe.ui.Page = class Page {
 		let sidebar_wrapper = this.wrapper.find(".layout-side-section");
 		let is_sidebar_visible = $(sidebar_wrapper).is(":visible");
 		sidebar_toggle_icon.html(
+<<<<<<< HEAD
 			frappe.utils.icon(
 				is_sidebar_visible ? "es-line-sidebar-collapse" : "es-line-sidebar-expand",
 				"md"
 			)
+=======
+			frappe.utils.icon(is_sidebar_visible ? "sidebar-collapse" : "sidebar-expand", "md")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		);
 	}
 
@@ -252,6 +280,7 @@ frappe.ui.Page = class Page {
 				${frappe.utils.icon(icon)}
 			</button>
 		`);
+<<<<<<< HEAD
 		// ideally, we should pass tooltip_label this is just safe gaurd.
 		if (!tooltip_label) {
 			if (icon.startsWith("es-")) {
@@ -261,20 +290,30 @@ frappe.ui.Page = class Page {
 			}
 			tooltip_label = frappe.unscrub(icon);
 		}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		button.appendTo(this.icon_group.removeClass("hide"));
 		button.click(click);
 		button
+<<<<<<< HEAD
 			.attr("title", __(tooltip_label))
+=======
+			.attr("title", __(tooltip_label || frappe.unscrub(icon)))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			.tooltip({ delay: { show: 600, hide: 100 }, trigger: "hover" });
 
 		return button;
 	}
 
 	clear_indicator() {
+<<<<<<< HEAD
 		return this.indicator
 			.removeClass()
 			.addClass("indicator-pill no-indicator-dot whitespace-nowrap hide");
+=======
+		return this.indicator.removeClass().addClass("indicator-pill whitespace-nowrap hide");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	get_icon_label(icon, label) {
@@ -292,15 +331,23 @@ frappe.ui.Page = class Page {
 	set_action(btn, opts) {
 		let me = this;
 		if (opts.icon) {
+<<<<<<< HEAD
 			opts.iconHTML = this.get_icon_label(opts.icon, opts.label);
+=======
+			opts.label = this.get_icon_label(opts.icon, opts.label);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		this.clear_action_of(btn);
 
 		btn.removeClass("hide")
 			.prop("disabled", false)
+<<<<<<< HEAD
 			.html(opts.iconHTML || opts.label)
 			.attr("data-label", opts.label)
+=======
+			.html(opts.label)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			.on("click", function () {
 				let response = opts.click.apply(this, [btn]);
 				me.btn_disable_enable(btn, response);
@@ -732,6 +779,30 @@ frappe.ui.Page = class Page {
 		this.inner_toolbar.empty().addClass("hide");
 	}
 
+<<<<<<< HEAD
+=======
+	//-- Sidebar --//
+
+	add_sidebar_item(label, action, insert_after, prepend) {
+		var parent = this.sidebar.find(".sidebar-menu.standard-actions");
+		var li = $("<li>");
+		var link = $("<a>").html(label).on("click", action).appendTo(li);
+
+		if (insert_after) {
+			li.insertAfter(parent.find(insert_after));
+		} else {
+			if (prepend) {
+				li.prependTo(parent);
+			} else {
+				li.appendTo(parent);
+			}
+		}
+		return link;
+	}
+
+	//---//
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	clear_user_actions() {
 		this.menu.find(".user-action").remove();
 	}
@@ -741,7 +812,11 @@ frappe.ui.Page = class Page {
 		return this.$title_area;
 	}
 
+<<<<<<< HEAD
 	set_title(title, icon = null, strip = true, tab_title = "", tooltip_label = "") {
+=======
+	set_title(title, icon = null, strip = true, tab_title = "") {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (!title) title = "";
 		if (strip) {
 			title = strip_html(title);
@@ -753,11 +828,15 @@ frappe.ui.Page = class Page {
 		}
 		let title_wrapper = this.$title_area.find(".title-text");
 		title_wrapper.html(title);
+<<<<<<< HEAD
 		title_wrapper.attr("title", tooltip_label || this.title);
 
 		if (tooltip_label) {
 			title_wrapper.tooltip({ delay: { show: 600, hide: 100 }, trigger: "hover" });
 		}
+=======
+		title_wrapper.attr("title", this.title);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	set_title_sub(txt) {
@@ -875,7 +954,11 @@ frappe.ui.Page = class Page {
 		f.refresh();
 		$(f.wrapper)
 			.addClass("col-md-2")
+<<<<<<< HEAD
 			.attr("title", __(df.label, null, df.parent))
+=======
+			.attr("title", __(df.label))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			.tooltip({
 				delay: { show: 600, hide: 100 },
 				trigger: "hover",
@@ -889,7 +972,11 @@ frappe.ui.Page = class Page {
 		// hidden fields dont have $input
 		if (!f.$input) f.make_input();
 
+<<<<<<< HEAD
 		f.$input.attr("placeholder", __(df.label, null, df.parent));
+=======
+		f.$input.attr("placeholder", __(df.label));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if (df.fieldtype === "Check") {
 			$(f.wrapper).find(":first-child").removeClass("col-md-offset-4 col-md-8");

@@ -7,6 +7,7 @@ from frappe.website.path_resolver import validate_path
 
 
 class PortalSettings(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -23,6 +24,8 @@ class PortalSettings(Document):
 		menu: DF.Table[PortalMenuItem]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def add_item(self, item):
 		"""insert new portal menu item if route is not set, or role is different"""
 		exists = [d for d in self.get("menu", []) if d.get("route") == item.get("route")]
@@ -50,8 +53,13 @@ class PortalSettings(Document):
 			if self.add_item(item):
 				dirty = True
 
+<<<<<<< HEAD
 		self.remove_deleted_doctype_items()
 		if dirty:
+=======
+		if dirty:
+			self.remove_deleted_doctype_items()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			self.save()
 
 	def on_update(self):
@@ -71,7 +79,11 @@ class PortalSettings(Document):
 
 	def remove_deleted_doctype_items(self):
 		existing_doctypes = set(frappe.get_list("DocType", pluck="name"))
+<<<<<<< HEAD
 		for menu_item in list(self.get("menu") + self.get("custom_menu")):
+=======
+		for menu_item in list(self.get("menu")):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if menu_item.reference_doctype not in existing_doctypes:
 				self.remove(menu_item)
 

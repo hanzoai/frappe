@@ -4,9 +4,12 @@
 """build query for doclistview and return results"""
 
 import json
+<<<<<<< HEAD
 from functools import lru_cache
 
 from sql_metadata import Parser
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 import frappe.permissions
@@ -24,7 +27,11 @@ from frappe.utils.data import sbool
 @frappe.read_only()
 def get():
 	args = get_form_params()
+<<<<<<< HEAD
 	# If virtual doctype, get data from controller get_list method
+=======
+	# If virtual doctype get data from controller het_list method
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if is_virtual_doctype(args.doctype):
 		controller = get_controller(args.doctype)
 		data = compress(controller.get_list(args))
@@ -50,7 +57,11 @@ def get_list():
 
 @frappe.whitelist()
 @frappe.read_only()
+<<<<<<< HEAD
 def get_count() -> int:
+=======
+def get_count():
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	args = get_form_params()
 
 	if is_virtual_doctype(args.doctype):
@@ -79,7 +90,11 @@ def execute(doctype, *args, **kwargs):
 
 
 def get_form_params():
+<<<<<<< HEAD
 	"""parse GET request parameters."""
+=======
+	"""Stringify GET request parameters."""
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	data = frappe._dict(frappe.local.form_dict)
 	clean_params(data)
 	validate_args(data)
@@ -105,10 +120,14 @@ def validate_fields(data):
 	wildcard = update_wildcard_field_param(data)
 
 	for field in list(data.fields or []):
+<<<<<<< HEAD
 		fieldname = extract_fieldnames(field)[0]
 		if not fieldname:
 			raise_invalid_field(fieldname)
 
+=======
+		fieldname = extract_fieldname(field)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if is_standard(fieldname):
 			continue
 
@@ -188,6 +207,7 @@ def is_standard(fieldname):
 	return fieldname in default_fields or fieldname in optional_fields or fieldname in child_table_fields
 
 
+<<<<<<< HEAD
 @lru_cache
 def extract_fieldnames(field):
 	from frappe.database.schema import SPECIAL_CHAR_PATTERN
@@ -203,6 +223,25 @@ def extract_fieldnames(field):
 			return ["*"]
 
 	return columns
+=======
+def extract_fieldname(field):
+	for text in (",", "/*", "#"):
+		if text in field:
+			raise_invalid_field(field)
+
+	fieldname = field
+	for sep in (" as ", " AS "):
+		if sep in fieldname:
+			fieldname = fieldname.split(sep, 1)[0]
+
+	# certain functions allowed, extract the fieldname from the function
+	if fieldname.startswith("count(") or fieldname.startswith("sum(") or fieldname.startswith("avg("):
+		if not fieldname.strip().endswith(")"):
+			raise_invalid_field(field)
+		fieldname = fieldname.split("(", 1)[1][:-1]
+
+	return fieldname
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_meta_and_docfield(fieldname, data):
@@ -216,8 +255,16 @@ def update_wildcard_field_param(data):
 	if (isinstance(data.fields, str) and data.fields == "*") or (
 		isinstance(data.fields, list | tuple) and len(data.fields) == 1 and data.fields[0] == "*"
 	):
+<<<<<<< HEAD
 		parent_type = data.parenttype or data.parent_doctype
 		data.fields = get_permitted_fields(data.doctype, parenttype=parent_type, ignore_virtual=True)
+=======
+		if frappe.get_system_settings("apply_perm_level_on_api_calls"):
+			parent_type = data.parenttype or data.parent_doctype
+			data.fields = get_permitted_fields(data.doctype, parenttype=parent_type, ignore_virtual=True)
+		else:
+			data.fields = frappe.db.get_table_columns(data.doctype)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return True
 
 	return False
@@ -231,8 +278,11 @@ def clean_params(data):
 def parse_json(data):
 	if (filters := data.get("filters")) and isinstance(filters, str):
 		data["filters"] = json.loads(filters)
+<<<<<<< HEAD
 	if (applied_filters := data.get("applied_filters")) and isinstance(applied_filters, str):
 		data["applied_filters"] = json.loads(applied_filters)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if (or_filters := data.get("or_filters")) and isinstance(or_filters, str):
 		data["or_filters"] = json.loads(or_filters)
 	if (fields := data.get("fields")) and isinstance(fields, str):
@@ -250,6 +300,7 @@ def get_parenttype_and_fieldname(field, data):
 		parts = field.split(".")
 		parenttype = parts[0]
 		fieldname = parts[1]
+<<<<<<< HEAD
 		df = frappe.get_meta(data.doctype).get_field(parenttype)
 		if not df and parenttype.startswith("tab"):
 			# tabChild DocType.fieldname
@@ -257,6 +308,15 @@ def get_parenttype_and_fieldname(field, data):
 		else:
 			# tablefield.fieldname
 			parenttype = df.options
+=======
+		if parenttype.startswith("`tab"):
+			# `tabChild DocType`.`fieldname`
+			parenttype = parenttype[4:-1]
+			fieldname = fieldname.strip("`")
+		else:
+			# tablefield.fieldname
+			parenttype = frappe.get_meta(data.doctype).get_field(parenttype).options
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	else:
 		parenttype = data.doctype
 		fieldname = field.strip("`")
@@ -277,7 +337,14 @@ def compress(data, args=None):
 	values = []
 	keys = list(data[0])
 	for row in data:
+<<<<<<< HEAD
 		values.append([row.get(key) for key in keys])
+=======
+		new_row = []
+		for key in keys:
+			new_row.append(row.get(key))
+		values.append(new_row)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# add user info for assignments (avatar)
 		if row.get("_assign", ""):
@@ -361,7 +428,10 @@ def export_query():
 	title = form_params.pop("title", doctype)
 	csv_params = pop_csv_params(form_params)
 	add_totals_row = 1 if form_params.pop("add_totals_row", None) == "1" else None
+<<<<<<< HEAD
 	translate_values = 1 if form_params.pop("translate_values", None) == "1" else None
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if selection := form_params.pop("selected_items", None):
 		form_params["filters"] = {"name": ("in", json.loads(selection))}
@@ -389,6 +459,7 @@ def export_query():
 	if add_totals_row:
 		ret = append_totals_row(ret)
 
+<<<<<<< HEAD
 	fields_info = get_field_info(db_query.fields, doctype)
 
 	labels = [info["label"] for info in fields_info]
@@ -407,6 +478,10 @@ def export_query():
 			processed_data.append(processed_row)
 			data.extend(processed_data)
 
+=======
+	data = [[_("Sr"), *get_labels(db_query.fields, doctype)]]
+	data.extend([i + 1, *list(row)] for i, row in enumerate(ret))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	data = handle_duration_fieldtype_values(doctype, data, db_query.fields)
 
 	if file_format_type == "CSV":
@@ -446,6 +521,7 @@ def append_totals_row(data):
 	return data
 
 
+<<<<<<< HEAD
 def get_field_info(fields, doctype):
 	"""Get column names, labels, field types, and translatable properties based on column names."""
 
@@ -459,10 +535,21 @@ def get_field_info(fields, doctype):
 			parenttype = doctype
 			fieldname = key.split("(", 1)[0]
 			fieldname = fieldname[0].upper() + fieldname[1:]
+=======
+def get_labels(fields, doctype):
+	"""get column labels based on column names"""
+	labels = []
+	for key in fields:
+		try:
+			parenttype, fieldname = parse_field(key)
+		except ValueError:
+			continue
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		parenttype = parenttype or doctype
 
 		if parenttype == doctype and fieldname == "name":
+<<<<<<< HEAD
 			name = fieldname
 			label = _("ID", context="Label of name column in report")
 			fieldtype = "Data"
@@ -485,16 +572,28 @@ def get_field_info(fields, doctype):
 				fieldtype = "Data"
 				translatable = False
 
+=======
+			label = _("ID", context="Label of name column in report")
+		else:
+			df = frappe.get_meta(parenttype).get_field(fieldname)
+			label = _(df.label if df else fieldname.title())
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if parenttype != doctype:
 				# If the column is from a child table, append the child doctype.
 				# For example, "Item Code (Sales Invoice Item)".
 				label += f" ({ _(parenttype) })"
 
+<<<<<<< HEAD
 		field_info.append(
 			{"name": name, "label": label, "fieldtype": fieldtype, "translatable": translatable}
 		)
 
 	return field_info
+=======
+		labels.append(label)
+
+	return labels
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def handle_duration_fieldtype_values(doctype, data, fields):
@@ -519,14 +618,22 @@ def handle_duration_fieldtype_values(doctype, data, fields):
 
 def parse_field(field: str) -> tuple[str | None, str]:
 	"""Parse a field into parenttype and fieldname."""
+<<<<<<< HEAD
 	key = field.split(" as ", 1)[0]
+=======
+	key = field.split(" as ")[0]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if key.startswith(("count(", "sum(", "avg(")):
 		raise ValueError
 
 	if "." in key:
+<<<<<<< HEAD
 		table, column = key.split(".", 2)[:2]
 		return table[4:-1], column.strip("`")
+=======
+		return key.split(".")[0][4:-1], key.split(".")[1].strip("`")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return None, key.strip("`")
 
@@ -546,7 +653,10 @@ def delete_items():
 
 
 def delete_bulk(doctype, items):
+<<<<<<< HEAD
 	undeleted_items = []
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	for i, d in enumerate(items):
 		try:
 			frappe.delete_doc(doctype, d)
@@ -563,6 +673,7 @@ def delete_bulk(doctype, items):
 		except Exception:
 			# rollback if any record failed to delete
 			# if not rollbacked, queries get committed on after_request method in app.py
+<<<<<<< HEAD
 			undeleted_items.append(d)
 			frappe.db.rollback()
 	if undeleted_items and len(items) != len(undeleted_items):
@@ -578,6 +689,9 @@ def delete_bulk(doctype, items):
 		frappe.msgprint(
 			_("Deleted all documents successfully"), realtime=True, title=_("Bulk Operation Successful")
 		)
+=======
+			frappe.db.rollback()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()
@@ -722,7 +836,15 @@ def scrub_user_tags(tagcount):
 
 				rdict[tag] += tagdict[t]
 
+<<<<<<< HEAD
 	return [[tag, rdict[tag]] for tag in rdict]
+=======
+	rlist = []
+	for tag in rdict:
+		rlist.append([tag, rdict[tag]])
+
+	return rlist
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 # used in building query in queries.py

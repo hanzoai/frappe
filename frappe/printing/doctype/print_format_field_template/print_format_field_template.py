@@ -7,6 +7,7 @@ from frappe.model.document import Document
 
 
 class PrintFormatFieldTemplate(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -23,6 +24,8 @@ class PrintFormatFieldTemplate(Document):
 		template_file: DF.Data | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		if self.standard and not (frappe.conf.developer_mode or frappe.flags.in_patch):
 			frappe.throw(_("Enable developer mode to create a standard Print Template"))

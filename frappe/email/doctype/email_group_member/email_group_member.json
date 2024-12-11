@@ -28,7 +28,10 @@
    "in_global_search": 1,
    "in_list_view": 1,
    "label": "Email",
+<<<<<<< HEAD
    "options": "Email",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "reqd": 1
   },
   {
@@ -41,7 +44,11 @@
   }
  ],
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-11-25 16:54:59.828669",
+=======
+ "modified": "2022-07-11 16:38:34.165271",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Email",
  "name": "Email Group Member",

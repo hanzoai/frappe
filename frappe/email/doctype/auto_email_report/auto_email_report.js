@@ -35,6 +35,7 @@ frappe.ui.form.on("Auto Email Report", {
 				frm.set_value("email_to", frappe.session.user);
 			}
 		}
+<<<<<<< HEAD
 
 		frm.set_query("sender", function () {
 			return {
@@ -44,6 +45,8 @@ frappe.ui.form.on("Auto Email Report", {
 				},
 			};
 		});
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 	report: function (frm) {
 		frm.set_value("filters", "");

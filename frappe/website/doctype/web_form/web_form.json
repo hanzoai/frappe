@@ -17,6 +17,7 @@
   "introduction_text",
   "web_form_fields",
   "settings_tab",
+<<<<<<< HEAD
   "access_control_section",
   "anonymous",
   "login_required",
@@ -34,6 +35,22 @@
   "show_attachments",
   "column_break_hhec",
   "allowed_embedding_domains",
+=======
+  "login_required",
+  "allow_multiple",
+  "allow_edit",
+  "allow_delete",
+  "anonymous",
+  "column_break_2",
+  "apply_document_permissions",
+  "allow_print",
+  "print_format",
+  "allow_comments",
+  "show_attachments",
+  "allow_incomplete",
+  "section_break_2",
+  "max_attachment_size",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "condition_section",
   "condition_description",
   "condition_json",
@@ -112,7 +129,11 @@
    "depends_on": "eval:!doc.anonymous",
    "fieldname": "login_required",
    "fieldtype": "Check",
+<<<<<<< HEAD
    "label": "Login required"
+=======
+   "label": "Login Required"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "default": "0",
@@ -182,28 +203,46 @@
    "options": "Web Form Field"
   },
   {
+<<<<<<< HEAD
    "description": "Set size in MB",
    "fieldname": "max_attachment_size",
    "fieldtype": "Int",
    "label": "Max attachment size"
+=======
+   "fieldname": "max_attachment_size",
+   "fieldtype": "Int",
+   "label": "Max Attachment Size (in MB)"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "description": "For help see <a href=\"https://frappeframework.com/docs/user/en/guides/portal-development/web-forms\" target=\"_blank\">Client Script API and Examples</a>",
    "fieldname": "client_script",
    "fieldtype": "Code",
+<<<<<<< HEAD
    "label": "Client script"
+=======
+   "label": "Client Script"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "default": "Save",
    "fieldname": "button_label",
    "fieldtype": "Data",
+<<<<<<< HEAD
    "label": "Submit button label"
+=======
+   "label": "Submit Button Label"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "description": "Message to be displayed on successful completion",
    "fieldname": "success_message",
    "fieldtype": "Text",
+<<<<<<< HEAD
    "label": "Success message"
+=======
+   "label": "Success Message"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "description": "Go to this URL after completing the form",
@@ -265,7 +304,11 @@
   {
    "fieldname": "list_setting_message",
    "fieldtype": "HTML",
+<<<<<<< HEAD
    "label": "List setting message"
+=======
+   "label": "List Setting Message"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "customization_tab",
@@ -275,7 +318,11 @@
   {
    "fieldname": "success_title",
    "fieldtype": "Data",
+<<<<<<< HEAD
    "label": "Success title"
+=======
+   "label": "Success Title"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "banner_image",
@@ -301,6 +348,13 @@
    "fieldtype": "Column Break"
   },
   {
+<<<<<<< HEAD
+=======
+   "fieldname": "section_break_2",
+   "fieldtype": "Section Break"
+  },
+  {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "collapsible": 1,
    "collapsible_depends_on": "show_list",
    "depends_on": "eval:!doc.anonymous",
@@ -347,12 +401,20 @@
   {
    "fieldname": "meta_title",
    "fieldtype": "Data",
+<<<<<<< HEAD
    "label": "Meta title"
+=======
+   "label": "Meta Title"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "meta_description",
    "fieldtype": "Small Text",
+<<<<<<< HEAD
    "label": "Meta description"
+=======
+   "label": "Meta Description"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "column_break_khxs",
@@ -361,7 +423,11 @@
   {
    "fieldname": "meta_image",
    "fieldtype": "Attach Image",
+<<<<<<< HEAD
    "label": "Meta image"
+=======
+   "label": "Meta Image"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "column_break_vdhm",
@@ -369,15 +435,26 @@
   },
   {
    "default": "0",
+<<<<<<< HEAD
    "description": "If enabled, all responses on the web form will be submitted anonymously",
    "fieldname": "anonymous",
    "fieldtype": "Check",
    "label": "Anonymous responses"
+=======
+   "description": "Receive anonymous response",
+   "fieldname": "anonymous",
+   "fieldtype": "Check",
+   "label": "Anonymous"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "condition_description",
    "fieldtype": "HTML",
+<<<<<<< HEAD
    "label": "Condition description",
+=======
+   "label": "Condition Description",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "options": "<p>Multiple webforms can be created for a single doctype. Add filters specific to this webform to display correct record after submission.</p><p>For Example:</p>\n<p>If you create a separate webform every year to capture feedback from employees add a \n field named year in doctype and add a filter <b>year = 2023</b></p>\n"
   },
   {
@@ -388,6 +465,7 @@
    "fieldname": "condition_json",
    "fieldtype": "JSON",
    "label": "Condition JSON"
+<<<<<<< HEAD
   },
   {
    "description": "Specify the domains or origins that are permitted to embed this form. Enter one domain per line (e.g., https://example.com). If no domains are specified, the form can only be embedded on the same origin.",
@@ -408,13 +486,19 @@
   {
    "fieldname": "column_break_hhec",
    "fieldtype": "Column Break"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "has_web_view": 1,
  "icon": "icon-edit",
  "is_published_field": "published",
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-10-21 12:04:47.314849",
+=======
+ "modified": "2024-07-27 20:32:06.331745",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Website",
  "name": "Web Form",
@@ -435,4 +519,8 @@
  "states": [],
  "title_field": "title",
  "track_changes": 1
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

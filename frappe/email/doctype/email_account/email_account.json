@@ -15,7 +15,10 @@
   "service",
   "authentication_column",
   "auth_method",
+<<<<<<< HEAD
   "backend_app_flow",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "authorize_api_access",
   "password",
   "awaiting_password",
@@ -41,7 +44,10 @@
   "imap_folder",
   "section_break_12",
   "append_emails_to_sent_folder",
+<<<<<<< HEAD
   "sent_folder_name",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "append_to",
   "create_contact",
   "enable_automatic_linking",
@@ -90,7 +96,10 @@
   },
   {
    "default": "0",
+<<<<<<< HEAD
    "depends_on": "eval: !doc.backend_app_flow",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "login_id_is_different",
    "fieldtype": "Check",
    "hide_days": 1,
@@ -579,7 +588,11 @@
    "label": "IMAP Details"
   },
   {
+<<<<<<< HEAD
    "depends_on": "eval: doc.auth_method === \"OAuth\" && !doc.__islocal && !doc.__unsaved && !doc.backend_app_flow",
+=======
+   "depends_on": "eval: doc.auth_method === \"OAuth\" && !doc.__islocal && !doc.__unsaved",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "authorize_api_access",
    "fieldtype": "Button",
    "label": "Authorize API Access"
@@ -608,6 +621,7 @@
    "options": "Connected App"
   },
   {
+<<<<<<< HEAD
    "depends_on": "eval: doc.auth_method === \"OAuth\" && !doc.backend_app_flow",
    "fieldname": "connected_user",
    "fieldtype": "Link",
@@ -628,12 +642,24 @@
    "fieldname": "sent_folder_name",
    "fieldtype": "Data",
    "label": "Sent Folder Name"
+=======
+   "depends_on": "eval: doc.auth_method === \"OAuth\"",
+   "fieldname": "connected_user",
+   "fieldtype": "Link",
+   "label": "Connected User",
+   "mandatory_depends_on": "eval: doc.auth_method === \"OAuth\"",
+   "options": "User"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "icon": "fa fa-inbox",
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-12-05 12:45:15.801652",
+=======
+ "modified": "2023-06-05 15:03:08.538819",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Email",
  "name": "Email Account",
@@ -645,6 +671,10 @@
    "delete": 1,
    "read": 1,
    "role": "System Manager",
+<<<<<<< HEAD
+=======
+   "set_user_permissions": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "write": 1
   },
   {

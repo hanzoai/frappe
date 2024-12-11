@@ -151,7 +151,10 @@ class TestEmail(FrappeTestCase):
 		)
 
 	def test_expose(self):
+<<<<<<< HEAD
 		from frappe.utils import set_request
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		from frappe.utils.verified_command import verify_request
 
 		frappe.sendmail(
@@ -192,6 +195,7 @@ class TestEmail(FrappeTestCase):
 			if content:
 				eol = "\r\n"
 
+<<<<<<< HEAD
 				query_string = re.search(
 					r"(?<=/api/method/frappe.email.queue.unsubscribe\?).*(?=" + eol + ")", content.decode()
 				).group(0)
@@ -200,6 +204,37 @@ class TestEmail(FrappeTestCase):
 				self.assertTrue(verify_request())
 				break
 
+=======
+				frappe.local.flags.signed_query_string = re.search(
+					r"(?<=/api/method/frappe.email.queue.unsubscribe\?).*(?=" + eol + ")", content.decode()
+				).group(0)
+				self.assertTrue(verify_request())
+				break
+
+	def test_expired(self):
+		self.test_email_queue()
+		frappe.db.sql("UPDATE `tabEmail Queue` SET `modified`=(NOW() - INTERVAL '8' day)")
+
+		from frappe.email.queue import set_expiry_for_email_queue
+
+		set_expiry_for_email_queue()
+
+		email_queue = frappe.db.sql("""select name from `tabEmail Queue` where status='Expired'""", as_dict=1)
+		self.assertEqual(len(email_queue), 1)
+		queue_recipients = [
+			r.recipient
+			for r in frappe.db.sql(
+				"""select recipient from `tabEmail Queue Recipient`
+			where parent = %s""",
+				email_queue[0].name,
+				as_dict=1,
+			)
+		]
+		self.assertTrue("test@example.com" in queue_recipients)
+		self.assertTrue("test1@example.com" in queue_recipients)
+		self.assertEqual(len(queue_recipients), 2)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_sender(self):
 		def _patched_assertion(email_account, assertion):
 			with patch.object(QueueBuilder, "get_outgoing_email_account", return_value=email_account):
@@ -315,7 +350,11 @@ class TestVerifiedRequests(FrappeTestCase):
 
 		for params in test_cases:
 			signed_url = get_signed_params(params)
+<<<<<<< HEAD
 			set_request(method="GET", query_string=signed_url)
+=======
+			set_request(method="GET", path="?" + signed_url)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			self.assertTrue(verify_request())
 		frappe.local.request = None
 
@@ -355,10 +394,15 @@ class TestEmailIntegrationTest(FrappeTestCase):
 		subject = "checking if email works"
 		content = "is email working?"
 
+<<<<<<< HEAD
 		email = frappe.sendmail(
 			sender=sender, recipients=recipients, subject=subject, content=content, now=True
 		)
 		email.reload()
+=======
+		frappe.sendmail(sender=sender, recipients=recipients, subject=subject, content=content, now=True)
+		email = frappe.get_last_doc("Email Queue")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertEqual(email.sender, sender)
 		self.assertEqual(len(email.recipients), 2)
 		self.assertEqual(email.status, "Sent")

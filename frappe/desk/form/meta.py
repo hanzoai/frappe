@@ -1,5 +1,9 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+<<<<<<< HEAD
+=======
+import io
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import os
 
 import frappe
@@ -32,6 +36,7 @@ ASSET_KEYS = (
 )
 
 
+<<<<<<< HEAD
 def get_meta(doctype, cached=True) -> "FormMeta":
 	# don't cache for developer mode as js files, templates may be edited
 	cached = cached and not frappe.conf.developer_mode
@@ -44,12 +49,32 @@ def get_meta(doctype, cached=True) -> "FormMeta":
 	else:
 		meta = FormMeta(doctype)
 
+=======
+def get_meta(doctype, cached=True):
+	# don't cache for developer mode as js files, templates may be edited
+	if cached and not frappe.conf.developer_mode:
+		meta = frappe.cache().hget("doctype_form_meta", doctype)
+		if not meta:
+			meta = FormMeta(doctype)
+			frappe.cache().hset("doctype_form_meta", doctype, meta)
+	else:
+		meta = FormMeta(doctype)
+
+	if frappe.local.lang != "en":
+		meta.set_translations(frappe.local.lang)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return meta
 
 
 class FormMeta(Meta):
+<<<<<<< HEAD
 	def __init__(self, doctype, *, cached=True):
 		self.__dict__.update(frappe.get_meta(doctype, cached=cached).__dict__)
+=======
+	def __init__(self, doctype):
+		super().__init__(doctype)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.load_assets()
 
 	def load_assets(self):
@@ -183,6 +208,10 @@ class FormMeta(Meta):
 
 	def add_search_fields(self):
 		"""add search fields found in the doctypes indicated by link fields' options"""
+<<<<<<< HEAD
+=======
+		# TODO: IF field is not found replace with useful message
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		for df in self.get("fields", {"fieldtype": "Link", "options": ["!=", "[Select]"]}):
 			if df.options:
 				try:
@@ -240,7 +269,13 @@ class FormMeta(Meta):
 			workflow = frappe.get_doc("Workflow", workflow_name)
 			workflow_docs.append(workflow)
 
+<<<<<<< HEAD
 			workflow_docs.extend(frappe.get_doc("Workflow State", d.state) for d in workflow.get("states"))
+=======
+			for d in workflow.get("states"):
+				workflow_docs.append(frappe.get_doc("Workflow State", d.state))
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.set("__workflow_docs", workflow_docs)
 
 	def load_templates(self):
@@ -254,6 +289,21 @@ class FormMeta(Meta):
 
 				self.set("__form_grid_templates", templates)
 
+<<<<<<< HEAD
+=======
+	def set_translations(self, lang):
+		from frappe.translate import extract_messages_from_code, make_dict_from_messages
+
+		self.set("__messages", frappe.get_lang_dict("doctype", self.name))
+
+		# set translations for grid templates
+		if self.get("__form_grid_templates"):
+			for content in self.get("__form_grid_templates").values():
+				messages = extract_messages_from_code(content)
+				messages = make_dict_from_messages(messages)
+				self.get("__messages").update(messages)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def load_dashboard(self):
 		self.set("__dashboard", self.get_dashboard_data())
 

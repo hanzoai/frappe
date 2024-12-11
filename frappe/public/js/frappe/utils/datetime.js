@@ -82,10 +82,13 @@ $.extend(frappe.datetime, {
 		return moment(d1).diff(d2, "hours");
 	},
 
+<<<<<<< HEAD
 	get_minute_diff: function (d1, d2) {
 		return moment(d1).diff(d2, "minutes");
 	},
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	get_day_diff: function (d1, d2) {
 		return moment(d1).diff(d2, "days");
 	},
@@ -274,3 +277,37 @@ $.extend(frappe.datetime, {
 		return moment.weekdays().indexOf(first_day_of_the_week);
 	},
 });
+<<<<<<< HEAD
+=======
+
+// Proxy for dateutil and get_today
+Object.defineProperties(window, {
+	dateutil: {
+		get: function () {
+			console.warn(
+				"Please use `frappe.datetime` instead of `dateutil`. It will be deprecated soon."
+			);
+			return frappe.datetime;
+		},
+		configurable: true,
+	},
+	date: {
+		get: function () {
+			console.warn(
+				"Please use `frappe.datetime` instead of `date`. It will be deprecated soon."
+			);
+			return frappe.datetime;
+		},
+		configurable: true,
+	},
+	get_today: {
+		get: function () {
+			console.warn(
+				"Please use `frappe.datetime.get_today` instead of `get_today`. It will be deprecated soon."
+			);
+			return frappe.datetime.get_today;
+		},
+		configurable: true,
+	},
+});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -4,12 +4,16 @@
 import frappe
 from frappe.model.document import Document
 from frappe.website.path_resolver import validate_path
+<<<<<<< HEAD
 from frappe.website.router import clear_routing_cache
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 STANDARD_ROLES = ("Administrator", "System Manager", "Script Manager", "All", "Guest")
 
 
 class Role(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -27,12 +31,18 @@ class Role(Document):
 		two_factor_auth: DF.Check
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def before_rename(self, old, new, merge=False):
 		if old in STANDARD_ROLES:
 			frappe.throw(frappe._("Standard roles cannot be renamed"))
 
 	def after_insert(self):
+<<<<<<< HEAD
 		frappe.cache.hdel("roles", "Administrator")
+=======
+		frappe.cache().hdel("roles", "Administrator")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def validate(self):
 		if self.disabled:
@@ -51,9 +61,12 @@ class Role(Document):
 		if frappe.request and self.home_page:
 			validate_path(self.home_page)
 
+<<<<<<< HEAD
 		if self.has_value_changed("home_page"):
 			clear_routing_cache()
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def set_desk_properties(self):
 		# set if desk_access is not allowed, unset all desk properties
 		if self.name == "Guest":

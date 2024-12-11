@@ -9,4 +9,9 @@ Integrations
 Printing
 Contacts
 Social
+<<<<<<< HEAD
 Automation
+=======
+Automation
+Event Streaming
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

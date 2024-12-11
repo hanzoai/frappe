@@ -104,6 +104,7 @@ export default class Header extends Block {
 		this._data = this.normalizeData(data);
 
 		if (data.text !== undefined) {
+<<<<<<< HEAD
 			let text = __(this._data.text) || "";
 			const contains_html_tag = /<[a-z][\s\S]*>/i.test(text);
 
@@ -114,6 +115,10 @@ export default class Header extends Block {
 			only_text = frappe.utils.escape_html(only_text);
 			text = text.replace(only_text, __(only_text));
 
+=======
+			let text = this._data.text || "";
+			const contains_html_tag = /<[a-z][\s\S]*>/i.test(text);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this._element.innerHTML = contains_html_tag
 				? text
 				: `<span class="h${this._settings.default_size}">${text}</span>`;

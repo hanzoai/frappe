@@ -15,6 +15,15 @@ img {
 	background: $light;
 }
 
+<<<<<<< HEAD
+=======
+.website-image-lazy {
+	min-height: 200px;
+	height: 100%;
+	background-color: $light;
+}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 @mixin website-image {
 	display: inline-block;
 	object-fit: contain;

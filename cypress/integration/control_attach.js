@@ -19,6 +19,7 @@ context("Attach Control", () => {
 				});
 			});
 	});
+<<<<<<< HEAD
 	it('Checking functionality for "Link" button in the "Attach" fieldtype', () => {
 		//Navigating to the new form for the newly created doctype
 		cy.new_form("Test Attach Control");
@@ -57,6 +58,8 @@ context("Attach Control", () => {
 		cy.get('.actions-btn-group > .dropdown-menu [data-label="Delete"]').click();
 		cy.click_modal_primary_button("Yes");
 	});
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	it('Checking functionality for "Library" button in the "Attach" fieldtype', () => {
 		//Navigating to the new form for the newly created doctype

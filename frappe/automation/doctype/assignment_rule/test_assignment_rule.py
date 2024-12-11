@@ -4,8 +4,12 @@
 import frappe
 from frappe.test_runner import make_test_records
 from frappe.tests.utils import FrappeTestCase
+<<<<<<< HEAD
 
 TEST_DOCTYPE = "Assignment Test"
+=======
+from frappe.utils import random_string
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class TestAutoAssign(FrappeTestCase):
@@ -13,14 +17,20 @@ class TestAutoAssign(FrappeTestCase):
 	def setUpClass(cls):
 		super().setUpClass()
 		frappe.db.delete("Assignment Rule")
+<<<<<<< HEAD
 		create_test_doctype(TEST_DOCTYPE)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@classmethod
 	def tearDownClass(cls):
 		frappe.db.rollback()
 
 	def setUp(self):
+<<<<<<< HEAD
 		frappe.set_user("Administrator")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		make_test_records("User")
 		days = [
 			dict(day="Sunday"),
@@ -36,6 +46,7 @@ class TestAutoAssign(FrappeTestCase):
 		clear_assignments()
 
 	def test_round_robin(self):
+<<<<<<< HEAD
 		# check if auto assigned to first user
 		record = _make_test_record(public=1)
 		self.assertEqual(
@@ -43,10 +54,19 @@ class TestAutoAssign(FrappeTestCase):
 				"ToDo",
 				dict(reference_type=TEST_DOCTYPE, reference_name=record.name, status="Open"),
 				"allocated_to",
+=======
+		note = make_note(dict(public=1))
+
+		# check if auto assigned to first user
+		self.assertEqual(
+			frappe.db.get_value(
+				"ToDo", dict(reference_type="Note", reference_name=note.name, status="Open"), "allocated_to"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			),
 			"test@example.com",
 		)
 
+<<<<<<< HEAD
 		# check if auto assigned to second user
 		record = _make_test_record(public=1)
 		self.assertEqual(
@@ -54,12 +74,21 @@ class TestAutoAssign(FrappeTestCase):
 				"ToDo",
 				dict(reference_type=TEST_DOCTYPE, reference_name=record.name, status="Open"),
 				"allocated_to",
+=======
+		note = make_note(dict(public=1))
+
+		# check if auto assigned to second user
+		self.assertEqual(
+			frappe.db.get_value(
+				"ToDo", dict(reference_type="Note", reference_name=note.name, status="Open"), "allocated_to"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			),
 			"test1@example.com",
 		)
 
 		clear_assignments()
 
+<<<<<<< HEAD
 		# check if auto assigned to third user, even if
 		# previous assignments where closed
 		record = _make_test_record(public=1)
@@ -68,17 +97,34 @@ class TestAutoAssign(FrappeTestCase):
 				"ToDo",
 				dict(reference_type=TEST_DOCTYPE, reference_name=record.name, status="Open"),
 				"allocated_to",
+=======
+		note = make_note(dict(public=1))
+
+		# check if auto assigned to third user, even if
+		# previous assignments where closed
+		self.assertEqual(
+			frappe.db.get_value(
+				"ToDo", dict(reference_type="Note", reference_name=note.name, status="Open"), "allocated_to"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			),
 			"test2@example.com",
 		)
 
 		# check loop back to first user
+<<<<<<< HEAD
 		record = _make_test_record(public=1)
 		self.assertEqual(
 			frappe.db.get_value(
 				"ToDo",
 				dict(reference_type=TEST_DOCTYPE, reference_name=record.name, status="Open"),
 				"allocated_to",
+=======
+		note = make_note(dict(public=1))
+
+		self.assertEqual(
+			frappe.db.get_value(
+				"ToDo", dict(reference_type="Note", reference_name=note.name, status="Open"), "allocated_to"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			),
 			"test@example.com",
 		)
@@ -88,6 +134,7 @@ class TestAutoAssign(FrappeTestCase):
 		self.assignment_rule.save()
 
 		for _ in range(30):
+<<<<<<< HEAD
 			_make_test_record(public=1)
 
 		# check if each user has 10 assignments (?)
@@ -95,15 +142,27 @@ class TestAutoAssign(FrappeTestCase):
 			self.assertEqual(
 				len(frappe.get_all("ToDo", dict(allocated_to=user, reference_type=TEST_DOCTYPE))), 10
 			)
+=======
+			make_note(dict(public=1))
+
+		# check if each user has 10 assignments (?)
+		for user in ("test@example.com", "test1@example.com", "test2@example.com"):
+			self.assertEqual(len(frappe.get_all("ToDo", dict(allocated_to=user, reference_type="Note"))), 10)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# clear 5 assignments for first user
 		# can't do a limit in "delete" since postgres does not support it
 		for d in frappe.get_all(
+<<<<<<< HEAD
 			"ToDo", dict(reference_type=TEST_DOCTYPE, allocated_to="test@example.com"), limit=5
+=======
+			"ToDo", dict(reference_type="Note", allocated_to="test@example.com"), limit=5
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		):
 			frappe.db.delete("ToDo", {"name": d.name})
 
 		# add 5 more assignments
+<<<<<<< HEAD
 		for _ in range(5):
 			_make_test_record(public=1)
 
@@ -112,17 +171,33 @@ class TestAutoAssign(FrappeTestCase):
 			self.assertEqual(
 				len(frappe.get_all("ToDo", dict(allocated_to=user, reference_type=TEST_DOCTYPE))), 10
 			)
+=======
+		for _i in range(5):
+			make_note(dict(public=1))
+
+		# check if each user still has 10 assignments
+		for user in ("test@example.com", "test1@example.com", "test2@example.com"):
+			self.assertEqual(len(frappe.get_all("ToDo", dict(allocated_to=user, reference_type="Note"))), 10)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_assingment_on_guest_submissions(self):
 		"""Sometimes documents are inserted as guest, check if assignment rules run on them. Use case: Web Forms"""
 		with self.set_user("Guest"):
+<<<<<<< HEAD
 			doc = _make_test_record(ignore_permissions=True, public=1)
+=======
+			doc = make_note({"public": 1}, ignore_permissions=True)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# check assignment to *anyone*
 		self.assertTrue(
 			frappe.db.get_value(
 				"ToDo",
+<<<<<<< HEAD
 				{"reference_type": TEST_DOCTYPE, "reference_name": doc.name, "status": "Open"},
+=======
+				{"reference_type": "Note", "reference_name": doc.name, "status": "Open"},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				"allocated_to",
 			),
 		)
@@ -132,6 +207,7 @@ class TestAutoAssign(FrappeTestCase):
 		self.assignment_rule.field = "owner"
 		self.assignment_rule.save()
 
+<<<<<<< HEAD
 		for test_user in ("test1@example.com", "test2@example.com"):
 			frappe.set_user(test_user)
 			note = _make_test_record(public=1)
@@ -154,16 +230,55 @@ class TestAutoAssign(FrappeTestCase):
 				"ToDo",
 				dict(reference_type=TEST_DOCTYPE, reference_name=note.name, status="Open"),
 				"allocated_to",
+=======
+		frappe.set_user("test1@example.com")
+		note = make_note(dict(public=1))
+		# check if auto assigned to doc owner, test1@example.com
+		self.assertEqual(
+			frappe.db.get_value(
+				"ToDo", dict(reference_type="Note", reference_name=note.name, status="Open"), "owner"
+			),
+			"test1@example.com",
+		)
+
+		frappe.set_user("test2@example.com")
+		note = make_note(dict(public=1))
+		# check if auto assigned to doc owner, test2@example.com
+		self.assertEqual(
+			frappe.db.get_value(
+				"ToDo", dict(reference_type="Note", reference_name=note.name, status="Open"), "owner"
+			),
+			"test2@example.com",
+		)
+
+		frappe.set_user("Administrator")
+
+	def test_assign_condition(self):
+		# check condition
+		note = make_note(dict(public=0))
+
+		self.assertEqual(
+			frappe.db.get_value(
+				"ToDo", dict(reference_type="Note", reference_name=note.name, status="Open"), "allocated_to"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			),
 			None,
 		)
 
 	def test_clear_assignment(self):
+<<<<<<< HEAD
 		note = _make_test_record(public=1)
 
 		# check if auto assigned to first user
 		todo = frappe.get_list(
 			"ToDo", dict(reference_type=TEST_DOCTYPE, reference_name=note.name, status="Open"), limit=1
+=======
+		note = make_note(dict(public=1))
+
+		# check if auto assigned to first user
+		todo = frappe.get_list(
+			"ToDo", dict(reference_type="Note", reference_name=note.name, status="Open"), limit=1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)[0]
 
 		todo = frappe.get_doc("ToDo", todo["name"])
@@ -179,11 +294,19 @@ class TestAutoAssign(FrappeTestCase):
 		self.assertEqual(todo.status, "Cancelled")
 
 	def test_close_assignment(self):
+<<<<<<< HEAD
 		note = _make_test_record(public=1, content="valid")
 
 		# check if auto assigned
 		todo = frappe.get_list(
 			"ToDo", dict(reference_type=TEST_DOCTYPE, reference_name=note.name, status="Open"), limit=1
+=======
+		note = make_note(dict(public=1, content="valid"))
+
+		# check if auto assigned
+		todo = frappe.get_list(
+			"ToDo", dict(reference_type="Note", reference_name=note.name, status="Open"), limit=1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)[0]
 
 		todo = frappe.get_doc("ToDo", todo["name"])
@@ -200,14 +323,22 @@ class TestAutoAssign(FrappeTestCase):
 		self.assertEqual(todo.allocated_to, "test@example.com")
 
 	def check_multiple_rules(self):
+<<<<<<< HEAD
 		note = _make_test_record(public=1, notify_on_login=1)
+=======
+		note = make_note(dict(public=1, notify_on_login=1))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# check if auto assigned to test3 (2nd rule is applied, as it has higher priority)
 		self.assertEqual(
 			frappe.db.get_value(
+<<<<<<< HEAD
 				"ToDo",
 				dict(reference_type=TEST_DOCTYPE, reference_name=note.name, status="Open"),
 				"allocated_to",
+=======
+				"ToDo", dict(reference_type="Note", reference_name=note.name, status="Open"), "allocated_to"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			),
 			"test@example.com",
 		)
@@ -222,6 +353,7 @@ class TestAutoAssign(FrappeTestCase):
 		get_assignment_rule([days_1, days_2], ["public == 1", "public == 1"])
 
 		frappe.flags.assignment_day = "Monday"
+<<<<<<< HEAD
 		note = _make_test_record(public=1)
 
 		self.assertIn(
@@ -229,11 +361,19 @@ class TestAutoAssign(FrappeTestCase):
 				"ToDo",
 				dict(reference_type=TEST_DOCTYPE, reference_name=note.name, status="Open"),
 				"allocated_to",
+=======
+		note = make_note(dict(public=1))
+
+		self.assertIn(
+			frappe.db.get_value(
+				"ToDo", dict(reference_type="Note", reference_name=note.name, status="Open"), "allocated_to"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			),
 			["test@example.com", "test1@example.com", "test2@example.com"],
 		)
 
 		frappe.flags.assignment_day = "Friday"
+<<<<<<< HEAD
 		note = _make_test_record(public=1)
 
 		self.assertIn(
@@ -241,6 +381,13 @@ class TestAutoAssign(FrappeTestCase):
 				"ToDo",
 				dict(reference_type=TEST_DOCTYPE, reference_name=note.name, status="Open"),
 				"allocated_to",
+=======
+		note = make_note(dict(public=1))
+
+		self.assertIn(
+			frappe.db.get_value(
+				"ToDo", dict(reference_type="Note", reference_name=note.name, status="Open"), "allocated_to"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			),
 			["test3@example.com"],
 		)
@@ -248,11 +395,24 @@ class TestAutoAssign(FrappeTestCase):
 	def test_assignment_rule_condition(self):
 		frappe.db.delete("Assignment Rule")
 
+<<<<<<< HEAD
+=======
+		# Add expiry_date custom field
+		from frappe.custom.doctype.custom_field.custom_field import create_custom_field
+
+		df = dict(fieldname="expiry_date", label="Expiry Date", fieldtype="Date")
+		create_custom_field("Note", df)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		assignment_rule = frappe.get_doc(
 			dict(
 				name="Assignment with Due Date",
 				doctype="Assignment Rule",
+<<<<<<< HEAD
 				document_type=TEST_DOCTYPE,
+=======
+				document_type="Note",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				assign_condition="public == 0",
 				due_date_based_on="expiry_date",
 				assignment_days=self.days,
@@ -263,11 +423,19 @@ class TestAutoAssign(FrappeTestCase):
 		).insert()
 
 		expiry_date = frappe.utils.add_days(frappe.utils.nowdate(), 2)
+<<<<<<< HEAD
 		note1 = _make_test_record(expiry_date=expiry_date)
 		note2 = _make_test_record(expiry_date=expiry_date)
 
 		note1_todo = frappe.get_all(
 			"ToDo", filters=dict(reference_type=TEST_DOCTYPE, reference_name=note1.name, status="Open")
+=======
+		note1 = make_note({"expiry_date": expiry_date})
+		note2 = make_note({"expiry_date": expiry_date})
+
+		note1_todo = frappe.get_all(
+			"ToDo", filters=dict(reference_type="Note", reference_name=note1.name, status="Open")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)[0]
 
 		note1_todo_doc = frappe.get_doc("ToDo", note1_todo.name)
@@ -282,7 +450,11 @@ class TestAutoAssign(FrappeTestCase):
 		# saving one note's expiry should not update other note todo's due date
 		note2_todo = frappe.get_all(
 			"ToDo",
+<<<<<<< HEAD
 			filters=dict(reference_type=TEST_DOCTYPE, reference_name=note2.name, status="Open"),
+=======
+			filters=dict(reference_type="Note", reference_name=note2.name, status="Open"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			fields=["name", "date"],
 		)[0]
 		self.assertNotEqual(frappe.utils.get_date_str(note2_todo.date), note1.expiry_date)
@@ -341,21 +513,36 @@ class TestAutoAssign(FrappeTestCase):
 
 
 def clear_assignments():
+<<<<<<< HEAD
 	frappe.db.delete("ToDo", {"reference_type": TEST_DOCTYPE})
 
 
 def get_assignment_rule(days, assign=None):
 	frappe.delete_doc_if_exists("Assignment Rule", f"For {TEST_DOCTYPE} 1")
+=======
+	frappe.db.delete("ToDo", {"reference_type": "Note"})
+
+
+def get_assignment_rule(days, assign=None):
+	frappe.delete_doc_if_exists("Assignment Rule", "For Note 1")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not assign:
 		assign = ["public == 1", "notify_on_login == 1"]
 
 	assignment_rule = frappe.get_doc(
 		dict(
+<<<<<<< HEAD
 			name=f"For {TEST_DOCTYPE} 1",
 			doctype="Assignment Rule",
 			priority=0,
 			document_type=TEST_DOCTYPE,
+=======
+			name="For Note 1",
+			doctype="Assignment Rule",
+			priority=0,
+			document_type="Note",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			assign_condition=assign[0],
 			unassign_condition="public == 0 or notify_on_login == 1",
 			close_condition='"Closed" in content',
@@ -369,15 +556,26 @@ def get_assignment_rule(days, assign=None):
 		)
 	).insert()
 
+<<<<<<< HEAD
 	frappe.delete_doc_if_exists("Assignment Rule", f"For {TEST_DOCTYPE} 2")
+=======
+	frappe.delete_doc_if_exists("Assignment Rule", "For Note 2")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# 2nd rule
 	frappe.get_doc(
 		dict(
+<<<<<<< HEAD
 			name=f"For {TEST_DOCTYPE} 2",
 			doctype="Assignment Rule",
 			priority=1,
 			document_type=TEST_DOCTYPE,
+=======
+			name="For Note 2",
+			doctype="Assignment Rule",
+			priority=1,
+			document_type="Note",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			assign_condition=assign[1],
 			unassign_condition="notify_on_login == 0",
 			rule="Round Robin",
@@ -389,6 +587,7 @@ def get_assignment_rule(days, assign=None):
 	return assignment_rule
 
 
+<<<<<<< HEAD
 def _make_test_record(
 	*,
 	ignore_permissions=False,
@@ -400,6 +599,17 @@ def _make_test_record(
 		doc.update(kwargs)
 
 	return doc.insert(ignore_permissions=ignore_permissions)
+=======
+def make_note(values=None, *, ignore_permissions=False):
+	note = frappe.get_doc(dict(doctype="Note", title=random_string(10), content=random_string(20)))
+
+	if values:
+		note.update(values)
+
+	note.insert(ignore_permissions=ignore_permissions)
+
+	return note
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def create_test_doctype(doctype: str):

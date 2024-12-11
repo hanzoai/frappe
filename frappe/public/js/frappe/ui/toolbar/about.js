@@ -5,6 +5,7 @@ frappe.ui.misc.about = function () {
 
 		$(d.body).html(
 			repl(
+<<<<<<< HEAD
 				`<div>
 					<p>${__("Open Source Applications for the Web")}</p>
 					<p><i class='fa fa-globe fa-fw'></i>
@@ -27,6 +28,28 @@ frappe.ui.misc.about = function () {
 					<hr>
 					<p class='text-muted'>${__("&copy; Frappe Technologies Pvt. Ltd. and contributors")} </p>
 					</div>`,
+=======
+				"<div>\
+		<p>" +
+					__("Open Source Applications for the Web") +
+					"</p>  \
+		<p><i class='fa fa-globe fa-fw'></i>\
+			Website: <a href='https://frappeframework.com' target='_blank'>https://frappeframework.com</a></p>\
+		<p><i class='fa fa-github fa-fw'></i>\
+			Source: <a href='https://github.com/frappe' target='_blank'>https://github.com/frappe</a></p>\
+		<p><i class='fa fa-linkedin fa-fw'></i>\
+			Linkedin: <a href='https://linkedin.com/company/frappe-tech' target='_blank'>https://linkedin.com/company/frappe-tech</a></p>\
+		<p><i class='fa fa-facebook fa-fw'></i>\
+			Facebook: <a href='https://facebook.com/erpnext' target='_blank'>https://facebook.com/erpnext</a></p>\
+		<p><i class='fa fa-twitter fa-fw'></i>\
+			Twitter: <a href='https://twitter.com/erpnext' target='_blank'>https://twitter.com/erpnext</a></p>\
+		<hr>\
+		<h4>Installed Apps</h4>\
+		<div id='about-app-versions'>Loading versions...</div>\
+		<hr>\
+		<p class='text-muted'>&copy; Frappe Technologies Pvt. Ltd. and contributors </p> \
+		</div>",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				frappe.app
 			)
 		);
@@ -50,15 +73,24 @@ frappe.ui.misc.about = function () {
 			var $wrap = $("#about-app-versions").empty();
 			$.each(Object.keys(versions).sort(), function (i, key) {
 				var v = versions[key];
+<<<<<<< HEAD
 				let text;
 				if (v.branch) {
 					text = $.format("<p><b>{0}:</b> v{1} ({2})<br></p>", [
+=======
+				if (v.branch) {
+					var text = $.format("<p><b>{0}:</b> v{1} ({2})<br></p>", [
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						v.title,
 						v.branch_version || v.version,
 						v.branch,
 					]);
 				} else {
+<<<<<<< HEAD
 					text = $.format("<p><b>{0}:</b> v{1}<br></p>", [v.title, v.version]);
+=======
+					var text = $.format("<p><b>{0}:</b> v{1}<br></p>", [v.title, v.version]);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				}
 				$(text).appendTo($wrap);
 			});

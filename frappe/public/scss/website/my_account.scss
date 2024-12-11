@@ -35,7 +35,11 @@
 
 .account-info {
 	background-color: var(--fg-color);
+<<<<<<< HEAD
 	border: 1px solid var(--border-color);
+=======
+	box-shadow: var(--card-shadow);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	border-radius: var(--border-radius-md);
 	padding: var(--padding-sm) 25px;
 
@@ -46,7 +50,11 @@
 	.my-account-name,
 	.my-account-item {
 		color: var(--gray-900);
+<<<<<<< HEAD
 		font-weight: var(--weight-medium);
+=======
+		font-weight: var(--text-bold);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	.my-account-avatar {
@@ -58,11 +66,19 @@
 
 	.my-account-item-desc {
 		color: var(--gray-700);
+<<<<<<< HEAD
 		@include get_textstyle("base", "regular");
 	}
 
 	.my-account-item-link {
 		@include get_textstyle("base", "regular");
+=======
+		font-size: var(--text-md);
+	}
+
+	.my-account-item-link {
+		font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		a {
 			text-decoration: none;

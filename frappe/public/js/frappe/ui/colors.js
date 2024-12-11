@@ -14,6 +14,10 @@ frappe.ui.color = {
 		if (color_names.includes(color_name)) {
 			return frappe.ui.color_map[color_name];
 		} else {
+<<<<<<< HEAD
+=======
+			// eslint-disable-next-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			console.warn(`'color_name' can be one of ${color_names} and not ${color_name}`);
 		}
 	},
@@ -51,6 +55,10 @@ frappe.ui.color = {
 			const color = this.get_color(color_name);
 			return color ? color[shades[shade]] : color_name;
 		} else {
+<<<<<<< HEAD
+=======
+			// eslint-disable-next-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			console.warn(`'shade' can be one of ${Object.keys(shades)} and not ${shade}`);
 		}
 	},

@@ -1,4 +1,5 @@
 frappe.ui.form.on("User", {
+<<<<<<< HEAD
 	setup: function (frm) {
 		frm.set_query("default_workspace", () => {
 			return {
@@ -12,6 +13,11 @@ frappe.ui.form.on("User", {
 	before_load: function (frm) {
 		let update_tz_options = function () {
 			frm.fields_dict.time_zone.set_data(frappe.all_timezones);
+=======
+	before_load: function (frm) {
+		var update_tz_select = function (user_language) {
+			frm.set_df_property("time_zone", "options", [""].concat(frappe.all_timezones));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		};
 
 		if (!frappe.all_timezones) {
@@ -19,11 +25,19 @@ frappe.ui.form.on("User", {
 				method: "frappe.core.doctype.user.user.get_timezones",
 				callback: function (r) {
 					frappe.all_timezones = r.message.timezones;
+<<<<<<< HEAD
 					update_tz_options();
 				},
 			});
 		} else {
 			update_tz_options();
+=======
+					update_tz_select();
+				},
+			});
+		} else {
+			update_tz_select();
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	},
 
@@ -85,7 +99,11 @@ frappe.ui.form.on("User", {
 		if (
 			frm.can_edit_roles &&
 			!frm.is_new() &&
+<<<<<<< HEAD
 			["System User", "Website User"].includes(frm.doc.user_type)
+=======
+			in_list(["System User", "Website User"], frm.doc.user_type)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		) {
 			if (!frm.roles_editor) {
 				const role_area = $('<div class="role-editor">').appendTo(
@@ -110,17 +128,24 @@ frappe.ui.form.on("User", {
 	refresh: function (frm) {
 		let doc = frm.doc;
 
+<<<<<<< HEAD
 		frappe.xcall("frappe.apps.get_apps").then((r) => {
 			let apps = r?.map((r) => r.name) || [];
 			frm.set_df_property("default_app", "options", [" ", ...apps]);
 		});
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (frm.is_new()) {
 			frm.set_value("time_zone", frappe.sys_defaults.time_zone);
 		}
 
 		if (
+<<<<<<< HEAD
 			["System User", "Website User"].includes(frm.doc.user_type) &&
+=======
+			in_list(["System User", "Website User"], frm.doc.user_type) &&
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			!frm.is_new() &&
 			!frm.roles_editor &&
 			frm.can_edit_roles
@@ -129,8 +154,23 @@ frappe.ui.form.on("User", {
 			return;
 		}
 
+<<<<<<< HEAD
 		frm.toggle_display(["sb1", "sb3", "modules_access"], false);
 		frm.trigger("setup_impersonation");
+=======
+		if (
+			doc.name === frappe.session.user &&
+			!doc.__unsaved &&
+			frappe.all_timezones &&
+			(doc.language || frappe.boot.user.language) &&
+			doc.language !== frappe.boot.user.language
+		) {
+			frappe.msgprint(__("Refreshing..."));
+			window.location.reload();
+		}
+
+		frm.toggle_display(["sb1", "sb3", "modules_access"], false);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if (!frm.is_new()) {
 			if (has_access_to_edit_user()) {
@@ -272,7 +312,11 @@ frappe.ui.form.on("User", {
 
 		if (frappe.route_flags.unsaved === 1) {
 			delete frappe.route_flags.unsaved;
+<<<<<<< HEAD
 			for (let i = 0; i < frm.doc.user_emails.length; i++) {
+=======
+			for (var i = 0; i < frm.doc.user_emails.length; i++) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				frm.doc.user_emails[i].idx = frm.doc.user_emails[i].idx + 1;
 			}
 			frm.dirty();
@@ -302,14 +346,22 @@ frappe.ui.form.on("User", {
 				email: frm.doc.email,
 			},
 			callback: function (r) {
+<<<<<<< HEAD
 				if (!Array.isArray(r.message) || !r.message.length) {
+=======
+				if (!Array.isArray(r.message)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					frappe.route_options = {
 						email_id: frm.doc.email,
 						awaiting_password: 1,
 						enable_incoming: 1,
 					};
 					frappe.model.with_doctype("Email Account", function (doc) {
+<<<<<<< HEAD
 						doc = frappe.model.get_new_doc("Email Account");
+=======
+						var doc = frappe.model.get_new_doc("Email Account");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						frappe.route_flags.linked_user = frm.doc.name;
 						frappe.route_flags.delete_user_from_locals = true;
 						frappe.set_route("Form", "Email Account", doc.name);
@@ -335,6 +387,7 @@ frappe.ui.form.on("User", {
 			},
 		});
 	},
+<<<<<<< HEAD
 	after_save: function (frm) {
 		/**
 		 * Checks whether the effective value has changed.
@@ -395,6 +448,12 @@ frappe.ui.form.on("User", {
 					__("Confirm")
 				);
 			});
+=======
+	on_update: function (frm) {
+		if (frappe.boot.time_zone && frappe.boot.time_zone.user !== frm.doc.time_zone) {
+			// Clear cache after saving to refresh the values of boot.
+			frappe.ui.toolbar.clear_cache();
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	},
 });

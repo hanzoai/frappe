@@ -4,7 +4,10 @@ from unittest.mock import patch
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
+<<<<<<< HEAD
 from frappe.utils import get_site_url
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class TestClient(FrappeTestCase):
@@ -135,15 +138,23 @@ class TestClient(FrappeTestCase):
 			"accept": "application/json",
 			"content-type": "application/json",
 		}
+<<<<<<< HEAD
 		url = get_site_url(frappe.local.site)
 		url += "/api/method/frappe.client.get_list"
 
+=======
+		url = f"http://{frappe.local.site}:{frappe.conf.webserver_port}/api/method/frappe.client.get_list"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		res = requests.post(url, json=params, headers=headers)
 		self.assertEqual(res.status_code, 200)
 		data = res.json()
 		first_item = data["message"][0]
 		self.assertTrue("name" in first_item)
 		self.assertTrue("modified" in first_item)
+<<<<<<< HEAD
+=======
+		frappe.local.login_manager.logout()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_client_get(self):
 		from frappe.client import get
@@ -237,8 +248,13 @@ class TestClient(FrappeTestCase):
 		docs = insert_many(doc_list)
 
 		self.assertEqual(len(docs), 7)
+<<<<<<< HEAD
 		self.assertEqual(frappe.db.get_value("Note", docs[3], "title"), "not-a-random-title")
 		self.assertEqual(frappe.db.get_value("Note", docs[6], "title"), "another-note-title")
+=======
+		self.assertEqual(docs[3], "not-a-random-title")
+		self.assertEqual(docs[6], "another-note-title")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertIn(note1.name, docs)
 
 		# cleanup

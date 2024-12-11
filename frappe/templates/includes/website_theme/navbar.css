@@ -3,7 +3,11 @@
 	background-repeat: repeat-x;
 	background-image: none;
 	border: none;
+<<<<<<< HEAD
 	border-bottom: 1px solid {{ theme.top_bar_color }};
+=======
+	border-bottom: 1px solid {{ get_shade(theme.top_bar_color, 10) }};
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	padding-top: 15px;
 	padding-bottom: 15px;
 }
@@ -34,7 +38,11 @@
 .navbar .nav > .open > a:hover,
 .navbar .nav > .open > a:focus,
 .navbar .nav > .open > a:active {
+<<<<<<< HEAD
 	color: {{ theme.top_bar_text_color }};
+=======
+	color: {{ get_shade(theme.top_bar_text_color, 15) }};
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	background-color: transparent;
     -webkit-box-shadow: none;
        -moz-box-shadow: none;

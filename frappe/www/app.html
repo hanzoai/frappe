@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html data-theme-mode="{{ desk_theme.lower() }}" data-theme="{{ desk_theme.lower() }}" dir={{ layout_direction }} lang="{{ lang }}">
 	<head>
+<<<<<<< HEAD
 		<meta charset="UTF-8">
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		<!-- Chrome, Firefox OS and Opera -->
 		<meta name="theme-color" content="#0089FF">
 		<!-- Windows Phone -->
@@ -16,7 +19,11 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="white">
 		<meta name="mobile-web-app-capable" content="yes">
+<<<<<<< HEAD
 		<title>{{ app_name }}</title>
+=======
+		<title>Frappe</title>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		<link rel="shortcut icon"
 			href="{{ favicon or "/assets/frappe/images/frappe-favicon.svg" }}" type="image/x-icon">
 		<link rel="icon"
@@ -24,6 +31,7 @@
 		{% for include in include_css -%}
 		{{ include_style(include) }}
 		{%- endfor -%}
+<<<<<<< HEAD
 
 		{% if lang == "eo" %}
 		<script type="text/javascript">
@@ -34,13 +42,21 @@
 		{% endif %}
 	</head>
 	<body>
+=======
+	</head>
+	<body>
+		{% include "public/icons/timeless/icons.svg" %}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		{% include "templates/includes/splash_screen.html" %}
 		<div class="main-section">
 			<header></header>
 			<div id="body"></div>
 			<footer></footer>
 		</div>
+<<<<<<< HEAD
 		<div id="all-symbols" style="display:none"></div>
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		<div id="build-events-overlay"></div>
 
 		<script type="text/javascript">
@@ -54,6 +70,7 @@
 			frappe.boot = JSON.parse({{ boot }});
 			frappe._messages = frappe.boot["__messages"];
 			frappe.csrf_token = "{{ csrf_token }}";
+<<<<<<< HEAD
 
 
 			{%- for path in include_icons -%}
@@ -64,6 +81,8 @@
 					svg_container.insertAdjacentHTML("beforeend", svg);
 				});
 			{%- endfor -%}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		</script>
 
 	{% for include in include_js %}
@@ -71,6 +90,10 @@
 	{% endfor %}
 
 	{% include "templates/includes/app_analytics/google_analytics.html" %}
+<<<<<<< HEAD
+=======
+	{% include "templates/includes/app_analytics/mixpanel_analytics.html" %}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		{% for sound in (sounds or []) %}
 		<audio preload="auto" id="sound-{{ sound.name }}" volume={{ sound.volume or 1 }}>

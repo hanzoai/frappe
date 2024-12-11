@@ -1,5 +1,8 @@
 {
+<<<<<<< HEAD
  "actions": [],
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "autoname": "field:calendar_name",
  "creation": "2019-07-06 17:54:09.450100",
  "doctype": "DocType",
@@ -109,12 +112,19 @@
    "label": "Push to Google Calendar"
   }
  ],
+<<<<<<< HEAD
  "links": [],
  "modified": "2023-08-28 22:21:44.238862",
  "modified_by": "Administrator",
  "module": "Integrations",
  "name": "Google Calendar",
  "naming_rule": "By fieldname",
+=======
+ "modified": "2019-08-08 15:44:15.798362",
+ "modified_by": "Administrator",
+ "module": "Integrations",
+ "name": "Google Calendar",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "owner": "Administrator",
  "permissions": [
   {
@@ -138,13 +148,20 @@
    "print": 1,
    "read": 1,
    "report": 1,
+<<<<<<< HEAD
    "role": "Desk User",
+=======
+   "role": "All",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "share": 1,
    "write": 1
   }
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+<<<<<<< HEAD
  "states": [],
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "track_changes": 1
 }

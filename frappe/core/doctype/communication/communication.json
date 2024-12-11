@@ -2,7 +2,11 @@
  "actions": [],
  "allow_import": 1,
  "creation": "2013-01-29 10:47:14",
+<<<<<<< HEAD
  "default_view": "List",
+=======
+ "default_view": "Inbox",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "description": "Keeps track of all communications",
  "doctype": "DocType",
  "document_type": "Setup",
@@ -31,7 +35,10 @@
   "additional_info",
   "communication_date",
   "read_receipt",
+<<<<<<< HEAD
   "send_after",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "column_break_14",
   "sender_full_name",
   "read_by_recipient",
@@ -126,7 +133,11 @@
    "fieldtype": "Select",
    "hidden": 1,
    "label": "Delivery Status",
+<<<<<<< HEAD
    "options": "\nSent\nBounced\nOpened\nMarked As Spam\nRejected\nDelayed\nSoft-Bounced\nClicked\nRecipient Unsubscribed\nError\nExpired\nSending\nRead\nScheduled"
+=======
+   "options": "\nSent\nBounced\nOpened\nMarked As Spam\nRejected\nDelayed\nSoft-Bounced\nClicked\nRecipient Unsubscribed\nError\nExpired\nSending\nRead"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "section_break_8",
@@ -391,18 +402,25 @@
    "hidden": 1,
    "label": "IMAP Folder",
    "read_only": 1
+<<<<<<< HEAD
   },
   {
    "fieldname": "send_after",
    "fieldtype": "Datetime",
    "label": "Send After"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "icon": "fa fa-comment",
  "idx": 1,
  "links": [],
  "make_attachments_public": 1,
+<<<<<<< HEAD
  "modified": "2024-02-09 12:10:01.200845",
+=======
+ "modified": "2024-03-27 12:10:01.200845",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Communication",

@@ -74,7 +74,11 @@ class TestNewsletterMixin:
 				).insert(ignore_if_duplicate=True)
 			except Exception:
 				frappe.db.rollback(save_point=savepoint)
+<<<<<<< HEAD
 				frappe.db.set_value(doctype, email_filters, "unsubscribed", 0)
+=======
+				frappe.db.update(doctype, email_filters, "unsubscribed", 0)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			frappe.db.release_savepoint(savepoint)
 
@@ -96,8 +100,11 @@ class TestNewsletterMixin:
 			newsletter.send_emails()
 			return newsletter.name
 
+<<<<<<< HEAD
 		return newsletter
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@staticmethod
 	def get_newsletter(**kwargs) -> "Newsletter":
 		"""Generate and return Newsletter object"""
@@ -162,9 +169,13 @@ class TestNewsletter(TestNewsletterMixin, FrappeTestCase):
 				self.assertTrue(email in recipients)
 
 	def test_schedule_send(self):
+<<<<<<< HEAD
 		newsletter = self.send_newsletter(schedule_send=add_days(getdate(), 1))
 		newsletter.db_set("schedule_send", add_days(getdate(), -1))  # Set date in past
 		send_scheduled_email()
+=======
+		self.send_newsletter(schedule_send=add_days(getdate(), -1))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		email_queue_list = [frappe.get_doc("Email Queue", e.name) for e in frappe.get_all("Email Queue")]
 		self.assertEqual(len(email_queue_list), 4)
@@ -238,6 +249,7 @@ class TestNewsletter(TestNewsletterMixin, FrappeTestCase):
 		email_queue_list = [frappe.get_doc("Email Queue", e.name) for e in frappe.get_all("Email Queue")]
 		self.assertEqual(len(email_queue_list), 4)
 
+<<<<<<< HEAD
 		# delete a queue document to emulate partial send
 		queue_recipient_name = email_queue_list[0].recipients[0].recipient
 		email_queue_list[0].delete()
@@ -250,3 +262,15 @@ class TestNewsletter(TestNewsletterMixin, FrappeTestCase):
 		newsletter.send_emails()
 		self.assertEqual(frappe.db.count("Email Queue"), 4)
 		self.assertTrue(newsletter.email_sent)
+=======
+		# emulate partial send
+		email_queue_list[0].status = "Error"
+		email_queue_list[0].recipients[0].status = "Error"
+		email_queue_list[0].save()
+		newsletter.email_sent = False
+
+		# retry
+		newsletter.send_emails()
+		email_queue_list = [frappe.get_doc("Email Queue", e.name) for e in frappe.get_all("Email Queue")]
+		self.assertEqual(len(email_queue_list), 5)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

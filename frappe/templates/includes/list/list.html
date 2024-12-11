@@ -8,7 +8,11 @@
 	</div>
 {% else %}
 	<div class="website-list" data-doctype="{{ doctype }}"
+<<<<<<< HEAD
 		data-txt="{{ (txt or '')|e }}">
+=======
+		data-txt="{{ txt|e or '[notxt]'  }}">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		<!-- {% if not hide_filters -%}
 			{% include "templates/includes/list/filters.html" %}
 		{%- endif %} -->

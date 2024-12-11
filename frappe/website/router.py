@@ -1,6 +1,10 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+<<<<<<< HEAD
+=======
+import io
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import os
 import re
 
@@ -15,6 +19,7 @@ def get_page_info_from_web_page_with_dynamic_routes(path):
 	"""
 	Query Web Page with dynamic_route = 1 and evaluate if any of the routes match
 	"""
+<<<<<<< HEAD
 	from frappe.website.doctype.web_page.web_page import get_dynamic_web_pages
 
 	rules, page_info = [], {}
@@ -22,6 +27,16 @@ def get_page_info_from_web_page_with_dynamic_routes(path):
 	for d in get_dynamic_web_pages():
 		rules.append(Rule(f"/{d.route}", endpoint=d.name))
 		d.doctype = d.doctype or "Web Page"
+=======
+	rules, page_info = [], {}
+
+	# build rules from all web page with `dynamic_route = 1`
+	for d in frappe.get_all(
+		"Web Page", fields=["name", "route", "modified"], filters=dict(published=1, dynamic_route=1)
+	):
+		rules.append(Rule("/" + d.route, endpoint=d.name))
+		d.doctype = "Web Page"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		page_info[d.name] = d
 
 	end_point = evaluate_dynamic_routes(rules, path)
@@ -31,10 +46,16 @@ def get_page_info_from_web_page_with_dynamic_routes(path):
 
 def get_page_info_from_web_form(path):
 	"""Query published web forms and evaluate if the route matches"""
+<<<<<<< HEAD
 	from frappe.website.doctype.web_form.web_form import get_published_web_forms
 
 	rules, page_info = [], {}
 	for d in get_published_web_forms():
+=======
+	rules, page_info = [], {}
+	web_forms = frappe.get_all("Web Form", ["name", "route", "modified"], {"published": 1})
+	for d in web_forms:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		rules.append(Rule(f"/{d.route}", endpoint=d.name))
 		rules.append(Rule(f"/{d.route}/list", endpoint=d.name))
 		rules.append(Rule(f"/{d.route}/new", endpoint=d.name))
@@ -68,10 +89,18 @@ def evaluate_dynamic_routes(rules, path):
 		urls = route_map.bind_to_environ(frappe.local.request.environ)
 		try:
 			endpoint, args = urls.match("/" + path)
+<<<<<<< HEAD
+=======
+			path = endpoint
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if args:
 				# don't cache when there's a query string!
 				frappe.local.no_cache = 1
 				frappe.local.form_dict.update(args)
+<<<<<<< HEAD
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		except NotFound:
 			pass
 
@@ -97,7 +126,11 @@ def get_pages(app=None):
 
 		return pages
 
+<<<<<<< HEAD
 	return frappe.cache.get_value("website_pages", lambda: _build(app))
+=======
+	return frappe.cache().get_value("website_pages", lambda: _build(app))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_pages_from_path(start, app, app_path):
@@ -258,7 +291,12 @@ def get_base_template(path=None):
 	for pattern in patterns_desc:
 		if re.match(pattern, path):
 			templates = base_template_map[pattern]
+<<<<<<< HEAD
 			return templates[-1]
+=======
+			base_template = templates[-1]
+			return base_template
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def setup_index(page_info):
@@ -301,11 +339,16 @@ def get_doctypes_with_web_view():
 		]
 		return doctypes
 
+<<<<<<< HEAD
 	return frappe.cache.get_value("doctypes_with_web_view", _get)
+=======
+	return frappe.cache().get_value("doctypes_with_web_view", _get)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_start_folders():
 	return frappe.local.flags.web_pages_folders or ("www", "templates/pages")
+<<<<<<< HEAD
 
 
 def clear_routing_cache():
@@ -319,3 +362,5 @@ def clear_routing_cache():
 	get_published_web_forms.clear_cache()
 	get_public_pages_from_doctypes.clear_cache()
 	frappe.cache.delete_value("home_page")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -13,6 +13,7 @@ from frappe.utils import cstr
 
 
 class Address(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -53,6 +54,8 @@ class Address(Document):
 		state: DF.Data | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def __setup__(self):
 		self.flags.linked = False
 
@@ -161,7 +164,11 @@ def get_default_address(doctype: str, name: str | None, sort_key: str = "is_prim
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 def get_address_display(address_dict: dict | str | None) -> str | None:
+=======
+def get_address_display(address_dict: dict | str | None = None) -> str | None:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return render_address(address_dict)
 
 
@@ -345,6 +352,7 @@ def get_condensed_address(doc):
 
 def update_preferred_address(address, field):
 	frappe.db.set_value("Address", address, field, 0)
+<<<<<<< HEAD
 
 
 def get_address_display_list(doctype: str, name: str) -> list[dict]:
@@ -365,3 +373,5 @@ def get_address_display_list(doctype: str, name: str) -> list[dict]:
 		a["display"] = get_address_display(a)
 
 	return address_list
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

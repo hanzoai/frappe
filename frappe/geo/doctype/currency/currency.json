@@ -4,7 +4,11 @@
  "allow_rename": 1,
  "autoname": "field:currency_name",
  "creation": "2013-01-28 10:06:02",
+<<<<<<< HEAD
  "description": "Currency list stores the currency value, its symbol and fraction unit",
+=======
+ "description": "**Currency** Master",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "doctype": "DocType",
  "document_type": "Setup",
  "engine": "InnoDB",
@@ -82,7 +86,11 @@
  "idx": 1,
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-01-30 13:18:12.053557",
+=======
+ "modified": "2022-07-04 09:42:52.425440",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Geo",
  "name": "Currency",
@@ -104,10 +112,13 @@
   },
   {
    "read": 1,
+<<<<<<< HEAD
    "role": "Accounts Manager"
   },
   {
    "read": 1,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "role": "Accounts User"
   },
   {

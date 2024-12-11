@@ -12,6 +12,7 @@ from frappe.utils.weasyprint import download_pdf, get_html
 
 
 class PrintFormat(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -50,6 +51,8 @@ class PrintFormat(Document):
 
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def onload(self):
 		templates = frappe.get_all(
 			"Print Format Field Template",
@@ -68,9 +71,13 @@ class PrintFormat(Document):
 		if (
 			self.standard == "Yes"
 			and not frappe.local.conf.get("developer_mode")
+<<<<<<< HEAD
 			and not frappe.flags.in_migrate
 			and not frappe.flags.in_install
 			and not frappe.flags.in_test
+=======
+			and not (frappe.flags.in_import or frappe.flags.in_test)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		):
 			frappe.throw(frappe._("Standard Print Format cannot be updated"))
 
@@ -132,7 +139,11 @@ class PrintFormat(Document):
 	def export_doc(self):
 		from frappe.modules.utils import export_module_json
 
+<<<<<<< HEAD
 		return export_module_json(self, self.standard == "Yes", self.module)
+=======
+		export_module_json(self, self.standard == "Yes", self.module)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def on_trash(self):
 		if self.doc_type:

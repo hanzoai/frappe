@@ -1,12 +1,19 @@
 # Copyright (c) 2015, Frappe Technologies and Contributors
 # License: MIT. See LICENSE
+<<<<<<< HEAD
 from unittest.mock import patch
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from ldap3.core.exceptions import LDAPException, LDAPInappropriateAuthenticationResult
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
+<<<<<<< HEAD
 from frappe.utils.error import _is_ldap_exception, guess_exception_source
+=======
+from frappe.utils.error import _is_ldap_exception
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 # test_records = frappe.get_test_records('Error Log')
 
@@ -23,6 +30,7 @@ class TestErrorLog(FrappeTestCase):
 
 		for e in exc:
 			self.assertTrue(_is_ldap_exception(e()))
+<<<<<<< HEAD
 
 
 _RAW_EXC = """
@@ -70,3 +78,5 @@ class TestExceptionSourceGuessing(FrappeTestCase):
 		for source, exc in TEST_EXCEPTIONS:
 			result = guess_exception_source(exc)
 			self.assertEqual(result, source)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

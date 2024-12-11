@@ -2,12 +2,16 @@
 # License: MIT. See LICENSE
 
 import frappe
+<<<<<<< HEAD
 from frappe import _
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.model.document import Document
 from frappe.modules.export_file import export_to_files
 
 
 class ModuleOnboarding(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -28,6 +32,8 @@ class ModuleOnboarding(Document):
 		title: DF.Data
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def on_update(self):
 		if frappe.conf.developer_mode:
 			export_to_files(record_list=[["Module Onboarding", self.name]], record_module=self.module)
@@ -58,6 +64,7 @@ class ModuleOnboarding(Document):
 
 		return False
 
+<<<<<<< HEAD
 	@frappe.whitelist()
 	def reset_progress(self):
 		self.db_set("is_complete", 0)
@@ -68,6 +75,8 @@ class ModuleOnboarding(Document):
 
 		frappe.msgprint(_("Module onboarding progress reset"), alert=True)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def before_export(self, doc):
 		doc.is_complete = 0
 

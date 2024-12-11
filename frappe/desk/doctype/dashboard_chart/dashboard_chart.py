@@ -201,10 +201,17 @@ def get_chart_config(chart, filters, timespan, timegrain, from_date, to_date):
 
 	data = frappe.get_list(
 		doctype,
+<<<<<<< HEAD
 		fields=[datefield, f"SUM({value_field})", "COUNT(*)"],
 		filters=filters,
 		group_by=datefield,
 		order_by=datefield,
+=======
+		fields=[f"{datefield} as _unit", f"SUM({value_field})", "COUNT(*)"],
+		filters=filters,
+		group_by="_unit",
+		order_by="_unit asc",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		as_list=True,
 		parent_doctype=chart.parent_document_type,
 	)
@@ -254,6 +261,7 @@ def get_heatmap_chart_config(chart, filters, heatmap_year):
 		)
 	)
 
+<<<<<<< HEAD
 	return {
 		"labels": [],
 		"dataPoints": data,
@@ -261,6 +269,16 @@ def get_heatmap_chart_config(chart, filters, heatmap_year):
 
 
 def get_group_by_chart_config(chart, filters) -> dict | None:
+=======
+	chart_config = {
+		"labels": [],
+		"dataPoints": data,
+	}
+	return chart_config
+
+
+def get_group_by_chart_config(chart, filters):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	aggregate_function = get_aggregate_function(chart.group_by_type)
 	value_field = chart.aggregate_function_based_on or "1"
 	group_by_field = chart.group_by_based_on
@@ -280,11 +298,22 @@ def get_group_by_chart_config(chart, filters) -> dict | None:
 	)
 
 	if data:
+<<<<<<< HEAD
 		return {
 			"labels": [item.get("name", "Not Specified") for item in data],
 			"datasets": [{"name": chart.name, "values": [item["count"] for item in data]}],
 		}
 	return None
+=======
+		chart_config = {
+			"labels": [item["name"] if item["name"] else "Not Specified" for item in data],
+			"datasets": [{"name": chart.name, "values": [item["count"] for item in data]}],
+		}
+
+		return chart_config
+	else:
+		return None
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_aggregate_function(chart_type):
@@ -300,11 +329,19 @@ def get_result(data, timegrain, from_date, to_date, chart_type):
 	result = [[date, 0] for date in dates]
 	data_index = 0
 	if data:
+<<<<<<< HEAD
 		for d in result:
 			count = 0
 			while data_index < len(data) and getdate(data[data_index][0]) <= d[0]:
 				d[1] += cint(data[data_index][1])
 				count += cint(data[data_index][2])
+=======
+		for _i, d in enumerate(result):
+			count = 0
+			while data_index < len(data) and getdate(data[data_index][0]) <= d[0]:
+				d[1] += data[data_index][1]
+				count += data[data_index][2]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				data_index += 1
 			if chart_type == "Average" and not count == 0:
 				d[1] = d[1] / count
@@ -324,6 +361,7 @@ def get_charts_for_user(doctype, txt, searchfield, start, page_len, filters):
 
 
 class DashboardChart(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -369,6 +407,10 @@ class DashboardChart(Document):
 	# end: auto-generated types
 	def on_update(self):
 		frappe.cache.delete_key(f"chart-data:{self.name}")
+=======
+	def on_update(self):
+		frappe.cache().delete_key(f"chart-data:{self.name}")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if frappe.conf.developer_mode and self.is_standard:
 			export_to_files(record_list=[["Dashboard Chart", self.name]], record_module=self.module)
 

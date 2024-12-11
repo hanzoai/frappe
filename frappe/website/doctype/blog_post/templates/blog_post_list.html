@@ -12,6 +12,7 @@
 				<p>{{ blog_introduction or '' }}</p>
 			</div>
 		</div>
+<<<<<<< HEAD
 
 		{%- if browse_by_category -%}
 		<div style="max-width: 20rem">
@@ -30,12 +31,35 @@
 				{%- endfor -%}
 			</select>
 		</div>
+=======
+	</div>
+	<div class="col-md-4 align-self-end">
+		{%- if browse_by_category -%}
+		<label for="category-select" class="sr-only">{{ _("Browse by category") }}</label>
+		<select id="category-select" class="custom-select" onchange="window.location.pathname = this.value">
+			<option value="" {{ not frappe.form_dict.category and "selected" or "" }} disabled>
+				{{ _("Browse by category") }}
+			</option>
+			{%- if frappe.form_dict.category -%}
+			<option value="blog">{{ _("Show all blogs") }}</option>
+			{%- endif -%}
+			{%- for category in blog_categories -%}
+			<option value="{{ category.route }}" {{ frappe.form_dict.category == category.name and "selected" or "" }}>
+				{{ _(category.title) }}
+			</option>
+			{%- endfor -%}
+		</select>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		{%- endif -%}
 	</div>
 </div>
 
 <div class="blog-list-content">
+<<<<<<< HEAD
 	<div data-doctype="{{ doctype }}" data-txt="{{ (txt or '') | e }}">
+=======
+	<div class="website-list" data-doctype="{{ doctype }}" data-txt="{{ txt or '[notxt]' | e }}">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		{% if not result -%}
 		<div class="text-muted" style="min-height: 300px;">
 			{{ no_result_message or _("Nothing to show") }}
@@ -55,10 +79,17 @@
 {% block script %}
 <script>
 	frappe.ready(() => {
+<<<<<<< HEAD
 		let result_wrapper = $(".blog-list.result");
 		let next_start = {{ next_start or 0 }};
 
 		$(".blog-list-content .btn-more").on("click", function() {
+=======
+		let result_wrapper = $(".website-list .result");
+		let next_start = {{ next_start or 0 }};
+
+		$(".website-list .btn-more").on("click", function() {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			let $btn = $(this);
 			let args = $.extend(frappe.utils.get_query_params(), {
 				doctype: "Blog Post",
@@ -83,7 +114,11 @@
 
 		function toggle_more(show) {
 			if (!show) {
+<<<<<<< HEAD
 				$(".btn-more").addClass("hide");
+=======
+				$(".website-list .more-block").addClass("hide");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		}
 	});

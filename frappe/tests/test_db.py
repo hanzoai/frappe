@@ -2,6 +2,10 @@
 # License: MIT. See LICENSE
 
 import datetime
+<<<<<<< HEAD
+=======
+import inspect
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from math import ceil
 from random import choice
 from unittest.mock import patch
@@ -16,7 +20,11 @@ from frappe.query_builder import Field
 from frappe.query_builder.functions import Concat_ws
 from frappe.tests.test_query_builder import db_type_is, run_only_if
 from frappe.tests.utils import FrappeTestCase, timeout
+<<<<<<< HEAD
 from frappe.utils import add_days, now, random_string, set_request
+=======
+from frappe.utils import add_days, cint, now, random_string, set_request
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils.testutils import clear_custom_fields
 
 
@@ -166,7 +174,11 @@ class TestDB(FrappeTestCase):
 		# test
 		for inp in test_inputs:
 			fieldname = f"test_{inp['fieldtype'].lower()}"
+<<<<<<< HEAD
 			frappe.db.set_single_value("Print Settings", fieldname, inp["value"])
+=======
+			frappe.db.set_value("Print Settings", "Print Settings", fieldname, inp["value"])
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			self.assertEqual(frappe.db.get_single_value("Print Settings", fieldname), inp["value"])
 
 		# teardown
@@ -182,7 +194,11 @@ class TestDB(FrappeTestCase):
 	def test_log_touched_tables(self):
 		frappe.flags.in_migrate = True
 		frappe.flags.touched_tables = set()
+<<<<<<< HEAD
 		frappe.db.set_single_value("System Settings", "backup_limit", 5)
+=======
+		frappe.db.set_value("System Settings", "System Settings", "backup_limit", 5)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertIn("tabSingles", frappe.flags.touched_tables)
 
 		frappe.flags.touched_tables = set()
@@ -518,6 +534,7 @@ class TestDB(FrappeTestCase):
 
 		frappe.db.delete("ToDo", {"description": test_body})
 
+<<<<<<< HEAD
 	def test_bulk_update(self):
 		test_body = f"test_bulk_update - {random_string(10)}"
 
@@ -572,6 +589,8 @@ class TestDB(FrappeTestCase):
 		# cleanup
 		frappe.db.delete("ToDo", {"name": ("in", record_names)})
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_count(self):
 		frappe.db.delete("Note")
 
@@ -628,6 +647,7 @@ class TestDB(FrappeTestCase):
 			modify_values((23, 23.0, 23.00004345, "wow", [1, 2, 3, "abc"])),
 		)
 
+<<<<<<< HEAD
 	def test_callbacks(self):
 		order_of_execution = []
 
@@ -659,6 +679,8 @@ class TestDB(FrappeTestCase):
 
 		self.assertEqual(order_of_execution, list(range(0, 9)))
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 @run_only_if(db_type_is.MARIADB)
 class TestDDLCommandsMaria(FrappeTestCase):
@@ -734,7 +756,16 @@ class TestDBSetValue(FrappeTestCase):
 		value = frappe.db.get_single_value("System Settings", "deny_multiple_sessions")
 		changed_value = not value
 
+<<<<<<< HEAD
 		frappe.db.set_single_value("System Settings", "deny_multiple_sessions", changed_value)
+=======
+		frappe.db.set_value("System Settings", "System Settings", "deny_multiple_sessions", changed_value)
+		current_value = frappe.db.get_single_value("System Settings", "deny_multiple_sessions")
+		self.assertEqual(current_value, changed_value)
+
+		changed_value = not current_value
+		frappe.db.set_value("System Settings", None, "deny_multiple_sessions", changed_value)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		current_value = frappe.db.get_single_value("System Settings", "deny_multiple_sessions")
 		self.assertEqual(current_value, changed_value)
 
@@ -743,6 +774,7 @@ class TestDBSetValue(FrappeTestCase):
 		current_value = frappe.db.get_single_value("System Settings", "deny_multiple_sessions")
 		self.assertEqual(current_value, changed_value)
 
+<<<<<<< HEAD
 		changed_value = not current_value
 		frappe.db.set_single_value("System Settings", "deny_multiple_sessions", changed_value)
 		current_value = frappe.db.get_single_value("System Settings", "deny_multiple_sessions")
@@ -754,16 +786,21 @@ class TestDBSetValue(FrappeTestCase):
 			frappe.db.set_value("User", None, "middle_name", "test")
 			frappe.db.set_value("User", "User", "middle_name", "test")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_update_single_row_single_column(self):
 		frappe.db.set_value("ToDo", self.todo1.name, "description", "test_set_value change 1")
 		updated_value = frappe.db.get_value("ToDo", self.todo1.name, "description")
 		self.assertEqual(updated_value, "test_set_value change 1")
 
+<<<<<<< HEAD
 	@patch("frappe.db.set_single_value")
 	def test_set_single_value_with_set_value(self, single_set):
 		frappe.db.set_value("Contact Us Settings", None, "country", "India")
 		single_set.assert_called_once()
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_update_single_row_multiple_columns(self):
 		description, status = "Upated by test_update_single_row_multiple_columns", "Closed"
 
@@ -844,12 +881,20 @@ class TestDBSetValue(FrappeTestCase):
 			"description",
 			f"{self.todo1.description}-edit by `test_for_update`",
 		)
+<<<<<<< HEAD
 		query = str(frappe.db.last_query)
+=======
+		query = frappe.db.last_query
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if frappe.conf.db_type == "postgres":
 			from frappe.database.postgres.database import modify_query
 
+<<<<<<< HEAD
 			self.assertTrue(modify_query("UPDATE `tabToDo` SET") in query)
+=======
+			self.assertTrue(modify_query("UPDATE `tabToDo` SET") in str(query))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if frappe.conf.db_type == "mariadb":
 			self.assertTrue("UPDATE `tabToDo` SET" in query)
 
@@ -995,7 +1040,11 @@ class TestTransactionManagement(FrappeTestCase):
 # Treat same DB as replica for tests, a separate connection will be opened
 class TestReplicaConnections(FrappeTestCase):
 	def test_switching_to_replica(self):
+<<<<<<< HEAD
 		with patch.dict(frappe.local.conf, {"read_from_replica": 1, "replica_host": "127.0.0.1"}):
+=======
+		with patch.dict(frappe.local.conf, {"read_from_replica": 1, "replica_host": "localhost"}):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			def db_id():
 				return id(frappe.local.db)

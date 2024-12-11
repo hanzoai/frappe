@@ -45,6 +45,7 @@
 .layout-side-section.print-preview-sidebar {
 	padding-right: var(--padding-md);
 
+<<<<<<< HEAD
 	.checkbox label {
 		align-items: unset;
 	}
@@ -55,6 +56,14 @@
 
 	.label-area {
 		white-space: unset;
+=======
+	.clearfix {
+		display: none;
+	}
+
+	.label-area {
+		white-space: nowrap;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 }
 

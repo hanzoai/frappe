@@ -17,12 +17,20 @@ frappe.ui.Tags = class {
 		this.$input = $(`<input class="tags-input form-control"></input>`);
 
 		this.$inputWrapper = this.get_list_element(this.$input);
+<<<<<<< HEAD
 		this.$placeholder =
 			$(`<button class="add-tags-btn text-muted btn btn-link icon-btn" id="add_tags">
 				${__(placeholder)}
 			</button>`);
 		this.$placeholder.appendTo(this.$ul.find(".form-sidebar-items"));
 		this.$inputWrapper.appendTo(this.$ul);
+=======
+		this.$placeholder = this.get_list_element(
+			$(`<span class="tags-placeholder text-muted">${placeholder}</span>`)
+		);
+		this.$inputWrapper.appendTo(this.$ul);
+		this.$placeholder.appendTo(this.$ul);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		this.deactivate();
 		this.bind();
@@ -70,7 +78,11 @@ frappe.ui.Tags = class {
 		if (label && label !== "" && !this.tagsList.includes(label)) {
 			let $tag = this.get_tag(label);
 			let row = this.get_list_element($tag, "form-tag-row");
+<<<<<<< HEAD
 			row.insertAfter(this.$inputWrapper);
+=======
+			row.insertBefore(this.$inputWrapper);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this.tagsList.push(label);
 			this.onTagAdd && this.onTagAdd(label);
 		}
@@ -100,6 +112,7 @@ frappe.ui.Tags = class {
 	}
 
 	get_tag(label) {
+<<<<<<< HEAD
 		let colored = true;
 		let $tag = frappe.get_data_pill(
 			label,
@@ -111,11 +124,22 @@ frappe.ui.Tags = class {
 			null,
 			colored
 		);
+=======
+		let $tag = frappe.get_data_pill(label, label, (target, pill_wrapper) => {
+			this.removeTag(target);
+			pill_wrapper.closest(".form-tag-row").remove();
+		});
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (this.onTagClick) {
 			$tag.on("click", ".pill-label", () => {
 				this.onTagClick(label);
 			});
 		}
+<<<<<<< HEAD
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return $tag;
 	}
 };

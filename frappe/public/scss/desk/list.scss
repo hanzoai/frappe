@@ -59,6 +59,7 @@
 }
 
 .list-row-container {
+<<<<<<< HEAD
 	display: flex;
 	flex-direction: column;
 	outline: none;
@@ -77,17 +78,34 @@
 
 	&:last-child .list-row-border {
 		display: none;
+=======
+	border-bottom: 1px solid $border-color;
+	display: flex;
+	flex-direction: column;
+	outline: none;
+
+	&:focus {
+		background-color: var(--yellow-highlight-color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 }
 
 .list-row {
 	padding: 15px 15px 15px 0px;
+<<<<<<< HEAD
 	height: 40px;
 	cursor: pointer;
 	transition: color 0.2s;
 	-webkit-transition: color 0.2s;
 	@include get_textstyle("base", "regular");
 	border-radius: var(--border-radius-md);
+=======
+	height: 45px;
+	cursor: pointer;
+	transition: color 0.2s;
+	-webkit-transition: color 0.2s;
+	font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	&:hover:not(.list-row-head) {
 		background-color: var(--highlight-color);
@@ -102,9 +120,14 @@
 		min-width: 80%;
 	}
 	.level-right {
+<<<<<<< HEAD
 		flex: 1;
 		overflow: visible;
 		align-items: center;
+=======
+		flex: 1.5;
+		overflow: visible;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	.tag-col {
@@ -129,11 +152,18 @@
 
 		& > span {
 			display: inline-block;
+<<<<<<< HEAD
 		}
 
 		.modified {
 			margin-right: var(--margin-sm);
 			min-width: 1.5rem;
+=======
+
+			&:not(:last-child) {
+				margin-right: 15px;
+			}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		.comment-count {
@@ -143,6 +173,10 @@
 		.frappe-timestamp {
 			font-size: var(--text-xs);
 			white-space: nowrap;
+<<<<<<< HEAD
+=======
+			min-width: 30px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		.list-assignments,
@@ -157,18 +191,25 @@
 		}
 	}
 
+<<<<<<< HEAD
 	.file-select {
 		padding-left: 11px;
 	}
 
 	.select-like {
 		padding: 10px 0 10px 11px;
+=======
+	.select-like,
+	.file-select {
+		padding: 15px 0px 15px 15px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 }
 
 .list-row-head {
 	@extend .list-row;
 	cursor: default;
+<<<<<<< HEAD
 	background-color: var(--subtle-fg);
 	height: 30px;
 	margin: 0.5rem var(--padding-xs);
@@ -177,6 +218,9 @@
 	.list-check-all {
 		margin-left: 11px;
 	}
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	.list-subject {
 		font-weight: normal;
 	}
@@ -191,12 +235,16 @@
 	margin-right: 15px;
 
 	a {
+<<<<<<< HEAD
 		color: var(--text-muted);
 	}
 
 	& > [data-sort-by]:hover {
 		cursor: pointer;
 		text-decoration: underline;
+=======
+		color: var(--text-light);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 }
 
@@ -210,6 +258,13 @@ $level-margin-right: 8px;
 		color: var(--text-color);
 	}
 
+<<<<<<< HEAD
+=======
+	.level-item:not(.file-select) {
+		margin-right: $level-margin-right;
+	}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	&.seen {
 		font-weight: normal;
 	}
@@ -219,6 +274,7 @@ $level-margin-right: 8px;
 .footnote-area {
 	border-top: 1px solid var(--border-color);
 
+<<<<<<< HEAD
 	.btn-group {
 		border: 1px solid var(--border-color);
 		border-radius: var(--border-radius);
@@ -233,6 +289,13 @@ $level-margin-right: 8px;
 	}
 	.btn-paging {
 		background-color: var(--gray-50);
+=======
+	.btn-group .btn-paging.btn-info {
+		background-color: var(--gray-600);
+		border-color: var(--gray-600);
+		color: var(--white);
+		font-weight: var(--text-bold);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 }
 
@@ -247,6 +310,13 @@ $level-margin-right: 8px;
 	height: 10px;
 }
 
+<<<<<<< HEAD
+=======
+.likes-count {
+	display: none;
+}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .list-liked-by-me {
 	margin-bottom: 1px;
 }
@@ -254,9 +324,13 @@ $level-margin-right: 8px;
 input.list-check-all,
 input.list-row-checkbox {
 	margin-top: 0px;
+<<<<<<< HEAD
 	margin-bottom: 0px;
 	--checkbox-right-margin: calc(var(--checkbox-size) / 2 + #{$level-margin-right});
 	background-color: var(--card-bg);
+=======
+	--checkbox-right-margin: calc(var(--checkbox-size) / 2 + #{$level-margin-right});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 input.list-check-all {
@@ -309,7 +383,11 @@ input.list-check-all {
 	height: 40px;
 	padding-left: 15px;
 
+<<<<<<< HEAD
 	@include get_textstyle("base", "regular");
+=======
+	font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	&:hover {
 		background-color: var(--highlight-color);
@@ -421,6 +499,7 @@ input.list-check-all {
 
 	.filter-selector .btn-group {
 		margin: var(--margin-xs);
+<<<<<<< HEAD
 
 		.filter-label {
 			display: inline-block;
@@ -433,6 +512,13 @@ input.list-check-all {
 	}
 
 	.filter-button.btn-primary-light {
+=======
+	}
+
+	.filter-button.btn-primary-light {
+		color: var(--text-on-blue);
+		outline: 1px solid var(--bg-dark-blue);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		z-index: 1;
 	}
 

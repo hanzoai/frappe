@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+/* eslint-disable no-console */
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 const path = require("path");
 const fs = require("fs");
 const glob = require("fast-glob");

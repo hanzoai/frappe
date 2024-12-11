@@ -1,8 +1,11 @@
 # Copyright (c) 2017, Frappe Technologies and Contributors
 # License: MIT. See LICENSE
 import frappe
+<<<<<<< HEAD
 from frappe.contacts.doctype.contact.contact import get_full_name
 from frappe.email import get_contact_list
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.tests.utils import FrappeTestCase
 
 test_dependencies = ["Contact", "Salutation"]
@@ -33,6 +36,7 @@ class TestContact(FrappeTestCase):
 		self.assertEqual(contact.phone, "+91 0000000002")
 		self.assertEqual(contact.mobile_no, "+91 0000000003")
 
+<<<<<<< HEAD
 	def test_get_full_name(self):
 		self.assertEqual(get_full_name(first="John"), "John")
 		self.assertEqual(get_full_name(last="Doe"), "Doe")
@@ -58,6 +62,8 @@ class TestContact(FrappeTestCase):
 		self.assertEqual(results[0].value, "test_contact@example.com")
 		self.assertEqual(results[0].description, "_Test Contact For _Test Supplier")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def create_contact(name, salutation, emails=None, phones=None, save=True):
 	doc = frappe.get_doc(

@@ -10,7 +10,11 @@ frappe.ui.form.ControlIcon = class ControlIcon extends frappe.ui.form.ControlDat
 
 	get_all_icons() {
 		frappe.symbols = [];
+<<<<<<< HEAD
 		$("#all-symbols > svg > symbol[id]").each(function () {
+=======
+		$("#frappe-symbols > symbol[id]").each(function () {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this.id.includes("icon-") && frappe.symbols.push(this.id.replace("icon-", ""));
 		});
 	}

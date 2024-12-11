@@ -15,6 +15,7 @@ class NamingSeriesNotSetError(frappe.ValidationError):
 
 
 class DocumentNamingSettings(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -37,6 +38,8 @@ class DocumentNamingSettings(Document):
 		user_must_always_select: DF.Check
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@frappe.whitelist()
 	def get_transactions_and_prefixes(self):
 		transactions = self._get_transactions()
@@ -190,6 +193,7 @@ class DocumentNamingSettings(Document):
 		return self.current_value
 
 	@frappe.whitelist()
+<<<<<<< HEAD
 	def update_amendment_rule(self):
 		self.db_set("default_amend_naming", self.default_amend_naming)
 
@@ -207,6 +211,8 @@ class DocumentNamingSettings(Document):
 		frappe.msgprint(_("Amendment naming rules updated."), indicator="green", alert=True)
 
 	@frappe.whitelist()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def update_series_start(self):
 		frappe.only_for("System Manager")
 
@@ -245,7 +251,12 @@ class DocumentNamingSettings(Document):
 			doc = self._fetch_last_doc_if_available()
 			return "\n".join(NamingSeries(series).get_preview(doc=doc))
 		except Exception as e:
+<<<<<<< HEAD
 			frappe.clear_last_message()
+=======
+			if frappe.message_log:
+				frappe.message_log.pop()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			return _("Failed to generate names from the series") + f"\n{e!s}"
 
 	def _fetch_last_doc_if_available(self):

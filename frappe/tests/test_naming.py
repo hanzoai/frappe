@@ -2,7 +2,10 @@
 # License: MIT. See LICENSE
 
 import time
+<<<<<<< HEAD
 import unittest
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_full_jitter
 
@@ -39,6 +42,7 @@ class TestNaming(FrappeTestCase):
 		if Bottle-1 exists
 		        Bottle -> Bottle-2
 		"""
+<<<<<<< HEAD
 		TITLE = "Bottle"
 		DOCTYPE = "Note"
 
@@ -46,6 +50,18 @@ class TestNaming(FrappeTestCase):
 
 		self.assertEqual(append_number_if_name_exists(DOCTYPE, note.name), f"{note.name}-1")
 		self.assertEqual(append_number_if_name_exists(DOCTYPE, TITLE, "title", "_"), f"{TITLE}_1")
+=======
+
+		note = frappe.new_doc("Note")
+		note.title = "Test"
+		note.insert()
+
+		title2 = append_number_if_name_exists("Note", "Test")
+		self.assertEqual(title2, "Test-1")
+
+		title2 = append_number_if_name_exists("Note", "Test", "title", "_")
+		self.assertEqual(title2, "Test_1")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_field_autoname_name_sync(self):
 		country = frappe.get_last_doc("Country")
@@ -280,8 +296,13 @@ class TestNaming(FrappeTestCase):
 		# set by passing set_name as ToDo
 		self.assertRaises(frappe.NameError, make_invalid_todo)
 
+<<<<<<< HEAD
 		# name (via title field) cannot be the same as the doctype
 		note = frappe.get_doc({"doctype": "Currency", "currency_name": "Currency"})
+=======
+		# set new name - Note
+		note = frappe.get_doc({"doctype": "Note", "title": "Note"})
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertRaises(frappe.NameError, note.insert)
 
 		# case 2: set name with "New ---"
@@ -405,7 +426,10 @@ class TestNaming(FrappeTestCase):
 			expected_name = "TODO-" + nowdate().split("-")[1] + "-" + "0001"
 			self.assertEqual(name, expected_name)
 
+<<<<<<< HEAD
 	@unittest.skip("This is not supported anymore, see #28349.")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@retry(
 		retry=retry_if_exception_type(AssertionError),
 		stop=stop_after_attempt(3),

@@ -1,6 +1,9 @@
 import frappe
 from frappe.model.document import get_controller
+<<<<<<< HEAD
 from frappe.utils.caching import redis_cache
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.website.page_renderers.base_template_page import BaseTemplatePage
 from frappe.website.router import (
 	get_doctypes_with_web_view,
@@ -23,15 +26,43 @@ class DocumentPage(BaseTemplatePage):
 		return False
 
 	def search_in_doctypes_with_web_view(self):
+<<<<<<< HEAD
 		if document := _find_matching_document_webview(self.path):
 			self.doctype, self.docname = document
 			doc = frappe.get_cached_doc(self.doctype, self.docname)
 			return doc.meta.allow_guest_to_view or doc.has_permission() or frappe.has_website_permission(doc)
+=======
+		for doctype in get_doctypes_with_web_view():
+			filters = dict(route=self.path)
+			meta = frappe.get_meta(doctype)
+			condition_field = self.get_condition_field(meta)
+
+			if condition_field:
+				filters[condition_field] = 1
+
+			try:
+				self.docname = frappe.db.get_value(doctype, filters, "name")
+				if self.docname:
+					self.doctype = doctype
+					doc = frappe.get_cached_doc(self.doctype, self.docname)
+					return (
+						doc.meta.allow_guest_to_view
+						or doc.has_permission()
+						or frappe.has_website_permission(doc)
+					)
+			except Exception as e:
+				if not frappe.db.is_missing_column(e):
+					raise e
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def search_web_page_dynamic_routes(self):
 		d = get_page_info_from_web_page_with_dynamic_routes(self.path)
 		if d:
+<<<<<<< HEAD
 			self.doctype = d.doctype
+=======
+			self.doctype = "Web Page"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			self.docname = d.name
 			return True
 		else:
@@ -49,7 +80,12 @@ class DocumentPage(BaseTemplatePage):
 		self.init_context()
 		self.update_context()
 		self.post_process_context()
+<<<<<<< HEAD
 		return frappe.get_template(self.template_path).render(self.context)
+=======
+		html = frappe.get_template(self.template_path).render(self.context)
+		return html
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def update_context(self):
 		self.context.doc = self.doc
@@ -71,8 +107,12 @@ class DocumentPage(BaseTemplatePage):
 			if prop not in self.context:
 				self.context[prop] = getattr(self.doc, prop, False)
 
+<<<<<<< HEAD
 	@staticmethod
 	def get_condition_field(meta):
+=======
+	def get_condition_field(self, meta):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		condition_field = None
 		if meta.is_published_field:
 			condition_field = meta.is_published_field
@@ -81,6 +121,7 @@ class DocumentPage(BaseTemplatePage):
 			condition_field = controller.website.condition_field
 
 		return condition_field
+<<<<<<< HEAD
 
 
 @redis_cache(ttl=60 * 60)
@@ -106,3 +147,5 @@ def _find_matching_document_webview(route: str) -> tuple[str, str] | None:
 		except Exception as e:
 			if not frappe.db.is_missing_column(e):
 				raise e
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

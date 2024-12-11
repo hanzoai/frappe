@@ -17,7 +17,11 @@
 	{% block header_buttons %}
 	{% if allow_edit and in_view_mode %}
 		<!-- edit button -->
+<<<<<<< HEAD
 		<a href="/{{ route }}/{{ doc_name }}/edit" class="edit-button btn btn-default btn-sm">{{ _("Edit", context="Button in web form") }}</a>
+=======
+		<a href="/{{ route }}/{{ doc_name }}/edit" class="edit-button btn btn-default btn-sm">{{ _("Edit Response", context="Button in web form") }}</a>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	{% endif %}
 
 	{% if allow_print and in_view_mode %}
@@ -164,6 +168,7 @@
 		frappe._messages = {{ translated_messages }};
 		frappe.web_form_doc = {{ web_form_doc | json }};
 		frappe.reference_doc = {{ reference_doc | json }};
+<<<<<<< HEAD
 		function in_iframe() {
 			try {
 				return window.self !== window.top;
@@ -182,6 +187,16 @@
 			$('.page_content').css('padding-left', 'unset').css('padding-right', 'unset');
 		}
 	</script>
+=======
+	</script>
+
+	<script type="text/javascript" src="/assets/frappe/node_modules/vue/dist/vue.js"></script>
+	<script>
+		Vue.prototype.__ = window.__;
+		Vue.prototype.frappe = window.frappe;
+	</script>
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	{{ include_script("web_form.bundle.js") }}
 
 	<script>

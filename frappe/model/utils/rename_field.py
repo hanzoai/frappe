@@ -8,11 +8,16 @@ from frappe.model.utils.user_settings import sync_user_settings, update_user_set
 from frappe.utils.password import rename_password_field
 
 
+<<<<<<< HEAD
 def rename_field(doctype, old_fieldname, new_fieldname, validate=True):
+=======
+def rename_field(doctype, old_fieldname, new_fieldname):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""This functions assumes that doctype is already synced"""
 
 	meta = frappe.get_meta(doctype, cached=False)
 	new_field = meta.get_field(new_fieldname)
+<<<<<<< HEAD
 
 	if validate:
 		if not new_field:
@@ -23,6 +28,16 @@ def rename_field(doctype, old_fieldname, new_fieldname, validate=True):
 			print("rename_field: " + (old_fieldname) + " not found in table for: " + doctype)
 			# never had the field?
 			return
+=======
+	if not new_field:
+		print("rename_field: " + (new_fieldname) + " not found in " + doctype)
+		return
+
+	if not meta.issingle and not frappe.db.has_column(doctype, old_fieldname):
+		print("rename_field: " + (old_fieldname) + " not found in table for: " + doctype)
+		# never had the field?
+		return
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if new_field.fieldtype in table_fields:
 		# change parentfield of table mentioned in options

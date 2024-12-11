@@ -40,7 +40,11 @@
  "icon": "fa fa-flag",
  "idx": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-12-08 15:52:37.525003",
+=======
+ "modified": "2023-03-20 18:12:42.137863",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Workflow",
  "name": "Workflow State",
@@ -58,14 +62,22 @@
    "write": 1
   },
   {
+<<<<<<< HEAD
    "role": "Desk User",
+=======
+   "role": "All",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "select": 1
   }
  ],
  "quick_entry": 1,
  "show_name_in_global_search": 1,
  "sort_field": "modified",
+<<<<<<< HEAD
  "sort_order": "DESC",
+=======
+ "sort_order": "ASC",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "states": [],
  "track_changes": 1,
  "translated_doctype": 1

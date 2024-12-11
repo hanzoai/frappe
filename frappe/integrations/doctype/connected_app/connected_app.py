@@ -4,7 +4,10 @@
 import os
 from urllib.parse import urlencode, urljoin
 
+<<<<<<< HEAD
 from oauthlib.oauth2 import BackendApplicationClient
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from requests_oauthlib import OAuth2Session
 
 import frappe
@@ -19,6 +22,7 @@ os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
 
 
 class ConnectedApp(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -42,6 +46,8 @@ class ConnectedApp(Document):
 		token_uri: DF.Data | None
 		userinfo_uri: DF.Data | None
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""Connect to a remote oAuth Server. Retrieve and store user's access token
 	in a Token Cache.
 	"""
@@ -147,6 +153,7 @@ class ConnectedApp(Document):
 
 		return token_cache
 
+<<<<<<< HEAD
 	def get_backend_app_token(self):
 		"""Get an Access Token for the Cloud-Registered Service Principal"""
 		# There is no User assigned to the app, so we give it an empty string,
@@ -170,6 +177,8 @@ class ConnectedApp(Document):
 
 		return token_cache
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 @frappe.whitelist(methods=["GET"], allow_guest=True)
 def callback(code=None, state=None):
@@ -193,7 +202,11 @@ def callback(code=None, state=None):
 	token_cache = frappe.get_doc("Token Cache", connected_app.name + "-" + frappe.session.user)
 
 	if state != token_cache.state:
+<<<<<<< HEAD
 		frappe.throw(_("Invalid token state! Check if the token has been created by the OAuth user."))
+=======
+		frappe.throw(_("Invalid state."))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	oauth_session = connected_app.get_oauth2_session(init=True)
 	query_params = connected_app.get_query_params()

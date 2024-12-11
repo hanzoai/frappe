@@ -11,6 +11,11 @@ frappe.listview_settings["Workflow Action"] = {
 		}
 		docname = docname.match(/[%'"]/) ? encodeURIComponent(docname) : docname;
 
+<<<<<<< HEAD
 		return "/app/" + frappe.router.slug(doctype) + "/" + docname;
+=======
+		const link = "/app/" + frappe.router.slug(doctype) + "/" + docname;
+		return link;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 };

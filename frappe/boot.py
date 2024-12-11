@@ -4,8 +4,11 @@
 bootstrap client session
 """
 
+<<<<<<< HEAD
 import os
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import frappe
 import frappe.defaults
 import frappe.desk.desk_page
@@ -26,7 +29,10 @@ from frappe.social.doctype.energy_point_settings.energy_point_settings import (
 )
 from frappe.utils import add_user_info, cstr, get_system_timezone
 from frappe.utils.change_log import get_versions
+<<<<<<< HEAD
 from frappe.utils.frappecloud import on_frappecloud
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.website.doctype.web_page_view.web_page_view import is_tracking_enabled
 
 
@@ -110,12 +116,17 @@ def get_bootinfo():
 	bootinfo.link_title_doctypes = get_link_title_doctypes()
 	bootinfo.translated_doctypes = get_translated_doctypes()
 	bootinfo.subscription_conf = add_subscription_conf()
+<<<<<<< HEAD
 	bootinfo.marketplace_apps = get_marketplace_apps()
 	bootinfo.changelog_feed = get_changelog_feed_items()
 
 	if sentry_dsn := get_sentry_dsn():
 		bootinfo.sentry_dsn = sentry_dsn
 
+=======
+	bootinfo.changelog_feed = get_changelog_feed_items()
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return bootinfo
 
 
@@ -136,7 +147,11 @@ def load_conf_settings(bootinfo):
 	from frappe.core.api.file import get_max_file_size
 
 	bootinfo.max_file_size = get_max_file_size()
+<<<<<<< HEAD
 	for key in ("developer_mode", "socketio_port", "file_watcher_port", "fc_communication_secret"):
+=======
+	for key in ("developer_mode", "socketio_port", "file_watcher_port"):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if key in frappe.conf:
 			bootinfo[key] = frappe.conf.get(key)
 
@@ -162,8 +177,15 @@ def get_allowed_report_names(cache=False) -> set[str]:
 
 
 def get_user_pages_or_reports(parent, cache=False):
+<<<<<<< HEAD
 	if cache:
 		has_role = frappe.cache.get_value("has_role:" + parent, user=frappe.session.user)
+=======
+	_cache = frappe.cache()
+
+	if cache:
+		has_role = _cache.get_value("has_role:" + parent, user=frappe.session.user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if has_role:
 			return has_role
 
@@ -173,9 +195,13 @@ def get_user_pages_or_reports(parent, cache=False):
 	page = DocType("Page")
 	report = DocType("Report")
 
+<<<<<<< HEAD
 	is_report = parent == "Report"
 
 	if is_report:
+=======
+	if parent == "Report":
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		columns = (report.name.as_("title"), report.ref_doctype, report.report_type)
 	else:
 		columns = (page.title.as_("title"),)
@@ -217,7 +243,11 @@ def get_user_pages_or_reports(parent, cache=False):
 		.distinct()
 	)
 
+<<<<<<< HEAD
 	if is_report:
+=======
+	if parent == "Report":
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		pages_with_standard_roles = pages_with_standard_roles.where(report.disabled == 0)
 
 	pages_with_standard_roles = pages_with_standard_roles.run(as_dict=True)
@@ -232,6 +262,7 @@ def get_user_pages_or_reports(parent, cache=False):
 		frappe.qb.from_(hasRole).select(Count("*")).where(hasRole.parent == parentTable.name)
 	)
 
+<<<<<<< HEAD
 	# pages and reports with no role are allowed
 	rows_with_no_roles = (
 		frappe.qb.from_(parentTable)
@@ -246,6 +277,21 @@ def get_user_pages_or_reports(parent, cache=False):
 				has_role[r.name] |= {"ref_doctype": r.ref_doctype}
 
 	if is_report:
+=======
+	# pages with no role are allowed
+	if parent == "Page":
+		pages_with_no_roles = (
+			frappe.qb.from_(parentTable)
+			.select(parentTable.name, parentTable.modified, *columns)
+			.where(no_of_roles == 0)
+		).run(as_dict=True)
+
+		for p in pages_with_no_roles:
+			if p.name not in has_role:
+				has_role[p.name] = {"modified": p.modified, "title": p.title}
+
+	elif parent == "Report":
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if not has_permission("Report", raise_exception=False):
 			return {}
 
@@ -263,7 +309,11 @@ def get_user_pages_or_reports(parent, cache=False):
 			has_role.pop(r, None)
 
 	# Expire every six hours
+<<<<<<< HEAD
 	frappe.cache.set_value("has_role:" + parent, has_role, frappe.session.user, 21600)
+=======
+	_cache.set_value("has_role:" + parent, has_role, frappe.session.user, 21600)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return has_role
 
 
@@ -304,7 +354,12 @@ def add_home_page(bootinfo, docs):
 		docs.append(page)
 		bootinfo["home_page"] = page.name
 	except (frappe.DoesNotExistError, frappe.PermissionError):
+<<<<<<< HEAD
 		frappe.clear_last_message()
+=======
+		if frappe.message_log:
+			frappe.message_log.pop()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		bootinfo["home_page"] = "Workspaces"
 
 
@@ -444,6 +499,7 @@ def load_currency_docs(bootinfo):
 	bootinfo.docs += currency_docs
 
 
+<<<<<<< HEAD
 def get_marketplace_apps():
 	import requests
 
@@ -470,11 +526,14 @@ def get_marketplace_apps():
 	return apps
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def add_subscription_conf():
 	try:
 		return frappe.conf.subscription
 	except Exception:
 		return ""
+<<<<<<< HEAD
 
 
 def get_sentry_dsn():
@@ -482,3 +541,5 @@ def get_sentry_dsn():
 		return
 
 	return os.getenv("FRAPPE_SENTRY_DSN")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

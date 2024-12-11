@@ -1,7 +1,11 @@
 # Configuration for probot-stale - https://github.com/probot/stale
 
 # Number of days of inactivity before an Issue or Pull Request becomes stale
+<<<<<<< HEAD
 daysUntilStale: 14
+=======
+daysUntilStale: 7
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 # Number of days of inactivity before a stale Issue or Pull Request is closed.
 # Set to false to disable. If disabled, issues still need to be closed manually, but will remain marked as stale.

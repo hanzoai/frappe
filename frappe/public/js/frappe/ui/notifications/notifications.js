@@ -69,10 +69,19 @@ frappe.ui.Notifications = class Notifications {
 		let get_headers_html = (item) => {
 			let active = item.id == "notifications" ? "active" : "";
 
+<<<<<<< HEAD
 			return `<li class="notifications-category ${active}"
    					id="${item.id}"
    					data-toggle="collapse"
    				>${item.label}</li>`;
+=======
+			let html = `<li class="notifications-category ${active}"
+					id="${item.id}"
+					data-toggle="collapse"
+				>${item.label}</li>`;
+
+			return html;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		};
 
 		let navitem = $(`<ul class="notification-item-tabs nav nav-tabs" role="tablist"></ul>`);
@@ -242,18 +251,30 @@ class NotificationsView extends BaseNotificationsView {
 		this.change_activity_status();
 	}
 
+<<<<<<< HEAD
 	get_dropdown_item_html(notification_log) {
 		let doc_link = this.get_item_link(notification_log);
 
 		let read_class = notification_log.read ? "" : "unread";
 		let message = notification_log.subject;
+=======
+	get_dropdown_item_html(field) {
+		let doc_link = this.get_item_link(field);
+
+		let read_class = field.read ? "" : "unread";
+		let message = field.subject;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		let title = message.match(/<b class="subject-title">(.*?)<\/b>/);
 		message = title
 			? message.replace(title[1], frappe.ellipsis(strip_html(title[1]), 100))
 			: message;
 
+<<<<<<< HEAD
 		let timestamp = frappe.datetime.comment_when(notification_log.creation);
+=======
+		let timestamp = frappe.datetime.comment_when(field.creation);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		let message_html = `<div class="message">
 			<div>${message}</div>
 			<div class="notification-timestamp text-muted">
@@ -261,12 +282,20 @@ class NotificationsView extends BaseNotificationsView {
 			</div>
 		</div>`;
 
+<<<<<<< HEAD
 		let user = notification_log.from_user;
+=======
+		let user = field.from_user;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		let user_avatar = frappe.avatar(user, "avatar-medium user-avatar");
 
 		let item_html = $(`<a class="recent-item notification-item ${read_class}"
 				href="${doc_link}"
+<<<<<<< HEAD
 				data-name="${notification_log.name}"
+=======
+				data-name="${field.name}"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			>
 				<div class="notification-body">
 					${user_avatar}
@@ -276,18 +305,30 @@ class NotificationsView extends BaseNotificationsView {
 				</div>
 			</a>`);
 
+<<<<<<< HEAD
 		if (!notification_log.read) {
+=======
+		if (!field.read) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			let mark_btn = item_html.find(".mark-as-read");
 			mark_btn.tooltip({ delay: { show: 600, hide: 100 }, trigger: "hover" });
 			mark_btn.on("click", (e) => {
 				e.preventDefault();
 				e.stopImmediatePropagation();
+<<<<<<< HEAD
 				this.mark_as_read(notification_log.name, item_html);
+=======
+				this.mark_as_read(field.name, item_html);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			});
 		}
 
 		item_html.on("click", () => {
+<<<<<<< HEAD
 			!notification_log.read && this.mark_as_read(notification_log.name, item_html);
+=======
+			!field.read && this.mark_as_read(field.name, item_html);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this.notifications_icon.trigger("click");
 		});
 
@@ -303,8 +344,13 @@ class NotificationsView extends BaseNotificationsView {
 		} else {
 			if (this.dropdown_items.length) {
 				this.container.empty();
+<<<<<<< HEAD
 				this.dropdown_items.forEach((notification_log) => {
 					this.container.append(this.get_dropdown_item_html(notification_log));
+=======
+				this.dropdown_items.forEach((field) => {
+					this.container.append(this.get_dropdown_item_html(field));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				});
 				this.container.append(`<a class="list-footer"
 					href="/app/List/Notification Log">
@@ -332,9 +378,12 @@ class NotificationsView extends BaseNotificationsView {
 	}
 
 	get_item_link(notification_doc) {
+<<<<<<< HEAD
 		if (notification_doc.link) {
 			return notification_doc.link;
 		}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		const link_doctype = notification_doc.document_type
 			? notification_doc.document_type
 			: "Notification Log";

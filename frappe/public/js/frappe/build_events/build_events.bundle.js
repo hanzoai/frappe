@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import { createApp } from "vue";
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import BuildError from "./BuildError.vue";
 import BuildSuccess from "./BuildSuccess.vue";
 
@@ -17,7 +20,11 @@ frappe.realtime.on("build_event", (data) => {
 					if (parts.length === 2) {
 						let filename = parts[0].split("/").slice(-1)[0];
 
+<<<<<<< HEAD
 						frappe.assets._executed = frappe.assets._executed.filter(
+=======
+						frappe.assets.executed_ = frappe.assets.executed_.filter(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							(asset) => !asset.includes(`${filename}.bundle`)
 						);
 					}
@@ -49,7 +56,15 @@ function show_build_success(data) {
 
 	if (!success) {
 		let target = $('<div class="build-success-container">').appendTo($container).get(0);
+<<<<<<< HEAD
 		success = createApp(BuildSuccess).mount(target);
+=======
+		let vm = new Vue({
+			el: target,
+			render: (h) => h(BuildSuccess),
+		});
+		success = vm.$children[0];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	success.show(data);
 }
@@ -60,7 +75,15 @@ function show_build_error(data) {
 	}
 	if (!error) {
 		let target = $('<div class="build-error-container">').appendTo($container).get(0);
+<<<<<<< HEAD
 		error = createApp(BuildError).mount(target);
+=======
+		let vm = new Vue({
+			el: target,
+			render: (h) => h(BuildError),
+		});
+		error = vm.$children[0];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	error.show(data);
 }

@@ -280,7 +280,11 @@ frappe.PrintFormatBuilder = class PrintFormatBuilder {
 				set_section(f.label);
 			} else if (f.fieldtype === "Column Break") {
 				set_column();
+<<<<<<< HEAD
 			} else if (!frappe.model.layout_fields.includes(f.fieldtype)) {
+=======
+			} else if (!in_list(frappe.model.layout_fields, f.fieldtype)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				if (!column) set_column();
 
 				if (f.fieldtype === "Table") {
@@ -317,7 +321,11 @@ frappe.PrintFormatBuilder = class PrintFormatBuilder {
 		f.visible_columns = [];
 		$.each(frappe.get_meta(f.options).fields, function (i, _f) {
 			if (
+<<<<<<< HEAD
 				!["Section Break", "Column Break", "Tab Break"].includes(_f.fieldtype) &&
+=======
+				!in_list(["Section Break", "Column Break", "Tab Break"], _f.fieldtype) &&
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				!_f.print_hide &&
 				f.label
 			) {
@@ -372,11 +380,18 @@ frappe.PrintFormatBuilder = class PrintFormatBuilder {
 				if (!$item.hasClass("print-format-builder-field")) {
 					var fieldname = $item.attr("data-fieldname");
 
+<<<<<<< HEAD
 					let field;
 					if (fieldname === "_custom_html") {
 						field = me.get_custom_html_field();
 					} else {
 						field = frappe.meta.get_docfield(me.print_format.doc_type, fieldname);
+=======
+					if (fieldname === "_custom_html") {
+						var field = me.get_custom_html_field();
+					} else {
+						var field = frappe.meta.get_docfield(me.print_format.doc_type, fieldname);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					}
 
 					var html = frappe.render_template("print_format_builder_field", {
@@ -562,7 +577,11 @@ frappe.PrintFormatBuilder = class PrintFormatBuilder {
 			resize();
 		} else if (new_no_of_columns > no_of_columns) {
 			// add empty column and resize old columns
+<<<<<<< HEAD
 			for (let i = no_of_columns; i < new_no_of_columns; i++) {
+=======
+			for (var i = no_of_columns; i < new_no_of_columns; i++) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				var col = $(
 					'<div class="section-column">\
 					<div class="print-format-builder-column"></div></div>'
@@ -636,7 +655,11 @@ frappe.PrintFormatBuilder = class PrintFormatBuilder {
 			// add field which are in column_names first to preserve order
 			var fields = [];
 			$.each(column_names, function (i, v) {
+<<<<<<< HEAD
 				if (Object.keys(docfields_by_name).includes(v)) {
+=======
+				if (in_list(Object.keys(docfields_by_name), v)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					fields.push(docfields_by_name[v]);
 				}
 			});
@@ -644,8 +667,13 @@ frappe.PrintFormatBuilder = class PrintFormatBuilder {
 			$.each(doc_fields, function (j, f) {
 				if (
 					f &&
+<<<<<<< HEAD
 					!column_names.includes(f.fieldname) &&
 					!["Section Break", "Column Break", "Tab Break"].includes(f.fieldtype) &&
+=======
+					!in_list(column_names, f.fieldname) &&
+					!in_list(["Section Break", "Column Break", "Tab Break"], f.fieldtype) &&
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					f.label
 				) {
 					fields.push(f);

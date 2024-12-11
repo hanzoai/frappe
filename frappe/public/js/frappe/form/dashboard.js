@@ -175,9 +175,16 @@ frappe.ui.form.Dashboard = class FormDashboard {
 
 	make_progress_chart(title) {
 		this.progress_area.show();
+<<<<<<< HEAD
 		return $('<div class="progress-chart" title="' + (title || "") + '"></div>').appendTo(
 			this.progress_area.body
 		);
+=======
+		let progress_chart = $(
+			'<div class="progress-chart" title="' + (title || "") + '"></div>'
+		).appendTo(this.progress_area.body);
+		return progress_chart;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	refresh() {
@@ -562,7 +569,11 @@ frappe.ui.form.Dashboard = class FormDashboard {
 				.addClass("indicator-column");
 		}
 
+<<<<<<< HEAD
 		return $(
+=======
+		let indicator = $(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			'<div class="col-sm-' +
 				colspan +
 				' indicator-column"><span class="indicator ' +
@@ -571,6 +582,11 @@ frappe.ui.form.Dashboard = class FormDashboard {
 				label +
 				"</span></div>"
 		).appendTo(this.stats_area_row);
+<<<<<<< HEAD
+=======
+
+		return indicator;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	// graphs

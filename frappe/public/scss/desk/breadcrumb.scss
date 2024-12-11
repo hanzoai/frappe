@@ -2,13 +2,23 @@
 	padding-left: 0;
 	padding-right: 0;
 	background-color: white;
+<<<<<<< HEAD
 	@include get_textstyle("sm", "regular");
+=======
+	font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 /*! This comment will be included even in compressed mode. */
 #navbar-breadcrumbs {
 	margin-left: var(--margin-md);
+<<<<<<< HEAD
 	@include get_textstyle("base", "regular");
 	a {
+=======
+	font-size: var(--text-sm);
+	a {
+		font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		margin-right: 10px;
 		&:before {
 			content: #{"/*!rtl:var(--left-arrow-svg);*/"}var(--right-arrow-svg);
@@ -19,7 +29,11 @@
 
 	li.disabled {
 		a {
+<<<<<<< HEAD
 			color: var(--gray-600);
+=======
+			color: var(--text-muted);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			pointer-events: none;
 		}
 	}

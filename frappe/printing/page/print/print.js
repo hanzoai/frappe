@@ -75,7 +75,11 @@ frappe.ui.form.PrintView = class {
 		});
 
 		this.page.add_action_icon(
+<<<<<<< HEAD
 			"es-line-filetype",
+=======
+			"file",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			() => {
 				this.go_to_form_view();
 			},
@@ -87,6 +91,7 @@ frappe.ui.form.PrintView = class {
 	setup_sidebar() {
 		this.sidebar = this.page.sidebar.addClass("print-preview-sidebar");
 
+<<<<<<< HEAD
 		this.print_format_selector = this.add_sidebar_item({
 			fieldtype: "Link",
 			fieldname: "print_format",
@@ -103,12 +108,33 @@ frappe.ui.form.PrintView = class {
 			fieldname: "language",
 			label: __("Language"),
 			options: "Language",
+=======
+		this.print_sel = this.add_sidebar_item({
+			fieldtype: "Select",
+			fieldname: "print_format",
+			label: "Print Format",
+			options: [this.get_default_option_for_select(__("Select Print Format"))],
+			change: () => this.refresh_print_format(),
+			default: __("Select Print Format"),
+		}).$input;
+
+		this.language_sel = this.add_sidebar_item({
+			fieldtype: "Select",
+			fieldname: "language",
+			placeholder: "Language",
+			options: [
+				this.get_default_option_for_select(__("Select Language")),
+				...this.get_language_options(),
+			],
+			default: __("Select Language"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			change: () => {
 				this.set_user_lang();
 				this.preview();
 			},
 		}).$input;
 
+<<<<<<< HEAD
 		let description = "";
 		if (!cint(this.print_settings.repeat_header_footer)) {
 			description =
@@ -131,6 +157,20 @@ frappe.ui.form.PrintView = class {
 				print_view.preview();
 			},
 		}).$input;
+=======
+		this.letterhead_selector_df = this.add_sidebar_item({
+			fieldtype: "Autocomplete",
+			fieldname: "letterhead",
+			label: __("Select Letterhead"),
+			placeholder: __("Select Letterhead"),
+			options: [__("No Letterhead")],
+			change: () => this.preview(),
+			default: this.print_settings.with_letterhead
+				? __("No Letterhead")
+				: __("Select Letterhead"),
+		});
+		this.letterhead_selector = this.letterhead_selector_df.$input;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.sidebar_dynamic_section = $(`<div class="dynamic-settings"></div>`).appendTo(
 			this.sidebar
 		);
@@ -154,6 +194,17 @@ frappe.ui.form.PrintView = class {
 		return field;
 	}
 
+<<<<<<< HEAD
+=======
+	get_default_option_for_select(value) {
+		return {
+			label: value,
+			value: value,
+			disabled: true,
+		};
+	}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	setup_menu() {
 		this.page.clear_menu();
 
@@ -184,6 +235,7 @@ frappe.ui.form.PrintView = class {
 		this.set_breadcrumbs();
 		this.setup_customize_dialog();
 
+<<<<<<< HEAD
 		// print designer link
 		if (Object.keys(frappe.boot.versions).includes("print_designer")) {
 			this.page.add_inner_message(`
@@ -202,6 +254,19 @@ frappe.ui.form.PrintView = class {
 			this.set_default_print_format,
 			this.set_default_print_language,
 			this.set_default_letterhead,
+=======
+		// print format builder beta
+		this.page.add_inner_message(`
+			<a style="line-height: 2.4" href="/app/print-format-builder-beta?doctype=${this.frm.doctype}">
+				${__("Try the new Print Format Builder")}
+			</a>
+		`);
+
+		let tasks = [
+			this.refresh_print_options,
+			this.set_default_print_language,
+			this.set_letterhead_options,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this.preview,
 		].map((fn) => fn.bind(this));
 
@@ -290,7 +355,11 @@ frappe.ui.form.PrintView = class {
 					beta: data.beta,
 				};
 				frappe.set_route("print-format-builder");
+<<<<<<< HEAD
 				this.print_format_selector.val(data.print_format_name);
+=======
+				this.print_sel.val(data.print_format_name);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			},
 			__("New Custom Print Format"),
 			__("Start")
@@ -315,6 +384,14 @@ frappe.ui.form.PrintView = class {
 	setup_customize_dialog() {
 		let print_format = this.get_print_format();
 		$(document).on("new-print-format", (e) => {
+<<<<<<< HEAD
+=======
+			this.refresh_print_options();
+			if (e.print_format) {
+				this.print_sel.val(e.print_format);
+			}
+			// start a new print format
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			frappe.prompt(
 				[
 					{
@@ -351,6 +428,7 @@ frappe.ui.form.PrintView = class {
 		});
 	}
 
+<<<<<<< HEAD
 	set_default_letterhead() {
 		if (this.frm.doc.letter_head) {
 			this.letterhead_selector.val(this.frm.doc.letter_head);
@@ -364,13 +442,48 @@ frappe.ui.form.PrintView = class {
 
 	set_user_lang() {
 		this.lang_code = this.language_selector.val();
+=======
+	set_letterhead_options() {
+		let letterhead_options = [__("No Letterhead")];
+		let default_letterhead;
+		let doc_letterhead = this.frm.doc.letter_head;
+
+		return frappe.db
+			.get_list("Letter Head", {
+				filters: { disabled: 0 },
+				fields: ["name", "is_default"],
+				limit: 0,
+			})
+			.then((letterheads) => {
+				letterheads.map((letterhead) => {
+					if (letterhead.is_default) default_letterhead = letterhead.name;
+					return letterhead_options.push(letterhead.name);
+				});
+
+				this.letterhead_selector_df.set_data(letterhead_options);
+				let selected_letterhead = doc_letterhead || default_letterhead;
+				if (selected_letterhead) this.letterhead_selector.val(selected_letterhead);
+			});
+	}
+
+	set_user_lang() {
+		this.lang_code = this.language_sel.val();
+	}
+
+	get_language_options() {
+		return frappe.get_languages();
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	set_default_print_language() {
 		let print_format = this.get_print_format();
 		this.lang_code =
 			this.frm.doc.language || print_format.default_print_language || frappe.boot.lang;
+<<<<<<< HEAD
 		this.language_selector.val(this.lang_code);
+=======
+		this.language_sel.val(this.lang_code);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	toggle_raw_printing() {
@@ -606,6 +719,7 @@ frappe.ui.form.PrintView = class {
 			},
 		});
 	}
+<<<<<<< HEAD
 	async is_wkhtmltopdf_valid() {
 		const is_valid = await frappe.xcall("frappe.utils.pdf.is_wkhtmltopdf_valid");
 		// function returns true or false
@@ -624,6 +738,9 @@ frappe.ui.form.PrintView = class {
 			indicator: "red",
 		});
 	}
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	render_pdf() {
 		let print_format = this.get_print_format();
 		if (print_format.print_format_builder_beta) {
@@ -639,7 +756,10 @@ frappe.ui.form.PrintView = class {
 				return;
 			}
 		} else {
+<<<<<<< HEAD
 			this.is_wkhtmltopdf_valid();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this.render_page("/api/method/frappe.utils.print_format.download_pdf?");
 		}
 	}
@@ -700,7 +820,11 @@ frappe.ui.form.PrintView = class {
 	}
 
 	get_letterhead() {
+<<<<<<< HEAD
 		return this.letterhead_selector.val() || __("No Letterhead");
+=======
+		return this.letterhead_selector.val();
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	get_no_preview_html() {
@@ -741,12 +865,18 @@ frappe.ui.form.PrintView = class {
 	get_print_format_printer_map() {
 		// returns the whole object "print_format_printer_map" stored in the localStorage.
 		try {
+<<<<<<< HEAD
 			return JSON.parse(localStorage.print_format_printer_map);
+=======
+			let print_format_printer_map = JSON.parse(localStorage.print_format_printer_map);
+			return print_format_printer_map;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		} catch (e) {
 			return {};
 		}
 	}
 
+<<<<<<< HEAD
 	set_default_print_format() {
 		if (
 			frappe.meta
@@ -762,6 +892,25 @@ frappe.ui.form.PrintView = class {
 
 	selected_format() {
 		return this.print_format_selector.val() || "Standard";
+=======
+	refresh_print_options() {
+		this.print_formats = frappe.meta.get_print_formats(this.frm.doctype);
+		const print_format_select_val = this.print_sel.val();
+		this.print_sel
+			.empty()
+			.add_options([
+				this.get_default_option_for_select(__("Select Print Format")),
+				...this.print_formats,
+			]);
+		return (
+			this.print_formats.includes(print_format_select_val) &&
+			this.print_sel.val(print_format_select_val)
+		);
+	}
+
+	selected_format() {
+		return this.print_sel.val() || this.frm.meta.default_print_format || "Standard";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	is_raw_printing(format) {
@@ -816,7 +965,11 @@ frappe.ui.form.PrintView = class {
 								fieldtype: "Select",
 								fieldname: "print_format",
 								default: 0,
+<<<<<<< HEAD
 								options: frappe.meta.get_print_formats(this.frm.doctype),
+=======
+								options: this.print_formats,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 								read_only: 0,
 								in_list_view: 1,
 								label: __("Print Format"),

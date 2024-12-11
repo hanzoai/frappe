@@ -25,8 +25,12 @@
    "fieldtype": "Data",
    "label": "Report Name",
    "read_only": 1,
+<<<<<<< HEAD
    "reqd": 1,
    "search_index": 1
+=======
+   "reqd": 1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "default": "Queued",
@@ -36,9 +40,14 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Status",
+<<<<<<< HEAD
    "options": "Error\nQueued\nCompleted\nStarted",
    "read_only": 1,
    "search_index": 1
+=======
+   "options": "Error\nQueued\nCompleted",
+   "read_only": 1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "column_break_4",
@@ -78,14 +87,24 @@
   {
    "fieldname": "filter_values",
    "fieldtype": "HTML",
+<<<<<<< HEAD
    "hidden": 1,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "label": "Filter Values"
   },
   {
    "fieldname": "job_id",
+<<<<<<< HEAD
    "fieldtype": "Data",
    "label": "Job ID",
    "no_copy": 1,
+=======
+   "fieldtype": "Link",
+   "label": "Job ID",
+   "no_copy": 1,
+   "options": "RQ Job",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "read_only": 1
   },
   {
@@ -105,7 +124,11 @@
  ],
  "in_create": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-03-07 12:01:58.209879",
+=======
+ "modified": "2022-05-03 21:29:39.883803",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Prepared Report",

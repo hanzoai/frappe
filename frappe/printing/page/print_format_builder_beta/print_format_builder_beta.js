@@ -58,7 +58,11 @@ function load_print_format_builder_beta(wrapper) {
 					default: frappe.route_options ? frappe.route_options.doctype : null,
 				},
 				{
+<<<<<<< HEAD
 					label: __("New Print Format Name"),
+=======
+					label: __("Print Format Name"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					fieldname: "print_format_name",
 					fieldtype: "Data",
 					depends_on: (doc) => doc.action === "Create",

@@ -5,6 +5,14 @@ import click
 import frappe
 from frappe.database.db_manager import DbManager
 
+<<<<<<< HEAD
+=======
+REQUIRED_MARIADB_CONFIG = {
+	"character_set_server": "utf8mb4",
+	"collation_server": "utf8mb4_unicode_ci",
+}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def get_mariadb_variables():
 	return frappe._dict(frappe.db.sql("show variables"))
@@ -14,20 +22,33 @@ def get_mariadb_version(version_string: str = ""):
 	# MariaDB classifies their versions as Major (1st and 2nd number), and Minor (3rd number)
 	# Example: Version 10.3.13 is Major Version = 10.3, Minor Version = 13
 	version_string = version_string or get_mariadb_variables().get("version")
+<<<<<<< HEAD
 	version = version_string.split("-", 1)[0]
 	return version.rsplit(".", 1)
 
 
 def setup_database(force, verbose, mariadb_user_host_login_scope=None):
+=======
+	version = version_string.split("-")[0]
+	return version.rsplit(".", 1)
+
+
+def setup_database(force, source_sql, verbose, no_mariadb_socket=False):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	frappe.local.session = frappe._dict({"user": "Administrator"})
 
 	db_name = frappe.local.conf.db_name
 	root_conn = get_root_connection(frappe.flags.root_login, frappe.flags.root_password)
 	dbman = DbManager(root_conn)
 	dbman_kwargs = {}
+<<<<<<< HEAD
 
 	if mariadb_user_host_login_scope is not None:
 		dbman_kwargs["host"] = mariadb_user_host_login_scope
+=======
+	if no_mariadb_socket:
+		dbman_kwargs["host"] = "%"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if force or (db_name not in dbman.get_database_list()):
 		dbman.delete_user(db_name, **dbman_kwargs)
@@ -51,6 +72,28 @@ def setup_database(force, verbose, mariadb_user_host_login_scope=None):
 	# close root connection
 	root_conn.close()
 
+<<<<<<< HEAD
+=======
+	bootstrap_database(db_name, verbose, source_sql)
+
+
+def setup_help_database(help_db_name):
+	dbman = DbManager(get_root_connection(frappe.flags.root_login, frappe.flags.root_password))
+	dbman.drop_database(help_db_name)
+
+	# make database
+	if help_db_name not in dbman.get_database_list():
+		try:
+			dbman.create_user(help_db_name, help_db_name)
+		except Exception as e:
+			# user already exists
+			if e.args[0] != 1396:
+				raise
+		dbman.create_database(help_db_name)
+		dbman.grant_all_privileges(help_db_name, help_db_name)
+		dbman.flush_privileges()
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def drop_user_and_database(db_name, root_login, root_password):
 	frappe.local.db = get_root_connection(root_login, root_password)
@@ -60,6 +103,7 @@ def drop_user_and_database(db_name, root_login, root_password):
 	dbman.delete_user(db_name)
 
 
+<<<<<<< HEAD
 def bootstrap_database(verbose, source_sql=None):
 	import sys
 
@@ -69,6 +113,19 @@ def bootstrap_database(verbose, source_sql=None):
 	import_db_from_sql(source_sql, verbose)
 	frappe.connect()
 
+=======
+def bootstrap_database(db_name, verbose, source_sql=None):
+	import sys
+
+	frappe.connect(db_name=db_name)
+	if not check_database_settings():
+		print("Database settings do not match expected values; stopping database setup.")
+		sys.exit(1)
+
+	import_db_from_sql(source_sql, verbose)
+
+	frappe.connect(db_name=db_name)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if "tabDefaultValue" not in frappe.db.get_tables(cached=False):
 		from click import secho
 
@@ -87,21 +144,58 @@ def import_db_from_sql(source_sql=None, verbose=False):
 	db_name = frappe.conf.db_name
 	if not source_sql:
 		source_sql = os.path.join(os.path.dirname(__file__), "framework_mariadb.sql")
+<<<<<<< HEAD
 	DbManager(frappe.local.db).restore_database(
 		verbose, db_name, source_sql, db_name, frappe.conf.db_password
 	)
+=======
+	DbManager(frappe.local.db).restore_database(db_name, source_sql, db_name, frappe.conf.db_password)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if verbose:
 		print("Imported from database %s" % source_sql)
 
 
+<<<<<<< HEAD
+=======
+def check_database_settings():
+	check_compatible_versions()
+
+	# Check each expected value vs. actuals:
+	mariadb_variables = get_mariadb_variables()
+	result = True
+	for key, expected_value in REQUIRED_MARIADB_CONFIG.items():
+		if mariadb_variables.get(key) != expected_value:
+			print(f"For key {key}. Expected value {expected_value}, found value {mariadb_variables.get(key)}")
+			result = False
+
+	if not result:
+		print(
+			(
+				"{sep2}Creation of your site - {site} failed because MariaDB is not properly {sep}"
+				"configured.{sep2}"
+				"Please verify the above settings in MariaDB's my.cnf.  Restart MariaDB.{sep}"
+				"And then run `bench new-site {site}` again.{sep2}"
+			).format(site=frappe.local.site, sep2="\n\n", sep="\n")
+		)
+
+	return result
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def check_compatible_versions():
 	try:
 		version = get_mariadb_version()
 		version_tuple = tuple(int(v) for v in version[0].split("."))
 
+<<<<<<< HEAD
 		if version_tuple < (10, 6):
 			click.secho(
 				f"Warning: MariaDB version {version} is less than 10.6 which is not supported by Frappe",
+=======
+		if version_tuple < (10, 3):
+			click.secho(
+				f"Warning: MariaDB version {version} is less than 10.3 which is not supported by Frappe",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				fg="yellow",
 			)
 		elif version_tuple >= (10, 9):
@@ -129,6 +223,7 @@ def get_root_connection(root_login, root_password):
 		if not root_password:
 			root_password = getpass.getpass("MySQL root password: ")
 
+<<<<<<< HEAD
 		frappe.local.flags.root_connection = frappe.database.get_db(
 			socket=frappe.conf.db_socket,
 			host=frappe.conf.db_host,
@@ -137,5 +232,8 @@ def get_root_connection(root_login, root_password):
 			password=root_password,
 			cur_db_name=None,
 		)
+=======
+		frappe.local.flags.root_connection = frappe.database.get_db(user=root_login, password=root_password)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return frappe.local.flags.root_connection

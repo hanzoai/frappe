@@ -14,9 +14,21 @@ test_dependencies = ["Web Form"]
 class TestWebForm(FrappeTestCase):
 	def setUp(self):
 		frappe.conf.disable_website_cache = True
+<<<<<<< HEAD
 
 	def tearDown(self):
 		frappe.conf.disable_website_cache = False
+=======
+		frappe.local.path = None
+
+	def tearDown(self):
+		frappe.conf.disable_website_cache = False
+		frappe.local.path = None
+		frappe.local.request_ip = None
+		frappe.form_dict.web_form = None
+		frappe.form_dict.data = None
+		frappe.form_dict.docname = None
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_accept(self):
 		frappe.set_user("Administrator")
@@ -28,6 +40,13 @@ class TestWebForm(FrappeTestCase):
 			"starts_on": "2014-09-09",
 		}
 
+<<<<<<< HEAD
+=======
+		frappe.form_dict.web_form = "manage-events"
+		frappe.form_dict.data = json.dumps(doc)
+		frappe.local.request_ip = "127.0.0.1"
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		accept(web_form="manage-events", data=json.dumps(doc))
 
 		self.event_name = frappe.db.get_value("Event", {"subject": "_Test Event Web Form"})
@@ -48,7 +67,15 @@ class TestWebForm(FrappeTestCase):
 			frappe.db.get_value("Event", self.event_name, "description"), doc.get("description")
 		)
 
+<<<<<<< HEAD
 		accept("manage-events", json.dumps(doc))
+=======
+		frappe.form_dict.web_form = "manage-events"
+		frappe.form_dict.docname = self.event_name
+		frappe.form_dict.data = json.dumps(doc)
+
+		accept(web_form="manage-events", docname=self.event_name, data=json.dumps(doc))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.assertEqual(frappe.db.get_value("Event", self.event_name, "description"), doc.get("description"))
 
@@ -62,6 +89,7 @@ class TestWebForm(FrappeTestCase):
 
 	def test_webform_html_meta_is_added(self):
 		set_request(method="GET", path="manage-events/new")
+<<<<<<< HEAD
 		content = self.normalize_html(get_response_content("manage-events/new"))
 
 		self.assertIn(self.normalize_html('<meta name="title" content="Test Meta Form Title">'), content)
@@ -76,3 +104,10 @@ class TestWebForm(FrappeTestCase):
 			self.normalize_html('<meta property="og:image" content="https://frappe.io/files/frappe.png">'),
 			content,
 		)
+=======
+		content = get_response_content("manage-events/new")
+
+		self.assertIn('<meta name="name" content="Test Meta Form Title">', content)
+		self.assertIn('<meta property="og:description" content="Test Meta Form Description">', content)
+		self.assertIn('<meta property="og:image" content="https://frappe.io/files/frappe.png">', content)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -11,7 +11,10 @@ The following 3rd-party software packages may be used by or distributed with <ht
 - Leaflet.Locate - (c) 2016 Dominik Moritz
 - Leaflet.draw - (c) 2012-2017, Jacob Toye, Jon West, Smartrak
 - Leaflet.EasyButton - MIT License, (C) 2014 Daniel Montague
+<<<<<<< HEAD
 - Identicons - MIT License, (C) 2015, <https://github.com/evuez/identicons>
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 ### Icon Fonts
 

@@ -9,6 +9,10 @@ Action,Akce,
 Actions,Akce,
 Active,Aktivní,
 Add,Přidat,
+<<<<<<< HEAD
+=======
+Add Comment,Přidat komentář,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,Přidat řádek,
 Address,Adresa,
 Address Line 2,Adresní řádek 2,
@@ -143,6 +147,10 @@ Monday,Pondělí,
 Monthly,Měsíčně,
 More,Více,
 More Information,Víc informací,
+<<<<<<< HEAD
+=======
+More...,Více...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,Stěhovat,
 My Account,Můj Účet,
 New Address,Nová adresa,
@@ -155,6 +163,10 @@ No items found.,Žádné předměty nenalezeny.,
 None,Žádný,
 Not Permitted,Není povoleno,
 Not active,Neaktivní,
+<<<<<<< HEAD
+=======
+Notes,Poznámky,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,Číslo,
 Online,Online,
 Operation,Operace,
@@ -164,12 +176,25 @@ Owner,Majitel,
 Page Missing or Moved,Stránka chybí nebo byla přesunuta,
 Parameter,Parametr,
 Password,Heslo,
+<<<<<<< HEAD
 Period,Období,
 Pincode,PSČ,
+=======
+Payment Gateway,Platební brána,
+Payment Gateway Name,Název platební brány,
+Payments,Platby,
+Period,Období,
+Pincode,PSČ,
+Plan Name,Název plánu,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,Prosím povolte vyskakovací okna,
 Please select Company,"Prosím, vyberte Company",
 Please select {0},"Prosím, vyberte {0}",
 Please set Email Address,Prosím nastavte e-mailovou adresu,
+<<<<<<< HEAD
+=======
+Portal,Portál,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,Portál Nastavení,
 Preview,Preview,
 Primary,Primární,
@@ -214,6 +239,10 @@ Salutation,Oslovení,
 Sample,Vzorek,
 Saturday,Sobota,
 Saved,Uloženo,
+<<<<<<< HEAD
+=======
+Scan Barcode,Naskenujte čárový kód,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,Plánované,
 Search,Hledat,
 Secret Key,Tajný klíč,
@@ -228,6 +257,10 @@ Settings,Nastavení,
 Shipping,Doprava,
 Short Name,Zkrácené jméno,
 Slideshow,Promítání obrázků,
+<<<<<<< HEAD
+=======
+Some information is missing,Některé informace chybí,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,Zdroj,
 Source Name,Název zdroje,
 Standard,Standard,
@@ -237,6 +270,10 @@ State,Stát,
 Stopped,Zastaveno,
 Subject,Předmět,
 Submit,Odeslat,
+<<<<<<< HEAD
+=======
+Successful,Úspěšný,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,souhrn,
 Sunday,Neděle,
 System Manager,Správce systému,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,Časové rozpětí,
 To,Na,
 To Date,To Date,
+<<<<<<< HEAD
 Traceback,Vystopovat,
 URL,URL,
 Unsubscribed,Odhlášen z odběru,
+=======
+Tools,Nástroje,
+Traceback,Vystopovat,
+URL,URL,
+Unsubscribed,Odhlášen z odběru,
+Use Sandbox,použití Sandbox,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,Uživatel,
 User ID,User ID,
 Users,Uživatelé,
@@ -556,6 +601,10 @@ Bulk Delete,Hromadné odstranění,
 Bulk Edit {0},Hromadná Upravit {0},
 Bulk Rename,Hromadné přejmenování,
 Bulk Update,Hromadná aktualizace,
+<<<<<<< HEAD
+=======
+Busy,Zaneprázdněný,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,Tlačítko,
 Button Help,tlačítko Nápověda,
 Button Label,tlačítko Label,
@@ -692,6 +741,10 @@ Compiled Successfully,Kompilace úspěšně,
 Complete By,Splnit do,
 Complete Registration,Dokončit registraci,
 Complete Setup,Kompletní nastavení,
+<<<<<<< HEAD
+=======
+Completed By,Dokončeno,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,skládat e-mail,
 Condition Detail,Podrobnosti o stavu,
 Conditions,Podmínky,
@@ -1380,7 +1433,11 @@ Is Submittable,Je Odeslatelné,
 Is Table,je Tabulka,
 Is Your Company Address,Je vaše firma adresa,
 It is risky to delete this file: {0}. Please contact your System Manager.,"Je to riskantní smazat tento soubor: {0}. Prosím, obraťte se na správce systému.",
+<<<<<<< HEAD
 Item cannot be added to its own descendants,Položka nemůže být přidána jako svůj vlastní podřízený potomek,
+=======
+Item cannot be added to its own descendents,Položka nemůže být přidána jako svůj vlastní podřízený potomek,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,JSON,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},JavaScript Formát: frappe.query_reports['REPORTNAME'] = {},
@@ -1675,8 +1732,13 @@ Not a valid Workflow Action,Neplatná akce Workflow,
 Not a valid user,Není platný uživatel,
 Not a zip file,Nejedná se o soubor zip,
 Not allowed for {0}: {1},Není povoleno pro {0}: {1},
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}","Není povoleno přistupovat k {0}, protože je propojen s {1} '{2}' v řádku {3}, pole {4}"
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},"Není povoleno přistupovat k tomuto záznamu {0}, protože je propojen s {1} '{2}' v poli {3}",
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},Není povoleno pro {0}: {1} v řádku {2}. Omezené pole: {3},
+Not allowed for {0}: {1}. Restricted field: {2},Není povoleno pro {0}: {1}. Omezené pole: {2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,Není povoleno importovat,
 Not allowed to change {0} after submission,Není povoleno změnit {0} po vložení,
 Not allowed to print cancelled documents,Není dovoleno tisknout zrušené dokumenty,
@@ -1804,6 +1866,10 @@ Path to private Key File,Cesta k souboru soukromého klíče,
 PayPal Settings,Nastavení PayPal,
 PayPal payment gateway settings,PayPal nastavení platební brána,
 Payment Cancelled,platba byla zrušena,
+<<<<<<< HEAD
+=======
+Payment Failed,Platba selhala,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,platba Úspěch,
 Pending Approval,Čeká na schválení,
 Pending Verification,Čeká na ověření,
@@ -3200,6 +3266,10 @@ Click on the link below to approve the request,Kliknutím na níže uvedený odk
 Click on the lock icon to toggle public/private,Klepnutím na ikonu zámku přepnete mezi veřejným / soukromým,
 Click on {0} to generate Refresh Token.,Kliknutím na {0} vygenerujete Refresh Token.,
 Close Condition,Zavřít podmínku,
+<<<<<<< HEAD
+=======
+Column {0},Sloupec {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,Sloupce / pole,
 "Configure notifications for mentions, assignments, energy points and more.","Nakonfigurujte oznámení pro zmínky, přiřazení, energetické body a další.",
 Contact Email,Kontaktní e-mail,
@@ -3281,6 +3351,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,Selhání,
 Fetching default Global Search documents.,Načítání výchozích dokumentů globálního vyhledávání.,
 Fetching posts...,Načítání příspěvků ...,
+<<<<<<< HEAD
+=======
+Field Mapping,Polní mapování,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,Pole ke kontrole,
 File Information,Informace o souboru,
 Filter By,Filtrovat podle,
@@ -3435,6 +3509,10 @@ No posts yet,Zatím žádné příspěvky,
 No records will be exported,Žádné záznamy nebudou exportovány,
 No results found for {0} in Global Search,Pro globální vyhledávání nebyly nalezeny žádné výsledky pro {0},
 No user found,Nebyl nalezen žádný uživatel,
+<<<<<<< HEAD
+=======
+Not Specified,Nespecifikováno,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,Protokol oznámení,
 Notification Settings,Nastavení upozornění,
 Notification Subscribed Document,Dokument předplatného oznámení,
@@ -3590,6 +3668,10 @@ Untitled Column,Sloupec bez názvu,
 Untranslated,Nepřekládaný,
 Upcoming Events,Připravované akce,
 Update Existing Records,Aktualizace existujících záznamů,
+<<<<<<< HEAD
+=======
+Update Type,Typ aktualizace,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,Aktualizováno na novou verzi 🎉,
 "Updating {0} of {1}, {2}","Aktualizace {0} z {1}, {2}",
 Upload file,Nahrát soubor,
@@ -3696,16 +3778,28 @@ Designation,Označení,
 Disabled,Vypnuto,
 Doctype,Doctype,
 Download Template,Stáhnout šablonu,
+<<<<<<< HEAD
+=======
+Dr,Dr,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,Datum splatnosti,
 Duplicate,Duplikát,
 Edit Profile,Editovat profil,
 Email,E-mailem,
+<<<<<<< HEAD
+=======
+End Time,End Time,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,Zadejte hodnotu,
 Entity Type,Typ entity,
 Error,Chyba,
 Expired,Vypršela,
 Export,Exportovat,
 Export not allowed. You need {0} role to export.,Export není povolen. Potřebujete roli {0} pro exportování.,
+<<<<<<< HEAD
+=======
+Fetching...,Okouzlující...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,Pole,
 File Manager,Správce souborů,
 Filters,Filtry,
@@ -3720,8 +3814,16 @@ Import Data from CSV / Excel files.,Import dat z souborů CSV / Excel.,
 In Progress,Pokrok,
 Intermediate,přechodný,
 Invite as User,Pozvat jako Uživatel,
+<<<<<<< HEAD
 Loading...,Nahrávám...,
 Location,Místo,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.","Zdá se, že je problém s konfigurací proužku serveru. V případě selhání bude částka vrácena na váš účet.",
+Loading...,Nahrávám...,
+Location,Místo,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,"Vypadá to, že vám někdo zaslal neúplnémý URL. Požádejte ho, aby to zkontroloval.",
+Master,Hlavní,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,Zpráva,
 Missing Values Required,Chybějící hodnoty vyžadovány,
 Mobile No,Mobile No,
@@ -3733,6 +3835,10 @@ Note,Poznámka,
 Offline,Offline,
 Open,Otevřít,
 Page {0} of {1},Strana {0} z {1},
+<<<<<<< HEAD
+=======
+Pay,Zaplatit,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,Až do,
 Phone,Telefon,
 Please click on the following link to set your new password,"Prosím klikněte na následující odkaz, pro nastavení nového hesla",
@@ -3782,6 +3888,10 @@ Welcome to {0},Vítejte v {0},
 Year,Rok,
 Yearly,Ročně,
 You,Vy,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,Můžete také kopírovat - vložit tento odkaz do Vašeho prohlížeče,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,a,
 {0} Name,{0} Name,
 {0} is required,{0} je vyžadováno,
@@ -4085,6 +4195,10 @@ Custom SCSS,Vlastní SCSS,
 Navbar,Navbar,
 Source Message,Zdrojová zpráva,
 Translated Message,Přeložená zpráva,
+<<<<<<< HEAD
+=======
+Verified By,Verified By,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,"Používání této konzoly může útočníkům umožnit vydávat se za vás a ukrást vaše informace. Nezadávejte ani nevkládejte kód, kterému nerozumíte.",
 {0} m,{0} m,
 {0} h,{0} h,
@@ -4108,7 +4222,11 @@ No changes in document,Žádné změny v dokumentu,
 by Role,podle role,
 Document is only editable by users with role,Dokument lze upravovat pouze uživateli s rolí,
 {0}: Other permission rules may also apply,{0}: Mohou platit i další pravidla oprávnění,
+<<<<<<< HEAD
 {0} Web page views,{0} Zobrazení stránky,
+=======
+{0} Page Views,{0} Zobrazení stránky,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,Rozšířit,
 Collapse,Kolaps,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.","Neplatný token na doručitele, uveďte platný přístupový token s předponou „na doručitele“.",
@@ -4117,6 +4235,10 @@ Collapse,Kolaps,
 {0} is not a valid Name,{0} není platné jméno,
 Your system is being updated. Please refresh again after a few moments.,Váš systém se aktualizuje. Po několika okamžicích znovu obnovte.,
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}: Odeslaný záznam nelze smazat. Nejprve to musíte {2} zrušit {3}.,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},Neplatná pojmenovací řada (. Chybí) pro {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},Došlo k chybě v {0},
 Status Updated,Stav aktualizován,
 You can also copy-paste this {0} to your browser,Toto {0} můžete také zkopírovat a vložit do svého prohlížeče,
@@ -4138,11 +4260,21 @@ Is Billing Contact,Je fakturační kontakt,
 Address And Contacts,Adresa a kontakty,
 Lead Conversion Time,Lead Conversion Time,
 Due Date Based On,Datum splatnosti založeno na,
+<<<<<<< HEAD
 Linked Documents,Propojené dokumenty,
+=======
+Phone Number,Telefonní číslo,
+Linked Documents,Propojené dokumenty,
+Account SID,SID účtu,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,Kroky,
 email,e-mailem,
 Component,Komponent,
 Subtitle,Titulky,
+<<<<<<< HEAD
+=======
+Global Defaults,Globální Výchozí,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,Prefix,
 Is Public,Je veřejné,
 This chart will be available to all Users if this is set,"Pokud je tato tabulka nastavena, bude tato tabulka k dispozici všem uživatelům",
@@ -4329,6 +4461,10 @@ Dynamic Filters Section,Sekce dynamických filtrů,
 Please create Card first,Nejprve si prosím vytvořte kartu,
 Onboarding Permission,Registrace povolení,
 Onboarding Step,Krok přihlášení,
+<<<<<<< HEAD
+=======
+Is Mandatory,Je povinná,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,Je přeskočeno,
 Create Entry,Vytvořit záznam,
 Update Settings,Aktualizovat nastavení,
@@ -4366,6 +4502,10 @@ Message (HTML),Zpráva (HTML),
 Send Attachments,Odeslat přílohy,
 Testing,Testování,
 System Notification,Oznámení systému,
+<<<<<<< HEAD
+=======
+WhatsApp,WhatsApp,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,Twilio číslo,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","Chcete-li použít WhatsApp pro firmy, inicializujte <a href=""#Form/Twilio Settings"">nastavení Twilio</a> .",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","Chcete-li použít Slack Channel, přidejte <a href=""#List/Slack%20Webhook%20URL/List"">URL Slack Webhook</a> .",
@@ -4500,6 +4640,10 @@ Add to ToDo,Přidat do úkolů,
 {0} are currently {1},{0} jsou aktuálně {1},
 Currently Replying,Právě odpovídá,
 created {0},vytvořeno {0},
+<<<<<<< HEAD
+=======
+Make a call,Zavolat,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,Změna,Coins
 Too Many Requests,Příliš mnoho požadavků,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.","Neplatná záhlaví autorizace, přidejte token s předponou z jedné z následujících možností: {0}.",
@@ -4664,6 +4808,7 @@ Value cannot be negative for {0}: {1},Hodnota nemůže být záporná pro {0}: {
 Negative Value,Záporná hodnota,
 Authentication failed while receiving emails from Email Account: {0}.,Při přijímání e-mailů z e-mailového účtu se nezdařilo ověření: {0}.,
 Message from server: {0},Zpráva ze serveru: {0},
+<<<<<<< HEAD
 Add Row,Přidat řádek,
 Analytics,analytika,
 Anonymous,Anonymní,
@@ -4796,3 +4941,5 @@ West Bengal,Západní Bengálsko,
 Published on,Publikováno dne,
 Bottom,Dno,
 Top,Horní,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

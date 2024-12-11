@@ -9,6 +9,10 @@ Action,aksie,
 Actions,aksies,
 Active,aktiewe,
 Add,Voeg,
+<<<<<<< HEAD
+=======
+Add Comment,Voeg kommentaar by,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,Voeg ry by,
 Address,adres,
 Address Line 2,Adreslyn 2,
@@ -143,6 +147,10 @@ Monday,Maandag,
 Monthly,maandelikse,
 More,meer,
 More Information,Meer inligting,
+<<<<<<< HEAD
+=======
+More...,Meer ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,skuif,
 My Account,My rekening,
 New Address,Nuwe adres,
@@ -155,6 +163,10 @@ No items found.,Geen items gevind nie.,
 None,Geen,
 Not Permitted,Nie toegelaat,
 Not active,Nie aktief nie,
+<<<<<<< HEAD
+=======
+Notes,notas,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,aantal,
 Online,Online,
 Operation,operasie,
@@ -164,12 +176,25 @@ Owner,Eienaar,
 Page Missing or Moved,Bladsy ontbreek of verskuif,
 Parameter,parameter,
 Password,wagwoord,
+<<<<<<< HEAD
 Period,tydperk,
 Pincode,PIN-kode,
+=======
+Payment Gateway,Betaling Gateway,
+Payment Gateway Name,Betaling Gateway Naam,
+Payments,betalings,
+Period,tydperk,
+Pincode,PIN-kode,
+Plan Name,Plan Naam,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,Aktiveer pop-ups,
 Please select Company,Kies asseblief Maatskappy,
 Please select {0},Kies asseblief {0},
 Please set Email Address,Stel asseblief e-pos adres in,
+<<<<<<< HEAD
+=======
+Portal,portaal,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,Portal instellings,
 Preview,voorskou,
 Primary,primêre,
@@ -214,6 +239,10 @@ Salutation,Salueer,
 Sample,monster,
 Saturday,Saterdag,
 Saved,gered,
+<<<<<<< HEAD
+=======
+Scan Barcode,Skandeer strepieskode,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,geskeduleer,
 Search,Soek,
 Secret Key,Geheime Sleutel,
@@ -228,6 +257,10 @@ Settings,instellings,
 Shipping,Gestuur,
 Short Name,Kort naam,
 Slideshow,skyfievertoning,
+<<<<<<< HEAD
+=======
+Some information is missing,Sommige inligting ontbreek,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,Bron,
 Source Name,Bron Naam,
 Standard,Standard,
@@ -237,6 +270,10 @@ State,staat,
 Stopped,gestop,
 Subject,Onderwerp,
 Submit,Indien,
+<<<<<<< HEAD
+=======
+Successful,Suksesvol,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,opsomming,
 Sunday,Sondag,
 System Manager,Stelselbestuurder,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,Tydsverloop,
 To,om,
 To Date,Tot op hede,
+<<<<<<< HEAD
 Traceback,Spoor terug,
 URL,URL,
 Unsubscribed,uitgeteken,
+=======
+Tools,gereedskap,
+Traceback,Spoor terug,
+URL,URL,
+Unsubscribed,uitgeteken,
+Use Sandbox,Gebruik Sandbox,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,gebruiker,
 User ID,Gebruikers-ID,
 Users,gebruikers,
@@ -556,6 +601,10 @@ Bulk Delete,Grootmaatverwydering,
 Bulk Edit {0},Grootmaat wysig {0},
 Bulk Rename,Bulk Hernoem,
 Bulk Update,Grootmaat Update,
+<<<<<<< HEAD
+=======
+Busy,Besig,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,Button,
 Button Help,Knoppie Hulp,
 Button Label,Knoppie,
@@ -692,6 +741,10 @@ Compiled Successfully,Suksesvol saamgestel,
 Complete By,Voltooi By,
 Complete Registration,Voltooi Registrasie,
 Complete Setup,Voltooi instellings,
+<<<<<<< HEAD
+=======
+Completed By,Voltooi deur,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,Stel e-pos saam,
 Condition Detail,Toestanddetail,
 Conditions,voorwaardes,
@@ -1380,7 +1433,11 @@ Is Submittable,Is Submittable,
 Is Table,Is Tabel,
 Is Your Company Address,Is u maatskappy se adres,
 It is risky to delete this file: {0}. Please contact your System Manager.,Dit is riskant om hierdie lêer te verwyder: {0}. Kontak asseblief u stelselbestuurder.,
+<<<<<<< HEAD
 Item cannot be added to its own descendants,Item kan nie by sy eie afstammelinge bygevoeg word nie,
+=======
+Item cannot be added to its own descendents,Item kan nie by sy eie afstammelinge bygevoeg word nie,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,into,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},JavaScript-formaat: frappe.query_reports [&#39;REPORTNAME&#39;] = {},
@@ -1675,8 +1732,13 @@ Not a valid Workflow Action,Nie &#39;n geldige Workflow Action,
 Not a valid user,Nie &#39;n geldige gebruiker nie,
 Not a zip file,Nie &#39;n zip-lêer nie,
 Not allowed for {0}: {1},Nie toegelaat vir {0}: {1},
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}","Nie toegelaat om {0} toegang te kry nie omdat dit gekoppel is aan {1} &#39;{2}&#39; in ry {3}, velde {4}",
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},Nie toegelaat om hierdie {0} rekord toegang te kry nie omdat dit gekoppel is aan {1} &#39;{2}&#39; in velde {3},
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},Nie toegelaat vir {0}: {1} in ry {2}. Beperkte veld: {3},
+Not allowed for {0}: {1}. Restricted field: {2},Nie toegelaat vir {0}: {1}. Beperkte veld: {2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,Nie toegelaat om in te voer nie,
 Not allowed to change {0} after submission,Nie toegelaat om {0} te verander na indiening nie,
 Not allowed to print cancelled documents,Nie toegelaat om gekanselleerde dokumente te druk nie,
@@ -1804,6 +1866,10 @@ Path to private Key File,Pad na privaat sleutellêer,
 PayPal Settings,PayPal-instellings,
 PayPal payment gateway settings,PayPal-betaling gateway instellings,
 Payment Cancelled,Betaling gekanselleer,
+<<<<<<< HEAD
+=======
+Payment Failed,Betaling misluk,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,Betaal Sukses,
 Pending Approval,Hangende goedkeuring,
 Pending Verification,Hangende verifikasie,
@@ -3200,6 +3266,10 @@ Click on the link below to approve the request,Klik op die skakel hieronder om d
 Click on the lock icon to toggle public/private,Klik op die slotikoon om publiek / privaat te skakel,
 Click on {0} to generate Refresh Token.,Klik op {0} om Refresh Token te genereer.,
 Close Condition,Gesonde toestand,
+<<<<<<< HEAD
+=======
+Column {0},Kolom {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,Kolomme / velde,
 "Configure notifications for mentions, assignments, energy points and more.","Stel kennisgewings op vir melding, opdragte, energiepunte en meer.",
 Contact Email,Kontak e-pos,
@@ -3281,6 +3351,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,mislukking,
 Fetching default Global Search documents.,Haal standaard Global Search-dokumente op.,
 Fetching posts...,Haal plasings uit ...,
+<<<<<<< HEAD
+=======
+Field Mapping,Veldkartering,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,Veld om na te gaan,
 File Information,Lêerinligting,
 Filter By,Filter By,
@@ -3435,6 +3509,10 @@ No posts yet,Nog geen plasings nie,
 No records will be exported,Geen rekords sal uitgevoer word nie,
 No results found for {0} in Global Search,Geen resultate vir {0} in Global Search gevind nie,
 No user found,Geen gebruiker gevind nie,
+<<<<<<< HEAD
+=======
+Not Specified,Nie gespesifiseer nie,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,Kennisgewinglogboek,
 Notification Settings,Kennisgewinginstellings,
 Notification Subscribed Document,Kennisgewing ingeteken dokument,
@@ -3590,6 +3668,10 @@ Untitled Column,Ongetitelde kolom,
 Untranslated,onvertaalde,
 Upcoming Events,komende gebeure,
 Update Existing Records,Bestaande rekords opdateer,
+<<<<<<< HEAD
+=======
+Update Type,Opdateringstipe,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,Opgedateer na &#39;n nuwe weergawe 🎉,
 "Updating {0} of {1}, {2}","Dateer {0} van {1}, {2} op",
 Upload file,Laai leêr op,
@@ -3696,16 +3778,28 @@ Designation,aanwysing,
 Disabled,gestremde,
 Doctype,DOCTYPE,
 Download Template,Laai sjabloon af,
+<<<<<<< HEAD
+=======
+Dr,Dr,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,Vervaldatum,
 Duplicate,Dupliseer,
 Edit Profile,Wysig profiel,
 Email,EMail,
+<<<<<<< HEAD
+=======
+End Time,Eindtyd,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,Voer waarde in,
 Entity Type,Entiteitstipe,
 Error,fout,
 Expired,verstryk,
 Export,uitvoer,
 Export not allowed. You need {0} role to export.,Uitvoer nie toegelaat nie. Jy benodig {0} rol om te eksporteer.,
+<<<<<<< HEAD
+=======
+Fetching...,Haal ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,veld,
 File Manager,Lêer bestuurder,
 Filters,filters,
@@ -3720,8 +3814,16 @@ Import Data from CSV / Excel files.,Voer data uit CSV / Excel-lêers in.,
 In Progress,In Progress,
 Intermediate,Intermediêre,
 Invite as User,Nooi as gebruiker,
+<<<<<<< HEAD
 Loading...,Laai ...,
 Location,plek,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.","Dit lyk asof daar &#39;n probleem met die bediener se streepkonfigurasie is. In geval van versuim, sal die bedrag terugbetaal word na u rekening.",
+Loading...,Laai ...,
+Location,plek,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,Dit lyk of iemand jou na &#39;n onvolledige URL gestuur het. Vra hulle asseblief om dit te ondersoek.,
+Master,meester,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,boodskap,
 Missing Values Required,Ontbrekende waardes word vereis,
 Mobile No,Mobiele nommer,
@@ -3733,6 +3835,10 @@ Note,nota,
 Offline,op die regte pad,
 Open,oop,
 Page {0} of {1},Bladsy {0} van {1},
+<<<<<<< HEAD
+=======
+Pay,betaal,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,hangende,
 Phone,Foon,
 Please click on the following link to set your new password,Klik asseblief op die volgende skakel om u nuwe wagwoord te stel,
@@ -3782,6 +3888,10 @@ Welcome to {0},Welkom by {0},
 Year,Jaar,
 Yearly,jaarlikse,
 You,jy,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,U kan hierdie skakel ook kopieer in u blaaier,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,en,
 {0} Name,{0} Naam,
 {0} is required,{0} is nodig,
@@ -4085,6 +4195,10 @@ Custom SCSS,Pasgemaakte SCSS,
 Navbar,Navbar,
 Source Message,Bronboodskap,
 Translated Message,Vertaalde boodskap,
+<<<<<<< HEAD
+=======
+Verified By,Verified By,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,"As u hierdie konsole gebruik, kan aanvallers u naboots en u inligting steel. Moenie kode invoer of plak wat u nie verstaan nie.",
 {0} m,{0} m,
 {0} h,{0} u,
@@ -4108,7 +4222,11 @@ No changes in document,Geen veranderinge in die dokument nie,
 by Role,deur Rol,
 Document is only editable by users with role,Dokument kan slegs deur gebruikers met rol gewysig word,
 {0}: Other permission rules may also apply,{0}: Ander toestemmingsreëls kan ook van toepassing wees,
+<<<<<<< HEAD
 {0} Web page views,{0} Bladsyaansigte,
+=======
+{0} Page Views,{0} Bladsyaansigte,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,Brei uit,
 Collapse,Inval,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.","Ongeldige toker-token, verskaf &#39;n geldige toegangstoken met die voorvoegsel &#39;Draer&#39;.",
@@ -4117,6 +4235,10 @@ Collapse,Inval,
 {0} is not a valid Name,{0} is nie &#39;n geldige naam nie,
 Your system is being updated. Please refresh again after a few moments.,U stelsel word tans opgedateer. Verfris asseblief weer na &#39;n paar oomblikke.,
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}: Die ingediende rekord kan nie uitgevee word nie. U moet dit eers {2} kanselleer {3}.,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},Ongeldige naamreeks (. Ontbreek) vir {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},Fout het voorgekom in {0},
 Status Updated,Status opgedateer,
 You can also copy-paste this {0} to your browser,U kan hierdie {0} ook in u blaaier kopie-plak,
@@ -4138,11 +4260,21 @@ Is Billing Contact,Is faktureringskontak,
 Address And Contacts,Adres en kontakte,
 Lead Conversion Time,Lood Gesprek Tyd,
 Due Date Based On,Vervaldatum gebaseer op,
+<<<<<<< HEAD
 Linked Documents,Gekoppelde dokumente,
+=======
+Phone Number,Telefoon nommer,
+Linked Documents,Gekoppelde dokumente,
+Account SID,Rekening SID,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,Stappe,
 email,e-pos,
 Component,komponent,
 Subtitle,Subtitle,
+<<<<<<< HEAD
+=======
+Global Defaults,Globale verstek,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,voorvoegsel,
 Is Public,Is publiek,
 This chart will be available to all Users if this is set,Hierdie grafiek sal beskikbaar wees vir alle gebruikers as dit ingestel is,
@@ -4329,6 +4461,10 @@ Dynamic Filters Section,Afdeling Dinamiese filters,
 Please create Card first,Skep eers die kaart,
 Onboarding Permission,Toestemming aan boord,
 Onboarding Step,Stap aan boord,
+<<<<<<< HEAD
+=======
+Is Mandatory,Is verpligtend,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,Word oorgeslaan,
 Create Entry,Skep inskrywing,
 Update Settings,Dateer instellings op,
@@ -4366,6 +4502,10 @@ Message (HTML),Boodskap (HTML),
 Send Attachments,Stuur aanhangsels,
 Testing,Toets,
 System Notification,Stelselkennisgewing,
+<<<<<<< HEAD
+=======
+WhatsApp,WhatsApp,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,Twilio-nommer,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","Initialiseer <a href=""#Form/Twilio Settings"">Twilio-instellings</a> om WhatsApp for Business te gebruik.",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","Voeg &#39;n <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a> by om Slack Channel te gebruik.",
@@ -4500,6 +4640,10 @@ Add to ToDo,Voeg by ToDo,
 {0} are currently {1},{0} is tans {1},
 Currently Replying,Antwoord tans,
 created {0},het {0} geskep,
+<<<<<<< HEAD
+=======
+Make a call,Maak &#39;n oproep,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,Verander,Coins
 Too Many Requests,Te veel versoeke,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.","Ongeldige magtigingsopskrifte, voeg &#39;n teken met &#39;n voorvoegsel by uit een van die volgende: {0}.",
@@ -4664,6 +4808,7 @@ Value cannot be negative for {0}: {1},Waarde kan nie negatief wees vir {0}: {1},
 Negative Value,Negatiewe waarde,
 Authentication failed while receiving emails from Email Account: {0}.,Stawing het misluk tydens die ontvangs van e-posse vanaf die e-posrekening: {0}.,
 Message from server: {0},Boodskap vanaf bediener: {0},
+<<<<<<< HEAD
 Add Row,Voeg ry by,
 Analytics,Analytics,
 Anonymous,Anoniem,
@@ -4796,3 +4941,5 @@ West Bengal,Wes-Bengale,
 Published on,Gepubliseer op,
 Bottom,Onder,
 Top,Top,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

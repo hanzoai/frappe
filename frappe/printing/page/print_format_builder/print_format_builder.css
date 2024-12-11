@@ -72,9 +72,14 @@
 
 .print-format-builder-section-head .section-label {
 	font-size: var(--text-lg);
+<<<<<<< HEAD
 	font-weight: var(--weight-medium);
 	letter-spacing: 0.015em;
 	color: var(--text-color);
+=======
+	color: var(--text-color);
+	font-weight: 500;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	vertical-align: middle;
 	margin-left: var(--margin-sm);
 }

@@ -9,6 +9,10 @@ Action,Darbība,
 Actions,Darbības,
 Active,Aktīvs,
 Add,Pievienot,
+<<<<<<< HEAD
+=======
+Add Comment,Pievienot komentāru,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,Pievienot rindu,
 Address,Adrese,
 Address Line 2,Adrese Line 2,
@@ -143,6 +147,10 @@ Monday,Pirmdiena,
 Monthly,Ikmēneša,
 More,Vairāk,
 More Information,Vairāk informācijas,
+<<<<<<< HEAD
+=======
+More...,More ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,pārvietot,
 My Account,Mans konts,
 New Address,Jauna adrese,
@@ -155,6 +163,10 @@ No items found.,Neviens vienums nav atrasts.,
 None,Nav,
 Not Permitted,Nav atļauts,
 Not active,Nav aktīvs,
+<<<<<<< HEAD
+=======
+Notes,Piezīmes,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,Numurs,
 Online,Online,
 Operation,Operācija,
@@ -164,12 +176,25 @@ Owner,Īpašnieks,
 Page Missing or Moved,"Page trūkst, vai pārvietots",
 Parameter,Parametrs,
 Password,Parole,
+<<<<<<< HEAD
 Period,Periods,
 Pincode,Pasta indeksa,
+=======
+Payment Gateway,Maksājumu Gateway,
+Payment Gateway Name,Maksājumu vārtejas nosaukums,
+Payments,Maksājumi,
+Period,Periods,
+Pincode,Pasta indeksa,
+Plan Name,Plāna nosaukums,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,"Lūdzu, aktivizējiet pop-ups",
 Please select Company,"Lūdzu, izvēlieties Uzņēmums",
 Please select {0},"Lūdzu, izvēlieties {0}",
 Please set Email Address,Lūdzu iestatīt e-pasta adresi,
+<<<<<<< HEAD
+=======
+Portal,Portāls,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,portāla iestatījumi,
 Preview,Preview,
 Primary,Galvenais,
@@ -214,6 +239,10 @@ Salutation,Sveiciens,
 Sample,Paraugs,
 Saturday,Sestdiena,
 Saved,Saglabāts,
+<<<<<<< HEAD
+=======
+Scan Barcode,Skenēt svītrkodu,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,Plānotais,
 Search,Meklēšana,
 Secret Key,Secret Key,
@@ -228,6 +257,10 @@ Settings,Settings,
 Shipping,Piegāde,
 Short Name,Saīsinātais nosaukums,
 Slideshow,Slaidrādi,
+<<<<<<< HEAD
+=======
+Some information is missing,Daži trūkst informācijas,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,Avots,
 Source Name,Source Name,
 Standard,Standarts,
@@ -237,6 +270,10 @@ State,Valsts,
 Stopped,Apturēts,
 Subject,Pakļauts,
 Submit,Iesniegt,
+<<<<<<< HEAD
+=======
+Successful,Veiksmīga,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,Kopsavilkums,
 Sunday,Svētdiena,
 System Manager,System Manager,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,Laika sprīdis,
 To,Uz,
 To Date,Līdz šim,
+<<<<<<< HEAD
 Traceback,Izsekot,
 URL,URL,
 Unsubscribed,Atrakstīts,
+=======
+Tools,Darbarīki,
+Traceback,Izsekot,
+URL,URL,
+Unsubscribed,Atrakstīts,
+Use Sandbox,Izmantot Sandbox,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,Lietotājs,
 User ID,Lietotāja ID,
 Users,Lietotāji,
@@ -556,6 +601,10 @@ Bulk Delete,Lielapjoma dzēšana,
 Bulk Edit {0},Bulk Edit {0},
 Bulk Rename,Bulk Rename,
 Bulk Update,Bulk Update,
+<<<<<<< HEAD
+=======
+Busy,Aizņemts,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,Poga,
 Button Help,poga Palīdzība,
 Button Label,poga Label,
@@ -692,6 +741,10 @@ Compiled Successfully,Sastādīts veiksmīgi,
 Complete By,Complete By,
 Complete Registration,Complete Reģistrācija,
 Complete Setup,Pabeigt Uzstādīšanu,
+<<<<<<< HEAD
+=======
+Completed By,Pabeigts ar,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,Rakstīt e-pasta,
 Condition Detail,Nosacījuma detaļas,
 Conditions,Nosacījumi,
@@ -1380,7 +1433,11 @@ Is Submittable,Vai Submittable,
 Is Table,ir tabula,
 Is Your Company Address,Vai Jūsu uzņēmuma adrese,
 It is risky to delete this file: {0}. Please contact your System Manager.,"Tas ir riskanti, lai izdzēstu šo failu: {0}. Lūdzu, sazinieties ar sistēmas pārzini.",
+<<<<<<< HEAD
 Item cannot be added to its own descendants,Posteni nevar pievienot saviem pēcnācējiem,
+=======
+Item cannot be added to its own descendents,Posteni nevar pievienot saviem pēcnācējiem,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,JSON,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},JavaScript Formāts: frappe.query_reports ['REPORTNAME'] = {},
@@ -1675,8 +1732,13 @@ Not a valid Workflow Action,Nav derīga darbplūsmas darbība,
 Not a valid user,Nav derīgs lietotājs,
 Not a zip file,Nav zip fails,
 Not allowed for {0}: {1},Nav atļauts {0}: {1},
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}","Jums nav atļaujas piekļūt {0}, jo tas ir saistīts ar {1} &#39;{2}&#39; rindā {3}, lauks {4}",
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},"Jums nav atļaujas piekļūt šo {0} ierakstu, jo tas ir saistīts ar {1} &#39;{2}&#39; laukā {3}",
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},Nav atļauts {0}: {1} rindā {2}. Ierobežots lauks: {3},
+Not allowed for {0}: {1}. Restricted field: {2},Nav atļauts {0}: {1}. Ierobežots lauks: {2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,Nav atļauts importēt,
 Not allowed to change {0} after submission,Nav atļauts mainīt {0} pēc iesniegšanas,
 Not allowed to print cancelled documents,Nav atļauts drukāt atcelts dokumentus,
@@ -1804,6 +1866,10 @@ Path to private Key File,Ceļš uz privāto atslēgas failu,
 PayPal Settings,PayPal iestatījumi,
 PayPal payment gateway settings,PayPal maksājumu vārteja iestatījumi,
 Payment Cancelled,maksājumu Atcelts,
+<<<<<<< HEAD
+=======
+Payment Failed,maksājums neizdevās,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,maksājumu Success,
 Pending Approval,Gaida apstiprinājumu,
 Pending Verification,Gaida pārbaudi,
@@ -3200,6 +3266,10 @@ Click on the link below to approve the request,"Noklikšķiniet uz saites zemāk
 Click on the lock icon to toggle public/private,"Noklikšķiniet uz bloķēšanas ikonas, lai pārslēgtu publisko / privāto",
 Click on {0} to generate Refresh Token.,"Noklikšķiniet uz {0}, lai ģenerētu Refresh Token.",
 Close Condition,Aizvērts nosacījums,
+<<<<<<< HEAD
+=======
+Column {0},{0} kolonna,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,Kolonnas / lauki,
 "Configure notifications for mentions, assignments, energy points and more.","Konfigurējiet paziņojumus pieminēšanai, uzdevumiem, enerģijas punktiem un citam.",
 Contact Email,Kontaktpersonas e-pasta,
@@ -3281,6 +3351,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,Neveiksme,
 Fetching default Global Search documents.,Noklusējuma globālās meklēšanas dokumentu ienešana.,
 Fetching posts...,Notiek ziņu iegūšana ...,
+<<<<<<< HEAD
+=======
+Field Mapping,Lauka kartēšana,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,Pārbaudāmais lauks,
 File Information,Informācija par failiem,
 Filter By,Filtrēt pēc,
@@ -3435,6 +3509,10 @@ No posts yet,Pagaidām nav ziņu,
 No records will be exported,Neviens ieraksts netiks eksportēts,
 No results found for {0} in Global Search,Globālajā meklēšanā nav atrasti rezultāti {0},
 No user found,Nav atrasts neviens lietotājs,
+<<<<<<< HEAD
+=======
+Not Specified,Nav precizēts,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,Paziņojumu žurnāls,
 Notification Settings,Paziņojumu iestatījumi,
 Notification Subscribed Document,Paziņojumu abonētais dokuments,
@@ -3590,6 +3668,10 @@ Untitled Column,Kolonna bez nosaukuma,
 Untranslated,Netulkots,
 Upcoming Events,Gaidāmie notikumi,
 Update Existing Records,Atjauniniet esošos ierakstus,
+<<<<<<< HEAD
+=======
+Update Type,Atjaunināšanas tips,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,Atjaunināts uz jaunu versiju 🎉,
 "Updating {0} of {1}, {2}","Notiek {0} no {1}, {2} atjaunināšana",
 Upload file,Augšupielādēt failu,
@@ -3696,16 +3778,28 @@ Designation,Apzīmējums,
 Disabled,Invalīdiem,
 Doctype,DocType,
 Download Template,Download Template,
+<<<<<<< HEAD
+=======
+Dr,Dr,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,Due Date,
 Duplicate,Dublēt,
 Edit Profile,Rediģēt profilu,
 Email,E-pasts,
+<<<<<<< HEAD
+=======
+End Time,Beigu laiks,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,Ievadiet vērtība,
 Entity Type,Uzņēmuma tips,
 Error,Kļūda,
 Expired,Beidzies,
 Export,Eksports,
 Export not allowed. You need {0} role to export.,"Eksporta nav atļauta. Jums ir nepieciešams, {0} lomu eksportu.",
+<<<<<<< HEAD
+=======
+Fetching...,Notiek ielāde ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,lauks,
 File Manager,Failu pārvaldnieks,
 Filters,Filtri,
@@ -3720,8 +3814,16 @@ Import Data from CSV / Excel files.,Datu importēšana no CSV / Excel failiem.,
 In Progress,Gaitā,
 Intermediate,Intermediate,
 Invite as User,Uzaicināt kā lietotājs,
+<<<<<<< HEAD
 Loading...,Loading ...,
 Location,Vieta,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.","Šķiet, ka pastāv servera joslas konfigurācijas problēma. Neveiksmes gadījumā summa tiks atmaksāta jūsu kontā.",
+Loading...,Loading ...,
+Location,Vieta,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,"Izskatās kāds jūs sūtīju nepilnīgu URL. Lūdzu, palūdziet, lai apskatīt to.",
+Master,Meistars,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,Ziņa,
 Missing Values Required,Trūkstošie Vērtības Nepieciešamais,
 Mobile No,Mobile Nr,
@@ -3733,6 +3835,10 @@ Note,Piezīme,
 Offline,Bezsaistē,
 Open,Atvērts,
 Page {0} of {1},Page {0} no {1},
+<<<<<<< HEAD
+=======
+Pay,Maksāt,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,Līdz,
 Phone,Telefons,
 Please click on the following link to set your new password,"Lūdzu, noklikšķiniet uz šīs saites, lai uzstādītu jauno paroli",
@@ -3782,6 +3888,10 @@ Welcome to {0},Welcome uz {0},
 Year,Gads,
 Yearly,Katru gadu,
 You,Tu,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,Jūs varat arī kopēt-ielīmēt šo saiti savā pārlūkprogrammā,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,un,
 {0} Name,{0} Name,
 {0} is required,{0} ir nepieciešams,
@@ -4085,6 +4195,10 @@ Custom SCSS,Pielāgota SCSS,
 Navbar,Navbar,
 Source Message,Avota ziņojums,
 Translated Message,Tulkots ziņojums,
+<<<<<<< HEAD
+=======
+Verified By,Verified by,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,Šīs konsoles izmantošana var ļaut uzbrucējiem uzdot sevi par citu un nozagt jūsu informāciju. Neievadiet un neielīmējiet nesaprotamu kodu.,
 {0} m,{0} m,
 {0} h,{0} h,
@@ -4108,7 +4222,11 @@ No changes in document,Dokumentā nav izmaiņu,
 by Role,autors Role,
 Document is only editable by users with role,Dokumentu var rediģēt tikai lietotāji ar lomu,
 {0}: Other permission rules may also apply,{0}: Var būt spēkā arī citi atļauju noteikumi,
+<<<<<<< HEAD
 {0} Web page views,{0} Lapas skatījumi,
+=======
+{0} Page Views,{0} Lapas skatījumi,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,Izvērst,
 Collapse,Sakļaut,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.","Nederīgs nesēja marķieris, lūdzu, norādiet derīgu piekļuves marķieri ar prefiksu “Nesējs”.",
@@ -4117,6 +4235,10 @@ Collapse,Sakļaut,
 {0} is not a valid Name,{0} nav derīgs nosaukums,
 Your system is being updated. Please refresh again after a few moments.,"Jūsu sistēma tiek atjaunināta. Lūdzu, pēc dažiem mirkļiem atsvaidziniet vēlreiz.",
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}: Iesniegto ierakstu nevar izdzēst. Vispirms jums tas ir {2} jāatceļ {3}.,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},Vietnei {0} nav derīga nosaukumu sērija (. Trūkst).,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},Kļūda radās šeit: {0},
 Status Updated,Statuss ir atjaunināts,
 You can also copy-paste this {0} to your browser,Varat arī nokopēt šo {0} savā pārlūkprogrammā,
@@ -4138,11 +4260,21 @@ Is Billing Contact,Vai ir norēķinu kontakts,
 Address And Contacts,Adrese un kontakti,
 Lead Conversion Time,Vadošais reklāmguvumu laiks,
 Due Date Based On,Izpildes datums pamatots,
+<<<<<<< HEAD
 Linked Documents,Saistītie dokumenti,
+=======
+Phone Number,Telefona numurs,
+Linked Documents,Saistītie dokumenti,
+Account SID,Konta SID,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,Soļi,
 email,e-pasts,
 Component,komponents,
 Subtitle,Apakšvirsraksts,
+<<<<<<< HEAD
+=======
+Global Defaults,Globālie Noklusējumi,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,Priedēklis,
 Is Public,Ir publisks,
 This chart will be available to all Users if this is set,"Šī diagramma būs pieejama visiem lietotājiem, ja tā ir iestatīta",
@@ -4329,6 +4461,10 @@ Dynamic Filters Section,Dinamisko filtru sadaļa,
 Please create Card first,"Lūdzu, vispirms izveidojiet karti",
 Onboarding Permission,Iekāpšanas atļauja,
 Onboarding Step,Iekāpšanas solis,
+<<<<<<< HEAD
+=======
+Is Mandatory,Ir obligāta,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,Ir izlaists,
 Create Entry,Izveidot ierakstu,
 Update Settings,Atjaunināt iestatījumus,
@@ -4366,6 +4502,10 @@ Message (HTML),Ziņojums (HTML),
 Send Attachments,Sūtīt pielikumus,
 Testing,Testēšana,
 System Notification,Sistēmas paziņojums,
+<<<<<<< HEAD
+=======
+WhatsApp,WhatsApp,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,Twilio numurs,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","Lai izmantotu WhatsApp for Business, inicializējiet <a href=""#Form/Twilio Settings"">Twilio iestatījumus</a> .",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","Lai izmantotu Slack Channel, pievienojiet <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a> .",
@@ -4500,6 +4640,10 @@ Add to ToDo,Pievienot uzdevumam,
 {0} are currently {1},{0} pašlaik ir {1},
 Currently Replying,Pašlaik atbild,
 created {0},izveidoja {0},
+<<<<<<< HEAD
+=======
+Make a call,Piezvanīt,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,Mainīt,Coins
 Too Many Requests,Pārāk daudz pieprasījumu,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.","Nederīgas autorizācijas galvenes, pievienojiet marķieri ar prefiksu no kāda no šiem: {0}.",
@@ -4664,6 +4808,7 @@ Value cannot be negative for {0}: {1},Vērtība {0} nevar būt negatīva: {1},
 Negative Value,Negatīva vērtība,
 Authentication failed while receiving emails from Email Account: {0}.,"Autentifikācija neizdevās, saņemot e-pasta ziņojumus no e-pasta konta: {0}.",
 Message from server: {0},Ziņojums no servera: {0},
+<<<<<<< HEAD
 Add Row,Pievienot rindu,
 Analytics,Analytics,
 Anonymous,Anonīms,
@@ -4796,3 +4941,5 @@ West Bengal,Rietumbengāle,
 Published on,Publicēts vietnē,
 Bottom,Apakšā,
 Top,Tops,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

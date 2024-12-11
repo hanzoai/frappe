@@ -18,11 +18,15 @@
   "update_series",
   "prefix",
   "current_value",
+<<<<<<< HEAD
   "update_series_start",
   "amended_documents_section",
   "default_amend_naming",
   "amend_naming_override",
   "update_amendment_naming"
+=======
+  "update_series_start"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  ],
  "fields": [
   {
@@ -85,10 +89,17 @@
   },
   {
    "depends_on": "transaction_type",
+<<<<<<< HEAD
    "description": "Get a preview of generated names with a series.",
    "fieldname": "try_naming_series",
    "fieldtype": "Data",
    "label": "Try a Naming Series"
+=======
+   "description": "Generate 3 preview of names generate by any valid series.",
+   "fieldname": "try_naming_series",
+   "fieldtype": "Data",
+   "label": "Try a naming Series"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "transaction_type",
@@ -109,6 +120,7 @@
    "fieldtype": "Text",
    "label": "Preview of generated names",
    "read_only": 1
+<<<<<<< HEAD
   },
   {
    "collapsible": 1,
@@ -137,13 +149,19 @@
    "fieldtype": "Button",
    "label": "Update Amendment Naming",
    "options": "update_amendment_rule"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "hide_toolbar": 1,
  "icon": "fa fa-sort-by-order",
  "issingle": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-06-20 17:47:52.204139",
+=======
+ "modified": "2022-05-30 23:51:36.136535",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Document Naming Settings",
@@ -162,4 +180,8 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

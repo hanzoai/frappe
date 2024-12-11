@@ -80,4 +80,8 @@ def set_webform_hook(key, value):
 			delattr(hooks, hook)
 
 	setattr(hooks, key, value)
+<<<<<<< HEAD
 	frappe.cache.delete_key("app_hooks")
+=======
+	frappe.cache().delete_key("app_hooks")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

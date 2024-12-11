@@ -4,7 +4,11 @@ frappe.provide("frappe.utils");
 
 export default class LinksWidget extends Widget {
 	constructor(opts) {
+<<<<<<< HEAD
 		opts.icon = opts.icon || "es-line-filetype";
+=======
+		opts.icon = opts.icon || "file";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		super(opts);
 	}
 
@@ -15,7 +19,10 @@ export default class LinksWidget extends Widget {
 			link_count: this.links.length,
 			label: this.label,
 			hidden: this.hidden,
+<<<<<<< HEAD
 			description: this.description,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		};
 	}
 
@@ -25,6 +32,7 @@ export default class LinksWidget extends Widget {
 			this.options.links = this.links;
 		}
 		this.widget.addClass("links-widget-box");
+<<<<<<< HEAD
 
 		if (this.description) {
 			const description = $(`
@@ -41,6 +49,8 @@ export default class LinksWidget extends Widget {
 			});
 		}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		const is_link_disabled = (item) => {
 			return item.dependencies && item.incomplete_dependencies;
 		};
@@ -60,7 +70,13 @@ export default class LinksWidget extends Widget {
 
 		const get_link_for_item = (item) => {
 			if (is_link_disabled(item)) {
+<<<<<<< HEAD
 				return `<span class="link-content ellipsis disabled-link">${item.link_title}</span>
+=======
+				return `<span class="link-content ellipsis disabled-link">${
+					item.label ? item.label : item.name
+				}</span>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					<div class="module-link-popover popover fade top in" role="tooltip" style="display: none;">
 						<div class="arrow"></div>
 						<h3 class="popover-title" style="display: none;"></h3>
@@ -72,6 +88,7 @@ export default class LinksWidget extends Widget {
 			}
 
 			if (item.youtube_id)
+<<<<<<< HEAD
 				return `
 					<span class="link-content help-video-link ellipsis" data-youtubeid="${item.youtube_id}">
 						${item.link_title}
@@ -84,6 +101,16 @@ export default class LinksWidget extends Widget {
 					${frappe.utils.icon("es-line-arrow-up-right", "xs", "", "", "ml-2")}
 				</span>
 			`;
+=======
+				return `<span class="link-content help-video-link ellipsis" data-youtubeid="${
+					item.youtube_id
+				}">
+						${item.label ? item.label : item.name}</span>`;
+
+			return `<span class="link-content ellipsis">${
+				item.label ? item.label : item.name
+			}</span>`;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		};
 
 		this.link_list = this.links.map((item) => {
@@ -92,7 +119,10 @@ export default class LinksWidget extends Widget {
 				type: item.link_type,
 				doctype: item.doctype,
 				is_query_report: item.is_query_report,
+<<<<<<< HEAD
 				report_ref_doctype: item.report_ref_doctype,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			};
 
 			if (item.link_type.toLowerCase() == "report" && !item.is_query_report) {
@@ -100,6 +130,7 @@ export default class LinksWidget extends Widget {
 			}
 
 			const route = frappe.utils.generate_route(opts);
+<<<<<<< HEAD
 			item.link_title = item.label ? item.label : item.name;
 
 			const $link = $(`
@@ -124,6 +155,17 @@ export default class LinksWidget extends Widget {
 			}
 
 			return $link;
+=======
+
+			return $(`<a href="${route}" class="link-item ellipsis ${
+				item.onboard ? "onboard-spotlight" : ""
+			} ${disabled_dependent(item)}" type="${item.type}" title="${
+				item.label ? item.label : item.name
+			}">
+					<span class="indicator-pill no-margin ${get_indicator_color(item)}"></span>
+					${get_link_for_item(item)}
+			</a>`);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		});
 		if (this.in_customize_mode) {
 			this.body.empty();

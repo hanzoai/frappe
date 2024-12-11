@@ -8,6 +8,7 @@ from frappe.utils import cstr
 
 
 class AccessLog(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -35,6 +36,9 @@ class AccessLog(Document):
 
 		table = frappe.qb.DocType("Access Log")
 		frappe.db.delete(table, filters=(table.modified < (Now() - Interval(days=days))))
+=======
+	pass
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()
@@ -61,11 +65,15 @@ def make_access_log(
 
 
 @frappe.write_only()
+<<<<<<< HEAD
 @retry(
 	stop=stop_after_attempt(3),
 	retry=retry_if_exception_type(frappe.DuplicateEntryError),
 	reraise=True,
 )
+=======
+@retry(stop=stop_after_attempt(3), retry=retry_if_exception_type(frappe.DuplicateEntryError))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def _make_access_log(
 	doctype=None,
 	document=None,
@@ -79,7 +87,11 @@ def _make_access_log(
 	user = frappe.session.user
 	in_request = frappe.request and frappe.request.method == "GET"
 
+<<<<<<< HEAD
 	access_log = frappe.get_doc(
+=======
+	frappe.get_doc(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		{
 			"doctype": "Access Log",
 			"user": user,
@@ -92,6 +104,7 @@ def _make_access_log(
 			"filters": cstr(filters) or None,
 			"columns": columns,
 		}
+<<<<<<< HEAD
 	)
 
 	if frappe.flags.read_only:
@@ -99,6 +112,9 @@ def _make_access_log(
 		return
 	else:
 		access_log.db_insert()
+=======
+	).db_insert()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# `frappe.db.commit` added because insert doesnt `commit` when called in GET requests like `printview`
 	# dont commit in test mode. It must be tempting to put this block along with the in_request in the

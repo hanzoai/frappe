@@ -12,6 +12,7 @@
 		display: block;
 	}
 
+<<<<<<< HEAD
 	& > [role="listbox"] {
 		&:empty {
 			display: none;
@@ -21,6 +22,17 @@
 		width: 100%;
 		list-style: none;
 		background-color: var(--bg-color);
+=======
+	& > ul:empty {
+		display: none;
+	}
+
+	& > ul {
+		position: absolute;
+		width: 100%;
+		list-style: none;
+		background-color: var(--fg-color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		max-height: unquote("min(60vh, 300px)");
 		overflow-y: auto;
 		overflow-x: hidden;
@@ -33,10 +45,16 @@
 		z-index: 4;
 		min-width: 250px;
 
+<<<<<<< HEAD
 		& > li,
 		& > [role="option"] {
 			cursor: pointer;
 			@include get_textstyle("sm", "regular");
+=======
+		& > li {
+			cursor: pointer;
+			font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			padding: var(--padding-sm);
 			color: var(--text-color);
 			border-radius: var(--border-radius);
@@ -50,6 +68,7 @@
 				overflow-y: clip;
 				text-overflow: ellipsis;
 			}
+<<<<<<< HEAD
 			strong {
 				@include get_textstyle("sm", "bold");
 			}
@@ -64,6 +83,18 @@
 				background-color: var(--awesomplete-hover-bg);
 				color: var(--text-color);
 			}
+=======
+		}
+
+		& > li .link-option {
+			font-weight: normal;
+		}
+
+		& > li:hover,
+		& > li[aria-selected="true"] {
+			background-color: var(--awesomplete-hover-bg);
+			color: var(--text-color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		a:hover {

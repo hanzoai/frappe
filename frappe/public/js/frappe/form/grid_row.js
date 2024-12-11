@@ -40,7 +40,11 @@ export default class GridRow {
 			render_row = this.render_row();
 		}
 
+<<<<<<< HEAD
 		if (!render_row) return;
+=======
+		if (!this.render_row) return;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		this.set_data();
 		this.wrapper.appendTo(this.parent);
@@ -95,10 +99,18 @@ export default class GridRow {
 	remove() {
 		var me = this;
 		if (this.grid.is_editable()) {
+<<<<<<< HEAD
 			if (this.get_open_form()) {
 				this.hide_form();
 			}
 			if (this.frm) {
+=======
+			if (this.frm) {
+				if (this.get_open_form()) {
+					this.hide_form();
+				}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				frappe
 					.run_serially([
 						() => {
@@ -122,7 +134,11 @@ export default class GridRow {
 					])
 					.catch((e) => {
 						// aborted
+<<<<<<< HEAD
 						console.trace(e);
+=======
+						console.trace(e); // eslint-disable-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					});
 			} else {
 				let data = null;
@@ -429,11 +445,19 @@ export default class GridRow {
 
 		$(`
 			<div class='form-group'>
+<<<<<<< HEAD
 				<div class='row' style='margin:0px; margin-bottom:10px;'>
 					<div class='col-6 col-md-8'>
 						${__("Fieldname").bold()}
 					</div>
 					<div class='col-6 col-md-4' style='padding-left:5px;'>
+=======
+				<div class='row' style='margin:0px; margin-bottom:10px'>
+					<div class='col-md-8'>
+						${__("Fieldname").bold()}
+					</div>
+					<div class='col-md-4' style='padding-left:5px;'>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						${__("Column Width").bold()}
 					</div>
 				</div>
@@ -550,6 +574,7 @@ export default class GridRow {
 
 				fields += `
 					<div class='control-input flex align-center form-control fields_order sortable-handle sortable'
+<<<<<<< HEAD
 						style='display: block; margin-bottom: 5px; padding: 0 8px; cursor: pointer; height: 32px;' data-fieldname='${
 							docfield.fieldname
 						}'
@@ -571,6 +596,24 @@ export default class GridRow {
 									data-fieldname='${docfield.fieldname}' style='background-color: var(--modal-bg); display: inline'>
 							</div>
 							<div class='col-1' style='padding-top: 3px;'>
+=======
+						style='display: block; margin-bottom: 5px; cursor: pointer;' data-fieldname='${docfield.fieldname}'
+						data-label='${docfield.label}' data-type='${docfield.fieldtype}'>
+
+						<div class='row'>
+							<div class='col-md-1' style='padding-top: 2px'>
+								<a style='cursor: grabbing;'>${frappe.utils.icon("drag", "xs")}</a>
+							</div>
+							<div class='col-md-7' style='padding-left:0px; padding-top:3px'>
+								${__(docfield.label)}
+							</div>
+							<div class='col-md-3' style='padding-left:0px;margin-top:-2px;' title='${__("Columns")}'>
+								<input class='form-control column-width input-xs text-right'
+									value='${docfield.columns || cint(d.columns)}'
+									data-fieldname='${docfield.fieldname}' style='background-color: var(--modal-bg); display: inline'>
+							</div>
+							<div class='col-md-1' style='padding-top: 3px'>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 								<a class='text-muted remove-field' data-fieldname='${docfield.fieldname}'>
 									<i class='fa fa-trash-o' aria-hidden='true'></i>
 								</a>
@@ -708,7 +751,11 @@ export default class GridRow {
 
 			let txt = this.doc
 				? frappe.format(this.doc[df.fieldname], df, null, this.doc)
+<<<<<<< HEAD
 				: __(df.label, null, df.parent);
+=======
+				: __(df.label);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			if (this.doc && df.fieldtype === "Select") {
 				txt = __(txt);
@@ -938,6 +985,7 @@ export default class GridRow {
 			}, 600);
 		}
 
+<<<<<<< HEAD
 		function trigger_focus(input_field, col_df) {
 			if (["Date", "Datetime"].includes(col_df.fieldtype) && col_df?.read_only) {
 				return;
@@ -946,6 +994,8 @@ export default class GridRow {
 			input_field.trigger("focus");
 		}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		var $col = $(
 			'<div class="col grid-static-col col-xs-' + colsize + " " + add_class + '"></div>'
 		)
@@ -1022,7 +1072,11 @@ export default class GridRow {
 						}
 					});
 
+<<<<<<< HEAD
 				!input_in_focus && trigger_focus(first_input_field, $(col).data("df"));
+=======
+				!input_in_focus && first_input_field.trigger("focus");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 				if (event.pointerType == "touch") {
 					first_input_field.length && on_input_focus(first_input_field);
@@ -1093,7 +1147,11 @@ export default class GridRow {
 
 					let txt = this.doc
 						? frappe.format(this.doc[df.fieldname], df, null, this.doc)
+<<<<<<< HEAD
 						: __(df.label, null, df.parent);
+=======
+						: __(df.label);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 					this.refresh_field(df.fieldname, txt);
 				}
@@ -1135,7 +1193,11 @@ export default class GridRow {
 		if (!field.df.onchange_modified) {
 			var field_on_change_function = field.df.onchange;
 			field.df.onchange = (e) => {
+<<<<<<< HEAD
 				field_on_change_function && field_on_change_function.bind(field)(e);
+=======
+				field_on_change_function && field_on_change_function(e);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				this.refresh_field(field.df.fieldname);
 			};
 
@@ -1166,7 +1228,11 @@ export default class GridRow {
 		if (field.$input) {
 			field.$input.on("keydown", function (e) {
 				var { TAB, UP: UP_ARROW, DOWN: DOWN_ARROW } = frappe.ui.keyCode;
+<<<<<<< HEAD
 				if (![TAB, UP_ARROW, DOWN_ARROW].includes(e.which)) {
+=======
+				if (!in_list([TAB, UP_ARROW, DOWN_ARROW], e.which)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					return;
 				}
 
@@ -1175,7 +1241,11 @@ export default class GridRow {
 				var fieldtype = $(this).attr("data-fieldtype");
 
 				let ctrl_key = e.metaKey || e.ctrlKey;
+<<<<<<< HEAD
 				if (!ignore_fieldtypes.includes(fieldtype) && ctrl_key && e.which !== TAB) {
+=======
+				if (!in_list(ignore_fieldtypes, fieldtype) && ctrl_key && e.which !== TAB) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					me.add_new_row_using_keys(e);
 					return;
 				}
@@ -1186,7 +1256,11 @@ export default class GridRow {
 				}
 
 				var move_up_down = function (base) {
+<<<<<<< HEAD
 					if (ignore_fieldtypes.includes(fieldtype) && !e.altKey) {
+=======
+					if (in_list(ignore_fieldtypes, fieldtype) && !e.altKey) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						return false;
 					}
 					if (field.autocomplete_open) {
@@ -1444,9 +1518,13 @@ export default class GridRow {
 		let field = this.on_grid_fields_dict[fieldname];
 		// reset field value
 		if (field) {
+<<<<<<< HEAD
 			// the below if statement is added to factor in the exception when this.doc is undefined -
 			// - after row removals via customize_form.js on links, actions and states child-tables
 			if (this.doc) field.docname = this.doc.name;
+=======
+			field.docname = this.doc.name;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			field.refresh();
 		}
 
@@ -1473,8 +1551,13 @@ export default class GridRow {
 				!df.hidden &&
 				df.in_list_view &&
 				me.grid.frm.get_perm(df.permlevel, "read") &&
+<<<<<<< HEAD
 				!frappe.model.layout_fields.includes(df.fieldtype) &&
 				!blacklist.includes(df.fieldname);
+=======
+				!in_list(frappe.model.layout_fields, df.fieldtype) &&
+				!in_list(blacklist, df.fieldname);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			return visible ? df : null;
 		});

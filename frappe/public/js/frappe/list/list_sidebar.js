@@ -277,7 +277,11 @@ frappe.views.ListSidebar = class ListSidebar {
 			this.insights_banner = $(`
 				<div style="position: relative;">
 					<div class="pr-3">
+<<<<<<< HEAD
 						${message} <a href="${link}" target="_blank" style="color: var(--text-color)">${cta} &rarr; </a>
+=======
+						${message} <a href="${link}" target="_blank" style="color: var(--primary-color)">${cta} &rarr; </a>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					</div>
 					<div style="position: absolute; top: -1px; right: -4px; cursor: pointer;" title="Dismiss"
 						onclick="localStorage.setItem('show_insights_banner', 'false') || this.parentElement.remove()">

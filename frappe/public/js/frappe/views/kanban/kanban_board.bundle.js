@@ -1,6 +1,10 @@
 // TODO: Refactor for better UX
 
+<<<<<<< HEAD
 import { createStore } from "vuex";
+=======
+import Vuex from "vuex";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 frappe.provide("frappe.views");
 
@@ -9,7 +13,11 @@ frappe.provide("frappe.views");
 
 	let columns_unwatcher = null;
 
+<<<<<<< HEAD
 	var store = createStore({
+=======
+	var store = new Vuex.Store({
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		state: {
 			doctype: "",
 			board: {},
@@ -95,7 +103,11 @@ frappe.provide("frappe.views");
 							});
 						},
 						function (err) {
+<<<<<<< HEAD
 							console.error(err);
+=======
+							console.error(err); // eslint-disable-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						}
 					);
 			},
@@ -730,9 +742,13 @@ frappe.provide("frappe.views");
 				let field =
 					frappe.meta.docfield_map[card.doctype]?.[field_name] ||
 					frappe.model.get_std_field(field_name);
+<<<<<<< HEAD
 				let label = cur_list.board.show_labels
 					? `<span>${__(field.label, null, field.parent)}: </span>`
 					: "";
+=======
+				let label = cur_list.board.show_labels ? `<span>${__(field.label)}: </span>` : "";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				let value = frappe.format(card.doc[field_name], field);
 				fields.push(`
 					<div class="text-muted text-truncate">
@@ -758,7 +774,11 @@ frappe.provide("frappe.views");
 
 			if (card.comment_count > 0)
 				html += `<span class="list-comment-count small text-muted ">
+<<<<<<< HEAD
 					${frappe.utils.icon("es-line-chat-alt")}
+=======
+					${frappe.utils.icon("small-message")}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					${card.comment_count}
 				</span>`;
 

@@ -8,8 +8,13 @@ module.exports = defineConfig({
 	pageLoadTimeout: 15000,
 	video: true,
 	videoUploadOnPasses: false,
+<<<<<<< HEAD
 	viewportHeight: 960,
 	viewportWidth: 1400,
+=======
+	viewportWidth: 1920,
+	viewportHeight: 1200,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	retries: {
 		runMode: 1,
 		openMode: 1,

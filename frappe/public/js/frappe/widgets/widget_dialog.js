@@ -219,6 +219,7 @@ class CardDialog extends WidgetDialog {
 			{
 				fieldtype: "Data",
 				fieldname: "label",
+<<<<<<< HEAD
 				label: __("Label"),
 			},
 			{
@@ -226,6 +227,9 @@ class CardDialog extends WidgetDialog {
 				fieldname: "description",
 				label: __("Description"),
 				max_height: "7rem",
+=======
+				label: "Label",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			},
 			{
 				fieldname: "links",
@@ -238,6 +242,20 @@ class CardDialog extends WidgetDialog {
 				},
 				fields: [
 					{
+<<<<<<< HEAD
+=======
+						fieldname: "label",
+						fieldtype: "Data",
+						in_list_view: 1,
+						label: "Label",
+					},
+					{
+						fieldname: "icon",
+						fieldtype: "Icon",
+						label: "Icon",
+					},
+					{
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						fieldname: "link_type",
 						fieldtype: "Select",
 						in_list_view: 1,
@@ -265,6 +283,7 @@ class CardDialog extends WidgetDialog {
 						},
 					},
 					{
+<<<<<<< HEAD
 						fieldname: "label",
 						fieldtype: "Data",
 						in_list_view: 1,
@@ -276,6 +295,8 @@ class CardDialog extends WidgetDialog {
 						label: "Icon",
 					},
 					{
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						fieldname: "column_break_7",
 						fieldtype: "Column Break",
 					},
@@ -433,6 +454,10 @@ class ShortcutDialog extends WidgetDialog {
 				fieldtype: "Data",
 				fieldname: "url",
 				label: __("URL"),
+<<<<<<< HEAD
+=======
+				options: "URL",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				default: "",
 				depends_on: (s) => s.type == "URL",
 				mandatory_depends_on: (s) => s.type == "URL",
@@ -560,11 +585,15 @@ class ShortcutDialog extends WidgetDialog {
 		data.label = data.label ? data.label : frappe.model.unscrub(data.link_to);
 
 		if (data.url) {
+<<<<<<< HEAD
 			let _url = data.url;
 			if (data.url.startsWith("/")) {
 				_url = frappe.urllib.get_base_url() + data.url;
 			}
 			!validate_url(_url) &&
+=======
+			!validate_url(data.url) &&
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				frappe.throw({
 					message: __("<b>{0}</b> is not a valid URL", [data.url]),
 					title: __("Invalid URL"),
@@ -593,7 +622,11 @@ class NumberCardDialog extends WidgetDialog {
 				{
 					fieldtype: "Link",
 					fieldname: "number_card_name",
+<<<<<<< HEAD
 					label: __("Number Card"),
+=======
+					label: __("Number Cards"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					options: "Number Card",
 					reqd: 1,
 					get_query: () => {

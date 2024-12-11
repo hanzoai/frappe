@@ -30,6 +30,7 @@ frappe.views.Workspace = class Workspace {
 			public: {},
 			private: {},
 		};
+<<<<<<< HEAD
 		this.sidebar_categories = [
 			{ id: "Personal", label: __("Personal", null, "Workspace Category") },
 			{ id: "Public", label: __("Public", null, "Workspace Category") },
@@ -48,6 +49,9 @@ frappe.views.Workspace = class Workspace {
 			"purple",
 			"light-blue",
 		];
+=======
+		this.sidebar_categories = ["My Workspaces", "Public"];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		this.prepare_container();
 		this.setup_pages();
@@ -62,7 +66,10 @@ frappe.views.Workspace = class Workspace {
 		`).appendTo(this.wrapper.find(".layout-side-section"));
 		this.sidebar = list_sidebar.find(".desk-sidebar");
 		this.body = this.wrapper.find(".layout-main-section");
+<<<<<<< HEAD
 		this.prepare_new_and_edit();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	async setup_pages(reload) {
@@ -72,7 +79,10 @@ frappe.views.Workspace = class Workspace {
 		this.cached_pages = $.extend(true, {}, this.sidebar_pages);
 		this.all_pages = this.sidebar_pages.pages;
 		this.has_access = this.sidebar_pages.has_access;
+<<<<<<< HEAD
 		this.has_create_access = this.sidebar_pages.has_create_access;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		this.all_pages.forEach((page) => {
 			page.is_editable = !page.public || this.has_access;
@@ -94,6 +104,7 @@ frappe.views.Workspace = class Workspace {
 		}
 	}
 
+<<<<<<< HEAD
 	prepare_new_and_edit() {
 		this.$page = $(`
 		<div class="editor-js-container"></div>
@@ -132,14 +143,19 @@ frappe.views.Workspace = class Workspace {
 		});
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	get_pages() {
 		return frappe.xcall("frappe.desk.desktop.get_workspace_sidebar_items");
 	}
 
 	sidebar_item_container(item) {
+<<<<<<< HEAD
 		item.indicator_color =
 			item.indicator_color || this.indicator_colors[Math.floor(Math.random() * 12)];
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return $(`
 			<div
 				class="sidebar-item-container ${item.is_editable ? "is-draggable" : ""}"
@@ -157,6 +173,7 @@ frappe.views.Workspace = class Workspace {
 						}"
 						class="item-anchor ${item.is_editable ? "" : "block-click"}" title="${__(item.title)}"
 					>
+<<<<<<< HEAD
 						<span class="sidebar-item-icon" item-icon=${item.icon || "folder-normal"}>
 							${
 								item.public
@@ -164,6 +181,12 @@ frappe.views.Workspace = class Workspace {
 									: `<span class="indicator ${item.indicator_color}"></span>`
 							}
 						</span>
+=======
+						<span class="sidebar-item-icon" item-icon=${item.icon || "folder-normal"}>${frappe.utils.icon(
+			item.icon || "folder-normal",
+			"md"
+		)}</span>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						<span class="sidebar-item-label">${__(item.title)}<span>
 					</a>
 					<div class="sidebar-item-control"></div>
@@ -182,7 +205,11 @@ frappe.views.Workspace = class Workspace {
 			let root_pages = this.public_pages.filter(
 				(page) => page.parent_page == "" || page.parent_page == null
 			);
+<<<<<<< HEAD
 			if (category.id != "Public") {
+=======
+			if (category != "Public") {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				root_pages = this.private_pages.filter(
 					(page) => page.parent_page == "" || page.parent_page == null
 				);
@@ -199,6 +226,7 @@ frappe.views.Workspace = class Workspace {
 		this.remove_sidebar_skeleton();
 	}
 
+<<<<<<< HEAD
 	build_sidebar_section(category, root_pages) {
 		let sidebar_section = $(
 			`<div class="standard-sidebar-section nested-container" data-title="${category.id}"></div>`
@@ -222,6 +250,26 @@ frappe.views.Workspace = class Workspace {
 			$e.find("span use").attr("href", icon);
 			$e.parent().find(".sidebar-item-container").toggleClass("hidden");
 			$e.attr("aria-expanded", String(!isCollapsed));
+=======
+	build_sidebar_section(title, root_pages) {
+		let sidebar_section = $(
+			`<div class="standard-sidebar-section nested-container" data-title="${title}"></div>`
+		);
+
+		let $title = $(`<div class="standard-sidebar-label">
+			<span>${frappe.utils.icon("small-down", "xs")}</span>
+			<span class="section-title">${__(title)}<span>
+		</div>`).appendTo(sidebar_section);
+		this.prepare_sidebar(root_pages, sidebar_section, this.sidebar);
+
+		$title.on("click", (e) => {
+			let icon =
+				$(e.target).find("span use").attr("href") === "#icon-small-down"
+					? "#icon-right"
+					: "#icon-small-down";
+			$(e.target).find("span use").attr("href", icon);
+			$(e.target).parent().find(".sidebar-item-container").toggleClass("hidden");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		});
 
 		if (Object.keys(root_pages).length === 0) {
@@ -284,15 +332,25 @@ frappe.views.Workspace = class Workspace {
 	}
 
 	add_drop_icon(item, sidebar_control, item_container) {
+<<<<<<< HEAD
 		let drop_icon = "es-line-down";
+=======
+		let drop_icon = "small-down";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (item_container.find(`[item-name="${this.current_page.name}"]`).length) {
 			drop_icon = "small-up";
 		}
 
 		let $child_item_section = item_container.find(".sidebar-child-item");
+<<<<<<< HEAD
 		let $drop_icon = $(`<button class="btn-reset drop-icon hidden">`)
 			.html(frappe.utils.icon(drop_icon, "sm"))
 			.appendTo(sidebar_control);
+=======
+		let $drop_icon = $(
+			`<span class="drop-icon hidden">${frappe.utils.icon(drop_icon, "sm")}</span>`
+		).appendTo(sidebar_control);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		let pages = item.public ? this.public_pages : this.private_pages;
 		if (
 			pages.some(
@@ -303,9 +361,15 @@ frappe.views.Workspace = class Workspace {
 		}
 		$drop_icon.on("click", () => {
 			let icon =
+<<<<<<< HEAD
 				$drop_icon.find("use").attr("href") === "#es-line-down"
 					? "#es-line-up"
 					: "#es-line-down";
+=======
+				$drop_icon.find("use").attr("href") === "#icon-small-down"
+					? "#icon-small-up"
+					: "#icon-small-down";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			$drop_icon.find("use").attr("href", icon);
 			$child_item_section.toggleClass("hidden");
 		});
@@ -319,6 +383,7 @@ frappe.views.Workspace = class Workspace {
 		}
 
 		let page = this.get_page_to_show();
+<<<<<<< HEAD
 
 		if (!frappe.router.current_route[0]) {
 			frappe.route_flags.replace_route = true;
@@ -329,6 +394,19 @@ frappe.views.Workspace = class Workspace {
 		this.page.set_title(__(page.name));
 		this.update_selected_sidebar(this.current_page, false); //remove selected from old page
 		this.update_selected_sidebar(page, true); //add selected on new page
+=======
+		this.page.set_title(__(page.name));
+
+		this.update_selected_sidebar(this.current_page, false); //remove selected from old page
+		this.update_selected_sidebar(page, true); //add selected on new page
+
+		if (!frappe.router.current_route[0]) {
+			frappe.router.current_route = !page.public
+				? ["Workspaces", "private", page.name]
+				: ["Workspaces", page.name];
+		}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.show_page(page);
 	}
 
@@ -394,12 +472,16 @@ frappe.views.Workspace = class Workspace {
 	get_page_to_show() {
 		let default_page;
 
+<<<<<<< HEAD
 		if (frappe.boot.user.default_workspace) {
 			default_page = {
 				name: frappe.boot.user.default_workspace.title,
 				public: frappe.boot.user.default_workspace.public,
 			};
 		} else if (
+=======
+		if (
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			localStorage.current_page &&
 			this.all_pages.filter((page) => page.title == localStorage.current_page).length != 0
 		) {
@@ -413,17 +495,32 @@ frappe.views.Workspace = class Workspace {
 			default_page = { name: "Build", public: true };
 		}
 
+<<<<<<< HEAD
 		const route = frappe.get_route();
 		const page = (route[1] == "private" ? route[2] : route[1]) || default_page.name;
 		const is_public = route[1] ? route[1] != "private" : default_page.public;
+=======
+		let page =
+			(frappe.get_route()[1] == "private" ? frappe.get_route()[2] : frappe.get_route()[1]) ||
+			default_page.name;
+		let is_public = frappe.get_route()[1]
+			? frappe.get_route()[1] != "private"
+			: default_page.public;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return { name: page, public: is_public };
 	}
 
 	async show_page(page) {
 		if (!this.body.find("#editorjs")[0]) {
+<<<<<<< HEAD
 			$(`
 				<div id="editorjs" class="desk-page page-main-content"></div>
 			`).appendTo(this.body.find(".editor-js-container"));
+=======
+			this.$page = $(`
+				<div id="editorjs" class="desk-page page-main-content"></div>
+			`).appendTo(this.body);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		if (this.all_pages.length) {
@@ -432,7 +529,10 @@ frappe.views.Workspace = class Workspace {
 			let pages =
 				page.public && this.public_pages.length ? this.public_pages : this.private_pages;
 			let current_page = pages.filter((p) => p.title == page.name)[0];
+<<<<<<< HEAD
 			this._page = current_page;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this.content = current_page && JSON.parse(current_page.content);
 
 			this.content && this.add_custom_cards_in_content();
@@ -498,6 +598,7 @@ frappe.views.Workspace = class Workspace {
 		}
 
 		this.clear_page_actions();
+<<<<<<< HEAD
 		if (current_page.is_editable) {
 			this.body.find(".btn-edit-workspace").removeClass("hide");
 		} else {
@@ -510,6 +611,25 @@ frappe.views.Workspace = class Workspace {
 		} else {
 			this.body.find(".btn-new-workspace").addClass("hide");
 		}
+=======
+
+		this.page.set_secondary_action(__("Edit"), async () => {
+			if (!this.editor || !this.editor.readOnly) return;
+			this.is_read_only = false;
+			this.toggle_hidden_workspaces(true);
+			await this.editor.readOnly.toggle();
+			this.editor.isReady.then(() => {
+				this.initialize_editorjs_undo();
+				this.setup_customization_buttons(current_page);
+				this.show_sidebar_actions();
+				this.make_blocks_sortable();
+			});
+		});
+
+		this.page.add_inner_button(__("Create Workspace"), () => {
+			this.initialize_new_page();
+		});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	initialize_editorjs_undo() {
@@ -532,7 +652,10 @@ frappe.views.Workspace = class Workspace {
 				__("Save"),
 				() => {
 					this.clear_page_actions();
+<<<<<<< HEAD
 					this.body.removeClass("edit-mode");
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					this.save_page(page).then((saved) => {
 						if (!saved) return;
 						this.undo.readOnly = true;
@@ -545,7 +668,10 @@ frappe.views.Workspace = class Workspace {
 			);
 
 		this.page.set_secondary_action(__("Discard"), async () => {
+<<<<<<< HEAD
 			this.body.removeClass("edit-mode");
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this.discard = true;
 			this.clear_page_actions();
 			this.toggle_hidden_workspaces(false);
@@ -586,7 +712,11 @@ frappe.views.Workspace = class Workspace {
 			});
 
 			frappe.utils.add_custom_button(
+<<<<<<< HEAD
 				frappe.utils.icon("es-line-duplicate", "sm"),
+=======
+				frappe.utils.icon("duplicate", "sm"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				() => this.duplicate_page(item),
 				"duplicate-page",
 				__("Duplicate Workspace"),
@@ -595,7 +725,11 @@ frappe.views.Workspace = class Workspace {
 			);
 		} else if (item.is_hidden) {
 			frappe.utils.add_custom_button(
+<<<<<<< HEAD
 				frappe.utils.icon("es-line-preview", "sm"),
+=======
+				frappe.utils.icon("unhide", "sm"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				(e) => this.unhide_workspace(item, e),
 				"unhide-workspace-btn",
 				__("Unhide Workspace"),
@@ -604,7 +738,11 @@ frappe.views.Workspace = class Workspace {
 			);
 		} else {
 			frappe.utils.add_custom_button(
+<<<<<<< HEAD
 				frappe.utils.icon("es-line-drag", "xs"),
+=======
+				frappe.utils.icon("drag", "xs"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				null,
 				"drag-handle",
 				__("Drag"),
@@ -666,8 +804,11 @@ frappe.views.Workspace = class Workspace {
 							"options",
 							this.get_value() ? me.public_parent_pages : me.private_parent_pages
 						);
+<<<<<<< HEAD
 						d.set_df_property("icon", "hidden", this.get_value() ? 0 : 1);
 						d.set_df_property("indicator_color", "hidden", this.get_value() ? 1 : 0);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					},
 				},
 				{
@@ -677,6 +818,7 @@ frappe.views.Workspace = class Workspace {
 					label: __("Icon"),
 					fieldtype: "Icon",
 					fieldname: "icon",
+<<<<<<< HEAD
 					default: item.public && item.icon,
 					hidden: !item.public,
 				},
@@ -687,13 +829,20 @@ frappe.views.Workspace = class Workspace {
 					options: this.indicator_colors,
 					default: !item.public && item.indicator_color,
 					hidden: item.public,
+=======
+					default: item.icon,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				},
 			],
 			primary_action_label: __("Update"),
 			primary_action: (values) => {
 				values.title = strip_html(values.title);
 				let is_title_changed = values.title != old_item.title;
+<<<<<<< HEAD
 				let is_section_changed = Boolean(values.is_public) != Boolean(old_item.public);
+=======
+				let is_section_changed = values.is_public != old_item.public;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				if (
 					(is_title_changed || is_section_changed) &&
 					!this.validate_page(values, old_item)
@@ -707,7 +856,10 @@ frappe.views.Workspace = class Workspace {
 						name: old_item.name,
 						title: values.title,
 						icon: values.icon || "",
+<<<<<<< HEAD
 						indicator_color: values.indicator_color || "",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						parent: values.parent || "",
 						public: values.is_public || 0,
 					},
@@ -751,7 +903,10 @@ frappe.views.Workspace = class Workspace {
 
 		new_updated_item.title = new_item.title;
 		new_updated_item.icon = new_item.icon;
+<<<<<<< HEAD
 		new_updated_item.indicator_color = new_item.indicator_color;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		new_updated_item.parent_page = new_item.parent || "";
 		new_updated_item.public = new_item.is_public;
 
@@ -846,19 +1001,31 @@ frappe.views.Workspace = class Workspace {
 			{
 				label: __("Edit"),
 				title: __("Edit Workspace"),
+<<<<<<< HEAD
 				icon: frappe.utils.icon("es-line-edit", "sm"),
+=======
+				icon: frappe.utils.icon("edit", "sm"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				action: () => this.edit_page(item),
 			},
 			{
 				label: __("Duplicate"),
 				title: __("Duplicate Workspace"),
+<<<<<<< HEAD
 				icon: frappe.utils.icon("es-line-duplicate", "sm"),
+=======
+				icon: frappe.utils.icon("duplicate", "sm"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				action: () => this.duplicate_page(item),
 			},
 			{
 				label: __("Hide"),
 				title: __("Hide Workspace"),
+<<<<<<< HEAD
 				icon: frappe.utils.icon("es-line-hide", "sm"),
+=======
+				icon: frappe.utils.icon("hide", "sm"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				action: (e) => this.hide_workspace(item, e),
 			},
 		];
@@ -873,8 +1040,13 @@ frappe.views.Workspace = class Workspace {
 		}
 
 		let $button = $(`
+<<<<<<< HEAD
 			<div class="btn btn-xs setting-btn dropdown-btn" title="${__("Setting")}">
 				${frappe.utils.icon("es-line-dot-horizontal", "xs")}
+=======
+			<div class="btn btn-secondary btn-xs setting-btn dropdown-btn" title="${__("Setting")}">
+				${frappe.utils.icon("dot-horizontal", "xs")}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			</div>
 			<div class="dropdown-list hidden"></div>
 		`);
@@ -994,8 +1166,11 @@ frappe.views.Workspace = class Workspace {
 							"options",
 							this.get_value() ? me.public_parent_pages : me.private_parent_pages
 						);
+<<<<<<< HEAD
 						d.set_df_property("icon", "hidden", this.get_value() ? 0 : 1);
 						d.set_df_property("indicator_color", "hidden", this.get_value() ? 1 : 0);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					},
 				},
 				{
@@ -1005,6 +1180,7 @@ frappe.views.Workspace = class Workspace {
 					label: __("Icon"),
 					fieldtype: "Icon",
 					fieldname: "icon",
+<<<<<<< HEAD
 					default: new_page.public && new_page.icon,
 					hidden: !new_page.public,
 				},
@@ -1015,6 +1191,9 @@ frappe.views.Workspace = class Workspace {
 					options: this.indicator_colors,
 					hidden: new_page.public,
 					default: !new_page.public && new_page.indicator_color,
+=======
+					default: new_page.icon,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				},
 			],
 			primary_action_label: __("Duplicate"),
@@ -1044,7 +1223,10 @@ frappe.views.Workspace = class Workspace {
 				new_page.name = values.title + (new_page.public ? "" : "-" + frappe.session.user);
 				new_page.label = new_page.name;
 				new_page.icon = values.icon;
+<<<<<<< HEAD
 				new_page.indicator_color = values.indicator_color;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				new_page.parent_page = values.parent || "";
 				new_page.for_user = new_page.public ? "" : frappe.session.user;
 				new_page.is_editable = !new_page.public;
@@ -1239,8 +1421,11 @@ frappe.views.Workspace = class Workspace {
 							"options",
 							this.get_value() ? me.public_parent_pages : me.private_parent_pages
 						);
+<<<<<<< HEAD
 						d.set_df_property("icon", "hidden", this.get_value() ? 0 : 1);
 						d.set_df_property("indicator_color", "hidden", this.get_value() ? 1 : 0);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					},
 				},
 				{
@@ -1250,6 +1435,7 @@ frappe.views.Workspace = class Workspace {
 					label: __("Icon"),
 					fieldtype: "Icon",
 					fieldname: "icon",
+<<<<<<< HEAD
 					hidden: 1,
 				},
 				{
@@ -1257,6 +1443,8 @@ frappe.views.Workspace = class Workspace {
 					fieldtype: "Select",
 					fieldname: "indicator_color",
 					options: this.indicator_colors,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				},
 			],
 			primary_action_label: __("Create"),
@@ -1283,7 +1471,10 @@ frappe.views.Workspace = class Workspace {
 					public: values.is_public || 0,
 					for_user: values.is_public ? "" : frappe.session.user,
 					icon: values.icon,
+<<<<<<< HEAD
 					indicator_color: values.indicator_color,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					parent_page: values.parent || "",
 					is_editable: true,
 					selected: true,
@@ -1401,7 +1592,11 @@ frappe.views.Workspace = class Workspace {
 			$sidebar_item.appendTo($child_section);
 			$child_section.removeClass("hidden");
 			$item_container.find(".drop-icon.hidden").removeClass("hidden");
+<<<<<<< HEAD
 			$item_container.find(".drop-icon use").attr("href", "#es-line-up");
+=======
+			$item_container.find(".drop-icon use").attr("href", "#icon-small-up");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		let section = item.is_public ? "public" : "private";

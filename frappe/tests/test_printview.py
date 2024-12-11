@@ -1,5 +1,8 @@
 import frappe
+<<<<<<< HEAD
 from frappe.core.doctype.doctype.test_doctype import new_doctype
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.tests.utils import FrappeTestCase
 from frappe.www.printview import get_html_and_style
 
@@ -18,6 +21,7 @@ class PrintViewTest(FrappeTestCase):
 
 		# html should exist
 		self.assertTrue(bool(ret["html"]))
+<<<<<<< HEAD
 
 	def test_print_error(self):
 		"""Print failures shouldn't generate PDF with failure message but instead escalate the error"""
@@ -30,3 +34,5 @@ class PrintViewTest(FrappeTestCase):
 
 		# cancelled doc can't be printed by default
 		self.assertRaises(frappe.PermissionError, frappe.attach_print, doc.doctype, doc.name)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

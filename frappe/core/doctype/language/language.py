@@ -10,6 +10,7 @@ from frappe.model.document import Document
 
 
 class Language(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -25,6 +26,8 @@ class Language(Document):
 		language_name: DF.Data
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		validate_with_regex(self.language_code, "Language Code")
 
@@ -32,8 +35,13 @@ class Language(Document):
 		validate_with_regex(new, "Name")
 
 	def on_update(self):
+<<<<<<< HEAD
 		frappe.cache.delete_value("languages_with_name")
 		frappe.cache.delete_value("languages")
+=======
+		frappe.cache().delete_value("languages_with_name")
+		frappe.cache().delete_value("languages")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def validate_with_regex(name, label):

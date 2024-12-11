@@ -69,7 +69,11 @@ def validate_template(html):
 		frappe.throw(f"Syntax error in template as line {e.lineno}: {e.message}")
 
 
+<<<<<<< HEAD
 def render_template(template, context=None, is_path=None, safe_render=True):
+=======
+def render_template(template, context, is_path=None, safe_render=True):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""Render a template using Jinja
 
 	:param template: path or HTML containing the jinja template
@@ -85,9 +89,12 @@ def render_template(template, context=None, is_path=None, safe_render=True):
 	if not template:
 		return ""
 
+<<<<<<< HEAD
 	if context is None:
 		context = {}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if is_path or guess_is_path(template):
 		return get_jenv().get_template(template).render(context)
 	else:

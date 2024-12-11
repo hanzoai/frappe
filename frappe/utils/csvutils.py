@@ -53,7 +53,13 @@ def read_csv_content(fcontent):
 			)
 
 	fcontent = fcontent.encode("utf-8")
+<<<<<<< HEAD
 	content = [frappe.safe_decode(line) for line in fcontent.splitlines(True)]
+=======
+	content = []
+	for line in fcontent.splitlines(True):
+		content.append(frappe.safe_decode(line))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	try:
 		rows = []
@@ -134,7 +140,11 @@ def check_record(d):
 				if val not in docfield.options.split("\n"):
 					frappe.throw(
 						_("{0} must be one of {1}").format(
+<<<<<<< HEAD
 							_(docfield.label, context=docfield.parent), comma_or(docfield.options.split("\n"))
+=======
+							_(docfield.label), comma_or(docfield.options.split("\n"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						)
 					)
 

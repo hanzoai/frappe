@@ -14,6 +14,7 @@ from frappe.model.utils import render_include
 
 
 class Page(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -33,6 +34,8 @@ class Page(Document):
 		title: DF.Data | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def autoname(self):
 		"""
 		Creates a url friendly name for this page.
@@ -173,6 +176,14 @@ class Page(Document):
 					# flag for not caching this page
 					self._dynamic_page = True
 
+<<<<<<< HEAD
+=======
+		if frappe.lang != "en":
+			from frappe.translate import get_lang_js
+
+			self.script += get_lang_js("page", self.name)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		for path in get_code_files_via_hooks("page_js", self.name):
 			js = get_js(path)
 			if js:

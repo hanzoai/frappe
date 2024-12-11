@@ -8,6 +8,7 @@ import frappe
 from frappe.website.page_renderers.base_renderer import BaseRenderer
 from frappe.website.utils import is_binary_file
 
+<<<<<<< HEAD
 UNSUPPORTED_STATIC_PAGE_TYPES = (
 	"css",
 	"html",
@@ -20,6 +21,9 @@ UNSUPPORTED_STATIC_PAGE_TYPES = (
 	"txt",
 	"xml",
 )
+=======
+UNSUPPORTED_STATIC_PAGE_TYPES = ("html", "md", "js", "xml", "css", "txt", "py", "json")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class StaticPage(BaseRenderer):

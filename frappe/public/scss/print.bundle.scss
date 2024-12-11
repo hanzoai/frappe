@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 @import "./desk/variables";
 @import "frappe/public/css/bootstrap.css";
 @import "./common/quill";
 
+=======
+@import "frappe/public/css/bootstrap.css";
+@import "./common/quill";
+
+@import "./desk/variables";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 @import "~bootstrap/scss/utilities/spacing";
 @import "./desk/css_variables";
 @import "./element/checkbox";

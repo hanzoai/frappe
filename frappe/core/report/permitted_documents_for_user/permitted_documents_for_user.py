@@ -31,7 +31,11 @@ def execute(filters=None):
 
 def get_columns_and_fields(doctype):
 	columns = [f"Name:Link/{doctype}:200"]
+<<<<<<< HEAD
 	fields = ["name"]
+=======
+	fields = ["`name`"]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	for df in frappe.get_meta(doctype).fields:
 		if df.in_list_view and df.fieldtype in data_fieldtypes:
 			fields.append(f"`{df.fieldname}`")

@@ -1,5 +1,10 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+<<<<<<< HEAD
+=======
+from contextlib import contextmanager
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import frappe
 from frappe.core.doctype.user_permission.test_user_permission import create_user
 from frappe.defaults import *
@@ -55,6 +60,7 @@ class TestDefaults(FrappeTestCase):
 		self.assertEqual(get_user_default("language"), "en")
 		self.assertEqual(get_user_default_as_list("language"), ["en"])
 
+<<<<<<< HEAD
 		old_user = frappe.session.user
 		user = "test@example.com"
 		frappe.set_user(user)
@@ -74,6 +80,34 @@ class TestDefaults(FrappeTestCase):
 
 		frappe.delete_doc("User Permission", perm_doc.name)
 		frappe.set_user(old_user)
+=======
+		with as_restricted_user():
+			self.assertEqual(get_global_default("language"), None)
+			self.assertEqual(get_user_default("language"), None)
+			self.assertEqual(get_user_default_as_list("language"), [])
+
+
+@contextmanager
+def as_restricted_user():
+	old_user = frappe.session.user
+	user = "test@example.com"
+
+	perm_doc = frappe.get_doc(
+		{
+			"doctype": "User Permission",
+			"user": user,
+			"allow": "Language",
+			"for_value": "en-GB",
+		}
+	).insert(ignore_permissions=True)
+
+	frappe.set_user(user)
+
+	yield
+
+	perm_doc.delete(ignore_permissions=True)
+	frappe.set_user(old_user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@run_only_if(db_type_is.MARIADB)
 	def test_user_permission_defaults(self):

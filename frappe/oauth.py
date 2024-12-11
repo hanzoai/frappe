@@ -45,7 +45,12 @@ class OAuthWebRequestValidator(RequestValidator):
 		# The redirect used if none has been supplied.
 		# Prefer your clients to pre register a redirect uri rather than
 		# supplying one on each authorization request.
+<<<<<<< HEAD
 		return frappe.db.get_value("OAuth Client", client_id, "default_redirect_uri")
+=======
+		redirect_uri = frappe.db.get_value("OAuth Client", client_id, "default_redirect_uri")
+		return redirect_uri
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def validate_scopes(self, client_id, scopes, client, request, *args, **kwargs):
 		# Is the client allowed to access the requested scopes?
@@ -150,7 +155,15 @@ class OAuthWebRequestValidator(RequestValidator):
 			filters={"client": client_id, "validity": "Valid"},
 		)
 
+<<<<<<< HEAD
 		if code in [vcode["name"] for vcode in validcodes]:
+=======
+		checkcodes = []
+		for vcode in validcodes:
+			checkcodes.append(vcode["name"])
+
+		if code in checkcodes:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			request.scopes = frappe.db.get_value("OAuth Authorization Code", code, "scopes").split(
 				get_url_delimiter()
 			)
@@ -227,7 +240,14 @@ class OAuthWebRequestValidator(RequestValidator):
 		otoken.save(ignore_permissions=True)
 		frappe.db.commit()
 
+<<<<<<< HEAD
 		return frappe.db.get_value("OAuth Client", request.client["name"], "default_redirect_uri")
+=======
+		default_redirect_uri = frappe.db.get_value(
+			"OAuth Client", request.client["name"], "default_redirect_uri"
+		)
+		return default_redirect_uri
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def invalidate_authorization_code(self, client_id, code, request, *args, **kwargs):
 		# Authorization codes are use once, invalidate it when a Bearer token
@@ -360,7 +380,12 @@ class OAuthWebRequestValidator(RequestValidator):
 
 	def get_userinfo_claims(self, request):
 		user = frappe.get_doc("User", frappe.session.user)
+<<<<<<< HEAD
 		return get_userinfo(user)
+=======
+		userinfo = get_userinfo(user)
+		return userinfo
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def validate_id_token(self, token, scopes, request):
 		try:
@@ -532,8 +557,25 @@ def calculate_at_hash(access_token, hash_alg):
 
 
 def delete_oauth2_data():
+<<<<<<< HEAD
 	frappe.db.delete("OAuth Authorization Code", {"validity": "Invalid"})
 	frappe.db.delete("OAuth Bearer Token", {"status": "Revoked"})
+=======
+	# Delete Invalid Authorization Code and Revoked Token
+	commit_code, commit_token = False, False
+	code_list = frappe.get_all("OAuth Authorization Code", filters={"validity": "Invalid"})
+	token_list = frappe.get_all("OAuth Bearer Token", filters={"status": "Revoked"})
+	if len(code_list) > 0:
+		commit_code = True
+	if len(token_list) > 0:
+		commit_token = True
+	for code in code_list:
+		frappe.delete_doc("OAuth Authorization Code", code["name"])
+	for token in token_list:
+		frappe.delete_doc("OAuth Bearer Token", token["name"])
+	if commit_code or commit_token:
+		frappe.db.commit()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_client_scopes(client_id):
@@ -552,7 +594,11 @@ def get_userinfo(user):
 		else:
 			picture = urljoin(frappe_server_url, user.user_image)
 
+<<<<<<< HEAD
 	return frappe._dict(
+=======
+	userinfo = frappe._dict(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		{
 			"sub": frappe.db.get_value(
 				"User Social Login",
@@ -569,6 +615,11 @@ def get_userinfo(user):
 		}
 	)
 
+<<<<<<< HEAD
+=======
+	return userinfo
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def get_url_delimiter(separator_character=" "):
 	return separator_character

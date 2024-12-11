@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class UnhandledEmail(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -29,3 +30,12 @@ class UnhandledEmail(Document):
 				"modified": ("<", frappe.utils.add_days(frappe.utils.nowdate(), -1 * days)),
 			},
 		)
+=======
+	pass
+
+
+def remove_old_unhandled_emails():
+	frappe.db.delete(
+		"Unhandled Email", {"modified": ("<", frappe.utils.add_days(frappe.utils.nowdate(), -14))}
+	)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

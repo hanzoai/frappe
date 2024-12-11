@@ -7,6 +7,7 @@ frappe.listview_settings["Workflow"] = {
 			return [__("Not active"), "gray", "is_active,=,No"];
 		}
 	},
+<<<<<<< HEAD
 	button: {
 		show(doc) {
 			return doc.name;
@@ -21,6 +22,8 @@ frappe.listview_settings["Workflow"] = {
 			frappe.set_route("workflow-builder", doc.name);
 		},
 	},
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 };
 
 frappe.help.youtube_id["Workflow"] = "yObJUg9FxFs";

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <!-- Built on Frappe. https://frappeframework.com/ -->
+<<<<<<< HEAD
 <html lang="{{boot.lang}}">
+=======
+<html lang="en">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -20,6 +24,11 @@
 	>
 	{% endblock %}
 
+<<<<<<< HEAD
+=======
+	<link rel="canonical" href="{{ canonical }}">
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	{%- block head -%}
 		{% include "templates/includes/head.html" %}
 	{%- endblock -%}
@@ -34,6 +43,7 @@
 		{%- endif %}
 	{%- endblock -%}
 
+<<<<<<< HEAD
 	{% if boot.lang == "eo" %}
 	<script type="text/javascript">
 		var _jipt = [];
@@ -42,6 +52,8 @@
 	<script type="text/javascript" src="https://cdn.crowdin.com/jipt/jipt.js"></script>
 	{% endif %}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	<script>
 		window.frappe = {};
 		frappe.ready_events = [];
@@ -49,13 +61,20 @@
 			frappe.ready_events.push(fn);
 		}
 		window.dev_server = {{ dev_server }};
+<<<<<<< HEAD
 		window.socketio_port = {{ (frappe.socketio_port or 9000) }};
+=======
+		window.socketio_port = {{ (frappe.socketio_port or 'null') }};
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		window.show_language_picker = {{ show_language_picker or 'false' }};
 	</script>
 </head>
 <body frappe-session-status="{{ 'logged-in' if frappe.session.user != 'Guest' else 'logged-out'}}" data-path="{{ path | e }}" {%- if template and template.endswith('.md') %} frappe-content-type="markdown" {%- endif %} class="{{ body_class or ''}}">
 	{% include "public/icons/timeless/icons.svg" %}
+<<<<<<< HEAD
 	{% include "public/icons/espresso/icons.svg" %}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	{%- block banner -%}
 		{% include "templates/includes/banner_extension.html" ignore missing %}
 

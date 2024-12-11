@@ -2,7 +2,11 @@
 {%- for name in metatags %}
 {%- set content = metatags.get(name, '') -%}
 {%- if content -%}
+<<<<<<< HEAD
 <meta {% if name.startswith('og:') %}property="{{ name }}" {% else %}name="{{ name }}"{% endif %} content="{{ content | striptags | escape }}">
+=======
+<meta {% if name.startswith('og:') %}property="{{ name }}"{% else %}name="{{ name }}"{% endif %} content="{{ content | striptags | escape }}">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 {%- endif -%}
 {%- endfor -%}
 {%- endif -%}

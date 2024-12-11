@@ -55,7 +55,11 @@ def get_first_login(client):
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 def delete_client(client_id: str):
+=======
+def delete_client(client_id):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	active_client_id_tokens = frappe.get_all(
 		"OAuth Bearer Token", filters=[["user", "=", frappe.session.user], ["client", "=", client_id]]
 	)

@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class CustomRole(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -21,6 +22,8 @@ class CustomRole(Document):
 		roles: DF.Table[HasRole]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		if self.report and not self.ref_doctype:
 			self.ref_doctype = frappe.db.get_value("Report", self.report, "ref_doctype")

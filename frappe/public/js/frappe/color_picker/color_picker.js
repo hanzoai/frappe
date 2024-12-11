@@ -122,6 +122,10 @@ class Picker {
 	}
 
 	setup_hue_event() {
+<<<<<<< HEAD
+=======
+		// eslint-disable-next-line no-unused-vars
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		let on_drag = (x, y) => {
 			this.hue_selector_position.x = x;
 			this.hue = Math.round((x * 360) / this.hue_map.offsetWidth);
@@ -151,7 +155,13 @@ class Picker {
 	}
 
 	get_pointer_coords() {
+<<<<<<< HEAD
 		let h, s, v;
+=======
+		// eslint-disable-next-line no-unused-vars
+		let h, s, v;
+		// eslint-disable-next-line no-unused-vars
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		[h, s, v] = utils.get_hsv(this.get_color());
 		let width = this.color_map.offsetWidth;
 		let height = this.color_map.offsetHeight;

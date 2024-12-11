@@ -9,6 +9,10 @@ Action,Toiminto,
 Actions,Toiminnot,
 Active,aktiivinen,
 Add,Lisää,
+<<<<<<< HEAD
+=======
+Add Comment,Lisää kommentti,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,Lisää rivi,
 Address,Osoite,
 Address Line 2,osoiterivi 2,
@@ -143,6 +147,10 @@ Monday,Maanantai,
 Monthly,Kuukausi,
 More,Lisää,
 More Information,Lisätiedot,
+<<<<<<< HEAD
+=======
+More...,Lisää...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,Liikkua,
 My Account,Oma tili,
 New Address,Uusi osoite,
@@ -155,6 +163,10 @@ No items found.,Kohteita ei löytynyt.,
 None,Ei mitään,
 Not Permitted,Ei Sallittu,
 Not active,Ei aktiivinen,
+<<<<<<< HEAD
+=======
+Notes,Muistiinpanot,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,Määrä,
 Online,Online,
 Operation,Toiminta,
@@ -164,12 +176,25 @@ Owner,Omistaja,
 Page Missing or Moved,Sivu puuttuu tai se on siirretty,
 Parameter,Parametri,
 Password,Salasana,
+<<<<<<< HEAD
 Period,Aikajakso,
 Pincode,PIN koodi,
+=======
+Payment Gateway,Payment Gateway,
+Payment Gateway Name,Maksun yhdyskäytävän nimi,
+Payments,maksut,
+Period,Aikajakso,
+Pincode,PIN koodi,
+Plan Name,Plan Name,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,Aktivoi ponnahdusikkunat,
 Please select Company,Ole hyvä ja valitse Company,
 Please select {0},Ole hyvä ja valitse {0},
 Please set Email Address,Määritä sähköpostiosoite,
+<<<<<<< HEAD
+=======
+Portal,Portaali,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,Portaalin asetukset,
 Preview,esikatselu,
 Primary,Ensisijainen,
@@ -214,6 +239,10 @@ Salutation,Tervehdys,
 Sample,Näyte,
 Saturday,Lauantai,
 Saved,Tallennettu,
+<<<<<<< HEAD
+=======
+Scan Barcode,Skannaa viivakoodi,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,Aikataulutettu,
 Search,Haku,
 Secret Key,salainen avain,
@@ -228,6 +257,10 @@ Settings,asetukset,
 Shipping,Toimitus,
 Short Name,Lyhyt nimi,
 Slideshow,diaesitys,
+<<<<<<< HEAD
+=======
+Some information is missing,Joitakin tietoja puuttuu,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,Lähde,
 Source Name,Source Name,
 Standard,perus,
@@ -237,6 +270,10 @@ State,Osavaltio,
 Stopped,pysäytetty,
 Subject,aihe,
 Submit,Vahvista,
+<<<<<<< HEAD
+=======
+Successful,onnistunut,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,Yhteenveto,
 Sunday,sunnuntai,
 System Manager,Järjestelmän ylläpitäjä,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,Aikajänne,
 To,jotta,
 To Date,Päivään,
+<<<<<<< HEAD
 Traceback,Jäljittää,
 URL,URL,
 Unsubscribed,Peruutettu,
+=======
+Tools,Työkalut,
+Traceback,Jäljittää,
+URL,URL,
+Unsubscribed,Peruutettu,
+Use Sandbox,Käytä Sandbox,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,käyttäjä,
 User ID,käyttäjätunnus,
 Users,Käyttäjät,
@@ -556,6 +601,10 @@ Bulk Delete,Irtotavarana poisto,
 Bulk Edit {0},massamuokkaus {0},
 Bulk Rename,Bulk Rename,
 Bulk Update,Joukkopäivitä,
+<<<<<<< HEAD
+=======
+Busy,Kiireinen,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,painike,
 Button Help,Painikkeen ohje,
 Button Label,Painikkeen teksti,
@@ -692,6 +741,10 @@ Compiled Successfully,Käännetty onnistuneesti,
 Complete By,suoritettu loppuun,
 Complete Registration,rekisteröinti suoritettu loppuun,
 Complete Setup,määritykset suoritettu loppuun,
+<<<<<<< HEAD
+=======
+Completed By,Täydentänyt,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,Kirjoita sähköposti,
 Condition Detail,Tilanne Yksityiskohta,
 Conditions,olosuhteet,
@@ -1380,7 +1433,11 @@ Is Submittable,On vahvistettavissa,
 Is Table,taulukkomuotoinen,
 Is Your Company Address,Is Your Company Osoite,
 It is risky to delete this file: {0}. Please contact your System Manager.,Se on riskialtista poistaa tiedoston: {0}. Ota yhteyttä System Manager.,
+<<<<<<< HEAD
 Item cannot be added to its own descendants,tuotetta ei voi lisätä omaksi alatuotteekseen,
+=======
+Item cannot be added to its own descendents,tuotetta ei voi lisätä omaksi alatuotteekseen,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,JSON,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},formaatti JavaScript: frappe.query_reports ['raportin_nimi'] = {},
@@ -1675,8 +1732,13 @@ Not a valid Workflow Action,Ei kelvollinen työnkulun toiminto,
 Not a valid user,Ei kelvollinen käyttäjä,
 Not a zip file,Ei zip-tiedosto,
 Not allowed for {0}: {1},Ei sallittu {0}: {1},
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}","Ei sallittu pääsyä {0} koska se on linkitetty {1} &quot;{2}&quot; rivi {3}, kenttä {4}",
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},Ei sallittu pääsyä tähän {0} tietue koska se on linkitetty {1} &quot;{2}&quot; kenttä {3},
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},Ei sallittu {0}: {1} rivillä {2}. Rajoitettu kenttä: {3},
+Not allowed for {0}: {1}. Restricted field: {2},Ei sallittu {0}: {1}. Rajoitettu kenttä: {2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,Ei voi tuoda,
 Not allowed to change {0} after submission,Eivät saa muuttaa {0} toimittamisen jälkeen,
 Not allowed to print cancelled documents,Ei sallittu tulostaa peruutettu asiakirjoja,
@@ -1804,6 +1866,10 @@ Path to private Key File,Polku yksityiseen avaintiedostoon,
 PayPal Settings,PayPal Asetukset,
 PayPal payment gateway settings,PayPal maksu yhdyskäytävä asetukset,
 Payment Cancelled,Maksu peruutettu,
+<<<<<<< HEAD
+=======
+Payment Failed,Maksu epäonnistui,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,Maksu onnistui,
 Pending Approval,Odottaa hyväksyntää,
 Pending Verification,Odottaa vahvistusta,
@@ -3200,6 +3266,10 @@ Click on the link below to approve the request,Napsauta alla olevaa linkkiä hyv
 Click on the lock icon to toggle public/private,Napsauta lukituskuvaketta vaihtaaksesi julkista / yksityistä,
 Click on {0} to generate Refresh Token.,Napsauta {0} luodaksesi Päivitä token.,
 Close Condition,Sulje kunto,
+<<<<<<< HEAD
+=======
+Column {0},Sarake {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,Sarakkeet / kentät,
 "Configure notifications for mentions, assignments, energy points and more.","Määritä ilmoitukset maininnoista, tehtävistä, energiapisteistä ja muusta.",
 Contact Email,"yhteystiedot, sähköposti",
@@ -3281,6 +3351,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,vika,
 Fetching default Global Search documents.,Haetaan oletushakuasiakirjoja.,
 Fetching posts...,Haetaan viestejä ...,
+<<<<<<< HEAD
+=======
+Field Mapping,Kenttäkartta,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,Tarkistettava kenttä,
 File Information,Tiedoston tiedot,
 Filter By,Suodata,
@@ -3435,6 +3509,10 @@ No posts yet,Ei postauksia vielä,
 No records will be exported,Tietueita ei viedä,
 No results found for {0} in Global Search,Haulle {0} ei löytynyt tuloksia globaalissa haussa,
 No user found,Käyttäjää ei löytynyt,
+<<<<<<< HEAD
+=======
+Not Specified,Ei määritelty,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,Ilmoitusloki,
 Notification Settings,Ilmoitusasetukset,
 Notification Subscribed Document,Ilmoitettu tilattu asiakirja,
@@ -3590,6 +3668,10 @@ Untitled Column,Nimetön sarake,
 Untranslated,Kääntämätön,
 Upcoming Events,Tulevat tapahtumat,
 Update Existing Records,Päivitä olemassa olevat tietueet,
+<<<<<<< HEAD
+=======
+Update Type,Päivitystyyppi,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,Päivitetty uudeksi versioon 🎉,
 "Updating {0} of {1}, {2}","Päivitetään {0} {1}, {2}",
 Upload file,Lataa tiedosto,
@@ -3696,16 +3778,28 @@ Designation,Puhuttelu,
 Disabled,Passiivinen,
 Doctype,Tietuetyyppi,
 Download Template,lataa mallipohja,
+<<<<<<< HEAD
+=======
+Dr,Tri,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,eräpäivä,
 Duplicate,Kopioi,
 Edit Profile,Muokkaa profiilia,
 Email,Sähköpostiosoite,
+<<<<<<< HEAD
+=======
+End Time,ajan loppu,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,syötä Arvo,
 Entity Type,Entity Type,
 Error,virhe,
 Expired,vanhentunut,
 Export,vienti,
 Export not allowed. You need {0} role to export.,"vienti kielletty, tarvitset {0} rooli vientiin",
+<<<<<<< HEAD
+=======
+Fetching...,Haetaan ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,Ala,
 File Manager,Tiedostonhallinta,
 Filters,Suodattimet,
@@ -3720,8 +3814,16 @@ Import Data from CSV / Excel files.,Tuo tiedot CSV / Excel-tiedostoista.,
 In Progress,Käynnissä,
 Intermediate,väli-,
 Invite as User,Kutsu Käyttäjä,
+<<<<<<< HEAD
 Loading...,Ladataan ...,
 Location,Sijainti,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.","Näyttää siltä, että palvelimen raidakokoonpano on ongelma. Vahingossa summa palautetaan tilillesi.",
+Loading...,Ladataan ...,
+Location,Sijainti,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,"Näyttää siltä, että joku on lähettänyt teidät epätäydellisen URL. Pyydä heitä tutkimaan sitä.",
+Master,valvonta,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,Viesti,
 Missing Values Required,puuttuvat arvot vaaditaan,
 Mobile No,Matkapuhelin,
@@ -3733,6 +3835,10 @@ Note,Muistiinpano,
 Offline,Poissa,
 Open,Avoin,
 Page {0} of {1},Sivu {0} - {1},
+<<<<<<< HEAD
+=======
+Pay,Maksaa,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,Odottaa,
 Phone,Puhelin,
 Please click on the following link to set your new password,Klikkaa seuraavaa linkkiä asettaa uuden salasanan,
@@ -3782,6 +3888,10 @@ Welcome to {0},Tervetuloa {0},
 Year,vuosi,
 Yearly,Vuosi,
 You,Sinä,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,voit kopioida ja liittää tämän linkin selaimeesi,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,ja,
 {0} Name,{0} Nimi,
 {0} is required,{0} on pakollinen,
@@ -4085,6 +4195,10 @@ Custom SCSS,Mukautettu SCSS,
 Navbar,Navigointipalkki,
 Source Message,Lähdesanoma,
 Translated Message,Käännetty viesti,
+<<<<<<< HEAD
+=======
+Verified By,Vahvistanut,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,"Tämän konsolin käyttö voi antaa hyökkääjille mahdollisuuden esiintyä toisena henkilönä ja varastaa tietosi. Älä kirjoita tai liitä koodia, jota et ymmärrä.",
 {0} m,{0} m,
 {0} h,{0} h,
@@ -4108,7 +4222,11 @@ No changes in document,Ei muutoksia asiakirjassa,
 by Role,kirjoittanut Role,
 Document is only editable by users with role,"Asiakirjaa voivat muokata vain käyttäjät, joilla on rooli",
 {0}: Other permission rules may also apply,{0}: Myös muut käyttöoikeussäännöt voivat olla voimassa,
+<<<<<<< HEAD
 {0} Web page views,{0} Sivun näyttökerrat,
+=======
+{0} Page Views,{0} Sivun näyttökerrat,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,Laajentaa,
 Collapse,Romahdus,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.","Virheellinen verkkotunnuksen tunnus. Anna kelvollinen käyttöoikeustunnus, jonka etuliite on &#39;kantaja&#39;.",
@@ -4117,6 +4235,10 @@ Collapse,Romahdus,
 {0} is not a valid Name,{0} ei ole kelvollinen nimi,
 Your system is being updated. Please refresh again after a few moments.,Järjestelmääsi päivitetään. Päivitä uudelleen hetken kuluttua.,
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}: Lähetettyä tietuetta ei voi poistaa. Sinun on ensin {2} peruutettava {3} se.,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},Virheellinen nimeämissarja (. Puuttuu) verkkotunnukselle {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},Virhe kohteessa {0},
 Status Updated,Tila päivitetty,
 You can also copy-paste this {0} to your browser,Voit myös kopioida tämän {0} selaimeesi,
@@ -4138,11 +4260,21 @@ Is Billing Contact,Onko laskutusyhteyshenkilö,
 Address And Contacts,Osoite ja yhteystiedot,
 Lead Conversion Time,Lyijyn muuntoaika,
 Due Date Based On,Eräpäivä perustuu,
+<<<<<<< HEAD
 Linked Documents,Linkitetyt asiakirjat,
+=======
+Phone Number,Puhelinnumero,
+Linked Documents,Linkitetyt asiakirjat,
+Account SID,Tilin SID,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,Askeleet,
 email,sähköposti,
 Component,komponentti,
 Subtitle,alaotsikko,
+<<<<<<< HEAD
+=======
+Global Defaults,Yleiset oletusasetukset,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,Etuliite,
 Is Public,On julkinen,
 This chart will be available to all Users if this is set,"Tämä kaavio on kaikkien käyttäjien saatavilla, jos tämä on määritetty",
@@ -4329,6 +4461,10 @@ Dynamic Filters Section,Dynaamiset suodattimet -osio,
 Please create Card first,Luo ensin Kortti,
 Onboarding Permission,Onboarding-lupa,
 Onboarding Step,Onboarding vaihe,
+<<<<<<< HEAD
+=======
+Is Mandatory,On pakollinen,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,Ohitetaan,
 Create Entry,Luo merkintä,
 Update Settings,Päivitä asetukset,
@@ -4366,6 +4502,10 @@ Message (HTML),Viesti (HTML),
 Send Attachments,Lähetä liitteet,
 Testing,Testaus,
 System Notification,Järjestelmäilmoitus,
+<<<<<<< HEAD
+=======
+WhatsApp,WhatsApp,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,Twilio-numero,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","Käynnistä WhatsApp for Business alustamalla <a href=""#Form/Twilio Settings"">Twilio-asetukset</a> .",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","Jos haluat käyttää Slack Channel -ohjelmaa, lisää <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL-osoite</a> .",
@@ -4500,6 +4640,10 @@ Add to ToDo,Lisää tehtävään,
 {0} are currently {1},{0} ovat tällä hetkellä {1},
 Currently Replying,Vastaa tällä hetkellä,
 created {0},luonut {0},
+<<<<<<< HEAD
+=======
+Make a call,Soita,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,Muuttaa,Coins
 Too Many Requests,Liian monta pyyntöä,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.","Virheelliset valtuutusotsikot, lisää tunniste, jossa on etuliite jostakin seuraavista: {0}.",
@@ -4664,6 +4808,7 @@ Value cannot be negative for {0}: {1},Arvo ei voi olla negatiivinen kohteelle {0
 Negative Value,Negatiivinen arvo,
 Authentication failed while receiving emails from Email Account: {0}.,Todennus epäonnistui vastaanotettaessa sähköposteja sähköpostitililtä: {0}.,
 Message from server: {0},Viesti palvelimelta: {0},
+<<<<<<< HEAD
 Add Row,Lisää rivi,
 Analytics,Analytiikka,
 Anonymous,anonyymi,
@@ -4796,3 +4941,5 @@ West Bengal,Länsi-Bengali,
 Published on,Julkaistu,
 Bottom,Pohja,
 Top,Yläosa,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

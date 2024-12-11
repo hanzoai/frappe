@@ -9,6 +9,13 @@
   "doctype_name",
   "column_break_peck",
   "document",
+<<<<<<< HEAD
+=======
+  "section_break_dfrx",
+  "start_date",
+  "column_break_ytzm",
+  "end_date",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "section_break_gppi",
   "version_table",
   "rows_added_section",
@@ -68,13 +75,41 @@
    "fieldtype": "Section Break",
    "hidden": 1,
    "label": "Rows Removed"
+<<<<<<< HEAD
+=======
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "eval: doc.start_date || doc.end_date",
+   "fieldname": "section_break_dfrx",
+   "fieldtype": "Section Break",
+   "label": "Date Range"
+  },
+  {
+   "fieldname": "column_break_ytzm",
+   "fieldtype": "Column Break"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-10-04 12:45:49.099121",
+=======
+ "modified": "2023-10-31 13:12:41.749483",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Audit Trail",
@@ -92,4 +127,8 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

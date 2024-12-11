@@ -1,13 +1,20 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+<<<<<<< HEAD
 import contextlib
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 # imports - standard imports
 import gzip
 import os
+<<<<<<< HEAD
 import sys
 from calendar import timegm
 from collections.abc import Callable
+=======
+from calendar import timegm
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from datetime import datetime
 from glob import glob
 from shutil import which
@@ -18,8 +25,12 @@ from cryptography.fernet import Fernet
 
 # imports - module imports
 import frappe
+<<<<<<< HEAD
 import frappe.utils
 from frappe import _, conf
+=======
+from frappe import conf
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils import cint, get_file_size, get_url, now, now_datetime
 
 # backup variable for backwards compatibility
@@ -35,7 +46,11 @@ class BackupGenerator:
 	"""
 	This class contains methods to perform On Demand Backup
 
+<<<<<<< HEAD
 	To initialize, specify (db_name, user, password, db_file_name=None, db_host="127.0.0.1")
+=======
+	To initialize, specify (db_name, user, password, db_file_name=None, db_host="localhost")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	If specifying db_file_name, also append ".sql.gz"
 	"""
 
@@ -48,22 +63,34 @@ class BackupGenerator:
 		backup_path_db=None,
 		backup_path_files=None,
 		backup_path_private_files=None,
+<<<<<<< HEAD
 		db_socket=None,
 		db_host=None,
 		db_port=None,
 		db_type=None,
+=======
+		db_host="localhost",
+		db_port=None,
+		db_type="mariadb",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		backup_path_conf=None,
 		ignore_conf=False,
 		compress_files=False,
 		include_doctypes="",
 		exclude_doctypes="",
 		verbose=False,
+<<<<<<< HEAD
 		old_backup_metadata=False,
 		rollback_callback=None,
 	):
 		global _verbose
 		self.compress_files = compress_files or compress
 		self.db_socket = db_socket
+=======
+	):
+		global _verbose
+		self.compress_files = compress_files or compress
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.db_host = db_host
 		self.db_port = db_port
 		self.db_name = db_name
@@ -79,8 +106,16 @@ class BackupGenerator:
 		self.include_doctypes = include_doctypes
 		self.exclude_doctypes = exclude_doctypes
 		self.partial = False
+<<<<<<< HEAD
 		self.old_backup_metadata = old_backup_metadata
 		self.rollback_callback = rollback_callback
+=======
+
+		if not self.db_type:
+			self.db_type = "mariadb"
+
+		self.db_port = self.db_port or frappe.db.default_port
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		site = frappe.local.site or frappe.generate_hash(length=8)
 		self.site_slug = site.replace(".", "_")
@@ -192,12 +227,19 @@ class BackupGenerator:
 			self.set_backup_file_name()
 
 		if not (last_db and last_file and last_private_file and site_config_backup_path):
+<<<<<<< HEAD
 			self.delete_if_step_fails(self.take_dump, self.backup_path_db)
 			self.delete_if_step_fails(self.copy_site_config, self.backup_path_conf)
 			if not ignore_files:
 				self.delete_if_step_fails(
 					self.backup_files, self.backup_path_files, self.backup_path_private_files
 				)
+=======
+			self.take_dump()
+			self.copy_site_config()
+			if not ignore_files:
+				self.backup_files()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			if frappe.get_system_settings("encrypt_backup"):
 				self.backup_encryption()
@@ -257,6 +299,7 @@ class BackupGenerator:
 
 	def get_recent_backup(self, older_than, partial=False):
 		backup_path = get_backup_path()
+<<<<<<< HEAD
 		separator = suffix = ""
 		if partial:
 			separator = "*"
@@ -270,6 +313,23 @@ class BackupGenerator:
 			"private": f"*-{{}}-private-files{suffix}.tar",
 			"config": f"*-{{}}-site_config_backup{suffix}.json",
 		}
+=======
+
+		if not frappe.get_system_settings("encrypt_backup"):
+			file_type_slugs = {
+				"database": "*-{{}}-{}database.sql.gz".format("*" if partial else ""),
+				"public": "*-{}-files.tar",
+				"private": "*-{}-private-files.tar",
+				"config": "*-{}-site_config_backup.json",
+			}
+		else:
+			file_type_slugs = {
+				"database": "*-{{}}-{}database.enc.sql.gz".format("*" if partial else ""),
+				"public": "*-{}-files.enc.tar",
+				"private": "*-{}-private-files.enc.tar",
+				"config": "*-{}-site_config_backup.json",
+			}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		def backup_time(file_path):
 			file_name = file_path.split(os.sep)[-1]
@@ -352,6 +412,7 @@ class BackupGenerator:
 			backup_path = self.backup_path_files if folder == "public" else self.backup_path_private_files
 
 			if self.compress_files:
+<<<<<<< HEAD
 				cmd_string = "set -o pipefail; tar cf - {1} | gzip > {0}"
 			else:
 				cmd_string = "tar -cf {0} {1}"
@@ -371,6 +432,15 @@ class BackupGenerator:
 					)
 				else:
 					raise e
+=======
+				cmd_string = "tar cf - {1} | gzip > {0}"
+			else:
+				cmd_string = "tar -cf {0} {1}"
+
+			frappe.utils.execute_in_shell(
+				cmd_string.format(backup_path, files_path), verbose=self.verbose, low_priority=True
+			)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def copy_site_config(self):
 		site_config_backup_path = self.backup_path_conf
@@ -380,6 +450,7 @@ class BackupGenerator:
 			n.write(c.read())
 
 	def take_dump(self):
+<<<<<<< HEAD
 		import shlex
 
 		import frappe.utils
@@ -405,6 +476,33 @@ class BackupGenerator:
 				"end frappe metadata",
 				"",
 			]
+=======
+		import frappe.utils
+		from frappe.utils.change_log import get_app_branch
+
+		db_exc = {
+			"mariadb": ("mysqldump", which("mysqldump")),
+			"postgres": ("pg_dump", which("pg_dump")),
+		}[self.db_type]
+		gzip_exc = which("gzip")
+
+		if not (gzip_exc and db_exc[1]):
+			_exc = "gzip" if not gzip_exc else db_exc[0]
+			frappe.throw(
+				f"{_exc} not found in PATH! This is required to take a backup.", exc=frappe.ExecutableNotFound
+			)
+		db_exc = db_exc[0]
+
+		database_header_content = [
+			f"Backup generated by Frappe {frappe.__version__} on branch {get_app_branch('frappe') or 'N/A'}",
+			"",
+		]
+
+		# escape reserved characters
+		args = frappe._dict(
+			[item[0], frappe.utils.esc(str(item[1]), "$ ")] for item in self.__dict__.copy().items()
+		)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if self.backup_includes:
 			backup_info = ("Backing Up Tables: ", ", ".join(self.backup_includes))
@@ -424,6 +522,7 @@ class BackupGenerator:
 
 		generated_header = "\n".join(f"-- {x}" for x in database_header_content) + "\n"
 
+<<<<<<< HEAD
 		with gzip.open(self.backup_path_db, "wt") as f:
 			f.write(generated_header)
 
@@ -464,6 +563,58 @@ class BackupGenerator:
 		command = " ".join(["set -o pipefail;", *cmd, "|", gzip_exc, ">>", self.backup_path_db])
 		if self.verbose:
 			print(command.replace(shlex.quote(self.password), "*" * 10) + "\n")
+=======
+		with gzip.open(args.backup_path_db, "wt") as f:
+			f.write(generated_header)
+
+		if self.db_type == "postgres":
+			if self.backup_includes:
+				args["include"] = " ".join(
+					[f"--table='public.\"{table}\"'" for table in self.backup_includes]
+				)
+			elif self.backup_excludes:
+				args["exclude"] = " ".join(
+					[f"--exclude-table-data='public.\"{table}\"'" for table in self.backup_excludes]
+				)
+
+			cmd_string = (
+				"self=$$; "
+				"( {db_exc} postgres://{user}:{password}@{db_host}:{db_port}/{db_name}"
+				" {include} {exclude} || kill $self ) | {gzip} >> {backup_path_db}"
+			)
+
+		else:
+			if self.backup_includes:
+				args["include"] = " ".join([f"'{x}'" for x in self.backup_includes])
+			elif self.backup_excludes:
+				args["exclude"] = " ".join(
+					[f"--ignore-table='{frappe.conf.db_name}.{table}'" for table in self.backup_excludes]
+				)
+
+			cmd_string = (
+				# Remember process of this shell and kill it if mysqldump exits w/ non-zero code
+				"self=$$; "
+				" ( {db_exc} --single-transaction --quick --lock-tables=false -u {user}"
+				" -p{password} {db_name} -h {db_host} -P {db_port} {include} {exclude} || kill $self ) "
+				" | {gzip} >> {backup_path_db}"
+			)
+
+		command = cmd_string.format(
+			user=args.user,
+			password=args.password,
+			db_exc=db_exc,
+			db_host=args.db_host,
+			db_port=args.db_port,
+			db_name=args.db_name,
+			backup_path_db=args.backup_path_db,
+			exclude=args.get("exclude", ""),
+			include=args.get("include", ""),
+			gzip=gzip_exc,
+		)
+
+		if self.verbose:
+			print(command.replace(args.password, "*" * 10) + "\n")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		frappe.utils.execute_in_shell(command, low_priority=True, check_exit_code=True)
 
@@ -493,6 +644,7 @@ download only after 24 hours."""
 		frappe.sendmail(recipients=recipient_list, message=msg, subject=subject)
 		return recipient_list
 
+<<<<<<< HEAD
 	def add_to_rollback(self, func: Callable) -> None:
 		"""
 		Adds the given callable to the rollback CallbackManager stack
@@ -521,6 +673,8 @@ download only after 24 hours."""
 		for path in paths:
 			self.add_to_rollback(lambda: os.remove(path))
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 @frappe.whitelist()
 def fetch_latest_backups(partial=False):
@@ -535,10 +689,16 @@ def fetch_latest_backups(partial=False):
 		frappe.conf.db_name,
 		frappe.conf.db_name,
 		frappe.conf.db_password,
+<<<<<<< HEAD
 		db_socket=frappe.conf.db_socket,
 		db_host=frappe.conf.db_host,
 		db_port=frappe.conf.db_port,
 		db_type=frappe.conf.db_type,
+=======
+		db_host=frappe.db.host,
+		db_type=frappe.conf.db_type,
+		db_port=frappe.conf.db_port,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	)
 	database, public, private, config = odb.get_recent_backup(older_than=24 * 30, partial=partial)
 
@@ -559,13 +719,20 @@ def scheduled_backup(
 	compress=False,
 	force=False,
 	verbose=False,
+<<<<<<< HEAD
 	old_backup_metadata=False,
 	rollback_callback=None,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 ):
 	"""this function is called from scheduler
 	deletes backups older than 7 days
 	takes backup"""
+<<<<<<< HEAD
 	return new_backup(
+=======
+	odb = new_backup(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		older_than=older_than,
 		ignore_files=ignore_files,
 		backup_path=backup_path,
@@ -579,9 +746,14 @@ def scheduled_backup(
 		compress=compress,
 		force=force,
 		verbose=verbose,
+<<<<<<< HEAD
 		old_backup_metadata=old_backup_metadata,
 		rollback_callback=rollback_callback,
 	)
+=======
+	)
+	return odb
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def new_backup(
@@ -598,17 +770,25 @@ def new_backup(
 	compress=False,
 	force=False,
 	verbose=False,
+<<<<<<< HEAD
 	old_backup_metadata=False,
 	rollback_callback=None,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 ):
 	delete_temp_backups()
 	odb = BackupGenerator(
 		frappe.conf.db_name,
 		frappe.conf.db_name,
 		frappe.conf.db_password,
+<<<<<<< HEAD
 		db_socket=frappe.conf.db_socket,
 		db_host=frappe.conf.db_host,
 		db_port=frappe.conf.db_port,
+=======
+		db_host=frappe.db.host,
+		db_port=frappe.db.port,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		db_type=frappe.conf.db_type,
 		backup_path=backup_path,
 		backup_path_db=backup_path_db,
@@ -620,8 +800,11 @@ def new_backup(
 		exclude_doctypes=exclude_doctypes,
 		verbose=verbose,
 		compress_files=compress,
+<<<<<<< HEAD
 		old_backup_metadata=old_backup_metadata,
 		rollback_callback=rollback_callback,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	)
 	odb.get_backup(older_than, ignore_files, force=force)
 	return odb
@@ -668,13 +851,22 @@ def is_file_old(file_path, older_than=24):
 
 
 def get_backup_path():
+<<<<<<< HEAD
 	return frappe.utils.get_site_path(conf.get("backup_path", "private/backups"))
+=======
+	backup_path = frappe.utils.get_site_path(conf.get("backup_path", "private/backups"))
+	return backup_path
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()
 def get_backup_encryption_key():
 	frappe.only_for("System Manager")
+<<<<<<< HEAD
 	return get_or_generate_backup_encryption_key()
+=======
+	return frappe.conf.get(BACKUP_ENCRYPTION_CONFIG_KEY)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_or_generate_backup_encryption_key():
@@ -690,6 +882,7 @@ def get_or_generate_backup_encryption_key():
 	return key
 
 
+<<<<<<< HEAD
 @contextlib.contextmanager
 def decrypt_backup(file_path: str, passphrase: str):
 	if which("gpg") is None:
@@ -718,6 +911,48 @@ def decrypt_backup(file_path: str, passphrase: str):
 			if os.path.exists(file_path.rstrip(".gz")):
 				os.remove(file_path.rstrip(".gz"))
 			os.rename(file_path_with_ext, file_path)
+=======
+class Backup:
+	def __init__(self, file_path):
+		self.file_path = file_path
+
+	def backup_decryption(self, passphrase):
+		"""
+		Decrypts backup at the given path using the passphrase.
+		"""
+		if not os.path.exists(self.file_path):
+			print("Invalid path", self.file_path)
+			return
+		else:
+			if which("gpg") is None:
+				click.secho("Please install `gpg` and ensure its available in your PATH", fg="red")
+				sys.exit(1)
+			file_path_with_ext = self.file_path + ".gpg"
+			os.rename(self.file_path, file_path_with_ext)
+
+			cmd_string = "gpg --yes --passphrase {passphrase} --pinentry-mode loopback -o {decrypted_file} -d {file_location}"
+			command = cmd_string.format(
+				passphrase=passphrase,
+				file_location=file_path_with_ext,
+				decrypted_file=self.file_path,
+			)
+		frappe.utils.execute_in_shell(command)
+
+	def decryption_rollback(self):
+		"""
+		Checks if the decrypted file exists at the given path.
+		if exists
+		        Renames the orginal encrypted file.
+		else
+		        Removes the decrypted file and rename the original file.
+		"""
+		if os.path.exists(self.file_path + ".gpg"):
+			if os.path.exists(self.file_path):
+				os.remove(self.file_path)
+			if os.path.exists(self.file_path.rstrip(".gz")):
+				os.remove(self.file_path.rstrip(".gz"))
+			os.rename(self.file_path + ".gpg", self.file_path)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def backup(
@@ -726,6 +961,10 @@ def backup(
 	backup_path_files=None,
 	backup_path_private_files=None,
 	backup_path_conf=None,
+<<<<<<< HEAD
+=======
+	quiet=False,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 ):
 	"Backup"
 	odb = scheduled_backup(
@@ -741,3 +980,79 @@ def backup(
 		"backup_path_files": odb.backup_path_files,
 		"backup_path_private_files": odb.backup_path_private_files,
 	}
+<<<<<<< HEAD
+=======
+
+
+if __name__ == "__main__":
+	import sys
+
+	from frappe.utils.commands import warn
+
+	warn(
+		"Calling the backup script directly is deprecated. "
+		"Use the backup command instead. This script will be removed in Frappe v15.",
+		category=DeprecationWarning,
+	)
+
+	cmd = sys.argv[1]
+
+	db_type = "mariadb"
+	try:
+		db_type = sys.argv[6]
+	except IndexError:
+		pass
+
+	db_port = 3306
+	try:
+		db_port = int(sys.argv[7])
+	except IndexError:
+		pass
+
+	if cmd == "is_file_old":
+		odb = BackupGenerator(
+			sys.argv[2],
+			sys.argv[3],
+			sys.argv[4],
+			sys.argv[5] or "localhost",
+			db_type=db_type,
+			db_port=db_port,
+		)
+		is_file_old(odb.db_file_name)
+
+	if cmd == "get_backup":
+		odb = BackupGenerator(
+			sys.argv[2],
+			sys.argv[3],
+			sys.argv[4],
+			sys.argv[5] or "localhost",
+			db_type=db_type,
+			db_port=db_port,
+		)
+		odb.get_backup()
+
+	if cmd == "take_dump":
+		odb = BackupGenerator(
+			sys.argv[2],
+			sys.argv[3],
+			sys.argv[4],
+			sys.argv[5] or "localhost",
+			db_type=db_type,
+			db_port=db_port,
+		)
+		odb.take_dump()
+
+	if cmd == "send_email":
+		odb = BackupGenerator(
+			sys.argv[2],
+			sys.argv[3],
+			sys.argv[4],
+			sys.argv[5] or "localhost",
+			db_type=db_type,
+			db_port=db_port,
+		)
+		odb.send_email()
+
+	if cmd == "delete_temp_backups":
+		delete_temp_backups()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

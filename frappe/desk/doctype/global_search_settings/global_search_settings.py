@@ -7,6 +7,7 @@ from frappe.model.document import Document
 
 
 class GlobalSearchSettings(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -19,6 +20,8 @@ class GlobalSearchSettings(Document):
 		allowed_in_global_search: DF.Table[GlobalSearchDocType]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		dts, core_dts, repeated_dts = [], [], []
 
@@ -40,7 +43,11 @@ class GlobalSearchSettings(Document):
 			frappe.throw(_("Document Type {0} has been repeated.").format(repeated_dts))
 
 		# reset cache
+<<<<<<< HEAD
 		frappe.cache.hdel("global_search", "search_priorities")
+=======
+		frappe.cache().hdel("global_search", "search_priorities")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_doctypes_for_global_search():
@@ -48,7 +55,11 @@ def get_doctypes_for_global_search():
 		doctypes = frappe.get_all("Global Search DocType", fields=["document_type"], order_by="idx ASC")
 		return [d.document_type for d in doctypes] or []
 
+<<<<<<< HEAD
 	return frappe.cache.hget("global_search", "search_priorities", get_from_db)
+=======
+	return frappe.cache().hget("global_search", "search_priorities", get_from_db)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()

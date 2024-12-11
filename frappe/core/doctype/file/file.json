@@ -82,7 +82,10 @@
    "in_list_view": 1,
    "label": "File Size",
    "length": 20,
+<<<<<<< HEAD
    "options": "File Size",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "read_only": 1
   },
   {
@@ -218,7 +221,11 @@
   }
  ],
  "sort_field": "modified",
+<<<<<<< HEAD
  "sort_order": "DESC",
+=======
+ "sort_order": "ASC",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "states": [],
  "title_field": "file_name",
  "track_changes": 1

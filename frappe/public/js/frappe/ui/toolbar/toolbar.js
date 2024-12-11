@@ -20,7 +20,10 @@ frappe.ui.toolbar.Toolbar = class {
 		this.setup_awesomebar();
 		this.setup_notifications();
 		this.setup_help();
+<<<<<<< HEAD
 		this.setup_announcement_widget();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.make();
 	}
 
@@ -47,6 +50,7 @@ frappe.ui.toolbar.Toolbar = class {
 		});
 	}
 
+<<<<<<< HEAD
 	setup_announcement_widget() {
 		let current_announcement = frappe.boot.navbar_settings.announcement_widget;
 
@@ -71,6 +75,8 @@ frappe.ui.toolbar.Toolbar = class {
 		}
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	setup_help() {
 		if (!frappe.boot.desk_settings.notifications) {
 			// hide the help section
@@ -107,7 +113,11 @@ frappe.ui.toolbar.Toolbar = class {
 			var breadcrumbs = route.split("/");
 
 			var links = [];
+<<<<<<< HEAD
 			for (let i = 0; i < breadcrumbs.length; i++) {
+=======
+			for (var i = 0; i < breadcrumbs.length; i++) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				var r = route.split("/", i + 1);
 				var key = r.join("/");
 				var help_links = frappe.help.help_links[key] || [];
@@ -120,7 +130,11 @@ frappe.ui.toolbar.Toolbar = class {
 				$help_links.next().show();
 			}
 
+<<<<<<< HEAD
 			for (let i = 0; i < links.length; i++) {
+=======
+			for (var i = 0; i < links.length; i++) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				var link = links[i];
 				var url = link.url;
 				$("<a>", {
@@ -156,6 +170,7 @@ frappe.ui.toolbar.Toolbar = class {
 		if (frappe.boot.desk_settings.search_bar) {
 			let awesome_bar = new frappe.search.AwesomeBar();
 			awesome_bar.setup("#navbar-search");
+<<<<<<< HEAD
 
 			frappe.search.utils.make_function_searchable(
 				frappe.utils.generate_tracking_url,
@@ -167,6 +182,13 @@ frappe.ui.toolbar.Toolbar = class {
 					frappe.set_route("List", "RQ Job");
 				}, __("Background Jobs"));
 			}
+=======
+		}
+		if (frappe.model.can_read("RQ Job")) {
+			frappe.search.utils.make_function_searchable(function () {
+				frappe.set_route("List", "RQ Job");
+			}, __("Background Jobs"));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 
@@ -272,7 +294,11 @@ frappe.ui.toolbar.setup_session_defaults = function () {
 			fields = JSON.parse(data.message);
 			let perms = frappe.perm.get_perm("Session Default Settings");
 			//add settings button only if user is a System Manager or has permission on 'Session Default Settings'
+<<<<<<< HEAD
 			if (frappe.user_roles.includes("System Manager") || perms[0].read == 1) {
+=======
+			if (in_list(frappe.user_roles, "System Manager") || perms[0].read == 1) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				fields[fields.length] = {
 					fieldname: "settings",
 					fieldtype: "Button",

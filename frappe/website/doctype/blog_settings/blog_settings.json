@@ -1,18 +1,30 @@
 {
  "actions": [],
  "creation": "2013-03-11 17:48:16",
+<<<<<<< HEAD
  "description": "Settings to control blog categories and interactions like comments and likes",
+=======
+ "description": "Blog Settings",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "blog_title",
   "blog_introduction",
+<<<<<<< HEAD
   "preview_image",
   "column_break",
   "enable_social_sharing",
   "allow_guest_to_comment",
   "browse_by_category",
   "show_cta_in_blog",
+=======
+  "column_break",
+  "enable_social_sharing",
+  "show_cta_in_blog",
+  "allow_guest_to_comment",
+  "browse_by_category",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "cta_section",
   "title",
   "subtitle",
@@ -50,13 +62,21 @@
    "default": "0",
    "fieldname": "show_cta_in_blog",
    "fieldtype": "Check",
+<<<<<<< HEAD
    "label": "Show \"Call to Action\" in Blog"
+=======
+   "label": "Show CTA in Blog"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "depends_on": "eval:doc.show_cta_in_blog",
    "fieldname": "cta_section",
    "fieldtype": "Section Break",
+<<<<<<< HEAD
    "label": "Call to Action"
+=======
+   "label": "CTA"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "title",
@@ -88,8 +108,12 @@
   },
   {
    "fieldname": "section_break_12",
+<<<<<<< HEAD
    "fieldtype": "Section Break",
    "label": "Rate Limits"
+=======
+   "fieldtype": "Section Break"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "default": "5",
@@ -120,18 +144,25 @@
    "fieldname": "like_limit",
    "fieldtype": "Int",
    "label": "Like limit"
+<<<<<<< HEAD
   },
   {
    "fieldname": "preview_image",
    "fieldtype": "Attach Image",
    "label": "Preview Image"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-01-30 14:13:12.477755",
+=======
+ "modified": "2022-07-12 17:45:49.108398",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Website",
  "name": "Blog Settings",

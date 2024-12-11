@@ -28,7 +28,10 @@ class WebsiteAnalytics:
 
 		self.filters.to_date = frappe.utils.add_days(self.filters.to_date, 1)
 		self.query_filters = {"creation": ["between", [self.filters.from_date, self.filters.to_date]]}
+<<<<<<< HEAD
 		self.group_by = self.filters.group_by
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def run(self):
 		columns = self.get_columns()
@@ -39,6 +42,7 @@ class WebsiteAnalytics:
 		return columns, data[:250], None, chart, summary
 
 	def get_columns(self):
+<<<<<<< HEAD
 		meta = frappe.get_meta("Web Page View")
 		group_by = meta.get_field(self.group_by)
 		return [
@@ -49,6 +53,10 @@ class WebsiteAnalytics:
 				"width": 500,
 				"align": "left",
 			},
+=======
+		return [
+			{"fieldname": "path", "label": "Page", "fieldtype": "Data", "width": 300},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			{"fieldname": "count", "label": "Page Views", "fieldtype": "Int", "width": 150},
 			{"fieldname": "unique_count", "label": "Unique Visitors", "fieldtype": "Int", "width": 150},
 		]
@@ -61,12 +69,21 @@ class WebsiteAnalytics:
 
 		return (
 			frappe.qb.from_(WebPageView)
+<<<<<<< HEAD
 			.select(self.group_by, count_all, count_is_unique)
 			.where(
 				Coalesce(WebPageView.creation, "0001-01-01")[self.filters.from_date : self.filters.to_date]
 			)
 			.groupby(self.group_by)
 			.orderby("count", order=frappe.qb.desc)
+=======
+			.select("path", count_all, count_is_unique)
+			.where(
+				Coalesce(WebPageView.creation, "0001-01-01")[self.filters.from_date : self.filters.to_date]
+			)
+			.groupby(WebPageView.path)
+			.orderby("count", Order=frappe.qb.desc)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		).run()
 
 	def _get_query_for_mariadb(self):
@@ -182,7 +199,11 @@ class WebsiteAnalytics:
 			unique_count += data.get("unique_count")
 			total_count += data.get("count")
 
+<<<<<<< HEAD
 		return [
+=======
+		report_summary = [
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			{
 				"value": total_count,
 				"label": "Total Page Views",
@@ -194,3 +215,7 @@ class WebsiteAnalytics:
 				"datatype": "Int",
 			},
 		]
+<<<<<<< HEAD
+=======
+		return report_summary
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

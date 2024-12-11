@@ -9,6 +9,7 @@ from frappe.model.document import Document
 
 
 class OnboardingStep(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -44,6 +45,8 @@ class OnboardingStep(Document):
 		video_url: DF.Data | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def before_export(self, doc):
 		doc.is_complete = 0
 		doc.is_skipped = 0

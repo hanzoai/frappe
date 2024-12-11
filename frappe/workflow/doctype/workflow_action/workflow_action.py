@@ -24,6 +24,7 @@ from frappe.utils.verified_command import get_signed_params, verify_request
 
 
 class WorkflowAction(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -44,6 +45,8 @@ class WorkflowAction(Document):
 		user: DF.Link | None
 		workflow_state: DF.Data | None
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	pass
 
 
@@ -81,11 +84,19 @@ def get_permission_query_conditions(user):
 
 
 def has_permission(doc, user):
+<<<<<<< HEAD
 	if user == "Administrator":
 		return True
 
 	permitted_roles = {permitted_role.role for permitted_role in doc.permitted_roles}
 	return not permitted_roles.isdisjoint(frappe.get_roles(user))
+=======
+	user_roles = set(frappe.get_roles(user))
+
+	permitted_roles = {permitted_role.role for permitted_role in doc.permitted_roles}
+
+	return user == "Administrator" or user_roles.intersection(permitted_roles)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def process_workflow_actions(doc, state):
@@ -118,7 +129,10 @@ def process_workflow_actions(doc, state):
 			doc=doc,
 			transitions=next_possible_transitions,
 			enqueue_after_commit=True,
+<<<<<<< HEAD
 			now=frappe.flags.in_test,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 
 
@@ -305,7 +319,11 @@ def update_completed_workflow_actions_using_user(doc, user=None):
 def get_next_possible_transitions(workflow_name, state, doc=None):
 	transitions = frappe.get_all(
 		"Workflow Transition",
+<<<<<<< HEAD
 		fields=["allowed", "action", "state", "allow_self_approval", "next_state", "condition"],
+=======
+		fields=["allowed", "action", "state", "allow_self_approval", "next_state", "`condition`"],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		filters=[["parent", "=", workflow_name], ["state", "=", state]],
 	)
 
@@ -381,7 +399,11 @@ def send_workflow_action_email(doc, transitions):
 	users_data = get_users_next_action_data(transitions, doc)
 	common_args = get_common_email_args(doc)
 	message = common_args.pop("message", None)
+<<<<<<< HEAD
 	for data in users_data.values():
+=======
+	for user, data in users_data.items():  # noqa: B007
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		email_args = {
 			"recipients": [data.get("email")],
 			"args": {"actions": list(deduplicate_actions(data.get("possible_actions"))), "message": message},
@@ -477,6 +499,7 @@ def get_common_email_args(doc):
 		subject = _("Workflow Action") + f" on {doctype}: {docname}"
 		response = get_link_to_form(doctype, docname, f"{doctype}: {docname}")
 
+<<<<<<< HEAD
 	print_format = doc.meta.default_print_format
 	lang = doc.get("language") or (
 		frappe.get_cached_value("Print Format", print_format, "default_print_language")
@@ -500,6 +523,16 @@ def get_common_email_args(doc):
 		"subject": subject,
 		"message": response,
 	}
+=======
+	common_args = {
+		"template": "workflow_action",
+		"header": "Workflow Action",
+		"attachments": [frappe.attach_print(doctype, docname, file_name=docname, doc=doc)],
+		"subject": subject,
+		"message": response,
+	}
+	return common_args
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_email_template_from_workflow(doc):

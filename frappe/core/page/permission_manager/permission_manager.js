@@ -323,6 +323,10 @@ frappe.PermissionEngine = class PermissionEngine {
 			"report",
 			"import",
 			"export",
+<<<<<<< HEAD
+=======
+			"set_user_permissions",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			"share",
 		];
 	}

@@ -138,7 +138,11 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 
 	set_disp_area(value) {
 		if (
+<<<<<<< HEAD
 			["Currency", "Int", "Float"].includes(this.df.fieldtype) &&
+=======
+			in_list(["Currency", "Int", "Float"], this.df.fieldtype) &&
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			(this.value === 0 || value === 0)
 		) {
 			// to set the 0 value in readonly for currency, int, float field
@@ -160,8 +164,12 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 
 		var icon = "";
 		this.label_span.innerHTML =
+<<<<<<< HEAD
 			(icon ? '<i class="' + icon + '"></i> ' : "") +
 				__(this.df.label, null, this.df.parent) || "&nbsp;";
+=======
+			(icon ? '<i class="' + icon + '"></i> ' : "") + __(this.df.label) || "&nbsp;";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this._label = this.df.label;
 	}
 
@@ -173,13 +181,21 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 		if (
 			!this.df.label ||
 			!this.df?.documentation_url ||
+<<<<<<< HEAD
 			unsupported_fieldtypes.includes(this.df.fieldtype)
+=======
+			in_list(unsupported_fieldtypes, this.df.fieldtype)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 			return;
 
 		let $help = this.$wrapper.find("span.help");
 		$help.empty();
+<<<<<<< HEAD
 		$(`<a href="${this.df.documentation_url}" target="_blank" title="${__("Documentation")}">
+=======
+		$(`<a href="${this.df.documentation_url}" target="_blank">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			${frappe.utils.icon("help", "sm")}
 		</a>`).appendTo($help);
 	}

@@ -28,7 +28,11 @@
 				</div>
 			</div>
 			{% if frappe.form_dict.scope %}
+<<<<<<< HEAD
 				<input type="text" hidden name="scope" value="{{ frappe.utils.escape_html(frappe.form_dict.scope) }}">
+=======
+				<input type="text" hidden name="scope" value="{{ frappe.sanitize_html(frappe.form_dict.scope) }}">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			{% endif %}
 		</form>
 	</div>

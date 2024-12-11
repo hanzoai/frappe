@@ -21,7 +21,11 @@ class NotFoundPage(TemplatePage):
 
 	def render(self):
 		if self.can_cache_404():
+<<<<<<< HEAD
 			frappe.cache.hset("website_404", self.request_url, True)
+=======
+			frappe.cache().hset("website_404", self.request_url, True)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return super().render()
 
 	def can_cache_404(self):

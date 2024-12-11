@@ -4,7 +4,10 @@
 import datetime
 from contextlib import suppress
 
+<<<<<<< HEAD
 import pytz
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from rq import Worker
 
 import frappe
@@ -14,6 +17,7 @@ from frappe.utils.background_jobs import get_workers
 
 
 class RQWorker(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -36,6 +40,8 @@ class RQWorker(Document):
 		worker_name: DF.Data | None
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def load_from_db(self):
 		all_workers = get_workers()
 		workers = [w for w in all_workers if w.name == self.name]
@@ -80,10 +86,13 @@ def serialize_worker(worker: Worker) -> frappe._dict:
 	queue = ", ".join(queue_names)
 	queue_types = ",".join(q.rsplit(":", 1)[1] for q in queue_names)
 
+<<<<<<< HEAD
 	current_job = worker.get_current_job_id()
 	if current_job and not current_job.startswith(frappe.local.site):
 		current_job = None
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return frappe._dict(
 		name=worker.name,
 		queue=queue,
@@ -91,7 +100,11 @@ def serialize_worker(worker: Worker) -> frappe._dict:
 		worker_name=worker.name,
 		status=worker.get_state(),
 		pid=worker.pid,
+<<<<<<< HEAD
 		current_job_id=current_job,
+=======
+		current_job_id=worker.get_current_job_id(),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		last_heartbeat=convert_utc_to_system_timezone(worker.last_heartbeat),
 		birth_date=convert_utc_to_system_timezone(worker.birth_date),
 		successful_job_count=worker.successful_job_count,
@@ -106,7 +119,11 @@ def serialize_worker(worker: Worker) -> frappe._dict:
 
 def compute_utilization(worker: Worker) -> float:
 	with suppress(Exception):
+<<<<<<< HEAD
 		total_time = (
 			datetime.datetime.now(pytz.UTC) - worker.birth_date.replace(tzinfo=pytz.UTC)
 		).total_seconds()
+=======
+		total_time = (datetime.datetime.utcnow() - worker.birth_date).total_seconds()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return worker.total_working_time / total_time * 100

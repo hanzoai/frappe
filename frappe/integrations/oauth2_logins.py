@@ -44,16 +44,23 @@ def login_via_fairlogin(code: str, state: str):
 
 
 @frappe.whitelist(allow_guest=True)
+<<<<<<< HEAD
 def login_via_keycloak(code: str, state: str):
 	login_via_oauth2("keycloak", code, state, decoder=decoder_compat)
 
 
 @frappe.whitelist(allow_guest=True)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def custom(code: str, state: str):
 	"""
 	Callback for processing code and state for user added providers
 
+<<<<<<< HEAD
 	process social login from /api/method/frappe.integrations.oauth2_logins.custom/<provider>
+=======
+	process social login from /api/method/frappe.integrations.custom/<provider>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""
 	path = frappe.request.path[1:].split("/")
 	if len(path) == 4 and path[3]:

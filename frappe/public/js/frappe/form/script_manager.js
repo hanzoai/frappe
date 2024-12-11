@@ -176,12 +176,20 @@ frappe.ui.form.ScriptManager = class ScriptManager {
 		}
 
 		if (client_script) {
+<<<<<<< HEAD
 			new Function(client_script)();
+=======
+			eval(client_script);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		if (!this.frm.doctype_layout && doctype.__custom_js) {
 			try {
+<<<<<<< HEAD
 				new Function(doctype.__custom_js)();
+=======
+				eval(doctype.__custom_js);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			} catch (e) {
 				frappe.msgprint({
 					title: __("Error in Client Script"),

@@ -47,11 +47,20 @@
 }
 
 .notifications-list {
+<<<<<<< HEAD
 	width: 360px;
 	padding: 0px;
 	min-height: 480px;
 	position: absolute;
 	box-shadow: var(--shadow-2xl);
+=======
+	width: 480px;
+	padding: 0px 10px;
+	min-height: 560px;
+	border: none;
+	position: absolute;
+	box-shadow: 0px 1px 4px rgba(17, 43, 66, 0.1), 0px 2px 6px rgba(17, 43, 66, 0.08);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	.notification-list-header {
 		margin: 0px 10px;
@@ -61,7 +70,11 @@
 
 	.notification-list-body {
 		// margin: 10px 0px;
+<<<<<<< HEAD
 		max-height: 450px;
+=======
+		max-height: 500px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		overflow-y: auto;
 
 		.panel-events,
@@ -76,12 +89,21 @@
 
 			.title {
 				margin-top: var(--margin-lg);
+<<<<<<< HEAD
 				@include get_textstyle("base", "semibold");
+=======
+				font-size: var(--text-base);
+				font-weight: 600;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 
 			.subtitle {
 				margin-top: var(--margin-sm);
+<<<<<<< HEAD
 				@include get_textstyle("base", "regular");
+=======
+				font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				color: var(--text-muted);
 			}
 		}
@@ -95,7 +117,11 @@
 			margin-bottom: -1px;
 			margin-right: var(--margin-lg);
 			color: var(--text-light);
+<<<<<<< HEAD
 			font-weight: var(--weight-medium);
+=======
+			font-weight: var(--text-bold);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			cursor: pointer;
 
 			&.active {
@@ -116,8 +142,14 @@
 	margin: 4px 0px;
 	border-radius: var(--border-radius-md, 8px);
 	white-space: normal;
+<<<<<<< HEAD
 	display: flex;
 	@include get_textstyle("base", "regular");
+=======
+	font-weight: normal;
+	display: flex;
+	font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	line-height: 20px;
 	color: var(--text-light);
 	max-width: 455px;
@@ -134,6 +166,7 @@
 }
 
 .recent-item.notification-item {
+<<<<<<< HEAD
 	padding: 10px 10px 10px 0px;
 	margin: 10px 10px 10px 10px;
 	justify-content: space-between;
@@ -153,21 +186,51 @@
 		}
 		.notification-body::before {
 			background: var(--invert-neutral);
+=======
+	padding: 10px 10px 10px 4px;
+	justify-content: space-between;
+
+	&.unread {
+		&:hover {
+			.mark-as-read {
+				flex-shrink: 0;
+				align-self: center;
+				justify-self: end;
+				width: 8px;
+				height: 8px;
+				border: 2px solid var(--primary);
+				border-radius: 1000px;
+			}
+		}
+
+		.notification-body::before {
+			background: var(--primary);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 
 	.notification-body {
 		display: flex;
+<<<<<<< HEAD
 		gap: 10px;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		&::before {
 			content: "";
 			display: inline-block;
+<<<<<<< HEAD
 			@include size(6px, 6px);
 			min-width: 6px;
 			margin-top: 16px;
 			margin-left: 2px;
 			border-radius: 10px;
+=======
+			@include size(4px, 4px);
+			margin-top: 16px;
+			border-radius: 10px;
+			margin-right: var(--margin-xs);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		.message {
@@ -205,12 +268,22 @@
 		padding-left: 10px;
 
 		.event-subject {
+<<<<<<< HEAD
 			@include get_textstyle("base", "medium");
 			color: var(--text-light);
 		}
 
 		.event-time {
 			@include get_textstyle("sm", "regular");
+=======
+			font-size: var(--text-md);
+			color: var(--text-light);
+			font-weight: 500;
+		}
+
+		.event-time {
+			font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			margin-right: 10px;
 		}
 
@@ -249,7 +322,11 @@
 
 		.target-title {
 			margin: auto;
+<<<<<<< HEAD
 			@include get_textstyle("base", "regular");
+=======
+			font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			color: var(--text-light);
 		}
 

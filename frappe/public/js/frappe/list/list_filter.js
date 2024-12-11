@@ -185,7 +185,10 @@ export default class ListFilter {
 					["for_user", "=", frappe.session.user],
 					["for_user", "=", ""],
 				],
+<<<<<<< HEAD
 				order_by: "filter_name asc",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			})
 			.then((filters) => {
 				this.filters = filters || [];

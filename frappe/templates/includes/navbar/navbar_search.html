@@ -3,7 +3,11 @@
 		<form action='/search'>
 		<input name='q' class='form-control navbar-search' type='text'
 			value='{{ frappe.form_dict.q|e if frappe.form_dict.q else ''}}'
+<<<<<<< HEAD
 			{% if not frappe.form_dict.q %}placeholder="{{ _("Search...") }}"{% endif %}>
+=======
+			{% if not frappe.form_dict.q%}placeholder="{{ _("Search...") }}"{% endif %}>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		</form>
 	</li>
 {% endif %}

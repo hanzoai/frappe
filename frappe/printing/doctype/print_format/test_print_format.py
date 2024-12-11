@@ -1,16 +1,23 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+<<<<<<< HEAD
 import os
 import re
 import unittest
 from typing import TYPE_CHECKING
+=======
+import re
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
 
+<<<<<<< HEAD
 if TYPE_CHECKING:
 	from frappe.printing.doctype.print_format.print_format import PrintFormat
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 test_records = frappe.get_test_records("Print Format")
 
 
@@ -34,6 +41,7 @@ class TestPrintFormat(FrappeTestCase):
 	def test_print_user_classic(self):
 		print_html = self.test_print_user("Classic")
 		self.assertTrue("/* classic format: for-test */" in print_html)
+<<<<<<< HEAD
 
 	@unittest.skipUnless(
 		os.access(frappe.get_app_path("frappe"), os.W_OK), "Only run if frappe app paths is writable"
@@ -63,3 +71,5 @@ class TestPrintFormat(FrappeTestCase):
 					self.assertEqual(value, doc_dict[key])
 
 		self.addCleanup(os.remove, exported_doc_path)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -8,7 +8,11 @@ frappe.defaults = {
 		if (!d && frappe.defaults.is_a_user_permission_key(key)) {
 			d = defaults[frappe.model.scrub(key)];
 			// Check for default user permission values
+<<<<<<< HEAD
 			let user_default = this.get_user_permission_default(key, defaults);
+=======
+			user_default = this.get_user_permission_default(key, defaults);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if (user_default) d = user_default;
 		}
 		if ($.isArray(d)) d = d[0];
@@ -107,9 +111,16 @@ frappe.defaults = {
 		let user_permission = this.get_user_permissions()[frappe.model.unscrub(key)];
 
 		if (user_permission && user_permission.length) {
+<<<<<<< HEAD
 			return user_permission.some((perm) => {
 				return perm.doc === value;
 			});
+=======
+			let doc_found = user_permission.some((perm) => {
+				return perm.doc === value;
+			});
+			return doc_found;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		} else {
 			// there is no user permission for this doctype
 			// so we can allow this doc i.e., value

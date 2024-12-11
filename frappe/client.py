@@ -12,7 +12,10 @@ from frappe.desk.reportview import validate_args
 from frappe.model.db_query import check_parent_permission
 from frappe.model.utils import is_virtual_doctype
 from frappe.utils import get_safe_filters
+<<<<<<< HEAD
 from frappe.utils.deprecations import deprecated
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 if TYPE_CHECKING:
 	from frappe.model.document import Document
@@ -34,8 +37,13 @@ def get_list(
 	limit_start=None,
 	limit_page_length=20,
 	parent=None,
+<<<<<<< HEAD
 	debug: bool = False,
 	as_dict: bool = True,
+=======
+	debug=False,
+	as_dict=True,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	or_filters=None,
 ):
 	"""Returns a list of records by filters, fields, ordering and limit
@@ -90,7 +98,13 @@ def get(doctype, name=None, filters=None, parent=None):
 		doc = frappe.get_doc(doctype)  # single
 
 	doc.check_permission()
+<<<<<<< HEAD
 	doc.apply_fieldlevel_read_permissions()
+=======
+
+	if frappe.get_system_settings("apply_perm_level_on_api_calls"):
+		doc.apply_fieldlevel_read_permissions()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return doc.as_dict()
 
@@ -212,7 +226,15 @@ def insert_many(docs=None):
 	if len(docs) > 200:
 		frappe.throw(_("Only 200 inserts allowed in one request"))
 
+<<<<<<< HEAD
 	return [insert_doc(doc).name for doc in docs]
+=======
+	out = []
+	for doc in docs:
+		out.append(insert_doc(doc).name)
+
+	return out
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist(methods=["POST", "PUT"])
@@ -329,7 +351,10 @@ def get_password(doctype, name, fieldname):
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 @deprecated
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def get_js(items):
 	"""Load JS code files.  Will also append translations
 	and extend `frappe._messages`

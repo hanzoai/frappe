@@ -95,8 +95,16 @@
  ],
  "quick_entry": 1,
  "sort_field": "modified",
+<<<<<<< HEAD
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1,
  "translated_doctype": 1
 }
+=======
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1,
+ "translated_doctype": 1
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

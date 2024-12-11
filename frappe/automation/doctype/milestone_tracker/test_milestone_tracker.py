@@ -9,7 +9,11 @@ class TestMilestoneTracker(FrappeTestCase):
 	def test_milestone(self):
 		frappe.db.delete("Milestone Tracker")
 
+<<<<<<< HEAD
 		frappe.cache.delete_key("milestone_tracker_map")
+=======
+		frappe.cache().delete_key("milestone_tracker_map")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		milestone_tracker = frappe.get_doc(
 			dict(doctype="Milestone Tracker", document_type="ToDo", track_field="status")

@@ -1,13 +1,21 @@
 # Copyright (c) 2020, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+<<<<<<< HEAD
 import datetime
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import json
 import os
 import traceback
 import uuid
+<<<<<<< HEAD
 
 import pytz
+=======
+from datetime import datetime
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import rq
 
 import frappe
@@ -52,7 +60,11 @@ class Monitor:
 			self.data = frappe._dict(
 				{
 					"site": frappe.local.site,
+<<<<<<< HEAD
 					"timestamp": datetime.datetime.now(pytz.UTC),
+=======
+					"timestamp": datetime.utcnow(),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					"transaction_type": transaction_type,
 					"uuid": str(uuid.uuid4()),
 				}
@@ -74,18 +86,28 @@ class Monitor:
 			}
 		)
 
+<<<<<<< HEAD
 		if request_id := frappe.request.headers.get("X-Frappe-Request-Id"):
 			self.data.uuid = request_id
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def collect_job_meta(self, method, kwargs):
 		self.data.job = frappe._dict({"method": method, "scheduled": False, "wait": 0})
 		if "run_scheduled_job" in method:
 			self.data.job.method = kwargs["job_type"]
 			self.data.job.scheduled = True
 
+<<<<<<< HEAD
 		if job := rq.get_current_job():
 			self.data.uuid = job.id
 			waitdiff = self.data.timestamp - job.enqueued_at.replace(tzinfo=pytz.UTC)
+=======
+		job = rq.get_current_job()
+		if job:
+			self.data.uuid = job.id
+			waitdiff = self.data.timestamp - job.enqueued_at
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			self.data.job.wait = int(waitdiff.total_seconds() * 1000000)
 
 	def add_custom_data(self, **kwargs):
@@ -94,7 +116,11 @@ class Monitor:
 
 	def dump(self, response=None):
 		try:
+<<<<<<< HEAD
 			timediff = datetime.datetime.now(pytz.UTC) - self.data.timestamp
+=======
+			timediff = datetime.utcnow() - self.data.timestamp
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			# Obtain duration in microseconds
 			self.data.duration = int(timediff.total_seconds() * 1000000)
 
@@ -117,21 +143,35 @@ class Monitor:
 
 	def store(self):
 		serialized = json.dumps(self.data, sort_keys=True, default=str, separators=(",", ":"))
+<<<<<<< HEAD
 		length = frappe.cache.rpush(MONITOR_REDIS_KEY, serialized)
 		if cint(length) > MONITOR_MAX_ENTRIES:
 			frappe.cache.ltrim(MONITOR_REDIS_KEY, 1, -1)
+=======
+		length = frappe.cache().rpush(MONITOR_REDIS_KEY, serialized)
+		if cint(length) > MONITOR_MAX_ENTRIES:
+			frappe.cache().ltrim(MONITOR_REDIS_KEY, 1, -1)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def flush():
 	try:
 		# Fetch all the logs without removing from cache
+<<<<<<< HEAD
 		logs = frappe.cache.lrange(MONITOR_REDIS_KEY, 0, -1)
+=======
+		logs = frappe.cache().lrange(MONITOR_REDIS_KEY, 0, -1)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if logs:
 			logs = list(map(frappe.safe_decode, logs))
 			with open(log_file(), "a", os.O_NONBLOCK) as f:
 				f.write("\n".join(logs))
 				f.write("\n")
 			# Remove fetched entries from cache
+<<<<<<< HEAD
 			frappe.cache.ltrim(MONITOR_REDIS_KEY, len(logs) - 1, -1)
+=======
+			frappe.cache().ltrim(MONITOR_REDIS_KEY, len(logs) - 1, -1)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	except Exception:
 		traceback.print_exc()

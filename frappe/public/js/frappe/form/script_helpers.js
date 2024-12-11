@@ -1,5 +1,9 @@
 // Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 // MIT License. See license.txt
+<<<<<<< HEAD
+=======
+/* eslint-disable no-console */
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 window.refresh_many = function (flist, dn, table_field) {
 	for (var i in flist) {

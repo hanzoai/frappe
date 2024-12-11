@@ -154,6 +154,10 @@
  "modified_by": "Administrator",
  "module": "Contacts",
  "name": "Address",
+<<<<<<< HEAD
+=======
+ "name_case": "Title Case",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "owner": "Administrator",
  "permissions": [
   {
@@ -206,12 +210,19 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+<<<<<<< HEAD
+=======
+   "set_user_permissions": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "share": 1,
    "write": 1
   },
   {
    "create": 1,
+<<<<<<< HEAD
    "export": 1,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "if_owner": 1,
    "print": 1,
    "read": 1,

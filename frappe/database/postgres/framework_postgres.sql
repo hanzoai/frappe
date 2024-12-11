@@ -189,6 +189,10 @@ CREATE TABLE "tabDocType" (
   "app" varchar(255) DEFAULT NULL,
   "autoname" varchar(255) DEFAULT NULL,
   "naming_rule" varchar(40) DEFAULT NULL,
+<<<<<<< HEAD
+=======
+  "name_case" varchar(255) DEFAULT NULL,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "title_field" varchar(255) DEFAULT NULL,
   "image_field" varchar(255) DEFAULT NULL,
   "timeline_field" varchar(255) DEFAULT NULL,
@@ -257,6 +261,10 @@ CREATE TABLE "tabSessions" (
   "sessiondata" text,
   "ipaddress" varchar(16) DEFAULT NULL,
   "lastupdate" timestamp(6) DEFAULT NULL,
+<<<<<<< HEAD
+=======
+  "device" varchar(255) DEFAULT 'desktop',
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "status" varchar(20) DEFAULT NULL
 );
 

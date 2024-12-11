@@ -48,7 +48,11 @@ function open_web_template_values_editor(template, current_values = {}) {
 			}
 		}
 
+<<<<<<< HEAD
 		return [
+=======
+		let fields = [
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			...normal_fields,
 			...table_fields.map((tf) => {
 				let data = current_values[tf.fieldname] || [];
@@ -66,5 +70,10 @@ function open_web_template_values_editor(template, current_values = {}) {
 				};
 			}),
 		];
+<<<<<<< HEAD
+=======
+
+		return fields;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 }

@@ -494,8 +494,14 @@
 }
 
 .collapsible-item-title {
+<<<<<<< HEAD
 	@include get_textstyle("2xl", "bold");
 	color: var(--text-color);
+=======
+	font-weight: 600;
+	color: var(--text-color);
+	font-size: var(--text-2xl);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .collapsible-item a {

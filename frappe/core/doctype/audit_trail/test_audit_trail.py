@@ -3,6 +3,10 @@
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
+<<<<<<< HEAD
+=======
+from frappe.utils import today
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class TestAuditTrail(FrappeTestCase):
@@ -129,6 +133,16 @@ def amend_document(amend_from, changed_fields, rows_updated, submit=False):
 
 def create_comparator_doc(doctype_name, document):
 	comparator = frappe.new_doc("Audit Trail")
+<<<<<<< HEAD
 	comparator.doctype_name = doctype_name
 	comparator.document = document
+=======
+	args_dict = {
+		"doctype_name": doctype_name,
+		"document": document,
+		"start_date": today(),
+		"end_date": today(),
+	}
+	comparator.update(args_dict)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return comparator

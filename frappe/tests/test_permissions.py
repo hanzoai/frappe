@@ -23,6 +23,10 @@ from frappe.permissions import (
 	update_permission_property,
 )
 from frappe.test_runner import make_test_records_for_doctype
+<<<<<<< HEAD
+=======
+from frappe.tests.test_db_query import enable_permlevel_restrictions
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.tests.utils import FrappeTestCase
 from frappe.utils.data import now_datetime
 
@@ -94,10 +98,18 @@ class TestPermissions(FrappeTestCase):
 		self.assertFalse(post.has_permission("read"))
 		self.assertRaises(frappe.PermissionError, post.save)
 
+<<<<<<< HEAD
 		permitted_record = frappe.get_list("Blog Post", fields="*", limit=1)[0]
 		full_record = frappe.get_all("Blog Post", fields="*", limit=1)[0]
 		self.assertNotEqual(permitted_record, full_record)
 		self.assertSequenceSubset(post.meta.get_search_fields(), permitted_record)
+=======
+		with enable_permlevel_restrictions():
+			permitted_record = frappe.get_list("Blog Post", fields="*", limit=1)[0]
+			full_record = frappe.get_all("Blog Post", fields="*", limit=1)[0]
+			self.assertNotEqual(permitted_record, full_record)
+			self.assertSequenceSubset(post.meta.get_search_fields(), permitted_record)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_user_permissions_in_doc(self):
 		add_user_permission("Blog Category", "-test-blog-category-1", "test2@example.com")
@@ -745,6 +757,7 @@ class TestPermissions(FrappeTestCase):
 
 		with self.set_user("test@example.com"):
 			self.assertNotIn(doctype, get_doctypes_with_read())
+<<<<<<< HEAD
 
 	def test_overrides_work_as_expected(self):
 		"""custom docperms should completely override standard ones"""
@@ -764,3 +777,5 @@ class TestPermissions(FrappeTestCase):
 		with self.set_user("test@example.com"):
 			# No one has this role, so user shouldn't have permission.
 			self.assertNotIn(doctype, get_doctypes_with_read())
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

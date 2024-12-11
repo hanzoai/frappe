@@ -70,7 +70,13 @@ frappe.ui.form.ControlMultiSelect = class ControlMultiSelect extends (
 
 	get_values() {
 		const value = this.get_value() || "";
+<<<<<<< HEAD
 		return value.split(/\s*,\s*/).filter((d) => d);
+=======
+		const values = value.split(/\s*,\s*/).filter((d) => d);
+
+		return values;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	get_data() {

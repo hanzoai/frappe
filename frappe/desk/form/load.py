@@ -2,7 +2,10 @@
 # License: MIT. See LICENSE
 
 import json
+<<<<<<< HEAD
 import typing
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from urllib.parse import quote
 
 import frappe
@@ -11,13 +14,20 @@ import frappe.desk.form.meta
 import frappe.utils
 from frappe import _, _dict
 from frappe.desk.form.document_follow import is_document_followed
+<<<<<<< HEAD
+=======
+from frappe.model.utils import is_virtual_doctype
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.model.utils.user_settings import get_user_settings
 from frappe.permissions import get_doc_permissions
 from frappe.utils.data import cstr
 
+<<<<<<< HEAD
 if typing.TYPE_CHECKING:
 	from frappe.model.document import Document
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 @frappe.whitelist()
 def getdoc(doctype, name, user=None):
@@ -30,19 +40,35 @@ def getdoc(doctype, name, user=None):
 	if not (doctype and name):
 		raise Exception("doctype and name required!")
 
+<<<<<<< HEAD
 	try:
 		doc = frappe.get_doc(doctype, name)
 	except frappe.DoesNotExistError:
 		frappe.clear_last_message()
 		return []
 
+=======
+	if not name:
+		name = doctype
+
+	if not is_virtual_doctype(doctype) and not frappe.db.exists(doctype, name):
+		return []
+
+	doc = frappe.get_doc(doctype, name)
+	run_onload(doc)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if not doc.has_permission("read"):
 		frappe.flags.error_message = _("Insufficient Permission for {0}").format(
 			frappe.bold(doctype + " " + name)
 		)
 		raise frappe.PermissionError(("read", doctype, name))
 
+<<<<<<< HEAD
 	run_onload(doc)
+=======
+	# ignores system setting (apply_perm_level_on_api_calls) unconditionally to maintain backward compatibility
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	doc.apply_fieldlevel_read_permissions()
 
 	# add file list
@@ -81,11 +107,17 @@ def getdoctype(doctype, with_parent=False, cached_timestamp=None):
 
 def get_meta_bundle(doctype):
 	bundle = [frappe.desk.form.meta.get_meta(doctype)]
+<<<<<<< HEAD
 	bundle.extend(
 		frappe.desk.form.meta.get_meta(df.options)
 		for df in bundle[0].fields
 		if df.fieldtype in frappe.model.table_fields
 	)
+=======
+	for df in bundle[0].fields:
+		if df.fieldtype in frappe.model.table_fields:
+			bundle.append(frappe.desk.form.meta.get_meta(df.options, not frappe.conf.developer_mode))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return bundle
 
 
@@ -117,11 +149,19 @@ def get_docinfo(doc=None, doctype=None, name=None):
 			"attachments": get_attachments(doc.doctype, doc.name),
 			"communications": communications_except_auto_messages,
 			"automated_messages": automated_messages,
+<<<<<<< HEAD
+=======
+			"total_comments": len(json.loads(doc.get("_comments") or "[]")),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			"versions": get_versions(doc),
 			"assignments": get_assignments(doc.doctype, doc.name),
 			"permissions": get_doc_permissions(doc),
 			"shared": get_docshares(doc),
+<<<<<<< HEAD
 			"views": get_view_logs(doc),
+=======
+			"views": get_view_logs(doc.doctype, doc.name),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			"energy_point_logs": get_point_logs(doc.doctype, doc.name),
 			"additional_timeline_content": get_additional_timeline_content(doc.doctype, doc.name),
 			"milestones": get_milestones(doc.doctype, doc.name),
@@ -153,6 +193,7 @@ def add_comments(doc, docinfo):
 	)
 
 	for c in comments:
+<<<<<<< HEAD
 		match c.comment_type:
 			case "Comment":
 				c.content = frappe.utils.markdown(c.content)
@@ -169,6 +210,31 @@ def add_comments(doc, docinfo):
 				docinfo.like_logs.append(c)
 			case "Workflow":
 				docinfo.workflow_logs.append(c)
+=======
+		if c.comment_type == "Comment":
+			c.content = frappe.utils.markdown(c.content)
+			docinfo.comments.append(c)
+
+		elif c.comment_type in ("Shared", "Unshared"):
+			docinfo.shared.append(c)
+
+		elif c.comment_type in ("Assignment Completed", "Assigned"):
+			docinfo.assignment_logs.append(c)
+
+		elif c.comment_type in ("Attachment", "Attachment Removed"):
+			docinfo.attachment_logs.append(c)
+
+		elif c.comment_type in ("Info", "Edit", "Label"):
+			docinfo.info_logs.append(c)
+
+		elif c.comment_type == "Like":
+			docinfo.like_logs.append(c)
+
+		elif c.comment_type == "Workflow":
+			docinfo.workflow_logs.append(c)
+
+		frappe.utils.add_user_info(c.owner, docinfo.user_info)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return comments
 
@@ -189,9 +255,13 @@ def get_attachments(dt, dn):
 	)
 
 
+<<<<<<< HEAD
 def get_versions(doc: "Document") -> list[dict]:
 	if not doc.meta.track_changes:
 		return []
+=======
+def get_versions(doc):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return frappe.get_all(
 		"Version",
 		filters=dict(ref_doctype=doc.doctype, docname=doc.name),
@@ -314,7 +384,11 @@ def get_communication_data(
 		{conditions}
 	"""
 
+<<<<<<< HEAD
 	return frappe.db.sql(
+=======
+	communications = frappe.db.sql(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""
 		SELECT *
 		FROM (({part1}) UNION ({part2})) AS combined
@@ -323,6 +397,7 @@ def get_communication_data(
 		LIMIT %(limit)s
 		OFFSET %(start)s
 	""".format(part1=part1, part2=part2, group_by=(group_by or "")),
+<<<<<<< HEAD
 		dict(
 			doctype=doctype,
 			name=name,
@@ -332,6 +407,14 @@ def get_communication_data(
 		as_dict=as_dict,
 	)
 
+=======
+		dict(doctype=doctype, name=name, start=frappe.utils.cint(start), limit=limit),
+		as_dict=as_dict,
+	)
+
+	return communications
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def get_assignments(dt, dn):
 	return frappe.get_all(
@@ -351,6 +434,7 @@ def run_onload(doc):
 	doc.run_method("onload")
 
 
+<<<<<<< HEAD
 def get_view_logs(doc: "Document") -> list[dict]:
 	"""get and return the latest view logs if available"""
 	if not doc.meta.track_views:
@@ -374,6 +458,34 @@ def get_tags(doctype: str, name: str) -> str:
 		fields=["tag"],
 		pluck="tag",
 	)
+=======
+def get_view_logs(doctype, docname):
+	"""get and return the latest view logs if available"""
+	logs = []
+	if hasattr(frappe.get_meta(doctype), "track_views") and frappe.get_meta(doctype).track_views:
+		view_logs = frappe.get_all(
+			"View Log",
+			filters={
+				"reference_doctype": doctype,
+				"reference_name": docname,
+			},
+			fields=["name", "creation", "owner"],
+			order_by="creation desc",
+		)
+
+		if view_logs:
+			logs = view_logs
+	return logs
+
+
+def get_tags(doctype, name):
+	tags = [
+		tag.tag
+		for tag in frappe.get_all(
+			"Tag Link", filters={"document_type": doctype, "document_name": name}, fields=["tag"]
+		)
+	]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return ",".join(tags)
 
@@ -464,6 +576,7 @@ def send_link_titles(link_titles):
 
 
 def update_user_info(docinfo):
+<<<<<<< HEAD
 	users = set()
 
 	users.update(d.sender for d in docinfo.communications)
@@ -478,6 +591,19 @@ def update_user_info(docinfo):
 	users.update(d.owner for d in docinfo.comments)
 
 	frappe.utils.add_user_info(users, docinfo.user_info)
+=======
+	for d in docinfo.communications:
+		frappe.utils.add_user_info(d.sender, docinfo.user_info)
+
+	for d in docinfo.shared:
+		frappe.utils.add_user_info(d.user, docinfo.user_info)
+
+	for d in docinfo.assignments:
+		frappe.utils.add_user_info(d.owner, docinfo.user_info)
+
+	for d in docinfo.views:
+		frappe.utils.add_user_info(d.owner, docinfo.user_info)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()

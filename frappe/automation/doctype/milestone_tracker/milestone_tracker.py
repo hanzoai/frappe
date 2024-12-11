@@ -8,6 +8,7 @@ from frappe.model.document import Document
 
 
 class MilestoneTracker(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -21,6 +22,8 @@ class MilestoneTracker(Document):
 		track_field: DF.Literal[None]
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def on_update(self):
 		frappe.cache_manager.clear_doctype_map("Milestone Tracker", self.document_type)
 

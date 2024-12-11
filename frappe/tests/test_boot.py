@@ -27,6 +27,7 @@ class TestBootData(FrappeTestCase):
 		unseen_notes = [d.title for d in get_unseen_notes()]
 		self.assertListEqual(unseen_notes, [])
 
+<<<<<<< HEAD
 
 class TestPermissionQueries(FrappeTestCase):
 	@classmethod
@@ -34,6 +35,8 @@ class TestPermissionQueries(FrappeTestCase):
 		cls.enable_safe_exec()
 		return super().setUpClass()
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_get_user_pages_or_reports_with_permission_query(self):
 		# Create a ToDo custom report with admin user
 		frappe.set_user("Administrator")
@@ -72,7 +75,11 @@ class TestPermissionQueries(FrappeTestCase):
 		).insert(ignore_permissions=True)
 
 		get_user_pages_or_reports("Report")
+<<<<<<< HEAD
 		allowed_reports = frappe.cache.get_value("has_role:Report", user=frappe.session.user)
+=======
+		allowed_reports = frappe.cache().get_value("has_role:Report", user=frappe.session.user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# Test user must not see admin user's report
 		self.assertNotIn("Test Admin Report", allowed_reports)

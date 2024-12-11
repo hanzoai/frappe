@@ -14,6 +14,7 @@ from frappe.utils.verified_command import get_signed_params, verify_request
 
 
 class PersonalDataDeletionRequest(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -31,6 +32,8 @@ class PersonalDataDeletionRequest(Document):
 		status: DF.Literal["Pending Verification", "Pending Approval", "On Hold", "Deleted"]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 

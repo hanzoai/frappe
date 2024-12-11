@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class HasRole(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -20,6 +21,8 @@ class HasRole(Document):
 		role: DF.Link | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def before_insert(self):
 		if frappe.db.exists("Has Role", {"parent": self.parent, "role": self.role}):
 			frappe.throw(frappe._("User '{0}' already has the role '{1}'").format(self.parent, self.role))

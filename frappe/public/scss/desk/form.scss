@@ -1,4 +1,5 @@
 @import "../common/form.scss";
+<<<<<<< HEAD
 
 .tooltip-content {
 	position: absolute;
@@ -26,6 +27,15 @@
 	border-radius: var(--border-radius-md);
 	border: 1px solid var(--border-color);
 	box-shadow: none;
+=======
+/*rtl:begin:ignore*/
+@import "~cropperjs/dist/cropper.min";
+/*rtl:end:ignore*/
+
+.std-form-layout > .form-layout > .form-page {
+	border-radius: var(--border-radius-md);
+	box-shadow: var(--card-shadow);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	background-color: var(--card-bg);
 }
 
@@ -35,14 +45,23 @@
 
 	.form-section-description {
 		margin-bottom: 10px;
+<<<<<<< HEAD
 		@include get_textstyle("base", "regular");
 		color: var(--heading-color);
+=======
+		font-size: var(--text-xs);
+		color: var(--text-muted);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	.section-head {
 		@extend .head-title;
+<<<<<<< HEAD
 		@include get_textstyle("lg", "semibold");
 		color: var(--text-color);
+=======
+		font-size: var(--text-base);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		width: 100%;
 		padding: var(--padding-sm) var(--padding-md);
 		margin: 0;
@@ -75,6 +94,7 @@
 	}
 }
 
+<<<<<<< HEAD
 .form-column {
 	.form-column-description {
 		margin-bottom: 10px;
@@ -90,6 +110,8 @@
 	}
 }
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .empty-section {
 	display: none !important;
 	border: 0 !important;
@@ -122,12 +144,22 @@
 
 .control-label,
 .grid-heading-row {
+<<<<<<< HEAD
 	color: var(--text-muted);
 	@include get_textstyle("sm", "regular");
 }
 
 .control-label {
 	margin-bottom: 6px;
+=======
+	color: var(--text-light);
+	font-size: var(--text-sm);
+}
+
+.control-label {
+	margin-bottom: var(--margin-xs);
+	font-weight: normal;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .form-inner-toolbar {
@@ -137,18 +169,28 @@
 
 .form-control:disabled,
 .form-control[readonly] {
+<<<<<<< HEAD
 	color: var(--text-muted);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	cursor: not-allowed;
 }
 
 .comment-box {
+<<<<<<< HEAD
 	margin-top: var(--margin-lg);
 	padding: 0;
+=======
+	@include card();
+	margin-top: var(--margin-lg);
+	padding: var(--padding-lg);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	.comment-input-header {
 		@extend .head-title;
 		margin-bottom: var(--margin-sm);
 	}
 	.comment-input-container {
+<<<<<<< HEAD
 		display: flex;
 		.avatar {
 			height: 32px;
@@ -162,6 +204,13 @@
 				min-height: 24px;
 				padding: 6px;
 			}
+=======
+		.frappe-control {
+			margin-bottom: var(--margin-xs);
+		}
+		.ql-editor {
+			background-color: var(--control-bg);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 
@@ -179,7 +228,11 @@
 	.form-link-title {
 		margin-top: var(--margin-md);
 		margin-bottom: var(--margin-sm);
+<<<<<<< HEAD
 		font-weight: var(--weight-medium);
+=======
+		font-weight: var(--text-bold);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	.form-documents:first-of-type .row:first-child {
 		.form-link-title {
@@ -191,16 +244,26 @@
 		display: flex;
 		.document-link-badge,
 		.report-link-badge {
+<<<<<<< HEAD
 			@include get_textstyle("sm", "regular");
+=======
+			font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			padding: var(--padding-xs) var(--padding-sm);
 			border-radius: var(--border-radius);
 			background-color: var(--control-bg);
 			.count {
 				font-size: var(--text-xs);
+<<<<<<< HEAD
 				font-weight: var(--weight-regular);
 				background-color: var(--neutral-white);
 				border-radius: var(--border-radius-full);
 				color: var(--gray-700);
+=======
+				background-color: var(--gray-500);
+				border-radius: var(--border-radius-sm);
+				color: var(--gray-50);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				padding: 0 var(--padding-xs);
 				margin-right: var(--margin-xs);
 			}
@@ -212,10 +275,17 @@
 		.open-notification {
 			display: inline-flex;
 			align-items: center;
+<<<<<<< HEAD
 			background-color: var(--gray-100);
 			font-size: var(--text-xs);
 			padding: 0 var(--padding-sm);
 			color: var(--gray-700);
+=======
+			background-color: var(--indicator-red-bg);
+			font-size: var(--text-xs);
+			padding: 0 var(--padding-sm);
+			color: var(--indicator-red);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			border-radius: var(--border-radius);
 			cursor: pointer;
 		}
@@ -290,6 +360,7 @@
 	}
 }
 
+<<<<<<< HEAD
 @mixin form-message-background($color, $theme: "light") {
 	@if $theme == "light" {
 		border: 1px solid var(--#{$color}-100);
@@ -307,6 +378,16 @@
 	position: relative;
 	border-radius: var(--border-radius);
 	padding: 8px 10px;
+=======
+@mixin form-message-background($color) {
+	background: var(--bg-#{$color});
+	color: var(--text-on-#{$color});
+}
+
+.form-message {
+	border-radius: var(--border-radius);
+	padding: var(--padding-md) var(--padding-xl);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	font-size: var(--text-md, 13px);
 	margin-bottom: var(--margin-md);
 
@@ -329,6 +410,7 @@
 	&.red {
 		@include form-message-background("red");
 	}
+<<<<<<< HEAD
 
 	.close-message {
 		position: absolute;
@@ -359,6 +441,8 @@
 	&.red {
 		@include form-message-background("red", "dark");
 	}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .help-box {
@@ -415,7 +499,11 @@
 	z-index: 5;
 	transition: 0.5s top;
 	padding-left: var(--padding-xs);
+<<<<<<< HEAD
 	border-bottom: 1px solid var(--border-color);
+=======
+	border-bottom: 2px solid var(--border-color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
 
 	.form-tabs {
@@ -425,10 +513,16 @@
 
 		.nav-item {
 			white-space: nowrap;
+<<<<<<< HEAD
 			@include get_textstyle("base", "regular");
 			.nav-link {
 				color: var(--text-muted);
 				padding: 10px 0;
+=======
+			.nav-link {
+				color: var(--text-muted);
+				padding: var(--padding-md) 0;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				margin: 0 var(--margin-md);
 
 				&.active {

@@ -106,8 +106,11 @@ export default class Onboarding extends Block {
 	}
 
 	render() {
+<<<<<<< HEAD
 		if (frappe.is_mobile()) return;
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.wrapper = document.createElement("div");
 		this.new("onboarding");
 

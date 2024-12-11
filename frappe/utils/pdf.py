@@ -6,19 +6,30 @@ import io
 import mimetypes
 import os
 import subprocess
+<<<<<<< HEAD
+=======
+from distutils.version import LooseVersion
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from urllib.parse import parse_qs, urlparse
 
 import cssutils
 import pdfkit
 from bs4 import BeautifulSoup
+<<<<<<< HEAD
 from packaging.version import Version
 from pypdf import PdfReader, PdfWriter
+=======
+from PyPDF2 import PdfReader, PdfWriter
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 from frappe import _
 from frappe.core.doctype.file.utils import find_file_by_url
 from frappe.utils import cstr, scrub_urls
+<<<<<<< HEAD
 from frappe.utils.caching import redis_cache
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils.jinja_globals import bundled_asset, is_rtl
 
 PDF_CONTENT_ERRORS = [
@@ -29,6 +40,7 @@ PDF_CONTENT_ERRORS = [
 ]
 
 
+<<<<<<< HEAD
 def pdf_header_html(soup, head, content, styles, html_id, css):
 	return frappe.render_template(
 		"templates/print_formats/pdf_header_footer.html",
@@ -75,6 +87,8 @@ def pdf_footer_html(soup, head, content, styles, html_id, css):
 	return pdf_header_html(soup=soup, head=head, content=content, styles=styles, html_id=html_id, css=css)
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def get_pdf(html, options=None, output: PdfWriter | None = None):
 	html = scrub_urls(html)
 	html, options = prepare_options(html, options)
@@ -82,7 +96,11 @@ def get_pdf(html, options=None, output: PdfWriter | None = None):
 	options.update({"disable-javascript": "", "disable-local-file-access": ""})
 
 	filedata = ""
+<<<<<<< HEAD
 	if Version(get_wkhtmltopdf_version()) > Version("0.12.3"):
+=======
+	if LooseVersion(get_wkhtmltopdf_version()) > LooseVersion("0.12.3"):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		options.update({"disable-smart-shrinking": ""})
 
 	try:
@@ -310,6 +328,7 @@ def prepare_header_footer(soup: BeautifulSoup):
 				tag.extract()
 
 			toggle_visible_pdf(content)
+<<<<<<< HEAD
 			id_map = {"header-html": "pdf_header_html", "footer-html": "pdf_footer_html"}
 			hook_func = frappe.get_hooks(id_map.get(html_id))
 			html = frappe.get_attr(hook_func[-1])(
@@ -319,6 +338,19 @@ def prepare_header_footer(soup: BeautifulSoup):
 				styles=styles,
 				html_id=html_id,
 				css=css,
+=======
+			html = frappe.render_template(
+				"templates/print_formats/pdf_header_footer.html",
+				{
+					"head": head,
+					"content": content,
+					"styles": styles,
+					"html_id": html_id,
+					"css": css,
+					"lang": frappe.local.lang,
+					"layout_direction": "rtl" if is_rtl() else "ltr",
+				},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			)
 
 			# create temp file
@@ -353,6 +385,7 @@ def toggle_visible_pdf(soup):
 		tag.extract()
 
 
+<<<<<<< HEAD
 @frappe.whitelist()
 @redis_cache(ttl=60 * 60)
 def is_wkhtmltopdf_valid():
@@ -365,12 +398,20 @@ def is_wkhtmltopdf_valid():
 
 def get_wkhtmltopdf_version():
 	wkhtmltopdf_version = frappe.cache.hget("wkhtmltopdf_version", None)
+=======
+def get_wkhtmltopdf_version():
+	wkhtmltopdf_version = frappe.cache().hget("wkhtmltopdf_version", None)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not wkhtmltopdf_version:
 		try:
 			res = subprocess.check_output(["wkhtmltopdf", "--version"])
 			wkhtmltopdf_version = res.decode("utf-8").split(" ")[1]
+<<<<<<< HEAD
 			frappe.cache.hset("wkhtmltopdf_version", None, wkhtmltopdf_version)
+=======
+			frappe.cache().hset("wkhtmltopdf_version", None, wkhtmltopdf_version)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		except Exception:
 			pass
 

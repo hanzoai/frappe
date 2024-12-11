@@ -15,8 +15,12 @@ frappe.ui.form.Attachments = class Attachments {
 			me.new_attachment();
 		});
 
+<<<<<<< HEAD
 		this.parent.find(".explore-link").click(() => {
 			if (!this.frm.attachments.get_attachments()?.length) return;
+=======
+		this.parent.find(".explore-btn").click(() => {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			frappe.open_in_new_tab = true;
 			frappe.set_route("List", "File", {
 				attached_to_doctype: this.frm.doctype,
@@ -52,7 +56,12 @@ frappe.ui.form.Attachments = class Attachments {
 		this.parent.find(".attachment-row").remove();
 
 		var max_reached = this.max_reached();
+<<<<<<< HEAD
 		this.add_attachment_wrapper.find(".add-attachment-btn").toggle(!max_reached);
+=======
+		this.add_attachment_wrapper.toggle(!max_reached);
+		this.setup_expanded_explore_button(max_reached);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		// add attachment objects
 		var attachments = this.get_attachments();
@@ -60,6 +69,24 @@ frappe.ui.form.Attachments = class Attachments {
 		this.setup_show_all_button(attachments);
 	}
 
+<<<<<<< HEAD
+=======
+	setup_expanded_explore_button(max_reached) {
+		if (!max_reached) {
+			this.parent.find(".explore-full-btn").addClass("hidden");
+			return;
+		}
+
+		this.parent.find(".explore-full-btn").removeClass("hidden");
+		this.parent.find(".explore-full-btn").click(() => {
+			frappe.set_route("List", "File", {
+				attached_to_doctype: this.frm.doctype,
+				attached_to_name: this.frm.docname,
+			});
+		});
+	}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	setup_show_all_button(attachments) {
 		// show button if there is more to show and user has not clicked on "Show All"
 		let is_slicable = attachments.length > this.attachments_page_length;
@@ -109,6 +136,10 @@ frappe.ui.form.Attachments = class Attachments {
 		if (!attachments.length) {
 			// If no attachments in totality
 			this.attachments_label.removeClass("has-attachments");
+<<<<<<< HEAD
+=======
+			this.parent.find(".explore-btn").toggle(false); // hide explore icon button
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 
@@ -148,12 +179,21 @@ frappe.ui.form.Attachments = class Attachments {
 		}
 
 		const icon = `<a href="/app/file/${fileid}">
+<<<<<<< HEAD
 				${frappe.utils.icon(attachment.is_private ? "es-line-lock" : "es-line-unlock", "sm ml-0")}
+=======
+				${frappe.utils.icon(attachment.is_private ? "lock" : "unlock", "sm ml-0")}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			</a>`;
 
 		$(`<li class="attachment-row">`)
 			.append(frappe.get_data_pill(file_label, fileid, remove_action, icon))
 			.insertAfter(this.add_attachment_wrapper);
+<<<<<<< HEAD
+=======
+
+		this.parent.find(".explore-btn").toggle(true); // show explore icon button if hidden
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	get_file_url(attachment) {

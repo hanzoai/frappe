@@ -26,6 +26,7 @@ if TYPE_CHECKING:
 
 
 class LDAPSettings(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -65,6 +66,8 @@ class LDAPSettings(Document):
 		ssl_tls_mode: DF.Literal["Off", "StartTLS"]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		self.default_user_type = self.default_user_type or "Website User"
 
@@ -301,7 +304,14 @@ class LDAPSettings(Document):
 			)  # Build search query
 
 		if len(conn.entries) >= 1:
+<<<<<<< HEAD
 			fetch_ldap_groups = [group["cn"].value for group in conn.entries]
+=======
+			fetch_ldap_groups = []
+			for group in conn.entries:
+				fetch_ldap_groups.append(group["cn"].value)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return fetch_ldap_groups
 
 	def authenticate(self, username: str, password: str):
@@ -415,6 +425,16 @@ def login():
 	frappe.form_dict.pop("pwd", None)
 	frappe.local.login_manager.post_login()
 
+<<<<<<< HEAD
+=======
+	try:
+		from frappe.core.doctype.activity_log.activity_log import add_authentication_log
+
+		add_authentication_log(_("{0} logged in").format(user.full_name), user.name)
+	except ImportError:
+		pass
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	# because of a GET request!
 	frappe.db.commit()
 

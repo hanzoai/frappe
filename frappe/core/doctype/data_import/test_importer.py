@@ -63,7 +63,11 @@ class TestImporter(FrappeTestCase):
 	def test_data_import_without_mandatory_values(self):
 		import_file = get_import_file("sample_import_file_without_mandatory")
 		data_import = self.get_importer(doctype_name, import_file)
+<<<<<<< HEAD
 		frappe.clear_messages()
+=======
+		frappe.local.message_log = []
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		data_import.start_import()
 		data_import.reload()
 

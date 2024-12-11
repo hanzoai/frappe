@@ -59,6 +59,20 @@ export default class Shortcut extends Block {
 			$(this.wrapper).find(".widget").addClass("shortcut edit-mode");
 			this.add_settings_button();
 			this.add_new_block_button();
+<<<<<<< HEAD
+=======
+		} else {
+			let $shortcut_icon = frappe.utils.icon(
+				"arrow-up-right",
+				"xs",
+				"",
+				"stroke: grey",
+				"ml-2"
+			);
+			$(this.wrapper).find(".widget .widget-title").append($shortcut_icon);
+
+			$(this.wrapper).append($(`<div class="divider"></div>`));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		return this.wrapper;
 	}

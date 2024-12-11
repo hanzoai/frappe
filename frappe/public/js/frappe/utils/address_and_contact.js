@@ -12,7 +12,13 @@ $.extend(frappe.contacts, {
 			$(frm.fields_dict["address_html"].wrapper)
 				.html(frappe.render_template("address_list", frm.doc.__onload))
 				.find(".btn-address")
+<<<<<<< HEAD
 				.on("click", () => new_record("Address", frm.doc));
+=======
+				.on("click", function () {
+					frappe.new_doc("Address");
+				});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		// render contact
@@ -20,7 +26,13 @@ $.extend(frappe.contacts, {
 			$(frm.fields_dict["contact_html"].wrapper)
 				.html(frappe.render_template("contact_list", frm.doc.__onload))
 				.find(".btn-contact")
+<<<<<<< HEAD
 				.on("click", () => new_record("Contact", frm.doc));
+=======
+				.on("click", function () {
+					frappe.new_doc("Contact");
+				});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	},
 	get_last_doc: function (frm) {
@@ -58,6 +70,7 @@ $.extend(frappe.contacts, {
 			.then((address_display) => frm.set_value(_display_field, address_display));
 	},
 });
+<<<<<<< HEAD
 
 function new_record(doctype, source_doc) {
 	frappe.dynamic_link = {
@@ -68,3 +81,5 @@ function new_record(doctype, source_doc) {
 
 	return frappe.new_doc(doctype);
 }
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

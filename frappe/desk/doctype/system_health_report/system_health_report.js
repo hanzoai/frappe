@@ -25,10 +25,17 @@ frappe.ui.form.on("System Health Report", {
 			frm.set_value("socketio_ping_check", "Pass");
 			frm.set_value(
 				"socketio_transport_mode",
+<<<<<<< HEAD
 				frappe.realtime.socket.io?.engine?.transport?.name
 			);
 		});
 		frappe.realtime.emit("ping");
+=======
+				frappe.socketio.socket.io?.engine?.transport?.name
+			);
+		});
+		frappe.socketio.socket.emit("ping");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frm.disable_save();
 		frm.trigger("setup_highlight");
 	},

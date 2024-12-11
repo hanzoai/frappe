@@ -9,6 +9,10 @@ Action,Handling,
 Actions,Handlinger,
 Active,Aktiv,
 Add,Tilføj,
+<<<<<<< HEAD
+=======
+Add Comment,Tilføj kommentar,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,Tilføj række,
 Address,Adresse,
 Address Line 2,Adresse 2,
@@ -143,6 +147,10 @@ Monday,Mandag,
 Monthly,Månedlig,
 More,Mere,
 More Information,Mere information,
+<<<<<<< HEAD
+=======
+More...,Mere...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,flytte,
 My Account,Min konto,
 New Address,Ny adresse,
@@ -155,6 +163,10 @@ No items found.,Ingen emner fundet.,
 None,Ingen,
 Not Permitted,Ikke Tilladt,
 Not active,Ikke aktiv,
+<<<<<<< HEAD
+=======
+Notes,Noter,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,Nummer,
 Online,Online,
 Operation,Operation,
@@ -164,12 +176,25 @@ Owner,Ejer,
 Page Missing or Moved,Side mangler eller er flyttet,
 Parameter,Parameter,
 Password,Adgangskode,
+<<<<<<< HEAD
 Period,Periode,
 Pincode,Pinkode,
+=======
+Payment Gateway,Betaling Gateway,
+Payment Gateway Name,Betalings gateway navn,
+Payments,Betalinger,
+Period,Periode,
+Pincode,Pinkode,
+Plan Name,Plan navn,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,Slå pop-ups til,
 Please select Company,Vælg firma,
 Please select {0},Vælg {0},
 Please set Email Address,Angiv e-mail adresse,
+<<<<<<< HEAD
+=======
+Portal,Portal,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,Portal Indstillinger,
 Preview,Eksempel,
 Primary,Primær,
@@ -214,6 +239,10 @@ Salutation,Titel,
 Sample,Prøve,
 Saturday,Lørdag,
 Saved,Gemt,
+<<<<<<< HEAD
+=======
+Scan Barcode,Scan stregkode,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,Planlagt,
 Search,Søg,
 Secret Key,Secret Key,
@@ -228,6 +257,10 @@ Settings,Indstillinger,
 Shipping,Forsendelse,
 Short Name,Kort navn,
 Slideshow,Slideshow,
+<<<<<<< HEAD
+=======
+Some information is missing,Der mangler nogle oplysninger,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,Kilde,
 Source Name,Kilde Navn,
 Standard,Standard,
@@ -237,6 +270,10 @@ State,Stat,
 Stopped,Stoppet,
 Subject,Emne,
 Submit,Godkend,
+<<<<<<< HEAD
+=======
+Successful,Vellykket,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,Resumé,
 Sunday,Søndag,
 System Manager,System Manager,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,Tidsperiode,
 To,Til,
 To Date,Til dato,
+<<<<<<< HEAD
 Traceback,Spore tilbage,
 URL,URL,
 Unsubscribed,Afmeldt,
+=======
+Tools,Værktøj,
+Traceback,Spore tilbage,
+URL,URL,
+Unsubscribed,Afmeldt,
+Use Sandbox,Brug Sandbox,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,Bruger,
 User ID,Bruger-id,
 Users,Brugere,
@@ -556,6 +601,10 @@ Bulk Delete,Sletning,
 Bulk Edit {0},Bulk Edit {0},
 Bulk Rename,Bulk Omdøb,
 Bulk Update,Bundtopdatering,
+<<<<<<< HEAD
+=======
+Busy,Travl,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,Knap,
 Button Help,Knappen Hjælp,
 Button Label,Button Label,
@@ -692,6 +741,10 @@ Compiled Successfully,Kompileret med succes,
 Complete By,Færdiggjort af,
 Complete Registration,Komplet Registrering,
 Complete Setup,Komplet opsætning,
+<<<<<<< HEAD
+=======
+Completed By,Færdiggjort af,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,Compose Email,
 Condition Detail,Tilstand detaljer,
 Conditions,Betingelser,
@@ -1380,7 +1433,11 @@ Is Submittable,Kan godkendes,
 Is Table,er Table,
 Is Your Company Address,Er din virksomhedsadresse,
 It is risky to delete this file: {0}. Please contact your System Manager.,Det er risikabelt at slette denne fil: {0}. Kontakt din systemadministrator.,
+<<<<<<< HEAD
 Item cannot be added to its own descendants,Punkt kan ikke føjes til sine egne efterkommere,
+=======
+Item cannot be added to its own descendents,Punkt kan ikke føjes til sine egne efterkommere,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,JSON,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},JavaScript Format: frappe.query_reports [&#39;rapportnavn&#39;] = {},
@@ -1675,8 +1732,13 @@ Not a valid Workflow Action,Ikke en gyldig Workflow Action,
 Not a valid user,Ikke en gyldig bruger,
 Not a zip file,Ikke en zip-fil,
 Not allowed for {0}: {1},Ikke tilladt for {0}: {1},
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}","Du har ikke tilladelse til at få adgang til {0} fordi det er knyttet til {1} '{2}' i række {3}, felt {4}",
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},Du har ikke tilladelse til at få adgang til denne {0} post fordi den er knyttet til {1} '{2}' i feltet {3},
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},Ikke tilladt for {0}: {1} i række {2}. Begrænset felt: {3},
+Not allowed for {0}: {1}. Restricted field: {2},Ikke tilladt for {0}: {1}. Begrænset felt: {2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,Ikke tilladt at importere,
 Not allowed to change {0} after submission,Ikke tilladt at ændre {0} efter indsendelse,
 Not allowed to print cancelled documents,Ikke tilladt at udskrive annullerede dokumenter,
@@ -1804,6 +1866,10 @@ Path to private Key File,Sti til privat nøglefil,
 PayPal Settings,PayPal-indstillinger,
 PayPal payment gateway settings,PayPal betaling gateway indstillinger,
 Payment Cancelled,Betaling annulleret,
+<<<<<<< HEAD
+=======
+Payment Failed,Betaling mislykkedes,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,Betaling gennemført,
 Pending Approval,Afventer godkendelse,
 Pending Verification,Venter på verifikation,
@@ -3200,6 +3266,10 @@ Click on the link below to approve the request,Klik på linket herunder for at g
 Click on the lock icon to toggle public/private,Klik på låseikonet for at skifte offentlig / privat,
 Click on {0} to generate Refresh Token.,Klik på {0} for at generere Refresh Token.,
 Close Condition,Luk tilstand,
+<<<<<<< HEAD
+=======
+Column {0},Kolonne {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,Kolonner / felter,
 "Configure notifications for mentions, assignments, energy points and more.","Konfigurer underretninger til omtaler, opgaver, energipunkter og mere.",
 Contact Email,Kontakt e-mail,
@@ -3281,6 +3351,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,Fiasko,
 Fetching default Global Search documents.,Henter standard Global Search-dokumenter.,
 Fetching posts...,Henter indlæg ...,
+<<<<<<< HEAD
+=======
+Field Mapping,Feltkortlægning,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,"Felt, der skal kontrolleres",
 File Information,Filoplysninger,
 Filter By,Sorter efter,
@@ -3435,6 +3509,10 @@ No posts yet,Der er endnu ingen indlæg,
 No records will be exported,Ingen poster vil blive eksporteret,
 No results found for {0} in Global Search,Ingen resultater fundet for {0} i global søgning,
 No user found,Ingen bruger fundet,
+<<<<<<< HEAD
+=======
+Not Specified,Ikke specificeret,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,Underretningslog,
 Notification Settings,Underretningsindstillinger,
 Notification Subscribed Document,Undertegnet abonneret dokument,
@@ -3590,6 +3668,10 @@ Untitled Column,Unavngivet søjle,
 Untranslated,Untranslated,
 Upcoming Events,Kommende begivenheder,
 Update Existing Records,Opdater eksisterende poster,
+<<<<<<< HEAD
+=======
+Update Type,Opdateringstype,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,Opdateret til en ny version 🎉,
 "Updating {0} of {1}, {2}","Opdaterer {0} af {1}, {2}",
 Upload file,Upload fil,
@@ -3696,16 +3778,28 @@ Designation,Betegnelse,
 Disabled,Deaktiveret,
 Doctype,doctype,
 Download Template,Hent skabelon,
+<<<<<<< HEAD
+=======
+Dr,Dr.,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,Forfaldsdato,
 Duplicate,Duplikér,
 Edit Profile,Rediger profil,
 Email,EMail,
+<<<<<<< HEAD
+=======
+End Time,End Time,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,Indtast værdi,
 Entity Type,Entity Type,
 Error,Fejl,
 Expired,Udløbet,
 Export,Udlæs,
 Export not allowed. You need {0} role to export.,Udlæsning er ikke tilladt. Du har brug for {0} rolle for at kunne udlæse.,
+<<<<<<< HEAD
+=======
+Fetching...,Henter ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,Felt,
 File Manager,Filadministrator,
 Filters,Filtre,
@@ -3720,8 +3814,16 @@ Import Data from CSV / Excel files.,Importer data fra CSV / Excel-filer.,
 In Progress,I gang,
 Intermediate,mellemniveau,
 Invite as User,Inviter som Bruger,
+<<<<<<< HEAD
 Loading...,Indlæser ...,
 Location,Lokation,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.",Det ser ud som om der er et problem med serverens stribekonfiguration. I tilfælde af fejl bliver beløbet refunderet til din konto.,
+Loading...,Indlæser ...,
+Location,Lokation,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,Ligner nogen har sendt dig til en ufuldstændig webadresse. Spørg dem om at se på det.,
+Master,Master,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,Besked,
 Missing Values Required,Manglende værdier skal angives,
 Mobile No,Mobiltelefonnr.,
@@ -3733,6 +3835,10 @@ Note,Bemærk,
 Offline,Offline,
 Open,Åbne,
 Page {0} of {1},Side {0} af {1},
+<<<<<<< HEAD
+=======
+Pay,Betale,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,Afventer,
 Phone,Telefonnr.,
 Please click on the following link to set your new password,Klik på følgende link for at indstille din nye adgangskode,
@@ -3782,6 +3888,10 @@ Welcome to {0},Velkommen til {0},
 Year,År,
 Yearly,Årlig,
 You,Du,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,Du kan også kopiere-indsætte dette link i din browser,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,og,
 {0} Name,{0} Navn,
 {0} is required,{0} er påkrævet,
@@ -4085,6 +4195,10 @@ Custom SCSS,Brugerdefineret SCSS,
 Navbar,Navbar,
 Source Message,Kildemeddelelse,
 Translated Message,Oversat besked,
+<<<<<<< HEAD
+=======
+Verified By,Bekræftet af,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,"Brug af denne konsol kan muligvis gøre det muligt for angribere at efterligne dig og stjæle dine oplysninger. Indtast eller indsæt ikke kode, som du ikke forstår.",
 {0} m,{0} m,
 {0} h,{0} t,
@@ -4108,7 +4222,11 @@ No changes in document,Ingen ændring på siden,
 by Role,af rolle,
 Document is only editable by users with role,Dokument kan kun redigeres af brugere med rolle,
 {0}: Other permission rules may also apply,{0}: Andre tilladelsesregler gælder muligvis også,
+<<<<<<< HEAD
 {0} Web page views,{0} Sidevisninger,
+=======
+{0} Page Views,{0} Sidevisninger,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,Se mere,
 Collapse,Bryder sammen,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.",Ugyldigt bærertoken. Angiv et gyldigt adgangstoken med præfikset &#39;Bærer&#39;.,
@@ -4117,6 +4235,10 @@ Collapse,Bryder sammen,
 {0} is not a valid Name,{0] er ikke et gyldigt navn,
 Your system is being updated. Please refresh again after a few moments.,Dit system opdateres. Opdater igen efter et øjeblik.,
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}: Den indsendte post kan ikke slettes. Du skal {2} annullere {3} det først.,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},Ugyldig navneserie (. Mangler) for {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},En fejl er opstået i {0},
 Status Updated,Status opdateret,
 You can also copy-paste this {0} to your browser,Du kan også kopiere og indsætte denne {0} i din browser,
@@ -4138,11 +4260,21 @@ Is Billing Contact,Er faktureringskontakt,
 Address And Contacts,Adresse og kontakter,
 Lead Conversion Time,Lead Conversion Time,
 Due Date Based On,Forfaldsdato baseret på,
+<<<<<<< HEAD
 Linked Documents,Koblede dokumenter,
+=======
+Phone Number,Telefonnummer,
+Linked Documents,Koblede dokumenter,
+Account SID,Konto SID,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,Trin,
 email,e-mail,
 Component,Lønart,
 Subtitle,Undertekst,
+<<<<<<< HEAD
+=======
+Global Defaults,Globale indstillinger,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,Præfiks,
 Is Public,Er offentlig,
 This chart will be available to all Users if this is set,"Dette diagram vil være tilgængeligt for alle brugere, hvis dette er indstillet",
@@ -4329,6 +4461,10 @@ Dynamic Filters Section,Sektionen for dynamiske filtre,
 Please create Card first,Opret kort først,
 Onboarding Permission,Ombord tilladelse,
 Onboarding Step,Ombordstigningstrin,
+<<<<<<< HEAD
+=======
+Is Mandatory,Er obligatorisk,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,Springes over,
 Create Entry,Opret post,
 Update Settings,Opdater indstillinger,
@@ -4366,6 +4502,10 @@ Message (HTML),Besked (HTML),
 Send Attachments,Send vedhæftede filer,
 Testing,Testning,
 System Notification,Systemmeddelelse,
+<<<<<<< HEAD
+=======
+WhatsApp,WhatsApp,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,Twilio-nummer,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","For at bruge WhatsApp for Business skal du initialisere <a href=""#Form/Twilio Settings"">Twilio-indstillinger</a> .",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","For at bruge Slack Channel skal du tilføje en <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a> .",
@@ -4500,6 +4640,10 @@ Add to ToDo,Føj til ToDo,
 {0} are currently {1},{0} er i øjeblikket {1},
 Currently Replying,Besvarer i øjeblikket,
 created {0},oprettet {0},
+<<<<<<< HEAD
+=======
+Make a call,Ringe,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,Lave om,Coins
 Too Many Requests,For mange anmodninger,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.","Ugyldige autorisationsoverskrifter, tilføj et token med et præfiks fra et af følgende: {0}.",
@@ -4664,6 +4808,7 @@ Value cannot be negative for {0}: {1},Værdien kan ikke være negativ for {0}: {
 Negative Value,Negativ værdi,
 Authentication failed while receiving emails from Email Account: {0}.,Godkendelse mislykkedes under modtagelse af e-mails fra e-mail-konto: {0}.,
 Message from server: {0},Meddelelse fra server: {0},
+<<<<<<< HEAD
 Add Row,Tilføj række,
 Analytics,Analyser,
 Anonymous,Anonym,
@@ -4796,3 +4941,5 @@ West Bengal,Vestbengalen,
 Published on,Udgivet den,
 Bottom,Bund,
 Top,Top,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

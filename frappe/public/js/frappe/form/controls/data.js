@@ -215,7 +215,12 @@ frappe.ui.form.ControlData = class ControlData extends frappe.ui.form.ControlInp
 	}
 	set_input_attributes() {
 		if (
+<<<<<<< HEAD
 			["Data", "Link", "Dynamic Link", "Password", "Select", "Read Only"].includes(
+=======
+			in_list(
+				["Data", "Link", "Dynamic Link", "Password", "Select", "Read Only"],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				this.df.fieldtype
 			)
 		) {

@@ -192,10 +192,13 @@ class TestDocument(FrappeTestCase):
 		with self.assertQueryCount(0):
 			user.db_set("user_type", "Magical Wizard")
 
+<<<<<<< HEAD
 	def test_new_doc_with_fields(self):
 		user = frappe.new_doc("User", first_name="wizard")
 		self.assertEqual(user.first_name, "wizard")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_update_after_submit(self):
 		d = self.test_insert()
 		d.starts_on = "2014-09-09"
@@ -461,6 +464,7 @@ class TestDocument(FrappeTestCase):
 
 		self.assertRaises(frappe.DoesNotExistError, doc.save)
 
+<<<<<<< HEAD
 	def test_validate_from_to_dates(self):
 		doc = frappe.new_doc("Web Page")
 		doc.start_date = None
@@ -492,6 +496,8 @@ class TestDocument(FrappeTestCase):
 		changed_val = frappe.db.get_single_value(c.doctype, key)
 		self.assertEqual(val, changed_val)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 class TestDocumentWebView(FrappeTestCase):
 	def get(self, path, user="Guest"):
@@ -537,6 +543,7 @@ class TestDocumentWebView(FrappeTestCase):
 
 		# Logged-in user can access the page without key
 		self.assertEqual(self.get(url_without_key, "Administrator").status, "200 OK")
+<<<<<<< HEAD
 
 	def test_bulk_inserts(self):
 		from frappe.model.document import bulk_insert
@@ -572,3 +579,5 @@ class TestDocumentWebView(FrappeTestCase):
 		)
 		self.assertEqual(sent_docs - all_docs, set(), "All docs should be inserted")
 		self.assertEqual(sent_child_docs - all_child_docs, set(), "All child docs should be inserted")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

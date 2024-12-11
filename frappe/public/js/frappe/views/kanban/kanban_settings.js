@@ -97,7 +97,11 @@ export default class KanbanSettings {
 							${frappe.utils.icon("drag", "xs", "", "", "sortable-handle")}
 						</div>
 						<div class="col-md-10" style="padding-left:0px;">
+<<<<<<< HEAD
 							${__(field.label, null, field.parent)}
+=======
+							${__(field.label)}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						</div>
 						<div class="col-md-1">
 							<a class="text-muted remove-field" data-fieldname="${field.fieldname}">
@@ -238,7 +242,11 @@ export default class KanbanSettings {
 			)
 			.map((field) => {
 				return {
+<<<<<<< HEAD
 					label: __(field.label, null, field.parent),
+=======
+					label: __(field.label),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					value: field.fieldname,
 					checked: this.fields.includes(field.fieldname),
 				};

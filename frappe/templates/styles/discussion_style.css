@@ -1,8 +1,35 @@
+<<<<<<< HEAD
+=======
+.modal .comment-field {
+	height: 300px;
+	resize: none;
+}
+
+.discussion-on-page .comment-field {
+	padding: 1rem;
+}
+
+.modal .cancel-comment {
+	display: none;
+}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .modal .comment-footer div:first-child {
 	display: none;
 }
 
+<<<<<<< HEAD
 .discussions-header {
+=======
+.cancel-comment {
+	font-size: var(--text-sm);
+	margin-right: 0.5rem;
+	cursor: pointer;
+}
+
+.discussions-header {
+	margin: 2.5rem 0 1.25rem;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	display: flex;
 	align-items: center;
 }
@@ -22,9 +49,15 @@
 	background-image: url(/assets/frappe/icons/timeless/search.svg);
 	background-repeat: no-repeat;
 	text-indent: 1.5rem;
+<<<<<<< HEAD
 	background-position: 1rem 0.45rem;
 	font-size: var(--text-md);
 	padding: 0.3rem 1rem;
+=======
+	background-position: 1rem 0.65rem;
+	font-size: var(--text-md);
+	padding: 0.5rem 1rem;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	border: 1px solid var(--dark-border-color);
 	border-radius: var(--border-radius-md);
 	margin-right: 0.5rem;
@@ -48,6 +81,7 @@
 }
 
 .reply-card {
+<<<<<<< HEAD
 	padding: 1.25rem 0;
 	border-bottom: 1px solid var(--border-color);
 }
@@ -55,6 +89,9 @@
 .reply-card:last-of-type {
 	border-bottom: none;
 	padding-bottom: 0;
+=======
+	margin-bottom: 1.5rem;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .reply-card .dropdown {
@@ -65,6 +102,10 @@
 	color: var(--text-color);
 	font-size: var(--text-lg);
 	font-weight: 600;
+<<<<<<< HEAD
+=======
+	margin-bottom: 0.5rem;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .discussion-on-page .topic-title {
@@ -73,12 +114,27 @@
 
 .discussion-on-page {
 	flex-direction: column;
+<<<<<<< HEAD
+=======
+	padding: 1.5rem;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .submit-discussion {
 	cursor: pointer;
 }
 
+<<<<<<< HEAD
+=======
+.reply-body {
+	background: var(--bg-color);
+	padding: 1rem;
+	border-radius: var(--border-radius);
+	font-size: var(--text-md);
+	color: var(--text-color);
+}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .reply-actions {
 	display: flex;
 	align-items: center;
@@ -113,6 +169,7 @@
 	align-items: center;
 }
 
+<<<<<<< HEAD
 .discussions-section-title {
 	font-size: var(--text-2xl);
 	font-weight: var(--weight-semibold);
@@ -124,6 +181,11 @@
 .discussion-heading {
 	font-weight: 600;
 	font-size: var(--text-lg);
+=======
+.discussion-heading {
+	font-weight: 600;
+	font-size: var(--text-3xl);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	line-height: 146%;
 	letter-spacing: -0.0175em;
 	color: var(--text-color);
@@ -163,7 +225,10 @@
 }
 
 .back-button {
+<<<<<<< HEAD
 	display: flex;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	margin-right: 1rem;
 	cursor: pointer;
 }
@@ -182,7 +247,11 @@
 }
 
 .empty-state {
+<<<<<<< HEAD
 	border: 1px solid var(--gray-300);
+=======
+	background: var(--control-bg);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	border-radius: var(--border-radius-lg);
 	padding: 2rem;
 	display: flex;
@@ -204,7 +273,11 @@
 .sidebar-parent {
 	display: flex;
 	align-items: center;
+<<<<<<< HEAD
 	padding: 1.25rem 0;
+=======
+	padding: 1.25rem;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	cursor: pointer;
 }
 
@@ -228,7 +301,11 @@
 .reply-section-header {
 	display: flex;
 	align-items: center;
+<<<<<<< HEAD
 	margin-top: 1.5rem;
+=======
+	margin-bottom: 2.5rem;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .reply-header {
@@ -250,6 +327,7 @@
 	margin-bottom: 0;
 }
 
+<<<<<<< HEAD
 .reply-header .dropdown-menu {
 	min-width: 7rem;
 }
@@ -291,3 +369,8 @@
 	color: var(--gray-600);
 	font-style: normal;
 }
+=======
+.reply-body .dropdown-menu {
+	min-width: 7rem;
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

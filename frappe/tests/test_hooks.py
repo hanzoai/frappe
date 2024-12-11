@@ -26,7 +26,11 @@ class TestHooks(FrappeTestCase):
 		hooks.override_doctype_class = {"ToDo": ["frappe.tests.test_hooks.CustomToDo"]}
 
 		# Clear cache
+<<<<<<< HEAD
 		frappe.cache.delete_value("app_hooks")
+=======
+		frappe.cache().delete_value("app_hooks")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		clear_controller_cache("ToDo")
 
 		todo = frappe.get_doc(doctype="ToDo", description="asdf")
@@ -53,7 +57,11 @@ class TestHooks(FrappeTestCase):
 		hooks.has_permission["*"] = wildcard_has_permission_hook
 
 		# Clear cache
+<<<<<<< HEAD
 		frappe.cache.delete_value("app_hooks")
+=======
+		frappe.cache().delete_value("app_hooks")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# Init User and Address
 		username = "test@example.com"

@@ -16,8 +16,13 @@
   "letter_head",
   "add_total_row",
   "disabled",
+<<<<<<< HEAD
   "prepared_report",
   "timeout",
+=======
+  "disable_prepared_report",
+  "prepared_report",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "filters_section",
   "filters",
   "columns_section",
@@ -135,9 +140,23 @@
   },
   {
    "default": "0",
+<<<<<<< HEAD
    "fieldname": "prepared_report",
    "fieldtype": "Check",
    "label": "Prepared Report"
+=======
+   "fieldname": "disable_prepared_report",
+   "fieldtype": "Check",
+   "label": "Disable Prepared Report"
+  },
+  {
+   "default": "0",
+   "fieldname": "prepared_report",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Prepared Report",
+   "read_only": 1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "depends_on": "eval:(doc.report_type===\"Script Report\" \n|| doc.report_type==\"Query Report\") \n&& doc.is_standard===\"No\"",
@@ -182,6 +201,7 @@
    "fieldname": "client_code_section",
    "fieldtype": "Section Break",
    "label": "Client Code"
+<<<<<<< HEAD
   },
   {
    "depends_on": "prepared_report",
@@ -189,12 +209,18 @@
    "fieldname": "timeout",
    "fieldtype": "Int",
    "label": "Timeout (In Seconds)"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "idx": 1,
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-08-31 20:34:10.018811",
+=======
+ "modified": "2023-04-07 18:18:11.782178",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Report",
@@ -239,7 +265,11 @@
    "print": 1,
    "read": 1,
    "report": 1,
+<<<<<<< HEAD
    "role": "Desk User"
+=======
+   "role": "All"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "show_name_in_global_search": 1,
@@ -247,4 +277,8 @@
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

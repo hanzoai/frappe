@@ -11,3 +11,13 @@ class TestForm(FrappeTestCase):
 		results = get_linked_docs("Role", "System Manager", linkinfo=get_linked_doctypes("Role"))
 		self.assertTrue("User" in results)
 		self.assertTrue("DocType" in results)
+<<<<<<< HEAD
+=======
+
+
+if __name__ == "__main__":
+	import unittest
+
+	frappe.connect()
+	unittest.main()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

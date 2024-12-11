@@ -52,6 +52,7 @@ def _toggle_like(doctype, name, add, user=None):
 				liked_by.remove(user)
 				remove_like(doctype, name)
 
+<<<<<<< HEAD
 		if frappe.get_meta(doctype).issingle:
 			frappe.db.set_single_value(doctype, "_liked_by", json.dumps(liked_by), update_modified=False)
 		else:
@@ -59,6 +60,12 @@ def _toggle_like(doctype, name, add, user=None):
 
 	except frappe.db.ProgrammingError as e:
 		if frappe.db.is_missing_column(e):
+=======
+		frappe.db.set_value(doctype, name, "_liked_by", json.dumps(liked_by), update_modified=False)
+
+	except frappe.db.ProgrammingError as e:
+		if frappe.db.is_column_missing(e):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			add_column(doctype, "_liked_by", "Text")
 			_toggle_like(doctype, name, add, user)
 		else:

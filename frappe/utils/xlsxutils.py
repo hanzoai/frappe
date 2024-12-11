@@ -11,6 +11,10 @@ from openpyxl.utils import get_column_letter
 from openpyxl.workbook.child import INVALID_TITLE_REGEX
 
 import frappe
+<<<<<<< HEAD
+=======
+from frappe import _
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils.html_utils import unescape_html
 
 ILLEGAL_CHARACTERS_RE = re.compile(r"[\000-\010]|[\013-\014]|[\016-\037]")
@@ -72,7 +76,13 @@ def handle_html(data):
 
 	value = ", ".join(value.split("  \n"))
 	value = " ".join(value.split("\n"))
+<<<<<<< HEAD
 	return ", ".join(value.split("# "))
+=======
+	value = ", ".join(value.split("# "))
+
+	return value
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def read_xlsx_file_from_attached_file(file_url=None, fcontent=None, filepath=None):
@@ -90,7 +100,14 @@ def read_xlsx_file_from_attached_file(file_url=None, fcontent=None, filepath=Non
 	wb1 = load_workbook(filename=filename, data_only=True)
 	ws1 = wb1.active
 	for row in ws1.iter_rows():
+<<<<<<< HEAD
 		rows.append([cell.value for cell in row])
+=======
+		tmp_list = []
+		for cell in row:
+			tmp_list.append(cell.value)
+		rows.append(tmp_list)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return rows
 
 
@@ -98,7 +115,14 @@ def read_xls_file_from_attached_file(content):
 	book = xlrd.open_workbook(file_contents=content)
 	sheets = book.sheets()
 	sheet = sheets[0]
+<<<<<<< HEAD
 	return [sheet.row_values(i) for i in range(sheet.nrows)]
+=======
+	rows = []
+	for i in range(sheet.nrows):
+		rows.append(sheet.row_values(i))
+	return rows
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def build_xlsx_response(data, filename):

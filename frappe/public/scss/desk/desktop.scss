@@ -1,10 +1,13 @@
 html,
 body {
 	background-color: var(--bg-color);
+<<<<<<< HEAD
 	::selection {
 		color: var(--neutral-black);
 		background: var(--gray-300);
 	}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .desk-sidebar {
@@ -14,7 +17,10 @@ body {
 		font-size: var(--text-xs);
 		text-transform: uppercase;
 		cursor: pointer;
+<<<<<<< HEAD
 		margin-bottom: var(--margin-xs) !important;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		span {
 			pointer-events: none;
@@ -31,7 +37,11 @@ body {
 }
 
 .widget-group {
+<<<<<<< HEAD
 	@include get_textstyle("base", "regular");
+=======
+	font-size: var(--text-base);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	margin-bottom: var(--margin-2xl);
 
 	&.widget-charts {
@@ -43,7 +53,12 @@ body {
 
 		.widget-group-title {
 			color: var(--heading-color);
+<<<<<<< HEAD
 			@include get_textstyle("lg", "semibold");
+=======
+			font-weight: 600;
+			font-size: var(--text-lg);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			margin-bottom: var(--margin-md);
 		}
 	}
@@ -115,7 +130,11 @@ body {
 	@include flex(flex, null, null, column);
 	min-height: 1px;
 	padding: 7px;
+<<<<<<< HEAD
 	border-radius: var(--border-radius-lg);
+=======
+	border-radius: var(--border-radius-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	height: 100%;
 	background-color: var(--card-bg);
 
@@ -141,10 +160,18 @@ body {
 
 			.widget-title {
 				@include flex(flex, null, center, null);
+<<<<<<< HEAD
 				@include get_textstyle("base", "medium");
 				font-family: inherit;
 				line-height: 1.3em;
 				color: var(--text-color);
+=======
+				font-size: var(--text-lg);
+				font-family: inherit;
+				font-weight: 500;
+				line-height: 1.3em;
+				color: var(--heading-color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				cursor: default;
 
 				svg {
@@ -211,11 +238,14 @@ body {
 	// Overrides for each widgets
 	&.dashboard-widget-box {
 		min-height: 240px;
+<<<<<<< HEAD
 		border: 1px solid var(--border-color);
 
 		.widget-head {
 			padding: 4px 8px;
 		}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		.filter-chart {
 			background-color: var(--control-bg);
@@ -348,6 +378,7 @@ body {
 
 	&.onboarding-widget-box {
 		margin-bottom: var(--margin-2xl);
+<<<<<<< HEAD
 		background-color: var(--bg-color);
 		border-bottom: 1px solid var(--border-color);
 		border-radius: 0;
@@ -360,6 +391,19 @@ body {
 				&:hover,
 				&.complete {
 					background-color: var(--fg-hover-color);
+=======
+		padding: var(--padding-lg) !important;
+		background-color: var(--bg-color);
+		box-shadow: var(--card-shadow);
+
+		&.edit-mode:hover {
+			background-color: var(--fg-color);
+
+			.onboarding-step {
+				&.active,
+				&:hover {
+					background-color: var(--bg-color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 					.step-index.step-pending {
 						background-color: var(--fg-color);
@@ -374,17 +418,24 @@ body {
 
 		.widget-head {
 			display: flex;
+<<<<<<< HEAD
 			justify-content: space-between;
 
 			.widget-label .widget-title {
 				@include get_textstyle("lg", "semibold");
 				color: var(--heading-color);
 			}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			.widget-subtitle {
 				margin-top: 5px;
 				color: var(--text-muted);
+<<<<<<< HEAD
 				@include get_textstyle("base", "regular");
+=======
+				font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 
 			.widget-control {
@@ -408,6 +459,7 @@ body {
 
 				h1,
 				h2 {
+<<<<<<< HEAD
 					@include get_textstyle("lg", "medium");
 					margin-bottom: var(--margin-sm);
 					color: var(--heading-color);
@@ -425,6 +477,19 @@ body {
 						@include get_textstyle("base", "regular");
 					}
 				}
+=======
+					font-size: var(--text-xl);
+					font-weight: 600;
+					margin-bottom: var(--margin-sm);
+				}
+
+				h3 {
+					font-size: var(--text-lg);
+					font-weight: 600;
+					margin-bottom: var(--margin-sm);
+				}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				.onboarding-step-footer {
 					margin-top: var(--margin-md);
 				}
@@ -433,11 +498,17 @@ body {
 			.onboarding-step {
 				@include flex(flex, space-between, center, null);
 				border-radius: var(--border-radius);
+<<<<<<< HEAD
 				padding: 5px 8px;
 				@include get_textstyle("base", "regular");
 				max-width: 350px;
 				text-decoration: none;
 				margin-bottom: var(--margin-xs);
+=======
+				padding: 8px;
+				font-size: var(--text-md);
+				max-width: 350px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 				&.pending {
 					.step-index.step-pending {
@@ -454,31 +525,65 @@ body {
 						display: none;
 					}
 
+<<<<<<< HEAD
 					span {
 						color: var(--gray-700);
+=======
+					.icon {
+						stroke: var(--white);
+					}
+
+					span {
+						color: $text-color;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					}
 				}
 
 				&.active,
 				&:hover {
+<<<<<<< HEAD
 					background-color: var(--subtle-fg);
 				}
 				&.active .step-skip {
 					visibility: visible;
+=======
+					background-color: var(--fg-color);
+
+					.step-index {
+						background-color: var(--bg-color);
+					}
+
+					.step-skip {
+						visibility: visible;
+					}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				}
 
 				.step-title {
 					@include flex(flex, null, center, null);
+<<<<<<< HEAD
 
 					.step-text {
 						margin-left: 8px;
 					}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				}
 
 				.step-index {
 					@include flex(flex, center, center, null);
+<<<<<<< HEAD
 					height: 18px;
 					width: 18px;
+=======
+					height: 20px;
+					width: 20px;
+					color: var(--text-on-light-gray);
+					background-color: var(--fg-color);
+
+					margin-right: var(--margin-sm);
+					border-radius: var(--border-radius-full);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 					&.step-pending {
 						display: none;
@@ -486,20 +591,39 @@ body {
 
 					&.step-complete {
 						display: none;
+<<<<<<< HEAD
+=======
+						background-color: var(--primary);
+						.icon use {
+							stroke: var(--var(--fg-color));
+						}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					}
 
 					&.step-skipped {
 						display: none;
+<<<<<<< HEAD
+=======
+						background-color: var(--blue-100);
+						svg {
+							stroke: var(--blue-600);
+						}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					}
 				}
 
 				.step-skip {
+<<<<<<< HEAD
 					@include get_textstyle("base", "regular");
+=======
+					font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					visibility: hidden;
 					cursor: pointer;
 				}
 
 				&.skipped {
+<<<<<<< HEAD
 					color: var(--text-light);
 					background-color: var(--bg-color);
 					.step-index.step-skipped {
@@ -508,17 +632,30 @@ body {
 					.step-text {
 						text-decoration: line-through;
 					}
+=======
+					.step-index.step-skipped {
+						display: flex;
+					}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 					.step-skip {
 						display: none;
 					}
 
 					i {
+<<<<<<< HEAD
 						color: var(--text-light);
 					}
 
 					span {
 						color: var(--text-light);
+=======
+						color: var(--text-muted);
+					}
+
+					span {
+						color: var(--text-muted);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					}
 
 					&:hover {
@@ -550,6 +687,7 @@ body {
 
 	&.shortcut-widget-box {
 		cursor: pointer;
+<<<<<<< HEAD
 		padding: 2px 7px;
 		align-items: flex-start;
 
@@ -557,12 +695,26 @@ body {
 			--icon-stroke: var(--invert-neutral);
 			.widget-title {
 				color: var(--invert-neutral) !important;
+=======
+
+		&:hover {
+			.widget-title {
+				color: var(--blue-500) !important;
+			}
+
+			svg.icon-xs {
+				stroke: var(--blue-500) !important;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		}
 
 		.widget-title {
 			cursor: pointer !important;
+<<<<<<< HEAD
 			@include get_textstyle("base", "medium");
+=======
+			font-size: var(--text-base) !important;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		.indicator-pill {
@@ -572,16 +724,21 @@ body {
 	}
 
 	&.links-widget-box {
+<<<<<<< HEAD
 		.widget-head .widget-label .widget-title svg {
 			margin: 2px;
 			margin-right: 12px !important;
 		}
 
 		padding: 10px;
+=======
+		padding: 12px 7px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		.link-item {
 			display: flex;
 			text-decoration: none;
+<<<<<<< HEAD
 			@include get_textstyle("base", "regular");
 			color: var(--text-color);
 			padding: 4px;
@@ -592,6 +749,26 @@ body {
 
 			&:first-child {
 				margin-top: 12px;
+=======
+			font-size: var(--text-md);
+			color: var(--text-color);
+			padding: 4px;
+			margin-left: -4px;
+			margin-bottom: 4px;
+			border-radius: var(--border-radius-md);
+			cursor: pointer;
+
+			&:hover {
+				background-color: var(--fg-hover-color);
+
+				.indicator-pill {
+					background-color: var(--fg-hover-color);
+				}
+			}
+
+			&:first-child {
+				margin-top: 18px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 
 			&:last-child {
@@ -600,9 +777,12 @@ body {
 
 			.link-content {
 				flex: 1;
+<<<<<<< HEAD
 				&:hover {
 					color: var(--invert-neutral);
 				}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 
 			.disabled-link {
@@ -618,16 +798,26 @@ body {
 					left: 20%;
 				}
 			}
+<<<<<<< HEAD
 		}
 
 		.widget-head .widget-label .widget-title {
 			@include get_textstyle("lg", "semibold");
 			color: var(--text-color) !important;
+=======
+
+			.indicator-pill {
+				margin-right: var(--margin-sm);
+				height: 20px;
+				padding: 3px 8px;
+			}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 
 	&.number-widget-box {
 		cursor: pointer;
+<<<<<<< HEAD
 		min-height: 84px;
 		padding: var(--number-card-padding);
 		border: 1px solid var(--border-color);
@@ -638,6 +828,16 @@ body {
 				color: var(--text-muted);
 				text-transform: uppercase;
 				font-size: var(--text-tiny);
+=======
+		height: 115px;
+		padding: var(--padding-sm) var(--padding-md);
+
+		.widget-head {
+			.widget-title {
+				font-weight: 500;
+				color: var(--heading-color);
+				font-size: var(--text-base);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				margin-top: var(--margin-xs);
 			}
 
@@ -648,7 +848,11 @@ body {
 			}
 
 			.card-actions {
+<<<<<<< HEAD
 				margin-top: -6px;
+=======
+				margin-top: -15px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		}
 
@@ -661,12 +865,22 @@ body {
 			}
 
 			.widget-content {
+<<<<<<< HEAD
 				@include flex(flex, space-between, null, column);
 				padding-top: var(--padding-md);
 
 				.number {
 					@include get_textstyle("2xl", "semibold");
 					line-height: var(--text-line-height-3xl);
+=======
+				@include flex(flex, space-between, null, null);
+				padding-top: var(--padding-xl);
+
+				.number {
+					font-weight: 600;
+					font-size: 22px;
+					line-height: 2.4em;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					color: var(--text-color);
 				}
 
@@ -677,12 +891,19 @@ body {
 				}
 
 				.card-stats {
+<<<<<<< HEAD
 					@include flex(flex, null, flex-end, row);
+=======
+					@include flex(flex, null, flex-end, column);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				}
 
 				.percentage-stat-area {
 					font-size: $font-size-sm;
+<<<<<<< HEAD
 					margin-top: var(--margin-sm);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 					.indicator-pill-round {
 						height: 18px;
@@ -693,6 +914,7 @@ body {
 							height: 10px;
 						}
 					}
+<<<<<<< HEAD
 				}
 
 				.stat-period {
@@ -704,6 +926,26 @@ body {
 
 					use {
 						stroke: var(--green-500);
+=======
+
+					.percentage-stat {
+						margin-left: var(--margin-xs);
+						vertical-align: bottom;
+						font-weight: 500;
+					}
+				}
+
+				.stat-period {
+					margin-top: var(--margin-xs);
+					font-size: 11px;
+				}
+
+				.green-stat {
+					color: var(--dark-green-500);
+
+					use {
+						stroke: var(--dark-green-500);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					}
 				}
 
@@ -963,6 +1205,7 @@ body {
 			}
 
 			.layout-main-section {
+<<<<<<< HEAD
 				border: 1px solid var(--border-color);
 				padding: var(--padding-md);
 				margin-bottom: var(--margin-sm);
@@ -977,6 +1220,10 @@ body {
 						display: none;
 					}
 				}
+=======
+				padding: var(--padding-md);
+				margin-bottom: var(--margin-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 
 			.desk-sidebar {
@@ -992,17 +1239,24 @@ body {
 
 	.layout-main-section {
 		background-color: var(--fg-color);
+<<<<<<< HEAD
 		box-shadow: none;
+=======
+		box-shadow: var(--card-shadow);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		border-radius: var(--border-radius-lg);
 		padding: var(--padding-sm);
 	}
 
+<<<<<<< HEAD
 	.workspace-footer {
 		height: 30px;
 		display: flex;
 		flex-direction: row-reverse;
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	.block-menu-item-icon svg {
 		width: 18px;
 		height: 18px;
@@ -1032,7 +1286,11 @@ body {
 			}
 
 			.drop-icon {
+<<<<<<< HEAD
 				padding: 0px 12px 0px 2px;
+=======
+				padding: 10px 12px 10px 2px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 
 			svg {
@@ -1051,14 +1309,21 @@ body {
 		.item-anchor {
 			display: flex;
 			overflow: hidden;
+<<<<<<< HEAD
 			padding: 3px 0px 3px 8px;
+=======
+			padding: 8px 0px 8px 12px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			flex: 1;
 		}
 	}
 
 	.sidebar-item-container {
 		position: relative;
+<<<<<<< HEAD
 		margin-left: -10px;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		&[item-is-hidden="1"] {
 			display: none;
@@ -1076,10 +1341,13 @@ body {
 				justify-content: start;
 			}
 		}
+<<<<<<< HEAD
 
 		.indicator {
 			margin-left: 5px;
 		}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	.desk-sidebar {
@@ -1118,7 +1386,10 @@ body {
 				&.selected {
 					.drag-handle {
 						display: inline-block;
+<<<<<<< HEAD
 						background-color: var(--bg-color);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					}
 
 					.setting-btn,
@@ -1143,7 +1414,11 @@ body {
 
 	// widgets
 	.widget.number-widget-box {
+<<<<<<< HEAD
 		border: 1px solid var(--border-color);
+=======
+		box-shadow: var(--shadow-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	.codex-editor__loader {
@@ -1210,9 +1485,12 @@ body {
 						visibility: visible;
 						opacity: 1;
 					}
+<<<<<<< HEAD
 					.widget-control > svg {
 						width: 12px;
 					}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				}
 
 				&.ce-block--focused {
@@ -1290,6 +1568,7 @@ body {
 						margin-bottom: 0 !important;
 						flex: 1;
 
+<<<<<<< HEAD
 						.h4 {
 							@include get_textstyle("xl", "semibold");
 						}
@@ -1299,6 +1578,8 @@ body {
 							color: var(--text-light);
 						}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						&:focus {
 							outline: none;
 						}
@@ -1324,6 +1605,7 @@ body {
 						&.edit-mode {
 							padding: 7px 12px;
 
+<<<<<<< HEAD
 							.widget-head {
 								justify-content: space-between;
 							}
@@ -1331,6 +1613,11 @@ body {
 							&:hover {
 								box-shadow: var(--shadow-base);
 								background-color: var(--bg-color);
+=======
+							&:hover {
+								box-shadow: var(--shadow-base);
+								background-color: var(--fg-color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							}
 
 							&.spacer {
@@ -1387,7 +1674,11 @@ body {
 							padding-left: 0px !important;
 							min-height: 40px;
 							box-shadow: none;
+<<<<<<< HEAD
 							background-color: var(--bg-color);
+=======
+							background-color: var(--control-bg);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							color: var(--text-muted);
 							cursor: text;
 
@@ -1397,7 +1688,11 @@ body {
 						}
 
 						&.shortcut {
+<<<<<<< HEAD
 							background-color: var(--bg-color);
+=======
+							background-color: var(--control-bg);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						}
 
 						&:focus {

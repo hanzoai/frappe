@@ -15,6 +15,7 @@ from frappe.utils import strip_html
 
 
 class Workspace(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -64,6 +65,8 @@ class Workspace(Document):
 		title: DF.Data
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		self.title = strip_html(self.title)
 
@@ -80,6 +83,7 @@ class Workspace(Document):
 		except Exception:
 			frappe.throw(_("Content data shoud be a list"))
 
+<<<<<<< HEAD
 		for d in self.get("links"):
 			if d.link_type == "Report" and d.is_query_report != 1:
 				d.report_ref_doctype = frappe.get_value("Report", d.link_to, "ref_doctype")
@@ -90,6 +94,14 @@ class Workspace(Document):
 			frappe.cache.hdel("bootinfo", self.for_user)
 		else:
 			frappe.cache.delete_key("bootinfo")
+=======
+	def clear_cache(self):
+		super().clear_cache()
+		if self.for_user:
+			frappe.cache().hdel("bootinfo", self.for_user)
+		else:
+			frappe.cache().delete_key("bootinfo")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def on_update(self):
 		if disable_saving_as_public():
@@ -108,10 +120,13 @@ class Workspace(Document):
 		if doc.title != doc.label and doc.label == doc.name:
 			self.name = doc.name = doc.label = doc.title
 
+<<<<<<< HEAD
 	def on_trash(self):
 		if self.public and not is_workspace_manager():
 			frappe.throw(_("You need to be Workspace Manager to delete a public workspace."))
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def after_delete(self):
 		if disable_saving_as_public():
 			return
@@ -162,7 +177,11 @@ class Workspace(Document):
 
 				current_card = link
 				card_links = []
+<<<<<<< HEAD
 			elif not link.get("only_for") or link.get("only_for") == frappe.get_system_settings("country"):
+=======
+			else:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				card_links.append(link)
 
 		current_card["links"] = card_links
@@ -192,7 +211,10 @@ class Workspace(Document):
 					"label": card.get("label"),
 					"type": "Card Break",
 					"icon": card.get("icon"),
+<<<<<<< HEAD
 					"description": card.get("description"),
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					"hidden": card.get("hidden") or False,
 					"link_count": card.get("link_count"),
 					"idx": 1 if not self.links else self.links[-1].idx + 1,
@@ -257,6 +279,7 @@ def new_page(new_page):
 	):
 		frappe.throw(_("Cannot create private workspace of other users"), frappe.PermissionError)
 
+<<<<<<< HEAD
 	elif not frappe.has_permission(doctype="Workspace", ptype="create"):
 		frappe.flags.error_message = _("User {0} does not have the permission to create a Workspace.").format(
 			frappe.bold(frappe.session.user)
@@ -267,6 +290,11 @@ def new_page(new_page):
 	doc.title = page.get("title")
 	doc.icon = page.get("icon")
 	doc.indicator_color = page.get("indicator_color")
+=======
+	doc = frappe.new_doc("Workspace")
+	doc.title = page.get("title")
+	doc.icon = page.get("icon")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	doc.content = page.get("content")
 	doc.parent_page = page.get("parent_page")
 	doc.label = page.get("label")
@@ -301,7 +329,11 @@ def save_page(title, public, new_widgets, blocks):
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 def update_page(name, title, icon, indicator_color, parent, public):
+=======
+def update_page(name, title, icon, parent, public):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	public = frappe.parse_json(public)
 	doc = frappe.get_doc("Workspace", name)
 
@@ -315,7 +347,10 @@ def update_page(name, title, icon, indicator_color, parent, public):
 		child_docs = frappe.get_all("Workspace", filters={"parent_page": doc.title, "public": doc.public})
 		doc.title = title
 		doc.icon = icon
+<<<<<<< HEAD
 		doc.indicator_color = indicator_color
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		doc.parent_page = parent
 		if doc.public != public:
 			doc.sequence_id = frappe.db.count("Workspace", {"public": public}, cache=True)
@@ -386,7 +421,10 @@ def duplicate_page(page_name, new_page):
 	doc = frappe.copy_doc(old_doc)
 	doc.title = new_page.get("title")
 	doc.icon = new_page.get("icon")
+<<<<<<< HEAD
 	doc.indicator_color = new_page.get("indicator_color")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	doc.parent_page = new_page.get("parent") or ""
 	doc.public = new_page.get("is_public")
 	doc.for_user = ""

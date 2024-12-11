@@ -10,8 +10,13 @@ from frappe.utils import get_url_to_form
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 def update_follow(doctype: str, doc_name: str, following: bool):
 	if following:
+=======
+def update_follow(doctype, doc_name, following):
+	if frappe.sbool(following):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return follow_document(doctype, doc_name, frappe.session.user)
 	else:
 		return unfollow_document(doctype, doc_name, frappe.session.user)
@@ -265,6 +270,7 @@ def get_row_changed(row_changed, time, doctype, doc_name, v):
 
 
 def get_added_row(added, time, doctype, doc_name, v):
+<<<<<<< HEAD
 	return [
 		{
 			"time": v.modified,
@@ -276,6 +282,21 @@ def get_added_row(added, time, doctype, doc_name, v):
 		}
 		for d in added
 	]
+=======
+	items = []
+	for d in added:
+		items.append(
+			{
+				"time": v.modified,
+				"data": {"to": d[0], "time": time},
+				"doctype": doctype,
+				"doc_name": doc_name,
+				"type": "row added",
+				"by": v.modified_by,
+			}
+		)
+	return items
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_field_changed(changed, time, doctype, doc_name, v):

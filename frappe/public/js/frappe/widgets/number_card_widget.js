@@ -151,7 +151,12 @@ export default class NumberCardWidget extends Widget {
 	}
 
 	get_filters() {
+<<<<<<< HEAD
 		return frappe.dashboard_utils.get_all_filters(this.card_doc);
+=======
+		const filters = frappe.dashboard_utils.get_all_filters(this.card_doc);
+		return filters;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	async render_card() {
@@ -213,16 +218,24 @@ export default class NumberCardWidget extends Widget {
 		}, []);
 		const col = res.columns.find((col) => col.fieldname == field);
 		this.number = frappe.report_utils.get_result_of_fn(this.card_doc.report_function, vals);
+<<<<<<< HEAD
 		this.set_formatted_number(col, this._generate_common_doc(res.result));
 	}
 
 	set_formatted_number(df, doc) {
+=======
+		this.set_formatted_number(col);
+	}
+
+	set_formatted_number(df) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		const default_country = frappe.sys_defaults.country;
 		const shortened_number = frappe.utils.shorten_number(this.number, default_country, 5);
 		let number_parts = shortened_number.split(" ");
 
 		const symbol = number_parts[1] || "";
 		number_parts[0] = window.convert_old_to_new_number_format(number_parts[0]);
+<<<<<<< HEAD
 		const formatted_number = frappe.format(number_parts[0], df, null, doc);
 		this.formatted_number =
 			($(formatted_number).text() || formatted_number) + " " + __(symbol);
@@ -243,6 +256,11 @@ export default class NumberCardWidget extends Widget {
 			}
 		});
 		return common_doc;
+=======
+		const formatted_number = $(frappe.format(number_parts[0], df)).text();
+
+		this.formatted_number = formatted_number + " " + __(symbol);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	render_number() {
@@ -266,12 +284,20 @@ export default class NumberCardWidget extends Widget {
 				color_class = "grey-stat";
 			} else if (this.percentage_stat > 0) {
 				caret_html = `<span class="indicator-pill-round green">
+<<<<<<< HEAD
 						${frappe.utils.icon("es-line-arrow-up-right", "xs")}
+=======
+						${frappe.utils.icon("arrow-up-right", "xs")}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					</span>`;
 				color_class = "green-stat";
 			} else {
 				caret_html = `<span class="indicator-pill-round red">
+<<<<<<< HEAD
 						${frappe.utils.icon("arrow-down-right", "xs")}
+=======
+						${frappe.utils.icon("arrow-down-left", "xs")}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					</span>`;
 				color_class = "red-stat";
 			}
@@ -296,7 +322,17 @@ export default class NumberCardWidget extends Widget {
 
 			$(this.body).find(".widget-content").append(`<div class="card-stats ${color_class}">
 				<span class="percentage-stat-area">
+<<<<<<< HEAD
 					${caret_html} ${stat} % ${stats_qualifier}
+=======
+					${caret_html}
+					<span class="percentage-stat">
+						${stat} %
+					</span>
+				</span>
+				<span class="stat-period text-muted">
+					${stats_qualifier}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				</span>
 			</div>`);
 		});
@@ -341,6 +377,10 @@ export default class NumberCardWidget extends Widget {
 	}
 
 	set_card_actions(actions) {
+<<<<<<< HEAD
+=======
+		/* eslint-disable indent */
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.card_actions = $(`<div class="card-actions dropdown pull-right">
 				<a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				...
@@ -356,6 +396,10 @@ export default class NumberCardWidget extends Widget {
 						.join("")}
 				</ul>
 			</div>`);
+<<<<<<< HEAD
+=======
+		/* eslint-disable indent */
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		this.card_actions.find("a[data-action]").each((i, o) => {
 			const action = o.dataset.action;

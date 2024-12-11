@@ -23,13 +23,27 @@ frappe.ui.SortSelector = class SortSelector {
 
 		// order
 		this.wrapper.find(".btn-order").on("click", function () {
+<<<<<<< HEAD
 			const order = $(this).attr("data-value") === "desc" ? "asc" : "desc";
 			me.set_value(me.sort_by, order);
+=======
+			let btn = $(this);
+			const order = $(this).attr("data-value") === "desc" ? "asc" : "desc";
+			const title =
+				$(this).attr("data-value") === "desc" ? __("ascending") : __("descending");
+
+			btn.attr("data-value", order);
+			btn.attr("title", title);
+			me.sort_order = order;
+			const icon_name = order === "asc" ? "sort-ascending" : "sort-descending";
+			btn.find(".sort-order").html(frappe.utils.icon(icon_name, "sm"));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			(me.onchange || me.change)(me.sort_by, me.sort_order);
 		});
 
 		// select field
 		this.wrapper.find(".dropdown-menu a.option").on("click", function () {
+<<<<<<< HEAD
 			me.set_value($(this).attr("data-value"), me.sort_order);
 			(me.onchange || me.change)(me.sort_by, me.sort_order);
 		});
@@ -52,6 +66,13 @@ frappe.ui.SortSelector = class SortSelector {
 			$icon.html(frappe.utils.icon(icon_name, "sm"));
 		}
 	}
+=======
+			me.sort_by = $(this).attr("data-value");
+			me.wrapper.find(".dropdown-text").html($(this).html());
+			(me.onchange || me.change)(me.sort_by, me.sort_order);
+		});
+	}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	prepare_args() {
 		var me = this;
 		if (!this.args) {
@@ -103,6 +124,7 @@ frappe.ui.SortSelector = class SortSelector {
 
 		var { meta_sort_field, meta_sort_order } = this.get_meta_sort_field();
 
+<<<<<<< HEAD
 		if (meta_sort_field) {
 			this.args.sort_by = meta_sort_field;
 			this.args.sort_order = meta_sort_order;
@@ -110,6 +132,17 @@ frappe.ui.SortSelector = class SortSelector {
 			// default
 			this.args.sort_by = "creation";
 			this.args.sort_order = "desc";
+=======
+		if (!this.args.sort_by) {
+			if (meta_sort_field) {
+				this.args.sort_by = meta_sort_field;
+				this.args.sort_order = meta_sort_order;
+			} else {
+				// default
+				this.args.sort_by = "modified";
+				this.args.sort_order = "desc";
+			}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		if (!this.args.sort_by_label) {
@@ -173,11 +206,19 @@ frappe.ui.SortSelector = class SortSelector {
 			};
 		}
 
+<<<<<<< HEAD
 		if (meta.sort_field) {
 			var parts = meta.sort_field.split(",")[0].split(" ");
 			return {
 				meta_sort_field: parts[0],
 				meta_sort_order: meta.sort_order ? meta.sort_order.toLowerCase() : "",
+=======
+		if (meta.sort_field && meta.sort_field.includes(",")) {
+			var parts = meta.sort_field.split(",")[0].split(" ");
+			return {
+				meta_sort_field: parts[0],
+				meta_sort_order: parts[1],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			};
 		} else {
 			return {

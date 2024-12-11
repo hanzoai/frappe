@@ -9,6 +9,10 @@ Action,Acció,
 Actions,Accions,
 Active,Actiu,
 Add,Afegir,
+<<<<<<< HEAD
+=======
+Add Comment,Afegir comentari,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,Afegir fila,
 Address,Adreça,
 Address Line 2,Adreça Línia 2,
@@ -143,6 +147,10 @@ Monday,Dilluns,
 Monthly,Mensual,
 More,Més,
 More Information,Més informació,
+<<<<<<< HEAD
+=======
+More...,Més ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,moviment,
 My Account,El meu compte,
 New Address,Nova adreça,
@@ -155,6 +163,10 @@ No items found.,No s’ha trobat cap element.,
 None,Cap,
 Not Permitted,No permès,
 Not active,No actiu,
+<<<<<<< HEAD
+=======
+Notes,Notes,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,Número,
 Online,en línia,
 Operation,Operació,
@@ -164,12 +176,25 @@ Owner,Propietari,
 Page Missing or Moved,Pàgina falta o traslladat,
 Parameter,Paràmetre,
 Password,Contrasenya,
+<<<<<<< HEAD
 Period,Període,
 Pincode,Codi PIN,
+=======
+Payment Gateway,Passarel·la de Pagament,
+Payment Gateway Name,Nom de la passarel·la de pagament,
+Payments,Pagaments,
+Period,Període,
+Pincode,Codi PIN,
+Plan Name,Nom del pla,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,"Si us plau, activa elements emergents",
 Please select Company,Seleccioneu de l&#39;empresa,
 Please select {0},Seleccioneu {0},
 Please set Email Address,"Si us plau, estableix Adreça de correu electrònic",
+<<<<<<< HEAD
+=======
+Portal,Portal,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,Característiques del portal,
 Preview,Preestrena,
 Primary,Primari,
@@ -214,6 +239,10 @@ Salutation,Salutació,
 Sample,Mostra,
 Saturday,Dissabte,
 Saved,Saved,
+<<<<<<< HEAD
+=======
+Scan Barcode,Escanejar codi de barres,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,Programat,
 Search,Cerca,
 Secret Key,clau secreta,
@@ -228,6 +257,10 @@ Settings,Ajustos,
 Shipping,Enviament,
 Short Name,Nom curt,
 Slideshow,Slideshow,
+<<<<<<< HEAD
+=======
+Some information is missing,falta informació,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,Font,
 Source Name,font Nom,
 Standard,Estàndard,
@@ -237,6 +270,10 @@ State,Estat,
 Stopped,Detingut,
 Subject,Subjecte,
 Submit,Presentar,
+<<<<<<< HEAD
+=======
+Successful,Èxit,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,Resum,
 Sunday,Diumenge,
 System Manager,Administrador del sistema,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,Lapse de temps,
 To,A,
 To Date,Fins La Data,
+<<<<<<< HEAD
 Traceback,Rastrejar,
 URL,URL,
 Unsubscribed,No subscriure,
+=======
+Tools,Instruments,
+Traceback,Rastrejar,
+URL,URL,
+Unsubscribed,No subscriure,
+Use Sandbox,ús Sandbox,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,Usuari,
 User ID,ID d'usuari,
 Users,Usuaris,
@@ -556,6 +601,10 @@ Bulk Delete,Suprimeix a granel,
 Bulk Edit {0},Edita granel {0},
 Bulk Rename,Bulk Rename,
 Bulk Update,actualització massiva,
+<<<<<<< HEAD
+=======
+Busy,Ocupada,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,Botó,
 Button Help,El botó d&#39;ajuda,
 Button Label,Etiqueta de botó,
@@ -692,6 +741,10 @@ Compiled Successfully,Recopilada amb èxit,
 Complete By,Completat per,
 Complete Registration,Completar el registre,
 Complete Setup,Instal·lació completa,
+<<<<<<< HEAD
+=======
+Completed By,Completat amb,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,redactar correu electrònic,
 Condition Detail,Detall d&#39;estat,
 Conditions,Condicions,
@@ -1380,7 +1433,11 @@ Is Submittable,És submittable,
 Is Table,és Taula,
 Is Your Company Address,La seva adreça és l&#39;empresa,
 It is risky to delete this file: {0}. Please contact your System Manager.,"És arriscat eliminar aquesta imatge: {0}. Si us plau, poseu-vos en contacte amb l&#39;administrador del sistema.",
+<<<<<<< HEAD
 Item cannot be added to its own descendants,L'article no es pot afegir als seus propis descendants,
+=======
+Item cannot be added to its own descendents,L'article no es pot afegir als seus propis descendents,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,JSON,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},JavaScript Format: frappe.query_reports['REPORTNAME'] = {},
@@ -1660,7 +1717,11 @@ No {0} permission,No {0} permís,
 None: End of Workflow,Cap: Final de flux de treball,
 Not Allowed: Disabled User,No permès: usuari desactivat,
 Not Ancestors Of,Sense avantpassats de,
+<<<<<<< HEAD
 Not Descendants Of,Sense descendants de,
+=======
+Not Descendants Of,Sense descendents de,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not Equals,No Equival,
 Not In,No En,
 Not Linked to any record,No vinculats a cap registre,
@@ -1675,8 +1736,13 @@ Not a valid Workflow Action,No és una acció de flux de treball vàlida,
 Not a valid user,No és un usuari vàlid,
 Not a zip file,No és un fitxer zip,
 Not allowed for {0}: {1},No està permès per a {0}: {1},
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}","No es permet accedir a {0} perquè està vinculat a {1} '{2}' a la fila {3}, camp {4}",
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},No es permet accedir a aquest registre {0} perquè està vinculat a {1} '{2}' al camp {3},
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},No està permès per a {0}: {1} a la fila {2}. Camp restringit: {3},
+Not allowed for {0}: {1}. Restricted field: {2},No està permès per a {0}: {1}. Camp restringit: {2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,No es permet importar,
 Not allowed to change {0} after submission,No es pot canviar {0} després de ser presentat,
 Not allowed to print cancelled documents,No es permet imprimir documents cancel·lats,
@@ -1804,6 +1870,10 @@ Path to private Key File,Ruta al fitxer de clau privat,
 PayPal Settings,Ajustos de PayPal,
 PayPal payment gateway settings,configuració de la passarel·la de pagament de PayPal,
 Payment Cancelled,pagament cancel·lat,
+<<<<<<< HEAD
+=======
+Payment Failed,Error en el pagament,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,L&#39;èxit de pagament,
 Pending Approval,Pendent d&#39;aprovació,
 Pending Verification,Pendent de verificar,
@@ -3029,7 +3099,11 @@ zoom-out,menys-zoom,
 {0} has been successfully added to the Email Group.,{0} s'ha afegit al Grup de Correu Electrònic.,
 {0} has left the conversation in {1} {2},{0} ha deixat la conversa en {1} {2},
 {0} hours ago,Fa {0} hores,
+<<<<<<< HEAD
 {0} in row {1} cannot have both URL and child items,{0} a la fila {1} no pot tenir les dues coses URL i elements descendants,
+=======
+{0} in row {1} cannot have both URL and child items,{0} a la fila {1} no pot tenir les dues coses URL i elements descendents,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 {0} is a mandatory field,{0} és un camp obligatori,
 {0} is an invalid email address in 'Recipients',{0} és una adreça electrònica no vàlida a &quot;Destinataris&quot;,
 {0} is not a raw printing format.,{0} no és un format d&#39;impressió en brut.,
@@ -3070,7 +3144,11 @@ zoom-out,menys-zoom,
 {0} {1} added,S&#39;ha afegit {0} {1},
 {0} {1} already exists,{0} {1} ja existeix,
 "{0} {1} cannot be ""{2}"". It should be one of ""{3}""","{0} {1} no pot ser ""{2}"". Ha de ser un de ""{3}""",
+<<<<<<< HEAD
 {0} {1} cannot be a leaf node as it has children,{0} {1} no pot ser un node fulla perquè té descendants,
+=======
+{0} {1} cannot be a leaf node as it has children,{0} {1} no pot ser un node fulla perquè té descendents,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 "{0} {1} does not exist, select a new target to merge","{0} {1} no existeix, seleccioneu un nou objectiu per unir",
 {0} {1} not found,{0} {1} no trobat,
 {0} {1} to {2},{0} {1} a {2},
@@ -3200,6 +3278,10 @@ Click on the link below to approve the request,Feu clic a l’enllaç següent p
 Click on the lock icon to toggle public/private,Feu clic a la icona de bloqueig per alternar públic / privat,
 Click on {0} to generate Refresh Token.,Feu clic a {0} per generar un token d’actualització.,
 Close Condition,Estat de tancament,
+<<<<<<< HEAD
+=======
+Column {0},Columna {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,Columnes / Camps,
 "Configure notifications for mentions, assignments, energy points and more.","Configureu les notificacions per a mencions, assignacions, punts d&#39;energia i molt més.",
 Contact Email,Correu electrònic de contacte,
@@ -3281,6 +3363,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,Fracàs,
 Fetching default Global Search documents.,Obtenció de documents de cerca global per defecte.,
 Fetching posts...,S&#39;obtenen publicacions ...,
+<<<<<<< HEAD
+=======
+Field Mapping,Cartografia de camp,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,Camp per comprovar,
 File Information,Informació del fitxer,
 Filter By,Filtra per,
@@ -3435,6 +3521,10 @@ No posts yet,No hi ha publicacions,
 No records will be exported,No s’exportaran registres,
 No results found for {0} in Global Search,No s&#39;han trobat resultats per a {0} a la cerca global,
 No user found,No s&#39;ha trobat cap usuari,
+<<<<<<< HEAD
+=======
+Not Specified,Sense especificar,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,Registre de notificacions,
 Notification Settings,Configuració de notificació,
 Notification Subscribed Document,Notificació Document subscrit,
@@ -3590,6 +3680,10 @@ Untitled Column,Columna sense títol,
 Untranslated,Sense traduir,
 Upcoming Events,Pròxims esdeveniments,
 Update Existing Records,Actualitzar els registres existents,
+<<<<<<< HEAD
+=======
+Update Type,Tipus d’actualització,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,S&#39;ha actualitzat a una nova versió 🎉,
 "Updating {0} of {1}, {2}","Actualitzant {0} de {1}, {2}",
 Upload file,Penja el document,
@@ -3696,16 +3790,28 @@ Designation,Designació,
 Disabled,Deshabilitat,
 Doctype,DocType,
 Download Template,Descarregar plantilla,
+<<<<<<< HEAD
+=======
+Dr,Dr,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,Data De Venciment,
 Duplicate,Duplicar,
 Edit Profile,Edita el perfil,
 Email,Correu electrònic,
+<<<<<<< HEAD
+=======
+End Time,Hora de finalització,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,Introduir valor,
 Entity Type,Tipus d&#39;entitat,
 Error,Error,
 Expired,Caducat,
 Export,Exportació,
 Export not allowed. You need {0} role to export.,No es pot exportar. Cal el rol {0} per a exportar.,
+<<<<<<< HEAD
+=======
+Fetching...,S&#39;obté ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,camp,
 File Manager,Gestor de fitxers,
 Filters,Filtres,
@@ -3720,8 +3826,16 @@ Import Data from CSV / Excel files.,Importar dades des de fitxers CSV / Excel.,
 In Progress,En progrés,
 Intermediate,intermedi,
 Invite as User,Convida com usuari,
+<<<<<<< HEAD
 Loading...,Carregant ...,
 Location,Ubicació,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.","Sembla que hi ha un problema amb la configuració de la xarxa del servidor. En cas de fracàs, l&#39;import es reemborsarà al vostre compte.",
+Loading...,Carregant ...,
+Location,Ubicació,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,"Sembla que algú li va enviar a un URL incompleta. Si us plau, demanar-los que mirar-hi.",
+Master,Mestre,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,Missatge,
 Missing Values Required,Camps Obligatoris,
 Mobile No,Número de Mòbil,
@@ -3733,6 +3847,10 @@ Note,Nota,
 Offline,desconnectat,
 Open,Obert,
 Page {0} of {1},Pàgina {0} de {1},
+<<<<<<< HEAD
+=======
+Pay,Pagar,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,Pendent,
 Phone,Telèfon,
 Please click on the following link to set your new password,"Si us plau, feu clic al següent enllaç per configurar la nova contrasenya",
@@ -3782,6 +3900,10 @@ Welcome to {0},Benvingut a {0},
 Year,Any,
 Yearly,Anual,
 You,Vostè,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,També podeu copiar i enganxar aquest enllaç al teu navegador,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,i,
 {0} Name,{0} Nom,
 {0} is required,{0} és necessari,
@@ -4085,6 +4207,10 @@ Custom SCSS,SCSS personalitzat,
 Navbar,Barra de navegació,
 Source Message,Missatge font,
 Translated Message,Missatge traduït,
+<<<<<<< HEAD
+=======
+Verified By,Verified Per,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,L&#39;ús d&#39;aquesta consola pot permetre que els atacants us supliquin la identitat i us robin la informació. No introduïu ni enganxeu codi que no entengueu.,
 {0} m,{0} m,
 {0} h,{0} h,
@@ -4108,7 +4234,11 @@ No changes in document,No hi ha canvis al document,
 by Role,per Role,
 Document is only editable by users with role,El document només és editable pels usuaris amb funció,
 {0}: Other permission rules may also apply,{0}: també es poden aplicar altres regles de permís,
+<<<<<<< HEAD
 {0} Web page views,{0} Visualitzacions de pàgina,
+=======
+{0} Page Views,{0} Visualitzacions de pàgina,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,Amplia,
 Collapse,Replega,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.","El testimoni de portador no és vàlid, proporcioneu un testimoni d&#39;accés vàlid amb el prefix &quot;Portador&quot;.",
@@ -4117,6 +4247,10 @@ Collapse,Replega,
 {0} is not a valid Name,{0} no és un nom vàlid,
 Your system is being updated. Please refresh again after a few moments.,El vostre sistema s&#39;està actualitzant. Actualitzeu de nou després d’uns instants.,
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}: el registre enviat no es pot suprimir. Primer heu de {2} cancel·lar-la {3}.,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},Sèrie de noms no vàlida (. Falta) per a {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},S&#39;ha produït un error a {0},
 Status Updated,Estat actualitzat,
 You can also copy-paste this {0} to your browser,També podeu copiar-enganxar {0} al vostre navegador,
@@ -4138,11 +4272,21 @@ Is Billing Contact,És el contacte de facturació,
 Address And Contacts,Adreça i contactes,
 Lead Conversion Time,Temps de conversió del plom,
 Due Date Based On,Data de venciment basada,
+<<<<<<< HEAD
 Linked Documents,Documents enllaçats,
+=======
+Phone Number,Número de telèfon,
+Linked Documents,Documents enllaçats,
+Account SID,Compte SID,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,Passos,
 email,correu electrònic,
 Component,component,
 Subtitle,Subtítol,
+<<<<<<< HEAD
+=======
+Global Defaults,Valors per defecte globals,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,Prefix,
 Is Public,És públic,
 This chart will be available to all Users if this is set,Aquest gràfic estarà disponible per a tots els usuaris si està establert,
@@ -4329,6 +4473,10 @@ Dynamic Filters Section,Secció de filtres dinàmics,
 Please create Card first,"En primer lloc, creeu la targeta",
 Onboarding Permission,Permís d&#39;incorporació,
 Onboarding Step,Pas d’incorporació,
+<<<<<<< HEAD
+=======
+Is Mandatory,És obligatori,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,S&#39;omet,
 Create Entry,Crea una entrada,
 Update Settings,Actualitza la configuració,
@@ -4366,6 +4514,10 @@ Message (HTML),Missatge (HTML),
 Send Attachments,Envia fitxers adjunts,
 Testing,Proves,
 System Notification,Notificació del sistema,
+<<<<<<< HEAD
+=======
+WhatsApp,Què tal,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,Número Twilio,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","Per utilitzar WhatsApp per a empreses, inicialitzeu la <a href=""#Form/Twilio Settings"">configuració de Twilio</a> .",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","Per utilitzar Slack Channel, afegiu un <a href=""#List/Slack%20Webhook%20URL/List"">URL de Slack Webhook</a> .",
@@ -4500,6 +4652,10 @@ Add to ToDo,Afegeix a ToDo,
 {0} are currently {1},{0} actualment són {1},
 Currently Replying,Actualment respon,
 created {0},creat {0},
+<<<<<<< HEAD
+=======
+Make a call,Fer una trucada,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,Canvi,Coins
 Too Many Requests,Hi ha massa sol·licituds,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.",Les capçaleres d&#39;autorització no són vàlides; afegiu un testimoni amb un prefix d&#39;un dels següents: {0}.,
@@ -4664,6 +4820,7 @@ Value cannot be negative for {0}: {1},El valor no pot ser negatiu per a {0}: {1}
 Negative Value,Valor negatiu,
 Authentication failed while receiving emails from Email Account: {0}.,L&#39;autenticació ha fallat en rebre correus electrònics del compte de correu electrònic: {0}.,
 Message from server: {0},Missatge del servidor: {0},
+<<<<<<< HEAD
 Add Row,Afegir fila,
 Analytics,analítica,
 Anonymous,Anònim,
@@ -4796,3 +4953,5 @@ West Bengal,Bengala Occidental,
 Published on,Publicat el,
 Bottom,Part inferior,
 Top,Superior,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

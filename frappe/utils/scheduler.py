@@ -12,14 +12,21 @@ Events:
 import os
 import random
 import time
+<<<<<<< HEAD
 from typing import NoReturn
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 from croniter import CroniterBadCronError
 
 # imports - module imports
 import frappe
 from frappe.utils import cint, get_datetime, get_sites, now_datetime
+<<<<<<< HEAD
 from frappe.utils.background_jobs import set_niceness
+=======
+from frappe.utils.background_jobs import get_jobs, set_niceness
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
@@ -33,7 +40,11 @@ def cprint(*args, **kwargs):
 		pass
 
 
+<<<<<<< HEAD
 def start_scheduler() -> NoReturn:
+=======
+def start_scheduler():
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""Run enqueue_events_for_all_sites based on scheduler tick.
 	Specify scheduler_interval in seconds in common_site_config.json"""
 
@@ -45,7 +56,11 @@ def start_scheduler() -> NoReturn:
 		enqueue_events_for_all_sites()
 
 
+<<<<<<< HEAD
 def enqueue_events_for_all_sites() -> None:
+=======
+def enqueue_events_for_all_sites():
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""Loop through sites and enqueue events that are not already queued"""
 
 	if os.path.exists(os.path.join(".", ".restarting")):
@@ -61,6 +76,7 @@ def enqueue_events_for_all_sites() -> None:
 	for site in sites:
 		try:
 			enqueue_events_for_site(site=site)
+<<<<<<< HEAD
 		except Exception:
 			frappe.logger("scheduler").debug(f"Failed to enqueue events for site: {site}", exc_info=True)
 
@@ -68,6 +84,16 @@ def enqueue_events_for_all_sites() -> None:
 def enqueue_events_for_site(site: str) -> None:
 	def log_exc():
 		frappe.logger("scheduler").error(f"Exception in Enqueue Events for Site {site}", exc_info=True)
+=======
+		except Exception as e:
+			print(e.__class__, f"Failed to enqueue events for site: {site}")
+
+
+def enqueue_events_for_site(site):
+	def log_and_raise():
+		error_message = f"Exception in Enqueue Events for Site {site}\n{frappe.get_traceback()}"
+		frappe.logger("scheduler").error(error_message)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	try:
 		frappe.init(site=site)
@@ -78,15 +104,26 @@ def enqueue_events_for_site(site: str) -> None:
 		enqueue_events(site=site)
 
 		frappe.logger("scheduler").debug(f"Queued events for site {site}")
+<<<<<<< HEAD
 	except Exception as e:
 		if frappe.db.is_access_denied(e):
 			frappe.logger("scheduler").debug(f"Access denied for site {site}")
 		log_exc()
+=======
+	except frappe.db.OperationalError as e:
+		if frappe.db.is_access_denied(e):
+			frappe.logger("scheduler").debug(f"Access denied for site {site}")
+		else:
+			log_and_raise()
+	except Exception:
+		log_and_raise()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	finally:
 		frappe.destroy()
 
 
+<<<<<<< HEAD
 def enqueue_events(site: str) -> list[str] | None:
 	if schedule_jobs_based_on_activity():
 		enqueued_jobs = []
@@ -101,6 +138,21 @@ def enqueue_events(site: str) -> list[str] | None:
 				)
 
 		return enqueued_jobs
+=======
+def enqueue_events(site):
+	if schedule_jobs_based_on_activity():
+		frappe.flags.enqueued_jobs = []
+		queued_jobs = get_jobs(site=site, key="job_type").get(site) or []
+		for job_type in frappe.get_all("Scheduled Job Type", ("name", "method"), dict(stopped=0)):
+			if job_type.method not in queued_jobs:
+				# don't add it to queue if still pending
+				try:
+					frappe.get_doc("Scheduled Job Type", job_type.name).enqueue()
+				except CroniterBadCronError:
+					frappe.logger("scheduler").error(
+						f"Invalid Job on {frappe.local.site} - {job_type.name}", exc_info=True
+					)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def is_scheduler_inactive(verbose=True) -> bool:

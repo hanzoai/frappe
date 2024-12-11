@@ -18,8 +18,11 @@ frappe.ui.form.ControlRating = class ControlRating extends frappe.ui.form.Contro
 
 		$(this.input_area).html(star_template);
 
+<<<<<<< HEAD
 		if (this.disabled) return;
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		let me = this;
 		$(this.input_area)
 			.find("svg")

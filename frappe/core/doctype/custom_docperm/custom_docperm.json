@@ -27,6 +27,10 @@
   "report",
   "export",
   "import",
+<<<<<<< HEAD
+=======
+  "set_user_permissions",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "column_break_19",
   "share",
   "print",
@@ -179,6 +183,16 @@
    "label": "Import"
   },
   {
+<<<<<<< HEAD
+=======
+   "default": "0",
+   "description": "This role update User Permissions for a user",
+   "fieldname": "set_user_permissions",
+   "fieldtype": "Check",
+   "label": "Set User Permissions"
+  },
+  {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "column_break_19",
    "fieldtype": "Column Break"
   },
@@ -215,7 +229,11 @@
   }
  ],
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-02-20 13:19:04.889081",
+=======
+ "modified": "2020-12-03 15:20:48.296730",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Custom DocPerm",

@@ -2550,6 +2550,7 @@
  },
  "Sudan": {
   "code": "sd",
+<<<<<<< HEAD
   "currency": "SDG",
   "currency_fraction": "Piastre",
   "currency_fraction_units": 100,
@@ -2561,6 +2562,17 @@
   ],
   "isd": "+249"
 },
+=======
+  "currency_fraction": "Piastre",
+  "currency_fraction_units": 100,
+  "currency_symbol": "\u00a3",
+  "number_format": "#,###.##",
+  "timezones": [
+   "Africa/Khartoum"
+  ],
+  "isd": "+249"
+ },
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "Suriname": {
   "code": "sr",
   "currency": "SRD",

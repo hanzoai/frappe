@@ -29,7 +29,11 @@ frappe.ui.form.ControlGeolocation = class ControlGeolocation extends frappe.ui.f
 			this.make_map(value);
 		} else {
 			$(document).on("frappe.ui.Dialog:shown", () => {
+<<<<<<< HEAD
 				this.make_map();
+=======
+				this.make_map(value);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			});
 		}
 	}

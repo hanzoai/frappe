@@ -1,9 +1,24 @@
 import frappe
 from frappe import _
+<<<<<<< HEAD
 
 
 def get_modules_from_all_apps_for_user(user: str | None = None) -> list[dict]:
 	user = user or frappe.session.user
+=======
+from frappe.desk.moduleview import (
+	config_exists,
+	get_data,
+	get_module_link_items_from_list,
+	get_onboard_items,
+)
+
+
+def get_modules_from_all_apps_for_user(user=None):
+	if not user:
+		user = frappe.session.user
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	all_modules = get_modules_from_all_apps()
 	global_blocked_modules = frappe.get_doc("User", "Administrator").get_blocked_modules()
 	user_blocked_modules = frappe.get_doc("User", user).get_blocked_modules()
@@ -19,6 +34,12 @@ def get_modules_from_all_apps_for_user(user: str | None = None) -> list[dict]:
 		if module_name in empty_tables_by_module:
 			module["onboard_present"] = 1
 
+<<<<<<< HEAD
+=======
+		# Set defaults links
+		module["links"] = get_onboard_items(module["app"], frappe.scrub(module_name))[:5]
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return allowed_modules_list
 
 
@@ -48,7 +69,11 @@ def get_all_empty_tables_by_module():
 	empty_tables_by_module = {}
 
 	for doctype, module in results:
+<<<<<<< HEAD
 		if f"tab{doctype}" in empty_tables:
+=======
+		if "tab" + doctype in empty_tables:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if module in empty_tables_by_module:
 				empty_tables_by_module[module].append(doctype)
 			else:

@@ -12,3 +12,10 @@ class TestPage(FrappeTestCase):
 			frappe.NameError,
 			frappe.get_doc(dict(doctype="Page", page_name="DocType", module="Core")).insert,
 		)
+<<<<<<< HEAD
+=======
+		self.assertRaises(
+			frappe.NameError,
+			frappe.get_doc(dict(doctype="Page", page_name="Settings", module="Core")).insert,
+		)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

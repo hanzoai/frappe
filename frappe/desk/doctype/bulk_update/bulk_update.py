@@ -3,6 +3,7 @@
 
 import frappe
 from frappe import _
+<<<<<<< HEAD
 from frappe.core.doctype.submission_queue.submission_queue import queue_submission
 from frappe.model.document import Document
 from frappe.utils import cint
@@ -27,6 +28,13 @@ class BulkUpdate(Document):
 
 	# end: auto-generated types
 
+=======
+from frappe.model.document import Document
+from frappe.utils import cint
+
+
+class BulkUpdate(Document):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@frappe.whitelist()
 	def bulk_update(self):
 		self.check_permission("write")
@@ -48,12 +56,20 @@ class BulkUpdate(Document):
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 def submit_cancel_or_update_docs(doctype, docnames, action="submit", data=None, task_id=None):
+=======
+def submit_cancel_or_update_docs(doctype, docnames, action="submit", data=None):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if isinstance(docnames, str):
 		docnames = frappe.parse_json(docnames)
 
 	if len(docnames) < 20:
+<<<<<<< HEAD
 		return _bulk_action(doctype, docnames, action, data, task_id)
+=======
+		return _bulk_action(doctype, docnames, action, data)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	elif len(docnames) <= 500:
 		frappe.msgprint(_("Bulk operation is enqueued in background."), alert=True)
 		frappe.enqueue(
@@ -62,7 +78,10 @@ def submit_cancel_or_update_docs(doctype, docnames, action="submit", data=None, 
 			docnames=docnames,
 			action=action,
 			data=data,
+<<<<<<< HEAD
 			task_id=task_id,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			queue="short",
 			timeout=1000,
 		)
@@ -70,11 +89,16 @@ def submit_cancel_or_update_docs(doctype, docnames, action="submit", data=None, 
 		frappe.throw(_("Bulk operations only support up to 500 documents."), title=_("Too Many Documents"))
 
 
+<<<<<<< HEAD
 def _bulk_action(doctype, docnames, action, data, task_id=None):
+=======
+def _bulk_action(doctype, docnames, action, data):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if data:
 		data = frappe.parse_json(data)
 
 	failed = []
+<<<<<<< HEAD
 	num_documents = len(docnames)
 
 	for idx, docname in enumerate(docnames, 1):
@@ -88,6 +112,16 @@ def _bulk_action(doctype, docnames, action, data, task_id=None):
 				else:
 					doc.submit()
 					message = _("Submitting {0}").format(doctype)
+=======
+
+	for i, d in enumerate(docnames, 1):
+		doc = frappe.get_doc(doctype, d)
+		try:
+			message = ""
+			if action == "submit" and doc.docstatus.is_draft():
+				doc.submit()
+				message = _("Submitting {0}").format(doctype)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			elif action == "cancel" and doc.docstatus.is_submitted():
 				doc.cancel()
 				message = _("Cancelling {0}").format(doctype)
@@ -96,6 +130,7 @@ def _bulk_action(doctype, docnames, action, data, task_id=None):
 				doc.save()
 				message = _("Updating {0}").format(doctype)
 			else:
+<<<<<<< HEAD
 				failed.append(docname)
 			frappe.db.commit()
 			frappe.publish_progress(
@@ -107,12 +142,23 @@ def _bulk_action(doctype, docnames, action, data, task_id=None):
 
 		except Exception:
 			failed.append(docname)
+=======
+				failed.append(d)
+			frappe.db.commit()
+			show_progress(docnames, message, i, d)
+
+		except Exception:
+			failed.append(d)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			frappe.db.rollback()
 
 	return failed
 
 
+<<<<<<< HEAD
 @deprecated
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def show_progress(docnames, message, i, description):
 	n = len(docnames)
 	frappe.publish_progress(float(i) * 100 / n, title=message, description=description)

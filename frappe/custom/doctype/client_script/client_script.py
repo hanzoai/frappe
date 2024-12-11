@@ -5,6 +5,7 @@ from frappe.model.document import Document
 
 
 class ClientScript(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -20,6 +21,8 @@ class ClientScript(Document):
 		view: DF.Literal["List", "Form"]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def on_update(self):
 		frappe.clear_cache(doctype=self.dt)
 

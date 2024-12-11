@@ -1,8 +1,26 @@
+<<<<<<< HEAD
 @import "../espresso/colors";
 @import "../espresso/typography";
 @import "../espresso/shadows";
 @import "../espresso/spacing";
 @import "../espresso/borders";
+=======
+$gray-50: #f9fafa !default;
+$gray-100: #f4f5f6 !default;
+$gray-200: #eef0f2 !default;
+$gray-300: #e2e6e9 !default;
+$gray-400: #c8cfd5 !default;
+$gray-500: #a6b1b9 !default;
+$gray-600: #74808b !default;
+$gray-700: #4c5a67 !default;
+$gray-800: #313b44 !default;
+$gray-900: #192734 !default;
+
+$black: #000 !default;
+$primary: #2490ef !default;
+$primary-light: lighten($primary, 42%) !default;
+$light: $gray-50 !default;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 $body-color: $gray-700 !default;
 $text-muted: $gray-600 !default;
@@ -10,7 +28,10 @@ $border-color: $gray-300 !default;
 $headings-color: $gray-900 !default;
 $breadcrumb-bg: transparent !default;
 $navbar-bg: white !default;
+<<<<<<< HEAD
 $navbar-height: 48px;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 $container-max-widths: (
 	sm: 540px,

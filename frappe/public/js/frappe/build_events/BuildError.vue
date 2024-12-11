@@ -9,6 +9,7 @@
 		</div>
 	</div>
 </template>
+<<<<<<< HEAD
 
 <script setup>
 import { ref } from "vue";
@@ -47,6 +48,47 @@ defineExpose({ show, hide });
 </script>
 
 <style scoped>
+=======
+<script>
+export default {
+	name: "BuildError",
+	data() {
+		return {
+			data: null,
+		};
+	},
+	methods: {
+		show(data) {
+			this.data = data;
+		},
+		hide() {
+			this.data = null;
+		},
+		open_in_editor(location) {
+			frappe.socketio.socket.emit("open_in_editor", location);
+		},
+		error_component(error, i) {
+			let location = this.data.error.errors[i].location;
+			let location_string = `${location.file}:${location.line}:${location.column}`;
+			let template = error.replace(
+				" > " + location_string,
+				` &gt; <a class="file-link" @click="open">${location_string}</a>`
+			);
+
+			return {
+				template: `<div>${template}</div>`,
+				methods: {
+					open() {
+						frappe.socketio.socket.emit("open_in_editor", location);
+					},
+				},
+			};
+		},
+	},
+};
+</script>
+<style>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .build-error-overlay {
 	position: fixed;
 	top: 0;

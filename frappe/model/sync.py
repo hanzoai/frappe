@@ -7,8 +7,11 @@
 import os
 
 import frappe
+<<<<<<< HEAD
 from frappe.cache_manager import clear_controller_cache
 from frappe.model.base_document import get_controller
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.modules.import_file import import_file_by_path
 from frappe.modules.patch_handler import _patch_mode
 from frappe.utils import update_progress_bar
@@ -137,6 +140,7 @@ def get_doc_files(files, start_path):
 							files.append(doc_path)
 
 	return files
+<<<<<<< HEAD
 
 
 def remove_orphan_doctypes():
@@ -174,3 +178,5 @@ def remove_orphan_doctypes():
 		update_progress_bar("Deleting orphaned DocTypes", i, len(orphan_doctypes))
 	frappe.db.commit()
 	print()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

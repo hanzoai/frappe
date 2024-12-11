@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 Auto Repeat Schedule,Programar Repetición Automática,
+=======
+DocType: Auto Repeat,Auto Repeat Schedule,Programar Repetición Automática
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

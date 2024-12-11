@@ -8,6 +8,7 @@ from frappe.utils import nowdate
 
 
 class SMSSettings(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -23,6 +24,8 @@ class SMSSettings(Document):
 		sms_gateway_url: DF.SmallText
 		use_post: DF.Check
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	pass
 
 

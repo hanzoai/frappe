@@ -2,9 +2,14 @@
 {{ head_html or "" }}
 {%- endif %}
 
+<<<<<<< HEAD
 {%- if theme and theme.name != 'Standard' -%}
 <link type="text/css" rel="stylesheet" href="{{ theme.theme_url }}">
 
+=======
+{%- if theme.name != 'Standard' -%}
+<link type="text/css" rel="stylesheet" href="{{ theme.theme_url }}">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 {%- else -%}
 {{ include_style('website.bundle.css') }}
 {%- endif -%}

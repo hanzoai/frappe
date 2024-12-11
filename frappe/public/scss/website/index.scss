@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 @import "variables";
 @import "../../css/fonts/inter/inter.scss";
 @import "../common/quill";
+=======
+@import "../common/quill";
+@import "variables";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 @import "~bootstrap/scss/bootstrap";
 @import "~cropperjs/dist/cropper.min";
 @import "../common/mixins";
@@ -81,13 +86,20 @@
 
 .dropdown-menu {
 	padding: 0.25rem;
+<<<<<<< HEAD
 	box-shadow: var(--shadow-2xl);
+=======
+	box-shadow: var(--shadow-lg);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	border-color: var(--gray-200);
 }
 
 .dropdown-item {
 	border-radius: $dropdown-border-radius;
+<<<<<<< HEAD
 	padding: var(--dropdown-padding) !important;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .dropdown-item:active {
@@ -166,11 +178,14 @@ a.card {
 	text-decoration: none;
 }
 
+<<<<<<< HEAD
 a.card-link,
 a.card-link:hover {
 	text-decoration: underline;
 }
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .hidden {
 	@extend .d-none;
 }

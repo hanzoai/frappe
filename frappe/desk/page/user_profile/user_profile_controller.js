@@ -145,6 +145,10 @@ class UserProfile {
 			});
 	}
 
+<<<<<<< HEAD
+=======
+	// eslint-disable-next-line no-unused-vars
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	render_percentage_chart(field, title) {
 		frappe
 			.xcall(

@@ -182,6 +182,7 @@ frappe.views.BaseList = class BaseList {
 	}
 
 	set_title() {
+<<<<<<< HEAD
 		this.page.set_title(this.page_title, null, true, "", this.meta?.description);
 	}
 
@@ -213,6 +214,32 @@ frappe.views.BaseList = class BaseList {
 
 			this.views_menu = this.page.add_custom_button_group(
 				label_map[this.view_name] || label_map["List"],
+=======
+		this.page.set_title(this.page_title);
+	}
+
+	setup_view_menu() {
+		// TODO: add all icons
+		const icon_map = {
+			Image: "image-view",
+			List: "list",
+			Report: "small-file",
+			Calendar: "calendar",
+			Gantt: "gantt",
+			Kanban: "kanban",
+			Dashboard: "dashboard",
+			Map: "map",
+		};
+
+		if (frappe.boot.desk_settings.view_switcher && !this.meta.force_re_route_to_default_view) {
+			/* @preserve
+			for translation, don't remove
+			__("List View") __("Report View") __("Dashboard View") __("Gantt View"),
+			__("Kanban View") __("Calendar View") __("Image View") __("Inbox View"),
+			__("Tree View") __("Map View") */
+			this.views_menu = this.page.add_custom_button_group(
+				__("{0} View", [this.view_name]),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				icon_map[this.view_name] || "list"
 			);
 			this.views_list = new frappe.views.ListViewSelect({
@@ -222,7 +249,10 @@ frappe.views.BaseList = class BaseList {
 				list_view: this,
 				sidebar: this.list_sidebar,
 				icon_map: icon_map,
+<<<<<<< HEAD
 				label_map: label_map,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			});
 		}
 	}
@@ -240,6 +270,7 @@ frappe.views.BaseList = class BaseList {
 				$secondary_action.addClass("visible-xs");
 			}
 		} else {
+<<<<<<< HEAD
 			this.refresh_button = this.page.add_action_icon(
 				"es-line-reload",
 				() => {
@@ -248,6 +279,11 @@ frappe.views.BaseList = class BaseList {
 				"",
 				__("Reload List")
 			);
+=======
+			this.refresh_button = this.page.add_action_icon("refresh", () => {
+				this.refresh();
+			});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 
@@ -323,9 +359,13 @@ frappe.views.BaseList = class BaseList {
 		this.filter_area = new FilterArea(this);
 
 		if (this.filters && this.filters.length > 0) {
+<<<<<<< HEAD
 			return this.filter_area.set(this.filters).catch(() => {
 				this.filter_area.clear(false);
 			});
+=======
+			return this.filter_area.set(this.filters);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 
@@ -698,7 +738,12 @@ class FilterArea {
 
 		const fields_dict = this.list_view.page.fields_dict;
 
+<<<<<<< HEAD
 		return filters.reduce((out, filter) => {
+=======
+		let out = filters.reduce((out, filter) => {
+			// eslint-disable-next-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			const [dt, fieldname, condition, value] = filter;
 			out.promise = out.promise || Promise.resolve();
 			out.non_standard_filters = out.non_standard_filters || [];
@@ -708,9 +753,13 @@ class FilterArea {
 			if (
 				fields_dict[fieldname] &&
 				(condition === "=" ||
+<<<<<<< HEAD
 					(condition === "like" && fields_dict[fieldname]?.df?.fieldtype != "Link") ||
 					(condition === "descendants of (inclusive)" &&
 						fields_dict[fieldname]?.df?.fieldtype == "Link"))
+=======
+					(condition === "like" && fields_dict[fieldname]?.df?.fieldtype != "Link"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			) {
 				// standard filter
 				out.promise = out.promise.then(() => fields_dict[fieldname].set_value(value));
@@ -720,6 +769,11 @@ class FilterArea {
 			}
 			return out;
 		}, {});
+<<<<<<< HEAD
+=======
+
+		return out;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	remove_filters(filters) {
@@ -824,6 +878,7 @@ class FilterArea {
 							options = options.join("\n");
 						}
 					}
+<<<<<<< HEAD
 					if (
 						df.fieldtype == "Link" &&
 						df.options &&
@@ -835,6 +890,12 @@ class FilterArea {
 					return {
 						fieldtype: fieldtype,
 						label: __(df.label, null, df.parent),
+=======
+
+					return {
+						fieldtype: fieldtype,
+						label: __(df.label),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						options: options,
 						fieldname: df.fieldname,
 						condition: condition,
@@ -877,7 +938,11 @@ class FilterArea {
 			<div class="btn-group">
 				<button class="btn btn-default btn-sm filter-button">
 					<span class="filter-icon">
+<<<<<<< HEAD
 						${frappe.utils.icon("es-line-filter")}
+=======
+						${frappe.utils.icon("filter")}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					</span>
 					<span class="button-label hidden-xs">
 					${__("Filter")}
@@ -885,7 +950,11 @@ class FilterArea {
 				</button>
 				<button class="btn btn-default btn-sm filter-x-button" title="${__("Clear all filters")}">
 					<span class="filter-icon">
+<<<<<<< HEAD
 						${frappe.utils.icon("es-small-close")}
+=======
+						${frappe.utils.icon("filter-x")}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					</span>
 				</button>
 			</div>

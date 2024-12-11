@@ -9,6 +9,7 @@ from frappe.model.document import Document
 
 
 class KanbanBoard(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -28,12 +29,18 @@ class KanbanBoard(Document):
 		show_labels: DF.Check
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		self.validate_column_name()
 
 	def on_change(self):
 		frappe.clear_cache(doctype=self.reference_doctype)
+<<<<<<< HEAD
 		frappe.cache.delete_keys("_user_settings")
+=======
+		frappe.cache().delete_keys("_user_settings")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def before_insert(self):
 		for column in self.columns:

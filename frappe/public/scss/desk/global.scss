@@ -5,9 +5,13 @@ html {
 body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+<<<<<<< HEAD
 	color: var(--text-muted);
 	font-weight: var(--weight-regular);
 	letter-spacing: 0.02em;
+=======
+	color: var(--text-light);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	background-color: var(--bg-color);
 
 	&.full-width {
@@ -88,7 +92,11 @@ a.badge-hover {
 
 .bold,
 .strong {
+<<<<<<< HEAD
 	font-weight: var(--weight-bold);
+=======
+	font-weight: bold;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 pre {
@@ -219,6 +227,7 @@ h4 {
 	color: var(--text-color);
 	margin-bottom: var(--margin-md);
 }
+<<<<<<< HEAD
 // override default gray-900 from bootstrap to support dark mode.
 h1,
 h2,
@@ -234,6 +243,9 @@ h6,
 .h6 {
 	color: var(--heading-color);
 }
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 h1,
 h2,
 h3 {
@@ -245,7 +257,11 @@ p {
 }
 
 .small {
+<<<<<<< HEAD
 	@include get_textstyle("sm", "regular");
+=======
+	font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 h1 {
@@ -279,19 +295,35 @@ h2 {
 .btn-group-sm > .btn,
 .btn-sm {
 	padding: var(--padding-xs) var(--padding-sm);
+<<<<<<< HEAD
 	@include get_textstyle("base", "regular");
+=======
+	font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .btn-group {
 	.btn {
 		box-shadow: none;
+<<<<<<< HEAD
 		&:nth-child(2) {
 			border-left: 1px solid var(--btn-group-border-color);
+=======
+		outline: 1px solid var(--btn-group-border-color);
+
+		&:not(:first-child) {
+			margin-left: 1px;
+		}
+
+		&:focus {
+			outline: 2px solid var(--dark-border-color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 }
 
 .select-group-btn {
+<<<<<<< HEAD
 	.dropdown-toggle-split {
 		padding-left: 0.375rem !important;
 		padding-right: 0.375rem !important;
@@ -300,6 +332,10 @@ h2 {
 		&::after {
 			display: none;
 		}
+=======
+	.dropdown-toggle-split::after {
+		display: none;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	.dropdown-item {
@@ -326,7 +362,11 @@ h2 {
 
 .input-xs {
 	height: 26px;
+<<<<<<< HEAD
 	@include get_textstyle("base", "regular");
+=======
+	font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 select.input-xs {
@@ -340,7 +380,11 @@ select.input-xs {
 }
 
 .bold {
+<<<<<<< HEAD
 	font-weight: var(--weight-semibold) !important;
+=======
+	font-weight: 600;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .text-color {
@@ -350,16 +394,26 @@ select.input-xs {
 /* dropdowns */
 
 .dropdown-item {
+<<<<<<< HEAD
 	border-radius: 8px;
 	padding: var(--dropdown-padding) !important;
+=======
+	border-radius: 4px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .dropdown-menu {
 	padding: 4px;
+<<<<<<< HEAD
 	@include get_textstyle("base", "regular");
 	max-height: 500px;
 	overflow: auto;
 	border: 1px solid var(--subtle-accent);
+=======
+	font-size: var(--text-md);
+	max-height: 500px;
+	overflow: auto;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	.dropdown-divider {
 		margin: 4px 0;
@@ -375,7 +429,10 @@ select.input-xs {
 	a {
 		transition: none;
 		cursor: pointer;
+<<<<<<< HEAD
 		text-decoration: none;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	a:active {
 		--icon-stroke: #{$component-active-color};
@@ -383,7 +440,11 @@ select.input-xs {
 
 	.divider,
 	.dropdown-divider {
+<<<<<<< HEAD
 		margin: 4px;
+=======
+		margin: 0px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	:last-child {
@@ -398,7 +459,11 @@ select.input-xs {
 }
 
 .custom-control.custom-switch {
+<<<<<<< HEAD
 	@include get_textstyle("base", "regular");
+=======
+	font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	line-height: 1.6;
 
 	.custom-control-input ~ .custom-control-label {
@@ -421,7 +486,12 @@ select.input-xs {
 // }
 
 .head-title {
+<<<<<<< HEAD
 	@include get_textstyle("lg", "bold");
+=======
+	font-size: var(--text-lg);
+	font-weight: 700;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	color: var(--heading-color);
 }
 
@@ -430,17 +500,23 @@ kbd {
 	font-family: var(--font-stack);
 	color: var(--text-light);
 	line-height: 1.2em;
+<<<<<<< HEAD
 	letter-spacing: 0.02em;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	height: 20px;
 	padding: 4px 8px;
 }
 
 .table {
 	color: var(--text-color);
+<<<<<<< HEAD
 	th,
 	td {
 		padding: 0.5rem;
 	}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .appreciation {
@@ -458,24 +534,38 @@ kbd {
 }
 
 .standard-sidebar {
+<<<<<<< HEAD
 	@include get_textstyle("base", "regular");
+=======
+	font-size: var(--text-base);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	.standard-sidebar-section .standard-sidebar-label {
 		margin-bottom: var(--margin-md);
 		margin-top: var(--margin-sm);
+<<<<<<< HEAD
 		width: 100%;
 
 		&:focus-visible {
 			text-decoration: underline;
 		}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	.standard-sidebar-item {
 		@include flex(flex, null, center, null);
+<<<<<<< HEAD
 		@include get_textstyle("base", "regular");
 		padding: 8px 12px;
 		margin-bottom: 2px;
 		border-radius: var(--border-radius);
+=======
+		font-size: var(--text-base);
+		padding: 8px 12px;
+		margin-bottom: 2px;
+		border-radius: var(--border-radius-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		overflow: hidden;
 		cursor: pointer;
 
@@ -487,7 +577,11 @@ kbd {
 			text-overflow: ellipsis;
 		}
 
+<<<<<<< HEAD
 		&:focus-within {
+=======
+		&:focus {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			background-color: var(--sidebar-select-color);
 			outline: 0;
 			text-decoration: none;
@@ -502,6 +596,7 @@ kbd {
 			background-color: var(--sidebar-select-color);
 		}
 
+<<<<<<< HEAD
 		> a {
 			color: var(--text-color);
 			text-decoration: none;
@@ -509,6 +604,11 @@ kbd {
 			&:focus-visible {
 				text-decoration: underline;
 			}
+=======
+		a {
+			color: var(--text-color);
+			text-decoration: none;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		svg {
@@ -594,9 +694,12 @@ body.no-sidebar {
 
 .app-logo {
 	width: 24px;
+<<<<<<< HEAD
 	h4 {
 		margin-top: 0;
 	}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .alt-pressed .alt-underline {
@@ -631,12 +734,17 @@ details > summary:focus {
 .uppercase {
 	padding-bottom: var(--padding-xs);
 	text-transform: uppercase;
+<<<<<<< HEAD
 	@include get_textstyle("sm", "regular");
+=======
+	font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	letter-spacing: 0.4px;
 	color: var(--text-muted);
 }
 
 .text-regular {
+<<<<<<< HEAD
 	@include get_textstyle("base", "regular");
 }
 
@@ -650,6 +758,21 @@ details > summary:focus {
 
 .text-large {
 	@include get_textstyle("lg", "regular");
+=======
+	font-size: var(--text-base);
+}
+
+.text-medium {
+	font-size: var(--text-md);
+}
+
+.text-small {
+	font-size: var(--text-sm);
+}
+
+.text-large {
+	font-size: var(--text-lg);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .disable-click {
@@ -680,7 +803,11 @@ details > summary:focus {
 }
 
 .dropdown-menu.small {
+<<<<<<< HEAD
 	@include get_textstyle("sm", "regular");
+=======
+	font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	min-width: 140px;
 	.dropdown-item {
 		padding: var(--padding-xs);

@@ -7,6 +7,7 @@ from frappe.model.document import Document
 
 
 class EmailUnsubscribe(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -21,6 +22,8 @@ class EmailUnsubscribe(Document):
 		reference_name: DF.DynamicLink | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		if not self.global_unsubscribe and not (self.reference_doctype and self.reference_name):
 			frappe.throw(_("Reference DocType and Reference Name are required"), frappe.MandatoryError)

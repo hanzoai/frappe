@@ -19,20 +19,33 @@ def deferred_insert(doctype: str, records: list[Union[dict, "Document"]] | str):
 		_records = records
 
 	try:
+<<<<<<< HEAD
 		frappe.cache.rpush(f"{queue_prefix}{doctype}", _records)
+=======
+		frappe.cache().rpush(f"{queue_prefix}{doctype}", _records)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	except redis.exceptions.ConnectionError:
 		for record in records:
 			insert_record(record, doctype)
 
 
 def save_to_db():
+<<<<<<< HEAD
 	queue_keys = frappe.cache.get_keys(queue_prefix)
+=======
+	queue_keys = frappe.cache().get_keys(queue_prefix)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	for key in queue_keys:
 		record_count = 0
 		queue_key = get_key_name(key)
 		doctype = get_doctype_name(key)
+<<<<<<< HEAD
 		while frappe.cache.llen(queue_key) > 0 and record_count <= 500:
 			records = frappe.cache.lpop(queue_key)
+=======
+		while frappe.cache().llen(queue_key) > 0 and record_count <= 500:
+			records = frappe.cache().lpop(queue_key)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			records = json.loads(records.decode("utf-8"))
 			if isinstance(records, dict):
 				record_count += 1

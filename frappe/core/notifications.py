@@ -11,6 +11,10 @@ def get_notification_config():
 			"Communication": {"status": "Open", "communication_type": "Communication"},
 			"ToDo": "frappe.core.notifications.get_things_todo",
 			"Event": "frappe.core.notifications.get_todays_events",
+<<<<<<< HEAD
+=======
+			"Error Snapshot": {"seen": 0, "parent_error_snapshot": None},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			"Workflow Action": {"status": "Open"},
 		},
 	}
@@ -31,10 +35,18 @@ def get_things_todo(as_list=False):
 
 	if as_list:
 		return data
+<<<<<<< HEAD
 	return data[0][0]
 
 
 def get_todays_events(as_list: bool = False):
+=======
+	else:
+		return data[0][0]
+
+
+def get_todays_events(as_list=False):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""Returns a count of todays events in calendar"""
 	from frappe.desk.doctype.event.event import get_events
 	from frappe.utils import nowdate

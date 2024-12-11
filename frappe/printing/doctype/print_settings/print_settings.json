@@ -47,7 +47,11 @@
    "default": "1",
    "fieldname": "repeat_header_footer",
    "fieldtype": "Check",
+<<<<<<< HEAD
    "label": "Repeat Header and Footer"
+=======
+   "label": "Repeat Header and Footer in PDF"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "column_break_4",
@@ -176,7 +180,11 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-05-30 14:55:25.740691",
+=======
+ "modified": "2021-09-17 12:59:14.783694",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Printing",
  "name": "Print Settings",
@@ -193,6 +201,9 @@
  "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
+<<<<<<< HEAD
  "states": [],
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "track_changes": 1
 }

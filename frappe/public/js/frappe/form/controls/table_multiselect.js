@@ -159,7 +159,11 @@ frappe.ui.form.ControlTableMultiSelect = class ControlTableMultiSelect extends (
 		let me = this;
 
 		awesomplete.filter = function (item) {
+<<<<<<< HEAD
 			if (me._rows_list.includes(item.value)) {
+=======
+			if (in_list(me._rows_list, item.value)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				return false;
 			}
 

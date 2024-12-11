@@ -14,8 +14,22 @@ from frappe.desk.reportview import clean_params, parse_json
 from frappe.model.utils import render_include
 from frappe.modules import get_module_path, scrub
 from frappe.monitor import add_data_to_monitor
+<<<<<<< HEAD
 from frappe.permissions import get_role_permissions, has_permission
 from frappe.utils import cint, cstr, flt, format_duration, get_html_format, sbool
+=======
+from frappe.permissions import get_role_permissions
+from frappe.utils import (
+	cint,
+	cstr,
+	flt,
+	format_duration,
+	get_html_format,
+	get_url_to_form,
+	gzip_decompress,
+	sbool,
+)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_report_doc(report_name):
@@ -36,6 +50,10 @@ def get_report_doc(report_name):
 
 		# Follow whatever the custom report has set for prepared report field
 		doc.prepared_report = custom_report_doc.prepared_report
+<<<<<<< HEAD
+=======
+		doc.disable_prepared_report = custom_report_doc.disable_prepared_report
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not doc.is_permitted():
 		frappe.throw(
@@ -119,7 +137,11 @@ def generate_report_result(
 		"report_summary": report_summary,
 		"skip_total_row": skip_total_row or 0,
 		"status": None,
+<<<<<<< HEAD
 		"execution_time": frappe.cache.hget("report_execution_time", report.name) or 0,
+=======
+		"execution_time": frappe.cache().hget("report_execution_time", report.name) or 0,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 
@@ -140,6 +162,16 @@ def normalize_result(result, columns):
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
+=======
+def background_enqueue_run(report_name, filters=None, user=None):
+	from frappe.core.doctype.prepared_report.prepared_report import make_prepared_report
+
+	return make_prepared_report(report_name, filters)
+
+
+@frappe.whitelist()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def get_script(report_name):
 	report = get_report_doc(report_name)
 	module = report.module or frappe.db.get_value("DocType", report.ref_doctype, "module")
@@ -170,7 +202,11 @@ def get_script(report_name):
 	return {
 		"script": render_include(script),
 		"html_format": html_format,
+<<<<<<< HEAD
 		"execution_time": frappe.cache.hget("report_execution_time", report_name) or 0,
+=======
+		"execution_time": frappe.cache().hget("report_execution_time", report_name) or 0,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"filters": report.filters,
 		"custom_report_name": report.name if report.get("is_custom_report") else None,
 	}
@@ -195,16 +231,23 @@ def run(
 	parent_field=None,
 	are_default_filters=True,
 ):
+<<<<<<< HEAD
 	if not user:
 		user = frappe.session.user
 	validate_filters_permissions(report_name, filters, user)
 	report = get_report_doc(report_name)
+=======
+	report = get_report_doc(report_name)
+	if not user:
+		user = frappe.session.user
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if not frappe.has_permission(report.ref_doctype, "report"):
 		frappe.msgprint(
 			_("Must have report permission to access this report."),
 			raise_exception=True,
 		)
 
+<<<<<<< HEAD
 	result = None
 
 	if sbool(are_default_filters) and report.custom_filters:
@@ -226,6 +269,28 @@ def run(
 	except Exception:
 		frappe.log_error("Report Error")
 		raise
+=======
+	if sbool(are_default_filters) and report.custom_filters:
+		filters = report.custom_filters
+
+	if (
+		report.prepared_report
+		and not report.disable_prepared_report
+		and not sbool(ignore_prepared_report)
+		and not custom_columns
+	):
+		dn = None
+		if filters:
+			if isinstance(filters, str):
+				filters = json.loads(filters)
+
+			dn = filters.pop("prepared_report_name", None)
+
+		result = get_prepared_report_result(report, filters, dn, user)
+	else:
+		result = generate_report_result(report, filters, user, custom_columns, is_tree, parent_field)
+		add_data_to_monitor(report=report.reference_report or report.name)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	result["add_total_row"] = report.add_total_row and not result.get("skip_total_row", False)
 
@@ -268,7 +333,11 @@ def add_custom_column_data(custom_columns, result):
 	return result
 
 
+<<<<<<< HEAD
 def get_prepared_report_result(report, filters, dn="", user=None):
+=======
+def get_prepared_report_result(report, filters, dn=None, user=None):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	from frappe.core.doctype.prepared_report.prepared_report import get_completed_prepared_report
 
 	def get_report_data(doc, data):
@@ -324,7 +393,10 @@ def export_query():
 	file_format_type = form_params.file_format_type
 	custom_columns = frappe.parse_json(form_params.custom_columns or "[]")
 	include_indentation = form_params.include_indentation
+<<<<<<< HEAD
 	include_filters = form_params.include_filters
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	visible_idx = form_params.visible_idx
 
 	if isinstance(visible_idx, str):
@@ -332,8 +404,11 @@ def export_query():
 
 	data = run(report_name, form_params.filters, custom_columns=custom_columns, are_default_filters=False)
 	data = frappe._dict(data)
+<<<<<<< HEAD
 	data.filters = form_params.applied_filters
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if not data.columns:
 		frappe.respond_as_web_page(
 			_("No data to export"),
@@ -342,9 +417,13 @@ def export_query():
 		return
 
 	format_duration_fields(data)
+<<<<<<< HEAD
 	xlsx_data, column_widths = build_xlsx_data(
 		data, visible_idx, include_indentation, include_filters=include_filters
 	)
+=======
+	xlsx_data, column_widths = build_xlsx_data(data, visible_idx, include_indentation)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if file_format_type == "CSV":
 		content = get_csv_bytes(xlsx_data, csv_params)
@@ -369,7 +448,11 @@ def format_duration_fields(data: frappe._dict) -> None:
 				row[index] = format_duration(row[index])
 
 
+<<<<<<< HEAD
 def build_xlsx_data(data, visible_idx, include_indentation, include_filters=False, ignore_visible_idx=False):
+=======
+def build_xlsx_data(data, visible_idx, include_indentation, ignore_visible_idx=False):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	EXCEL_TYPES = (
 		str,
 		bool,
@@ -389,6 +472,7 @@ def build_xlsx_data(data, visible_idx, include_indentation, include_filters=Fals
 		# Note: converted for faster lookups
 		visible_idx = set(visible_idx)
 
+<<<<<<< HEAD
 	result = []
 	column_widths = []
 
@@ -412,11 +496,23 @@ def build_xlsx_data(data, visible_idx, include_indentation, include_filters=Fals
 		if column.get("hidden"):
 			continue
 		column_data.append(_(column.get("label")))
+=======
+	result = [[]]
+	column_widths = []
+
+	for column in data.columns:
+		if column.get("hidden"):
+			continue
+		result[0].append(_(column.get("label")))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		column_width = cint(column.get("width", 0))
 		# to convert into scale accepted by openpyxl
 		column_width /= 10
 		column_widths.append(column_width)
+<<<<<<< HEAD
 	result.append(column_data)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# build table from result
 	for row_idx, row in enumerate(data.result):
@@ -524,7 +620,12 @@ def get_data_for_custom_field(doctype, field, names=None):
 			names = frappe.json.loads(names)
 		filters.update({"name": ["in", names]})
 
+<<<<<<< HEAD
 	return frappe._dict(frappe.get_list(doctype, filters=filters, fields=["name", field], as_list=1))
+=======
+	value_map = frappe._dict(frappe.get_list(doctype, filters=filters, fields=["name", field], as_list=1))
+	return value_map
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_data_for_custom_report(columns, result):
@@ -704,7 +805,11 @@ def get_linked_doctypes(columns, data):
 
 	columns_dict = get_columns_dict(columns)
 
+<<<<<<< HEAD
 	for idx in range(len(columns)):
+=======
+	for idx, _ in enumerate(columns):  # noqa: F402
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		df = columns_dict[idx]
 		if df.get("fieldtype") == "Link":
 			if data and isinstance(data[0], list | tuple):
@@ -785,6 +890,7 @@ def get_user_match_filters(doctypes, user):
 			match_filters[dt] = filter_list
 
 	return match_filters
+<<<<<<< HEAD
 
 
 def validate_filters_permissions(report_name, filters=None, user=None):
@@ -808,3 +914,5 @@ def validate_filters_permissions(report_name, filters=None, user=None):
 						linked_doctype, filters[field.fieldname]
 					)
 				)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

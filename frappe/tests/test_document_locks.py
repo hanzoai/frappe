@@ -18,6 +18,7 @@ class TestDocumentLocks(FrappeTestCase):
 		self.assertRaises(frappe.DocumentLockedError, todo.lock)
 		todo_1.unlock()
 
+<<<<<<< HEAD
 	def test_operations_on_locked_documents(self):
 		todo = frappe.get_doc(dict(doctype="ToDo", description="testing operations")).insert()
 		todo.lock()
@@ -38,6 +39,8 @@ class TestDocumentLocks(FrappeTestCase):
 		self.assertEqual(doc.is_locked, False)
 		self.assertEqual(todo.is_locked, False)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_locks_auto_expiry(self):
 		todo = frappe.get_doc(dict(doctype="ToDo", description=frappe.generate_hash())).insert()
 		todo.lock()

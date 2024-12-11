@@ -4,6 +4,7 @@
 import frappe
 from frappe.model.document import Document
 
+<<<<<<< HEAD
 DEFAULT_ENABLED_CURRENCIES = ("INR", "USD", "GBP", "EUR", "AED", "AUD", "JPY", "CNY", "CHF")
 
 
@@ -45,3 +46,10 @@ class Currency(Document):
 
 def enable_default_currencies():
 	frappe.db.set_value("Currency", {"name": ("in", DEFAULT_ENABLED_CURRENCIES)}, "enabled", 1)
+=======
+
+class Currency(Document):
+	def validate(self):
+		if not frappe.flags.in_install_app:
+			frappe.clear_cache()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

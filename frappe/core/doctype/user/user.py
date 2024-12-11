@@ -1,7 +1,10 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+<<<<<<< HEAD
 
 from collections.abc import Iterable
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from datetime import timedelta
 
 import frappe
@@ -9,7 +12,10 @@ import frappe.defaults
 import frappe.permissions
 import frappe.share
 from frappe import STANDARD_USERS, _, msgprint, throw
+<<<<<<< HEAD
 from frappe.apps import get_default_path
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.auth import MAX_PASSWORD_SIZE
 from frappe.core.doctype.user_type.user_type import user_linked_with_permission_on_doctype
 from frappe.desk.doctype.notification_settings.notification_settings import (
@@ -36,7 +42,11 @@ from frappe.utils.deprecations import deprecated
 from frappe.utils.password import check_password, get_password_reset_limit
 from frappe.utils.password import update_password as _update_password
 from frappe.utils.user import get_system_managers
+<<<<<<< HEAD
 from frappe.website.utils import get_home_page, is_signup_disabled
+=======
+from frappe.website.utils import is_signup_disabled
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 desk_properties = (
 	"search_bar",
@@ -51,6 +61,7 @@ desk_properties = (
 
 
 class User(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -135,6 +146,8 @@ class User(Document):
 		username: DF.Data | None
 		view_switcher: DF.Check
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	__new_password = None
 
 	def __setup__(self):
@@ -160,8 +173,13 @@ class User(Document):
 
 	def after_insert(self):
 		create_notification_settings(self.name)
+<<<<<<< HEAD
 		frappe.cache.delete_key("users_for_mentions")
 		frappe.cache.delete_key("enabled_users")
+=======
+		frappe.cache().delete_key("users_for_mentions")
+		frappe.cache().delete_key("enabled_users")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def validate(self):
 		# clear new password
@@ -245,10 +263,17 @@ class User(Document):
 			frappe.defaults.set_default("time_zone", self.time_zone, self.name)
 
 		if self.has_value_changed("enabled"):
+<<<<<<< HEAD
 			frappe.cache.delete_key("users_for_mentions")
 			frappe.cache.delete_key("enabled_users")
 		elif self.has_value_changed("allow_in_mentions") or self.has_value_changed("user_type"):
 			frappe.cache.delete_key("users_for_mentions")
+=======
+			frappe.cache().delete_key("users_for_mentions")
+			frappe.cache().delete_key("enabled_users")
+		elif self.has_value_changed("allow_in_mentions") or self.has_value_changed("user_type"):
+			frappe.cache().delete_key("users_for_mentions")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def has_website_permission(self, ptype, user, verbose=False):
 		"""Returns true if current user is the session user"""
@@ -387,6 +412,7 @@ class User(Document):
 		return (self.first_name or "") + (self.first_name and " " or "") + (self.last_name or "")
 
 	def password_reset_mail(self, link):
+<<<<<<< HEAD
 		reset_password_template = frappe.db.get_system_setting("reset_password_template")
 
 		self.send_login_mail(
@@ -396,6 +422,9 @@ class User(Document):
 			now=True,
 			custom_template=reset_password_template,
 		)
+=======
+		self.send_login_mail(_("Password Reset"), "password_reset", {"link": link}, now=True)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def send_welcome_mail_to_user(self):
 		from frappe.utils import get_url
@@ -412,8 +441,11 @@ class User(Document):
 			else:
 				subject = _("Complete Registration")
 
+<<<<<<< HEAD
 		welcome_email_template = frappe.db.get_system_setting("welcome_email_template")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.send_login_mail(
 			subject,
 			"new_user",
@@ -421,10 +453,16 @@ class User(Document):
 				link=link,
 				site_url=get_url(),
 			),
+<<<<<<< HEAD
 			custom_template=welcome_email_template,
 		)
 
 	def send_login_mail(self, subject, template, add_args, now=None, custom_template=None):
+=======
+		)
+
+	def send_login_mail(self, subject, template, add_args, now=None):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""send mail with login details"""
 		from frappe.utils import get_url
 		from frappe.utils.user import get_user_fullname
@@ -447,6 +485,7 @@ class User(Document):
 			frappe.session.user not in STANDARD_USERS and get_formatted_email(frappe.session.user) or None
 		)
 
+<<<<<<< HEAD
 		if custom_template:
 			from frappe.email.doctype.email_template.email_template import get_email_template
 
@@ -454,12 +493,18 @@ class User(Document):
 			subject = email_template.get("subject")
 			content = email_template.get("message")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.sendmail(
 			recipients=self.email,
 			sender=sender,
 			subject=subject,
+<<<<<<< HEAD
 			template=template if not custom_template else None,
 			content=content if custom_template else None,
+=======
+			template=template,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			args=args,
 			header=[subject, "green"],
 			delayed=(not now) if now is not None else self.flags.delay_emails,
@@ -509,9 +554,15 @@ class User(Document):
 		frappe.delete_doc("Notification Settings", self.name, ignore_permissions=True)
 
 		if self.get("allow_in_mentions"):
+<<<<<<< HEAD
 			frappe.cache.delete_key("users_for_mentions")
 
 		frappe.cache.delete_key("enabled_users")
+=======
+			frappe.cache().delete_key("users_for_mentions")
+
+		frappe.cache().delete_key("enabled_users")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# delete user permissions
 		frappe.db.delete("User Permission", {"user": self.name})
@@ -539,10 +590,13 @@ class User(Document):
 			note.save(ignore_permissions=True)
 
 	def before_rename(self, old_name, new_name, merge=False):
+<<<<<<< HEAD
 		# if merging, delete the old user notification settings
 		if merge:
 			frappe.delete_doc("Notification Settings", old_name, ignore_permissions=True)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.clear_cache(user=old_name)
 		self.validate_rename(old_name, new_name)
 
@@ -562,7 +616,14 @@ class User(Document):
 		tables = frappe.db.get_tables()
 		for tab in tables:
 			desc = frappe.db.get_table_columns_description(tab)
+<<<<<<< HEAD
 			has_fields = [d.get("name") for d in desc if d.get("name") in ["owner", "modified_by"]]
+=======
+			has_fields = []
+			for d in desc:
+				if d.get("name") in ["owner", "modified_by"]:
+					has_fields.append(d.get("name"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			for field in has_fields:
 				frappe.db.sql(
 					"""UPDATE `{}`
@@ -575,7 +636,11 @@ class User(Document):
 			frappe.rename_doc("Notification Settings", old_name, new_name, force=True, show_alert=False)
 
 		# set email
+<<<<<<< HEAD
 		frappe.db.set_value("User", new_name, "email", new_name)
+=======
+		frappe.db.update("User", new_name, "email", new_name)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def append_roles(self, *roles):
 		"""Add roles to user"""
@@ -610,7 +675,11 @@ class User(Document):
 
 	def ensure_unique_roles(self):
 		exists = []
+<<<<<<< HEAD
 		for d in self.get("roles"):
+=======
+		for _i, d in enumerate(self.get("roles")):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if (not d.role) or (d.role in exists):
 				self.get("roles").remove(d)
 			else:
@@ -640,7 +709,11 @@ class User(Document):
 
 		if self.__new_password:
 			user_data = (self.first_name, self.middle_name, self.last_name, self.email, self.birth_date)
+<<<<<<< HEAD
 			result = test_password_strength(self.__new_password, user_data=user_data)
+=======
+			result = test_password_strength(self.__new_password, "", None, user_data)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			feedback = result.get("feedback", None)
 
 			if feedback and not feedback.get("password_policy_validation_passed", False):
@@ -763,7 +836,11 @@ def get_timezones():
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 def get_all_roles():
+=======
+def get_all_roles(arg=None):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""return all roles"""
 	active_domains = frappe.get_active_domains()
 
@@ -777,7 +854,11 @@ def get_all_roles():
 		order_by="name",
 	)
 
+<<<<<<< HEAD
 	return sorted([role.get("name") for role in roles])
+=======
+	return [role.get("name") for role in roles]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()
@@ -795,6 +876,7 @@ def get_perm_info(role):
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
+<<<<<<< HEAD
 def update_password(
 	new_password: str, logout_all_sessions: int = 0, key: str | None = None, old_password: str | None = None
 ):
@@ -806,11 +888,22 @@ def update_password(
 	        key (str, optional): Password reset key. Defaults to None.
 	        old_password (str, optional): Old password. Defaults to None.
 	"""
+=======
+def update_password(new_password, logout_all_sessions=0, key=None, old_password=None):
+	# validate key to avoid key input like ['like', '%'], '', ['in', ['']]
+	if key and not isinstance(key, str):
+		frappe.throw(_("Invalid key type"))
+
+	result = test_password_strength(new_password, key, old_password)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if len(new_password) > MAX_PASSWORD_SIZE:
 		frappe.throw(_("Password size exceeded the maximum allowed size."))
 
+<<<<<<< HEAD
 	result = test_password_strength(new_password)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	feedback = result.get("feedback", None)
 
 	if feedback and not feedback.get("password_policy_validation_passed", False):
@@ -831,10 +924,17 @@ def update_password(
 	user_doc, redirect_url = reset_user_data(user)
 
 	# get redirect url from cache
+<<<<<<< HEAD
 	redirect_to = frappe.cache.hget("redirect_after_login", user)
 	if redirect_to:
 		redirect_url = redirect_to
 		frappe.cache.hdel("redirect_after_login", user)
+=======
+	redirect_to = frappe.cache().hget("redirect_after_login", user)
+	if redirect_to:
+		redirect_url = redirect_to
+		frappe.cache().hdel("redirect_after_login", user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	frappe.local.login_manager.login_as(user)
 
@@ -842,6 +942,7 @@ def update_password(
 	frappe.db.set_value("User", user, "reset_password_key", "")
 
 	if user_doc.user_type == "System User":
+<<<<<<< HEAD
 		return get_default_path() or "/app"
 	else:
 		return redirect_url or get_default_path() or get_home_page()
@@ -858,6 +959,26 @@ def test_password_strength(new_password: str, key=None, old_password=None, user_
 		)
 
 	enable_password_policy = frappe.get_system_settings("enable_password_policy") or 0
+=======
+		return "/app"
+	else:
+		return redirect_url if redirect_url else "/"
+
+
+@frappe.whitelist(allow_guest=True)
+def test_password_strength(new_password, key=None, old_password=None, user_data=None):
+	from frappe.utils.password_strength import test_password_strength as _test_password_strength
+
+	password_policy = (
+		frappe.db.get_value(
+			"System Settings", None, ["enable_password_policy", "minimum_password_score"], as_dict=True
+		)
+		or {}
+	)
+
+	enable_password_policy = cint(password_policy.get("enable_password_policy", 0))
+	minimum_password_score = cint(password_policy.get("minimum_password_score", 0))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not enable_password_policy:
 		return {}
@@ -870,7 +991,10 @@ def test_password_strength(new_password: str, key=None, old_password=None, user_
 	if new_password:
 		result = _test_password_strength(new_password, user_inputs=user_data)
 		password_policy_validation_passed = False
+<<<<<<< HEAD
 		minimum_password_score = cint(frappe.get_system_settings("minimum_password_score")) or 0
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# score should be greater than 0 and minimum_password_score
 		if result.get("score") and result.get("score") >= minimum_password_score:
@@ -881,8 +1005,14 @@ def test_password_strength(new_password: str, key=None, old_password=None, user_
 		return result
 
 
+<<<<<<< HEAD
 @frappe.whitelist()
 def has_email_account(email: str):
+=======
+# for login
+@frappe.whitelist()
+def has_email_account(email):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return frappe.get_list("Email Account", filters={"email_id": email})
 
 
@@ -950,7 +1080,11 @@ def verify_password(password):
 
 
 @frappe.whitelist(allow_guest=True)
+<<<<<<< HEAD
 def sign_up(email: str, full_name: str, redirect_to: str) -> tuple[int, str]:
+=======
+def sign_up(email, full_name, redirect_to):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if is_signup_disabled():
 		frappe.throw(_("Sign Up is disabled"), title=_("Not Allowed"))
 
@@ -992,7 +1126,11 @@ def sign_up(email: str, full_name: str, redirect_to: str) -> tuple[int, str]:
 			user.add_roles(default_role)
 
 		if redirect_to:
+<<<<<<< HEAD
 			frappe.cache.hset("redirect_after_login", user.name, redirect_to)
+=======
+			frappe.cache().hset("redirect_after_login", user.name, redirect_to)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if user.flags.email_sent:
 			return 1, _("Please check your email for verification")
@@ -1071,6 +1209,7 @@ def get_total_users():
 	)
 
 
+<<<<<<< HEAD
 def get_system_users(exclude_users: Iterable[str] | str | None = None, limit: int | None = None):
 	_excluded_users = list(STANDARD_USERS)
 	if isinstance(exclude_users, str):
@@ -1089,6 +1228,29 @@ def get_system_users(exclude_users: Iterable[str] | str | None = None, limit: in
 		limit=limit,
 	)
 
+=======
+def get_system_users(exclude_users=None, limit=None):
+	if not exclude_users:
+		exclude_users = []
+	elif not isinstance(exclude_users, list | tuple):
+		exclude_users = [exclude_users]
+
+	limit_cond = ""
+	if limit:
+		limit_cond = f"limit {limit}"
+
+	exclude_users += list(STANDARD_USERS)
+
+	system_users = frappe.db.sql_list(
+		"""select name from `tabUser`
+		where enabled=1 and user_type != 'Website User'
+		and name not in ({}) {}""".format(", ".join(["%s"] * len(exclude_users)), limit_cond),
+		exclude_users,
+	)
+
+	return system_users
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def get_active_users():
 	"""Returns No. of system users who logged in, in the last 3 days"""
@@ -1179,12 +1341,22 @@ def throttle_user_creation():
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 def get_role_profile(role_profile: str):
 	return frappe.get_doc("Role Profile", {"role_profile": role_profile}).roles
 
 
 @frappe.whitelist()
 def get_module_profile(module_profile: str):
+=======
+def get_role_profile(role_profile):
+	roles = frappe.get_doc("Role Profile", {"role_profile": role_profile})
+	return roles.roles
+
+
+@frappe.whitelist()
+def get_module_profile(module_profile):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	module_profile = frappe.get_doc("Module Profile", {"module_profile_name": module_profile})
 	return module_profile.get("block_modules")
 
@@ -1197,6 +1369,7 @@ def create_contact(user, ignore_links=False, ignore_mandatory=False):
 
 	contact_name = get_contact_name(user.email)
 	if not contact_name:
+<<<<<<< HEAD
 		try:
 			contact = frappe.get_doc(
 				{
@@ -1254,6 +1427,56 @@ def create_contact(user, ignore_links=False, ignore_mandatory=False):
 			contact.save(ignore_permissions=True)
 		except frappe.TimestampMismatchError:
 			raise frappe.RetryBackgroundJobError
+=======
+		contact = frappe.get_doc(
+			{
+				"doctype": "Contact",
+				"first_name": user.first_name,
+				"last_name": user.last_name,
+				"user": user.name,
+				"gender": user.gender,
+			}
+		)
+
+		if user.email:
+			contact.add_email(user.email, is_primary=True)
+
+		if user.phone:
+			contact.add_phone(user.phone, is_primary_phone=True)
+
+		if user.mobile_no:
+			contact.add_phone(user.mobile_no, is_primary_mobile_no=True)
+		contact.insert(ignore_permissions=True, ignore_links=ignore_links, ignore_mandatory=ignore_mandatory)
+	else:
+		contact = frappe.get_doc("Contact", contact_name)
+		contact.first_name = user.first_name
+		contact.last_name = user.last_name
+		contact.gender = user.gender
+
+		# Add mobile number if phone does not exists in contact
+		if user.phone and not any(new_contact.phone == user.phone for new_contact in contact.phone_nos):
+			# Set primary phone if there is no primary phone number
+			contact.add_phone(
+				user.phone,
+				is_primary_phone=not any(
+					new_contact.is_primary_phone == 1 for new_contact in contact.phone_nos
+				),
+			)
+
+		# Add mobile number if mobile does not exists in contact
+		if user.mobile_no and not any(
+			new_contact.phone == user.mobile_no for new_contact in contact.phone_nos
+		):
+			# Set primary mobile if there is no primary mobile number
+			contact.add_phone(
+				user.mobile_no,
+				is_primary_mobile_no=not any(
+					new_contact.is_primary_mobile_no == 1 for new_contact in contact.phone_nos
+				),
+			)
+
+		contact.save(ignore_permissions=True)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_restricted_ip_list(user):
@@ -1264,14 +1487,22 @@ def get_restricted_ip_list(user):
 
 
 @frappe.whitelist(methods=["POST"])
+<<<<<<< HEAD
 def generate_keys(user: str):
+=======
+def generate_keys(user):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""
 	generate api key and api secret
 
 	:param user: str
 	"""
 	frappe.only_for("System Manager")
+<<<<<<< HEAD
 	user_details: User = frappe.get_doc("User", user)
+=======
+	user_details = frappe.get_doc("User", user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	api_secret = frappe.generate_hash(length=15)
 	# if api key is not set generate api key
 	if not user_details.api_key:
@@ -1294,6 +1525,7 @@ def get_enabled_users():
 		enabled_users = frappe.get_all("User", filters={"enabled": "1"}, pluck="name")
 		return enabled_users
 
+<<<<<<< HEAD
 	return frappe.cache.get_value("enabled_users", _get_enabled_users)
 
 
@@ -1323,3 +1555,6 @@ def impersonate(user: str, reason: str):
 	notification.set("type", "Alert")
 	notification.insert(ignore_permissions=True)
 	frappe.local.login_manager.impersonate(user)
+=======
+	return frappe.cache().get_value("enabled_users", _get_enabled_users)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

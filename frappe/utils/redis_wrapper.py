@@ -4,12 +4,16 @@ import pickle
 import re
 
 import redis
+<<<<<<< HEAD
 from redis.commands.search import Search
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 from frappe.utils import cstr
 
 
+<<<<<<< HEAD
 class RedisearchWrapper(Search):
 	def sugadd(self, key, *suggestions, **kwargs):
 		return super().sugadd(self.client.make_key(key), *suggestions, **kwargs)
@@ -24,6 +28,8 @@ class RedisearchWrapper(Search):
 		return super().sugget(self.client.make_key(key), *args, **kwargs)
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 class RedisWrapper(redis.Redis):
 	"""Redis client that will automatically prefix conf.db_name"""
 
@@ -34,10 +40,13 @@ class RedisWrapper(redis.Redis):
 		except redis.exceptions.ConnectionError:
 			return False
 
+<<<<<<< HEAD
 	def __call__(self):
 		"""WARNING: Added for backward compatibility to support frappe.cache().method(...)"""
 		return self
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def make_key(self, key, user=None, shared=False):
 		if shared:
 			return key
@@ -49,7 +58,11 @@ class RedisWrapper(redis.Redis):
 
 		return f"{frappe.conf.db_name}|{key}".encode()
 
+<<<<<<< HEAD
 	def set_value(self, key, val, user=None, expires_in_sec=None, shared=False):
+=======
+	def set_value(self, key, val, user=None, expires_in_sec=None, shared=False, cache_locally=True):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""Sets cache value.
 
 		:param key: Cache key
@@ -59,7 +72,11 @@ class RedisWrapper(redis.Redis):
 		"""
 		key = self.make_key(key, user, shared)
 
+<<<<<<< HEAD
 		if not expires_in_sec:
+=======
+		if not expires_in_sec and cache_locally:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			frappe.local.cache[key] = val
 
 		try:
@@ -131,6 +148,7 @@ class RedisWrapper(redis.Redis):
 
 	def delete_value(self, keys, user=None, make_keys=True, shared=False):
 		"""Delete value, list of values."""
+<<<<<<< HEAD
 		if not keys:
 			return
 
@@ -147,6 +165,22 @@ class RedisWrapper(redis.Redis):
 			self.delete(*keys)
 		except redis.exceptions.ConnectionError:
 			pass
+=======
+		if not isinstance(keys, list | tuple):
+			keys = (keys,)
+
+		for key in keys:
+			if make_keys:
+				key = self.make_key(key, shared=shared)
+
+			if key in frappe.local.cache:
+				del frappe.local.cache[key]
+
+			try:
+				self.delete(key)
+			except redis.exceptions.ConnectionError:
+				pass
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def lpush(self, key, value):
 		return super().lpush(self.make_key(key), value)
@@ -169,6 +203,7 @@ class RedisWrapper(redis.Redis):
 	def ltrim(self, key, start, stop):
 		return super().ltrim(self.make_key(key), start, stop)
 
+<<<<<<< HEAD
 	def hset(
 		self,
 		name: str,
@@ -178,17 +213,29 @@ class RedisWrapper(redis.Redis):
 		*args,
 		**kwargs,
 	):
+=======
+	def hset(self, name: str, key: str, value, shared: bool = False, cache_locally: bool = True):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if key is None:
 			return
 
 		_name = self.make_key(name, shared=shared)
 
 		# set in local
+<<<<<<< HEAD
 		frappe.local.cache.setdefault(_name, {})[key] = value
 
 		# set in redis
 		try:
 			super().hset(_name, key, pickle.dumps(value), *args, **kwargs)
+=======
+		if cache_locally:
+			frappe.local.cache.setdefault(_name, {})[key] = value
+
+		# set in redis
+		try:
+			super().hset(_name, key, pickle.dumps(value))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		except redis.exceptions.ConnectionError:
 			pass
 
@@ -203,11 +250,18 @@ class RedisWrapper(redis.Redis):
 
 	def exists(self, *names: str, user=None, shared=None) -> int:
 		names = [self.make_key(n, user=user, shared=shared) for n in names]
+<<<<<<< HEAD
 
 		try:
 			return super().exists(*names)
 		except redis.exceptions.ConnectionError:
 			return False
+=======
+		try:
+			return super().exists(*names)
+		except redis.exceptions.ConnectionError:
+			return 0
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def hgetall(self, name):
 		value = super().hgetall(self.make_key(name))
@@ -251,7 +305,11 @@ class RedisWrapper(redis.Redis):
 
 	def hdel_keys(self, name_starts_with, key):
 		"""Delete hash names with wildcard `*` and key"""
+<<<<<<< HEAD
 		for name in self.get_keys(name_starts_with):
+=======
+		for name in frappe.cache().get_keys(name_starts_with):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			name = name.split("|", 1)[1]
 			self.hdel(name, key)
 
@@ -285,9 +343,12 @@ class RedisWrapper(redis.Redis):
 		"""Return all members of the set"""
 		return super().smembers(self.make_key(name))
 
+<<<<<<< HEAD
 	def ft(self, index_name="idx"):
 		return RedisearchWrapper(client=self, index_name=self.make_key(index_name))
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def setup_cache():
 	if frappe.conf.redis_cache_sentinel_enabled:

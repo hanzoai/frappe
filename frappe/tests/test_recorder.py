@@ -1,33 +1,47 @@
 # Copyright (c) 2019, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+<<<<<<< HEAD
 import time
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import sqlparse
 
 import frappe
 import frappe.recorder
 from frappe.recorder import normalize_query
+<<<<<<< HEAD
 from frappe.tests.utils import FrappeTestCase, timeout
 from frappe.utils import set_request
 from frappe.utils.doctor import any_job_pending
+=======
+from frappe.tests.utils import FrappeTestCase
+from frappe.utils import set_request
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.website.serve import get_response_content
 
 
 class TestRecorder(FrappeTestCase):
 	def setUp(self):
+<<<<<<< HEAD
 		self.wait_for_background_jobs()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.recorder.stop()
 		frappe.recorder.delete()
 		set_request()
 		frappe.recorder.start()
 		frappe.recorder.record()
 
+<<<<<<< HEAD
 	@timeout
 	def wait_for_background_jobs(self):
 		while any_job_pending(frappe.local.site):
 			time.sleep(1)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def stop_recording(self):
 		frappe.recorder.dump()
 		frappe.recorder.stop()
@@ -83,7 +97,10 @@ class TestRecorder(FrappeTestCase):
 	def test_explain(self):
 		frappe.db.sql("SELECT * FROM tabDocType")
 		frappe.db.sql("COMMIT")
+<<<<<<< HEAD
 		frappe.db.sql("select 1", run=0)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.stop_recording()
 
 		requests = frappe.recorder.get()

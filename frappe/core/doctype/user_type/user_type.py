@@ -10,6 +10,7 @@ from frappe.utils import get_link_to_form
 
 
 class UserType(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -33,6 +34,8 @@ class UserType(Document):
 		user_type_modules: DF.Table[UserTypeModule]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		self.set_modules()
 		self.add_select_perm_doctypes()
@@ -41,7 +44,11 @@ class UserType(Document):
 		super().clear_cache()
 
 		if not self.is_standard:
+<<<<<<< HEAD
 			frappe.cache.delete_value("non_standard_user_types")
+=======
+			frappe.cache().delete_value("non_standard_user_types")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def on_update(self):
 		if self.is_standard:
@@ -191,7 +198,13 @@ class UserType(Document):
 		doctypes.append("File")
 
 		for doctype in ["select_doctypes", "custom_select_doctypes"]:
+<<<<<<< HEAD
 			doctypes.extend(dt.document_type for dt in self.get(doctype))
+=======
+			for dt in self.get(doctype):
+				doctypes.append(dt.document_type)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		for perm in frappe.get_all(
 			"Custom DocPerm", filters={"role": self.role, "parent": ["not in", doctypes]}
 		):
@@ -308,7 +321,11 @@ def apply_permissions_for_non_standard_user_type(doc, method=None):
 	if not frappe.db.table_exists("User Type") or frappe.flags.in_migrate:
 		return
 
+<<<<<<< HEAD
 	user_types = frappe.cache.get_value(
+=======
+	user_types = frappe.cache().get_value(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"non_standard_user_types",
 		get_non_standard_user_types,
 	)

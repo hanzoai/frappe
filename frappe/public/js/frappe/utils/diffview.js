@@ -24,7 +24,11 @@ frappe.ui.DiffView = class DiffView {
 			},
 		});
 		const onchange = () => this.compute_diff();
+<<<<<<< HEAD
 		return new frappe.ui.Dialog({
+=======
+		let dialog = new frappe.ui.Dialog({
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			title: __("Compare Versions"),
 			fields: [
 				{
@@ -61,6 +65,10 @@ frappe.ui.DiffView = class DiffView {
 			],
 			size: "extra-large",
 		});
+<<<<<<< HEAD
+=======
+		return dialog;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	compute_diff() {

@@ -20,7 +20,11 @@ def get_context(context):
 
 
 @frappe.whitelist(allow_guest=True)
+<<<<<<< HEAD
 def get_search_results(text: str, scope: str | None = None, start: int = 0, as_html: bool = False):
+=======
+def get_search_results(text, scope=None, start=0, as_html=False):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	results = web_search(text, scope, start, limit=21)
 	out = frappe._dict()
 

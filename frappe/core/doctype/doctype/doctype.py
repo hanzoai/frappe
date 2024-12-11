@@ -6,7 +6,10 @@ import json
 import os
 import re
 import shutil
+<<<<<<< HEAD
 from pathlib import Path
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from typing import TYPE_CHECKING, Union
 
 import frappe
@@ -33,7 +36,11 @@ from frappe.modules import get_doc_path, make_boilerplate
 from frappe.modules.import_file import get_file_path
 from frappe.permissions import ALL_USER_ROLE, AUTOMATIC_ROLES, SYSTEM_USER_ROLE
 from frappe.query_builder.functions import Concat
+<<<<<<< HEAD
 from frappe.utils import cint, flt, get_datetime, is_a_property, random_string
+=======
+from frappe.utils import cint, is_a_property, random_string
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.website.utils import clear_cache
 
 if TYPE_CHECKING:
@@ -86,6 +93,7 @@ form_grid_templates = {"fields": "templates/form_grid/fields.html"}
 
 
 class DocType(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -176,6 +184,10 @@ class DocType(Document):
 		translated_doctype: DF.Check
 		website_search_field: DF.Data | None
 	# end: auto-generated types
+=======
+	def get_feed(self):
+		return self.name
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def validate(self):
 		"""Validate DocType before saving.
@@ -201,7 +213,11 @@ class DocType(Document):
 		self.set("can_change_name_type", validate_autoincrement_autoname(self))
 		self.validate_document_type()
 		validate_fields(self)
+<<<<<<< HEAD
 		self.check_indexing_for_dashboard_links()
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if not self.istable:
 			validate_permissions(self)
 
@@ -210,7 +226,10 @@ class DocType(Document):
 		self.validate_nestedset()
 		self.validate_child_table()
 		self.validate_website()
+<<<<<<< HEAD
 		self.validate_virtual_doctype_methods()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.ensure_minimum_max_attachment_limit()
 		validate_links_table_fieldnames(self)
 
@@ -231,7 +250,10 @@ class DocType(Document):
 			"DocPerm",
 			"Custom Field",
 			"Customize Form Field",
+<<<<<<< HEAD
 			"Web Form Field",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			"DocField",
 		]
 
@@ -302,6 +324,7 @@ class DocType(Document):
 			if d.translatable and not supports_translation(d.fieldtype):
 				d.translatable = 0
 
+<<<<<<< HEAD
 	def check_indexing_for_dashboard_links(self):
 		"""Enable indexing for outgoing links used in dashboard"""
 		for d in self.fields:
@@ -321,6 +344,8 @@ class DocType(Document):
 					indicator="orange",
 				)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def check_developer_mode(self):
 		"""Throw exception if not developer mode or via patch"""
 		if frappe.flags.in_patch or frappe.flags.in_test:
@@ -357,8 +382,11 @@ class DocType(Document):
 			for df in new_fields_to_fetch:
 				if df.fieldname not in old_fields_to_fetch:
 					link_fieldname, source_fieldname = df.fetch_from.split(".", 1)
+<<<<<<< HEAD
 					if not source_fieldname:
 						continue  # Invalid expression
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					link_df = new_meta.get_field(link_fieldname)
 
 					if frappe.db.db_type == "postgres":
@@ -413,6 +441,7 @@ class DocType(Document):
 			# clear website cache
 			clear_cache()
 
+<<<<<<< HEAD
 	def validate_virtual_doctype_methods(self):
 		if not self.get("is_virtual") or self.is_new():
 			return
@@ -421,6 +450,8 @@ class DocType(Document):
 
 		validate_controller(self.name)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def ensure_minimum_max_attachment_limit(self):
 		"""Ensure that max_attachments is *at least* bigger than number of attach fields."""
 		from frappe.model import attachment_fieldtypes
@@ -448,7 +479,11 @@ class DocType(Document):
 			"DocField", "parent", dict(fieldtype=["in", frappe.model.table_fields], options=self.name)
 		)
 		for p in parent_list:
+<<<<<<< HEAD
 			frappe.db.set_value("DocType", p.parent, {})
+=======
+			frappe.db.update("DocType", p.parent, {}, for_update=False)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def scrub_field_names(self):
 		"""Sluggify fieldnames if not set from Label."""
@@ -479,7 +514,11 @@ class DocType(Document):
 						elif d.fieldtype == "Tab Break":
 							d.fieldname = d.fieldname + "_tab"
 					elif d.fieldtype in ("Section Break", "Column Break", "Tab Break"):
+<<<<<<< HEAD
 						d.fieldname = d.fieldtype.lower().replace(" ", "_") + "_" + str(random_string(4))
+=======
+						d.fieldname = d.fieldtype.lower().replace(" ", "_") + "_" + str(random_string(5))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					else:
 						frappe.throw(
 							_("Row #{}: Fieldname is required").format(d.idx), title="Missing Fieldname"
@@ -524,7 +563,10 @@ class DocType(Document):
 			self.export_doc()
 			self.make_controller_template()
 			self.set_base_class_for_controller()
+<<<<<<< HEAD
 			self.export_types_to_controller()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# update index
 		if not self.custom:
@@ -563,7 +605,11 @@ class DocType(Document):
 
 		if self.autoname == "autoincrement":
 			name_type = "bigint"
+<<<<<<< HEAD
 			frappe.db.create_sequence(self.name, check_not_exists=True)
+=======
+			frappe.db.create_sequence(self.name, check_not_exists=True, cache=frappe.db.SEQUENCE_CACHE)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		change_name_column_type(self.name, name_type)
 
@@ -848,6 +894,7 @@ class DocType(Document):
 			make_boilerplate("templates/controller.html", self.as_dict())
 			make_boilerplate("templates/controller_row.html", self.as_dict())
 
+<<<<<<< HEAD
 	def export_types_to_controller(self):
 		from frappe.modules.utils import get_module_app
 		from frappe.types.exporter import TypeExporter
@@ -860,6 +907,8 @@ class DocType(Document):
 		if any(frappe.get_hooks("export_python_type_annotations", app_name=app)):
 			TypeExporter(self).export_types()
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def make_amendable(self):
 		"""If is_submittable is set, add amended_from docfields."""
 		if self.is_submittable:
@@ -959,7 +1008,10 @@ class DocType(Document):
 				"fieldtype": "Link",
 				"options": self.name,
 				"fieldname": parent_field_name,
+<<<<<<< HEAD
 				"ignore_user_permissions": 1,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			},
 		)
 		self.nsm_parent_field = parent_field_name
@@ -1017,6 +1069,7 @@ class DocType(Document):
 
 		validate_route_conflict(self.doctype, self.name)
 
+<<<<<<< HEAD
 	@frappe.whitelist()
 	def check_pending_migration(self) -> bool:
 		"""Checks if all migrations are applied on doctype."""
@@ -1035,6 +1088,8 @@ class DocType(Document):
 			)
 			return True
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def validate_series(dt, autoname=None, name=None):
 	"""Validate if `autoname` property is correctly set."""
@@ -1202,7 +1257,11 @@ def validate_fields_for_doctype(doctype):
 
 
 # this is separate because it is also called via custom field
+<<<<<<< HEAD
 def validate_fields(meta: Meta):
+=======
+def validate_fields(meta):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""Validate doctype fields. Checks
 	1. There are no illegal characters in fieldnames
 	2. If fieldnames are unique.
@@ -1575,7 +1634,11 @@ def validate_fields(meta: Meta):
 
 		if docfield.fieldtype == "Data" and not (docfield.oldfieldtype and docfield.oldfieldtype != "Data"):
 			if docfield.options and (docfield.options not in data_field_options):
+<<<<<<< HEAD
 				df_str = frappe.bold(_(docfield.label, context=docfield.parent))
+=======
+				df_str = frappe.bold(_(docfield.label))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				text_str = (
 					_("{0} is an invalid Data field.").format(df_str)
 					+ "<br>" * 2
@@ -1593,9 +1656,15 @@ def validate_fields(meta: Meta):
 			return
 
 		doctype = docfield.options
+<<<<<<< HEAD
 		child_doctype_meta = frappe.get_meta(doctype)
 
 		if not child_doctype_meta.istable:
+=======
+		meta = frappe.get_meta(doctype)
+
+		if not meta.istable:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			frappe.throw(
 				_("Option {0} for field {1} is not a child table").format(
 					frappe.bold(doctype), frappe.bold(docfield.fieldname)
@@ -1603,6 +1672,7 @@ def validate_fields(meta: Meta):
 				title=_("Invalid Option"),
 			)
 
+<<<<<<< HEAD
 		if not (meta.is_virtual == child_doctype_meta.is_virtual):
 			error_msg = " should be virtual." if meta.is_virtual else " cannot be virtual."
 			frappe.throw(
@@ -1612,6 +1682,8 @@ def validate_fields(meta: Meta):
 				title=_("Invalid Option"),
 			)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def check_max_height(docfield):
 		if getattr(docfield, "max_height", None) and (docfield.max_height[-2:] not in ("px", "em")):
 			frappe.throw(f"Max for {frappe.bold(docfield.fieldname)} height must be in px, em, rem")
@@ -1773,6 +1845,14 @@ def validate_permissions(doctype, for_remove=False, alert=False):
 			d.set("import", 0)
 			d.set("export", 0)
 
+<<<<<<< HEAD
+=======
+		for ptype, label in [["set_user_permissions", _("Set User Permissions")]]:
+			if d.get(ptype):
+				d.set(ptype, 0)
+				frappe.msgprint(_("{0} cannot be set for Single types").format(label))
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def check_if_submittable(d):
 		if d.submit and not issubmittable:
 			frappe.throw(_("{0}: Cannot set Assign Submit if not Submittable").format(get_txt(d)))
@@ -1873,7 +1953,11 @@ def check_fieldname_conflicts(docfield):
 
 
 def clear_linked_doctype_cache():
+<<<<<<< HEAD
 	frappe.cache.delete_value("linked_doctypes_without_ignore_user_permissions_enabled")
+=======
+	frappe.cache().delete_value("linked_doctypes_without_ignore_user_permissions_enabled")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def check_email_append_to(doc):
@@ -1914,6 +1998,7 @@ def get_field(doc, fieldname):
 	for field in doc.fields:
 		if field.fieldname == fieldname:
 			return field
+<<<<<<< HEAD
 
 
 @frappe.whitelist()
@@ -1925,3 +2010,5 @@ def get_row_size_utilization(doctype: str) -> float:
 		return flt(frappe.db.get_row_size(doctype) / frappe.db.MAX_ROW_SIZE_LIMIT * 100, 2)
 	except Exception:
 		return 0.0
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const jump_to_field = (field_label) => {
 	cy.get("body")
 		.type("{esc}") // lose focus if any
@@ -14,6 +15,8 @@ const type_value = (value) => {
 	cy.focused().clear().type(value).type("{esc}");
 };
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 context("Form", () => {
 	before(() => {
 		cy.login();
@@ -26,16 +29,24 @@ context("Form", () => {
 			});
 	});
 
+<<<<<<< HEAD
 	beforeEach(() => {
 		cy.login();
 		cy.visit("/app/website");
 	});
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	it("create a new form", () => {
 		cy.visit("/app/todo/new");
 		cy.get_field("description", "Text Editor")
 			.type("this is a test todo", { force: true })
+<<<<<<< HEAD
 			.wait(1000);
+=======
+			.wait(200);
+		cy.wait(1000);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		cy.get(".page-title").should("contain", "Not Saved");
 		cy.intercept({
 			method: "POST",
@@ -50,6 +61,7 @@ context("Form", () => {
 		cy.get(".list-row").should("contain", "this is a test todo");
 	});
 
+<<<<<<< HEAD
 	it("navigates between documents with child table list filters applied", () => {
 		cy.visit("/app/contact");
 
@@ -78,6 +90,8 @@ context("Form", () => {
 		cy.clear_filters();
 	});
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	it("validates behaviour of Data options validations in child table", () => {
 		// test email validations for set_invalid controller
 		let website_input = "website.in";
@@ -101,12 +115,20 @@ context("Form", () => {
 		cy.get("@email_input2").type(valid_email, { waitForAnimations: false });
 
 		cy.get("@row1").click();
+<<<<<<< HEAD
+=======
+		cy.get("@email_input1").should(($div) => {
+			const style = window.getComputedStyle($div[0]);
+			expect(style.backgroundColor).to.equal(expectBackgroundColor);
+		});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		cy.get("@email_input1").should("have.class", "invalid");
 
 		cy.get("@row2").click();
 		cy.get("@email_input2").should("not.have.class", "invalid");
 	});
 
+<<<<<<< HEAD
 	it("Jump to field in collapsed section", { scrollBehavior: false }, () => {
 		cy.new_form("User");
 
@@ -167,5 +189,81 @@ context("Form", () => {
 					.should("be.visible");
 				cy.get("@table-form").find(".grid-footer-toolbar").click();
 			});
+=======
+	it("Shows version conflict warning", { scrollBehavior: false }, () => {
+		cy.visit("/app/todo");
+
+		cy.insert_doc("ToDo", { description: "old" }).then((doc) => {
+			cy.visit(`/app/todo/${doc.name}`);
+			// make form dirty
+			cy.fill_field("status", "Cancelled", "Select");
+
+			// update doc using api - simulating parallel change by another user
+			cy.update_doc("ToDo", doc.name, { status: "Closed" }).then(() => {
+				cy.findByRole("button", { name: "Refresh" }).click();
+				cy.get_field("status", "Select").should("have.value", "Closed");
+			});
+		});
+	});
+
+	it("let user undo/redo field value changes", { scrollBehavior: false }, () => {
+		const jump_to_field = (field_label) => {
+			cy.get("body")
+				.type("{esc}") // lose focus if any
+				.type("{ctrl+j}") // jump to field
+				.type(field_label)
+				.wait(500)
+				.type("{enter}")
+				.wait(200)
+				.type("{enter}")
+				.wait(500);
+		};
+
+		const type_value = (value) => {
+			cy.focused().clear().type(value).type("{esc}");
+		};
+
+		const undo = () => cy.get("body").type("{esc}").type("{ctrl+z}").wait(500);
+		const redo = () => cy.get("body").type("{esc}").type("{ctrl+y}").wait(500);
+
+		cy.new_form("User");
+
+		jump_to_field("Email");
+		type_value("admin@example.com");
+
+		jump_to_field("Username");
+		type_value("admin42");
+
+		jump_to_field("Send Welcome Email");
+		cy.focused().uncheck();
+
+		// make a mistake
+		jump_to_field("Username");
+		type_value("admin24");
+
+		// undo behaviour
+		undo();
+		cy.get_field("username").should("have.value", "admin42");
+
+		// redo behaviour
+		redo();
+		cy.get_field("username").should("have.value", "admin24");
+
+		// undo everything & redo everything, ensure same values at the end
+		undo();
+		undo();
+		undo();
+		undo();
+		redo();
+		redo();
+		redo();
+		redo();
+
+		cy.compare_document({
+			username: "admin24",
+			email: "admin@example.com",
+			send_welcome_email: 0,
+		});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	});
 });

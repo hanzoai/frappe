@@ -18,8 +18,11 @@
   "icon",
   "column_break_1",
   "base_url",
+<<<<<<< HEAD
   "configuration_section",
   "sign_ups",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "client_urls",
   "authorize_url",
   "access_token_url",
@@ -52,7 +55,11 @@
    "fieldname": "social_login_provider",
    "fieldtype": "Select",
    "label": "Social Login Provider",
+<<<<<<< HEAD
    "options": "Custom\nFacebook\nFrappe\nGitHub\nGoogle\nOffice 365\nSalesforce\nfairlogin\nKeycloak",
+=======
+   "options": "Custom\nFacebook\nFrappe\nGitHub\nGoogle\nOffice 365\nSalesforce\nfairlogin",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "set_only_once": 1
   },
   {
@@ -159,6 +166,7 @@
    "fieldname": "user_id_property",
    "fieldtype": "Data",
    "label": "User ID Property"
+<<<<<<< HEAD
   },
   {
    "collapsible": 1,
@@ -172,11 +180,17 @@
    "fieldtype": "Select",
    "label": "Sign ups",
    "options": "\nAllow\nDeny"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-09-06 15:22:46.342392",
+=======
+ "modified": "2020-09-30 14:37:13.616002",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Integrations",
  "name": "Social Login Key",
@@ -197,7 +211,13 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+<<<<<<< HEAD
  "states": [],
  "title_field": "provider_name",
  "track_changes": 1
 }
+=======
+ "title_field": "provider_name",
+ "track_changes": 1
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

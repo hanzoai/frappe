@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class DocField(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -120,6 +121,8 @@ class DocField(Document):
 		width: DF.Data | None
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def get_link_doctype(self):
 		"""Returns the Link doctype for the docfield (if applicable)
 		if fieldtype is Link: Returns "options"
@@ -131,6 +134,7 @@ class DocField(Document):
 		if self.fieldtype == "Table MultiSelect":
 			table_doctype = self.options
 
+<<<<<<< HEAD
 			return frappe.db.get_value(
 				"DocField",
 				{
@@ -142,10 +146,21 @@ class DocField(Document):
 				"options",
 			)
 
+=======
+			link_doctype = frappe.db.get_value(
+				"DocField",
+				{"fieldtype": "Link", "parenttype": "DocType", "parent": table_doctype, "in_list_view": 1},
+				"options",
+			)
+
+			return link_doctype
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def get_select_options(self):
 		if self.fieldtype == "Select":
 			options = self.options or ""
 			return [d for d in options.split("\n") if d]
+<<<<<<< HEAD
 
 	def __repr__(self):
 		unsaved = "unsaved" if not self.name else ""
@@ -155,3 +170,5 @@ class DocField(Document):
 		parent = f" parent={self.parent}" if getattr(self, "parent", None) else ""
 
 		return f"<{self.fieldtype}{doctype}: {self.fieldname}{docstatus}{parent}{unsaved}>"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -11,7 +11,10 @@
   "language",
   "column_break_3",
   "time_zone",
+<<<<<<< HEAD
   "currency",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "enable_onboarding",
   "setup_complete",
   "disable_document_sharing",
@@ -25,6 +28,7 @@
   "float_precision",
   "currency_precision",
   "rounding_method",
+<<<<<<< HEAD
   "permissions",
   "apply_strict_user_permissions",
   "column_break_21",
@@ -43,6 +47,43 @@
   "login_with_email_link",
   "login_with_email_link_expiry",
   "rate_limit_email_link_login",
+=======
+  "sec_backup_limit",
+  "backup_limit",
+  "encrypt_backup",
+  "background_workers",
+  "enable_scheduler",
+  "dormant_days",
+  "permissions",
+  "apply_strict_user_permissions",
+  "column_break_21",
+  "allow_guests_to_upload_files",
+  "force_web_capture_mode_for_uploads",
+  "security",
+  "session_expiry",
+  "session_expiry_mobile",
+  "document_share_key_expiry",
+  "column_break_13",
+  "deny_multiple_sessions",
+  "allow_login_using_mobile_number",
+  "allow_login_using_user_name",
+  "disable_user_pass_login",
+  "login_with_email_link",
+  "login_with_email_link_expiry",
+  "rate_limit_email_link_login",
+  "allow_error_traceback",
+  "strip_exif_metadata_from_uploaded_images",
+  "allow_older_web_view_links",
+  "apply_perm_level_on_api_calls",
+  "password_settings",
+  "logout_on_password_reset",
+  "force_user_to_reset_password",
+  "reset_password_link_expiry_duration",
+  "password_reset_limit",
+  "column_break_31",
+  "enable_password_policy",
+  "minimum_password_score",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "brute_force_security",
   "allow_consecutive_login_attempts",
   "column_break_34",
@@ -54,6 +95,7 @@
   "two_factor_method",
   "lifespan_qrcode_image",
   "otp_issuer_name",
+<<<<<<< HEAD
   "password_tab",
   "password_settings",
   "logout_on_password_reset",
@@ -64,6 +106,8 @@
   "enable_password_policy",
   "minimum_password_score",
   "email_tab",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "email",
   "email_footer_address",
   "email_retry_limit",
@@ -72,6 +116,7 @@
   "hide_footer_in_auto_email_reports",
   "attach_view_link",
   "store_attached_pdf_document",
+<<<<<<< HEAD
   "welcome_email_template",
   "reset_password_template",
   "files_tab",
@@ -103,6 +148,18 @@
   "enable_telemetry",
   "search_section",
   "link_field_results_limit"
+=======
+  "prepared_report_section",
+  "max_auto_email_report_per_user",
+  "system_updates_section",
+  "disable_system_update_notification",
+  "disable_change_log_notification",
+  "telemetry_section",
+  "enable_telemetry",
+  "files_section",
+  "max_file_size",
+  "column_break_uqma"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  ],
  "fields": [
   {
@@ -143,6 +200,10 @@
    "read_only": 1
   },
   {
+<<<<<<< HEAD
+=======
+   "collapsible": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "date_and_number_format",
    "fieldtype": "Section Break",
    "label": "Date and Number Format"
@@ -187,8 +248,15 @@
    "options": "\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
   },
   {
+<<<<<<< HEAD
    "fieldname": "sec_backup_limit",
    "fieldtype": "Section Break"
+=======
+   "collapsible": 1,
+   "fieldname": "sec_backup_limit",
+   "fieldtype": "Section Break",
+   "label": "Backups"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "default": "3",
@@ -198,6 +266,10 @@
    "label": "Number of Backups"
   },
   {
+<<<<<<< HEAD
+=======
+   "collapsible": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "background_workers",
    "fieldtype": "Section Break",
    "label": "Background Workers"
@@ -211,6 +283,10 @@
    "label": "Enable Scheduled Jobs"
   },
   {
+<<<<<<< HEAD
+=======
+   "collapsible": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "permissions",
    "fieldtype": "Section Break",
    "label": "Permissions"
@@ -223,17 +299,41 @@
    "label": "Apply Strict User Permissions"
   },
   {
+<<<<<<< HEAD
    "fieldname": "security",
    "fieldtype": "Section Break"
   },
   {
    "default": "170:00",
+=======
+   "collapsible": 1,
+   "fieldname": "security",
+   "fieldtype": "Section Break",
+   "label": "Security"
+  },
+  {
+   "default": "60:00",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "description": "Example: Setting this to 24:00 will log out a user if they are not active for 24:00 hours.",
    "fieldname": "session_expiry",
    "fieldtype": "Data",
    "label": "Session Expiry (idle timeout)"
   },
   {
+<<<<<<< HEAD
+=======
+   "default": "720:00",
+   "description": "In Hours",
+   "fieldname": "session_expiry_mobile",
+   "fieldtype": "Data",
+   "label": "Session Expiry Mobile"
+  },
+  {
+   "fieldname": "column_break_13",
+   "fieldtype": "Column Break"
+  },
+  {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "default": "0",
    "description": "Note: Multiple sessions will be allowed in case of mobile device",
    "fieldname": "deny_multiple_sessions",
@@ -261,6 +361,10 @@
    "label": "Show Full Error and Allow Reporting of Issues to the Developer"
   },
   {
+<<<<<<< HEAD
+=======
+   "collapsible": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "password_settings",
    "fieldtype": "Section Break",
    "label": "Password"
@@ -291,6 +395,10 @@
    "options": "2\n3\n4"
   },
   {
+<<<<<<< HEAD
+=======
+   "collapsible": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "brute_force_security",
    "fieldtype": "Section Break",
    "label": "Brute Force Security"
@@ -313,6 +421,10 @@
    "label": "Allow Login After Fail"
   },
   {
+<<<<<<< HEAD
+=======
+   "collapsible": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "two_factor_authentication",
    "fieldtype": "Section Break",
    "label": "Two Factor Authentication"
@@ -341,7 +453,10 @@
   },
   {
    "default": "OTP App",
+<<<<<<< HEAD
    "depends_on": "enable_two_factor_auth",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "description": "Choose authentication method to be used by all users",
    "fieldname": "two_factor_method",
    "fieldtype": "Select",
@@ -349,7 +464,11 @@
    "options": "OTP App\nSMS\nEmail"
   },
   {
+<<<<<<< HEAD
    "depends_on": "eval:doc.enable_two_factor_auth && doc.two_factor_method == \"OTP App\"",
+=======
+   "depends_on": "eval:doc.two_factor_method == \"OTP App\"",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "description": "Time in seconds to retain QR code image on server. Min:<strong>240</strong>",
    "fieldname": "lifespan_qrcode_image",
    "fieldtype": "Int",
@@ -363,8 +482,15 @@
    "label": "OTP Issuer Name"
   },
   {
+<<<<<<< HEAD
    "fieldname": "email",
    "fieldtype": "Section Break"
+=======
+   "collapsible": 1,
+   "fieldname": "email",
+   "fieldtype": "Section Break",
+   "label": "Email"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "description": "Your organization name and address for the email footer.",
@@ -432,6 +558,10 @@
    "label": "Include Web View Link in Email"
   },
   {
+<<<<<<< HEAD
+=======
+   "collapsible": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "prepared_report_section",
    "fieldtype": "Section Break",
    "label": "Reports"
@@ -457,8 +587,15 @@
    "label": "Encrypt Backups"
   },
   {
+<<<<<<< HEAD
    "fieldname": "system_updates_section",
    "fieldtype": "Section Break"
+=======
+   "collapsible": 1,
+   "fieldname": "system_updates_section",
+   "fieldtype": "Section Break",
+   "label": "System Updates"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "default": "0",
@@ -519,6 +656,7 @@
    "label": "Disable Username/Password Login"
   },
   {
+<<<<<<< HEAD
    "default": "1",
    "description": "Allow users to log in without a password, using a login link sent to their email",
    "fieldname": "login_with_email_link",
@@ -531,6 +669,12 @@
    "fieldname": "login_with_email_link_expiry",
    "fieldtype": "Int",
    "label": "Login with email link expiry (in minutes)"
+=======
+   "default": "0",
+   "fieldname": "apply_perm_level_on_api_calls",
+   "fieldtype": "Check",
+   "label": "Apply Perm Level on API calls (Recommended)"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "default": "Banker's Rounding (legacy)",
@@ -546,6 +690,24 @@
    "label": "Disable Document Sharing"
   },
   {
+<<<<<<< HEAD
+=======
+   "default": "0",
+   "description": "Allow users to log in without a password, using a login link sent to their email",
+   "fieldname": "login_with_email_link",
+   "fieldtype": "Check",
+   "label": "Login with email link"
+  },
+  {
+   "default": "10",
+   "depends_on": "login_with_email_link",
+   "fieldname": "login_with_email_link_expiry",
+   "fieldtype": "Int",
+   "label": "Login with email link expiry (in minutes)"
+  },
+  {
+   "collapsible": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "telemetry_section",
    "fieldtype": "Section Break",
    "label": "Telemetry"
@@ -557,6 +719,7 @@
    "label": "Allow Sending Usage Data for Improving Applications"
   },
   {
+<<<<<<< HEAD
    "fieldname": "welcome_email_template",
    "fieldtype": "Link",
    "label": "Welcome Email Template",
@@ -569,6 +732,8 @@
    "options": "Email Template"
   },
   {
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "default": "0",
    "description": "When uploading files, force the use of the web-based image capture. If this is unchecked, the default behavior is to use the mobile native camera when use from a mobile is detected.",
    "fieldname": "force_web_capture_mode_for_uploads",
@@ -576,8 +741,15 @@
    "label": "Force Web Capture Mode for Uploads"
   },
   {
+<<<<<<< HEAD
    "fieldname": "files_section",
    "fieldtype": "Section Break"
+=======
+   "collapsible": 1,
+   "fieldname": "files_section",
+   "fieldtype": "Section Break",
+   "label": "Files"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "max_file_size",
@@ -590,6 +762,7 @@
    "fieldtype": "Column Break"
   },
   {
+<<<<<<< HEAD
    "description": "Provide a list of allowed file extensions for file uploads. Each line should contain one allowed file type. If unset, all file extensions are allowed. Example: <br>CSV<br>JPG<br>PNG",
    "fieldname": "allowed_file_extensions",
    "fieldtype": "Small Text",
@@ -656,6 +829,8 @@
    "non_negative": 1
   },
   {
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "default": "1",
    "description": "When sending document using email, store the PDF on Communication. Warning: This can increase your storage usage.",
    "fieldname": "store_attached_pdf_document",
@@ -670,6 +845,7 @@
    "label": "Rate limit for email link login"
   },
   {
+<<<<<<< HEAD
    "fieldname": "app_tab",
    "fieldtype": "Tab Break",
    "label": "App"
@@ -681,10 +857,13 @@
    "label": "Default App"
   },
   {
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "default": "0",
    "fieldname": "use_number_format_from_currency",
    "fieldtype": "Check",
    "label": "Use Number Format from Currency"
+<<<<<<< HEAD
   },
   {
    "description": "Default display currency",
@@ -692,12 +871,18 @@
    "fieldtype": "Link",
    "label": "Currency",
    "options": "Currency"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-11-04 15:51:39.954876",
+=======
+ "modified": "2024-09-26 16:20:59.417151",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
@@ -713,7 +898,14 @@
  ],
  "quick_entry": 1,
  "sort_field": "modified",
+<<<<<<< HEAD
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
 }
+=======
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

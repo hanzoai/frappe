@@ -10,6 +10,7 @@ from frappe.website.website_generator import WebsiteGenerator
 
 
 class HelpArticle(WebsiteGenerator):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -30,6 +31,8 @@ class HelpArticle(WebsiteGenerator):
 		title: DF.Data
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		self.set_route()
 
@@ -114,7 +117,11 @@ def get_sidebar_items():
 			as_dict=True,
 		)
 
+<<<<<<< HEAD
 	return frappe.cache.get_value("knowledge_base:category_sidebar", _get)
+=======
+	return frappe.cache().get_value("knowledge_base:category_sidebar", _get)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def clear_cache():
@@ -126,14 +133,26 @@ def clear_cache():
 
 
 def clear_website_cache(path=None):
+<<<<<<< HEAD
 	frappe.cache.delete_value("knowledge_base:category_sidebar")
 	frappe.cache.delete_value("knowledge_base:faq")
+=======
+	frappe.cache().delete_value("knowledge_base:category_sidebar")
+	frappe.cache().delete_value("knowledge_base:faq")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist(allow_guest=True)
 @rate_limit(key="article", limit=5, seconds=60 * 60)
 def add_feedback(article: str, helpful: str):
+<<<<<<< HEAD
 	field = "not_helpful" if helpful == "No" else "helpful"
 
+=======
+	if not isinstance("article", str):
+		frappe.throw(_("Invalid Article Name"))
+
+	field = "not_helpful" if helpful == "No" else "helpful"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	value = cint(frappe.db.get_value("Help Article", article, field))
 	frappe.db.set_value("Help Article", article, field, value + 1, update_modified=False)

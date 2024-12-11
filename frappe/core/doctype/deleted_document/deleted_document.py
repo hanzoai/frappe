@@ -11,6 +11,7 @@ from frappe.model.workflow import get_workflow_name
 
 
 class DeletedDocument(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -26,6 +27,8 @@ class DeletedDocument(Document):
 		restored: DF.Check
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	no_feed_on_delete = True
 
 	@staticmethod
@@ -82,11 +85,19 @@ def bulk_restore(docnames):
 			restored.append(d)
 
 		except frappe.DocumentAlreadyRestored:
+<<<<<<< HEAD
 			frappe.clear_last_message()
 			invalid.append(d)
 
 		except Exception:
 			frappe.clear_last_message()
+=======
+			frappe.message_log.pop()
+			invalid.append(d)
+
+		except Exception:
+			frappe.message_log.pop()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			failed.append(d)
 			frappe.db.rollback()
 

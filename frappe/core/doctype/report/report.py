@@ -17,6 +17,7 @@ from frappe.utils.safe_exec import check_safe_sql_query, safe_exec
 
 
 class Report(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -48,6 +49,8 @@ class Report(Document):
 		timeout: DF.Int
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		"""only administrator can save standard report"""
 		if not self.module:
@@ -81,15 +84,22 @@ class Report(Document):
 	def on_update(self):
 		self.export_doc()
 
+<<<<<<< HEAD
 	def before_export(self, doc):
 		doc.letterhead = None
 		doc.prepared_report = 0
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def on_trash(self):
 		if (
 			self.is_standard == "Yes"
 			and not cint(getattr(frappe.local.conf, "developer_mode", 0))
+<<<<<<< HEAD
 			and not (frappe.flags.in_migrate or frappe.flags.in_patch)
+=======
+			and not frappe.flags.in_patch
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		):
 			frappe.throw(_("You are not allowed to delete Standard Report"))
 		delete_custom_role("report", self.name)
@@ -153,7 +163,11 @@ class Report(Document):
 
 	def execute_script_report(self, filters):
 		# save the timestamp to automatically set to prepared
+<<<<<<< HEAD
 		threshold = 15
+=======
+		threshold = 30
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		res = []
 
 		start_time = datetime.datetime.now()
@@ -169,7 +183,11 @@ class Report(Document):
 		if execution_time > threshold and not self.prepared_report and not frappe.conf.developer_mode:
 			frappe.enqueue(enable_prepared_report, report=self.name)
 
+<<<<<<< HEAD
 		frappe.cache.hset("report_execution_time", self.name, execution_time)
+=======
+		frappe.cache().hset("report_execution_time", self.name, execution_time)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		return res
 
@@ -182,7 +200,11 @@ class Report(Document):
 	def execute_script(self, filters):
 		# server script
 		loc = {"filters": frappe._dict(filters), "data": None, "result": None}
+<<<<<<< HEAD
 		safe_exec(self.report_script, None, loc, script_filename=f"Report {self.name}")
+=======
+		safe_exec(self.report_script, None, loc)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if loc["data"]:
 			return loc["data"]
 		else:
@@ -289,11 +311,18 @@ class Report(Document):
 			columns = params.get("fields")
 		else:
 			columns = [["name", self.ref_doctype]]
+<<<<<<< HEAD
 			columns.extend(
 				[df.fieldname, self.ref_doctype]
 				for df in frappe.get_meta(self.ref_doctype).fields
 				if df.in_list_view
 			)
+=======
+			for df in frappe.get_meta(self.ref_doctype).fields:
+				if df.in_list_view:
+					columns.append([df.fieldname, self.ref_doctype])
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return columns
 
 	def get_standard_report_filters(self, params, filters):
@@ -373,15 +402,33 @@ class Report(Document):
 		return data
 
 	@frappe.whitelist()
+<<<<<<< HEAD
 	def toggle_disable(self, disable: bool):
+=======
+	def toggle_disable(self, disable):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if not self.has_permission("write"):
 			frappe.throw(_("You are not allowed to edit the report."))
 
 		self.db_set("disabled", cint(disable))
 
+<<<<<<< HEAD
 
 def is_prepared_report_enabled(report):
 	return cint(frappe.db.get_value("Report", report, "prepared_report")) or 0
+=======
+	@frappe.whitelist()
+	def enable_prepared_report(self):
+		enable_prepared_report(self.name)
+		frappe.msgprint(_("Prepared Report Enabled"))
+
+
+def is_prepared_report_disabled(report):
+	return (
+		frappe.db.get_value("Report", report, "disable_prepared_report")
+		and not frappe.db.get_value("Report", report, "prepared_report")
+	) or 0
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_report_module_dotted_path(module, report_name):
@@ -417,3 +464,7 @@ def get_group_by_column_label(args, meta):
 
 def enable_prepared_report(report: str):
 	frappe.db.set_value("Report", report, "prepared_report", 1)
+<<<<<<< HEAD
+=======
+	frappe.db.set_value("Report", report, "disable_prepared_report", 0)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

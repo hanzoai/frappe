@@ -9,8 +9,11 @@ EVENT_MAP = {
 	"before_validate": "Before Validate",
 	"validate": "Before Save",
 	"on_update": "After Save",
+<<<<<<< HEAD
 	"before_rename": "Before Rename",
 	"after_rename": "After Rename",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"before_submit": "Before Submit",
 	"on_submit": "After Submit",
 	"before_cancel": "Before Cancel",
@@ -58,7 +61,11 @@ def get_server_script_map():
 	if frappe.flags.in_patch and not frappe.db.table_exists("Server Script"):
 		return {}
 
+<<<<<<< HEAD
 	script_map = frappe.cache.get_value("server_script_map")
+=======
+	script_map = frappe.cache().get_value("server_script_map")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if script_map is None:
 		script_map = {"permission_query": {}}
 		enabled_server_scripts = frappe.get_all(
@@ -76,6 +83,10 @@ def get_server_script_map():
 			else:
 				script_map.setdefault("_api", {})[script.api_method] = script.name
 
+<<<<<<< HEAD
 		frappe.cache.set_value("server_script_map", script_map)
+=======
+		frappe.cache().set_value("server_script_map", script_map)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return script_map

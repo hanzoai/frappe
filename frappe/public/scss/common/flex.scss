@@ -74,8 +74,11 @@
 }
 
 .level-item {
+<<<<<<< HEAD
 	font-weight: var(--weight-medium);
 	color: var(--text-muted);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	align-items: center;
 	display: flex;
 	flex-basis: auto;

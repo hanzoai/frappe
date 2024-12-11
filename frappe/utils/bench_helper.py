@@ -3,8 +3,11 @@ import json
 import os
 import traceback
 import warnings
+<<<<<<< HEAD
 from pathlib import Path
 from textwrap import dedent
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import click
 
@@ -20,6 +23,7 @@ def main():
 	click.Group(commands=commands)(prog_name="bench")
 
 
+<<<<<<< HEAD
 def get_app_groups() -> dict[str, click.Group]:
 	"""Get all app groups, put them in main group "frappe" since bench is
 	designed to only handle that"""
@@ -32,6 +36,24 @@ def get_app_groups() -> dict[str, click.Group]:
 
 def get_app_group(app: str) -> click.Group:
 	if app_commands := get_app_commands(app):
+=======
+def get_app_groups():
+	"""Get all app groups, put them in main group "frappe" since bench is
+	designed to only handle that"""
+	commands = dict()
+	for app in get_apps():
+		app_commands = get_app_commands(app)
+		if app_commands:
+			commands.update(app_commands)
+
+	ret = dict(frappe=click.group(name="frappe", commands=commands)(app_group))
+	return ret
+
+
+def get_app_group(app):
+	app_commands = get_app_commands(app)
+	if app_commands:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return click.group(name=app, commands=app_commands)(app_group)
 
 
@@ -46,13 +68,18 @@ def app_group(ctx, site=False, force=False, verbose=False, profile=False):
 		ctx.info_name = ""
 
 
+<<<<<<< HEAD
 def get_sites(site_arg: str) -> list[str]:
+=======
+def get_sites(site_arg):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if site_arg == "all":
 		return frappe.utils.get_sites()
 	elif site_arg:
 		return [site_arg]
 	elif os.environ.get("FRAPPE_SITE"):
 		return [os.environ.get("FRAPPE_SITE")]
+<<<<<<< HEAD
 	elif default_site := frappe.get_conf().default_site:
 		return [default_site]
 	# This is not supported, just added here for warning.
@@ -81,6 +108,29 @@ def get_app_commands(app: str) -> dict:
 	except Exception:
 		traceback.print_exc()
 		return ret
+=======
+	elif os.path.exists("currentsite.txt"):
+		with open("currentsite.txt") as f:
+			site = f.read().strip()
+			if site:
+				return [site]
+	return []
+
+
+def get_app_commands(app):
+	if os.path.exists(os.path.join("..", "apps", app, app, "commands.py")) or os.path.exists(
+		os.path.join("..", "apps", app, app, "commands", "__init__.py")
+	):
+		try:
+			app_command_module = importlib.import_module(app + ".commands")
+		except Exception:
+			traceback.print_exc()
+			return []
+	else:
+		return []
+
+	ret = {}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	for command in getattr(app_command_module, "commands", []):
 		ret[command.name] = command
 	return ret

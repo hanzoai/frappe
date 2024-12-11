@@ -23,7 +23,10 @@
   "options",
   "sort_options",
   "show_dashboard",
+<<<<<<< HEAD
   "link_filters",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "defaults_section",
   "default",
   "column_break_6",
@@ -31,7 +34,10 @@
   "fetch_if_empty",
   "visibility_section",
   "hidden",
+<<<<<<< HEAD
   "show_on_timeline",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "bold",
   "allow_in_quick_entry",
   "translatable",
@@ -75,7 +81,10 @@
   "column_break_22",
   "description",
   "documentation_url",
+<<<<<<< HEAD
   "placeholder",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "oldfieldname",
   "oldfieldtype"
  ],
@@ -555,9 +564,14 @@
   {
    "depends_on": "eval:!in_list([\"Tab Break\", \"Section Break\", \"Column Break\", \"Button\", \"HTML\"], doc.fieldtype)",
    "fieldname": "documentation_url",
+<<<<<<< HEAD
    "fieldtype": "Data",
    "label": "Documentation URL",
    "options": "URL"
+=======
+   "fieldtype": "Small Text",
+   "label": "Documentation URL"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "default": "0",
@@ -567,6 +581,7 @@
    "label": "Sort Options"
   },
   {
+<<<<<<< HEAD
    "fieldname": "link_filters",
    "fieldtype": "JSON",
    "label": "Link Filters"
@@ -584,6 +599,8 @@
    "label": "Placeholder"
   },
   {
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "default": "0",
    "depends_on": "eval:['Attach', 'Attach Image'].includes(doc.fieldtype)",
    "fieldname": "make_attachment_public",

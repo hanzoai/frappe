@@ -8,6 +8,7 @@ from frappe.query_builder.functions import Now
 
 
 class ErrorLog(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -24,6 +25,8 @@ class ErrorLog(Document):
 		trace_id: DF.Data | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def onload(self):
 		if not self.seen and not frappe.flags.read_only:
 			self.db_set("seen", 1, update_modified=0)

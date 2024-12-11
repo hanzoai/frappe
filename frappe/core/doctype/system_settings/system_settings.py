@@ -9,6 +9,7 @@ from frappe.utils import cint, today
 
 
 class SystemSettings(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -99,6 +100,8 @@ class SystemSettings(Document):
 		welcome_email_template: DF.Link | None
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		from frappe.twofactor import toggle_two_factor_auth
 
@@ -109,10 +112,18 @@ class SystemSettings(Document):
 		elif not enable_password_policy:
 			self.minimum_password_score = ""
 
+<<<<<<< HEAD
 		if self.session_expiry:
 			parts = self.session_expiry.split(":")
 			if len(parts) != 2 or not (cint(parts[0]) or cint(parts[1])):
 				frappe.throw(_("Session Expiry must be in format {0}").format("hh:mm"))
+=======
+		for key in ("session_expiry", "session_expiry_mobile"):
+			if self.get(key):
+				parts = self.get(key).split(":")
+				if len(parts) != 2 or not (cint(parts[0]) or cint(parts[1])):
+					frappe.throw(_("Session Expiry must be in format {0}").format("hh:mm"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if self.enable_two_factor_auth:
 			if self.two_factor_method == "SMS":
@@ -133,6 +144,7 @@ class SystemSettings(Document):
 
 		self.validate_user_pass_login()
 		self.validate_backup_limit()
+<<<<<<< HEAD
 		self.validate_file_extensions()
 
 		if not self.link_field_results_limit:
@@ -144,6 +156,8 @@ class SystemSettings(Document):
 			frappe.msgprint(
 				_("{0} can not be more than {1}").format(label, 50), alert=True, indicator="yellow"
 			)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def validate_user_pass_login(self):
 		if not self.disable_user_pass_login:
@@ -151,12 +165,20 @@ class SystemSettings(Document):
 
 		social_login_enabled = frappe.db.exists("Social Login Key", {"enable_social_login": 1})
 		ldap_enabled = frappe.db.get_single_value("LDAP Settings", "enabled")
+<<<<<<< HEAD
 		login_with_email_link_enabled = frappe.db.get_single_value("System Settings", "login_with_email_link")
 
 		if not (social_login_enabled or ldap_enabled or login_with_email_link_enabled):
 			frappe.throw(
 				_(
 					"Please enable atleast one Social Login Key or LDAP or Login With Email Link before disabling username/password based login."
+=======
+
+		if not (social_login_enabled or ldap_enabled):
+			frappe.throw(
+				_(
+					"Please enable atleast one Social Login Key or LDAP before disabling username/password based login."
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				)
 			)
 
@@ -165,6 +187,7 @@ class SystemSettings(Document):
 			frappe.msgprint(_("Number of backups must be greater than zero."), alert=True)
 			self.backup_limit = 1
 
+<<<<<<< HEAD
 	def validate_file_extensions(self):
 		if not self.allowed_file_extensions:
 			return
@@ -178,6 +201,13 @@ class SystemSettings(Document):
 
 		frappe.cache.delete_value("system_settings")
 		frappe.cache.delete_value("time_zone")
+=======
+	def on_update(self):
+		self.set_defaults()
+
+		frappe.cache().delete_value("system_settings")
+		frappe.cache().delete_value("time_zone")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if frappe.flags.update_last_reset_password_date:
 			update_last_reset_password_date()

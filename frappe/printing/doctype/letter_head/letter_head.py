@@ -8,6 +8,7 @@ from frappe.utils import flt, is_image
 
 
 class LetterHead(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -33,6 +34,8 @@ class LetterHead(Document):
 		source: DF.Literal["Image", "HTML"]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def before_insert(self):
 		# for better UX, let user set from attachment
 		self.source = "Image"

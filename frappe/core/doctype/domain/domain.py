@@ -7,6 +7,7 @@ from frappe.model.document import Document
 
 
 class Domain(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -17,6 +18,8 @@ class Domain(Document):
 
 		domain: DF.Data
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""Domain documents are created automatically when DocTypes
 	with "Restricted" domains are imported during
 	installation or migration"""

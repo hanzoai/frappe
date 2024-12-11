@@ -62,6 +62,11 @@ class Engine:
 			self.validate_doctype()
 			self.table = frappe.qb.DocType(table)
 
+<<<<<<< HEAD
+=======
+		self.validate_filters = validate_filters
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if update:
 			self.query = frappe.qb.update(self.table)
 		elif into:

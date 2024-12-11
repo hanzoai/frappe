@@ -31,3 +31,26 @@ def getpage():
 	doc = get(page)
 
 	frappe.response.docs.append(doc)
+<<<<<<< HEAD
+=======
+
+
+def has_permission(page):
+	if frappe.session.user == "Administrator" or "System Manager" in frappe.get_roles():
+		return True
+
+	page_roles = [d.role for d in page.get("roles")]
+	if page_roles:
+		if frappe.session.user == "Guest" and "Guest" not in page_roles:
+			return False
+		elif not set(page_roles).intersection(set(frappe.get_roles())):
+			# check if roles match
+			return False
+
+	if not frappe.has_permission("Page", ptype="read", doc=page):
+		# check if there are any user_permissions
+		return False
+	else:
+		# hack for home pages! if no Has Roles, allow everyone to see!
+		return True
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

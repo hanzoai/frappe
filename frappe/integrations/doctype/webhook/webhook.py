@@ -13,7 +13,10 @@ import requests
 import frappe
 from frappe import _
 from frappe.model.document import Document
+<<<<<<< HEAD
 from frappe.utils.background_jobs import get_queues_timeout
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils.jinja import validate_template
 from frappe.utils.safe_exec import get_safe_globals
 
@@ -21,6 +24,7 @@ WEBHOOK_SECRET_HEADER = "X-Frappe-Webhook-Signature"
 
 
 class Webhook(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -59,6 +63,8 @@ class Webhook(Document):
 		webhook_secret: DF.Password | None
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		self.validate_docevent()
 		self.validate_condition()
@@ -69,7 +75,11 @@ class Webhook(Document):
 		self.preview_document = None
 
 	def on_update(self):
+<<<<<<< HEAD
 		frappe.cache.delete_value("webhooks")
+=======
+		frappe.cache().delete_value("webhooks")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def validate_docevent(self):
 		if self.webhook_doctype:
@@ -107,7 +117,14 @@ class Webhook(Document):
 
 	def validate_repeating_fields(self):
 		"""Error when Same Field is entered multiple times in webhook_data"""
+<<<<<<< HEAD
 		webhook_data = [entry.fieldname for entry in self.webhook_data]
+=======
+		webhook_data = []
+		for entry in self.webhook_data:
+			webhook_data.append(entry.fieldname)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if len(webhook_data) != len(set(webhook_data)):
 			frappe.throw(_("Same Field is entered more than once"))
 
@@ -156,6 +173,7 @@ def get_context(doc):
 
 
 def enqueue_webhook(doc, webhook) -> None:
+<<<<<<< HEAD
 	request_url = headers = data = r = None
 	try:
 		webhook: Webhook = frappe.get_doc("Webhook", webhook.get("name"))
@@ -168,29 +186,55 @@ def enqueue_webhook(doc, webhook) -> None:
 	except Exception as e:
 		frappe.logger().debug({"enqueue_webhook_error": e})
 		log_request(webhook.name, doc.name, request_url, headers, data)
+=======
+	headers = data = None
+	try:
+		webhook: Webhook = frappe.get_doc("Webhook", webhook.get("name"))
+		headers = get_webhook_headers(doc, webhook)
+		data = get_webhook_data(doc, webhook)
+	except Exception as e:
+		frappe.logger().debug({"enqueue_webhook_error": e})
+		log_request(webhook.name, doc.name, webhook.request_url, headers, data)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return
 
 	for i in range(3):
 		try:
 			r = requests.request(
 				method=webhook.request_method,
+<<<<<<< HEAD
 				url=request_url,
+=======
+				url=webhook.request_url,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				data=json.dumps(data, default=str),
 				headers=headers,
 				timeout=webhook.timeout or 5,
 			)
 			r.raise_for_status()
 			frappe.logger().debug({"webhook_success": r.text})
+<<<<<<< HEAD
 			log_request(webhook.name, doc.name, request_url, headers, data, r)
+=======
+			log_request(webhook.name, doc.name, webhook.request_url, headers, data, r)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			break
 
 		except requests.exceptions.ReadTimeout as e:
 			frappe.logger().debug({"webhook_error": e, "try": i + 1})
+<<<<<<< HEAD
 			log_request(webhook.name, doc.name, request_url, headers, data)
 
 		except Exception as e:
 			frappe.logger().debug({"webhook_error": e, "try": i + 1})
 			log_request(webhook.name, doc.name, request_url, headers, data, r)
+=======
+			log_request(webhook.name, doc.name, webhook.request_url, headers, data)
+
+		except Exception as e:
+			frappe.logger().debug({"webhook_error": e, "try": i + 1})
+			log_request(webhook.name, doc.name, webhook.request_url, headers, data, r)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			sleep(3 * i + 1)
 			if i != 2:
 				continue
@@ -213,7 +257,11 @@ def log_request(
 			"url": url,
 			"headers": frappe.as_json(headers) if headers else None,
 			"data": frappe.as_json(data) if data else None,
+<<<<<<< HEAD
 			"response": res.text if res is not None else None,
+=======
+			"response": res and res.text,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			"error": frappe.get_traceback(),
 		}
 	)
@@ -254,6 +302,7 @@ def get_webhook_data(doc, webhook):
 		data = json.loads(data)
 
 	return data
+<<<<<<< HEAD
 
 
 @frappe.whitelist()
@@ -262,3 +311,5 @@ def get_all_queues():
 	frappe.only_for("System Manager")
 
 	return get_queues_timeout().keys()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

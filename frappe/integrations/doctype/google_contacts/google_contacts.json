@@ -1,5 +1,8 @@
 {
+<<<<<<< HEAD
  "actions": [],
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "autoname": "format:GC-{email_id}",
  "creation": "2019-06-14 00:09:39.441961",
  "doctype": "DocType",
@@ -98,12 +101,19 @@
    "label": "Push to Google Contacts"
   }
  ],
+<<<<<<< HEAD
  "links": [],
  "modified": "2023-12-08 15:52:37.525003",
  "modified_by": "Administrator",
  "module": "Integrations",
  "name": "Google Contacts",
  "naming_rule": "Expression",
+=======
+ "modified": "2020-09-18 17:26:09.703215",
+ "modified_by": "Administrator",
+ "module": "Integrations",
+ "name": "Google Contacts",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "owner": "Administrator",
  "permissions": [
   {
@@ -119,14 +129,28 @@
   {
    "create": 1,
    "delete": 1,
+<<<<<<< HEAD
    "if_owner": 1,
    "read": 1,
    "role": "Desk User",
+=======
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
+   "share": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "write": 1
   }
  ],
  "sort_field": "modified",
+<<<<<<< HEAD
  "sort_order": "DESC",
  "states": [],
+=======
+ "sort_order": "ASC",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "track_changes": 1
 }

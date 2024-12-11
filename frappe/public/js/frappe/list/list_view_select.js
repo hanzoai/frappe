@@ -13,7 +13,11 @@ frappe.views.ListViewSelect = class ListViewSelect {
 		}
 		let $el = this.page.add_custom_menu_item(
 			this.parent,
+<<<<<<< HEAD
 			this.label_map[view] || __(view),
+=======
+			__(view),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			action,
 			true,
 			null,
@@ -40,11 +44,14 @@ frappe.views.ListViewSelect = class ListViewSelect {
 	set_route(view, calendar_name) {
 		const route = [this.slug(), "view", view];
 		if (calendar_name) route.push(calendar_name);
+<<<<<<< HEAD
 
 		let search_params = cur_list?.get_search_params();
 		if (search_params) {
 			frappe.route_options = Object.fromEntries(search_params);
 		}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.set_route(route);
 	}
 

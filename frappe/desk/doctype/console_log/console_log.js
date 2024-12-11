@@ -2,6 +2,7 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Console Log", {
+<<<<<<< HEAD
 	refresh: function (frm) {
 		frm.add_custom_button(__("Re-Run in Console"), () => {
 			window.localStorage.setItem("system_console_code", frm.doc.script);
@@ -9,4 +10,8 @@ frappe.ui.form.on("Console Log", {
 			frappe.set_route("Form", "System Console");
 		});
 	},
+=======
+	// refresh: function(frm) {
+	// }
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 });

@@ -9,6 +9,10 @@ Action,veiksmas,
 Actions,Veiksmai,
 Active,aktyvus,
 Add,Papildyti,
+<<<<<<< HEAD
+=======
+Add Comment,Pridėti komentarą,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,Pridėti Row,
 Address,adresas,
 Address Line 2,Adreso eilutė 2,
@@ -143,6 +147,10 @@ Monday,pirmadienis,
 Monthly,kas mėnesį,
 More,daugiau,
 More Information,Daugiau informacijos,
+<<<<<<< HEAD
+=======
+More...,Daugiau ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,žingsnis,
 My Account,Mano sąskaita,
 New Address,Naujas adresas,
@@ -155,6 +163,10 @@ No items found.,Nerasta elementų.,
 None,Nė vienas,
 Not Permitted,Neleistina,
 Not active,neaktyvus,
+<<<<<<< HEAD
+=======
+Notes,Pastabos,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,Numeris,
 Online,Prisijunges,
 Operation,Operacija,
@@ -164,12 +176,25 @@ Owner,Savininkas,
 Page Missing or Moved,Puslapis trūkstama arba persikėlė,
 Parameter,Parametras,
 Password,slaptažodis,
+<<<<<<< HEAD
 Period,laikotarpis,
 Pincode,PIN kodas,
+=======
+Payment Gateway,Mokėjimo šliuzai,
+Payment Gateway Name,Mokėjimo šliuzo pavadinimas,
+Payments,Mokėjimai,
+Period,laikotarpis,
+Pincode,PIN kodas,
+Plan Name,Plano pavadinimas,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,Prašome įjungti iššokančių langų,
 Please select Company,Prašome pasirinkti kompaniją,
 Please select {0},Prašome pasirinkti {0},
 Please set Email Address,Prašome nustatyti elektroninio pašto adresą,
+<<<<<<< HEAD
+=======
+Portal,portalas,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,portalo Nustatymai,
 Preview,Peržiūrėti,
 Primary,pagrindinis,
@@ -214,6 +239,10 @@ Salutation,pasveikinimas,
 Sample,Pavyzdys,
 Saturday,šeštadienis,
 Saved,Išsaugota,
+<<<<<<< HEAD
+=======
+Scan Barcode,Skenuoti Barcodą,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,planuojama,
 Search,Paieška,
 Secret Key,slaptas raktas,
@@ -228,6 +257,10 @@ Settings,Nustatymai,
 Shipping,gabenimas,
 Short Name,Trumpas vardas,
 Slideshow,Skaidrės,
+<<<<<<< HEAD
+=======
+Some information is missing,Kai trūksta informacijos,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,šaltinis,
 Source Name,šaltinis Vardas,
 Standard,standartas,
@@ -237,6 +270,10 @@ State,Valstybė,
 Stopped,sustabdyta,
 Subject,Tema,
 Submit,Pateikti,
+<<<<<<< HEAD
+=======
+Successful,Sėkmingas,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,Santrauka,
 Sunday,sekmadienis,
 System Manager,sistemos direktorius,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,Laiko tarpas,
 To,Į,
 To Date,data,
+<<<<<<< HEAD
 Traceback,Atsekti,
 URL,URL,
 Unsubscribed,neišplatintos,
+=======
+Tools,Įrankiai,
+Traceback,Atsekti,
+URL,URL,
+Unsubscribed,neišplatintos,
+Use Sandbox,Naudokite Smėlio,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,Vartotojas,
 User ID,Vartotojo ID,
 Users,vartotojai,
@@ -556,6 +601,10 @@ Bulk Delete,Masinis ištrynimas,
 Bulk Edit {0},Masiniai Redaguoti {0},
 Bulk Rename,Tūrinės Pervadinti,
 Bulk Update,Masiniai Atnaujinti,
+<<<<<<< HEAD
+=======
+Busy,Užsiėmes,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,Mygtukas,
 Button Help,mygtukas Pagalba,
 Button Label,mygtukas Etiketė,
@@ -692,6 +741,10 @@ Compiled Successfully,Sudaryta sėkmingai,
 Complete By,išsamūs,
 Complete Registration,pilnas Registracija,
 Complete Setup,pilnas sąranka,
+<<<<<<< HEAD
+=======
+Completed By,Užbaigtas,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,rašyti laišką,
 Condition Detail,Išsami būklė,
 Conditions,Sąlygos,
@@ -1380,7 +1433,11 @@ Is Submittable,Ar Submittable,
 Is Table,Ar lentelė,
 Is Your Company Address,Ar Jūsų įmonė Adresas,
 It is risky to delete this file: {0}. Please contact your System Manager.,Tai rizikinga ištrinti šį failą: {0}. Prašome susisiekti su savo sistemos valdytojas.,
+<<<<<<< HEAD
 Item cannot be added to its own descendants,Prekė negali būti įtraukta į savo palikuonims,
+=======
+Item cannot be added to its own descendents,Prekė negali būti įtraukta į savo palikuonims,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,JSON,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},JavaScript Formatas: frappe.query_reports [ &#39;REPORTNAME&#39;] = {},
@@ -1675,8 +1732,13 @@ Not a valid Workflow Action,Netinkamas darbo eigos veiksmas,
 Not a valid user,Negaliojantis vartotojo,
 Not a zip file,Ne zip failą,
 Not allowed for {0}: {1},Neleidžiama {0}: {1},
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}","Jūs neturite leidimo prieiti {0}, nes jis yra susijęs su {1} &quot;{2}&quot; eilutėje {3}, laukas {4}",
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},"Jūs neturite leidimo prieiti šį {0} įrašą, nes jis yra susijęs su {1} &quot;{2}&quot; lauke {3}",
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},Neleidžiama {0}: {1} {2} eilutėje. Ribotas laukas: {3},
+Not allowed for {0}: {1}. Restricted field: {2},Neleidžiama {0}: {1}. Ribotas laukas: {2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,Neleidžiama importuoti,
 Not allowed to change {0} after submission,Neleidžiama keisti {0} po pateikimo,
 Not allowed to print cancelled documents,Neleidžiama spausdinti atšauktas dokumentus,
@@ -1804,6 +1866,10 @@ Path to private Key File,Kelias į asmeninį rakto failą,
 PayPal Settings,PayPal Nustatymai,
 PayPal payment gateway settings,PayPal mokėjimų vartai nustatymai,
 Payment Cancelled,Mokėjimo atšauktas,
+<<<<<<< HEAD
+=======
+Payment Failed,Mokėjimo Nepavyko,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,Mokėjimo Sėkmės,
 Pending Approval,Laukiama patvirtinimo,
 Pending Verification,Laukiama patikrinimo,
@@ -3200,6 +3266,10 @@ Click on the link below to approve the request,"Spustelėkite žemiau esančią 
 Click on the lock icon to toggle public/private,"Spustelėkite užrakto piktogramą, kad perjungtumėte viešą / privačią",
 Click on {0} to generate Refresh Token.,"Spustelėkite {0}, kad sukurtumėte „Refresh Token“.",
 Close Condition,Uždaryti sąlyga,
+<<<<<<< HEAD
+=======
+Column {0},{0} stulpelis,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,Stulpeliai / laukai,
 "Configure notifications for mentions, assignments, energy points and more.","Konfigūruokite pranešimus apie paminėjimus, užduotis, energijos taškus ir dar daugiau.",
 Contact Email,kontaktinis elektroninio pašto adresas,
@@ -3281,6 +3351,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,Nesėkmė,
 Fetching default Global Search documents.,Numatytųjų visuotinės paieškos dokumentų gavimas.,
 Fetching posts...,Gaunami įrašai ...,
+<<<<<<< HEAD
+=======
+Field Mapping,Lauko žemėlapis,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,"Laukas, kurį reikia patikrinti",
 File Information,Informacija apie bylą,
 Filter By,Filtruoti pagal,
@@ -3435,6 +3509,10 @@ No posts yet,Dar nėra įrašų,
 No records will be exported,Įrašai nebus eksportuojami,
 No results found for {0} in Global Search,Visuotinėje paieškoje nerasta {0} rezultatų,
 No user found,Nerastas vartotojas,
+<<<<<<< HEAD
+=======
+Not Specified,Nenurodyta,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,Pranešimų žurnalas,
 Notification Settings,Pranešimų nustatymai,
 Notification Subscribed Document,Pranešimo prenumeruotas dokumentas,
@@ -3590,6 +3668,10 @@ Untitled Column,Stulpelis be pavadinimo,
 Untranslated,Neišversta,
 Upcoming Events,Artimiausi renginiai,
 Update Existing Records,Atnaujinkite esamus įrašus,
+<<<<<<< HEAD
+=======
+Update Type,Atnaujinimo tipas,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,Atnaujinta į naują versiją 🎉,
 "Updating {0} of {1}, {2}","Atnaujinamas {0} iš {1}, {2}",
 Upload file,Įkelti failą,
@@ -3696,16 +3778,28 @@ Designation,žymėjimas,
 Disabled,neįgalusis,
 Doctype,„DocType“,
 Download Template,parsisiųsti Šablonas,
+<<<<<<< HEAD
+=======
+Dr,dr,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,Terminas,
 Duplicate,dublikatas,
 Edit Profile,Redaguoti profilį,
 Email,El. Paštas,
+<<<<<<< HEAD
+=======
+End Time,pabaigos laikas,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,Įveskite reikšmę,
 Entity Type,Subjekto tipas,
 Error,klaida,
 Expired,baigėsi,
 Export,eksportas,
 Export not allowed. You need {0} role to export.,Eksportas neleidžiama. Jums reikia {0} vaidmenį eksportui.,
+<<<<<<< HEAD
+=======
+Fetching...,Gaunama ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,laukas,
 File Manager,failų tvarkyklė,
 Filters,Filtrai,
@@ -3720,8 +3814,16 @@ Import Data from CSV / Excel files.,Importuoti duomenis iš CSV / Excel failų.,
 In Progress,&quot;Progress&quot;,
 Intermediate,Tarpinis,
 Invite as User,Kviesti kaip naudotoją,
+<<<<<<< HEAD
 Loading...,Kraunasi ...,
 Location,vieta,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.","Atrodo, kad yra problema dėl serverio juostos konfigūracijos. Nepavykus, suma bus grąžinta į jūsų sąskaitą.",
+Loading...,Kraunasi ...,
+Location,vieta,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,"Atrodo, kad kažkas jus siuntė nepilno URL. Paprašykite juos pažvelgti į jį.",
+Master,meistras,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,Žinutė,
 Missing Values Required,Trūkstamas reikšmes Reikalinga,
 Mobile No,Mobilus Nėra,
@@ -3733,6 +3835,10 @@ Note,Pastaba,
 Offline,Atsijungęs,
 Open,Atviras,
 Page {0} of {1},Puslapis {0} iš {1},
+<<<<<<< HEAD
+=======
+Pay,mokėti,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,kol,
 Phone,telefonas,
 Please click on the following link to set your new password,Spustelėkite šią nuorodą nustatyti naują slaptažodį,
@@ -3782,6 +3888,10 @@ Welcome to {0},Laukiami {0},
 Year,Metai,
 Yearly,Kasmet,
 You,Tu,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,Taip pat galite kopijuoti įklijuokite šią nuorodą savo naršyklėje,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,ir,
 {0} Name,{0} Vardas,
 {0} is required,{0} reikalingas,
@@ -4085,6 +4195,10 @@ Custom SCSS,Pasirinktinis SCSS,
 Navbar,„Navbar“,
 Source Message,Šaltinio pranešimas,
 Translated Message,Išverstas pranešimas,
+<<<<<<< HEAD
+=======
+Verified By,Patvirtinta,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,Naudodami šią konsolę užpuolikai gali leisti apsimetinėti jumis ir pavogti jūsų informaciją. Negalima įvesti ir neįklijuoti nesuprantamo kodo.,
 {0} m,{0} m,
 {0} h,{0} val,
@@ -4108,7 +4222,11 @@ No changes in document,Dokumente nėra jokių pakeitimų,
 by Role,pateikė Role,
 Document is only editable by users with role,Dokumentą gali redaguoti tik tam tikrą vaidmenį turintys vartotojai,
 {0}: Other permission rules may also apply,{0}: Taip pat gali būti taikomos kitos leidimo taisyklės,
+<<<<<<< HEAD
 {0} Web page views,{0} Puslapio peržiūros,
+=======
+{0} Page Views,{0} Puslapio peržiūros,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,Išskleisti,
 Collapse,Sutraukti,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.",Netinkamas turėtojo atpažinimo ženklas. Pateikite galiojantį prieigos raktą su priešdėliu „Bearer“.,
@@ -4117,6 +4235,10 @@ Collapse,Sutraukti,
 {0} is not a valid Name,{0} nėra tinkamas vardas,
 Your system is being updated. Please refresh again after a few moments.,Jūsų sistema atnaujinama. Po kelių akimirkų dar kartą atnaujinkite.,
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}: Pateikto įrašo negalima ištrinti. Pirmiausia turite {2} atšaukti {3}.,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},Netinkama {0} pavadinimų serija (. Trūksta),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},{0} įvyko klaida,
 Status Updated,Būsena atnaujinta,
 You can also copy-paste this {0} to your browser,Taip pat galite nukopijuoti {0} į savo naršyklę,
@@ -4138,11 +4260,21 @@ Is Billing Contact,Ar yra atsiskaitymo kontaktas,
 Address And Contacts,Adresas ir kontaktai,
 Lead Conversion Time,Pagrindinis konversijos laikas,
 Due Date Based On,Terminas pagrįstas,
+<<<<<<< HEAD
 Linked Documents,Susieti dokumentai,
+=======
+Phone Number,Telefono numeris,
+Linked Documents,Susieti dokumentai,
+Account SID,Sąskaitos SID,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,Žingsniai,
 email,paštu,
 Component,Komponentas,
 Subtitle,Paantraštė,
+<<<<<<< HEAD
+=======
+Global Defaults,Global Numatytasis,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,priešdėlis,
 Is Public,Yra viešas,
 This chart will be available to all Users if this is set,"Ši diagrama bus prieinama visiems vartotojams, jei tai bus nustatyta",
@@ -4329,6 +4461,10 @@ Dynamic Filters Section,Dinaminių filtrų skyrius,
 Please create Card first,Pirmiausia sukurkite kortelę,
 Onboarding Permission,Borto leidimas,
 Onboarding Step,Įlaipinimo laiptelis,
+<<<<<<< HEAD
+=======
+Is Mandatory,Yra privaloma,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,Yra praleistas,
 Create Entry,Sukurti įrašą,
 Update Settings,Atnaujinti nustatymus,
@@ -4366,6 +4502,10 @@ Message (HTML),Pranešimas (HTML),
 Send Attachments,Siųsti priedus,
 Testing,Testavimas,
 System Notification,Pranešimas apie sistemą,
+<<<<<<< HEAD
+=======
+WhatsApp,„WhatsApp“,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,Twilio numeris,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","Jei norite naudoti „WhatsApp for Business“, <a href=""#Form/Twilio Settings"">pradėkite „Twilio“ nustatymus</a> .",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","Norėdami naudoti „Slack Channel“, pridėkite „ <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook“ URL</a> .",
@@ -4500,6 +4640,10 @@ Add to ToDo,Pridėti prie „ToDo“,
 {0} are currently {1},{0} šiuo metu yra {1},
 Currently Replying,Šiuo metu atsakoma,
 created {0},sukūrė {0},
+<<<<<<< HEAD
+=======
+Make a call,Paskambinti,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,Keisti,Coins
 Too Many Requests,Per daug prašymų,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.","Netinkamos prieigos teisių antraštės, pridėkite prieigos raktą su priešdėliu iš vieno iš šių: {0}.",
@@ -4664,6 +4808,7 @@ Value cannot be negative for {0}: {1},{0} vertė negali būti neigiama: {1},
 Negative Value,Neigiama vertė,
 Authentication failed while receiving emails from Email Account: {0}.,Nepavyko autentifikuoti gavus el. Laiškus iš el. Pašto paskyros: {0}.,
 Message from server: {0},Pranešimas iš serverio: {0},
+<<<<<<< HEAD
 Add Row,Pridėti Row,
 Analytics,Google Analytics,
 Anonymous,Anoniminis,
@@ -4796,3 +4941,5 @@ West Bengal,Vakarų Bengalija,
 Published on,Paskelbta,
 Bottom,Apačia,
 Top,Į viršų,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -10,6 +10,7 @@ from frappe.utils import cstr, has_gravatar
 
 
 class Contact(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -50,6 +51,11 @@ class Contact(Document):
 	# end: auto-generated types
 	def autoname(self):
 		self.name = self._get_full_name()
+=======
+	def autoname(self):
+		# concat first and last name
+		self.name = " ".join(filter(None, [cstr(self.get(f)).strip() for f in ["first_name", "last_name"]]))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# concat party name if reqd
 		for link in self.links:
@@ -60,7 +66,10 @@ class Contact(Document):
 			self.name = append_number_if_name_exists("Contact", self.name)
 
 	def validate(self):
+<<<<<<< HEAD
 		self.full_name = self._get_full_name()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.set_primary_email()
 		self.set_primary("phone")
 		self.set_primary("mobile_no")
@@ -127,7 +136,11 @@ class Contact(Document):
 			return
 
 		if len([email.email_id for email in self.email_ids if email.is_primary]) > 1:
+<<<<<<< HEAD
 			frappe.throw(_("Only one {0} can be set as primary.").format(frappe.bold(_("Email ID"))))
+=======
+			frappe.throw(_("Only one {0} can be set as primary.").format(frappe.bold("Email ID")))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if len(self.email_ids) == 1:
 			self.email_ids[0].is_primary = 1
@@ -167,9 +180,12 @@ class Contact(Document):
 		if not primary_number_exists:
 			setattr(self, fieldname, "")
 
+<<<<<<< HEAD
 	def _get_full_name(self) -> str:
 		return get_full_name(self.first_name, self.middle_name, self.last_name, self.company_name)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def get_default_contact(doctype, name):
 	"""Returns default contact for the given doctype, name"""
@@ -182,7 +198,11 @@ def get_default_contact(doctype, name):
 		where
 			dl.link_doctype=%s and
 			dl.link_name=%s and
+<<<<<<< HEAD
 			dl.parenttype = 'Contact' """,
+=======
+			dl.parenttype = 'Contact'""",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		(doctype, name),
 		as_dict=True,
 	)
@@ -225,7 +245,13 @@ def get_contact_details(contact):
 
 	return {
 		"contact_person": contact.get("name"),
+<<<<<<< HEAD
 		"contact_display": contact.get("full_name"),
+=======
+		"contact_display": " ".join(
+			filter(None, [contact.get("salutation"), contact.get("first_name"), contact.get("last_name")])
+		),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"contact_email": contact.get("email_id"),
 		"contact_mobile": contact.get("mobile_no"),
 		"contact_phone": contact.get("phone"),
@@ -260,7 +286,11 @@ def contact_query(doctype, txt, searchfield, start, page_len, filters):
 
 	return frappe.db.sql(
 		f"""select
+<<<<<<< HEAD
 			`tabContact`.name, `tabContact`.full_name, `tabContact`.company_name
+=======
+			`tabContact`.name, `tabContact`.first_name, `tabContact`.last_name
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		from
 			`tabContact`, `tabDynamic Link`
 		where
@@ -271,8 +301,13 @@ def contact_query(doctype, txt, searchfield, start, page_len, filters):
 			`tabContact`.`{searchfield}` like %(txt)s
 			{get_match_cond(doctype)}
 		order by
+<<<<<<< HEAD
 			if(locate(%(_txt)s, `tabContact`.full_name), locate(%(_txt)s, `tabContact`.company_name), 99999),
 			`tabContact`.idx desc, `tabContact`.full_name
+=======
+			if(locate(%(_txt)s, `tabContact`.name), locate(%(_txt)s, `tabContact`.name), 99999),
+			`tabContact`.idx desc, `tabContact`.name
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		limit %(start)s, %(page_len)s """,
 		{
 			"txt": "%" + txt + "%",
@@ -364,6 +399,7 @@ def get_contacts_linked_from(doctype, docname, fields=None):
 		return []
 
 	return frappe.get_list("Contact", fields=fields, filters={"name": ("in", contact_names)})
+<<<<<<< HEAD
 
 
 def get_full_name(
@@ -419,3 +455,5 @@ def get_contact_display_list(doctype: str, name: str) -> list[dict]:
 			contact["address"] = get_condensed_address(address)
 
 	return contact_list
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

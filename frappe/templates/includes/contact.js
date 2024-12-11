@@ -23,6 +23,7 @@ frappe.ready(function() {
 		}
 
 		$("#contact-alert").toggle(false);
+<<<<<<< HEAD
 		frappe.call({
 			type: "POST",
 			method: "frappe.www.contact.send_message",
@@ -31,14 +32,28 @@ frappe.ready(function() {
 				sender: email,
 				message: message,
 			},
+=======
+		frappe.send_message({
+			subject: $('[name="subject"]').val(),
+			sender: email,
+			message: message,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			callback: function(r) {
 				if (!r.exc) {
 					frappe.msgprint('{{ _("Thank you for your message") }}', '{{ _("Message Sent") }}');
 				}
 				$(':input').val('');
+<<<<<<< HEAD
 			},
 		});
 	});
+=======
+			}
+		}, this);
+		return false;
+	});
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 });
 
 var msgprint = function(txt) {

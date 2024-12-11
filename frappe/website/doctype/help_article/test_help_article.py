@@ -25,6 +25,7 @@ class TestHelpArticle(FrappeTestCase):
 			}
 		).insert()
 
+<<<<<<< HEAD
 	def test_article_is_helpful(self):
 		from frappe.website.doctype.help_article.help_article import add_feedback
 
@@ -51,6 +52,8 @@ class TestHelpArticle(FrappeTestCase):
 		self.help_article.load_from_db()
 		self.assertEqual(self.help_article.published, 0)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@classmethod
 	def tearDownClass(cls) -> None:
 		frappe.delete_doc(cls.help_article.doctype, cls.help_article.name)

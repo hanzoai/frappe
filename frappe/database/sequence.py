@@ -1,5 +1,6 @@
 from frappe import db, scrub
 
+<<<<<<< HEAD
 # NOTE:
 # FOR MARIADB - using no cache - as during backup, if the sequence was used in anyform,
 # it drops the cache and uses the next non cached value in setval query and
@@ -17,6 +18,8 @@ from frappe import db, scrub
 # ref: https://stackoverflow.com/questions/21356375/postgres-9-0-4-sequence-skipping-numbers
 SEQUENCE_CACHE = 0
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def create_sequence(
 	doctype_name: str,
@@ -25,7 +28,11 @@ def create_sequence(
 	temporary: bool = False,
 	check_not_exists: bool = False,
 	cycle: bool = False,
+<<<<<<< HEAD
 	cache: int = SEQUENCE_CACHE,
+=======
+	cache: int = 0,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	start_value: int = 0,
 	increment_by: int = 0,
 	min_value: int = 0,

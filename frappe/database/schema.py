@@ -40,7 +40,11 @@ class DBTable:
 		if self.is_new():
 			self.create()
 		else:
+<<<<<<< HEAD
 			frappe.cache.hdel("table_columns", self.table_name)
+=======
+			frappe.cache().hdel("table_columns", self.table_name)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			self.alter()
 
 	def create(self):
@@ -58,16 +62,27 @@ class DBTable:
 		return ret
 
 	def get_index_definitions(self):
+<<<<<<< HEAD
 		return [
 			"index `" + key + "`(`" + key + "`)"
 			for key, col in self.columns.items()
+=======
+		ret = []
+		for key, col in self.columns.items():
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if (
 				col.set_index
 				and not col.unique
 				and col.fieldtype in frappe.db.type_map
 				and frappe.db.type_map.get(col.fieldtype)[0] not in ("text", "longtext")
+<<<<<<< HEAD
 			)
 		]
+=======
+			):
+				ret.append("index `" + key + "`(`" + key + "`)")
+		return ret
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def get_columns_from_docfields(self):
 		"""

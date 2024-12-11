@@ -4,6 +4,7 @@
 import functools
 import hashlib
 import io
+<<<<<<< HEAD
 import os
 import shutil
 import sys
@@ -27,6 +28,25 @@ from werkzeug.test import Client
 # utility functions like cint, int, flt, etc.
 from frappe.utils.data import *
 from frappe.utils.deprecations import deprecated
+=======
+import json
+import os
+import re
+import sys
+import traceback
+from collections.abc import Generator, Iterable, MutableMapping, MutableSequence, Sequence
+from email.header import decode_header, make_header
+from email.utils import formataddr, parseaddr
+from urllib.parse import quote, urlparse
+
+from redis.exceptions import ConnectionError
+from werkzeug.test import Client
+
+import frappe
+
+# utility functions like cint, int, flt, etc.
+from frappe.utils.data import *
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils.html_utils import sanitize_html
 
 EMAIL_NAME_PATTERN = re.compile(r"[^A-Za-z0-9\u00C0-\u024F\/\_\' ]+")
@@ -38,10 +58,13 @@ PHONE_NUMBER_PATTERN = re.compile(r"([0-9\ \+\_\-\,\.\*\#\(\)]){1,20}$")
 PERSON_NAME_PATTERN = re.compile(r"^[\w][\w\'\-]*( \w[\w\'\-]*)*$")
 WHITESPACE_PATTERN = re.compile(r"[\t\n\r]")
 MULTI_EMAIL_STRING_PATTERN = re.compile(r'[,\n](?=(?:[^"]|"[^"]*")*$)')
+<<<<<<< HEAD
 EMAIL_MATCH_PATTERN = re.compile(
 	r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
 	re.IGNORECASE,
 )
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_fullname(user=None):
@@ -93,10 +116,20 @@ def get_formatted_email(user, mail=None):
 
 def extract_email_id(email):
 	"""fetch only the email part of the Email Address"""
+<<<<<<< HEAD
 	return cstr(parse_addr(email)[1])
 
 
 def validate_phone_number_with_country_code(phone_number: str, fieldname: str) -> None:
+=======
+	email_id = parse_addr(email)[1]
+	if email_id and isinstance(email_id, str) and not isinstance(email_id, str):
+		email_id = email_id.decode("utf-8", "ignore")
+	return email_id
+
+
+def validate_phone_number_with_country_code(phone_number, fieldname):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	from phonenumbers import NumberParseException, is_valid_number, parse
 
 	from frappe import _
@@ -143,8 +176,11 @@ def validate_name(name, throw=False):
 	"""Returns True if the name is valid
 	valid names may have unicode and ascii characters, dash, quotes, numbers
 	anything else is considered invalid
+<<<<<<< HEAD
 
 	Note: "Name" here is name of a person, not the primary key in Frappe doctypes.
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""
 	if not name:
 		return False
@@ -176,10 +212,28 @@ def validate_email_address(email_str, throw=False):
 
 		else:
 			email_id = extract_email_id(e)
+<<<<<<< HEAD
 			match = EMAIL_MATCH_PATTERN.match(email_id) if email_id else None
 
 			if not match:
 				_valid = False
+=======
+			match = (
+				re.match(
+					r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+					email_id.lower(),
+				)
+				if email_id
+				else None
+			)
+
+			if not match:
+				_valid = False
+			else:
+				matched = match.group(0)
+				if match:
+					match = matched == email_id.lower()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if not _valid:
 			if throw:
@@ -190,7 +244,11 @@ def validate_email_address(email_str, throw=False):
 				)
 			return None
 		else:
+<<<<<<< HEAD
 			return email_id
+=======
+			return matched
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	out = []
 	for e in email_str.split(","):
@@ -214,11 +272,15 @@ def split_emails(txt):
 	return email_list
 
 
+<<<<<<< HEAD
 def validate_url(
 	txt: str,
 	throw: bool = False,
 	valid_schemes: str | Container[str] | None = None,
 ) -> bool:
+=======
+def validate_url(txt, throw=False, valid_schemes=None):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""
 	Checks whether `txt` has a valid URL string
 
@@ -244,7 +306,11 @@ def validate_url(
 	return is_valid
 
 
+<<<<<<< HEAD
 def random_string(length: int) -> str:
+=======
+def random_string(length):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""generate a random string"""
 	import string
 	from random import choice
@@ -252,7 +318,11 @@ def random_string(length: int) -> str:
 	return "".join(choice(string.ascii_letters + string.digits) for i in range(length))
 
 
+<<<<<<< HEAD
 def has_gravatar(email: str) -> str:
+=======
+def has_gravatar(email):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""Returns gravatar url if user has set an avatar at gravatar.com"""
 	import requests
 
@@ -261,7 +331,13 @@ def has_gravatar(email: str) -> str:
 		# since querying gravatar for every item will be slow
 		return ""
 
+<<<<<<< HEAD
 	gravatar_url = get_gravatar_url(email, "404")
+=======
+	hexdigest = hashlib.md5(frappe.as_unicode(email).encode("utf-8")).hexdigest()
+
+	gravatar_url = f"https://secure.gravatar.com/avatar/{hexdigest}?d=404&s=200"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	try:
 		res = requests.get(gravatar_url, timeout=5)
 		if res.status_code == 200:
@@ -272,6 +348,7 @@ def has_gravatar(email: str) -> str:
 		return ""
 
 
+<<<<<<< HEAD
 def get_gravatar_url(email: str, default: Literal["mm", "404"] = "mm") -> str:
 	hexdigest = hashlib.md5(frappe.as_unicode(email).encode("utf-8"), usedforsecurity=False).hexdigest()
 	return f"https://secure.gravatar.com/avatar/{hexdigest}?d={default}&s=200"
@@ -281,6 +358,23 @@ def get_gravatar(email: str) -> str:
 	from frappe.utils.identicon import Identicon
 
 	return has_gravatar(email) or Identicon(email).base64()
+=======
+def get_gravatar_url(email):
+	return "https://secure.gravatar.com/avatar/{hash}?d=mm&s=200".format(
+		hash=hashlib.md5(email.encode("utf-8")).hexdigest()
+	)
+
+
+def get_gravatar(email):
+	from frappe.utils.identicon import Identicon
+
+	gravatar_url = has_gravatar(email)
+
+	if not gravatar_url:
+		gravatar_url = Identicon(email).base64()
+
+	return gravatar_url
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_traceback(with_context=False) -> str:
@@ -348,11 +442,22 @@ def log(event, details):
 	frappe.logger(event).info(details)
 
 
+<<<<<<< HEAD
 def dict_to_str(args: dict[str, Any], sep: str = "&") -> str:
 	"""
 	Converts a dictionary to URL
 	"""
 	return sep.join(f"{k!s}=" + quote(str(args[k] or "")) for k in list(args))
+=======
+def dict_to_str(args, sep="&"):
+	"""
+	Converts a dictionary to URL
+	"""
+	t = []
+	for k in list(args):
+		t.append(str(k) + "=" + quote(str(args[k] or "")))
+	return sep.join(t)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def list_to_str(seq, sep=", "):
@@ -381,6 +486,7 @@ def set_default(key, val):
 	return frappe.db.set_default(key, val)
 
 
+<<<<<<< HEAD
 def remove_blanks(d: dict) -> dict:
 	"""
 	Returns d with empty ('' or None) values stripped. Mutates inplace.
@@ -388,6 +494,20 @@ def remove_blanks(d: dict) -> dict:
 	for k, v in tuple(d.items()):
 		if not v:
 			del d[k]
+=======
+def remove_blanks(d):
+	"""
+	Returns d with empty ('' or None) values stripped
+	"""
+	empty_keys = []
+	for key in d:
+		if d[key] == "" or d[key] is None:
+			# del d[key] raises runtime exception, using a workaround
+			empty_keys.append(key)
+	for key in empty_keys:
+		del d[key]
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return d
 
 
@@ -444,6 +564,7 @@ def unesc(s, esc_chars):
 
 def execute_in_shell(cmd, verbose=False, low_priority=False, check_exit_code=False):
 	# using Popen instead of os.system - as recommended by python docs
+<<<<<<< HEAD
 	import shlex
 	import tempfile
 	from subprocess import Popen
@@ -471,6 +592,26 @@ def execute_in_shell(cmd, verbose=False, low_priority=False, check_exit_code=Fal
 
 		stderr.seek(0)
 		err = stderr.read()
+=======
+	import tempfile
+	from subprocess import Popen
+
+	with tempfile.TemporaryFile() as stdout:
+		with tempfile.TemporaryFile() as stderr:
+			kwargs = {"shell": True, "stdout": stdout, "stderr": stderr}
+
+			if low_priority:
+				kwargs["preexec_fn"] = lambda: os.nice(10)
+
+			p = Popen(cmd, **kwargs)
+			exit_code = p.wait()
+
+			stdout.seek(0)
+			out = stdout.read()
+
+			stderr.seek(0)
+			err = stderr.read()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	failed = check_exit_code and exit_code
 
@@ -481,9 +622,13 @@ def execute_in_shell(cmd, verbose=False, low_priority=False, check_exit_code=Fal
 			print(out)
 
 	if failed:
+<<<<<<< HEAD
 		raise frappe.CommandFailedError(
 			"Command failed", out.decode(errors="replace"), err.decode(errors="replace")
 		)
+=======
+		raise Exception("Command failed")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return err, out
 
@@ -508,9 +653,13 @@ def get_files_path(*path, **kwargs):
 
 
 def get_bench_path():
+<<<<<<< HEAD
 	return os.environ.get("FRAPPE_BENCH_ROOT") or os.path.realpath(
 		os.path.join(os.path.dirname(frappe.__file__), "..", "..", "..")
 	)
+=======
+	return os.path.realpath(os.path.join(os.path.dirname(frappe.__file__), "..", "..", ".."))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_bench_id():
@@ -530,10 +679,14 @@ def get_request_site_address(full_address=False):
 
 
 def get_site_url(site):
+<<<<<<< HEAD
 	conf = frappe.get_conf(site)
 	if conf.host_name:
 		return conf.host_name
 	return f"http://{site}:{conf.webserver_port}"
+=======
+	return f"http://{site}:{frappe.get_conf(site).webserver_port}"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def encode_dict(d, encoding="utf-8"):
@@ -571,11 +724,19 @@ def touch_file(path):
 	return path
 
 
+<<<<<<< HEAD
 def get_test_client(use_cookies=True) -> Client:
 	"""Returns an test instance of the Frappe WSGI"""
 	from frappe.app import application
 
 	return Client(application, use_cookies=use_cookies)
+=======
+def get_test_client() -> Client:
+	"""Returns an test instance of the Frappe WSGI"""
+	from frappe.app import application
+
+	return Client(application)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_hook_method(hook_name, fallback=None):
@@ -614,7 +775,11 @@ def update_progress_bar(txt, i, l, absolute=False):
 		sys.stdout.flush()
 		return
 
+<<<<<<< HEAD
 	if not getattr(frappe.local, "request", None) or is_cli():  # pragma: no cover
+=======
+	if not getattr(frappe.local, "request", None) or is_cli():
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		lt = len(txt)
 		try:
 			col = 40 if os.get_terminal_size().columns > 80 else 20
@@ -685,10 +850,17 @@ def get_sites(sites_path=None):
 
 def get_request_session(max_retries=5):
 	import requests
+<<<<<<< HEAD
 	from requests.adapters import HTTPAdapter, Retry
 
 	session = requests.Session()
 	http_adapter = HTTPAdapter(max_retries=Retry(total=max_retries, status_forcelist=[500]))
+=======
+	from urllib3.util import Retry
+
+	session = requests.Session()
+	http_adapter = requests.adapters.HTTPAdapter(max_retries=Retry(total=max_retries, status_forcelist=[500]))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	session.mount("http://", http_adapter)
 	session.mount("https://", http_adapter)
@@ -765,6 +937,7 @@ def get_installed_apps_info():
 	out = []
 	from frappe.utils.change_log import get_versions
 
+<<<<<<< HEAD
 	out.extend(
 		{
 			"app_name": app,
@@ -773,6 +946,17 @@ def get_installed_apps_info():
 		}
 		for app, version_details in get_versions().items()
 	)
+=======
+	for app, version_details in get_versions().items():
+		out.append(
+			{
+				"app_name": app,
+				"version": version_details.get("branch_version") or version_details.get("version"),
+				"branch": version_details.get("branch"),
+			}
+		)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return out
 
 
@@ -799,7 +983,11 @@ def get_site_info():
 
 	kwargs = {
 		"fields": ["user", "creation", "full_name"],
+<<<<<<< HEAD
 		"filters": {"operation": "Login", "status": "Success"},
+=======
+		"filters": {"Operation": "Login", "Status": "Success"},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"limit": "10",
 	}
 
@@ -877,9 +1065,12 @@ def call(fn, *args, **kwargs):
 
 # Following methods are aken as-is from Python 3 codebase
 # since gzip.compress and gzip.decompress are not available in Python 2.7
+<<<<<<< HEAD
 
 
 @deprecated
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def gzip_compress(data, compresslevel=9):
 	"""Compress data in one shot and return the compressed string.
 	Optional argument is the compression level, in range of 0-9.
@@ -892,7 +1083,10 @@ def gzip_compress(data, compresslevel=9):
 	return buf.getvalue()
 
 
+<<<<<<< HEAD
 @deprecated
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def gzip_decompress(data):
 	"""Decompress a gzip compressed string in one shot.
 	Return the decompressed string.
@@ -945,7 +1139,12 @@ def get_html_for_route(route):
 
 	set_request(method="GET", path=route)
 	response = get_response()
+<<<<<<< HEAD
 	return frappe.safe_decode(response.get_data())
+=======
+	html = frappe.safe_decode(response.get_data())
+	return html
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_file_size(path, format=False):
@@ -985,7 +1184,11 @@ def get_assets_json():
 
 	if not hasattr(frappe.local, "assets_json"):
 		if not frappe.conf.developer_mode:
+<<<<<<< HEAD
 			frappe.local.assets_json = frappe.cache.get_value(
+=======
+			frappe.local.assets_json = frappe.cache().get_value(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				"assets_json",
 				_get_assets,
 				shared=True,
@@ -1087,6 +1290,7 @@ def dictify(arg):
 	return arg
 
 
+<<<<<<< HEAD
 class _UserInfo(TypedDict):
 	fullname: str
 	image: str
@@ -1117,6 +1321,20 @@ def add_user_info(user: str | list[str] | set[str], user_info: dict[str, _UserIn
 			fullname=info.full_name or info.name,
 			image=info.user_image,
 			name=info.name,
+=======
+def add_user_info(user, user_info):
+	if user not in user_info:
+		info = (
+			frappe.db.get_value(
+				"User", user, ["full_name", "user_image", "name", "email", "time_zone"], as_dict=True
+			)
+			or frappe._dict()
+		)
+		user_info[user] = frappe._dict(
+			fullname=info.full_name or user,
+			image=info.user_image,
+			name=user,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			email=info.email,
 			time_zone=info.time_zone,
 		)
@@ -1126,6 +1344,7 @@ def is_git_url(url: str) -> bool:
 	# modified to allow without the tailing .git from https://github.com/jonschlinkert/is-git-url.git
 	pattern = r"(?:git|ssh|https?|\w*@[-\w.]+):(\/\/)?(.*?)(\.git)?(\/?|\#[-\d\w._]+?)$"
 	return bool(re.match(pattern, url))
+<<<<<<< HEAD
 
 
 class CallbackManager:
@@ -1168,3 +1387,5 @@ class CallbackManager:
 
 	def reset(self):
 		self._functions.clear()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

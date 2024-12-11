@@ -60,9 +60,13 @@ frappe.ui.form.ControlButton = class ControlButton extends frappe.ui.form.Contro
 		if (label) {
 			this.df.label = label;
 		}
+<<<<<<< HEAD
 		label =
 			(this.df.icon ? frappe.utils.icon(this.df.icon) : "") +
 			__(this.df.label, null, this.df.parent);
+=======
+		label = (this.df.icon ? frappe.utils.icon(this.df.icon) : "") + __(this.df.label);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		$(this.label_span).html("&nbsp;");
 		this.$input && this.$input.html(label);
 	}

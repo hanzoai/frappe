@@ -38,6 +38,7 @@ def execute(filters=None):
 		as_dict=1,
 	)
 	return COLUMNS, data
+<<<<<<< HEAD
 
 
 @frappe.whitelist()
@@ -62,3 +63,5 @@ def optimize_doctype_job(doctype_name: str):
 		query = f"VACUUM (ANALYZE) {doctype_table};"
 
 	frappe.db.sql(query)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

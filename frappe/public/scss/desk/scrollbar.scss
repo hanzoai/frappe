@@ -19,12 +19,21 @@ html {
 	background: var(--scrollbar-track-color);
 }
 
+<<<<<<< HEAD
 *:not(#page-form-builder *)::-webkit-scrollbar {
+=======
+*::-webkit-scrollbar {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	width: 6px;
 	height: 6px;
 }
 
 body::-webkit-scrollbar {
+<<<<<<< HEAD
 	width: 12px !important;
 	height: 12px !important;
+=======
+	width: 12px;
+	height: 12px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }

@@ -10,6 +10,18 @@ from frappe.website.doctype.blog_post.test_blog_post import make_test_blog
 
 
 class TestComment(FrappeTestCase):
+<<<<<<< HEAD
+=======
+	def tearDown(self):
+		frappe.form_dict.comment = None
+		frappe.form_dict.comment_email = None
+		frappe.form_dict.comment_by = None
+		frappe.form_dict.reference_doctype = None
+		frappe.form_dict.reference_name = None
+		frappe.form_dict.route = None
+		frappe.local.request_ip = None
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_comment_creation(self):
 		test_doc = frappe.get_doc(dict(doctype="ToDo", description="test"))
 		test_doc.insert()
@@ -36,6 +48,7 @@ class TestComment(FrappeTestCase):
 		test_blog = make_test_blog()
 
 		frappe.db.delete("Comment", {"reference_doctype": "Blog Post"})
+<<<<<<< HEAD
 		add_comment_args = {
 			"comment": "Good comment with 10 chars",
 			"comment_email": "test@test.com",
@@ -45,6 +58,18 @@ class TestComment(FrappeTestCase):
 			"route": test_blog.route,
 		}
 		add_comment(**add_comment_args)
+=======
+
+		frappe.form_dict.comment = "Good comment with 10 chars"
+		frappe.form_dict.comment_email = "test@test.com"
+		frappe.form_dict.comment_by = "Good Tester"
+		frappe.form_dict.reference_doctype = "Blog Post"
+		frappe.form_dict.reference_name = test_blog.name
+		frappe.form_dict.route = test_blog.route
+		frappe.local.request_ip = "127.0.0.1"
+
+		add_comment()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.assertEqual(
 			frappe.get_all(
@@ -57,8 +82,15 @@ class TestComment(FrappeTestCase):
 
 		frappe.db.delete("Comment", {"reference_doctype": "Blog Post"})
 
+<<<<<<< HEAD
 		add_comment_args.update(comment="pleez vizits my site http://mysite.com", comment_by="bad commentor")
 		add_comment(**add_comment_args)
+=======
+		frappe.form_dict.comment = "pleez vizits my site http://mysite.com"
+		frappe.form_dict.comment_by = "bad commentor"
+
+		add_comment()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.assertEqual(
 			len(
@@ -74,8 +106,16 @@ class TestComment(FrappeTestCase):
 		# test for filtering html and css injection elements
 		frappe.db.delete("Comment", {"reference_doctype": "Blog Post"})
 
+<<<<<<< HEAD
 		add_comment_args.update(comment="<script>alert(1)</script>Comment", comment_by="hacker")
 		add_comment(**add_comment_args)
+=======
+		frappe.form_dict.comment = "<script>alert(1)</script>Comment"
+		frappe.form_dict.comment_by = "hacker"
+
+		add_comment()
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertEqual(
 			frappe.get_all(
 				"Comment",
@@ -91,6 +131,7 @@ class TestComment(FrappeTestCase):
 	def test_guest_cannot_comment(self):
 		test_blog = make_test_blog()
 		with set_user("Guest"):
+<<<<<<< HEAD
 			self.assertEqual(
 				add_comment(
 					comment="Good comment with 10 chars",
@@ -118,3 +159,29 @@ class TestComment(FrappeTestCase):
 				reference_name=test_blog.name,
 				route=test_blog.route,
 			)
+=======
+			frappe.form_dict.comment = "Good comment with 10 chars"
+			frappe.form_dict.comment_email = "mail@example.org"
+			frappe.form_dict.comment_by = "Good Tester"
+			frappe.form_dict.reference_doctype = "Blog Post"
+			frappe.form_dict.reference_name = test_blog.name
+			frappe.form_dict.route = test_blog.route
+			frappe.local.request_ip = "127.0.0.1"
+
+			self.assertEqual(add_comment(), None)
+
+	def test_user_not_logged_in(self):
+		some_system_user = frappe.db.get_value("User", {})
+
+		test_blog = make_test_blog()
+		with set_user("Guest"):
+			frappe.form_dict.comment = "Good comment with 10 chars"
+			frappe.form_dict.comment_email = some_system_user
+			frappe.form_dict.comment_by = "Good Tester"
+			frappe.form_dict.reference_doctype = "Blog Post"
+			frappe.form_dict.reference_name = test_blog.name
+			frappe.form_dict.route = test_blog.route
+			frappe.local.request_ip = "127.0.0.1"
+
+			self.assertRaises(frappe.ValidationError, add_comment)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

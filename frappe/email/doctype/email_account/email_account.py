@@ -4,6 +4,10 @@
 import email.utils
 import functools
 import imaplib
+<<<<<<< HEAD
+=======
+import socket
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import time
 from datetime import datetime, timedelta
 from poplib import error_proto
@@ -49,6 +53,7 @@ def cache_email_account(cache_name):
 
 
 class EmailAccount(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -111,6 +116,8 @@ class EmailAccount(Document):
 		use_starttls: DF.Check
 		use_tls: DF.Check
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	DOCTYPE = "Email Account"
 
 	def autoname(self):
@@ -190,27 +197,39 @@ class EmailAccount(Document):
 			self.default_incoming = False
 			messages.append(
 				_("{} has been disabled. It can only be enabled if {} is checked.").format(
+<<<<<<< HEAD
 					frappe.bold(_("Default Incoming")),
 					frappe.bold(_("Enable Incoming")),
+=======
+					frappe.bold(_("Default Incoming")), frappe.bold(_("Enable Incoming"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				)
 			)
 		if not self.enable_outgoing and self.default_outgoing:
 			self.default_outgoing = False
 			messages.append(
 				_("{} has been disabled. It can only be enabled if {} is checked.").format(
+<<<<<<< HEAD
 					frappe.bold(_("Default Outgoing")),
 					frappe.bold(_("Enable Outgoing")),
+=======
+					frappe.bold(_("Default Outgoing")), frappe.bold(_("Enable Outgoing"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				)
 			)
 		if messages:
 			if len(messages) == 1:
 				(as_list, messages) = (0, messages[0])
+<<<<<<< HEAD
 			frappe.msgprint(
 				messages,
 				as_list=as_list,
 				indicator="orange",
 				title=_("Defaults Updated"),
 			)
+=======
+			frappe.msgprint(messages, as_list=as_list, indicator="orange", title=_("Defaults Updated"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def on_update(self):
 		"""Check there is only one default of each type."""
@@ -290,11 +309,15 @@ class EmailAccount(Document):
 				"loginfailed",
 			]
 
+<<<<<<< HEAD
 			other_error_codes = [
 				"err[auth]",
 				"errtemporaryerror",
 				"loginviayourwebbrowser",
 			]
+=======
+			other_error_codes = ["err[auth]", "errtemporaryerror", "loginviayourwebbrowser"]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			all_error_codes = auth_error_codes + other_error_codes
 
@@ -354,17 +377,25 @@ class EmailAccount(Document):
 		return frappe.get_doc(cls.DOCTYPE, name)
 
 	@classmethod
+<<<<<<< HEAD
 	def find_one_by_filters(cls, **kwargs) -> "EmailAccount":
+=======
+	def find_one_by_filters(cls, **kwargs):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		name = frappe.db.get_value(cls.DOCTYPE, kwargs)
 		return cls.find(name) if name else None
 
 	@classmethod
 	def find_from_config(cls):
 		config = cls.get_account_details_from_site_config()
+<<<<<<< HEAD
 		if config:
 			account = cls.from_record(config)
 			account._from_site_config = True
 			return account
+=======
+		return cls.from_record(config) if config else None
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@classmethod
 	def create_dummy(cls):
@@ -396,7 +427,11 @@ class EmailAccount(Document):
 
 		if _raise_error:
 			frappe.throw(
+<<<<<<< HEAD
 				_("Please setup default Email Account from Settings > Email Account"),
+=======
+				_("Please setup default Email Account from Setup > Email > Email Account"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				frappe.OutgoingEmailError,
 			)
 
@@ -426,7 +461,12 @@ class EmailAccount(Document):
 
 	@classmethod
 	def find_default_incoming(cls):
+<<<<<<< HEAD
 		return cls.find_one_by_filters(enable_incoming=1, default_incoming=1)
+=======
+		doc = cls.find_one_by_filters(enable_incoming=1, default_incoming=1)
+		return doc
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@classmethod
 	def get_account_details_from_site_config(cls):
@@ -484,6 +524,7 @@ class EmailAccount(Document):
 		}
 
 	def get_smtp_server(self):
+<<<<<<< HEAD
 		"""Get SMTPServer (wrapper around actual smtplib object) for this account.
 
 		Implementation Detail: Since SMTPServer is same for each email connection, the same *instance*
@@ -500,6 +541,11 @@ class EmailAccount(Document):
 		super().remove_unpicklable_values(state)
 		state.pop("_smtp_server_instance", None)
 
+=======
+		config = self.sendmail_config()
+		return SMTPServer(**config)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def handle_incoming_connect_error(self, description):
 		if self.get_failed_attempts_count() > 5:
 			# This is done in background to avoid committing here.
@@ -528,10 +574,17 @@ class EmailAccount(Document):
 				pass
 
 	def set_failed_attempts_count(self, value):
+<<<<<<< HEAD
 		frappe.cache.set_value(f"{self.name}:email-account-failed-attempts", value)
 
 	def get_failed_attempts_count(self):
 		return cint(frappe.cache.get_value(f"{self.name}:email-account-failed-attempts"))
+=======
+		frappe.cache().set_value(f"{self.name}:email-account-failed-attempts", value)
+
+	def get_failed_attempts_count(self):
+		return cint(frappe.cache().get_value(f"{self.name}:email-account-failed-attempts"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def receive(self):
 		"""Called by scheduler to receive emails from this EMail account using POP3/IMAP."""
@@ -578,6 +631,7 @@ class EmailAccount(Document):
 				seen_status = messages.get("seen_status", {}).get(uid)
 				if self.email_sync_option != "UNSEEN" or seen_status != "SEEN":
 					# only append the emails with status != 'SEEN' if sync option is set to 'UNSEEN'
+<<<<<<< HEAD
 					mails.append(
 						InboundMail(
 							message,
@@ -587,6 +641,9 @@ class EmailAccount(Document):
 							append_to,
 						)
 					)
+=======
+					mails.append(InboundMail(message, self, frappe.safe_decode(uid), seen_status, append_to))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if not self.enable_incoming:
 			return []
@@ -650,9 +707,13 @@ class EmailAccount(Document):
 
 	def send_auto_reply(self, communication, email):
 		"""Send auto reply if set."""
+<<<<<<< HEAD
 		from frappe.core.doctype.communication.email import (
 			set_incoming_outgoing_accounts,
 		)
+=======
+		from frappe.core.doctype.communication.email import set_incoming_outgoing_accounts
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if self.enable_auto_reply:
 			set_incoming_outgoing_accounts(communication)
@@ -675,7 +736,12 @@ class EmailAccount(Document):
 	def get_unreplied_notification_emails(self):
 		"""Return list of emails listed"""
 		self.send_notification_to = self.send_notification_to.replace(",", "\n")
+<<<<<<< HEAD
 		return [e.strip() for e in self.send_notification_to.split("\n") if e.strip()]
+=======
+		out = [e.strip() for e in self.send_notification_to.split("\n") if e.strip()]
+		return out
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def on_trash(self):
 		"""Clear communications where email account is linked"""
@@ -700,15 +766,71 @@ class EmailAccount(Document):
 		else:
 			return self.email_sync_option or "UNSEEN"
 
+<<<<<<< HEAD
+=======
+	def mark_emails_as_read_unread(self, email_server=None, folder_name="INBOX"):
+		"""mark Email Flag Queue of self.email_account mails as read"""
+		if not self.use_imap:
+			return
+
+		EmailFlagQ = frappe.qb.DocType("Email Flag Queue")
+		flags = (
+			frappe.qb.from_(EmailFlagQ)
+			.select(EmailFlagQ.name, EmailFlagQ.communication, EmailFlagQ.uid, EmailFlagQ.action)
+			.where(EmailFlagQ.is_completed == 0)
+			.where(EmailFlagQ.email_account == frappe.db.escape(self.name))
+		).run(as_dict=True)
+
+		uid_list = {flag.get("uid", None): flag.get("action", "Read") for flag in flags}
+		if flags and uid_list:
+			if not email_server:
+				email_server = self.get_incoming_server()
+			if not email_server:
+				return
+			email_server.update_flag(folder_name, uid_list=uid_list)
+
+			# mark communication as read
+			docnames = ",".join(
+				"'%s'" % flag.get("communication") for flag in flags if flag.get("action") == "Read"
+			)
+			self.set_communication_seen_status(docnames, seen=1)
+
+			# mark communication as unread
+			docnames = ",".join(
+				["'%s'" % flag.get("communication") for flag in flags if flag.get("action") == "Unread"]
+			)
+			self.set_communication_seen_status(docnames, seen=0)
+
+			docnames = ",".join(["'%s'" % flag.get("name") for flag in flags])
+
+			EmailFlagQueue = frappe.qb.DocType("Email Flag Queue")
+			frappe.qb.update(EmailFlagQueue).set(EmailFlagQueue.is_completed, 1).where(
+				EmailFlagQueue.name.isin(docnames)
+			).run()
+
+	def set_communication_seen_status(self, docnames, seen=0):
+		"""mark Email Flag Queue of self.email_account mails as read"""
+		if not docnames:
+			return
+		Communication = frappe.qb.from_("Communication")
+		frappe.qb.update(Communication).set(Communication.seen == seen).where(
+			Communication.name.isin(docnames)
+		).run()
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def check_automatic_linking_email_account(self):
 		if self.enable_automatic_linking:
 			if not self.enable_incoming:
 				frappe.throw(_("Automatic Linking can be activated only if Incoming is enabled."))
 
+<<<<<<< HEAD
 			if frappe.db.exists(
 				"Email Account",
 				{"enable_automatic_linking": 1, "name": ("!=", self.name)},
 			):
+=======
+			if frappe.db.exists("Email Account", {"enable_automatic_linking": 1, "name": ("!=", self.name)}):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				frappe.throw(_("Automatic Linking can be activated only for one Email Account."))
 
 	def append_email_to_sent_folder(self, message):
@@ -719,27 +841,36 @@ class EmailAccount(Document):
 		try:
 			email_server = self.get_incoming_server(in_receive=True)
 			message = safe_encode(message)
+<<<<<<< HEAD
 			sent_folder_name = self.sent_folder_name or "Sent"
 			email_server.imap.append(
 				sent_folder_name, "\\Seen", imaplib.Time2Internaldate(time.time()), message
 			)
+=======
+			email_server.imap.append("Sent", "\\Seen", imaplib.Time2Internaldate(time.time()), message)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		except Exception:
 			self.log_error("Unable to add to Sent folder")
 
 	def get_oauth_token(self):
 		if self.auth_method == "OAuth":
 			connected_app = frappe.get_doc("Connected App", self.connected_app)
+<<<<<<< HEAD
 			if self.backend_app_flow:
 				token = connected_app.get_backend_app_token()
 			else:
 				token = connected_app.get_active_token(self.connected_user)
 
 			return token
+=======
+			return connected_app.get_active_token(self.connected_user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()
 def get_append_to(doctype=None, txt=None, searchfield=None, start=None, page_len=None, filters=None):
 	txt = txt if txt else ""
+<<<<<<< HEAD
 
 	filters = {"istable": 0, "issingle": 0, "email_append_to": 1}
 	# Set Email Append To DocTypes via DocType
@@ -756,15 +887,37 @@ def get_append_to(doctype=None, txt=None, searchfield=None, start=None, page_len
 		)
 	)
 	return [[d] for d in set(email_append_to_list) if txt in d]
+=======
+	email_append_to_list = []
+
+	# Set Email Append To DocTypes via DocType
+	filters = {"istable": 0, "issingle": 0, "email_append_to": 1}
+	for dt in frappe.get_all("DocType", filters=filters, fields=["name", "email_append_to"]):
+		email_append_to_list.append(dt.name)
+
+	# Set Email Append To DocTypes set via Customize Form
+	for dt in frappe.get_list(
+		"Property Setter", filters={"property": "email_append_to", "value": 1}, fields=["doc_type"]
+	):
+		email_append_to_list.append(dt.doc_type)
+
+	email_append_to = [[d] for d in set(email_append_to_list) if txt in d]
+
+	return email_append_to
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def notify_unreplied():
 	"""Sends email notifications if there are unreplied Communications
 	and `notify_if_unreplied` is set as true."""
 	for email_account in frappe.get_all(
+<<<<<<< HEAD
 		"Email Account",
 		"name",
 		filters={"enable_incoming": 1, "notify_if_unreplied": 1},
+=======
+		"Email Account", "name", filters={"enable_incoming": 1, "notify_if_unreplied": 1}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	):
 		email_account = frappe.get_doc("Email Account", email_account.name)
 
@@ -821,22 +974,31 @@ def pull(now=False):
 	doctype = frappe.qb.DocType("Email Account")
 	email_accounts = (
 		frappe.qb.from_(doctype)
+<<<<<<< HEAD
 		.select(
 			doctype.name,
 			doctype.auth_method,
 			doctype.connected_app,
 			doctype.connected_user,
 		)
+=======
+		.select(doctype.name, doctype.auth_method, doctype.connected_app, doctype.connected_user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		.where(doctype.enable_incoming == 1)
 		.where(doctype.awaiting_password == 0)
 		.run(as_dict=1)
 	)
 
 	for email_account in email_accounts:
+<<<<<<< HEAD
 		if (
 			email_account.auth_method == "OAuth"
 			and not email_account.backend_app_flow
 			and not has_token(email_account.connected_app, email_account.connected_user)
+=======
+		if email_account.auth_method == "OAuth" and not has_token(
+			email_account.connected_app, email_account.connected_user
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		):
 			# don't try to pull from accounts which dont have access token (for Oauth)
 			continue
@@ -866,9 +1028,16 @@ def pull_from_email_account(email_account):
 
 
 def get_max_email_uid(email_account):
+<<<<<<< HEAD
 	"""get maximum uid of emails"""
 
 	if result := frappe.get_all(
+=======
+	# get maximum uid of emails
+	max_uid = 1
+
+	result = frappe.get_all(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"Communication",
 		filters={
 			"communication_medium": "Email",
@@ -876,9 +1045,19 @@ def get_max_email_uid(email_account):
 			"email_account": email_account,
 		},
 		fields=["max(uid) as uid"],
+<<<<<<< HEAD
 	):
 		return cint(result[0].get("uid", 0)) + 1
 	return 1
+=======
+	)
+
+	if not result:
+		return 1
+	else:
+		max_uid = cint(result[0].get("uid", 0)) + 1
+		return max_uid
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def setup_user_email_inbox(email_account, awaiting_password, email_id, enable_outgoing, used_oauth):
@@ -910,11 +1089,15 @@ def setup_user_email_inbox(email_account, awaiting_password, email_id, enable_ou
 
 		# check if inbox is alreay configured
 		user_inbox = (
+<<<<<<< HEAD
 			frappe.db.get_value(
 				"User Email",
 				{"email_account": email_account, "parent": user_name},
 				["name"],
 			)
+=======
+			frappe.db.get_value("User Email", {"email_account": email_account, "parent": user_name}, ["name"])
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			or None
 		)
 
@@ -941,11 +1124,15 @@ def remove_user_email_inbox(email_account):
 	if not email_account:
 		return
 
+<<<<<<< HEAD
 	users = frappe.get_all(
 		"User Email",
 		filters={"email_account": email_account},
 		fields=["parent as name"],
 	)
+=======
+	users = frappe.get_all("User Email", filters={"email_account": email_account}, fields=["parent as name"])
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	for user in users:
 		doc = frappe.get_doc("User", user.get("name"))

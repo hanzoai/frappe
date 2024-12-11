@@ -66,8 +66,15 @@ def get_doctypes_to_skip(doctype, user):
 
 			else:
 				doctypes_to_skip.append(parent_doctype)
+<<<<<<< HEAD
 	# remove possible duplicates
 	return list(set(doctypes_to_skip))
+=======
+	# to remove possible duplicates
+	doctypes_to_skip = list(set(doctypes_to_skip))
+
+	return doctypes_to_skip
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 # store user's valid perms to avoid repeated query

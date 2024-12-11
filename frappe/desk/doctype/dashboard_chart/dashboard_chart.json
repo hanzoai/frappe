@@ -326,7 +326,11 @@
    "print": 1,
    "read": 1,
    "report": 1,
+<<<<<<< HEAD
    "role": "Desk User",
+=======
+   "role": "All",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "share": 1
   }
  ],
@@ -334,4 +338,8 @@
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

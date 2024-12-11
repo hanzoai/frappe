@@ -3,7 +3,10 @@
 
 import json
 import os
+<<<<<<< HEAD
 from pathlib import Path
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 from frappe.model.document import Document
@@ -11,6 +14,7 @@ from frappe.modules.export_file import delete_folder
 
 
 class ModuleDef(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -26,6 +30,8 @@ class ModuleDef(Document):
 		restrict_to_domain: DF.Link | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def on_update(self):
 		"""If in `developer_mode`, create folder for module and
 		add in `modules.txt` of app if missing."""
@@ -65,6 +71,7 @@ class ModuleDef(Document):
 		if not frappe.conf.get("developer_mode") or frappe.flags.in_uninstall or self.custom:
 			return
 
+<<<<<<< HEAD
 		if frappe.local.module_app.get(frappe.scrub(self.name)):
 			frappe.db.after_commit.add(self.delete_module_from_file)
 
@@ -82,6 +89,23 @@ class ModuleDef(Document):
 			modules_txt.write_text("\n".join(modules))
 			frappe.clear_cache()
 			frappe.setup_module_map()
+=======
+		modules = None
+		if frappe.local.module_app.get(frappe.scrub(self.name)):
+			delete_folder(self.module_name, "Module Def", self.name)
+			with open(frappe.get_app_path(self.app_name, "modules.txt")) as f:
+				content = f.read()
+				if self.name in content.splitlines():
+					modules = list(filter(None, content.splitlines()))
+					modules.remove(self.name)
+
+			if modules:
+				with open(frappe.get_app_path(self.app_name, "modules.txt"), "w") as f:
+					f.write("\n".join(modules))
+
+				frappe.clear_cache()
+				frappe.setup_module_map()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()

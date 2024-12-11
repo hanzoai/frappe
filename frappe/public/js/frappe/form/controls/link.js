@@ -95,10 +95,17 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		return this.is_translatable() ? __(value) : value;
 	}
 	is_translatable() {
+<<<<<<< HEAD
 		return (frappe.boot?.translated_doctypes || []).includes(this.get_options());
 	}
 	is_title_link() {
 		return (frappe.boot?.link_title_doctypes || []).includes(this.get_options());
+=======
+		return in_list(frappe.boot?.translated_doctypes || [], this.get_options());
+	}
+	is_title_link() {
+		return in_list(frappe.boot?.link_title_doctypes || [], this.get_options());
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	async set_link_title(value) {
 		const doctype = this.get_options();
@@ -192,7 +199,10 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		this.$input.cache = {};
 
 		this.awesomplete = new Awesomplete(me.input, {
+<<<<<<< HEAD
 			tabSelect: true,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			minChars: 0,
 			maxItems: 99,
 			autoFirst: true,
@@ -227,6 +237,7 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 				) {
 					html += '<br><span class="small">' + __(d.description) + "</span>";
 				}
+<<<<<<< HEAD
 				return $(`<div role="option">`)
 					.on("click", (event) => {
 						me.awesomplete.select(event.currentTarget, event.currentTarget);
@@ -234,6 +245,12 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 					.data("item.autocomplete", d)
 					.prop("aria-selected", "false")
 					.html(`<p title="${frappe.utils.escape_html(_label)}">${html}</p>`)
+=======
+				return $("<li></li>")
+					.data("item.autocomplete", d)
+					.prop("aria-selected", "false")
+					.html(`<a><p title="${frappe.utils.escape_html(_label)}">${html}</p></a>`)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					.get(0);
 			},
 			sort: function () {
@@ -263,7 +280,10 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 					doctype: doctype,
 					ignore_user_permissions: me.df.ignore_user_permissions,
 					reference_doctype: me.get_reference_doctype() || "",
+<<<<<<< HEAD
 					page_length: cint(frappe.boot.sysdefaults?.link_field_results_limit) || 10,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				};
 
 				me.set_custom_query(args);
@@ -277,6 +297,7 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 						if (!window.Cypress && !me.$input.is(":focus")) {
 							return;
 						}
+<<<<<<< HEAD
 						r.message = me.merge_duplicates(r.message);
 
 						// show filter description in awesomplete
@@ -291,14 +312,34 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 								value: "",
 								action: () => {},
 							});
+=======
+						r.results = me.merge_duplicates(r.results);
+
+						// show filter description in awesomplete
+						if (args.filters) {
+							let filter_string = me.get_filter_description(args.filters);
+							if (filter_string) {
+								r.results.push({
+									html: `<span class="text-muted" style="line-height: 1.5">${filter_string}</span>`,
+									value: "",
+									action: () => {},
+								});
+							}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						}
 
 						if (!me.df.only_select) {
 							if (frappe.model.can_create(doctype)) {
 								// new item
+<<<<<<< HEAD
 								r.message.push({
 									html:
 										"<span class='link-option'>" +
+=======
+								r.results.push({
+									html:
+										"<span class='text-primary link-option'>" +
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 										"<i class='fa fa-plus' style='margin-right: 5px;'></i> " +
 										__("Create a new {0}", [__(me.get_options())]) +
 										"</span>",
@@ -314,15 +355,25 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 								frappe.ui.form.ControlLink.link_options(me);
 
 							if (custom__link_options) {
+<<<<<<< HEAD
 								r.message = r.message.concat(custom__link_options);
+=======
+								r.results = r.results.concat(custom__link_options);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							}
 
 							// advanced search
 							if (locals && locals["DocType"]) {
 								// not applicable in web forms
+<<<<<<< HEAD
 								r.message.push({
 									html:
 										"<span class='link-option'>" +
+=======
+								r.results.push({
+									html:
+										"<span class='text-primary link-option'>" +
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 										"<i class='fa fa-search' style='margin-right: 5px;'></i> " +
 										__("Advanced Search") +
 										"</span>",
@@ -332,10 +383,17 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 								});
 							}
 						}
+<<<<<<< HEAD
 						me.$input.cache[doctype][term] = r.message;
 						me.awesomplete.list = me.$input.cache[doctype][term];
 						me.toggle_href(doctype);
 						r.message.forEach((item) => {
+=======
+						me.$input.cache[doctype][term] = r.results;
+						me.awesomplete.list = me.$input.cache[doctype][term];
+						me.toggle_href(doctype);
+						r.results.forEach((item) => {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							frappe.utils.add_link_title(doctype, item.value, item.label);
 						});
 					},
@@ -523,12 +581,15 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 			});
 			return obj;
 		};
+<<<<<<< HEAD
 
 		// apply link field filters
 		if (this.df.link_filters && !!this.df.link_filters.length) {
 			this.apply_link_field_filters();
 		}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (this.get_query || this.df.get_query) {
 			var get_query = this.get_query || this.df.get_query;
 			if ($.isPlainObject(get_query)) {
@@ -591,6 +652,7 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 			$.extend(args.filters, this.df.filters);
 		}
 	}
+<<<<<<< HEAD
 
 	apply_link_field_filters() {
 		let link_filters = JSON.parse(this.df.link_filters);
@@ -621,6 +683,8 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		return filters;
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	validate(value) {
 		// validate the value just entered
 		if (this._validated || this.df.options == "[Select]" || this.df.ignore_link_validation) {
@@ -648,6 +712,7 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 				if (value) {
 					field_value = response[source_field];
 				}
+<<<<<<< HEAD
 
 				if (this.layout?.set_value) {
 					this.layout.set_value(target_field, field_value);
@@ -660,6 +725,15 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 						this.df.fieldtype
 					);
 				}
+=======
+				frappe.model.set_value(
+					this.df.parent,
+					this.docname,
+					target_field,
+					field_value,
+					this.df.fieldtype
+				);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		};
 
@@ -684,6 +758,7 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		}
 	}
 
+<<<<<<< HEAD
 	fetch_map_for_quick_entry() {
 		let me = this;
 		let fetch_map = {};
@@ -751,6 +826,10 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 			return this.fetch_map_for_quick_entry();
 		}
 
+=======
+	get fetch_map() {
+		const fetch_map = {};
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (!this.frm) return fetch_map;
 
 		for (const key of ["*", this.df.parent]) {

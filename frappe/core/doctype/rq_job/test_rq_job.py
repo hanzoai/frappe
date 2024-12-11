@@ -12,6 +12,7 @@ from frappe.core.doctype.rq_job.rq_job import RQJob, remove_failed_jobs, stop_jo
 from frappe.installer import update_site_config
 from frappe.tests.utils import FrappeTestCase, timeout
 from frappe.utils import cstr, execute_in_shell
+<<<<<<< HEAD
 from frappe.utils.background_jobs import get_job_status, is_job_enqueued
 
 
@@ -21,14 +22,27 @@ def wait_for_completion(job: Job):
 		if not (job.is_queued or job.is_started):
 			break
 		time.sleep(0.2)
+=======
+from frappe.utils.background_jobs import is_job_enqueued
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class TestRQJob(FrappeTestCase):
 	BG_JOB = "frappe.core.doctype.rq_job.test_rq_job.test_func"
 
+<<<<<<< HEAD
 	def check_status(self, job: Job, status, wait=True):
 		if wait:
 			wait_for_completion(job)
+=======
+	@timeout(seconds=60)
+	def check_status(self, job: Job, status, wait=True):
+		while wait:
+			if not (job.is_queued or job.is_started):
+				break
+			time.sleep(0.2)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertEqual(frappe.get_doc("RQ Job", job.id).status, status)
 
 	def test_serialization(self):
@@ -41,6 +55,10 @@ class TestRQJob(FrappeTestCase):
 				"name": job.id,
 				"queue": "short",
 				"job_name": self.BG_JOB,
+<<<<<<< HEAD
+=======
+				"status": "queued",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				"exc_info": None,
 			},
 			rq_job,
@@ -56,7 +74,11 @@ class TestRQJob(FrappeTestCase):
 	def test_func_obj_serialization(self):
 		job = frappe.enqueue(method=test_func, queue="short")
 		rq_job = frappe.get_doc("RQ Job", job.id)
+<<<<<<< HEAD
 		self.assertEqual(rq_job.job_name, "frappe.core.doctype.rq_job.test_rq_job.test_func")
+=======
+		self.assertEqual(rq_job.job_name, "test_func")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@timeout
 	def test_get_list_filtering(self):
@@ -90,7 +112,11 @@ class TestRQJob(FrappeTestCase):
 		with self.assertRaises(rq_exc.NoSuchJobError):
 			job.refresh()
 
+<<<<<<< HEAD
 	@timeout
+=======
+	@timeout(20)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_multi_queue_burst_consumption(self):
 		for _ in range(3):
 			for q in ["default", "short"]:
@@ -99,6 +125,7 @@ class TestRQJob(FrappeTestCase):
 		_, stderr = execute_in_shell("bench worker --queue short,default --burst", check_exit_code=True)
 		self.assertIn("quitting", cstr(stderr))
 
+<<<<<<< HEAD
 	@timeout
 	def test_multi_queue_burst_consumption_worker_pool(self):
 		for _ in range(3):
@@ -111,12 +138,16 @@ class TestRQJob(FrappeTestCase):
 		self.assertIn("quitting", cstr(stderr))
 
 	def test_job_id_manual_dedup(self):
+=======
+	def test_job_id_dedup(self):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		job_id = "test_dedup"
 		job = frappe.enqueue(self.BG_JOB, sleep=5, job_id=job_id)
 		self.assertTrue(is_job_enqueued(job_id))
 		self.check_status(job, "finished")
 		self.assertFalse(is_job_enqueued(job_id))
 
+<<<<<<< HEAD
 	def test_auto_job_dedup(self):
 		job_id = "test_dedup"
 		job1 = frappe.enqueue(self.BG_JOB, sleep=2, job_id=job_id, deduplicate=True)
@@ -165,6 +196,9 @@ class TestRQJob(FrappeTestCase):
 		LAST_MEASURED_USAGE = 41
 		self.assertLessEqual(rss, LAST_MEASURED_USAGE * 1.05, msg)
 
+=======
+	@timeout(60)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_clear_failed_jobs(self):
 		limit = 10
 		update_site_config("rq_failed_jobs_limit", limit)

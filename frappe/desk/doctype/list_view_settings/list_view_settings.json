@@ -7,7 +7,10 @@
  "engine": "InnoDB",
  "field_order": [
   "disable_count",
+<<<<<<< HEAD
   "disable_comment_count",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "disable_sidebar_stats",
   "disable_auto_refresh",
   "allow_edit",
@@ -54,12 +57,15 @@
   },
   {
    "default": "0",
+<<<<<<< HEAD
    "fieldname": "disable_comment_count",
    "fieldtype": "Check",
    "label": "Disable Comment Count"
   },
   {
    "default": "0",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "description": "Allow editing even if the doctype has a workflow set up.\n\nDoes nothing if a workflow isn't set up.",
    "fieldname": "allow_edit",
    "fieldtype": "Check",
@@ -71,7 +77,10 @@
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "List View Settings",
+<<<<<<< HEAD
  "naming_rule": "Set by user",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "owner": "Administrator",
  "permissions": [
   {
@@ -88,6 +97,11 @@
  "read_only": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
+<<<<<<< HEAD
  "states": [],
  "track_changes": 1
 }
+=======
+ "track_changes": 1
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

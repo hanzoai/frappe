@@ -14,6 +14,14 @@ frappe.listview_settings["RQ Job"] = {
 			__("Actions")
 		);
 
+<<<<<<< HEAD
+=======
+		if (listview.list_view_settings) {
+			listview.list_view_settings.disable_count = 1;
+			listview.list_view_settings.disable_sidebar_stats = 1;
+		}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.xcall("frappe.utils.scheduler.get_scheduler_status").then(({ status }) => {
 			if (status === "active") {
 				listview.page.set_indicator(__("Scheduler: Active"), "green");
@@ -52,6 +60,10 @@ frappe.listview_settings["RQ Job"] = {
 			}
 
 			listview.refresh();
+<<<<<<< HEAD
 		}, 15000);
+=======
+		}, 5000);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 };

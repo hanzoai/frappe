@@ -61,8 +61,13 @@ def get_roles_and_doctypes():
 	roles_list = [{"label": _(d.get("name")), "value": d.get("name")} for d in roles]
 
 	return {
+<<<<<<< HEAD
 		"doctypes": sorted(doctypes_list, key=lambda d: d["label"].casefold()),
 		"roles": sorted(roles_list, key=lambda d: d["label"].casefold()),
+=======
+		"doctypes": sorted(doctypes_list, key=lambda d: d["label"]),
+		"roles": sorted(roles_list, key=lambda d: d["label"]),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 
@@ -122,10 +127,13 @@ def update(doctype, role, permlevel, ptype, value=None, if_owner=0):
 	Returns:
 	        str: Refresh flag is permission is updated successfully
 	"""
+<<<<<<< HEAD
 
 	def clear_cache():
 		frappe.clear_cache(doctype=doctype)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	frappe.only_for("System Manager")
 
 	if ptype == "report" and value == "1" and if_owner == "1":
@@ -136,8 +144,11 @@ def update(doctype, role, permlevel, ptype, value=None, if_owner=0):
 	if ptype == "if_owner" and value == "1":
 		update_permission_property(doctype, role, permlevel, "report", "0", if_owner=value)
 
+<<<<<<< HEAD
 	frappe.db.after_commit.add(clear_cache)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return "refresh" if out else None
 
 

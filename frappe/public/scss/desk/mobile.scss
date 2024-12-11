@@ -156,7 +156,12 @@ body {
 	body[data-route^="Form"] {
 		.page-title {
 			.title-text {
+<<<<<<< HEAD
 				@include get_textstyle("lg", "regular");
+=======
+				font-size: var(--text-lg);
+				max-width: 300px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 
 			.indicator {
@@ -376,6 +381,7 @@ body {
 		}
 	}
 }
+<<<<<<< HEAD
 
 @media (max-width: 412px) {
 	body[data-route^="Form"] {
@@ -384,3 +390,5 @@ body {
 		}
 	}
 }
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

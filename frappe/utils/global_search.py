@@ -60,7 +60,11 @@ def get_doctypes_with_global_search(with_child_tables=True):
 
 		return doctypes
 
+<<<<<<< HEAD
 	return frappe.cache.get_value("doctypes_with_global_search", _get)
+=======
+	return frappe.cache().get_value("doctypes_with_global_search", _get)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def rebuild_for_doctype(doctype):
@@ -209,10 +213,17 @@ def get_children_data(doctype, meta):
 
 
 def insert_values_for_multiple_docs(all_contents):
+<<<<<<< HEAD
 	values = [
 		"({doctype}, {name}, {content}, {published}, {title}, {route})".format(**content)
 		for content in all_contents
 	]
+=======
+	values = []
+	for content in all_contents:
+		values.append("({doctype}, {name}, {content}, {published}, {title}, {route})".format(**content))
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	batch_size = 50000
 	for i in range(0, len(values), batch_size):
 		batch_values = values[i : i + batch_size]
@@ -242,21 +253,35 @@ def update_global_search(doc):
 	if doc.docstatus > 1 or (doc.meta.has_field("enabled") and not doc.get("enabled")) or doc.get("disabled"):
 		return
 
+<<<<<<< HEAD
 	content = [
 		get_formatted_value(doc.get(field.fieldname), field)
 		for field in doc.meta.get_global_search_fields()
 		if doc.get(field.fieldname) and field.fieldtype not in frappe.model.table_fields
 	]
+=======
+	content = []
+	for field in doc.meta.get_global_search_fields():
+		if doc.get(field.fieldname) and field.fieldtype not in frappe.model.table_fields:
+			content.append(get_formatted_value(doc.get(field.fieldname), field))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# Get children
 	for child in doc.meta.get_table_fields():
 		for d in doc.get(child.fieldname):
 			if d.parent == doc.name:
+<<<<<<< HEAD
 				content.extend(
 					get_formatted_value(d.get(field.fieldname), field)
 					for field in d.meta.get_global_search_fields()
 					if d.get(field.fieldname)
 				)
+=======
+				for field in d.meta.get_global_search_fields():
+					if d.get(field.fieldname):
+						content.append(get_formatted_value(d.get(field.fieldname), field))
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if content:
 		published = 0
 		if hasattr(doc, "is_website_published") and doc.meta.allow_guest_to_view:
@@ -366,6 +391,7 @@ def sync_global_search():
 	:param flags:
 	:return:
 	"""
+<<<<<<< HEAD
 	from itertools import islice
 
 	def get_search_queue_item_generator():
@@ -411,18 +437,33 @@ def sync_values(values: list):
 			raise NotImplementedError
 
 	query.run()
+=======
+	while frappe.cache().llen("global_search_queue") > 0:
+		# rpop to follow FIFO
+		# Last one should override all previous contents of same document
+		value = json.loads(frappe.cache().rpop("global_search_queue").decode("utf-8"))
+		sync_value(value)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def sync_value_in_queue(value):
 	try:
 		# append to search queue if connected
+<<<<<<< HEAD
 		frappe.cache.lpush("global_search_queue", json.dumps(value))
+=======
+		frappe.cache().lpush("global_search_queue", json.dumps(value))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	except redis.exceptions.ConnectionError:
 		# not connected, sync directly
 		sync_value(value)
 
 
+<<<<<<< HEAD
 def sync_value(value: dict):
+=======
+def sync_value(value):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""
 	Sync a given document to global search
 	:param value: dict of { doctype, name, content, published, title, route }
@@ -511,7 +552,11 @@ def search(text, start=0, limit=20, doctype=""):
 
 	# sort results based on allowed_doctype's priority
 	for doctype in allowed_doctypes:
+<<<<<<< HEAD
 		for r in results:
+=======
+		for _index, r in enumerate(results):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if r.doctype == doctype and r.rank > 0.0:
 				try:
 					meta = frappe.get_meta(r.doctype)
@@ -526,7 +571,11 @@ def search(text, start=0, limit=20, doctype=""):
 
 
 @frappe.whitelist(allow_guest=True)
+<<<<<<< HEAD
 def web_search(text: str, scope: str | None = None, start: int = 0, limit: int = 20):
+=======
+def web_search(text, scope=None, start=0, limit=20):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""
 	Search for given text in __global_search where published = 1
 	:param text: phrase to be searched

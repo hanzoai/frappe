@@ -22,7 +22,13 @@ frappe._.get_data_uri = (element) => {
 	const context = $canvas[0].getContext("2d");
 	context.drawImage(element, 0, 0, width, height);
 
+<<<<<<< HEAD
 	return $canvas[0].toDataURL("image/png");
+=======
+	const data_uri = $canvas[0].toDataURL("image/png");
+
+	return data_uri;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 };
 
 function get_file_input() {

@@ -22,6 +22,7 @@ from frappe.utils.backups import new_backup
 
 
 class GoogleDrive(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -42,6 +43,8 @@ class GoogleDrive(Document):
 		send_email_for_successful_backup: DF.Check
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		doc_before_save = self.get_doc_before_save()
 		if doc_before_save and doc_before_save.backup_folder_name != self.backup_folder_name:

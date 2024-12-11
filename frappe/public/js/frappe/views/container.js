@@ -41,12 +41,20 @@ frappe.views.Container = class Container {
 	}
 	change_to(label) {
 		cur_page = this;
+<<<<<<< HEAD
 		let page;
 		if (label.tagName) {
 			// if sent the div, get the table
 			page = label;
 		} else {
 			page = frappe.pages[label];
+=======
+		if (label.tagName) {
+			// if sent the div, get the table
+			var page = label;
+		} else {
+			var page = frappe.pages[label];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		if (!page) {
 			console.log(__("Page not found") + ": " + label);

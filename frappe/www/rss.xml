@@ -9,10 +9,18 @@
         <ttl>1800</ttl>
 		{% for i in items %}<item>
 			        <title>{{ i.title }}</title>
+<<<<<<< HEAD
 			        <description>{{ i.blog_intro }}</description>
+=======
+			        <description>{{ i.content }}</description>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			        <link>{{ i.link }}</link>
 			        <guid>{{ i.name }}</guid>
 			        <pubDate>{{ i.published_on }}</pubDate>
 		</item>{% endfor %}
 </channel>
+<<<<<<< HEAD
 </rss>
+=======
+</rss>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

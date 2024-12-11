@@ -72,10 +72,18 @@
 }
 
 .slides-wrapper {
+<<<<<<< HEAD
 	max-width: 520px;
 	background: var(--card-bg);
 	padding: var(--padding-xl);
 	border: 1px solid var(--border-color);
+=======
+	width: 520px;
+	max-width: 520px;
+	background: var(--card-bg);
+	padding: var(--padding-xl);
+	box-shadow: var(--card-shadow);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	border-radius: var(--border-radius-md);
 
 	.slide-wrapper:focus {

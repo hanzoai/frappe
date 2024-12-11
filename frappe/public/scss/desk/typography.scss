@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 // Typography remove when espresso is ready
 $text-muted: var(--text-muted);
 $text-light: var(--text-light);
 $text-color: var(--text-color);
 $headings-color: var(--gray-900);
+=======
+// Typography
+$text-muted: var(--text-muted);
+$text-light: var(--text-light);
+$text-color: var(--text-color);
+$headings-color: var(--heading-color) !default;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 $font-family-base: var(--font-stack);
 
 $font-size-xs: 0.6875rem !default;

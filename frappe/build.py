@@ -4,8 +4,14 @@ import os
 import re
 import shutil
 import subprocess
+<<<<<<< HEAD
 from subprocess import getoutput
 from tempfile import mkdtemp
+=======
+from distutils.spawn import find_executable
+from subprocess import getoutput
+from tempfile import mkdtemp, mktemp
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from urllib.parse import urlparse
 
 import click
@@ -178,9 +184,18 @@ def symlink(target, link_name, overwrite=False):
 	if not overwrite:
 		return os.symlink(target, link_name)
 
+<<<<<<< HEAD
 	# Create link to target with temporary filename
 	while True:
 		temp_link_name = f"tmp{frappe.generate_hash()}"
+=======
+	# os.replace() may fail if files are on different filesystems
+	link_dir = os.path.dirname(link_name)
+
+	# Create link to target with temporary filename
+	while True:
+		temp_link_name = mktemp(dir=link_dir)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# os.* functions mimic as closely as possible system functions
 		# The POSIX symlink() returns EEXIST if link_name already exists
@@ -223,10 +238,18 @@ def bundle(
 	mode,
 	apps=None,
 	hard_link=False,
+<<<<<<< HEAD
 	verbose=False,
 	skip_frappe=False,
 	files=None,
 	save_metafiles=False,
+=======
+	make_copy=False,
+	restore=False,
+	verbose=False,
+	skip_frappe=False,
+	files=None,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 ):
 	"""concat / minify js files"""
 	setup()
@@ -246,6 +269,7 @@ def bundle(
 
 	command += " --run-build-command"
 
+<<<<<<< HEAD
 	if save_metafiles:
 		command += " --save-metafiles"
 
@@ -254,6 +278,10 @@ def bundle(
 
 	check_node_executable()
 	frappe_app_path = frappe.get_app_source_path("frappe")
+=======
+	check_node_executable()
+	frappe_app_path = frappe.get_app_path("frappe", "..")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	frappe.commands.popen(command, cwd=frappe_app_path, env=get_node_env(), raise_err=True)
 
 
@@ -271,22 +299,37 @@ def watch(apps=None):
 		command += " --live-reload"
 
 	check_node_executable()
+<<<<<<< HEAD
 	frappe_app_path = frappe.get_app_source_path("frappe")
+=======
+	frappe_app_path = frappe.get_app_path("frappe", "..")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	frappe.commands.popen(command, cwd=frappe_app_path, env=get_node_env())
 
 
 def check_node_executable():
 	node_version = Version(subprocess.getoutput("node -v")[1:])
 	warn = "⚠️ "
+<<<<<<< HEAD
 	if node_version.major < 18:
 		click.echo(f"{warn} Please update your node version to 18")
 	if not shutil.which("yarn"):
+=======
+	if node_version.major < 14:
+		click.echo(f"{warn} Please update your node version to 14")
+	if not find_executable("yarn"):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		click.echo(f"{warn} Please install yarn using below command and try again.\nnpm install -g yarn")
 	click.echo()
 
 
 def get_node_env():
+<<<<<<< HEAD
 	return {"NODE_OPTIONS": f"--max_old_space_size={get_safe_max_old_space_size()}"}
+=======
+	node_env = {"NODE_OPTIONS": f"--max_old_space_size={get_safe_max_old_space_size()}"}
+	return node_env
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_safe_max_old_space_size():
@@ -382,9 +425,14 @@ def make_asset_dirs(hard_link=False):
 		try:
 			print(start_message, end="\r")
 			link_assets_dir(source, target, hard_link=hard_link)
+<<<<<<< HEAD
 		except Exception as e:
 			print(e)
 			print(fail_message)
+=======
+		except Exception:
+			print(fail_message, end="\r")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	click.echo(unstrip(click.style("✔", fg="green") + " Application Assets Linked") + "\n")
 

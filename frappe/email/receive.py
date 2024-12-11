@@ -19,8 +19,12 @@ from email_reply_parser import EmailReplyParser
 
 import frappe
 from frappe import _, safe_decode, safe_encode
+<<<<<<< HEAD
 from frappe.core.doctype.file.exceptions import MaxFileSizeReachedError
 from frappe.core.doctype.file.utils import get_random_filename
+=======
+from frappe.core.doctype.file import MaxFileSizeReachedError, get_random_filename
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.email.oauth import Oauth
 from frappe.utils import (
 	add_days,
@@ -54,6 +58,13 @@ class EmailSizeExceededError(frappe.ValidationError):
 	pass
 
 
+<<<<<<< HEAD
+=======
+class EmailTimeoutError(frappe.ValidationError):
+	pass
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 class LoginLimitExceeded(frappe.ValidationError):
 	pass
 
@@ -76,6 +87,7 @@ class EmailServer:
 		"""Connect to IMAP"""
 		try:
 			if cint(self.settings.use_ssl):
+<<<<<<< HEAD
 				self.imap = imaplib.IMAP4_SSL(
 					self.settings.host,
 					self.settings.incoming_port,
@@ -85,6 +97,17 @@ class EmailServer:
 			else:
 				self.imap = imaplib.IMAP4(
 					self.settings.host, self.settings.incoming_port, timeout=frappe.conf.pop_timeout
+=======
+				self.imap = Timed_IMAP4_SSL(
+					self.settings.host,
+					self.settings.incoming_port,
+					timeout=frappe.conf.get("pop_timeout"),
+					ssl_context=ssl.create_default_context(),
+				)
+			else:
+				self.imap = Timed_IMAP4(
+					self.settings.host, self.settings.incoming_port, timeout=frappe.conf.get("pop_timeout")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				)
 
 				if cint(self.settings.use_starttls):
@@ -113,6 +136,7 @@ class EmailServer:
 		# this method return pop connection
 		try:
 			if cint(self.settings.use_ssl):
+<<<<<<< HEAD
 				self.pop = poplib.POP3_SSL(
 					self.settings.host,
 					self.settings.incoming_port,
@@ -122,6 +146,17 @@ class EmailServer:
 			else:
 				self.pop = poplib.POP3(
 					self.settings.host, self.settings.incoming_port, timeout=frappe.conf.pop_timeout
+=======
+				self.pop = Timed_POP3_SSL(
+					self.settings.host,
+					self.settings.incoming_port,
+					timeout=frappe.conf.get("pop_timeout"),
+					context=ssl.create_default_context(),
+				)
+			else:
+				self.pop = Timed_POP3(
+					self.settings.host, self.settings.incoming_port, timeout=frappe.conf.get("pop_timeout")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				)
 
 			if self.settings.use_oauth:
@@ -177,7 +212,11 @@ class EmailServer:
 		for i, uid in enumerate(email_list[:100]):
 			try:
 				self.retrieve_message(uid, i + 1)
+<<<<<<< HEAD
 			except (_socket.timeout, LoginLimitExceeded):
+=======
+			except (EmailTimeoutError, LoginLimitExceeded):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				# get whatever messages were retrieved
 				break
 
@@ -266,7 +305,11 @@ class EmailServer:
 			else:
 				msg = self.pop.retr(msg_num)
 				self.latest_messages.append(b"\n".join(msg[1]))
+<<<<<<< HEAD
 		except _socket.timeout:
+=======
+		except EmailTimeoutError:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			# propagate this error to break the loop
 			raise
 
@@ -409,6 +452,7 @@ class Email:
 		"""Parse and decode `Subject` header."""
 		_subject = decode_header(self.mail.get("Subject", "No Subject"))
 		self.subject = _subject[0][0] or ""
+<<<<<<< HEAD
 
 		if charset := _subject[0][1]:
 			# Encoding is known by decode_header (might also be unknown-8bit)
@@ -422,6 +466,13 @@ class Email:
 		# Convert non-string (e.g. None)
 		# Truncate to 140 chars (can be used as a document name)
 		self.subject = str(self.subject).strip()[:140]
+=======
+		if charset := _subject[0][1]:
+			self.subject = safe_decode(self.subject, charset, ALTERNATE_CHARSET_MAP)
+		else:
+			# assume that the encoding is utf-8
+			self.subject = safe_decode(self.subject)[:140]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if not self.subject:
 			self.subject = "No Subject"
@@ -442,14 +493,22 @@ class Email:
 
 		self.from_real_name = parse_addr(_from_email)[0] if "@" in _from_email else _from_email
 
+<<<<<<< HEAD
 	@staticmethod
 	def decode_email(email):
+=======
+	def decode_email(self, email):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if not email:
 			return
 		decoded = ""
 		for part, encoding in decode_header(frappe.as_unicode(email).replace('"', " ").replace("'", " ")):
 			if encoding:
+<<<<<<< HEAD
 				decoded += part.decode(encoding, "replace")
+=======
+				decoded += part.decode(encoding)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			else:
 				decoded += safe_decode(part)
 		return decoded
@@ -486,7 +545,14 @@ class Email:
 
 	def show_attached_email_headers_in_content(self, part):
 		# get the multipart/alternative message
+<<<<<<< HEAD
 		from html import escape
+=======
+		try:
+			from html import escape  # python 3.x
+		except ImportError:
+			from cgi import escape  # python 2.x
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		message = list(part.walk())[1]
 		headers = []
@@ -539,9 +605,12 @@ class Email:
 					fname = get_random_filename(content_type=content_type)
 			else:
 				fname = get_random_filename(content_type=content_type)
+<<<<<<< HEAD
 			# Don't clobber existing filename
 			while fname in self.cid_map:
 				fname = get_random_filename(content_type=content_type)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			self.attachments.append(
 				{
@@ -904,3 +973,46 @@ class InboundMail(Email):
 			"has_attachment": 1 if self.attachments else 0,
 			"seen": self.seen_status or 0,
 		}
+<<<<<<< HEAD
+=======
+
+
+class TimerMixin:
+	def __init__(self, *args, **kwargs):
+		self.timeout = kwargs.pop("timeout", 0.0)
+		self.elapsed_time = 0.0
+		self._super.__init__(self, *args, **kwargs)
+		if self.timeout:
+			# set per operation timeout to one-fifth of total pop timeout
+			self.sock.settimeout(self.timeout / 5.0)
+
+	def _getline(self, *args, **kwargs):
+		start_time = time.time()
+		ret = self._super._getline(self, *args, **kwargs)
+
+		self.elapsed_time += time.time() - start_time
+		if self.timeout and self.elapsed_time > self.timeout:
+			raise EmailTimeoutError
+
+		return ret
+
+	def quit(self, *args, **kwargs):
+		self.elapsed_time = 0.0
+		return self._super.quit(self, *args, **kwargs)
+
+
+class Timed_POP3(TimerMixin, poplib.POP3):
+	_super = poplib.POP3
+
+
+class Timed_POP3_SSL(TimerMixin, poplib.POP3_SSL):
+	_super = poplib.POP3_SSL
+
+
+class Timed_IMAP4(TimerMixin, imaplib.IMAP4):
+	_super = imaplib.IMAP4
+
+
+class Timed_IMAP4_SSL(TimerMixin, imaplib.IMAP4_SSL):
+	_super = imaplib.IMAP4_SSL
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

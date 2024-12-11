@@ -20,7 +20,11 @@ def get_context(context):
 	elif frappe.local.form_dict.id:
 		message_id = frappe.local.form_dict.id
 		key = f"message_id:{message_id}"
+<<<<<<< HEAD
 		message = frappe.cache.get_value(key, expires=True)
+=======
+		message = frappe.cache().get_value(key, expires=True)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if message:
 			message_context.update(message.get("context", {}))
 			if message.get("http_status_code"):

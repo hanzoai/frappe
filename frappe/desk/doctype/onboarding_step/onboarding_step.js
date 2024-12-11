@@ -75,7 +75,11 @@ function setup_fields(frm) {
 				})
 				.map((df) => {
 					return {
+<<<<<<< HEAD
 						label: `${__(df.label, null, df.parent)} (${df.fieldname})`,
+=======
+						label: `${__(df.label)} (${df.fieldname})`,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						value: df.fieldname,
 					};
 				});

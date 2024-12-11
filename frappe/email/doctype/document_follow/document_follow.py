@@ -5,6 +5,7 @@ from frappe.model.document import Document
 
 
 class DocumentFollow(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -17,4 +18,6 @@ class DocumentFollow(Document):
 		ref_doctype: DF.Link
 		user: DF.Link
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	pass

@@ -83,7 +83,11 @@ frappe.views.FileView = class FileView extends frappe.views.ListView {
 	}
 
 	file_menu_items() {
+<<<<<<< HEAD
 		return [
+=======
+		const items = [
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			{
 				label: __("Home"),
 				action: () => {
@@ -137,6 +141,11 @@ frappe.views.FileView = class FileView extends frappe.views.ListView {
 				},
 			},
 		];
+<<<<<<< HEAD
+=======
+
+		return items;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	add_file_action_buttons() {

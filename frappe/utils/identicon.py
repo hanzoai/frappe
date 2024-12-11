@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 This module provides a class Identicon that can be used to generate identicons
 from strings.
@@ -8,6 +9,12 @@ which has been released under the MIT license, as described in attributions.md.
 from base64 import b64encode
 from hashlib import md5
 from io import BytesIO
+=======
+import base64
+import random
+from hashlib import md5
+from io import StringIO
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 from PIL import Image, ImageDraw
 
@@ -31,7 +38,11 @@ class Identicon:
 		"""
 		Returns a md5 numeric hash
 		"""
+<<<<<<< HEAD
 		return int(md5(str_.encode("utf-8"), usedforsecurity=False).hexdigest(), 16)
+=======
+		return int(md5(str_.encode("utf-8")).hexdigest(), 16)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def calculate(self):
 		"""
@@ -39,7 +50,36 @@ class Identicon:
 		First three bytes are used to generate the color,
 		remaining bytes are used to create the drawing
 		"""
+<<<<<<< HEAD
 		color = (self.hash & 0xFF, self.hash >> 8 & 0xFF, self.hash >> 16 & 0xFF)
+=======
+		# color = (self.hash & 0xff, self.hash >> 8 & 0xff, self.hash >> 16 & 0xff)
+		color = random.choice(
+			(
+				(254, 196, 197),
+				(253, 138, 139),
+				(254, 231, 206),
+				(254, 208, 159),
+				(210, 211, 253),
+				(163, 165, 252),
+				(247, 213, 247),
+				(242, 172, 238),
+				(235, 247, 206),
+				(217, 241, 157),
+				(211, 248, 237),
+				(167, 242, 221),
+				(255, 249, 207),
+				(254, 245, 161),
+				(211, 241, 254),
+				(168, 228, 254),
+				(207, 245, 210),
+				(159, 235, 164),
+			)
+		)
+		# print color
+		# color = (254, 232, 206)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.hash >>= 24  # skip first three bytes
 		square_x = square_y = 0  # init square position
 		for x in range(GRID_SIZE * (GRID_SIZE + 1) // 2):
@@ -67,6 +107,7 @@ class Identicon:
 
 	def base64(self, format="PNG"):
 		"""
+<<<<<<< HEAD
 		Return the identicon's base64
 
 		Created by: liuzheng712
@@ -81,3 +122,24 @@ class Identicon:
 		self.image.save(buff, format=format.upper())
 
 		return f"data:image/png;base64,{b64encode(buff.getvalue()).decode()}"
+=======
+		usage:  i = Identicon('xx')
+		                print(i.base64())
+		return: this image's base64 code
+		created by: liuzheng712
+		bug report: https://github.com/liuzheng712/identicons/issues
+		"""
+		self.calculate()
+		fp = StringIO()
+		self.image.encoderinfo = {}
+		self.image.encoderconfig = ()
+
+		if format.upper() not in Image.SAVE:
+			Image.init()
+		save_handler = Image.SAVE[format.upper()]
+		try:
+			save_handler(self.image, fp, "")
+		finally:
+			fp.seek(0)
+			return f"data:image/png;base64,{base64.b64encode(fp.read())}"  # noqa
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

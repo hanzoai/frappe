@@ -16,6 +16,7 @@ frappe.ui.form.on("System Settings", {
 				}
 			},
 		});
+<<<<<<< HEAD
 
 		frappe.xcall("frappe.apps.get_apps").then((r) => {
 			let apps = r?.map((r) => r.name) || [];
@@ -23,6 +24,8 @@ frappe.ui.form.on("System Settings", {
 		});
 
 		frm.trigger("set_rounding_method_options");
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 	enable_password_policy: function (frm) {
 		if (frm.doc.enable_password_policy == 0) {
@@ -37,6 +40,7 @@ frappe.ui.form.on("System Settings", {
 			frm.set_value("bypass_restrict_ip_check_if_2fa_enabled", 0);
 		}
 	},
+<<<<<<< HEAD
 	after_save: function (frm) {
 		/**
 		 * Checks whether the effective value has changed.
@@ -56,6 +60,12 @@ frappe.ui.form.on("System Settings", {
 		if (attr_tuples.some(has_effectively_changed)) {
 			frappe.msgprint(__("Refreshing..."));
 			window.location.reload();
+=======
+	on_update: function (frm) {
+		if (frappe.boot.time_zone && frappe.boot.time_zone.system !== frm.doc.time_zone) {
+			// Clear cache after saving to refresh the values of boot.
+			frappe.ui.toolbar.clear_cache();
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	},
 	first_day_of_the_week(frm) {
@@ -78,6 +88,7 @@ frappe.ui.form.on("System Settings", {
 			}
 		);
 	},
+<<<<<<< HEAD
 
 	set_rounding_method_options: function (frm) {
 		if (frm.doc.rounding_method != "Banker's Rounding (legacy)") {
@@ -91,4 +102,6 @@ frappe.ui.form.on("System Settings", {
 			field.refresh();
 		}
 	},
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 });

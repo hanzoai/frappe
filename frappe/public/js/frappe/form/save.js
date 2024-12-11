@@ -135,7 +135,11 @@ frappe.ui.form.save = function (frm, action, callback, btn) {
 						!frappe.model.has_value(doc.doctype, doc.name, df.fieldname)
 					) {
 						has_errors = true;
+<<<<<<< HEAD
 						error_fields[error_fields.length] = __(df.label, null, df.parent);
+=======
+						error_fields[error_fields.length] = __(df.label);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						// scroll to field
 						if (!frm.scroll_set) {
 							scroll_to(doc.parentfield || df.fieldname);
@@ -156,7 +160,10 @@ frappe.ui.form.save = function (frm, action, callback, btn) {
 
 			if (error_fields.length) {
 				let meta = frappe.get_meta(doc.doctype);
+<<<<<<< HEAD
 				let message;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				if (meta.istable) {
 					const table_field = frappe.meta.docfield_map[doc.parenttype][doc.parentfield];
 
@@ -164,12 +171,20 @@ frappe.ui.form.save = function (frm, action, callback, btn) {
 						table_field.label || frappe.unscrub(table_field.fieldname)
 					).bold();
 
+<<<<<<< HEAD
 					message = __("Mandatory fields required in table {0}, Row {1}", [
+=======
+					var message = __("Mandatory fields required in table {0}, Row {1}", [
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						table_label,
 						doc.idx,
 					]);
 				} else {
+<<<<<<< HEAD
 					message = __("Mandatory fields required in {0}", [__(doc.doctype)]);
+=======
+					var message = __("Mandatory fields required in {0}", [__(doc.doctype)]);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				}
 				message = message + "<br><br><ul><li>" + error_fields.join("</li><li>") + "</ul>";
 				frappe.msgprint({

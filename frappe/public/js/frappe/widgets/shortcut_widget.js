@@ -65,6 +65,7 @@ export default class ShortcutWidget extends Widget {
 	set_actions() {
 		if (this.in_customize_mode) return;
 
+<<<<<<< HEAD
 		$(frappe.utils.icon("es-line-arrow-up-right", "xs", "", "", "ml-2")).appendTo(
 			this.action_area
 		);
@@ -81,6 +82,12 @@ export default class ShortcutWidget extends Widget {
 		let filters = frappe.utils.process_filter_expression(this.stats_filter);
 
 		if (this.type == "DocType" && this.doc_view != "New" && filters) {
+=======
+		this.widget.addClass("shortcut-widget-box");
+
+		let filters = frappe.utils.process_filter_expression(this.stats_filter);
+		if (this.type == "DocType" && filters) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			frappe.db
 				.count(this.link_to, {
 					filters: filters,
@@ -100,11 +107,15 @@ export default class ShortcutWidget extends Widget {
 		this.action_area.empty();
 		const label = get_label();
 		let color = this.color && count ? this.color.toLowerCase() : "gray";
+<<<<<<< HEAD
 		$(
 			`<div class="indicator-pill no-indicator-dot ellipsis ${color}">${label}</div>`
 		).appendTo(this.action_area);
 
 		$(frappe.utils.icon("es-line-arrow-up-right", "xs", "", "", "ml-2")).appendTo(
+=======
+		$(`<div class="indicator-pill ellipsis ${color}">${label}</div>`).appendTo(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this.action_area
 		);
 	}

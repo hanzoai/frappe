@@ -71,7 +71,11 @@
    "fieldname": "operation",
    "fieldtype": "Select",
    "label": "Operation",
+<<<<<<< HEAD
    "options": "\nLogin\nLogout\nImpersonate"
+=======
+   "options": "\nLogin\nLogout"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "status",
@@ -158,7 +162,11 @@
  "icon": "fa fa-comment",
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-02-24 16:31:16.253153",
+=======
+ "modified": "2023-07-28 13:26:32.281278",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Activity Log",
@@ -170,6 +178,19 @@
    "report": 1,
    "role": "System Manager",
    "share": 1
+<<<<<<< HEAD
+=======
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "if_owner": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
+   "share": 1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "search_fields": "subject",

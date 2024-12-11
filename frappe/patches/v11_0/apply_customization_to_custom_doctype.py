@@ -44,7 +44,11 @@ def execute():
 			if field:
 				field.update(cf)
 			else:
+<<<<<<< HEAD
 				df = frappe.new_doc("DocField", parent_doc=meta, parentfield="fields")
+=======
+				df = frappe.new_doc("DocField", meta, "fields")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				df.update(cf)
 				meta.fields.append(df)
 			frappe.db.delete("Custom Field", {"name": cf.name})

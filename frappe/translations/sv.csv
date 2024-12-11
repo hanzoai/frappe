@@ -9,6 +9,10 @@ Action,Åtgärd,
 Actions,Åtgärder,
 Active,Aktiv,
 Add,Lägga till,
+<<<<<<< HEAD
+=======
+Add Comment,Lägg till kommentar,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,Lägg till rad,
 Address,Adress,
 Address Line 2,Adress Linje 2,
@@ -143,6 +147,10 @@ Monday,Måndag,
 Monthly,Månadsvis,
 More,Mer,
 More Information,Mer information,
+<<<<<<< HEAD
+=======
+More...,Mer...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,drag,
 My Account,Mitt Konto,
 New Address,Ny adress,
@@ -155,6 +163,10 @@ No items found.,Inga föremål hittades.,
 None,Ingen,
 Not Permitted,Inte Tillåtna,
 Not active,Inte aktiv,
+<<<<<<< HEAD
+=======
+Notes,Anmärkningar,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,siffra,
 Online,Uppkopplad,
 Operation,Funktion,
@@ -164,12 +176,25 @@ Owner,Ägare,
 Page Missing or Moved,Sida saknas eller flyttats,
 Parameter,Parameter,
 Password,Lösenord,
+<<<<<<< HEAD
 Period,Period,
 Pincode,Pinkod,
+=======
+Payment Gateway,Payment Gateway,
+Payment Gateway Name,Betalnings Gateway Name,
+Payments,Betalningar,
+Period,Period,
+Pincode,Pinkod,
+Plan Name,Plannamn,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,Aktivera popup-fönster,
 Please select Company,Välj Företag,
 Please select {0},Välj {0},
 Please set Email Address,Ställ in e-postadress,
+<<<<<<< HEAD
+=======
+Portal,Portal,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,Portal Settings,
 Preview,Förhandsgranska,
 Primary,Primär,
@@ -214,6 +239,10 @@ Salutation,Salutation,
 Sample,Prov,
 Saturday,Lördag,
 Saved,sparad,
+<<<<<<< HEAD
+=======
+Scan Barcode,Skanna streckkod,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,Planerad,
 Search,Sök,
 Secret Key,Hemlig nyckel,
@@ -228,6 +257,10 @@ Settings,Inställningar,
 Shipping,Frakt,
 Short Name,Kort Namn,
 Slideshow,Bildspel,
+<<<<<<< HEAD
+=======
+Some information is missing,Viss information saknas,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,Källa,
 Source Name,käll~~POS=TRUNC,
 Standard,Standard,
@@ -237,6 +270,10 @@ State,stat,
 Stopped,Stoppad,
 Subject,Ämne,
 Submit,Skicka,
+<<<<<<< HEAD
+=======
+Successful,Framgångsrik,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,Sammanfattning,
 Sunday,Söndag,
 System Manager,System Manager,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,Tidsrymd,
 To,Till,
 To Date,Till Datum,
+<<<<<<< HEAD
 Traceback,Spåra tillbaka,
 URL,URL,
 Unsubscribed,Otecknade,
+=======
+Tools,Verktyg,
+Traceback,Spåra tillbaka,
+URL,URL,
+Unsubscribed,Otecknade,
+Use Sandbox,användning Sandbox,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,Användare,
 User ID,användar ID,
 Users,användare,
@@ -556,6 +601,10 @@ Bulk Delete,Bulk Delete,
 Bulk Edit {0},Bulk Redigera {0},
 Bulk Rename,Bulk Byt namn,
 Bulk Update,Bulk Update,
+<<<<<<< HEAD
+=======
+Busy,Upptagen,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,Knapp,
 Button Help,KNAPPHJÄLP,
 Button Label,Button Label,
@@ -692,6 +741,10 @@ Compiled Successfully,Sammanställt framgångsrikt,
 Complete By,Avslutad Av,
 Complete Registration,Avsluta registrering,
 Complete Setup,Avsluta Setup,
+<<<<<<< HEAD
+=======
+Completed By,Fullgjord av,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,komponera e,
 Condition Detail,Skickdetalj,
 Conditions,Betingelser,
@@ -1380,7 +1433,11 @@ Is Submittable,Är Skickad,
 Is Table,är Table,
 Is Your Company Address,Är ditt Företag Adress,
 It is risky to delete this file: {0}. Please contact your System Manager.,Det är riskabelt att ta bort denna fil: {0}. Kontakta din systemadministratören.,
+<<<<<<< HEAD
 Item cannot be added to its own descendants,Produkt kan inte läggas till sina egna underprodukter,
+=======
+Item cannot be added to its own descendents,Produkt kan inte läggas till sina egna underprodukter,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,JSON,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},JavaScript Format: frappe.query_reports [&#39;rapportnamn&#39;] = {},
@@ -1675,8 +1732,13 @@ Not a valid Workflow Action,Inte en giltig arbetsflödesåtgärd,
 Not a valid user,Inte ett giltigt användarnamn,
 Not a zip file,Inte en zip-fil,
 Not allowed for {0}: {1},Inte tillåtet för {0}: {1},
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}","Du har inte tillåtelse att komma åt {0} eftersom det är länkat till {1} &quot;{2}&quot; i rad {3}, fält {4}",
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},Du har inte tillåtelse att komma åt denna {0} post eftersom det är länkat till {1} &quot;{2}&quot; i fältet {3},
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},Inte tillåtet för {0}: {1} i rad {2}. Begränsat fält: {3},
+Not allowed for {0}: {1}. Restricted field: {2},Inte tillåtet för {0}: {1}. Begränsat fält: {2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,Ej tillåtet att importera,
 Not allowed to change {0} after submission,Ej tillåtet att ändra {0} efter inlämnandet,
 Not allowed to print cancelled documents,Inte tillåtet att skriva ut inställda dokument,
@@ -1804,6 +1866,10 @@ Path to private Key File,Sökväg till privat nyckelfil,
 PayPal Settings,PayPal Inställningar,
 PayPal payment gateway settings,Paypal betalning gateway inställningar,
 Payment Cancelled,betalning Inställd,
+<<<<<<< HEAD
+=======
+Payment Failed,Betalning misslyckades,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,betalning Framgång,
 Pending Approval,Väntar på godkännande,
 Pending Verification,Väntar på verifiering,
@@ -3200,6 +3266,10 @@ Click on the link below to approve the request,Klicka på länken nedan för att
 Click on the lock icon to toggle public/private,Klicka på låsikonen för att växla offentlig / privat,
 Click on {0} to generate Refresh Token.,Klicka på {0} för att generera Refresh Token.,
 Close Condition,Nära skick,
+<<<<<<< HEAD
+=======
+Column {0},Kolumn {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,Kolumner / fält,
 "Configure notifications for mentions, assignments, energy points and more.","Konfigurera aviseringar för omnämnanden, uppdrag, energipoäng och mer.",
 Contact Email,Kontakt E-Post,
@@ -3281,6 +3351,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,Fel,
 Fetching default Global Search documents.,Hämtar standarddokument för global sökning.,
 Fetching posts...,Hämtar inlägg ...,
+<<<<<<< HEAD
+=======
+Field Mapping,Fältkartläggning,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,Fält som ska kontrolleras,
 File Information,Filinformation,
 Filter By,Filtrera efter,
@@ -3435,6 +3509,10 @@ No posts yet,Inga inlägg än,
 No records will be exported,Inga poster kommer att exporteras,
 No results found for {0} in Global Search,Inga resultat hittades för {0} i Global Search,
 No user found,Ingen användare hittades,
+<<<<<<< HEAD
+=======
+Not Specified,Ej angivet,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,Meddelande logg,
 Notification Settings,Meddelandeinställningar,
 Notification Subscribed Document,Meddelande Prenumererat dokument,
@@ -3590,6 +3668,10 @@ Untitled Column,Namnlös kolumn,
 Untranslated,oöversatt,
 Upcoming Events,uppkommande händelser,
 Update Existing Records,Uppdatera befintliga poster,
+<<<<<<< HEAD
+=======
+Update Type,Uppdateringstyp,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,Uppdaterad till en ny version 🎉,
 "Updating {0} of {1}, {2}","Uppdaterar {0} av {1}, {2}",
 Upload file,Ladda upp fil,
@@ -3696,16 +3778,28 @@ Designation,Beteckning,
 Disabled,Inaktiverad,
 Doctype,Doctype,
 Download Template,Hämta mall,
+<<<<<<< HEAD
+=======
+Dr,Dr,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,Förfallodatum,
 Duplicate,Duplicera,
 Edit Profile,Redigera profil,
 Email,E-post,
+<<<<<<< HEAD
+=======
+End Time,Sluttid,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,Ange värde,
 Entity Type,Entitetstyp,
 Error,Fel,
 Expired,Utgånget,
 Export,Export,
 Export not allowed. You need {0} role to export.,Export tillåts inte. Du behöver {0} roll att exportera.,
+<<<<<<< HEAD
+=======
+Fetching...,Hämtar ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,Fält,
 File Manager,Filhanterare,
 Filters,Filter,
@@ -3720,8 +3814,16 @@ Import Data from CSV / Excel files.,Importera data från CSV / Excel-filer.,
 In Progress,Pågående,
 Intermediate,Mellanliggande,
 Invite as User,Bjud in som Användare,
+<<<<<<< HEAD
 Loading...,Laddar ...,
 Location,Läge,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.",Det verkar som om det finns ett problem med serverns randkonfiguration. Vid fel kommer beloppet att återbetalas till ditt konto.,
+Loading...,Laddar ...,
+Location,Läge,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,Ser ut som någon skickat till en ofullständig webbadress. Vänligen be dem att undersöka saken.,
+Master,Ledar-,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,Meddelande,
 Missing Values Required,Saknade värden Krävs,
 Mobile No,Mobilnummer,
@@ -3733,6 +3835,10 @@ Note,Notera,
 Offline,Off-line,
 Open,Öppen,
 Page {0} of {1},Page {0} av {1},
+<<<<<<< HEAD
+=======
+Pay,Betala,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,Väntar,
 Phone,Telefon,
 Please click on the following link to set your new password,Klicka på följande länk för att ställa in ditt nya lösenord,
@@ -3782,6 +3888,10 @@ Welcome to {0},Välkommen till {0},
 Year,År,
 Yearly,Årlig,
 You,Du,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,Du kan också kopiera och klistra in den här länken i din webbläsare,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,och,
 {0} Name,{0} Namn,
 {0} is required,{0} krävs,
@@ -4085,6 +4195,10 @@ Custom SCSS,Anpassad SCSS,
 Navbar,Navbar,
 Source Message,Källmeddelande,
 Translated Message,Översatt meddelande,
+<<<<<<< HEAD
+=======
+Verified By,Verifierad Av,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,Att använda den här konsolen kan göra det möjligt för angripare att efterlikna dig och stjäla din information. Ange eller klistra inte in kod som du inte förstår.,
 {0} m,{0} m,
 {0} h,{0} h,
@@ -4108,7 +4222,11 @@ No changes in document,Inga dokumentändringar,
 by Role,av roll,
 Document is only editable by users with role,Dokumentet kan endast redigeras av användare med roll,
 {0}: Other permission rules may also apply,{0}: Andra behörighetsregler kan också gälla,
+<<<<<<< HEAD
 {0} Web page views,{0} Sidvisningar,
+=======
+{0} Page Views,{0} Sidvisningar,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,Bygga ut,
 Collapse,Kollaps,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.","Ogiltig bärartoken, ange en giltig åtkomsttoken med prefixet &quot;bärare&quot;.",
@@ -4117,6 +4235,10 @@ Collapse,Kollaps,
 {0} is not a valid Name,{0} är inte ett giltigt namn,
 Your system is being updated. Please refresh again after a few moments.,Ditt system uppdateras. Uppdatera igen efter några ögonblick.,
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}: Inskickad post kan inte raderas. Du måste {2} avbryta {3} det först.,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},Ogiltig namngivningsserie (. Saknas) för {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},Fel har inträffat i {0},
 Status Updated,Status uppdaterad,
 You can also copy-paste this {0} to your browser,Du kan också kopiera och klistra in den här {0} i din webbläsare,
@@ -4138,11 +4260,21 @@ Is Billing Contact,Är faktureringskontakt,
 Address And Contacts,Adress och kontakter,
 Lead Conversion Time,Lead Conversion Time,
 Due Date Based On,Förfallodatum baserad på,
+<<<<<<< HEAD
 Linked Documents,Länkade dokument,
+=======
+Phone Number,Telefonnummer,
+Linked Documents,Länkade dokument,
+Account SID,Konto SID,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,Steg,
 email,e-post,
 Component,Komponent,
 Subtitle,Texta,
+<<<<<<< HEAD
+=======
+Global Defaults,Globala standardinställningar,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,Prefix,
 Is Public,Är offentlig,
 This chart will be available to all Users if this is set,Detta diagram är tillgängligt för alla användare om detta är inställt,
@@ -4329,6 +4461,10 @@ Dynamic Filters Section,Avsnitt för dynamiska filter,
 Please create Card first,Vänligen skapa kort först,
 Onboarding Permission,Ombordstigningstillstånd,
 Onboarding Step,Ombordsteg,
+<<<<<<< HEAD
+=======
+Is Mandatory,Är obligatorisk,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,Hoppas över,
 Create Entry,Skapa post,
 Update Settings,Uppdatera inställningarna,
@@ -4366,6 +4502,10 @@ Message (HTML),Meddelande (HTML),
 Send Attachments,Skicka bilagor,
 Testing,Testning,
 System Notification,Systemmeddelande,
+<<<<<<< HEAD
+=======
+WhatsApp,WhatsApp,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,Twilio-nummer,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","För att använda WhatsApp for Business, initialisera <a href=""#Form/Twilio Settings"">Twilio Settings</a> .",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","För att använda Slack Channel, lägg till en <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a> .",
@@ -4500,6 +4640,10 @@ Add to ToDo,Lägg till i ToDo,
 {0} are currently {1},{0} är för närvarande {1},
 Currently Replying,För närvarande svarar,
 created {0},skapade {0},
+<<<<<<< HEAD
+=======
+Make a call,Ringa ett samtal,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,Förändra,Coins
 Too Many Requests,För många begäranden,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.","Ogiltiga behörighetsrubriker, lägg till en token med ett prefix från något av följande: {0}.",
@@ -4664,6 +4808,7 @@ Value cannot be negative for {0}: {1},Värde kan inte vara negativt för {0}: {1
 Negative Value,Negativt värde,
 Authentication failed while receiving emails from Email Account: {0}.,Autentiseringen misslyckades när e-postmeddelanden togs emot från e-postkontot: {0}.,
 Message from server: {0},Meddelande från servern: {0},
+<<<<<<< HEAD
 Add Row,Lägg till rad,
 Analytics,Analytics,
 Anonymous,Anonym,
@@ -4796,3 +4941,5 @@ West Bengal,Västbengalen,
 Published on,publicerad på,
 Bottom,Botten,
 Top,Topp,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

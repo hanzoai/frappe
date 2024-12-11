@@ -16,7 +16,10 @@
   "module",
   "column_break_3",
   "icon",
+<<<<<<< HEAD
   "indicator_color",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "restrict_to_domain",
   "hide_custom",
   "public",
@@ -208,6 +211,7 @@
    "fieldtype": "Table",
    "label": "Custom Blocks",
    "options": "Workspace Custom Block"
+<<<<<<< HEAD
   },
   {
    "depends_on": "doc.icon",
@@ -215,11 +219,17 @@
    "fieldtype": "Select",
    "label": "Indicator Color",
    "options": "green\ncyan\nblue\norange\nyellow\ngray\ngrey\nred\npink\ndarkgrey\npurple\nlight-blue"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "in_create": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-05-30 17:30:36.791171",
+=======
+ "modified": "2023-06-08 14:52:38.110224",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Workspace",
@@ -237,6 +247,7 @@
    "role": "Workspace Manager",
    "share": 1,
    "write": 1
+<<<<<<< HEAD
   },
   {
    "create": 1,
@@ -249,10 +260,16 @@
    "role": "Desk User",
    "share": 1,
    "write": 1
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

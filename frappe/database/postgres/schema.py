@@ -1,6 +1,10 @@
 import frappe
 from frappe import _
 from frappe.database.schema import DBTable, get_definition
+<<<<<<< HEAD
+=======
+from frappe.model import log_types
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils import cint, flt
 
 
@@ -29,8 +33,13 @@ class PostgresTable(DBTable):
 			)
 
 		# creating sequence(s)
+<<<<<<< HEAD
 		if not self.meta.issingle and self.meta.autoname == "autoincrement":
 			frappe.db.create_sequence(self.doctype, check_not_exists=True)
+=======
+		if (not self.meta.issingle and self.meta.autoname == "autoincrement") or self.doctype in log_types:
+			frappe.db.create_sequence(self.doctype, check_not_exists=True, cache=frappe.db.SEQUENCE_CACHE)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			name_column = "name bigint primary key"
 
 		# TODO: set docstatus length
@@ -53,7 +62,11 @@ class PostgresTable(DBTable):
 
 	def create_indexes(self):
 		create_index_query = ""
+<<<<<<< HEAD
 		for col in self.columns.values():
+=======
+		for _key, col in self.columns.items():
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if (
 				col.set_index
 				and col.fieldtype in frappe.db.type_map
@@ -70,7 +83,14 @@ class PostgresTable(DBTable):
 		for col in self.columns.values():
 			col.build_for_alter_table(self.current_columns.get(col.fieldname.lower()))
 
+<<<<<<< HEAD
 		query = [f"ADD COLUMN `{col.fieldname}` {col.get_definition()}" for col in self.add_column]
+=======
+		query = []
+
+		for col in self.add_column:
+			query.append(f"ADD COLUMN `{col.fieldname}` {col.get_definition()}")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		for col in self.change_type:
 			using_clause = ""
@@ -79,7 +99,11 @@ class PostgresTable(DBTable):
 				# involving the old values of the row
 				# read more https://www.postgresql.org/docs/9.1/sql-altertable.html
 				using_clause = f"USING {col.fieldname}::timestamp without time zone"
+<<<<<<< HEAD
 			elif col.fieldtype == "Check":
+=======
+			elif col.fieldtype in ("Check"):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				using_clause = f"USING {col.fieldname}::smallint"
 
 			query.append(

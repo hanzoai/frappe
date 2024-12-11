@@ -24,7 +24,11 @@ export default {
 		},
 		{
 			divisor: 1.0e5,
+<<<<<<< HEAD
 			symbol: __("L", null, "Number system"),
+=======
+			symbol: __("Lakh", null, "Number system"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		},
 		{
 			divisor: 1.0e3,

@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import frappe
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.website.page_renderers.document_page import DocumentPage
 from frappe.website.router import get_page_info_from_web_form
 
@@ -9,6 +12,7 @@ class WebFormPage(DocumentPage):
 		if web_form:
 			self.doctype = "Web Form"
 			self.docname = web_form.name
+<<<<<<< HEAD
 			self.set_headers()
 			return True
 		else:
@@ -20,3 +24,8 @@ class WebFormPage(DocumentPage):
 		if allowed_embedding_domains:
 			allowed_embedding_domains = allowed_embedding_domains.replace("\n", " ")
 			self.headers = {"Content-Security-Policy": f"frame-ancestors 'self' {allowed_embedding_domains}"}
+=======
+			return True
+		else:
+			return False
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -43,7 +43,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-08-28 22:24:08.103972",
+=======
+ "modified": "2023-02-14 17:53:24.486171",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Custom",
  "name": "DocType Layout",
@@ -64,7 +68,11 @@
   },
   {
    "read": 1,
+<<<<<<< HEAD
    "role": "Desk User"
+=======
+   "role": "All"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "route": "doctype-layout",

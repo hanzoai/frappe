@@ -59,7 +59,10 @@ def update_nsm(doc):
 	# set old parent
 	doc.set(old_parent_field, parent)
 	frappe.db.set_value(doc.doctype, doc.name, old_parent_field, parent or "", update_modified=False)
+<<<<<<< HEAD
 	frappe.clear_document_cache(doc.doctype)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	doc.reload()
 
@@ -221,7 +224,11 @@ def rebuild_node(doctype, parent, left, parent_field):
 
 	# we've got the left value, and now that we've processed
 	# the children of this node we also know the right value
+<<<<<<< HEAD
 	frappe.db.set_value(doctype, parent, {"lft": left, "rgt": right}, update_modified=False)
+=======
+	frappe.db.set_value(doctype, parent, {"lft": left, "rgt": right}, for_update=False, update_modified=False)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# return the right value of this node + 1
 	return right + 1
@@ -230,6 +237,7 @@ def rebuild_node(doctype, parent, left, parent_field):
 def validate_loop(doctype, name, lft, rgt):
 	"""check if item not an ancestor (loop)"""
 	if name in frappe.get_all(doctype, filters={"lft": ["<=", lft], "rgt": [">=", rgt]}, pluck="name"):
+<<<<<<< HEAD
 		frappe.throw(_("Item cannot be added to its own descendants"), NestedSetRecursionError)
 
 
@@ -238,6 +246,13 @@ def remove_subtree(doctype: str, name: str, throw=True):
 
 	WARN: This does not run any controller hooks for deletion and deletes them with raw SQL query.
 	"""
+=======
+		frappe.throw(_("Item cannot be added to its own descendents"), NestedSetRecursionError)
+
+
+def remove_subtree(doctype: str, name: str, throw=True):
+	"""Remove doc and all its children."""
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	frappe.has_permission(doctype, ptype="delete", throw=throw)
 
 	# Determine the `lft` and `rgt` of the subtree to be removed.
@@ -257,8 +272,11 @@ def remove_subtree(doctype: str, name: str, throw=True):
 	frappe.qb.update(table).set(table.lft, table.lft - width).where(table.lft > rgt).run()
 	frappe.qb.update(table).set(table.rgt, table.rgt - width).where(table.rgt > rgt).run()
 
+<<<<<<< HEAD
 	frappe.clear_document_cache(doctype)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 class NestedSet(Document):
 	def __setup__(self):
@@ -270,17 +288,24 @@ class NestedSet(Document):
 		self.validate_ledger()
 
 	def on_trash(self, allow_root_deletion=False):
+<<<<<<< HEAD
 		"""
 		Runs on deletion of a document/node
 
 		:param allow_root_deletion: used for allowing root document deletion (DEPRECATED)
 		"""
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if not getattr(self, "nsm_parent_field", None):
 			self.nsm_parent_field = frappe.scrub(self.doctype) + "_parent"
 
 		parent = self.get(self.nsm_parent_field)
+<<<<<<< HEAD
 		if not parent and not getattr(self, "allow_root_deletion", True):
+=======
+		if not parent and not allow_root_deletion:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			frappe.throw(_("Root {0} cannot be deleted").format(_(self.doctype)))
 
 		# cannot delete non-empty group
@@ -292,7 +317,11 @@ class NestedSet(Document):
 			update_nsm(self)
 		except frappe.DoesNotExistError:
 			if self.flags.on_rollback:
+<<<<<<< HEAD
 				frappe.clear_last_message()
+=======
+				frappe.message_log.pop()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			else:
 				raise
 
@@ -324,6 +353,10 @@ class NestedSet(Document):
 			{parent_field: newdn},
 			{"old_parent": newdn},
 			update_modified=False,
+<<<<<<< HEAD
+=======
+			for_update=False,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 
 		if merge:

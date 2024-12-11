@@ -1,7 +1,10 @@
 import re
 
 import click
+<<<<<<< HEAD
 import werkzeug.routing.exceptions
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from werkzeug.routing import Rule
 
 import frappe
@@ -18,11 +21,18 @@ from frappe.website.utils import can_cache, get_home_page
 
 
 class PathResolver:
+<<<<<<< HEAD
 	__slots__ = ("path", "http_status_code")
 
 	def __init__(self, path, http_status_code=None):
 		self.path = path.strip("/ ")
 		self.http_status_code = http_status_code
+=======
+	__slots__ = ("path",)
+
+	def __init__(self, path):
+		self.path = path.strip("/ ")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def resolve(self):
 		"""Returns endpoint and a renderer instance that can render the endpoint"""
@@ -31,11 +41,16 @@ class PathResolver:
 			request = frappe.local.request or request
 
 		# check if the request url is in 404 list
+<<<<<<< HEAD
 		if request.url and can_cache() and frappe.cache.hget("website_404", request.url):
+=======
+		if request.url and can_cache() and frappe.cache().hget("website_404", request.url):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			return self.path, NotFoundPage(self.path)
 
 		try:
 			resolve_redirect(self.path, request.query_string)
+<<<<<<< HEAD
 		except frappe.Redirect as e:
 			return frappe.flags.redirect_location, RedirectPage(self.path, e.http_status_code)
 
@@ -52,6 +67,16 @@ class PathResolver:
 		# WARN: Hardcoded for better performance
 		if endpoint == "app":
 			return endpoint, TemplatePage(endpoint, self.http_status_code)
+=======
+		except frappe.Redirect:
+			return frappe.flags.redirect_location, RedirectPage(self.path)
+
+		endpoint = resolve_path(self.path)
+
+		# WARN: Hardcoded for better performance
+		if endpoint == "app":
+			return endpoint, TemplatePage(endpoint, 200)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		custom_renderers = self.get_custom_page_renderers()
 		renderers = [
@@ -62,10 +87,18 @@ class PathResolver:
 			TemplatePage,
 			ListPage,
 			PrintPage,
+<<<<<<< HEAD
 		]
 
 		for renderer in renderers:
 			renderer_instance = renderer(endpoint, self.http_status_code)
+=======
+			NotFoundPage,
+		]
+
+		for renderer in renderers:
+			renderer_instance = renderer(endpoint, 200)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if renderer_instance.can_render():
 				return endpoint, renderer_instance
 
@@ -102,6 +135,7 @@ def resolve_redirect(path, query_string=None):
 
 	Example:
 
+<<<<<<< HEAD
 	                website_redirect = [
 	                                # absolute location
 	                                {"source": "/from", "target": "https://mysite/from"},
@@ -118,16 +152,38 @@ def resolve_redirect(path, query_string=None):
 	redirects += frappe.get_all(
 		"Website Route Redirect", ["source", "target", "redirect_http_status"], order_by=None
 	)
+=======
+	        website_redirect = [
+	                # absolute location
+	                {"source": "/from", "target": "https://mysite/from"},
+
+	                # relative location
+	                {"source": "/from", "target": "/main"},
+
+	                # use regex
+	                {"source": r"/from/(.*)", "target": r"/main/\1"}
+	                # use r as a string prefix if you use regex groups or want to escape any string literal
+	        ]
+	"""
+	redirects = frappe.get_hooks("website_redirects")
+	redirects += frappe.get_all("Website Route Redirect", ["source", "target"], order_by=None)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not redirects:
 		return
 
+<<<<<<< HEAD
 	redirect_to = frappe.cache.hget("website_redirects", path)
 
 	if redirect_to:
 		if isinstance(redirect_to, dict):
 			frappe.flags.redirect_location = redirect_to["path"]
 			raise frappe.Redirect(redirect_to["status_code"])
+=======
+	redirect_to = frappe.cache().hget("website_redirects", path)
+
+	if redirect_to:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.flags.redirect_location = redirect_to
 		raise frappe.Redirect
 
@@ -137,6 +193,7 @@ def resolve_redirect(path, query_string=None):
 		if query_string and rule.get("match_with_query_string"):
 			path_to_match = path + "?" + frappe.safe_decode(query_string)
 
+<<<<<<< HEAD
 		try:
 			match = re.match(pattern, path_to_match)
 		except re.error:
@@ -150,6 +207,13 @@ def resolve_redirect(path, query_string=None):
 				"website_redirects", path_to_match, {"path": redirect_to, "status_code": status_code}
 			)
 			raise frappe.Redirect(status_code)
+=======
+		if re.match(pattern, path_to_match):
+			redirect_to = re.sub(pattern, rule["target"], path_to_match)
+			frappe.flags.redirect_location = redirect_to
+			frappe.cache().hset("website_redirects", path_to_match, redirect_to)
+			raise frappe.Redirect
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def resolve_path(path):
@@ -194,7 +258,11 @@ def get_website_rules():
 		# dont cache in development
 		return _get()
 
+<<<<<<< HEAD
 	return frappe.cache.get_value("website_route_rules", _get)
+=======
+	return frappe.cache().get_value("website_route_rules", _get)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def validate_path(path: str):

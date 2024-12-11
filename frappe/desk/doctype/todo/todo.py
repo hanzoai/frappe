@@ -12,6 +12,7 @@ exclude_from_linked_with = True
 
 
 class ToDo(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -34,6 +35,8 @@ class ToDo(Document):
 		sender: DF.Data | None
 		status: DF.Literal["Open", "Closed", "Cancelled"]
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	DocType = "ToDo"
 
 	def validate(self):
@@ -103,6 +106,7 @@ class ToDo(Document):
 			)
 			assignments.reverse()
 
+<<<<<<< HEAD
 			if frappe.get_meta(self.reference_type).issingle:
 				frappe.db.set_single_value(
 					self.reference_type,
@@ -118,13 +122,26 @@ class ToDo(Document):
 					json.dumps(assignments) if assignments else "",
 					update_modified=False,
 				)
+=======
+			frappe.db.set_value(
+				self.reference_type,
+				self.reference_name,
+				"_assign",
+				json.dumps(assignments) if assignments else "",
+				update_modified=False,
+			)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		except Exception as e:
 			if frappe.db.is_table_missing(e) and frappe.flags.in_install:
 				# no table
 				return
 
+<<<<<<< HEAD
 			elif frappe.db.is_missing_column(e):
+=======
+			elif frappe.db.is_column_missing(e):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				from frappe.database.schema import add_column
 
 				add_column(self.reference_type, "_assign", "Text")

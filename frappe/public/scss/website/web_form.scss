@@ -19,10 +19,13 @@
 				max-width: 800px;
 				margin: auto;
 
+<<<<<<< HEAD
 				.tooltip-content {
 					display: none;
 				}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				h1 {
 					font-size: 2.25rem;
 					margin-top: 0;
@@ -80,7 +83,11 @@
 								flex: 1;
 
 								.btn {
+<<<<<<< HEAD
 									@include get_textstyle("base", "regular");
+=======
+									font-size: var(--text-base);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 								}
 							}
 						}
@@ -118,7 +125,11 @@
 							background-color: var(--control-bg);
 
 							@include media-breakpoint-down(sm) {
+<<<<<<< HEAD
 								@include get_textstyle("sm", "regular");
+=======
+								font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							}
 						}
 
@@ -143,7 +154,11 @@
 								position: relative;
 
 								@include media-breakpoint-down(sm) {
+<<<<<<< HEAD
 									@include get_textstyle("sm", "regular");
+=======
+									font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 								}
 
 								&[data-fieldtype="Rating"] {
@@ -234,10 +249,17 @@
 							flex-wrap: wrap;
 
 							.btn {
+<<<<<<< HEAD
 								@include get_textstyle("base", "regular");
 
 								@include media-breakpoint-down(sm) {
 									@include get_textstyle("sm", "regular");
+=======
+								font-size: var(--text-base);
+
+								@include media-breakpoint-down(sm) {
+									font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 								}
 							}
 
@@ -262,7 +284,11 @@
 							.center-area {
 								display: flex;
 								align-items: center;
+<<<<<<< HEAD
 								@include get_textstyle("base", "regular");
+=======
+								font-size: var(--text-base);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 								.slides-progress {
 									display: flex;
@@ -363,7 +389,11 @@
 						justify-content: space-between;
 						gap: 6px;
 						color: var(--text-muted);
+<<<<<<< HEAD
 						@include get_textstyle("base", "regular");
+=======
+						font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 						&:hover {
 							text-decoration: none;

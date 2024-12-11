@@ -32,4 +32,8 @@ def execute():
 		for agg in ["avg", "max", "min", "sum"]:
 			script = re.sub(f"frappe.db.{agg}\\(", f"frappe.qb.{agg}(", script)
 
+<<<<<<< HEAD
 		frappe.db.set_value("Server Script", name, "script", script)
+=======
+		frappe.db.update("Server Script", name, "script", script)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

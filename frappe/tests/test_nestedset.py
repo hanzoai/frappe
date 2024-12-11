@@ -1,8 +1,11 @@
 # Copyright (c) 2022, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+<<<<<<< HEAD
 from unittest.mock import patch
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import frappe
 from frappe.core.doctype.doctype.test_doctype import new_doctype
 from frappe.query_builder import Field
@@ -51,6 +54,7 @@ records = [
 	},
 ]
 
+<<<<<<< HEAD
 TEST_DOCTYPE = "Test Tree DocType"
 
 
@@ -64,22 +68,47 @@ class NestedSetTestUtil:
 
 		for record in records:
 			d = frappe.new_doc(TEST_DOCTYPE)
+=======
+
+class NestedSetTestUtil:
+	def setup_test_doctype(self):
+		frappe.db.sql("delete from `tabDocType` where `name` = 'Test Tree DocType'")
+		frappe.db.sql_ddl("drop table if exists `tabTest Tree DocType`")
+
+		self.tree_doctype = new_doctype("Test Tree DocType", is_tree=True, autoname="field:some_fieldname")
+		self.tree_doctype.insert()
+
+		for record in records:
+			d = frappe.new_doc("Test Tree DocType")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			d.update(record)
 			d.insert()
 
 	def teardown_test_doctype(self):
 		self.tree_doctype.delete()
+<<<<<<< HEAD
 		frappe.db.sql_ddl(f"drop table if exists `{TEST_DOCTYPE}`")
 
 	def move_it_back(self):
 		parent_1 = frappe.get_doc(TEST_DOCTYPE, "Parent 1")
+=======
+		frappe.db.sql_ddl("drop table if exists `tabTest Tree DocType`")
+
+	def move_it_back(self):
+		parent_1 = frappe.get_doc("Test Tree DocType", "Parent 1")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		parent_1.parent_test_tree_doctype = "Root Node"
 		parent_1.save()
 
 	def get_no_of_children(self, record_name: str) -> int:
 		if not record_name:
+<<<<<<< HEAD
 			return frappe.db.count(TEST_DOCTYPE)
 		return len(get_descendants_of(TEST_DOCTYPE, record_name, ignore_permissions=True))
+=======
+			return frappe.db.count("Test Tree DocType")
+		return len(get_descendants_of("Test Tree DocType", record_name, ignore_permissions=True))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class TestNestedSet(FrappeTestCase):
@@ -101,18 +130,30 @@ class TestNestedSet(FrappeTestCase):
 		global records
 
 		min_lft = 1
+<<<<<<< HEAD
 		max_rgt = frappe.qb.from_(TEST_DOCTYPE).select(Max(Field("rgt"))).run(pluck=True)[0]
 
 		for record in records:
 			lft, rgt, parent_test_tree_doctype = frappe.db.get_value(
 				TEST_DOCTYPE,
+=======
+		max_rgt = frappe.qb.from_("Test Tree DocType").select(Max(Field("rgt"))).run(pluck=True)[0]
+
+		for record in records:
+			lft, rgt, parent_test_tree_doctype = frappe.db.get_value(
+				"Test Tree DocType",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				record["some_fieldname"],
 				["lft", "rgt", "parent_test_tree_doctype"],
 			)
 
 			if parent_test_tree_doctype:
 				parent_lft, parent_rgt = frappe.db.get_value(
+<<<<<<< HEAD
 					TEST_DOCTYPE, parent_test_tree_doctype, ["lft", "rgt"]
+=======
+					"Test Tree DocType", parent_test_tree_doctype, ["lft", "rgt"]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				)
 			else:
 				# root
@@ -138,12 +179,17 @@ class TestNestedSet(FrappeTestCase):
 			self.assertTrue(parent_rgt == (parent_lft + 1 + (2 * no_of_children)))
 
 	def test_recursion(self):
+<<<<<<< HEAD
 		leaf_node = frappe.get_doc(TEST_DOCTYPE, {"some_fieldname": "Parent 2"})
+=======
+		leaf_node = frappe.get_doc("Test Tree DocType", {"some_fieldname": "Parent 2"})
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		leaf_node.parent_test_tree_doctype = "Child 3"
 		self.assertRaises(NestedSetRecursionError, leaf_node.save)
 		leaf_node.reload()
 
 	def test_rebuild_tree(self):
+<<<<<<< HEAD
 		rebuild_tree(TEST_DOCTYPE, "parent_test_tree_doctype")
 		self.test_basic_tree()
 
@@ -151,6 +197,15 @@ class TestNestedSet(FrappeTestCase):
 		old_lft, old_rgt = frappe.db.get_value(TEST_DOCTYPE, "Parent 2", ["lft", "rgt"])
 
 		parent_1 = frappe.get_doc(TEST_DOCTYPE, "Parent 1")
+=======
+		rebuild_tree("Test Tree DocType", "parent_test_tree_doctype")
+		self.test_basic_tree()
+
+	def test_move_group_into_another(self):
+		old_lft, old_rgt = frappe.db.get_value("Test Tree DocType", "Parent 2", ["lft", "rgt"])
+
+		parent_1 = frappe.get_doc("Test Tree DocType", "Parent 1")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		lft, rgt = parent_1.lft, parent_1.rgt
 
 		parent_1.parent_test_tree_doctype = "Parent 2"
@@ -158,7 +213,11 @@ class TestNestedSet(FrappeTestCase):
 		self.test_basic_tree()
 
 		# after move
+<<<<<<< HEAD
 		new_lft, new_rgt = frappe.db.get_value(TEST_DOCTYPE, "Parent 2", ["lft", "rgt"])
+=======
+		new_lft, new_rgt = frappe.db.get_value("Test Tree DocType", "Parent 2", ["lft", "rgt"])
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# lft should reduce
 		self.assertEqual(old_lft - new_lft, rgt - lft + 1)
@@ -170,10 +229,17 @@ class TestNestedSet(FrappeTestCase):
 		self.test_basic_tree()
 
 	def test_move_leaf_into_another_group(self):
+<<<<<<< HEAD
 		child_2 = frappe.get_doc(TEST_DOCTYPE, "Child 2")
 
 		# assert that child 2 is not already under parent 1
 		parent_lft_old, parent_rgt_old = frappe.db.get_value(TEST_DOCTYPE, "Parent 2", ["lft", "rgt"])
+=======
+		child_2 = frappe.get_doc("Test Tree DocType", "Child 2")
+
+		# assert that child 2 is not already under parent 1
+		parent_lft_old, parent_rgt_old = frappe.db.get_value("Test Tree DocType", "Parent 2", ["lft", "rgt"])
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertTrue((parent_lft_old > child_2.lft) and (parent_rgt_old > child_2.rgt))
 
 		child_2.parent_test_tree_doctype = "Parent 2"
@@ -181,20 +247,32 @@ class TestNestedSet(FrappeTestCase):
 		self.test_basic_tree()
 
 		# assert that child 2 is under parent 1
+<<<<<<< HEAD
 		parent_lft_new, parent_rgt_new = frappe.db.get_value(TEST_DOCTYPE, "Parent 2", ["lft", "rgt"])
+=======
+		parent_lft_new, parent_rgt_new = frappe.db.get_value("Test Tree DocType", "Parent 2", ["lft", "rgt"])
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertFalse((parent_lft_new > child_2.lft) and (parent_rgt_new > child_2.rgt))
 
 	def test_delete_leaf(self):
 		global records
 		el = {"some_fieldname": "Child 1", "parent_test_tree_doctype": "Parent 1", "is_group": 0}
 
+<<<<<<< HEAD
 		child_1 = frappe.get_doc(TEST_DOCTYPE, "Child 1")
+=======
+		child_1 = frappe.get_doc("Test Tree DocType", "Child 1")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		child_1.delete()
 		records.remove(el)
 
 		self.test_basic_tree()
 
+<<<<<<< HEAD
 		n = frappe.new_doc(TEST_DOCTYPE)
+=======
+		n = frappe.new_doc("Test Tree DocType")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		n.update(el)
 		n.insert()
 		records.append(el)
@@ -204,10 +282,17 @@ class TestNestedSet(FrappeTestCase):
 	def test_delete_group(self):
 		# cannot delete group with child, but can delete leaf
 		with self.assertRaises(NestedSetChildExistsError):
+<<<<<<< HEAD
 			frappe.delete_doc(TEST_DOCTYPE, "Parent 1")
 
 	def test_remove_subtree(self):
 		remove_subtree(TEST_DOCTYPE, "Parent 2")
+=======
+			frappe.delete_doc("Test Tree DocType", "Parent 1")
+
+	def test_remove_subtree(self):
+		remove_subtree("Test Tree DocType", "Parent 2")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.test_basic_tree()
 
 	def test_rename_nestedset(self):
@@ -219,7 +304,11 @@ class TestNestedSet(FrappeTestCase):
 	def test_merge_groups(self):
 		global records
 		el = {"some_fieldname": "Parent 2", "parent_test_tree_doctype": "Root Node", "is_group": 1}
+<<<<<<< HEAD
 		frappe.rename_doc(TEST_DOCTYPE, "Parent 2", "Parent 1", merge=True)
+=======
+		frappe.rename_doc("Test Tree DocType", "Parent 2", "Parent 1", merge=True)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		records.remove(el)
 		self.test_basic_tree()
 
@@ -228,7 +317,11 @@ class TestNestedSet(FrappeTestCase):
 		el = {"some_fieldname": "Child 3", "parent_test_tree_doctype": "Parent 2", "is_group": 0}
 
 		frappe.rename_doc(
+<<<<<<< HEAD
 			TEST_DOCTYPE,
+=======
+			"Test Tree DocType",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			"Child 3",
 			"Child 2",
 			merge=True,
@@ -238,6 +331,7 @@ class TestNestedSet(FrappeTestCase):
 
 	def test_merge_leaf_into_group(self):
 		with self.assertRaises(NestedSetInvalidMergeError):
+<<<<<<< HEAD
 			frappe.rename_doc(TEST_DOCTYPE, "Child 1", "Parent 1", merge=True)
 
 	def test_merge_group_into_leaf(self):
@@ -295,3 +389,10 @@ class TestNestedSet(FrappeTestCase):
 
 		self.assertNotIn(record, str(frappe.qb.get_query(table=linked_doctype, filters=exclusive_link)))
 		self.assertIn(record, str(frappe.qb.get_query(table=linked_doctype, filters=inclusive_link)))
+=======
+			frappe.rename_doc("Test Tree DocType", "Child 1", "Parent 1", merge=True)
+
+	def test_merge_group_into_leaf(self):
+		with self.assertRaises(NestedSetInvalidMergeError):
+			frappe.rename_doc("Test Tree DocType", "Parent 1", "Child 1", merge=True)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

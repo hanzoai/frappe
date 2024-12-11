@@ -66,7 +66,11 @@ export function create_default_layout(meta, print_format) {
 
 				let field_template = get_field_template(print_format, df.fieldname);
 				if (field_template) {
+<<<<<<< HEAD
 					field.label = `${__(df.label, null, df.parent)} (${__("Field Template")})`;
+=======
+					field.label = `${__(df.label)} (${__("Field Template")})`;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					field.fieldtype = "Field Template";
 					field.field_template = field_template.name;
 					field.fieldname = df.fieldname = "_template";
@@ -94,7 +98,11 @@ export function get_table_columns(df) {
 	let total_width = 0;
 	for (let tf of table_fields) {
 		if (
+<<<<<<< HEAD
 			!["Section Break", "Column Break"].includes(tf.fieldtype) &&
+=======
+			!in_list(["Section Break", "Column Break"], tf.fieldtype) &&
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			!tf.print_hide &&
 			df.label &&
 			total_width < 100

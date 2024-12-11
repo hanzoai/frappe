@@ -27,10 +27,17 @@ class WorkflowPermissionError(frappe.ValidationError):
 
 
 def get_workflow_name(doctype):
+<<<<<<< HEAD
 	workflow_name = frappe.cache.hget("workflow", doctype)
 	if workflow_name is None:
 		workflow_name = frappe.db.get_value("Workflow", {"document_type": doctype, "is_active": 1}, "name")
 		frappe.cache.hset("workflow", doctype, workflow_name or "")
+=======
+	workflow_name = frappe.cache().hget("workflow", doctype)
+	if workflow_name is None:
+		workflow_name = frappe.db.get_value("Workflow", {"document_type": doctype, "is_active": 1}, "name")
+		frappe.cache().hset("workflow", doctype, workflow_name or "")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return workflow_name
 
@@ -130,6 +137,7 @@ def apply_workflow(doc, action):
 	if doc.docstatus.is_draft() and new_docstatus == DocStatus.draft():
 		doc.save()
 	elif doc.docstatus.is_draft() and new_docstatus == DocStatus.submitted():
+<<<<<<< HEAD
 		from frappe.core.doctype.submission_queue.submission_queue import queue_submission
 		from frappe.utils.scheduler import is_scheduler_inactive
 
@@ -137,6 +145,8 @@ def apply_workflow(doc, action):
 			queue_submission(doc, "Submit")
 			return
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		doc.submit()
 	elif doc.docstatus.is_submitted() and new_docstatus == DocStatus.submitted():
 		doc.save()
@@ -153,6 +163,7 @@ def apply_workflow(doc, action):
 @frappe.whitelist()
 def can_cancel_document(doctype):
 	workflow = get_workflow(doctype)
+<<<<<<< HEAD
 	cancelling_states = [s.state for s in workflow.states if s.doc_status == "2"]
 	if not cancelling_states:
 		return True
@@ -160,6 +171,14 @@ def can_cancel_document(doctype):
 	for transition in workflow.transitions:
 		if transition.next_state in cancelling_states:
 			return False
+=======
+	for state_doc in workflow.states:
+		if state_doc.doc_status == "2":
+			for transition in workflow.transitions:
+				if transition.next_state == state_doc.state:
+					return False
+			return True
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return True
 
 

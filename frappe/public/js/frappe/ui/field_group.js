@@ -55,7 +55,11 @@ frappe.ui.FieldGroup = class FieldGroup extends frappe.ui.form.Layout {
 	focus_on_first_input() {
 		if (this.no_focus) return;
 		$.each(this.fields_list, function (i, f) {
+<<<<<<< HEAD
 			if (!["Date", "Datetime", "Time", "Check"].includes(f.df.fieldtype) && f.set_focus) {
+=======
+			if (!in_list(["Date", "Datetime", "Time", "Check"], f.df.fieldtype) && f.set_focus) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				f.set_focus();
 				return false;
 			}

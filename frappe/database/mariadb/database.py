@@ -78,10 +78,13 @@ class MariaDBExceptionUtil:
 		return e.args[0] == ER.DATA_TOO_LONG
 
 	@staticmethod
+<<<<<<< HEAD
 	def is_db_table_size_limit(e: pymysql.Error) -> bool:
 		return e.args[0] == ER.TOO_BIG_ROWSIZE
 
 	@staticmethod
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def is_primary_key_violation(e: pymysql.Error) -> bool:
 		return (
 			MariaDBDatabase.is_duplicate_entry(e)
@@ -120,12 +123,19 @@ class MariaDBConnectionUtil:
 
 	def get_connection_settings(self) -> dict:
 		conn_settings = {
+<<<<<<< HEAD
 			"user": self.user,
+=======
+			"host": self.host,
+			"user": self.user,
+			"password": self.password,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			"conv": self.CONVERSION_MAP,
 			"charset": "utf8mb4",
 			"use_unicode": True,
 		}
 
+<<<<<<< HEAD
 		if self.cur_db_name:
 			conn_settings["database"] = self.cur_db_name
 
@@ -138,6 +148,13 @@ class MariaDBConnectionUtil:
 
 		if self.password:
 			conn_settings["password"] = self.password
+=======
+		if self.user not in (frappe.flags.root_login, "root"):
+			conn_settings["database"] = self.user
+
+		if self.port:
+			conn_settings["port"] = int(self.port)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if frappe.conf.local_infile:
 			conn_settings["local_infile"] = frappe.conf.local_infile
@@ -159,7 +176,10 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 		UnicodeWithAttrs: escape_string,
 	}
 	default_port = "3306"
+<<<<<<< HEAD
 	MAX_ROW_SIZE_LIMIT = 65_535  # bytes
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def setup_type_map(self):
 		self.db_type = "mariadb"
@@ -208,7 +228,11 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 			SUM(`data_length` + `index_length`) / 1024 / 1024 AS `database_size`
 			FROM information_schema.tables WHERE `table_schema` = %s GROUP BY `table_schema`
 			""",
+<<<<<<< HEAD
 			self.cur_db_name,
+=======
+			self.db_name,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			as_dict=True,
 		)
 
@@ -350,6 +374,7 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 			as_dict=1,
 		)
 
+<<<<<<< HEAD
 	def get_column_type(self, doctype, column):
 		"""Returns column type from database."""
 		information_schema = frappe.qb.Schema("information_schema")
@@ -365,6 +390,8 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 			.run(pluck=True)[0]
 		)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def has_index(self, table_name, index_name):
 		return self.sql(
 			f"""SHOW INDEX FROM `{table_name}`
@@ -456,7 +483,11 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 		to_query = not cached
 
 		if cached:
+<<<<<<< HEAD
 			tables = frappe.cache.get_value("db_tables")
+=======
+			tables = frappe.cache().get_value("db_tables")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			to_query = not tables
 
 		if to_query:
@@ -468,6 +499,7 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 				.where(information_schema.tables.table_schema != "information_schema")
 				.run(pluck=True)
 			)
+<<<<<<< HEAD
 			frappe.cache.set_value("db_tables", tables)
 
 		return tables
@@ -525,6 +557,12 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 		if est_row_size:
 			return int(est_row_size[0][0])
 
+=======
+			frappe.cache().set_value("db_tables", tables)
+
+		return tables
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@contextmanager
 	def unbuffered_cursor(self):
 		from pymysql.cursors import SSCursor

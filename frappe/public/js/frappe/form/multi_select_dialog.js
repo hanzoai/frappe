@@ -260,8 +260,11 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 					label: df_prop.label,
 					fieldname: setter,
 					options: df_prop.options,
+<<<<<<< HEAD
 					read_only:
 						(this?.read_only_setters && this.read_only_setters.includes(setter)) || 0,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					default: this.setters[setter],
 				});
 			});
@@ -593,13 +596,20 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 			no_spinner: true,
 			args: args,
 		});
+<<<<<<< HEAD
 		const more = res.message.length && res.message.length > this.page_length ? 1 : 0;
 
 		return [res.message, more];
+=======
+		const more = res.values.length && res.values.length > this.page_length ? 1 : 0;
+
+		return [res, more];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	async get_results() {
 		const args = this.get_args_for_search();
+<<<<<<< HEAD
 		let [results, more] = await this.perform_search(args);
 
 		if (more) {
@@ -609,6 +619,17 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 		this.results = [];
 		if (results.length) {
 			results.forEach((result) => {
+=======
+		const [res, more] = await this.perform_search(args);
+
+		if (more) {
+			res.values = res.values.splice(0, this.page_length);
+		}
+
+		this.results = [];
+		if (res.values.length) {
+			res.values.forEach((result) => {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				result.checked = 0;
 				this.results.push(result);
 			});
@@ -619,11 +640,20 @@ frappe.ui.form.MultiSelectDialog = class MultiSelectDialog {
 	async get_filtered_parents_for_child_search() {
 		const parent_search_args = this.get_args_for_search();
 		parent_search_args.filter_fields = ["name"];
+<<<<<<< HEAD
 		const [results, _] = await this.perform_search(parent_search_args);
 
 		let parent_names = [];
 		if (results.length) {
 			parent_names = results.map((v) => v.name);
+=======
+		// eslint-disable-next-line no-unused-vars
+		const [response, _] = await this.perform_search(parent_search_args);
+
+		let parent_names = [];
+		if (response.values.length) {
+			parent_names = response.values.map((v) => v.name);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		return parent_names;
 	}

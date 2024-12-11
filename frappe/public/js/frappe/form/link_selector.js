@@ -19,7 +19,10 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 		var me = this;
 
 		this.start = 0;
+<<<<<<< HEAD
 		this.page_length = 10;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.dialog = new frappe.ui.Dialog({
 			title: __("Select {0}", [this.doctype == "[Select]" ? __("value") : __(this.doctype)]),
 			fields: [
@@ -38,7 +41,11 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 					fieldname: "more",
 					label: __("More"),
 					click: () => {
+<<<<<<< HEAD
 						me.start += me.page_length;
+=======
+						me.start += 20;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						me.search();
 					},
 				},
@@ -66,7 +73,10 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 			txt: this.dialog.fields_dict.txt.get_value(),
 			searchfield: "name",
 			start: this.start,
+<<<<<<< HEAD
 			page_length: this.page_length,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		};
 		var me = this;
 
@@ -86,14 +96,23 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 		frappe.link_search(
 			this.doctype,
 			args,
+<<<<<<< HEAD
 			function (results) {
+=======
+			function (r) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				var parent = me.dialog.fields_dict.results.$wrapper;
 				if (args.start === 0) {
 					parent.empty();
 				}
 
+<<<<<<< HEAD
 				if (results.length) {
 					for (const v of results) {
+=======
+				if (r.values.length) {
+					$.each(r.values, function (i, v) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						var row = $(
 							repl(
 								'<div class="row link-select-row">\
@@ -128,7 +147,11 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 								}
 								return false;
 							});
+<<<<<<< HEAD
 					}
+=======
+					});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				} else {
 					$(
 						'<p><br><span class="text-muted">' +
@@ -149,7 +172,11 @@ frappe.ui.form.LinkSelector = class LinkSelector {
 				}
 
 				var more_btn = me.dialog.fields_dict.more.$wrapper;
+<<<<<<< HEAD
 				if (results.length < me.page_length) {
+=======
+				if (r.values.length < 20) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					more_btn.hide();
 				} else {
 					more_btn.show();
@@ -246,7 +273,11 @@ frappe.link_search = function (doctype, args, callback, btn) {
 		type: "GET",
 		args: args,
 		callback: function (r) {
+<<<<<<< HEAD
 			callback && callback(r.message);
+=======
+			callback && callback(r);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		},
 		btn: btn,
 	});

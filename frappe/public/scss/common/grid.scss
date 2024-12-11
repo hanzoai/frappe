@@ -1,6 +1,10 @@
 .form-grid {
 	border: 1px solid var(--table-border-color);
+<<<<<<< HEAD
 	border-radius: var(--border-radius-md);
+=======
+	border-radius: var(--border-radius);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	color: var(--text-color);
 }
 
@@ -10,6 +14,7 @@
 
 .grid-heading-row {
 	border-bottom: 1px solid var(--table-border-color);
+<<<<<<< HEAD
 	color: var(--gray-600);
 	background-color: var(--subtle-fg);
 	@include get_textstyle("sm", "regular");
@@ -44,6 +49,15 @@
 				content: " *";
 				color: var(--red-400);
 			}
+=======
+	color: var(--text-muted);
+	font-size: var(--text-md);
+
+	.grid-static-col {
+		.static-area.reqd:after {
+			content: " *";
+			color: var(--red-400);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 }
@@ -55,7 +69,11 @@
 }
 
 .data-row textarea {
+<<<<<<< HEAD
 	height: 38px;
+=======
+	height: 40px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .form-grid .data-row {
@@ -94,8 +112,12 @@
 }
 
 .grid-body .data-row {
+<<<<<<< HEAD
 	@include get_textstyle("sm", "regular");
 	color: var(--text-muted);
+=======
+	font-size: $font-size-sm;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .grid-empty,
@@ -111,7 +133,12 @@
 
 .grid-static-col,
 .row-index {
+<<<<<<< HEAD
 	height: 38px;
+=======
+	height: 34px;
+	padding: 8px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	max-height: 200px;
 
 	&.search {
@@ -125,7 +152,12 @@
 }
 
 .row-check {
+<<<<<<< HEAD
 	height: 38px;
+=======
+	height: 34px;
+	padding: 8px 3px !important;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	text-align: center;
 
 	input {
@@ -133,7 +165,11 @@
 	}
 
 	&.search {
+<<<<<<< HEAD
 		padding: var(--grid-padding) !important;
+=======
+		padding: 0 !important;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 }
 
@@ -184,7 +220,12 @@
 	}
 
 	.col {
+<<<<<<< HEAD
 		padding: var(--grid-padding);
+=======
+		padding-left: var(--padding-sm);
+		padding-right: var(--padding-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		border-right: 1px solid var(--table-border-color);
 		// overflow: hidden;
 	}
@@ -201,25 +242,39 @@
 
 	.btn-open-row {
 		display: flex;
+<<<<<<< HEAD
 		justify-content: center;
 		line-height: unset;
 		div {
 			margin-left: var(--margin-xs);
+=======
+		padding-top: var(--padding-sm);
+		justify-content: center;
+		div {
+			margin-left: var(--margin-xs);
+			line-height: 1.7em;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 
 	.editable-row {
+<<<<<<< HEAD
 		// TODO: Dark and Light Mode
 		--control-bg: var(--neutral);
 		--input-disabled-bg: var(--gray-50);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		.grid-static-col {
 			padding: 0px !important;
 		}
 
+<<<<<<< HEAD
 		.frappe-control[data-fieldtype="Select"].form-group .select-icon {
 			top: 9px;
 		}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		.checkbox {
 			margin: 0px;
 			text-align: center;
@@ -227,13 +282,18 @@
 		}
 
 		textarea {
+<<<<<<< HEAD
 			height: 46px !important;
+=======
+			height: 37px !important;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		.form-control,
 		.ql-editor {
 			border-radius: 0px;
 			border: 0px;
+<<<<<<< HEAD
 			padding-top: 10px;
 			padding-bottom: 10px;
 			height: 38px;
@@ -242,6 +302,15 @@
 		.link-btn {
 			top: 5px;
 			background-color: var(--bg-color);
+=======
+			padding-top: 8px;
+			padding-bottom: 9px;
+			height: 34px;
+		}
+
+		.link-btn {
+			top: 2px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		.form-control:focus {
@@ -356,6 +425,7 @@
 			display: none;
 		}
 	}
+<<<<<<< HEAD
 
 	.editable-row {
 		.markdown-container {
@@ -363,6 +433,8 @@
 			z-index: 1;
 		}
 	}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 @mixin base-grid() {
@@ -396,7 +468,12 @@
 
 		.section-head {
 			padding: 0;
+<<<<<<< HEAD
 			@include get_textstyle("lg", "medium");
+=======
+			font-size: var(--text-lg);
+			font-weight: 500;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		.form-column:first-child {
@@ -465,9 +542,13 @@
 .grid-custom-buttons:empty {
 	padding: 0;
 }
+<<<<<<< HEAD
 .grid-footer {
 	margin-top: var(--margin-sm);
 }
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .grid-footer,
 .grid-custom-buttons {
 	padding: var(--padding-sm) 0px;

@@ -18,6 +18,10 @@ frappe.breadcrumbs = {
 		Workflow: "Settings",
 		Printing: "Settings",
 		Setup: "Settings",
+<<<<<<< HEAD
+=======
+		"Event Streaming": "Tools",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		Automation: "Tools",
 	},
 

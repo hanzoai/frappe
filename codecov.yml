@@ -2,16 +2,28 @@ codecov:
   require_ci_to_pass: yes
 
 coverage:
+<<<<<<< HEAD
   range: 60..90
   status:
     project:
       default:
+=======
+  status:
+    project:
+      default: false
+      server:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
         target: auto
         threshold: 0.5%
         flags:
           - server
     patch:
+<<<<<<< HEAD
       default:
+=======
+      default: false
+      server:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
         target: 85%
         threshold: 0%
         only_pulls: true
@@ -22,11 +34,15 @@ coverage:
 comment:
   layout: "diff, flags"
   require_changes: true
+<<<<<<< HEAD
   show_critical_paths: true
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 flags:
   server:
     paths:
+<<<<<<< HEAD
       - "**/*.py"
     carryforward: true
   ui-tests:
@@ -58,3 +74,11 @@ profiling:
       - /frappe/core/doctype/user/*
       - /frappe/query_builder/*
       - /frappe/database/*
+=======
+      - ".*\\.py"
+    carryforward: true
+  ui-tests:
+    paths:
+      - ".*\\.js"
+    carryforward: true
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

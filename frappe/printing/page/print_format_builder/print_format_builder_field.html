@@ -2,7 +2,11 @@
 	{% if(field.print_hide) { %}style="background-color: #F7FAFC; color: #8D99A6;"
 		title="{{ __("Hidden") }}"{% } %}
 	data-fieldname="{%= field.fieldname %}"
+<<<<<<< HEAD
 	data-label="{{ __(field.label, context=field.parent) }}"
+=======
+	data-label="{{ __(field.label) }}"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	{% if field.align %}data-align="{{ field.align }}"{% endif %}
 	data-fieldtype="{%= field.fieldtype %}"
@@ -34,13 +38,21 @@
 			<span class="drag-handle">
 				<svg class="icon icon-xs"><use href="#icon-drag"></use></svg>
 			</span>
+<<<<<<< HEAD
 			<span class="field-label">{{ __(field.label, context=field.parent) || __(field.fieldname) }}
+=======
+			<span class="field-label">{{ __(field.label) || __(field.fieldname) }}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				<span> ({%= __("Table") %})</span>
 			</span>
 			<a class="pull-right select-columns btn btn-default btn-xs">
 				{%= __("Select Columns") %}</a>
 		{% } else { %}
+<<<<<<< HEAD
 			<span class="field-label">{{ __(field.label, context=field.parent) }}</span>
+=======
+			<span class="field-label">{{ __(field.label) }}</span>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		{% } %}
 	{% } %}
 </div>

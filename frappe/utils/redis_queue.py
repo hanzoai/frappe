@@ -31,7 +31,15 @@ class RedisQueue:
 			conn = sentinel.master_for(frappe.conf.get("redis_queue_master_service"))
 			conn.ping()
 			return conn
+<<<<<<< HEAD
 		conn = redis.from_url(frappe.conf.redis_queue, username=username, password=password)
+=======
+
+		rq_url = frappe.local.conf.redis_queue
+		domain = rq_url.split("redis://", 1)[-1]
+		url = (username and f"redis://{username}:{password or ''}@{domain}") or rq_url
+		conn = redis.from_url(url)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		conn.ping()
 		return conn
 

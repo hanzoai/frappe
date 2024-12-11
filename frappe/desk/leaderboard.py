@@ -3,7 +3,11 @@ from frappe.utils import get_fullname
 
 
 def get_leaderboards():
+<<<<<<< HEAD
 	return {
+=======
+	leaderboards = {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"User": {
 			"fields": ["points"],
 			"method": "frappe.desk.leaderboard.get_energy_point_leaderboard",
@@ -11,6 +15,10 @@ def get_leaderboards():
 			"icon": "users",
 		}
 	}
+<<<<<<< HEAD
+=======
+	return leaderboards
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()

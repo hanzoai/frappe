@@ -4,7 +4,11 @@
 frappe.ui.form.on("Newsletter", {
 	refresh(frm) {
 		let doc = frm.doc;
+<<<<<<< HEAD
 		let can_write = frappe.boot.user.can_write.includes(doc.doctype);
+=======
+		let can_write = in_list(frappe.boot.user.can_write, doc.doctype);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (!frm.is_new() && !frm.is_dirty() && !doc.email_sent && can_write) {
 			frm.add_custom_button(
 				__("Send a test email"),
@@ -112,14 +116,20 @@ frappe.ui.form.on("Newsletter", {
 					options: {
 						minDate: new Date(),
 					},
+<<<<<<< HEAD
 					reqd: true,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				},
 				{
 					label: __("Time"),
 					fieldname: "time",
 					fieldtype: "Select",
 					options: time_slots,
+<<<<<<< HEAD
 					reqd: true,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				},
 			],
 			primary_action_label: __("Schedule"),

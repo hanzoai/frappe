@@ -9,6 +9,7 @@ from frappe.utils.safe_exec import read_sql, safe_exec
 
 
 class SystemConsole(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -24,12 +25,18 @@ class SystemConsole(Document):
 		type: DF.Literal["Python", "SQL"]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def run(self):
 		frappe.only_for("System Manager")
 		try:
 			frappe.local.debug_log = []
 			if self.type == "Python":
+<<<<<<< HEAD
 				safe_exec(self.console, script_filename="System Console")
+=======
+				safe_exec(self.console)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				self.output = "\n".join(frappe.debug_log)
 			elif self.type == "SQL":
 				self.output = frappe.as_json(read_sql(self.console, as_dict=1))
@@ -41,9 +48,14 @@ class SystemConsole(Document):
 			frappe.db.commit()
 		else:
 			frappe.db.rollback()
+<<<<<<< HEAD
 		frappe.get_doc(
 			dict(doctype="Console Log", script=self.console, type=self.type, committed=self.commit)
 		).insert()
+=======
+
+		frappe.get_doc(dict(doctype="Console Log", script=self.console)).insert()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.db.commit()
 
 

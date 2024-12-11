@@ -24,6 +24,7 @@ STANDARD_EXCLUSIONS = [
 	"*/patches/*",
 ]
 
+<<<<<<< HEAD
 # tested via commands' test suite
 TESTED_VIA_CLI = [
 	"*/frappe/installer.py",
@@ -33,6 +34,8 @@ TESTED_VIA_CLI = [
 	"*/frappe/database/**/setup_db.py",
 ]
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 FRAPPE_EXCLUSIONS = [
 	"*/tests/*",
 	"*/commands/*",
@@ -42,7 +45,10 @@ FRAPPE_EXCLUSIONS = [
 	"*frappe/setup.py",
 	"*/doctype/*/*_dashboard.py",
 	"*/patches/*",
+<<<<<<< HEAD
 	*TESTED_VIA_CLI,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 ]
 
 
@@ -74,4 +80,7 @@ class CodeCoverage:
 			self.coverage.stop()
 			self.coverage.save()
 			self.coverage.xml_report()
+<<<<<<< HEAD
 			print("Saved Coverage")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

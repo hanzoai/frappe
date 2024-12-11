@@ -152,7 +152,11 @@ frappe.views.ListGroupBy = class ListGroupBy {
 			fieldtype: "MultiCheck",
 			columns: 2,
 			options: fields.map((df) => ({
+<<<<<<< HEAD
 				label: __(df.label, null, df.parent),
+=======
+				label: __(df.label),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				value: df.fieldname,
 				checked: this.group_by_fields.includes(df.fieldname),
 			})),
@@ -214,6 +218,7 @@ frappe.views.ListGroupBy = class ListGroupBy {
 	}
 
 	get_dropdown_html(field, fieldtype, applied = false) {
+<<<<<<< HEAD
 		let label;
 		if (field.name == null) {
 			label = __("Not Set");
@@ -225,6 +230,16 @@ frappe.views.ListGroupBy = class ListGroupBy {
 			label = __(field.name);
 		}
 		let value = field.name == null ? "" : encodeURIComponent(field.name);
+=======
+		let label = field.name == null ? __("Not Set") : field.name;
+		if (label === frappe.session.user) {
+			label = __("Me");
+		} else if (fieldtype && fieldtype == "Check") {
+			label = label == "0" ? __("No") : __("Yes");
+		}
+		let value = field.name == null ? "" : encodeURIComponent(field.name);
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		let applied_html = applied
 			? `<span class="applied"> ${frappe.utils.icon("tick", "xs")} </span>`
 			: "";

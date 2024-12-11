@@ -5,6 +5,7 @@ from frappe.model.document import Document
 
 
 class WebsiteRouteMeta(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -17,6 +18,8 @@ class WebsiteRouteMeta(Document):
 		meta_tags: DF.Table[WebsiteMetaTag]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def autoname(self):
 		if self.name and self.name.startswith("/"):
 			self.name = self.name[1:]

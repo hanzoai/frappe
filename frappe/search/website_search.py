@@ -141,8 +141,13 @@ def remove_document_from_index(path):
 
 
 def build_index_for_all_routes():
+<<<<<<< HEAD
 	from frappe.utils.synchronization import filelock
 
 	with filelock("building_website_search"):
 		ws = WebsiteSearch(INDEX_NAME)
 		return ws.build()
+=======
+	ws = WebsiteSearch(INDEX_NAME)
+	return ws.build()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

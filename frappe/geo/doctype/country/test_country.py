@@ -2,6 +2,7 @@
 # License: MIT. See LICENSE
 
 import frappe
+<<<<<<< HEAD
 from frappe.geo.doctype.country.country import (
 	get_countries_and_currencies,
 	import_country_and_currency,
@@ -51,3 +52,7 @@ class TestCountry(FrappeTestCase):
 
 		self.assertEqual(countries_before, countries_after)
 		self.assertEqual(currencies_before, currencies_after)
+=======
+
+test_records = frappe.get_test_records("Country")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

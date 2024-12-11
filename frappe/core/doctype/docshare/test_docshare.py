@@ -56,6 +56,7 @@ class TestDocShare(FrappeTestCase):
 		with self.assertRowsRead(1):
 			self.assertTrue(self.event.has_permission())
 
+<<<<<<< HEAD
 	def test_list_permission(self):
 		frappe.set_user(self.user)
 		with self.assertRaises(frappe.PermissionError):
@@ -74,6 +75,8 @@ class TestDocShare(FrappeTestCase):
 		with self.assertRaises(frappe.PermissionError):
 			frappe.get_list("Web Page")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_share_permission(self):
 		frappe.share.add("Event", self.event.name, self.user, write=1, share=1)
 

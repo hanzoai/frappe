@@ -21,6 +21,7 @@ from frappe.utils.background_jobs import enqueue
 
 
 class S3BackupSettings(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -40,6 +41,8 @@ class S3BackupSettings(Document):
 		send_email_for_successful_backup: DF.Check
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		if not self.enabled:
 			return

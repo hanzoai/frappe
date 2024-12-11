@@ -9,9 +9,20 @@ from unittest.mock import patch
 
 import frappe
 from frappe.core.doctype.doctype.test_doctype import new_doctype
+<<<<<<< HEAD
 from frappe.exceptions import DoesNotExistError
 from frappe.model.base_document import get_controller
 from frappe.model.rename_doc import bulk_rename, update_document_title
+=======
+from frappe.exceptions import DoesNotExistError, ValidationError
+from frappe.model.base_document import get_controller
+from frappe.model.rename_doc import (
+	bulk_rename,
+	get_fetch_fields,
+	update_document_title,
+	update_linked_doctypes,
+)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.modules.utils import get_doc_path
 from frappe.tests.utils import FrappeTestCase
 from frappe.utils import add_to_date, now
@@ -215,7 +226,11 @@ class TestRenameDoc(FrappeTestCase):
 		new_name = f"{dn}-new"
 
 		# pass invalid types to API
+<<<<<<< HEAD
 		with self.assertRaises(TypeError):
+=======
+		with self.assertRaises(ValidationError):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			update_document_title(doctype=dt, docname=dn, title={}, name={"hack": "this"})
 
 		doc_before = frappe.get_doc(test_doctype, dn)
@@ -245,6 +260,19 @@ class TestRenameDoc(FrappeTestCase):
 				doctype=self.test_doctype,
 			)
 
+<<<<<<< HEAD
+=======
+	def test_deprecated_utils(self):
+		stdout = StringIO()
+
+		with redirect_stdout(stdout), patch_db(["set_value"]):
+			get_fetch_fields("User", "ToDo", ["Activity Log"])
+			self.assertTrue("Function frappe.model.rename_doc.get_fetch_fields" in stdout.getvalue())
+
+			update_linked_doctypes("User", "ToDo", "str", "str")
+			self.assertTrue("Function frappe.model.rename_doc.update_linked_doctypes" in stdout.getvalue())
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_doc_rename_method(self):
 		name = choice(self.available_documents)
 		new_name = f"{name}-{frappe.generate_hash(length=4)}"

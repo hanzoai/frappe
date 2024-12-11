@@ -19,7 +19,10 @@ frappe.ui.form.on("Website Theme", {
 		} else {
 			frm.enable_save();
 		}
+<<<<<<< HEAD
 		frm.set_df_property("custom_scss", "max_lines", 45);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 
 	set_default_theme_button_and_indicator(frm) {

@@ -9,6 +9,12 @@ class TestConfig(FrappeTestCase):
 	def test_get_modules(self):
 		frappe_modules = frappe.get_all("Module Def", filters={"app_name": "frappe"}, pluck="name")
 		all_modules_data = get_modules_from_all_apps_for_user()
+<<<<<<< HEAD
 		all_modules = [x["module_name"] for x in all_modules_data]
+=======
+		first_module_entry = all_modules_data[0]
+		all_modules = [x["module_name"] for x in all_modules_data]
+		self.assertIn("links", first_module_entry)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertIsInstance(all_modules_data, list)
 		self.assertFalse([x for x in frappe_modules if x not in all_modules])

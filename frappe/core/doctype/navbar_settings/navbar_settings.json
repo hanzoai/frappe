@@ -7,38 +7,71 @@
  "field_order": [
   "logo_section",
   "app_logo",
+<<<<<<< HEAD
   "section_break_2",
   "settings_dropdown",
   "help_dropdown",
   "announcements_section",
   "announcement_widget"
+=======
+  "column_break_3",
+  "logo_width",
+  "section_break_2",
+  "settings_dropdown",
+  "help_dropdown"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  ],
  "fields": [
   {
    "fieldname": "app_logo",
    "fieldtype": "Attach Image",
+<<<<<<< HEAD
    "label": "Application Logo"
+=======
+   "label": "Application Logo",
+   "show_days": 1,
+   "show_seconds": 1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "settings_dropdown",
    "fieldtype": "Table",
    "label": "Settings Dropdown",
+<<<<<<< HEAD
    "options": "Navbar Item"
+=======
+   "options": "Navbar Item",
+   "show_days": 1,
+   "show_seconds": 1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "help_dropdown",
    "fieldtype": "Table",
    "label": "Help Dropdown",
+<<<<<<< HEAD
    "options": "Navbar Item"
+=======
+   "options": "Navbar Item",
+   "show_days": 1,
+   "show_seconds": 1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "section_break_2",
    "fieldtype": "Section Break",
+<<<<<<< HEAD
    "label": "Dropdowns"
+=======
+   "label": "Dropdowns",
+   "show_days": 1,
+   "show_seconds": 1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "logo_section",
    "fieldtype": "Section Break",
+<<<<<<< HEAD
    "label": "Application Logo"
   },
   {
@@ -52,11 +85,33 @@
    "fieldtype": "Text Editor",
    "label": "Announcement Widget",
    "max_height": "10em"
+=======
+   "label": "Application Logo",
+   "show_days": 1,
+   "show_seconds": 1
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break",
+   "show_days": 1,
+   "show_seconds": 1
+  },
+  {
+   "fieldname": "logo_width",
+   "fieldtype": "Int",
+   "label": "Logo Width",
+   "show_days": 1,
+   "show_seconds": 1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "issingle": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-05-01 14:09:54.587137",
+=======
+ "modified": "2020-08-06 18:11:29.955835",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Navbar Settings",
@@ -76,6 +131,11 @@
  "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
+<<<<<<< HEAD
  "states": [],
  "track_changes": 1
 }
+=======
+ "track_changes": 1
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

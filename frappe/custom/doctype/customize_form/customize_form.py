@@ -26,6 +26,7 @@ from frappe.utils import cint
 
 
 class CustomizeForm(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -86,6 +87,8 @@ class CustomizeForm(Document):
 		translated_doctype: DF.Check
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def on_update(self):
 		frappe.db.delete("Singles", {"doctype": "Customize Form"})
 		frappe.db.delete("Customize Form Field")
@@ -96,7 +99,11 @@ class CustomizeForm(Document):
 		if not self.doc_type:
 			return
 
+<<<<<<< HEAD
 		meta = frappe.get_meta(self.doc_type, cached=False)
+=======
+		meta = frappe.get_meta(self.doc_type)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.validate_doctype(meta)
 
@@ -233,6 +240,7 @@ class CustomizeForm(Document):
 		check_email_append_to(self)
 
 		if self.flags.update_db:
+<<<<<<< HEAD
 			try:
 				frappe.db.updatedb(self.doc_type)
 			except Exception as e:
@@ -245,6 +253,9 @@ class CustomizeForm(Document):
 						title=_("Database Table Row Size Limit"),
 					)
 				raise
+=======
+			frappe.db.updatedb(self.doc_type)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if not hasattr(self, "hide_success") or not self.hide_success:
 			frappe.msgprint(_("{0} updated").format(_(self.doc_type)), alert=True)
@@ -600,8 +611,16 @@ class CustomizeForm(Document):
 			""",
 				as_dict=True,
 			)
+<<<<<<< HEAD
 			label = df.label
 			links_str = ", ".join(frappe.utils.get_link_to_form(self.doc_type, doc.name) for doc in docs)
+=======
+			links = []
+			label = df.label
+			for doc in docs:
+				links.append(frappe.utils.get_link_to_form(self.doc_type, doc.name))
+			links_str = ", ".join(links)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			if docs:
 				frappe.throw(
@@ -623,6 +642,7 @@ class CustomizeForm(Document):
 		self.fetch_to_customize()
 
 	@frappe.whitelist()
+<<<<<<< HEAD
 	def reset_layout(self):
 		if not self.doc_type:
 			return
@@ -641,6 +661,8 @@ class CustomizeForm(Document):
 		self.fetch_to_customize()
 
 	@frappe.whitelist()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def trim_table(self):
 		"""Removes database fields that don't exist in the doctype.
 
@@ -701,6 +723,7 @@ def is_standard_or_system_generated_field(df):
 	return not df.get("is_custom_field") or df.get("is_system_generated")
 
 
+<<<<<<< HEAD
 @frappe.whitelist()
 def get_link_filters_from_doc_without_customisations(doctype, fieldname):
 	"""Get the filters of a link field from a doc without customisations
@@ -712,6 +735,8 @@ def get_link_filters_from_doc_without_customisations(doctype, fieldname):
 	return field[0].link_filters
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 doctype_properties = {
 	"search_fields": "Data",
 	"title_field": "Data",
@@ -722,7 +747,10 @@ doctype_properties = {
 	"allow_copy": "Check",
 	"istable": "Check",
 	"quick_entry": "Check",
+<<<<<<< HEAD
 	"queue_in_background": "Check",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"editable_grid": "Check",
 	"max_attachments": "Int",
 	"make_attachments_public": "Check",
@@ -738,6 +766,10 @@ doctype_properties = {
 	"naming_rule": "Data",
 	"autoname": "Data",
 	"show_title_field_in_link": "Check",
+<<<<<<< HEAD
+=======
+	"translate_link_fields": "Check",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"is_calendar_and_gantt": "Check",
 	"default_view": "Select",
 	"force_re_route_to_default_view": "Check",
@@ -792,8 +824,11 @@ docfield_properties = {
 	"hide_days": "Check",
 	"hide_seconds": "Check",
 	"is_virtual": "Check",
+<<<<<<< HEAD
 	"link_filters": "JSON",
 	"placeholder": "Data",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 doctype_link_properties = {

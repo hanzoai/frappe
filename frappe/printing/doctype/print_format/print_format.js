@@ -79,7 +79,11 @@ frappe.ui.form.on("Print Format", {
 			frappe.model.with_doctype(doctype, () => {
 				const meta = frappe.get_meta(doctype);
 				const has_int_float_currency_field = meta.fields.filter((df) =>
+<<<<<<< HEAD
 					["Int", "Float", "Currency"].includes(df.fieldtype)
+=======
+					in_list(["Int", "Float", "Currency"], df.fieldtype)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				);
 				frm.toggle_display("absolute_value", has_int_float_currency_field.length);
 			});

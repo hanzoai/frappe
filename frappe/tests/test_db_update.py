@@ -139,6 +139,7 @@ class TestDBUpdate(FrappeTestCase):
 		doctype.save()
 		self.check_unique_indexes(doctype.name, field)
 
+<<<<<<< HEAD
 		# New column with a unique index
 		# This works because index name is same as fieldname.
 		new_field = frappe.copy_doc(doctype.fields[0])
@@ -147,6 +148,8 @@ class TestDBUpdate(FrappeTestCase):
 		doctype.save()
 		self.check_unique_indexes(doctype.name, new_field.fieldname)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		doctype.delete()
 		frappe.db.commit()
 
@@ -187,11 +190,20 @@ def get_other_fields_meta(meta):
 
 	optional_fields_map = {field: ("Text", 0) for field in optional_fields}
 	fields = dict(default_fields_map, **optional_fields_map, **child_table_fields_map)
+<<<<<<< HEAD
 	return [
+=======
+	field_map = [
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe._dict({"fieldname": field, "fieldtype": _type, "length": _length})
 		for field, (_type, _length) in fields.items()
 	]
 
+<<<<<<< HEAD
+=======
+	return field_map
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def get_table_column(doctype, fieldname):
 	table_columns = frappe.db.get_table_columns_description(f"tab{doctype}")

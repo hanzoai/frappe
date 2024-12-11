@@ -21,11 +21,17 @@ from unittest.mock import patch
 import click
 from click import Command
 from click.testing import CliRunner, Result
+<<<<<<< HEAD
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_fixed
 
 # imports - module imports
 import frappe
 import frappe.commands.scheduler
+=======
+
+# imports - module imports
+import frappe
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import frappe.commands.site
 import frappe.commands.utils
 import frappe.recorder
@@ -39,7 +45,11 @@ from frappe.utils.jinja_globals import bundled_asset
 from frappe.utils.scheduler import enable_scheduler, is_scheduler_inactive
 
 _result: Result | None = None
+<<<<<<< HEAD
 TEST_SITE = "commands-site-O4PN2QK.test"  # added random string tag to avoid collisions
+=======
+TEST_SITE = "commands-site-O4PN2QKA.test"  # added random string tag to avoid collisions
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 CLI_CONTEXT = frappe._dict(sites=[TEST_SITE])
 
 
@@ -180,18 +190,28 @@ class BaseTestCommands(FrappeTestCase):
 		cmd_config = {
 			"test_site": TEST_SITE,
 			"admin_password": frappe.conf.admin_password,
+<<<<<<< HEAD
 			"db_type": frappe.conf.db_type,
 			"db_root_username": frappe.conf.root_login,
 			"db_root_password": frappe.conf.root_password,
+=======
+			"root_login": frappe.conf.root_login,
+			"root_password": frappe.conf.root_password,
+			"db_type": frappe.conf.db_type,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		if not os.path.exists(os.path.join(TEST_SITE, "site_config.json")):
 			cls.execute(
+<<<<<<< HEAD
 				"bench new-site {test_site} "
 				"--admin-password {admin_password} "
 				"--db-root-username {db_root_username} "
 				"--db-root-password {db_root_password} "
 				"--db-type {db_type}",
+=======
+				"bench new-site {test_site} --admin-password {admin_password} --db-type" " {db_type}",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				cmd_config,
 			)
 
@@ -243,7 +263,11 @@ class TestCommands(BaseTestCommands):
 		self.assertEqual(self.returncode, 0)
 		self.assertEqual(self.stdout[1:-1], frappe.bold(text="DocType"))
 
+<<<<<<< HEAD
 	@run_only_if(db_type_is.MARIADB)
+=======
+	@unittest.skip
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_restore(self):
 		# step 0: create a site to run the test on
 		global_config = {
@@ -257,6 +281,7 @@ class TestCommands(BaseTestCommands):
 			if value:
 				self.execute(f"bench set-config {key} {value} -g")
 
+<<<<<<< HEAD
 		with self.switch_site(TEST_SITE):
 			public_file = frappe.new_doc(
 				"File", file_name=f"test_{frappe.generate_hash()}", content=frappe.generate_hash()
@@ -267,10 +292,15 @@ class TestCommands(BaseTestCommands):
 
 		# test 1: bench restore from full backup
 		self.execute("bench --site {test_site} backup --ignore-backup-conf --with-files", site_data)
+=======
+		# test 1: bench restore from full backup
+		self.execute("bench --site {test_site} backup --ignore-backup-conf", site_data)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.execute(
 			"bench --site {test_site} execute frappe.utils.backups.fetch_latest_backups",
 			site_data,
 		)
+<<<<<<< HEAD
 		# Destroy some data and files to verify that they are indeed being restored.
 		with self.switch_site(TEST_SITE):
 			public_file.delete_file_data_content()
@@ -291,6 +321,10 @@ class TestCommands(BaseTestCommands):
 			self.assertTrue(frappe.db.table_exists("ToDo", cached=False))
 			self.assertTrue(public_file.exists_on_disk())
 			self.assertTrue(private_file.exists_on_disk())
+=======
+		site_data.update({"database": json.loads(self.stdout)["database"]})
+		self.execute("bench --site {test_site} restore {database}", site_data)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# test 2: restore from partial backup
 		self.execute("bench --site {test_site} backup --exclude 'ToDo'", site_data)
@@ -471,7 +505,11 @@ class TestCommands(BaseTestCommands):
 			f"bench new-site {site} --force --verbose "
 			f"--admin-password {frappe.conf.admin_password} "
 			f"--mariadb-root-password {frappe.conf.root_password} "
+<<<<<<< HEAD
 			f"--db-type {frappe.conf.db_type} "
+=======
+			f"--db-type {frappe.conf.db_type or 'mariadb'} "
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 		self.assertEqual(self.returncode, 0)
 
@@ -494,7 +532,11 @@ class TestCommands(BaseTestCommands):
 				f"bench new-site {TEST_SITE} --verbose "
 				f"--admin-password {frappe.conf.admin_password} "
 				f"--mariadb-root-password {frappe.conf.root_password} "
+<<<<<<< HEAD
 				f"--db-type {frappe.conf.db_type} "
+=======
+				f"--db-type {frappe.conf.db_type or 'mariadb'} "
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			)
 
 		app_name = "frappe"
@@ -558,6 +600,7 @@ class TestBackups(BaseTestCommands):
 		self.assertIn("successfully completed", self.stdout)
 		self.assertNotEqual(before_backup["database"], after_backup["database"])
 
+<<<<<<< HEAD
 	@skipIf(
 		not (frappe.conf.db_type == "mariadb"),
 		"Only for MariaDB",
@@ -594,15 +637,22 @@ class TestBackups(BaseTestCommands):
 		)
 		self.assertEqual(self.returncode, 0)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_backup_fails_with_exit_code(self):
 		"""Provide incorrect options to check if exit code is 1"""
 		odb = BackupGenerator(
 			frappe.conf.db_name,
 			frappe.conf.db_name,
 			frappe.conf.db_password + "INCORRECT PASSWORD",
+<<<<<<< HEAD
 			db_socket=frappe.conf.db_socket,
 			db_host=frappe.conf.db_host,
 			db_port=frappe.conf.db_port,
+=======
+			db_host=frappe.db.host,
+			db_port=frappe.db.port,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			db_type=frappe.conf.db_type,
 		)
 		with self.assertRaises(Exception):
@@ -800,6 +850,10 @@ class TestAddNewUser(BaseTestCommands):
 		self.execute(
 			"bench --site {site} add-user test@gmail.com --first-name test --last-name test --password 123 --user-type 'System User' --add-role 'Accounts User' --add-role 'Sales User'"
 		)
+<<<<<<< HEAD
+=======
+		frappe.db.rollback()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertEqual(self.returncode, 0)
 		user = frappe.get_doc("User", "test@gmail.com")
 		roles = {r.role for r in user.roles}
@@ -841,6 +895,7 @@ class TestDBUtils(BaseTestCommands):
 		meta = frappe.get_meta("User", cached=False)
 		self.assertTrue(meta.get_field(field).search_index)
 
+<<<<<<< HEAD
 
 class TestSchedulerUtils(BaseTestCommands):
 	# Retry just in case there are stuck queued jobs
@@ -853,6 +908,16 @@ class TestSchedulerUtils(BaseTestCommands):
 	def test_ready_for_migrate(self):
 		with cli(frappe.commands.scheduler.ready_for_migration) as result:
 			self.assertEqual(result.exit_code, 0)
+=======
+	@run_only_if(db_type_is.MARIADB)
+	def test_describe_table(self):
+		self.execute("bench --site {site} describe-database-table --doctype User", {})
+		self.assertIn("user_type", self.stdout)
+
+		# Ensure that output is machine parseable
+		stats = json.loads(self.stdout)
+		self.assertIn("total_rows", stats)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class TestCommandUtils(FrappeTestCase):
@@ -870,12 +935,15 @@ class TestDBCli(BaseTestCommands):
 		self.execute("bench --site {site} db-console", kwargs={"cmd_input": rb"\q"})
 		self.assertEqual(self.returncode, 0)
 
+<<<<<<< HEAD
 	@run_only_if(db_type_is.MARIADB)
 	def test_db_cli_with_sql(self):
 		self.execute("bench --site {site} db-console -e 'select 1'")
 		self.assertEqual(self.returncode, 0)
 		self.assertIn("1", self.stdout)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 class TestSchedulerCLI(BaseTestCommands):
 	@classmethod

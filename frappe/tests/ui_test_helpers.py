@@ -78,12 +78,19 @@ def create_todo_records():
 
 
 @whitelist_for_tests
+<<<<<<< HEAD
 def prepare_webform_test():
 	for note in frappe.get_all("Note", pluck="name"):
 		frappe.delete_doc("Note", note, force=True)
 
 	frappe.delete_doc_if_exists("Web Form", "note")
 
+=======
+def clear_notes():
+	for note in frappe.get_all("Note", pluck="name"):
+		frappe.delete_doc("Note", note, force=True)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 @whitelist_for_tests
 def create_communication_record():
@@ -412,7 +419,11 @@ def create_blog_post():
 		}
 	).insert(ignore_if_duplicate=True)
 
+<<<<<<< HEAD
 	return frappe.get_doc(
+=======
+	doc = frappe.get_doc(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		{
 			"name": "test-blog-attachment-post",
 			"doctype": "Blog Post",
@@ -423,6 +434,11 @@ def create_blog_post():
 		},
 	).insert(ignore_if_duplicate=True)
 
+<<<<<<< HEAD
+=======
+	return doc
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 @whitelist_for_tests
 def create_test_user(username=None):
@@ -452,7 +468,11 @@ def create_test_user(username=None):
 
 @whitelist_for_tests
 def setup_tree_doctype():
+<<<<<<< HEAD
 	frappe.delete_doc_if_exists("DocType", "Custom Tree", force=True)
+=======
+	frappe.delete_doc_if_exists("DocType", "Custom Tree")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	frappe.get_doc(
 		{
@@ -476,7 +496,11 @@ def setup_tree_doctype():
 
 @whitelist_for_tests
 def setup_image_doctype():
+<<<<<<< HEAD
 	frappe.delete_doc_if_exists("DocType", "Custom Image", force=True)
+=======
+	frappe.delete_doc_if_exists("DocType", "Custom Image")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	frappe.get_doc(
 		{
@@ -534,6 +558,15 @@ def setup_default_view(view, force_reroute=None):
 
 
 @whitelist_for_tests
+<<<<<<< HEAD
+=======
+def create_note():
+	if not frappe.db.exists("Note", "Routing Test"):
+		frappe.get_doc({"doctype": "Note", "title": "Routing Test"}).insert()
+
+
+@whitelist_for_tests
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def create_kanban():
 	if not frappe.db.exists("Custom Field", "Note-kanban"):
 		frappe.get_doc(
@@ -577,7 +610,11 @@ def create_kanban():
 
 @whitelist_for_tests
 def create_todo(description):
+<<<<<<< HEAD
 	return frappe.get_doc({"doctype": "ToDo", "description": description}).insert()
+=======
+	frappe.get_doc({"doctype": "ToDo", "description": description}).insert()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @whitelist_for_tests
@@ -625,6 +662,7 @@ def add_remove_role(action, user, role):
 		user_doc.remove_roles(role)
 	else:
 		user_doc.add_roles(role)
+<<<<<<< HEAD
 
 
 @whitelist_for_tests
@@ -662,3 +700,5 @@ def slow_task(duration, title, doctype, docname):
 	for i in range(steps + 1):
 		frappe.publish_progress(i * 10, title=title, doctype=doctype, docname=docname)
 		time.sleep(int(duration) / steps)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -34,8 +34,12 @@ def new_language(context, lang_code, app):
 		raise Exception("--site is required")
 
 	# init site
+<<<<<<< HEAD
 	frappe.init(site=context["sites"][0])
 	frappe.connect()
+=======
+	frappe.connect(site=context["sites"][0])
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	frappe.translate.write_translations_file(app, lang_code)
 
 	print(f"File created at ./apps/{app}/{app}/translations/{lang_code}.csv")

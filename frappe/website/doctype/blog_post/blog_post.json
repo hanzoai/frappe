@@ -95,11 +95,19 @@
    "label": "Blog Intro"
   },
   {
+<<<<<<< HEAD
    "default": "Markdown",
    "fieldname": "content_type",
    "fieldtype": "Select",
    "label": "Content Type",
    "options": "Markdown\nRich Text\nHTML",
+=======
+   "default": "Rich Text",
+   "fieldname": "content_type",
+   "fieldtype": "Select",
+   "label": "Content Type",
+   "options": "Rich Text\nMarkdown\nHTML",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "reqd": 1
   },
   {
@@ -230,6 +238,10 @@
    "read": 1,
    "report": 1,
    "role": "Website Manager",
+<<<<<<< HEAD
+=======
+   "set_user_permissions": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "share": 1,
    "write": 1
   },

@@ -49,7 +49,11 @@ context("Rounding behaviour", () => {
 				let rounding_method = "Banker's Rounding";
 
 				expect(flt("0.5", 0, null, rounding_method)).eq(0);
+<<<<<<< HEAD
 				expect(flt("0.3", null, null, rounding_method)).eq(0.3);
+=======
+				expect(flt("0.3", null, rounding_method)).eq(0.3);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 				expect(flt("1.5", 0, null, rounding_method)).eq(2);
 

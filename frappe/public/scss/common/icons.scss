@@ -11,6 +11,7 @@
 	stroke: var(--icon-stroke);
 }
 
+<<<<<<< HEAD
 .es-icon {
 	@extend .icon;
 	// reverse fill and stroke because of the way es icon is drawn
@@ -23,6 +24,12 @@ use.like-icon {
 	--icon-stroke: transparent;
 	cursor: pointer;
 	stroke: var(--gray-800);
+=======
+/* like icon */
+use.like-icon {
+	cursor: pointer;
+	stroke: var(--gray-500);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 #icon-file-large {
@@ -34,7 +41,11 @@ use.like-icon {
 }
 
 #icon-close {
+<<<<<<< HEAD
 	fill: var(--invert-neutral);
+=======
+	fill: var(--gray-600);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .icon > .close-alt {
@@ -43,8 +54,13 @@ use.like-icon {
 
 .liked {
 	use.like-icon {
+<<<<<<< HEAD
 		--icon-stroke: var(--red-500);
 		fill: var(--icon-stroke);
+=======
+		stroke: none;
+		fill: var(--red-500);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 }
 

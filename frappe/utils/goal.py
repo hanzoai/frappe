@@ -50,8 +50,14 @@ def get_monthly_goal_graph_data(
 	goal_doctype_link: str,
 	goal_field: str,
 	date_field: str,
+<<<<<<< HEAD
 	aggregation: str = "sum",
 	filters: str | dict | None = None,
+=======
+	filter_str: str | None = None,
+	aggregation: str = "sum",
+	filters: dict | None = None,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 ) -> dict:
 	"""
 	Get month-wise graph data for a doctype based on aggregation values of a field in the goal doctype
@@ -65,11 +71,23 @@ def get_monthly_goal_graph_data(
 	:param goal_doctype: doctype the goal is based on
 	:param goal_doctype_link: doctype link field in goal_doctype
 	:param goal_field: field from which the goal is calculated
+<<<<<<< HEAD
+=======
+	:param filter_str: [DEPRECATED] where clause condition. Use filters.
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	:param aggregation: a value like 'count', 'sum', 'avg'
 	:param filters: optional filters
 
 	:return: dict of graph data
 	"""
+<<<<<<< HEAD
+=======
+	if isinstance(filter_str, str):
+		frappe.throw(
+			"String filters have been deprecated. Pass Dict filters instead.", exc=DeprecationWarning
+		)  # nosemgrep
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	doc = frappe.get_doc(doctype, docname)
 	doc.check_permission()
 

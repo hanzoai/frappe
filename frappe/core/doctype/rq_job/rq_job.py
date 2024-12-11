@@ -39,6 +39,7 @@ def check_permissions(method):
 
 
 class RQJob(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -59,6 +60,8 @@ class RQJob(Document):
 		timeout: DF.Duration | None
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def load_from_db(self):
 		try:
 			job = Job.fetch(self.name, connection=get_redis_conn())
@@ -82,6 +85,7 @@ class RQJob(Document):
 
 		order_desc = "desc" in args.get("order_by", "")
 
+<<<<<<< HEAD
 		matched_job_ids = RQJob.get_matching_job_ids(args)[start : start + page_length]
 
 		conn = get_redis_conn()
@@ -91,6 +95,25 @@ class RQJob(Document):
 
 	@staticmethod
 	def get_matching_job_ids(args) -> list[str]:
+=======
+		matched_job_ids = RQJob.get_matching_job_ids(args)
+
+		jobs = []
+		for job_ids in create_batch(matched_job_ids, 100):
+			jobs.extend(
+				serialize_job(job)
+				for job in Job.fetch_many(job_ids=job_ids, connection=get_redis_conn())
+				if job and for_current_site(job)
+			)
+			if len(jobs) > start + page_length:
+				# we have fetched enough. This is inefficient but because of site filtering TINA
+				break
+
+		return sorted(jobs, key=lambda j: j.modified, reverse=order_desc)[start : start + page_length]
+
+	@staticmethod
+	def get_matching_job_ids(args):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		filters = make_filter_dict(args.get("filters"))
 
 		queues = _eval_filters(filters.get("queue"), QUEUES)
@@ -103,7 +126,11 @@ class RQJob(Document):
 			for status in statuses:
 				matched_job_ids.extend(fetch_job_ids(queue, status))
 
+<<<<<<< HEAD
 		return filter_current_site_jobs(matched_job_ids)
+=======
+		return matched_job_ids
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@check_permissions
 	def delete(self):
@@ -118,7 +145,12 @@ class RQJob(Document):
 
 	@staticmethod
 	def get_count(args) -> int:
+<<<<<<< HEAD
 		return len(RQJob.get_matching_job_ids(args))
+=======
+		# Can not be implemented efficiently due to site filtering hence ignored.
+		return 0
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# None of these methods apply to virtual job doctype, overriden for sanity.
 	@staticmethod
@@ -134,6 +166,7 @@ class RQJob(Document):
 
 def serialize_job(job: Job) -> frappe._dict:
 	modified = job.last_heartbeat or job.ended_at or job.started_at or job.created_at
+<<<<<<< HEAD
 	job_kwargs = job.kwargs.get("kwargs", {})
 	job_name = job_kwargs.get("job_type") or str(job.kwargs.get("job_name"))
 	if job_name == "frappe.utils.background_jobs.run_doc_method":
@@ -141,6 +174,9 @@ def serialize_job(job: Job) -> frappe._dict:
 		doc_method = job_kwargs.get("doc_method")
 		if doctype and doc_method:
 			job_name = f"{doctype}.{doc_method}"
+=======
+	job_name = job.kwargs.get("kwargs", {}).get("job_type") or str(job.kwargs.get("job_name"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# function objects have this repr: '<function functionname at 0xmemory_address >'
 	# This regex just removes unnecessary things around it.
@@ -171,12 +207,15 @@ def for_current_site(job: Job) -> bool:
 	return job.kwargs.get("site") == frappe.local.site
 
 
+<<<<<<< HEAD
 def filter_current_site_jobs(job_ids: list[str]) -> list[str]:
 	site = frappe.local.site
 
 	return [j for j in job_ids if j.startswith(site)]
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def _eval_filters(filter, values: list[str]) -> list[str]:
 	if filter:
 		operator, operand = filter
@@ -208,6 +247,7 @@ def remove_failed_jobs():
 	frappe.only_for("System Manager")
 	for queue in get_queues():
 		fail_registry = queue.failed_job_registry
+<<<<<<< HEAD
 		failed_jobs = filter_current_site_jobs(fail_registry.get_job_ids())
 
 		# Delete in batches to avoid loading too many things in memory
@@ -215,6 +255,12 @@ def remove_failed_jobs():
 		for job_ids in create_batch(failed_jobs, 100):
 			for job in Job.fetch_many(job_ids=job_ids, connection=conn):
 				job and fail_registry.remove(job, delete_job=True)
+=======
+		for job_ids in create_batch(fail_registry.get_job_ids(), 100):
+			for job in Job.fetch_many(job_ids=job_ids, connection=get_redis_conn()):
+				if job and for_current_site(job):
+					fail_registry.remove(job, delete_job=True)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_all_queued_jobs():

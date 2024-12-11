@@ -24,7 +24,11 @@ frappe.ui.form.on("Email Queue", {
 				});
 			});
 		} else if (frm.doc.status == "Error") {
+<<<<<<< HEAD
 			frm.add_custom_button("Retry Sending", function () {
+=======
+			frm.add_custom_button(__("Retry Sending"), function () {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				frm.call({
 					method: "retry_sending",
 					doc: frm.doc,

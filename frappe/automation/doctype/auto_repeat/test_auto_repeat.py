@@ -1,7 +1,10 @@
 # Copyright (c) 2018, Frappe Technologies and Contributors
 # License: MIT. See LICENSE
+<<<<<<< HEAD
 from typing import TYPE_CHECKING
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import frappe
 from frappe.automation.doctype.auto_repeat.auto_repeat import (
 	create_repeated_entries,
@@ -12,11 +15,16 @@ from frappe.custom.doctype.custom_field.custom_field import create_custom_field
 from frappe.tests.utils import FrappeTestCase
 from frappe.utils import add_days, add_months, getdate, today
 
+<<<<<<< HEAD
 if TYPE_CHECKING:
 	from frappe.custom.doctype.custom_field.custom_field import CustomField
 
 
 def add_custom_fields() -> "CustomField":
+=======
+
+def add_custom_fields():
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	df = dict(
 		fieldname="auto_repeat",
 		label="Auto Repeat",
@@ -27,6 +35,7 @@ def add_custom_fields() -> "CustomField":
 		print_hide=1,
 		read_only=1,
 	)
+<<<<<<< HEAD
 	return create_custom_field("ToDo", df) or frappe.get_doc(
 		"Custom Field", dict(fieldname=df["fieldname"], dt="ToDo")
 	)
@@ -38,6 +47,17 @@ class TestAutoRepeat(FrappeTestCase):
 		cls.custom_field = add_custom_fields()
 		cls.addClassCleanup(cls.custom_field.delete)
 		return super().setUpClass()
+=======
+	create_custom_field("ToDo", df)
+
+
+class TestAutoRepeat(FrappeTestCase):
+	def setUp(self):
+		if not frappe.db.sql(
+			"SELECT `fieldname` FROM `tabCustom Field` WHERE `fieldname`='auto_repeat' and `dt`=%s", "Todo"
+		):
+			add_custom_fields()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_daily_auto_repeat(self):
 		todo = frappe.get_doc(
@@ -234,7 +254,11 @@ class TestAutoRepeat(FrappeTestCase):
 
 def make_auto_repeat(**args):
 	args = frappe._dict(args)
+<<<<<<< HEAD
 	return frappe.get_doc(
+=======
+	doc = frappe.get_doc(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		{
 			"doctype": "Auto Repeat",
 			"reference_doctype": args.reference_doctype or "ToDo",
@@ -251,6 +275,11 @@ def make_auto_repeat(**args):
 		}
 	).insert(ignore_permissions=True)
 
+<<<<<<< HEAD
+=======
+	return doc
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def create_submittable_doctype(doctype, submit_perms=1):
 	if frappe.db.exists("DocType", doctype):

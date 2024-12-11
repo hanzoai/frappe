@@ -10,7 +10,10 @@ be used to build database driven apps.
 
 Read the documentation: https://frappeframework.com/docs
 """
+<<<<<<< HEAD
 import copy
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import faulthandler
 import functools
 import gc
@@ -20,16 +23,26 @@ import json
 import os
 import re
 import signal
+<<<<<<< HEAD
 import traceback
 import unicodedata
 import warnings
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any, Literal, Optional, TypeAlias, overload
+=======
+import unicodedata
+import warnings
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, Literal, Optional, overload
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import click
 from werkzeug.local import Local, release_local
 
+<<<<<<< HEAD
 import frappe
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.query_builder import (
 	get_query,
 	get_query_builder,
@@ -41,7 +54,10 @@ from frappe.utils.data import cint, cstr, sbool
 
 # Local application imports
 from .exceptions import *
+<<<<<<< HEAD
 from .types.frappedict import _dict
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from .utils.jinja import (
 	get_email_from_template,
 	get_jenv,
@@ -51,6 +67,7 @@ from .utils.jinja import (
 )
 from .utils.lazy_loader import lazy_import
 
+<<<<<<< HEAD
 __version__ = "15.8.1"
 __title__ = "Frappe Framework"
 
@@ -90,6 +107,19 @@ STANDARD_USERS = ("Guest", "Administrator")
 
 _qb_patched = {}
 _dev_server = int(sbool(os.environ.get("DEV_SERVER", False)))
+=======
+__version__ = "14.47.2"
+__title__ = "Frappe Framework"
+
+controllers = {}
+local = Local()
+STANDARD_USERS = ("Guest", "Administrator")
+
+_dev_server = int(sbool(os.environ.get("DEV_SERVER", False)))
+_qb_patched = {}
+re._MAXCACHE = 50  # reduced from default 512 given we are already maintaining this on parent worker
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 _tune_gc = bool(sbool(os.environ.get("FRAPPE_TUNE_GC", True)))
 
 if _dev_server:
@@ -97,8 +127,35 @@ if _dev_server:
 	warnings.simplefilter("always", PendingDeprecationWarning)
 
 
+<<<<<<< HEAD
 def _(msg: str, lang: str | None = None, context: str | None = None) -> str:
 	"""Return translated string in current lang, if exists.
+=======
+class _dict(dict):
+	"""dict like object that exposes keys as attributes"""
+
+	__slots__ = ()
+	__getattr__ = dict.get
+	__setattr__ = dict.__setitem__
+	__delattr__ = dict.__delitem__
+	__setstate__ = dict.update
+
+	def __getstate__(self):
+		return self
+
+	def update(self, *args, **kwargs):
+		"""update and return self -- the missing dict feature in python"""
+
+		super().update(*args, **kwargs)
+		return self
+
+	def copy(self):
+		return _dict(self)
+
+
+def _(msg: str, lang: str | None = None, context: str | None = None) -> str:
+	"""Returns translated string in current lang, if exists.
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	Usage:
 	        _('Change')
 	        _('Change', context='Coins')
@@ -133,6 +190,7 @@ def _(msg: str, lang: str | None = None, context: str | None = None) -> str:
 	return translated_string or non_translated_string
 
 
+<<<<<<< HEAD
 def _lt(msg: str, lang: str | None = None, context: str | None = None):
 	"""Lazily translate a string.
 
@@ -152,6 +210,10 @@ def _lt(msg: str, lang: str | None = None, context: str | None = None):
 
 def as_unicode(text, encoding: str = "utf-8") -> str:
 	"""Convert to unicode if required."""
+=======
+def as_unicode(text: str, encoding: str = "utf-8") -> str:
+	"""Convert to unicode if required"""
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if isinstance(text, str):
 		return text
 	elif text is None:
@@ -162,6 +224,19 @@ def as_unicode(text, encoding: str = "utf-8") -> str:
 		return str(text)
 
 
+<<<<<<< HEAD
+=======
+def get_lang_dict(fortype: str, name: str | None = None) -> dict[str, str]:
+	"""Returns the translated language dict for the given type and name.
+
+	:param fortype: must be one of `doctype`, `page`, `report`, `include`, `jsfile`, `boot`
+	:param name: name of the document for which assets are to be returned."""
+	from frappe.translate import get_dict
+
+	return get_dict(fortype, name)
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def set_user_lang(user: str, user_language: str | None = None) -> None:
 	"""Guess and set user language for the session. `frappe.local.lang`"""
 	from frappe.translate import get_user_lang
@@ -176,7 +251,10 @@ qb = local("qb")
 conf = local("conf")
 form = form_dict = local("form_dict")
 request = local("request")
+<<<<<<< HEAD
 job = local("job")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 response = local("response")
 session = local("session")
 user = local("user")
@@ -188,6 +266,24 @@ message_log = local("message_log")
 
 lang = local("lang")
 
+<<<<<<< HEAD
+=======
+# This if block is never executed when running the code. It is only used for
+# telling static code analyzer where to find dynamically defined attributes.
+if TYPE_CHECKING:
+	from frappe.database.mariadb.database import MariaDBDatabase
+	from frappe.database.postgres.database import PostgresDatabase
+	from frappe.model.document import Document
+	from frappe.query_builder.builder import MariaDB, Postgres
+	from frappe.utils.redis_wrapper import RedisWrapper
+
+	db: MariaDBDatabase | PostgresDatabase
+	qb: MariaDB | Postgres
+
+
+# end: static analysis hack
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def init(site: str, sites_path: str = ".", new_site: bool = False, force=False) -> None:
 	"""Initialize frappe for the current site. Reset thread locals `frappe.local`"""
@@ -197,6 +293,10 @@ def init(site: str, sites_path: str = ".", new_site: bool = False, force=False) 
 	local.error_log = []
 	local.message_log = []
 	local.debug_log = []
+<<<<<<< HEAD
+=======
+	local.realtime_log = []
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	local.flags = _dict(
 		{
 			"currently_saving": [],
@@ -213,7 +313,13 @@ def init(site: str, sites_path: str = ".", new_site: bool = False, force=False) 
 			"read_only": False,
 		}
 	)
+<<<<<<< HEAD
 	local.locked_documents = []
+=======
+	local.rollback_observers = []
+	local.locked_documents = []
+	local.before_commit = []
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	local.test_objects = {}
 
 	local.site = site
@@ -237,10 +343,15 @@ def init(site: str, sites_path: str = ".", new_site: bool = False, force=False) 
 	local.role_permissions = {}
 	local.valid_columns = {}
 	local.new_doc_templates = {}
+<<<<<<< HEAD
+=======
+	local.link_count = {}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	local.jenv = None
 	local.jloader = None
 	local.cache = {}
+<<<<<<< HEAD
 	local.form_dict = _dict()
 	local.preload_assets = {"style": [], "script": [], "icons": []}
 	local.session = _dict()
@@ -248,14 +359,28 @@ def init(site: str, sites_path: str = ".", new_site: bool = False, force=False) 
 	local.qb = get_query_builder(local.conf.db_type)
 	local.qb.get_query = get_query
 	setup_redis_cache_connection()
+=======
+	local.document_cache = {}
+	local.form_dict = _dict()
+	local.preload_assets = {"style": [], "script": []}
+	local.session = _dict()
+	local.dev_server = _dev_server
+	local.qb = get_query_builder(local.conf.db_type or "mariadb")
+	local.qb.get_query = get_query
+	local.qb.engine = _dict(get_query=get_query)  # for backward compatiblity
+	setup_module_map()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not _qb_patched.get(local.conf.db_type):
 		patch_query_execute()
 		patch_query_aggregation()
 		_register_fault_handler()
 
+<<<<<<< HEAD
 	setup_module_map(include_all_apps=not (frappe.request or frappe.job or frappe.flags.in_migrate))
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	local.initialised = True
 
 
@@ -271,6 +396,7 @@ def connect(site: str | None = None, db_name: str | None = None, set_admin_as_us
 	if site:
 		init(site)
 
+<<<<<<< HEAD
 	assert db_name or local.conf.db_name, "site must be fully initialized, db_name missing"
 	assert local.conf.db_password, "site must be fully initialized, db_password missing"
 
@@ -282,6 +408,9 @@ def connect(site: str | None = None, db_name: str | None = None, set_admin_as_us
 		password=local.conf.db_password,
 		cur_db_name=local.conf.db_name or db_name,
 	)
+=======
+	local.db = get_db(user=db_name or local.conf.db_name)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if set_admin_as_user:
 		set_user("Administrator")
 
@@ -300,6 +429,7 @@ def connect_replica() -> bool:
 		user = local.conf.replica_db_name
 		password = local.conf.replica_db_password
 
+<<<<<<< HEAD
 	local.replica_db = get_db(
 		socket=None,
 		host=local.conf.replica_host,
@@ -308,6 +438,9 @@ def connect_replica() -> bool:
 		password=password,
 		cur_db_name=local.conf.db_name,
 	)
+=======
+	local.replica_db = get_db(host=local.conf.replica_host, user=user, password=password, port=port)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# swap db connections
 	local.primary_db = local.db
@@ -319,13 +452,27 @@ def connect_replica() -> bool:
 def get_site_config(sites_path: str | None = None, site_path: str | None = None) -> dict[str, Any]:
 	"""Returns `site_config.json` combined with `sites/common_site_config.json`.
 	`site_config` is a set of site wide settings like database name, password, email etc."""
+<<<<<<< HEAD
 	config = _dict()
+=======
+	config = {}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	sites_path = sites_path or getattr(local, "sites_path", None)
 	site_path = site_path or getattr(local, "site_path", None)
 
 	if sites_path:
+<<<<<<< HEAD
 		config.update(get_common_site_config(sites_path))
+=======
+		common_site_config = os.path.join(sites_path, "common_site_config.json")
+		if os.path.exists(common_site_config):
+			try:
+				config.update(get_file_json(common_site_config))
+			except Exception as error:
+				click.secho("common_site_config.json is invalid", fg="red")
+				print(error)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if site_path:
 		site_config = os.path.join(site_path, "site_config.json")
@@ -338,6 +485,7 @@ def get_site_config(sites_path: str | None = None, site_path: str | None = None)
 		elif local.site and not local.flags.new_site:
 			raise IncorrectSitePath(f"{local.site} does not exist")
 
+<<<<<<< HEAD
 	# Generalized env variable overrides and defaults
 	def db_default_ports(db_type):
 		from frappe.database.mariadb.database import MariaDBDatabase
@@ -392,15 +540,25 @@ def get_common_site_config(sites_path: str | None = None) -> dict[str, Any]:
 			click.secho("common_site_config.json is invalid", fg="red")
 			print(error)
 	return _dict()
+=======
+	return _dict(config)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_conf(site: str | None = None) -> dict[str, Any]:
 	if hasattr(local, "conf"):
 		return local.conf
 
+<<<<<<< HEAD
 	# if no site, get from common_site_config.json
 	with init_site(site):
 		return local.conf
+=======
+	else:
+		# if no site, get from common_site_config.json
+		with init_site(site):
+			return local.conf
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class init_site:
@@ -424,6 +582,7 @@ def destroy():
 	release_local(local)
 
 
+<<<<<<< HEAD
 def setup_redis_cache_connection():
 	"""Defines `frappe.cache` as `RedisWrapper` instance"""
 	global cache
@@ -432,6 +591,19 @@ def setup_redis_cache_connection():
 		from frappe.utils.redis_wrapper import setup_cache
 
 		cache = setup_cache()
+=======
+redis_server = None
+
+
+def cache() -> "RedisWrapper":
+	"""Returns redis connection."""
+	global redis_server
+	if not redis_server:
+		from frappe.utils.redis_wrapper import setup_cache
+
+		redis_server = setup_cache()
+	return redis_server
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_traceback(with_context: bool = False) -> str:
@@ -453,6 +625,7 @@ def errprint(msg: str) -> None:
 
 
 def print_sql(enable: bool = True) -> None:
+<<<<<<< HEAD
 	return cache.set_value("flag_print_sql", enable)
 
 
@@ -462,6 +635,18 @@ def log(msg: str) -> None:
 	:param msg: Message."""
 	if not request:
 		print(repr(msg))
+=======
+	return cache().set_value("flag_print_sql", enable)
+
+
+def log(msg: str) -> None:
+	"""Add to `debug_log`.
+
+	:param msg: Message."""
+	if not request:
+		if conf.get("logging") or False:
+			print(repr(msg))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	debug_log.append(as_unicode(msg))
 
@@ -510,12 +695,18 @@ def msgprint(
 	def _raise_exception():
 		if raise_exception:
 			if inspect.isclass(raise_exception) and issubclass(raise_exception, Exception):
+<<<<<<< HEAD
 				exc = raise_exception(msg)
 			else:
 				exc = ValidationError(msg)
 			if out.__frappe_exc_id:
 				exc.__frappe_exc_id = out.__frappe_exc_id
 			raise exc
+=======
+				raise raise_exception(msg)
+			else:
+				raise ValidationError(msg)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if flags.mute_messages:
 		_raise_exception()
@@ -552,7 +743,10 @@ def msgprint(
 
 	if raise_exception:
 		out.raise_exception = 1
+<<<<<<< HEAD
 		out.__frappe_exc_id = generate_hash()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if primary_action:
 		out.primary_action = primary_action
@@ -563,7 +757,15 @@ def msgprint(
 	if realtime:
 		publish_realtime(event="msgprint", message=out)
 	else:
+<<<<<<< HEAD
 		message_log.append(out)
+=======
+		message_log.append(json.dumps(out))
+
+	if raise_exception and hasattr(raise_exception, "__name__"):
+		local.response["exc_type"] = raise_exception.__name__
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	_raise_exception()
 
 
@@ -571,8 +773,17 @@ def clear_messages():
 	local.message_log = []
 
 
+<<<<<<< HEAD
 def get_message_log() -> list[dict]:
 	return [msg_out for msg_out in local.message_log]
+=======
+def get_message_log():
+	log = []
+	for msg_out in local.message_log:
+		log.append(json.loads(msg_out))
+
+	return log
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def clear_last_message():
@@ -702,8 +913,12 @@ def sendmail(
 	header=None,
 	print_letterhead=False,
 	with_container=False,
+<<<<<<< HEAD
 	email_read_tracker_url=None,
 ) -> Optional["EmailQueue"]:
+=======
+):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""Send email using user's default **Email Account** or global default **Email Account**.
 
 
@@ -784,11 +999,18 @@ def sendmail(
 		header=header,
 		print_letterhead=print_letterhead,
 		with_container=with_container,
+<<<<<<< HEAD
 		email_read_tracker_url=email_read_tracker_url,
 	)
 
 	# build email queue and send the email if send_now is True.
 	return builder.process(send_now=now)
+=======
+	)
+
+	# build email queue and send the email if send_now is True.
+	builder.process(send_now=now)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 whitelisted = []
@@ -816,6 +1038,7 @@ def whitelist(allow_guest=False, xss_safe=False, methods=None):
 		methods = ["GET", "POST", "PUT", "DELETE"]
 
 	def innerfn(fn):
+<<<<<<< HEAD
 		from frappe.utils.typing_validations import validate_argument_types
 
 		global whitelisted, guest_methods, xss_safe_methods, allowed_http_methods_for_whitelisted_func
@@ -823,14 +1046,23 @@ def whitelist(allow_guest=False, xss_safe=False, methods=None):
 		# validate argument types only if request is present
 		in_request_or_test = lambda: getattr(local, "request", None) or local.flags.in_test  # noqa: E731
 
+=======
+		global whitelisted, guest_methods, xss_safe_methods, allowed_http_methods_for_whitelisted_func
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		# get function from the unbound / bound method
 		# this is needed because functions can be compared, but not methods
 		method = None
 		if hasattr(fn, "__func__"):
+<<<<<<< HEAD
 			method = validate_argument_types(fn, apply_condition=in_request_or_test)
 			fn = method.__func__
 		else:
 			fn = validate_argument_types(fn, apply_condition=in_request_or_test)
+=======
+			method = fn
+			fn = method.__func__
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		whitelisted.append(fn)
 		allowed_http_methods_for_whitelisted_func[fn] = methods
@@ -927,7 +1159,11 @@ def only_for(roles: list[str] | tuple[str] | str, message=False):
 	if isinstance(roles, str):
 		roles = (roles,)
 
+<<<<<<< HEAD
 	if set(roles).isdisjoint(get_roles()):
+=======
+	if not set(roles).intersection(get_roles()):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if not message:
 			raise PermissionError
 
@@ -961,7 +1197,10 @@ def clear_cache(user: str | None = None, doctype: str | None = None):
 	:param doctype: If doctype is given, only DocType cache is cleared."""
 	import frappe.cache_manager
 	import frappe.utils.caching
+<<<<<<< HEAD
 	from frappe.website.router import clear_routing_cache
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if doctype:
 		frappe.cache_manager.clear_doctype_cache(doctype)
@@ -969,12 +1208,20 @@ def clear_cache(user: str | None = None, doctype: str | None = None):
 	elif user:
 		frappe.cache_manager.clear_user_cache(user)
 	else:  # everything
+<<<<<<< HEAD
 		# Delete ALL keys associated with this site.
 		keys_to_delete = set(frappe.cache.get_keys(""))
 		for key in frappe.get_hooks("persistent_cache_keys"):
 			keys_to_delete.difference_update(frappe.cache.get_keys(key))
 		frappe.cache.delete_value(list(keys_to_delete), make_keys=False)
 
+=======
+		from frappe import translate
+
+		frappe.cache_manager.clear_user_cache()
+		frappe.cache_manager.clear_domain_cache()
+		translate.clear_cache()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		reset_metadata_version()
 		local.cache = {}
 		local.new_doc_templates = {}
@@ -991,19 +1238,36 @@ def clear_cache(user: str | None = None, doctype: str | None = None):
 	if hasattr(local, "website_settings"):
 		del local.website_settings
 
+<<<<<<< HEAD
 	clear_routing_cache()
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def only_has_select_perm(doctype, user=None, ignore_permissions=False):
 	if ignore_permissions:
 		return False
 
+<<<<<<< HEAD
 	from frappe.permissions import get_role_permissions
 
 	user = user or local.session.user
 	permissions = get_role_permissions(doctype, user=user)
 
 	return permissions.get("select") and not permissions.get("read")
+=======
+	if not user:
+		user = local.session.user
+
+	import frappe.permissions
+
+	permissions = frappe.permissions.get_role_permissions(doctype, user=user)
+
+	if permissions.get("select") and not permissions.get("read"):
+		return True
+	else:
+		return False
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def has_permission(
@@ -1011,10 +1275,17 @@ def has_permission(
 	ptype="read",
 	doc=None,
 	user=None,
+<<<<<<< HEAD
 	throw=False,
 	*,
 	parent_doctype=None,
 	debug=False,
+=======
+	verbose=False,
+	throw=False,
+	*,
+	parent_doctype=None,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 ):
 	"""
 	Returns True if the user has permission `ptype` for given `doctype` or `doc`
@@ -1024,6 +1295,10 @@ def has_permission(
 	:param ptype: Permission type (`read`, `write`, `create`, `submit`, `cancel`, `amend`). Default: `read`.
 	:param doc: [optional] Checks User permissions for given doc.
 	:param user: [optional] Check for given user. Default: current user.
+<<<<<<< HEAD
+=======
+	:param verbose: DEPRECATED, will be removed in a future release.
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	:param parent_doctype: Required when checking permission for a child DocType (unless doc is specified).
 	"""
 	import frappe.permissions
@@ -1038,7 +1313,10 @@ def has_permission(
 		user=user,
 		raise_exception=throw,
 		parent_doctype=parent_doctype,
+<<<<<<< HEAD
 		debug=debug,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	)
 
 	if throw and not out:
@@ -1094,7 +1372,11 @@ def is_table(doctype: str) -> bool:
 	def get_tables():
 		return db.get_values("DocType", filters={"istable": 1}, order_by=None, pluck=True)
 
+<<<<<<< HEAD
 	tables = cache.get_value("is_table", get_tables)
+=======
+	tables = cache().get_value("is_table", get_tables)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return doctype in tables
 
 
@@ -1121,22 +1403,33 @@ def generate_hash(txt: str | None = None, length: int = 56) -> str:
 def reset_metadata_version():
 	"""Reset `metadata_version` (Client (Javascript) build ID) hash."""
 	v = generate_hash()
+<<<<<<< HEAD
 	cache.set_value("metadata_version", v)
+=======
+	cache().set_value("metadata_version", v)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return v
 
 
 def new_doc(
 	doctype: str,
+<<<<<<< HEAD
 	*,
 	parent_doc: Optional["Document"] = None,
 	parentfield: str | None = None,
 	as_dict: bool = False,
 	**kwargs,
+=======
+	parent_doc: Optional["Document"] = None,
+	parentfield: str | None = None,
+	as_dict: bool = False,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 ) -> "Document":
 	"""Returns a new document of the given DocType with defaults set.
 
 	:param doctype: DocType of the new document.
 	:param parent_doc: [optional] add to parent document.
+<<<<<<< HEAD
 	:param parentfield: [optional] add against this `parentfield`.
 	:param as_dict: [optional] return as dictionary instead of Document.
 	:param kwargs: [optional] You can specify fields as field=value pairs in function call.
@@ -1147,6 +1440,12 @@ def new_doc(
 	new_doc = get_new_doc(doctype, parent_doc, parentfield, as_dict=as_dict)
 
 	return new_doc.update(kwargs)
+=======
+	:param parentfield: [optional] add against this `parentfield`."""
+	from frappe.model.create_new import get_new_doc
+
+	return get_new_doc(doctype, parent_doc, parentfield, as_dict=as_dict)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def set_value(doctype, docname, fieldname, value=None):
@@ -1157,10 +1456,32 @@ def set_value(doctype, docname, fieldname, value=None):
 
 
 def get_cached_doc(*args, **kwargs) -> "Document":
+<<<<<<< HEAD
 	if (key := can_cache_doc(args)) and (doc := cache.get_value(key)):
 		return doc
 
 	# Not found in cache, fetch from DB
+=======
+	def _respond(doc, from_redis=False):
+		if isinstance(doc, dict):
+			local.document_cache[key] = doc = get_doc(doc)
+
+		elif from_redis:
+			local.document_cache[key] = doc
+
+		return doc
+
+	if key := can_cache_doc(args):
+		# local cache - has "ready" `Document` objects
+		if doc := local.document_cache.get(key):
+			return _respond(doc)
+
+		# redis cache
+		if doc := cache().hget("document_cache", key):
+			return _respond(doc, True)
+
+	# Not found in local/redis, fetch from DB
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	doc = get_doc(*args, **kwargs)
 
 	# Store in cache
@@ -1173,7 +1494,18 @@ def get_cached_doc(*args, **kwargs) -> "Document":
 
 
 def _set_document_in_cache(key: str, doc: "Document") -> None:
+<<<<<<< HEAD
 	cache.set_value(key, doc)
+=======
+	local.document_cache[key] = doc
+
+	# Avoid setting in local.cache since we're already using local.document_cache above
+	# Try pickling the doc object as-is first, else fallback to doc.as_dict()
+	try:
+		cache().hset("document_cache", key, doc, cache_locally=False)
+	except Exception:
+		cache().hset("document_cache", key, doc.as_dict(), cache_locally=False)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def can_cache_doc(args) -> str | None:
@@ -1194,6 +1526,7 @@ def can_cache_doc(args) -> str | None:
 
 
 def get_document_cache_key(doctype: str, name: str):
+<<<<<<< HEAD
 	return f"document_cache::{doctype}::{name}"
 
 
@@ -1212,6 +1545,19 @@ def clear_document_cache(doctype: str, name: str | None = None) -> None:
 	if doctype == "System Settings" and hasattr(local, "system_settings"):
 		delattr(local, "system_settings")
 
+=======
+	return f"{doctype}::{name}"
+
+
+def clear_document_cache(doctype, name):
+	cache().hdel("last_modified", doctype)
+	key = get_document_cache_key(doctype, name)
+	if key in local.document_cache:
+		del local.document_cache[key]
+	cache().hdel("document_cache", key)
+	if doctype == "System Settings" and hasattr(local, "system_settings"):
+		delattr(local, "system_settings")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if doctype == "Website Settings" and hasattr(local, "website_settings"):
 		delattr(local, "website_settings")
 
@@ -1234,6 +1580,7 @@ def get_cached_value(doctype: str, name: str, fieldname: str = "name", as_dict: 
 	return values
 
 
+<<<<<<< HEAD
 _SingleDocument: TypeAlias = "Document"
 _NewDocument: TypeAlias = "Document"
 
@@ -1270,6 +1617,9 @@ def get_doc(documentdict: dict) -> "_NewDocument":
 
 
 def get_doc(*args, **kwargs):
+=======
+def get_doc(*args, **kwargs) -> "Document":
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""Return a `frappe.model.document.Document` object of the given type and name.
 
 	:param arg1: DocType name as string **or** document JSON.
@@ -1290,7 +1640,11 @@ def get_doc(*args, **kwargs):
 	doc = frappe.model.document.get_doc(*args, **kwargs)
 
 	# Replace cache if stale one exists
+<<<<<<< HEAD
 	if not kwargs.get("for_update") and (key := can_cache_doc(args)) and cache.exists(key):
+=======
+	if (key := can_cache_doc(args)) and cache().hexists("document_cache", key):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		_set_document_in_cache(key, doc)
 
 	return doc
@@ -1462,6 +1816,7 @@ def get_app_path(app_name, *joins):
 	return get_pymodule_path(app_name, *joins)
 
 
+<<<<<<< HEAD
 def get_app_source_path(app_name, *joins):
 	"""Return source path of given app.
 
@@ -1470,13 +1825,19 @@ def get_app_source_path(app_name, *joins):
 	return get_app_path(app_name, "..", *joins)
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def get_site_path(*joins):
 	"""Return path of current site.
 
 	:param *joins: Join additional path elements using `os.path.join`."""
+<<<<<<< HEAD
 	from os.path import join
 
 	return join(local.site_path, *joins)
+=======
+	return os.path.join(local.site_path, *joins)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_pymodule_path(modulename, *joins):
@@ -1484,17 +1845,27 @@ def get_pymodule_path(modulename, *joins):
 
 	:param modulename: Python module name.
 	:param *joins: Join additional path elements using `os.path.join`."""
+<<<<<<< HEAD
 	from os.path import abspath, dirname, join
 
 	if "public" not in joins:
 		joins = [scrub(part) for part in joins]
 
 	return abspath(join(dirname(get_module(scrub(modulename)).__file__ or ""), *joins))
+=======
+	if "public" not in joins:
+		joins = [scrub(part) for part in joins]
+	return os.path.join(os.path.dirname(get_module(scrub(modulename)).__file__ or ""), *joins)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_module_list(app_name):
 	"""Get list of modules for given all via `app/modules.txt`."""
+<<<<<<< HEAD
 	return get_file_items(get_app_path(app_name, "modules.txt"))
+=======
+	return get_file_items(os.path.join(os.path.dirname(get_module(app_name).__file__), "modules.txt"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_all_apps(with_internal_apps=True, sites_path=None):
@@ -1517,12 +1888,25 @@ def get_all_apps(with_internal_apps=True, sites_path=None):
 
 
 @request_cache
+<<<<<<< HEAD
 def get_installed_apps(*, _ensure_on_bench=False) -> list[str]:
 	"""
 	Get list of installed apps in current site.
 
 	:param _ensure_on_bench: Only return apps that are present on bench.
 	"""
+=======
+def get_installed_apps(sort=False, frappe_last=False, *, _ensure_on_bench=False):
+	"""
+	Get list of installed apps in current site.
+
+	:param sort: [DEPRECATED] Sort installed apps based on the sequence in sites/apps.txt
+	:param frappe_last: [DEPRECATED] Keep frappe last. Do not use this, reverse the app list instead.
+	:param ensure_on_bench: Only return apps that are present on bench.
+	"""
+	from frappe.utils.deprecations import deprecation_warning
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if getattr(flags, "in_install_db", True):
 		return []
 
@@ -1531,10 +1915,30 @@ def get_installed_apps(*, _ensure_on_bench=False) -> list[str]:
 
 	installed = json.loads(db.get_global("installed_apps") or "[]")
 
+<<<<<<< HEAD
 	if _ensure_on_bench:
 		all_apps = cache.get_value("all_apps", get_all_apps)
 		installed = [app for app in installed if app in all_apps]
 
+=======
+	if sort:
+		if not local.all_apps:
+			local.all_apps = cache().get_value("all_apps", get_all_apps)
+
+		deprecation_warning("`sort` argument is deprecated and will be removed in v15.")
+		installed = [app for app in local.all_apps if app in installed]
+
+	if _ensure_on_bench:
+		all_apps = cache().get_value("all_apps", get_all_apps)
+		installed = [app for app in installed if app in all_apps]
+
+	if frappe_last:
+		deprecation_warning("`frappe_last` argument is deprecated and will be removed in v15.")
+		if "frappe" in installed:
+			installed.remove("frappe")
+		installed.append("frappe")
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return installed
 
 
@@ -1597,7 +2001,11 @@ def get_hooks(
 		if conf.developer_mode:
 			hooks = _dict(_load_app_hooks())
 		else:
+<<<<<<< HEAD
 			hooks = _dict(cache.get_value("app_hooks", _load_app_hooks))
+=======
+			hooks = _dict(cache().get_value("app_hooks", _load_app_hooks))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if hook:
 		return hooks.get(hook, ([] if default == "_KEEP_DEFAULT_LIST" else default))
@@ -1625,6 +2033,7 @@ def append_hook(target, key, value):
 		target[key].extend(value)
 
 
+<<<<<<< HEAD
 def setup_module_map(include_all_apps: bool = True) -> None:
 	"""
 	Function to rebuild map of all modules
@@ -1665,6 +2074,28 @@ def setup_module_map(include_all_apps: bool = True) -> None:
 					stacklevel=1,
 				)
 			local.module_app[module] = app
+=======
+def setup_module_map():
+	"""Rebuild map of all modules (internal)."""
+	_cache = cache()
+
+	if conf.db_name:
+		local.app_modules = _cache.get_value("app_modules")
+		local.module_app = _cache.get_value("module_app")
+
+	if not (local.app_modules and local.module_app):
+		local.module_app, local.app_modules = {}, {}
+		for app in get_all_apps(with_internal_apps=True):
+			local.app_modules.setdefault(app, [])
+			for module in get_module_list(app):
+				module = scrub(module)
+				local.module_app[module] = app
+				local.app_modules[app].append(module)
+
+		if conf.db_name:
+			_cache.set_value("app_modules", local.app_modules)
+			_cache.set_value("module_app", local.module_app)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_file_items(path, raise_not_found=False, ignore_empty_lines=True):
@@ -1740,6 +2171,7 @@ def get_newargs(fn: Callable, kwargs: dict[str, Any]) -> dict[str, Any]:
 	# Ref: https://docs.python.org/3/library/inspect.html#inspect.Parameter.kind
 	varkw_exist = False
 
+<<<<<<< HEAD
 	signature = inspect.signature(fn)
 	fnargs = list(signature.parameters)
 
@@ -1748,6 +2180,19 @@ def get_newargs(fn: Callable, kwargs: dict[str, Any]) -> dict[str, Any]:
 			varkw_exist = True
 			fnargs.remove(param_name)
 			break
+=======
+	if hasattr(fn, "fnargs"):
+		fnargs = fn.fnargs
+	else:
+		signature = inspect.signature(fn)
+		fnargs = list(signature.parameters)
+
+		for param_name, parameter in signature.parameters.items():
+			if parameter.kind == inspect.Parameter.VAR_KEYWORD:
+				varkw_exist = True
+				fnargs.remove(param_name)
+				break
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	newargs = {}
 	for a in kwargs:
@@ -1862,6 +2307,30 @@ def copy_doc(doc: "Document", ignore_no_copy: bool = True) -> "Document":
 	return newdoc
 
 
+<<<<<<< HEAD
+=======
+def compare(val1, condition, val2):
+	"""Compare two values using `frappe.utils.compare`
+
+	`condition` could be:
+	- "^"
+	- "in"
+	- "not in"
+	- "="
+	- "!="
+	- ">"
+	- "<"
+	- ">="
+	- "<="
+	- "not None"
+	- "None"
+	"""
+	import frappe.utils
+
+	return frappe.utils.compare(val1, condition, val2)
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def respond_as_web_page(
 	title,
 	html,
@@ -1948,7 +2417,11 @@ def redirect_to_message(title, html, http_status_code=None, context=None, indica
 	if indicator_color:
 		message["context"].update({"indicator_color": indicator_color})
 
+<<<<<<< HEAD
 	cache.set_value(f"message_id:{message_id}", message, expires_in_sec=60)
+=======
+	cache().set_value(f"message_id:{message_id}", message, expires_in_sec=60)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	location = f"/message?id={message_id}"
 
 	if not getattr(local, "is_ajax", False):
@@ -1983,6 +2456,12 @@ def get_list(doctype, *args, **kwargs):
 
 	        # filter as a list of lists
 	        frappe.get_list("ToDo", fields="*", filters = [["modified", ">", "2014-01-01"]])
+<<<<<<< HEAD
+=======
+
+	        # filter as a list of dicts
+	        frappe.get_list("ToDo", fields="*", filters = {"description": ("like", "test%")})
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""
 	import frappe.model.db_query
 
@@ -2007,6 +2486,12 @@ def get_all(doctype, *args, **kwargs):
 
 	        # filter as a list of lists
 	        frappe.get_all("ToDo", fields=["*"], filters = [["modified", ">", "2014-01-01"]])
+<<<<<<< HEAD
+=======
+
+	        # filter as a list of dicts
+	        frappe.get_all("ToDo", fields=["*"], filters = {"description": ("like", "test%")})
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""
 	kwargs["ignore_permissions"] = True
 	if "limit_page_length" not in kwargs:
@@ -2029,13 +2514,18 @@ def get_value(*args, **kwargs):
 	return db.get_value(*args, **kwargs)
 
 
+<<<<<<< HEAD
 def as_json(obj: dict | list, indent=1, separators=None, ensure_ascii=True) -> str:
+=======
+def as_json(obj: dict | list, indent=1, separators=None) -> str:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	from frappe.utils.response import json_handler
 
 	if separators is None:
 		separators = (",", ": ")
 
 	try:
+<<<<<<< HEAD
 		return json.dumps(
 			obj,
 			indent=indent,
@@ -2044,10 +2534,14 @@ def as_json(obj: dict | list, indent=1, separators=None, ensure_ascii=True) -> s
 			separators=separators,
 			ensure_ascii=ensure_ascii,
 		)
+=======
+		return json.dumps(obj, indent=indent, sort_keys=True, default=json_handler, separators=separators)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	except TypeError:
 		# this would break in case the keys are not all os "str" type - as defined in the JSON
 		# adding this to ensure keys are sorted (expected behaviour)
 		sorted_obj = dict(sorted(obj.items(), key=lambda kv: str(kv[0])))
+<<<<<<< HEAD
 		return json.dumps(
 			sorted_obj,
 			indent=indent,
@@ -2055,6 +2549,9 @@ def as_json(obj: dict | list, indent=1, separators=None, ensure_ascii=True) -> s
 			separators=separators,
 			ensure_ascii=ensure_ascii,
 		)
+=======
+		return json.dumps(sorted_obj, indent=indent, default=json_handler, separators=separators)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def are_emails_muted():
@@ -2100,6 +2597,10 @@ def get_print(
 	name=None,
 	print_format=None,
 	style=None,
+<<<<<<< HEAD
+=======
+	html=None,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	as_pdf=False,
 	doc=None,
 	output=None,
@@ -2117,6 +2618,7 @@ def get_print(
 	:param as_pdf: Return as PDF. Default False.
 	:param password: Password to encrypt the pdf with. Default None"""
 	from frappe.utils.pdf import get_pdf
+<<<<<<< HEAD
 	from frappe.website.serve import get_response_without_exception_handling
 
 	original_form_dict = copy.deepcopy(local.form_dict)
@@ -2137,6 +2639,24 @@ def get_print(
 		html = str(response.data, "utf-8")
 	finally:
 		local.form_dict = original_form_dict
+=======
+	from frappe.website.serve import get_response_content
+
+	local.form_dict.doctype = doctype
+	local.form_dict.name = name
+	local.form_dict.format = print_format
+	local.form_dict.style = style
+	local.form_dict.doc = doc
+	local.form_dict.no_letterhead = no_letterhead
+	local.form_dict.letterhead = letterhead
+
+	pdf_options = pdf_options or {}
+	if password:
+		pdf_options["password"] = password
+
+	if not html:
+		html = get_response_content("printview")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return get_pdf(html, options=pdf_options, output=output) if as_pdf else html
 
@@ -2163,6 +2683,10 @@ def attach_print(
 	kwargs = dict(
 		print_format=print_format,
 		style=style,
+<<<<<<< HEAD
+=======
+		html=html,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		doc=doc,
 		no_letterhead=not print_letterhead,
 		letterhead=letterhead,
@@ -2312,6 +2836,40 @@ def logger(module=None, with_more_info=False, allow_site=True, filter=None, max_
 	)
 
 
+<<<<<<< HEAD
+=======
+def log_error(title=None, message=None, reference_doctype=None, reference_name=None):
+	"""Log error to Error Log"""
+	# Parameter ALERT:
+	# the title and message may be swapped
+	# the better API for this is log_error(title, message), and used in many cases this way
+	# this hack tries to be smart about whats a title (single line ;-)) and fixes it
+
+	traceback = None
+	if message:
+		if "\n" in title:  # traceback sent as title
+			traceback, title = title, message
+		else:
+			traceback = message
+
+	title = title or "Error"
+	traceback = as_unicode(traceback or get_traceback(with_context=True))
+
+	error_log = get_doc(
+		doctype="Error Log",
+		error=traceback,
+		method=title,
+		reference_doctype=reference_doctype,
+		reference_name=reference_name,
+	)
+
+	if flags.read_only:
+		error_log.deferred_insert()
+	else:
+		return error_log.insert(ignore_permissions=True)
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def get_desk_link(doctype, name):
 	meta = get_meta(doctype)
 	title = get_value(doctype, name, meta.get_title_field())
@@ -2494,8 +3052,11 @@ def _register_fault_handler():
 		faulthandler.register(signal.SIGUSR1, file=sys.__stderr__)
 
 
+<<<<<<< HEAD
 from frappe.utils.error import log_error
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 if _tune_gc:
 	# generational GC gets triggered after certain allocs (g0) which is 700 by default.
 	# This number is quite small for frappe where a single query can potentially create 700+
@@ -2504,6 +3065,9 @@ if _tune_gc:
 	# everything else.
 	g0, g1, g2 = gc.get_threshold()  # defaults are 700, 10, 10.
 	gc.set_threshold(g0 * 10, g1 * 2, g2 * 2)
+<<<<<<< HEAD
 
 # Remove references to pattern that are pre-compiled and loaded to global scopes.
 re.purge()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

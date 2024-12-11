@@ -50,10 +50,17 @@ frappe.get_indicator = function (doc, doctype, show_workflow_state) {
 	) {
 		var value = doc[workflow_fieldname];
 		if (value) {
+<<<<<<< HEAD
 			let colour = "";
 
 			if (locals["Workflow State"][value] && locals["Workflow State"][value].style) {
 				colour = {
+=======
+			var colour = "";
+
+			if (locals["Workflow State"][value] && locals["Workflow State"][value].style) {
+				var colour = {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					Success: "green",
 					Warning: "orange",
 					Danger: "red",

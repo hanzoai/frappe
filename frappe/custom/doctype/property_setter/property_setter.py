@@ -9,6 +9,7 @@ not_allowed_fieldtype_change = ["naming_series"]
 
 
 class PropertySetter(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -31,6 +32,8 @@ class PropertySetter(Document):
 		value: DF.SmallText | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def autoname(self):
 		self.name = "{doctype}-{field}-{property}".format(
 			doctype=self.doc_type, field=self.field_name or self.row_name or "main", property=self.property

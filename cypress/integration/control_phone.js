@@ -57,7 +57,11 @@ context("Control Phone", () => {
 
 		let search_text = "india";
 		cy.get(".selected-phone").click().first();
+<<<<<<< HEAD
 		cy.get(".phone-picker").get(".search-phones").click().type(search_text);
+=======
+		cy.get(".phone-picker").findByRole("searchbox").click().type(search_text);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		cy.get(".phone-section .phone-wrapper:not(.hidden)").then((i) => {
 			cy.get(`.phone-section .phone-wrapper[id*="${search_text.toLowerCase()}"]`).then(
 				(countries) => {

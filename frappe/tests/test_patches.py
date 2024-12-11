@@ -4,6 +4,10 @@ from unittest.mock import mock_open, patch
 import frappe
 from frappe.modules import patch_handler
 from frappe.tests.utils import FrappeTestCase
+<<<<<<< HEAD
+=======
+from frappe.utils import get_bench_path
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 EMTPY_FILE = ""
 EMTPY_SECTION = """
@@ -168,9 +172,17 @@ def check_patch_files(app):
 
 
 def _get_dotted_path(file: Path, app) -> str:
+<<<<<<< HEAD
 	app_path = Path(frappe.get_app_path(app))
+=======
+	app_path = Path(get_bench_path()) / "apps" / app
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	*path, filename = file.relative_to(app_path).parts
 	base_filename = Path(filename).stem
 
+<<<<<<< HEAD
 	return ".".join([app, *path, base_filename])
+=======
+	return ".".join([*path, base_filename])
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -63,6 +63,7 @@
    "link_fieldname": "blogger"
   }
  ],
+<<<<<<< HEAD
  "make_attachments_public": 1,
  "max_attachments": 1,
  "modified": "2022-10-18 15:44:31.473178",
@@ -70,6 +71,13 @@
  "module": "Website",
  "name": "Blogger",
  "naming_rule": "By fieldname",
+=======
+ "max_attachments": 1,
+ "modified": "2020-05-28 19:22:40.959895",
+ "modified_by": "Administrator",
+ "module": "Website",
+ "name": "Blogger",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "owner": "Administrator",
  "permissions": [
   {
@@ -82,6 +90,10 @@
    "read": 1,
    "report": 1,
    "role": "Website Manager",
+<<<<<<< HEAD
+=======
+   "set_user_permissions": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "share": 1,
    "write": 1
   },
@@ -96,7 +108,13 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+<<<<<<< HEAD
  "states": [],
  "title_field": "full_name",
  "track_changes": 1
 }
+=======
+ "title_field": "full_name",
+ "track_changes": 1
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

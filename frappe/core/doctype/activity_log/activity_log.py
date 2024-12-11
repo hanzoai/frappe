@@ -10,6 +10,7 @@ from frappe.utils import get_fullname, now
 
 
 class ActivityLog(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -35,6 +36,8 @@ class ActivityLog(Document):
 		user: DF.Link | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def before_insert(self):
 		self.full_name = get_fullname(self.user)
 		self.date = now()

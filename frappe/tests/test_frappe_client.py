@@ -2,11 +2,16 @@
 # License: MIT. See LICENSE
 
 import base64
+<<<<<<< HEAD
+=======
+import unittest
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import requests
 
 import frappe
 from frappe.core.doctype.user.user import generate_keys
+<<<<<<< HEAD
 from frappe.frappeclient import FrappeClient, FrappeException
 from frappe.model import default_fields
 from frappe.tests.utils import FrappeTestCase
@@ -45,6 +50,56 @@ class TestFrappeClient(FrappeTestCase):
 
 		self.assertEqual(response.get("doctype"), "Note")
 		self.assertEqual(response.get("title"), "test_create")
+=======
+from frappe.frappeclient import AuthError, FrappeClient, FrappeException
+from frappe.utils.data import get_url
+
+
+class TestFrappeClient(unittest.TestCase):
+	PASSWORD = frappe.conf.admin_password or "admin"
+
+	@classmethod
+	def setUpClass(cls) -> None:
+		site_url = get_url()
+		try:
+			FrappeClient(site_url, "Administrator", cls.PASSWORD, verify=False)
+		except AuthError:
+			raise unittest.SkipTest(
+				f"AuthError raised for {site_url} [usr=Administrator, pwd={cls.PASSWORD}]"
+			)
+
+		return super().setUpClass()
+
+	def test_insert_many(self):
+		server = FrappeClient(get_url(), "Administrator", self.PASSWORD, verify=False)
+		frappe.db.delete("Note", {"title": ("in", ("Sing", "a", "song", "of", "sixpence"))})
+		frappe.db.commit()
+
+		server.insert_many(
+			[
+				{"doctype": "Note", "public": True, "title": "Sing"},
+				{"doctype": "Note", "public": True, "title": "a"},
+				{"doctype": "Note", "public": True, "title": "song"},
+				{"doctype": "Note", "public": True, "title": "of"},
+				{"doctype": "Note", "public": True, "title": "sixpence"},
+			]
+		)
+
+		self.assertTrue(frappe.db.get_value("Note", {"title": "Sing"}))
+		self.assertTrue(frappe.db.get_value("Note", {"title": "a"}))
+		self.assertTrue(frappe.db.get_value("Note", {"title": "song"}))
+		self.assertTrue(frappe.db.get_value("Note", {"title": "of"}))
+		self.assertTrue(frappe.db.get_value("Note", {"title": "sixpence"}))
+
+	def test_create_doc(self):
+		server = FrappeClient(get_url(), "Administrator", self.PASSWORD, verify=False)
+		frappe.db.delete("Note", {"title": "test_create"})
+		frappe.db.commit()
+
+		server.insert({"doctype": "Note", "public": True, "title": "test_create"})
+
+		self.assertTrue(frappe.db.get_value("Note", {"title": "test_create"}))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_list_docs(self):
 		server = FrappeClient(get_url(), "Administrator", self.PASSWORD, verify=False)
@@ -53,6 +108,7 @@ class TestFrappeClient(FrappeTestCase):
 		self.assertTrue(len(doc_list))
 
 	def test_get_doc(self):
+<<<<<<< HEAD
 		USER = "Administrator"
 		TITLE = "get_this"
 		DOCTYPE = "Note"
@@ -86,6 +142,39 @@ class TestFrappeClient(FrappeTestCase):
 	def test_get_value_with_malicious_query(self):
 		server = FrappeClient(get_url(), "Administrator", self.PASSWORD, verify=False)
 		server.insert({"doctype": "Note", "title": "get_value"})
+=======
+		server = FrappeClient(get_url(), "Administrator", self.PASSWORD, verify=False)
+		frappe.db.delete("Note", {"title": "get_this"})
+		frappe.db.commit()
+
+		server.insert_many(
+			[
+				{"doctype": "Note", "public": True, "title": "get_this"},
+			]
+		)
+		doc = server.get_doc("Note", "get_this")
+		self.assertTrue(doc)
+
+	def test_get_value(self):
+		server = FrappeClient(get_url(), "Administrator", self.PASSWORD, verify=False)
+		frappe.db.delete("Note", {"title": "get_value"})
+		frappe.db.commit()
+
+		test_content = "test get value"
+
+		server.insert_many(
+			[
+				{"doctype": "Note", "public": True, "title": "get_value", "content": test_content},
+			]
+		)
+		self.assertEqual(
+			server.get_value("Note", "content", {"title": "get_value"}).get("content"), test_content
+		)
+		name = server.get_value("Note", "name", {"title": "get_value"}).get("name")
+
+		# test by name
+		self.assertEqual(server.get_value("Note", "content", name).get("content"), test_content)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.assertRaises(
 			FrappeException,
@@ -105,6 +194,7 @@ class TestFrappeClient(FrappeTestCase):
 		self.assertEqual(
 			server.get_value("Website Settings", "title_prefix").get("title_prefix"), "test-prefix"
 		)
+<<<<<<< HEAD
 		frappe.db.set_single_value("Website Settings", "title_prefix", "")
 
 	def test_update_doc(self):
@@ -116,6 +206,21 @@ class TestFrappeClient(FrappeTestCase):
 		doc["content"] = CONTENT
 		doc = server.update(doc)
 		self.assertTrue(doc["content"] == CONTENT)
+=======
+		frappe.db.set_value("Website Settings", None, "title_prefix", "")
+
+	def test_update_doc(self):
+		server = FrappeClient(get_url(), "Administrator", self.PASSWORD, verify=False)
+		frappe.db.delete("Note", {"title": ("in", ("Sing", "sing"))})
+		frappe.db.commit()
+
+		server.insert({"doctype": "Note", "public": True, "title": "Sing"})
+		doc = server.get_doc("Note", "Sing")
+		changed_title = "sing"
+		doc["title"] = changed_title
+		doc = server.update(doc)
+		self.assertTrue(doc["title"] == changed_title)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_update_child_doc(self):
 		server = FrappeClient(get_url(), "Administrator", self.PASSWORD, verify=False)
@@ -161,9 +266,23 @@ class TestFrappeClient(FrappeTestCase):
 
 	def test_delete_doc(self):
 		server = FrappeClient(get_url(), "Administrator", self.PASSWORD, verify=False)
+<<<<<<< HEAD
 		NAME_TO_DELETE = server.insert({"doctype": "Note", "title": "Sing"}).get("name")
 		server.delete("Note", NAME_TO_DELETE)
 		self.assertFalse(frappe.db.get_value("Note", NAME_TO_DELETE))
+=======
+		frappe.db.delete("Note", {"title": "delete"})
+		frappe.db.commit()
+
+		server.insert_many(
+			[
+				{"doctype": "Note", "public": True, "title": "delete"},
+			]
+		)
+		server.delete("Note", "delete")
+
+		self.assertFalse(frappe.db.get_value("Note", {"title": "delete"}))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_auth_via_api_key_secret(self):
 		# generate API key and API secret for administrator

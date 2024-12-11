@@ -15,7 +15,10 @@
 
 .kanban {
 	display: flex;
+<<<<<<< HEAD
 	gap: 0.5em;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	overflow-y: hidden;
 
 	-ms-overflow-style: none; /* IE and Edge */
@@ -28,17 +31,30 @@
 	.kanban-column {
 		@include transition();
 
+<<<<<<< HEAD
 		flex: 1 0 260px;
 		border-radius: var(--border-radius);
 		padding: var(--padding-md);
 		min-height: calc(100vh - 150px);
+=======
+		flex: 0 0 260px;
+		max-width: 260px;
+		border-radius: var(--border-radius);
+		padding: var(--padding-md);
+		min-height: calc(100vh - 250px);
+		max-height: calc(100vh - var(--navbar-height) - var(--page-bottom-margin) - 80px);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		.add-card {
 			@include flex(flex, center, center, null);
 			@include transition();
 
 			color: var(--text-light);
+<<<<<<< HEAD
 			background-color: var(--bg-color);
+=======
+			background-color: var(--kanban-new-card-bg);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			height: 27px;
 			font-size: var(--text-md);
 			margin-bottom: var(--margin-sm);
@@ -77,7 +93,11 @@
 			font-size: 12px;
 			// align-items: center;
 			.indicator-pill {
+<<<<<<< HEAD
 				padding: 2px 7px;
+=======
+				padding: 2px 8px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				width: 20px;
 				height: 20px;
 
@@ -104,21 +124,40 @@
 					margin: 0;
 				}
 			}
+<<<<<<< HEAD
+=======
+
+			&:hover {
+				cursor: pointer;
+			}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		.kanban-column-title {
 			@include flex(flex, null, center, null);
 
+<<<<<<< HEAD
 			@include get_textstyle("lg", "regular");
 			color: var(--text-color);
+=======
+			font-size: var(--text-lg);
+			color: var(--text-color);
+			font-weight: normal;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			padding-right: var(--padding-xs);
 			max-width: 100%;
 
 			// margin-left: 10px;
 			.kanban-title {
+<<<<<<< HEAD
 				@include get_textstyle("lg", "semibold");
 				margin-left: var(--margin-sm);
 				cursor: grab;
+=======
+				font-size: var(--text-lg);
+				margin-left: var(--margin-sm);
+				font-weight: var(--text-bold, 600);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		}
 
@@ -157,8 +196,11 @@
 					margin-top: var(--margin-sm);
 					min-height: 100px;
 					@include card($padding: 0, $background-color: var(--kanban-card-bg));
+<<<<<<< HEAD
 					box-shadow: none;
 					border: 1px solid var(--border-color);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 					.kanban-image {
 						height: 125px;
@@ -178,7 +220,11 @@
 
 					.kanban-card-body {
 						cursor: grab;
+<<<<<<< HEAD
 						padding: var(--padding-md);
+=======
+						padding: var(--padding-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 						.kanban-title-area {
 							margin-bottom: 12px;
@@ -211,7 +257,11 @@
 							}
 
 							.kanban-tags {
+<<<<<<< HEAD
 								@include get_textstyle("sm", "regular");
+=======
+								font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 								margin-bottom: 8px;
 
 								.tag-pill {
@@ -314,7 +364,11 @@
 			min-height: 65px;
 			border-radius: var(--border-radius);
 			border: 1px dashed var(--gray-400);
+<<<<<<< HEAD
 			@include get_textstyle("base", "regular");
+=======
+			font-size: var(--text-base);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			&:hover {
 				background-color: var(--kanban-column-bg);

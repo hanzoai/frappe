@@ -1,4 +1,8 @@
 import hashlib
+<<<<<<< HEAD
+=======
+import imghdr
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import mimetypes
 import os
 import re
@@ -7,7 +11,13 @@ from io import BytesIO
 from typing import TYPE_CHECKING, Optional
 from urllib.parse import unquote
 
+<<<<<<< HEAD
 import filetype
+=======
+import requests
+import requests.exceptions
+from PIL import Image
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 from frappe import _, safe_decode
@@ -74,18 +84,27 @@ def get_extension(
 
 		mimetype = mimetypes.guess_type(filename + "." + extn)[0]
 
+<<<<<<< HEAD
 	if mimetype is None and extn is None and content:
 		# detect file extension by using filetype matchers
 		_type_info = filetype.match(content)
 		if _type_info:
 			extn = _type_info.extension
+=======
+	if mimetype is None or not mimetype.startswith("image/") and content:
+		# detect file extension by reading image header properties
+		extn = imghdr.what(filename + "." + (extn or ""), h=content)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return extn
 
 
 def get_local_image(file_url: str) -> tuple["ImageFile", str, str]:
+<<<<<<< HEAD
 	from PIL import Image
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if file_url.startswith("/private"):
 		file_url_path = (file_url.lstrip("/"),)
 	else:
@@ -116,10 +135,14 @@ def get_local_image(file_url: str) -> tuple["ImageFile", str, str]:
 
 
 def get_web_image(file_url: str) -> tuple["ImageFile", str, str]:
+<<<<<<< HEAD
 	import requests
 	import requests.exceptions
 	from PIL import Image
 
+=======
+	# download
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	file_url = frappe.utils.get_url(file_url)
 	r = requests.get(file_url, stream=True)
 	try:
@@ -187,7 +210,11 @@ def remove_file_by_url(file_url: str, doctype: str | None = None, name: str | No
 def get_content_hash(content: bytes | str) -> str:
 	if isinstance(content, str):
 		content = content.encode()
+<<<<<<< HEAD
 	return hashlib.md5(content, usedforsecurity=False).hexdigest()  # nosec
+=======
+	return hashlib.md5(content).hexdigest()  # nosec
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def generate_file_name(name: str, suffix: str | None = None, is_private: bool = False) -> str:
@@ -375,15 +402,26 @@ def attach_files_to_document(doc: "Document", event) -> None:
 
 
 def relink_files(doc, fieldname, temp_doc_name):
+<<<<<<< HEAD
 	"""
 	Relink files attached to incorrect document name to the new document name
 	by check if file with temp name exists that was created in last 60 minutes
 	"""
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if not temp_doc_name:
 		return
 	from frappe.utils.data import add_to_date, now_datetime
 
+<<<<<<< HEAD
 	mislinked_file = frappe.db.get_value(
+=======
+	"""
+	Relink files attached to incorrect document name to the new document name
+	by check if file with temp name exists that was created in last 60 minutes
+	"""
+	mislinked_file = frappe.db.exists(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"File",
 		{
 			"file_url": doc.get(fieldname),
@@ -396,7 +434,11 @@ def relink_files(doc, fieldname, temp_doc_name):
 			),
 		},
 	)
+<<<<<<< HEAD
 	# If file exists, attach it to the new docname
+=======
+	"""If file exists, attach it to the new docname"""
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if mislinked_file:
 		frappe.db.set_value(
 			"File",

@@ -230,8 +230,12 @@
    "fieldname": "message",
    "fieldtype": "Code",
    "ignore_xss_filter": 1,
+<<<<<<< HEAD
    "label": "Message",
    "options": "Jinja"
+=======
+   "label": "Message"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "message_examples",
@@ -291,7 +295,11 @@
  "icon": "fa fa-envelope",
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-07-04 05:53:40.595130",
+=======
+ "modified": "2024-07-04 05:50:40.595130",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Email",
  "name": "Notification",

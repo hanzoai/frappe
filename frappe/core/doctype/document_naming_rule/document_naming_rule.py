@@ -9,6 +9,7 @@ from frappe.utils.data import evaluate_filters
 
 
 class DocumentNamingRule(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -29,6 +30,8 @@ class DocumentNamingRule(Document):
 		priority: DF.Int
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		self.validate_fields_in_conditions()
 

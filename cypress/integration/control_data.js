@@ -41,7 +41,11 @@ context("Data Control", () => {
 	it("check custom formatters", () => {
 		cy.visit(`/app/doctype/User`);
 		cy.get(
+<<<<<<< HEAD
 			'[data-fieldname="fields"] .grid-row[data-idx="3"] [data-fieldname="fieldtype"] .static-area'
+=======
+			'[data-fieldname="fields"] .grid-row[data-idx="2"] [data-fieldname="fieldtype"] .static-area'
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		).should("have.text", "Section Break");
 	});
 

@@ -10,8 +10,11 @@ export default class BulkOperations {
 		const is_submittable = frappe.model.is_submittable(this.doctype);
 		const allow_print_for_cancelled = cint(print_settings.allow_print_for_cancelled);
 		const letterheads = this.get_letterhead_options();
+<<<<<<< HEAD
 		const MAX_PRINT_LIMIT = 500;
 		const BACKGROUND_PRINT_THRESHOLD = 25;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		const valid_docs = docs
 			.filter((doc) => {
@@ -37,10 +40,15 @@ export default class BulkOperations {
 			return;
 		}
 
+<<<<<<< HEAD
 		if (valid_docs.length > MAX_PRINT_LIMIT) {
 			frappe.msgprint(
 				__("You can only print upto {0} documents at a time", [MAX_PRINT_LIMIT])
 			);
+=======
+		if (valid_docs.length > 50) {
+			frappe.msgprint(__("You can only print upto 50 documents at a time"));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			return;
 		}
 
@@ -82,6 +90,7 @@ export default class BulkOperations {
 					depends_on: 'eval:doc.page_size == "Custom"',
 					default: print_settings.pdf_page_width,
 				},
+<<<<<<< HEAD
 				{
 					fieldtype: "Check",
 					label: __("Background Print (required for >25 documents)"),
@@ -89,6 +98,8 @@ export default class BulkOperations {
 					default: valid_docs.length > BACKGROUND_PRINT_THRESHOLD,
 					read_only: valid_docs.length > BACKGROUND_PRINT_THRESHOLD,
 				},
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			],
 		});
 
@@ -113,6 +124,7 @@ export default class BulkOperations {
 				pdf_options = JSON.stringify({ "page-size": args.page_size });
 			}
 
+<<<<<<< HEAD
 			if (args.background_print) {
 				frappe
 					.call("frappe.utils.print_format.download_multi_pdf_async", {
@@ -163,6 +175,30 @@ export default class BulkOperations {
 			}
 			dialog.hide();
 		});
+=======
+			const w = window.open(
+				"/api/method/frappe.utils.print_format.download_multi_pdf?" +
+					"doctype=" +
+					encodeURIComponent(this.doctype) +
+					"&name=" +
+					encodeURIComponent(json_string) +
+					"&format=" +
+					encodeURIComponent(print_format) +
+					"&no_letterhead=" +
+					(with_letterhead ? "0" : "1") +
+					"&letterhead=" +
+					encodeURIComponent(letterhead) +
+					"&options=" +
+					encodeURIComponent(pdf_options)
+			);
+
+			if (!w) {
+				frappe.msgprint(__("Please enable pop-ups"));
+				return;
+			}
+		});
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		dialog.show();
 	}
 
@@ -240,6 +276,7 @@ export default class BulkOperations {
 		}
 	}
 
+<<<<<<< HEAD
 	clear_assignment(docnames, done) {
 		if (docnames.length > 0) {
 			frappe
@@ -261,6 +298,8 @@ export default class BulkOperations {
 		}
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	apply_assignment_rule(docnames, done) {
 		if (docnames.length > 0) {
 			frappe
@@ -274,6 +313,7 @@ export default class BulkOperations {
 
 	submit_or_cancel(docnames, action = "submit", done = null) {
 		action = action.toLowerCase();
+<<<<<<< HEAD
 		const task_id = Math.random().toString(36).slice(-5);
 		frappe.realtime.task_subscribe(task_id);
 		return frappe
@@ -304,6 +344,30 @@ export default class BulkOperations {
 			})
 			.finally(() => {
 				frappe.realtime.task_unsubscribe(task_id);
+=======
+		frappe
+			.call({
+				method: "frappe.desk.doctype.bulk_update.bulk_update.submit_cancel_or_update_docs",
+				args: {
+					doctype: this.doctype,
+					action: action,
+					docnames: docnames,
+				},
+			})
+			.then((r) => {
+				let failed = r.message;
+				if (!failed) failed = [];
+
+				if (failed.length && !r._server_messages) {
+					frappe.throw(
+						__("Cannot {0} {1}", [action, failed.map((f) => f.bold()).join(", ")])
+					);
+				}
+				if (failed.length < docnames.length) {
+					frappe.utils.play_sound(action);
+					if (done) done();
+				}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			});
 	}
 

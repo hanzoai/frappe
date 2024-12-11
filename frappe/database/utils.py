@@ -1,17 +1,24 @@
 # Copyright (c) 2022, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+<<<<<<< HEAD
 import typing
 from functools import cached_property, wraps
 from types import NoneType
+=======
+from functools import cached_property, wraps
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 from frappe.query_builder.builder import MariaDB, Postgres
 from frappe.query_builder.functions import Function
 
+<<<<<<< HEAD
 if typing.TYPE_CHECKING:
 	from frappe.query_builder import DocType
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Query = str | MariaDB | Postgres
 QueryValues = tuple | list | dict | None
 
@@ -23,7 +30,10 @@ NestedSetHierarchy = (
 	"descendants of",
 	"not ancestors of",
 	"not descendants of",
+<<<<<<< HEAD
 	"descendants of (inclusive)",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 )
 
 
@@ -39,7 +49,12 @@ def get_doctype_name(table_name: str) -> str:
 	if table_name.startswith(("tab", "`tab", '"tab')):
 		table_name = table_name.replace("tab", "", 1)
 	table_name = table_name.replace("`", "")
+<<<<<<< HEAD
 	return table_name.replace('"', "")
+=======
+	table_name = table_name.replace('"', "")
+	return table_name
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class LazyString:

@@ -10,6 +10,20 @@ from frappe.model.document import Document
 from frappe.utils import cint
 from frappe.utils.caching import site_cache
 
+<<<<<<< HEAD
+=======
+DEFAULT_LOGTYPES_RETENTION = {
+	"Error Log": 30,
+	"Activity Log": 90,
+	"Email Queue": 30,
+	"Error Snapshot": 30,
+	"Scheduled Job Log": 90,
+	"Route History": 90,
+	"Prepared Report": 30,
+	"Webhook Request Log": 30,
+}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 @runtime_checkable
 class LogType(Protocol):
@@ -30,6 +44,7 @@ def _supports_log_clearing(doctype: str) -> bool:
 
 
 class LogSettings(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -48,6 +63,14 @@ class LogSettings(Document):
 		self.add_default_logtypes()
 
 	def remove_unsupported_doctypes(self):
+=======
+	def validate(self):
+		self._remove_unsupported_doctypes()
+		self._deduplicate_entries()
+		self.add_default_logtypes()
+
+	def _remove_unsupported_doctypes(self):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		for entry in list(self.logs_to_clear):
 			if _supports_log_clearing(entry.ref_doctype):
 				continue
@@ -68,14 +91,22 @@ class LogSettings(Document):
 	def add_default_logtypes(self):
 		existing_logtypes = {d.ref_doctype for d in self.logs_to_clear}
 		added_logtypes = set()
+<<<<<<< HEAD
 		default_logtypes_retention = frappe.get_hooks("default_log_clearing_doctypes", {})
 
 		for logtype, retentions in default_logtypes_retention.items():
+=======
+		for logtype, retention in DEFAULT_LOGTYPES_RETENTION.items():
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if logtype not in existing_logtypes and _supports_log_clearing(logtype):
 				if not frappe.db.exists("DocType", logtype):
 					continue
 
+<<<<<<< HEAD
 				self.append("logs_to_clear", {"ref_doctype": logtype, "days": cint(retentions[-1])})
+=======
+				self.append("logs_to_clear", {"ref_doctype": logtype, "days": cint(retention)})
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				added_logtypes.add(logtype)
 
 		if added_logtypes:
@@ -112,7 +143,10 @@ class LogSettings(Document):
 
 def run_log_clean_up():
 	doc = frappe.get_doc("Log Settings")
+<<<<<<< HEAD
 	doc.remove_unsupported_doctypes()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	doc.add_default_logtypes()
 	doc.save()
 	doc.clear_logs()
@@ -154,6 +188,10 @@ LOG_DOCTYPES = [
 	"Route History",
 	"Email Queue",
 	"Email Queue Recipient",
+<<<<<<< HEAD
+=======
+	"Error Snapshot",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"Error Log",
 ]
 

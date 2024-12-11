@@ -1,8 +1,12 @@
 # Copyright (c) 2021, Frappe Technologies Pvt. Ltd. and Contributors
 # MIT License. See LICENSE
+<<<<<<< HEAD
 import base64
 import binascii
 from urllib.parse import quote, urlencode, urlparse
+=======
+from urllib.parse import quote
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 from werkzeug.wrappers import Response
 
@@ -11,9 +15,13 @@ import frappe.database
 import frappe.utils
 import frappe.utils.user
 from frappe import _
+<<<<<<< HEAD
 from frappe.apps import get_default_path
 from frappe.core.doctype.activity_log.activity_log import add_authentication_log
 from frappe.desk.utils import slug
+=======
+from frappe.core.doctype.activity_log.activity_log import add_authentication_log
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.sessions import Session, clear_sessions, delete_session, get_expiry_in_seconds
 from frappe.translate import get_language
 from frappe.twofactor import (
@@ -27,8 +35,11 @@ from frappe.utils.deprecations import deprecation_warning
 from frappe.utils.password import check_password, get_decrypted_password
 from frappe.website.utils import get_home_page
 
+<<<<<<< HEAD
 SAFE_HTTP_METHODS = frozenset(("GET", "HEAD", "OPTIONS"))
 UNSAFE_HTTP_METHODS = frozenset(("POST", "PUT", "DELETE", "PATCH"))
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 MAX_PASSWORD_SIZE = 512
 
 
@@ -78,6 +89,7 @@ class HTTPRequest:
 		frappe.local.login_manager = LoginManager()
 
 	def validate_csrf_token(self):
+<<<<<<< HEAD
 		if (
 			not frappe.request
 			or frappe.request.method not in UNSAFE_HTTP_METHODS
@@ -93,6 +105,27 @@ class HTTPRequest:
 
 		frappe.flags.disable_traceback = True
 		frappe.throw(_("Invalid Request"), frappe.CSRFTokenError)
+=======
+		if frappe.local.request and frappe.local.request.method in ("POST", "PUT", "DELETE"):
+			if not frappe.local.session:
+				return
+			if (
+				not frappe.local.session.data.csrf_token
+				or frappe.local.session.data.device == "mobile"
+				or frappe.conf.get("ignore_csrf", None)
+			):
+				# not via boot
+				return
+
+			csrf_token = frappe.get_request_header("X-Frappe-CSRF-Token")
+			if not csrf_token and "csrf_token" in frappe.local.form_dict:
+				csrf_token = frappe.local.form_dict.csrf_token
+				del frappe.local.form_dict["csrf_token"]
+
+			if frappe.local.session.data.csrf_token != csrf_token:
+				frappe.local.flags.disable_traceback = True
+				frappe.throw(_("Invalid Request"), frappe.CSRFTokenError)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def set_lang(self):
 		frappe.local.lang = get_language()
@@ -158,10 +191,14 @@ class LoginManager:
 
 	def get_user_info(self):
 		self.info = frappe.get_cached_value(
+<<<<<<< HEAD
 			"User",
 			self.user,
 			["user_type", "first_name", "last_name", "user_image", "default_workspace"],
 			as_dict=1,
+=======
+			"User", self.user, ["user_type", "first_name", "last_name", "user_image"], as_dict=1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 
 		self.user_type = self.info.user_type
@@ -181,25 +218,40 @@ class LoginManager:
 			frappe.local.cookie_manager.set_cookie("system_user", "no")
 			if not resume:
 				frappe.local.response["message"] = "No App"
+<<<<<<< HEAD
 				frappe.local.response["home_page"] = get_default_path() or "/" + get_home_page()
+=======
+				frappe.local.response["home_page"] = "/" + get_home_page()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		else:
 			frappe.local.cookie_manager.set_cookie("system_user", "yes")
 			if not resume:
 				frappe.local.response["message"] = "Logged In"
+<<<<<<< HEAD
 				default_workspace = self.info.default_workspace
 				if default_workspace:
 					frappe.local.response["home_page"] = "/app/" + slug(default_workspace)
 				else:
 					frappe.local.response["home_page"] = get_default_path() or "/app"
+=======
+				frappe.local.response["home_page"] = "/app"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if not resume:
 			frappe.response["full_name"] = self.full_name
 
 		# redirect information
+<<<<<<< HEAD
 		redirect_to = frappe.cache.hget("redirect_after_login", self.user)
 		if redirect_to:
 			frappe.local.response["redirect_to"] = redirect_to
 			frappe.cache.hdel("redirect_after_login", self.user)
+=======
+		redirect_to = frappe.cache().hget("redirect_after_login", self.user)
+		if redirect_to:
+			frappe.local.response["redirect_to"] = redirect_to
+			frappe.cache().hdel("redirect_after_login", self.user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		frappe.local.cookie_manager.set_cookie("full_name", self.full_name)
 		frappe.local.cookie_manager.set_cookie("user_id", self.user)
@@ -337,12 +389,15 @@ class LoginManager:
 		self.user = user
 		self.post_login()
 
+<<<<<<< HEAD
 	def impersonate(self, user):
 		current_user = frappe.session.user
 		self.login_as(user)
 		# Flag this session as impersonated session, so other code can log this.
 		frappe.local.session_obj.set_impersonsated(current_user)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def logout(self, arg="", user=None):
 		if not user:
 			user = frappe.session.user
@@ -351,8 +406,11 @@ class LoginManager:
 		if user == frappe.session.user:
 			delete_session(frappe.session.sid, user=user, reason="User Manually Logged Out")
 			self.clear_cookies()
+<<<<<<< HEAD
 			if frappe.request:
 				self.login_as_guest()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		else:
 			clear_sessions(user)
 
@@ -371,6 +429,11 @@ class CookieManager:
 
 		if frappe.session.sid:
 			self.set_cookie("sid", frappe.session.sid, max_age=get_expiry_in_seconds(), httponly=True)
+<<<<<<< HEAD
+=======
+		if frappe.session.session_country:
+			self.set_cookie("country", frappe.session.session_country)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def set_cookie(
 		self,
@@ -385,6 +448,13 @@ class CookieManager:
 		if not secure and hasattr(frappe.local, "request"):
 			secure = frappe.local.request.scheme == "https"
 
+<<<<<<< HEAD
+=======
+		# Cordova does not work with Lax
+		if frappe.local.session.data.device == "mobile":
+			samesite = None
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.cookies[key] = {
 			"value": value,
 			"expires": expires,
@@ -529,6 +599,7 @@ class LoginAttemptTracker:
 
 	@property
 	def login_failed_count(self):
+<<<<<<< HEAD
 		return frappe.cache.hget("login_failed_count", self.key)
 
 	@login_failed_count.setter
@@ -538,6 +609,17 @@ class LoginAttemptTracker:
 	@login_failed_count.deleter
 	def login_failed_count(self):
 		frappe.cache.hdel("login_failed_count", self.key)
+=======
+		return frappe.cache().hget("login_failed_count", self.key)
+
+	@login_failed_count.setter
+	def login_failed_count(self, count):
+		frappe.cache().hset("login_failed_count", self.key, count)
+
+	@login_failed_count.deleter
+	def login_failed_count(self):
+		frappe.cache().hdel("login_failed_count", self.key)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@property
 	def login_failed_time(self):
@@ -545,6 +627,7 @@ class LoginAttemptTracker:
 
 		For every user we track only First failed login attempt time within lock interval of time.
 		"""
+<<<<<<< HEAD
 		return frappe.cache.hget("login_failed_time", self.key)
 
 	@login_failed_time.setter
@@ -554,6 +637,17 @@ class LoginAttemptTracker:
 	@login_failed_time.deleter
 	def login_failed_time(self):
 		frappe.cache.hdel("login_failed_time", self.key)
+=======
+		return frappe.cache().hget("login_failed_time", self.key)
+
+	@login_failed_time.setter
+	def login_failed_time(self, timestamp):
+		frappe.cache().hset("login_failed_time", self.key, timestamp)
+
+	@login_failed_time.deleter
+	def login_failed_time(self):
+		frappe.cache().hdel("login_failed_time", self.key)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def add_failure_attempt(self):
 		"""Log user failure attempts into the system.
@@ -596,6 +690,7 @@ class LoginAttemptTracker:
 		):
 			return False
 		return True
+<<<<<<< HEAD
 
 
 def validate_auth():
@@ -705,3 +800,5 @@ def validate_api_key_secret(api_key, api_secret, frappe_authorization_source=Non
 def validate_auth_via_hooks():
 	for auth_hook in frappe.get_hooks("auth_hooks", []):
 		frappe.get_attr(auth_hook)()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

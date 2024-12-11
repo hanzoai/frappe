@@ -47,6 +47,19 @@ frappe.views.FormFactory = class FormFactory extends frappe.views.Factory {
 			$(document).on("page-change", function () {
 				frappe.ui.form.close_grid_form();
 			});
+<<<<<<< HEAD
+=======
+
+			frappe.realtime.on("doc_viewers", function (data) {
+				// set users that currently viewing the form
+				frappe.ui.form.FormViewers.set_users(data, "viewers");
+			});
+
+			frappe.realtime.on("doc_typers", function (data) {
+				// set users that currently typing on the form
+				frappe.ui.form.FormViewers.set_users(data, "typers");
+			});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		this.initialized = true;
 	}

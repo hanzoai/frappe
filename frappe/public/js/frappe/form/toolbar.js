@@ -2,7 +2,10 @@
 // MIT License. See license.txt
 import "./linked_with";
 import "./form_viewers";
+<<<<<<< HEAD
 import { ReminderManager } from "./reminders";
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 frappe.ui.form.Toolbar = class Toolbar {
 	constructor(opts) {
@@ -13,6 +16,10 @@ frappe.ui.form.Toolbar = class Toolbar {
 	}
 	refresh() {
 		this.make_menu();
+<<<<<<< HEAD
+=======
+		this.make_viewers();
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.set_title();
 		this.page.clear_user_actions();
 		this.show_title_as_dirty();
@@ -31,12 +38,20 @@ frappe.ui.form.Toolbar = class Toolbar {
 		}
 	}
 	set_title() {
+<<<<<<< HEAD
 		let title;
 		if (this.frm.is_new()) {
 			title = __("New {0}", [__(this.frm.meta.name)]);
 		} else if (this.frm.meta.title_field) {
 			let title_field = (this.frm.doc[this.frm.meta.title_field] || "").toString().trim();
 			title = strip_html(title_field || this.frm.docname);
+=======
+		if (this.frm.is_new()) {
+			var title = __("New {0}", [__(this.frm.meta.name)]);
+		} else if (this.frm.meta.title_field) {
+			let title_field = (this.frm.doc[this.frm.meta.title_field] || "").toString().trim();
+			var title = strip_html(title_field || this.frm.docname);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if (
 				this.frm.doc.__islocal ||
 				title === this.frm.docname ||
@@ -52,7 +67,11 @@ frappe.ui.form.Toolbar = class Toolbar {
 				});
 			}
 		} else {
+<<<<<<< HEAD
 			title = this.frm.docname;
+=======
+			var title = this.frm.docname;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		var me = this;
@@ -77,8 +96,12 @@ frappe.ui.form.Toolbar = class Toolbar {
 			this.frm.perm[0].write &&
 			!this.frm.doc.__islocal &&
 			doc_field.fieldtype === "Data" &&
+<<<<<<< HEAD
 			!doc_field.read_only &&
 			!doc_field.set_only_once
+=======
+			!doc_field.read_only
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		) {
 			return true;
 		} else {
@@ -114,7 +137,10 @@ frappe.ui.form.Toolbar = class Toolbar {
 		}
 
 		let rename_document = () => {
+<<<<<<< HEAD
 			if (input_name != docname) frappe.realtime.doctype_subscribe(doctype, input_name);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			return frappe
 				.xcall("frappe.model.rename_doc.update_document_title", {
 					doctype,
@@ -136,8 +162,14 @@ frappe.ui.form.Toolbar = class Toolbar {
 					};
 
 					// handle document renaming queued action
+<<<<<<< HEAD
 					if (input_name != docname) {
 						frappe.realtime.on("list_update", (data) => {
+=======
+					if (input_name && new_docname == docname) {
+						frappe.socketio.doc_subscribe(doctype, input_name);
+						frappe.realtime.on("doc_update", (data) => {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							if (data.doctype == doctype && data.name == input_name) {
 								reload_form(input_name);
 								frappe.show_alert({
@@ -278,11 +310,30 @@ frappe.ui.form.Toolbar = class Toolbar {
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	make_viewers() {
+		if (this.frm.viewers) {
+			return;
+		}
+		this.frm.viewers = new frappe.ui.form.FormViewers({
+			frm: this.frm,
+			parent: $('<div class="form-viewers d-flex"></div>').prependTo(
+				this.frm.page.page_actions
+			),
+		});
+	}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	make_navigation() {
 		// Navigate
 		if (!this.frm.is_new() && !this.frm.meta.issingle) {
 			this.page.add_action_icon(
+<<<<<<< HEAD
 				"es-line-left-chevron",
+=======
+				"left",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				() => {
 					this.frm.navigate_records(1);
 				},
@@ -290,7 +341,11 @@ frappe.ui.form.Toolbar = class Toolbar {
 				__("Previous Document")
 			);
 			this.page.add_action_icon(
+<<<<<<< HEAD
 				"es-line-right-chevron",
+=======
+				"right",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				() => {
 					this.frm.navigate_records(0);
 				},
@@ -373,14 +428,22 @@ frappe.ui.form.Toolbar = class Toolbar {
 		}
 
 		// duplicate
+<<<<<<< HEAD
 		if (frappe.boot.user.can_create.includes(me.frm.doctype) && !me.frm.meta.allow_copy) {
+=======
+		if (in_list(frappe.boot.user.can_create, me.frm.doctype) && !me.frm.meta.allow_copy) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this.page.add_menu_item(
 				__("Duplicate"),
 				function () {
 					me.frm.copy_doc();
 				},
+<<<<<<< HEAD
 				true,
 				"Shift+D"
+=======
+				true
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			);
 		}
 
@@ -417,7 +480,10 @@ frappe.ui.form.Toolbar = class Toolbar {
 		if (
 			cint(me.frm.doc.docstatus) != 1 &&
 			!me.frm.doc.__islocal &&
+<<<<<<< HEAD
 			!frappe.model.is_single(me.frm.doctype) &&
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			frappe.model.can_delete(me.frm.doctype)
 		) {
 			this.page.add_menu_item(
@@ -433,6 +499,7 @@ frappe.ui.form.Toolbar = class Toolbar {
 			);
 		}
 
+<<<<<<< HEAD
 		this.page.add_menu_item(
 			__("Remind Me"),
 			() => {
@@ -472,6 +539,8 @@ frappe.ui.form.Toolbar = class Toolbar {
 			}
 		);
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.make_customize_buttons();
 
 		// Auto Repeat
@@ -499,6 +568,22 @@ frappe.ui.form.Toolbar = class Toolbar {
 				}
 			);
 		}
+<<<<<<< HEAD
+=======
+
+		if (
+			this.frm.doc.amended_from &&
+			frappe.model.get_value("DocType", this.frm.doc.doctype, "track_changes")
+		) {
+			this.page.add_menu_item(
+				__("View Audit Trail"),
+				function () {
+					frappe.set_route("audit-trail");
+				},
+				true
+			);
+		}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	make_customize_buttons() {

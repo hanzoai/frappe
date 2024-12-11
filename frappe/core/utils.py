@@ -7,8 +7,13 @@ import frappe
 
 
 def get_parent_doc(doc):
+<<<<<<< HEAD
 	"""Return document of `reference_doctype`, `reference_doctype`."""
 	if not getattr(doc, "parent_doc", None):
+=======
+	"""Returns document of `reference_doctype`, `reference_doctype`"""
+	if not hasattr(doc, "parent_doc"):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if doc.reference_doctype and doc.reference_name:
 			doc.parent_doc = frappe.get_doc(doc.reference_doctype, doc.reference_name)
 		else:
@@ -66,7 +71,15 @@ def find_all(list_of_dict, match_function):
 
 	        red_shapes = find_all(colored_shapes, lambda d: d['color'] == 'red')
 	"""
+<<<<<<< HEAD
 	return [entry for entry in list_of_dict if match_function(entry)]
+=======
+	found = []
+	for entry in list_of_dict:
+		if match_function(entry):
+			found.append(entry)
+	return found
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def ljust_list(_list, length, fill_word=None):

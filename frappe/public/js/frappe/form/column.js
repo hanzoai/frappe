@@ -4,13 +4,17 @@ export default class Column {
 
 		this.df = df;
 		this.section = section;
+<<<<<<< HEAD
 		this.section.columns.push(this);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.make();
 		this.resize_all_columns();
 	}
 
 	make() {
 		this.wrapper = $(`
+<<<<<<< HEAD
 			<div class="form-column" data-fieldname="${this.df.fieldname}">
 				<form>
 				</form>
@@ -33,6 +37,25 @@ export default class Column {
 					${__(this.df.label, null, this.df.parent)}
 				</label>
 			`).prependTo(this.wrapper);
+=======
+			<div class="form-column">
+				<form>
+				</form>
+			</div>
+		`)
+			.appendTo(this.section.body)
+			.find("form")
+			.on("submit", function () {
+				return false;
+			});
+
+		if (this.df.label) {
+			$(`
+				<label class="control-label">
+					${__(this.df.label)}
+				</label>
+			`).appendTo(this.wrapper);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 
@@ -52,8 +75,11 @@ export default class Column {
 			.addClass("col-sm-" + colspan);
 	}
 
+<<<<<<< HEAD
 	add_field() {}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	refresh() {
 		this.section.refresh();
 	}

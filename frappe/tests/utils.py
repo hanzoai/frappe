@@ -1,6 +1,9 @@
 import copy
 import datetime
+<<<<<<< HEAD
 import os
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import signal
 import unittest
 from collections.abc import Sequence
@@ -10,7 +13,11 @@ from unittest.mock import patch
 import pytz
 
 import frappe
+<<<<<<< HEAD
 from frappe.model.base_document import BaseDocument, get_controller
+=======
+from frappe.model.base_document import BaseDocument
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils import cint
 from frappe.utils.data import convert_utc_to_timezone, get_datetime, get_system_timezone
 
@@ -28,7 +35,10 @@ class FrappeTestCase(unittest.TestCase):
 	TEST_SITE = "test_site"
 
 	SHOW_TRANSACTION_COMMIT_WARNINGS = False
+<<<<<<< HEAD
 	maxDiff = 10_000  # prints long diffs but useful in CI
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@classmethod
 	def setUpClass(cls) -> None:
@@ -39,7 +49,11 @@ class FrappeTestCase(unittest.TestCase):
 		# flush changes done so far to avoid flake
 		frappe.db.commit()
 		if cls.SHOW_TRANSACTION_COMMIT_WARNINGS:
+<<<<<<< HEAD
 			frappe.db.before_commit.add(_commit_watcher)
+=======
+			frappe.db.add_before_commit(_commit_watcher)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# enqueue teardown actions (executed in LIFO order)
 		cls.addClassCleanup(_restore_thread_locals, copy.deepcopy(frappe.local.flags))
@@ -92,7 +106,11 @@ class FrappeTestCase(unittest.TestCase):
 		"""Formats SQL consistently so simple string comparisons can work on them."""
 		import sqlparse
 
+<<<<<<< HEAD
 		return sqlparse.format(query.strip(), keyword_case="upper", reindent=True, strip_comments=True)
+=======
+		return (sqlparse.format(query.strip(), keyword_case="upper", reindent=True, strip_comments=True),)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@contextmanager
 	def primary_connection(self):
@@ -134,6 +152,7 @@ class FrappeTestCase(unittest.TestCase):
 
 		def _sql_with_count(*args, **kwargs):
 			ret = orig_sql(*args, **kwargs)
+<<<<<<< HEAD
 			queries.append(args[0].last_query)
 			return ret
 
@@ -166,6 +185,18 @@ class FrappeTestCase(unittest.TestCase):
 			)
 		finally:
 			frappe.cache.execute_command = orig_execute
+=======
+			queries.append(frappe.db.last_query)
+			return ret
+
+		try:
+			orig_sql = frappe.db.sql
+			frappe.db.sql = _sql_with_count
+			yield
+			self.assertLessEqual(len(queries), count, msg="Queries executed: " + "\n\n".join(queries))
+		finally:
+			frappe.db.sql = orig_sql
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@contextmanager
 	def assertRowsRead(self, count):
@@ -187,6 +218,7 @@ class FrappeTestCase(unittest.TestCase):
 		finally:
 			frappe.db.sql = orig_sql
 
+<<<<<<< HEAD
 	@classmethod
 	def enable_safe_exec(cls) -> None:
 		"""Enable safe exec and disable them after test case is completed."""
@@ -202,6 +234,8 @@ class FrappeTestCase(unittest.TestCase):
 			)
 		)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@contextmanager
 	def set_user(self, user: str):
 		try:
@@ -237,6 +271,7 @@ class FrappeTestCase(unittest.TestCase):
 			yield
 
 
+<<<<<<< HEAD
 class MockedRequestTestCase(FrappeTestCase):
 	def setUp(self):
 		import responses
@@ -250,6 +285,8 @@ class MockedRequestTestCase(FrappeTestCase):
 		return super().setUp()
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def _commit_watcher():
 	import traceback
 
@@ -258,6 +295,11 @@ def _commit_watcher():
 
 
 def _rollback_db():
+<<<<<<< HEAD
+=======
+	frappe.local.before_commit = []
+	frappe.local.rollback_observers = []
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	frappe.db.value_cache = {}
 	frappe.db.rollback()
 
@@ -267,6 +309,7 @@ def _restore_thread_locals(flags):
 	frappe.local.error_log = []
 	frappe.local.message_log = []
 	frappe.local.debug_log = []
+<<<<<<< HEAD
 	frappe.local.conf = frappe._dict(frappe.get_site_config())
 	frappe.local.cache = {}
 	frappe.local.lang = "en"
@@ -274,6 +317,13 @@ def _restore_thread_locals(flags):
 
 	if hasattr(frappe.local, "request"):
 		delattr(frappe.local, "request")
+=======
+	frappe.local.realtime_log = []
+	frappe.local.conf = frappe._dict(frappe.get_site_config())
+	frappe.local.cache = {}
+	frappe.local.lang = "en"
+	frappe.local.preload_assets = {"style": [], "script": []}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @contextmanager
@@ -288,6 +338,7 @@ def change_settings(doctype, settings_dict=None, /, commit=False, **settings):
 	@change_settings("Print Settings", {"send_print_as_pdf": 1})
 	def test_case(self):
 	        ...
+<<<<<<< HEAD
 
 	@change_settings("Print Settings", send_print_as_pdf=1)
 	def test_case(self):
@@ -298,6 +349,13 @@ def change_settings(doctype, settings_dict=None, /, commit=False, **settings):
 		settings_dict = settings
 
 	try:
+=======
+	"""
+
+	try:
+		if settings_dict is None:
+			settings_dict = settings
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		settings = frappe.get_doc(doctype)
 		# remember setting
 		previous_settings = copy.deepcopy(settings_dict)
@@ -366,6 +424,7 @@ def patch_hooks(overridden_hoooks):
 
 	with patch.object(frappe, "get_hooks", patched_hooks):
 		yield
+<<<<<<< HEAD
 
 
 def check_orpahned_doctypes():
@@ -384,3 +443,5 @@ def check_orpahned_doctypes():
 		frappe.throw(
 			"Following doctypes exist in DB without controller.\n {}".format("\n".join(orpahned_doctypes))
 		)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

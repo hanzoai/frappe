@@ -7,12 +7,18 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+<<<<<<< HEAD
   "details_tab",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "doc_type",
   "properties",
   "label",
   "search_fields",
+<<<<<<< HEAD
   "link_filters",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "column_break_5",
   "istable",
   "is_calendar_and_gantt",
@@ -22,7 +28,12 @@
   "track_views",
   "allow_auto_repeat",
   "allow_import",
+<<<<<<< HEAD
   "queue_in_background",
+=======
+  "fields_section_break",
+  "fields",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "naming_section",
   "naming_rule",
   "autoname",
@@ -48,20 +59,30 @@
   "sender_field",
   "sender_name_field",
   "subject_field",
+<<<<<<< HEAD
   "section_break_8",
   "sort_field",
   "column_break_10",
   "sort_order",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "document_actions_section",
   "actions",
   "document_links_section",
   "links",
   "document_states_section",
   "states",
+<<<<<<< HEAD
   "fields_section_break",
   "fields",
   "form_tab",
   "form_builder"
+=======
+  "section_break_8",
+  "sort_field",
+  "column_break_10",
+  "sort_order"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  ],
  "fields": [
   {
@@ -178,8 +199,13 @@
    "options": "ASC\nDESC"
   },
   {
+<<<<<<< HEAD
    "collapsible": 1,
    "depends_on": "doc_type",
+=======
+   "depends_on": "doc_type",
+   "description": "Customize Label, Print Hide, Default etc.",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "fields_section_break",
    "fieldtype": "Section Break",
    "label": "Fields"
@@ -348,6 +374,7 @@
    "label": "Make Attachments Public by Default"
   },
   {
+<<<<<<< HEAD
    "default": "0",
    "description": "Enabling this will submit documents in background",
    "fieldname": "queue_in_background",
@@ -355,6 +382,8 @@
    "label": "Queue in Background (BETA)"
   },
   {
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "default_view",
    "fieldtype": "Select",
    "label": "Default View"
@@ -374,6 +403,7 @@
    "label": "Is Calendar and Gantt"
   },
   {
+<<<<<<< HEAD
    "fieldname": "form_builder",
    "fieldtype": "HTML",
    "label": "Form Builder"
@@ -395,6 +425,8 @@
    "label": "Details"
   },
   {
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "depends_on": "email_append_to",
    "fieldname": "sender_name_field",
    "fieldtype": "Data",
@@ -430,4 +462,8 @@
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

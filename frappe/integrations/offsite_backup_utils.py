@@ -39,6 +39,12 @@ def send_email(success, service_name, doctype, email_field, error_status=None):
 
 
 def get_recipients(doctype, email_field):
+<<<<<<< HEAD
+=======
+	if not frappe.db:
+		frappe.connect()
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return split_emails(frappe.db.get_value(doctype, None, email_field))
 
 
@@ -49,10 +55,16 @@ def get_latest_backup_file(with_files=False):
 		frappe.conf.db_name,
 		frappe.conf.db_name,
 		frappe.conf.db_password,
+<<<<<<< HEAD
 		db_socket=frappe.conf.db_socket,
 		db_host=frappe.conf.db_host,
 		db_port=frappe.conf.db_port,
 		db_type=frappe.conf.db_type,
+=======
+		db_host=frappe.db.host,
+		db_type=frappe.conf.db_type,
+		db_port=frappe.conf.db_port,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	)
 	database, public, private, config = odb.get_recent_backup(older_than=24 * 30)
 
@@ -108,10 +120,16 @@ def generate_files_backup():
 		frappe.conf.db_name,
 		frappe.conf.db_name,
 		frappe.conf.db_password,
+<<<<<<< HEAD
 		db_socket=frappe.conf.db_socket,
 		db_host=frappe.conf.db_host,
 		db_port=frappe.conf.db_port,
 		db_type=frappe.conf.db_type,
+=======
+		db_host=frappe.db.host,
+		db_type=frappe.conf.db_type,
+		db_port=frappe.conf.db_port,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	)
 
 	backup.set_backup_file_name()

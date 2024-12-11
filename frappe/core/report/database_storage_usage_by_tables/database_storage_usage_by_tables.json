@@ -9,6 +9,10 @@
  "filters": [],
  "idx": 0,
  "is_standard": "Yes",
+<<<<<<< HEAD
+=======
+ "letter_head": "abc",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified": "2022-10-19 02:59:00.365307",
  "modified_by": "Administrator",
  "module": "Core",
@@ -24,4 +28,8 @@
    "role": "System Manager"
   }
  ]
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

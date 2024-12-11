@@ -1,10 +1,18 @@
 # Copyright (c) 2020, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+<<<<<<< HEAD
+=======
+import io
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import json
 import os
 import re
 import timeit
+<<<<<<< HEAD
+=======
+import typing
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from datetime import date, datetime, time
 
 import frappe
@@ -44,7 +52,10 @@ class Importer:
 			file_path or data_import.google_sheets_url or data_import.import_file,
 			self.template_options,
 			self.import_type,
+<<<<<<< HEAD
 			console=self.console,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 
 	def get_data_for_import_preview(self):
@@ -62,7 +73,11 @@ class Importer:
 
 	def before_import(self):
 		# set user lang for translations
+<<<<<<< HEAD
 		frappe.cache.hdel("lang", frappe.session.user)
+=======
+		frappe.cache().hdel("lang", frappe.session.user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.set_user_lang(frappe.session.user)
 
 		# set flags
@@ -402,13 +417,20 @@ class Importer:
 
 
 class ImportFile:
+<<<<<<< HEAD
 	def __init__(self, doctype, file, template_options=None, import_type=None, *, console=False):
+=======
+	def __init__(self, doctype, file, template_options=None, import_type=None):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.doctype = doctype
 		self.template_options = template_options or frappe._dict(column_to_field_map=frappe._dict())
 		self.column_to_field_map = self.template_options.column_to_field_map
 		self.import_type = import_type
 		self.warnings = []
+<<<<<<< HEAD
 		self.console = console
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.file_doc = self.file_path = self.google_sheets_url = None
 		if isinstance(file, str):
@@ -536,6 +558,10 @@ class ImportFile:
 			# subsequent rows that have blank values in parent columns
 			# are considered as child rows
 			parent_column_indexes = self.header.get_column_indexes(self.doctype)
+<<<<<<< HEAD
+=======
+			first_row.get_values(parent_column_indexes)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			data_without_first_row = data[1:]
 			for row in data_without_first_row:
@@ -588,10 +614,13 @@ class ImportFile:
 
 		file_content = None
 
+<<<<<<< HEAD
 		if self.console:
 			file_content = frappe.read_file(file_path, True)
 			return file_content, extn
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		file_name = frappe.db.get_value("File", {"file_url": file_path})
 		if file_name:
 			file = frappe.get_doc("File", file_name)
@@ -615,6 +644,11 @@ class ImportFile:
 
 
 class Row:
+<<<<<<< HEAD
+=======
+	link_values_exist_map: typing.ClassVar[dict] = {}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def __init__(self, index, row, doctype, header, import_type):
 		self.index = index
 		self.row_number = index + 1
@@ -649,7 +683,12 @@ class Row:
 			return None
 
 		columns = self.header.get_columns(col_indexes)
+<<<<<<< HEAD
 		return self._parse_doc(doctype, columns, values, parent_doc, table_df)
+=======
+		doc = self._parse_doc(doctype, columns, values, parent_doc, table_df)
+		return doc
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def _parse_doc(self, doctype, columns, values, parent_doc=None, table_df=None):
 		doc = frappe._dict()
@@ -757,7 +796,14 @@ class Row:
 		return value
 
 	def link_exists(self, value, df):
+<<<<<<< HEAD
 		return bool(frappe.db.exists(df.options, value, cache=True))
+=======
+		key = df.options + "::" + cstr(value)
+		if Row.link_values_exist_map.get(key) is None:
+			Row.link_values_exist_map[key] = frappe.db.exists(df.options, value)
+		return Row.link_values_exist_map.get(key)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def parse_value(self, value, col):
 		df = col.df
@@ -853,6 +899,11 @@ class Header(Row):
 
 
 class Column:
+<<<<<<< HEAD
+=======
+	seen: typing.ClassVar[list] = []
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def __init__(self, index, header, doctype, column_values, map_to_field=None, seen=None):
 		if seen is None:
 			seen = []
@@ -1210,7 +1261,11 @@ def get_df_for_column_header(doctype, header):
 	def build_fields_dict_for_doctype():
 		return build_fields_dict_for_column_matching(doctype)
 
+<<<<<<< HEAD
 	df_by_labels_and_fieldname = frappe.cache.hget(
+=======
+	df_by_labels_and_fieldname = frappe.cache().hget(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"data_import_column_header_map", doctype, generator=build_fields_dict_for_doctype
 	)
 	return df_by_labels_and_fieldname.get(header)

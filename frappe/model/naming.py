@@ -13,6 +13,10 @@ from frappe import _
 from frappe.model import log_types
 from frappe.query_builder import DocType
 from frappe.utils import cint, cstr, now_datetime
+<<<<<<< HEAD
+=======
+from frappe.utils.caching import redis_cache
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 if TYPE_CHECKING:
 	from frappe.model.document import Document
@@ -150,8 +154,12 @@ def set_new_name(doc):
 
 	if getattr(doc, "amended_from", None):
 		_set_amended_name(doc)
+<<<<<<< HEAD
 		if doc.name:
 			return
+=======
+		return
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	elif getattr(doc.meta, "issingle", False):
 		doc.name = doc.doctype
@@ -169,21 +177,49 @@ def set_new_name(doc):
 	if not doc.name:
 		doc.name = make_autoname("hash", doc.doctype)
 
+<<<<<<< HEAD
 	doc.name = validate_name(doc.doctype, doc.name)
+=======
+	doc.name = validate_name(doc.doctype, doc.name, meta.get_field("name_case"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def is_autoincremented(doctype: str, meta: Optional["Meta"] = None) -> bool:
 	"""Checks if the doctype has autoincrement autoname set"""
 
+<<<<<<< HEAD
 	if not meta:
 		meta = frappe.get_meta(doctype)
 
 	if not getattr(meta, "issingle", False) and meta.autoname == "autoincrement":
 		return True
+=======
+	if doctype in log_types:
+		return _implicitly_auto_incremented(doctype)
+	else:
+		if not meta:
+			meta = frappe.get_meta(doctype)
+
+		if not getattr(meta, "issingle", False) and meta.autoname == "autoincrement":
+			return True
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return False
 
 
+<<<<<<< HEAD
+=======
+@redis_cache
+def _implicitly_auto_incremented(doctype) -> bool:
+	query = f"""select data_type FROM information_schema.columns where column_name = 'name' and table_name = 'tab{doctype}'"""
+	values = ()
+	if frappe.db.db_type == "mariadb":
+		query += " and table_schema = %s"
+		values = (frappe.db.db_name,)
+	return frappe.db.sql(query, values)[0][0] == "bigint"
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def set_name_from_naming_options(autoname, doc):
 	"""
 	Get a name based on the autoname field option
@@ -260,11 +296,20 @@ def make_autoname(key="", doctype="", doc="", *, ignore_validate=False):
 
 	*Example:*
 
+<<<<<<< HEAD
 	              * DE./.YY./.MM./.##### will create a series like
 	                DE/09/01/00001 where 09 is the year, 01 is the month and 00001 is the series
 	"""
 	if key == "hash":
 		return _generate_random_string(10)
+=======
+	              * DE/./.YY./.MM./.##### will create a series like
+	                DE/09/01/0001 where 09 is the year, 01 is the month and 0001 is the series
+	"""
+	if key == "hash":
+		# Makeshift "ULID": first 4 chars are based on timestamp, other 6 are random
+		return _get_timestamp_prefix() + _generate_random_string(6)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	series = NamingSeries(key)
 	return series.generate_next_name(doc, ignore_validate=ignore_validate)
@@ -450,7 +495,11 @@ def get_default_naming_series(doctype: str) -> str | None:
 			return option
 
 
+<<<<<<< HEAD
 def validate_name(doctype: str, name: int | str):
+=======
+def validate_name(doctype: str, name: int | str, case: str | None = None):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if not name:
 		frappe.throw(_("No Name Specified for {0}").format(doctype))
 
@@ -467,6 +516,13 @@ def validate_name(doctype: str, name: int | str):
 		frappe.throw(
 			_("There were some errors setting the name, please contact the administrator"), frappe.NameError
 		)
+<<<<<<< HEAD
+=======
+	if case == "Title Case":
+		name = name.title()
+	if case == "UPPER CASE":
+		name = name.upper()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	name = name.strip()
 
 	if not frappe.get_meta(doctype).get("issingle") and (doctype == name) and (name != "DocType"):
@@ -508,6 +564,7 @@ def append_number_if_name_exists(doctype, value, fieldname="name", separator="-"
 
 
 def _set_amended_name(doc):
+<<<<<<< HEAD
 	amend_naming_rule = frappe.db.get_value(
 		"Amended Document Naming Settings", {"document_type": doc.doctype}, "action", cache=True
 	)
@@ -519,6 +576,8 @@ def _set_amended_name(doc):
 	if amend_naming_rule == "Default Naming":
 		return
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	am_id = 1
 	am_prefix = doc.amended_from
 	if frappe.db.get_value(doc.doctype, doc.amended_from, "amended_from"):
@@ -535,7 +594,12 @@ def _field_autoname(autoname, doc, skip_slicing=None):
 	`autoname` field starts with 'field:'
 	"""
 	fieldname = autoname if skip_slicing else autoname[6:]
+<<<<<<< HEAD
 	return (cstr(doc.get(fieldname)) or "").strip()
+=======
+	name = (cstr(doc.get(fieldname)) or "").strip()
+	return name
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def _prompt_autoname(autoname, doc):
@@ -548,7 +612,11 @@ def _prompt_autoname(autoname, doc):
 		frappe.throw(_("Please set the document name"))
 
 
+<<<<<<< HEAD
 def _format_autoname(autoname: str, doc):
+=======
+def _format_autoname(autoname, doc):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""
 	Generate autoname by replacing all instances of braced params (fields, date params ('DD', 'MM', 'YY'), series)
 	Independent of remaining string or separators.

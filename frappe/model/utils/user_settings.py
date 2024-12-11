@@ -11,7 +11,11 @@ filter_dict = {"doctype": 0, "docfield": 1, "operator": 2, "value": 3}
 
 
 def get_user_settings(doctype, for_update=False):
+<<<<<<< HEAD
 	user_settings = frappe.cache.hget("_user_settings", f"{doctype}::{frappe.session.user}")
+=======
+	user_settings = frappe.cache().hget("_user_settings", f"{doctype}::{frappe.session.user}")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if user_settings is None:
 		user_settings = frappe.db.sql(
@@ -41,12 +45,20 @@ def update_user_settings(doctype, user_settings, for_update=False):
 
 		current.update(user_settings)
 
+<<<<<<< HEAD
 	frappe.cache.hset("_user_settings", f"{doctype}::{frappe.session.user}", json.dumps(current))
+=======
+	frappe.cache().hset("_user_settings", f"{doctype}::{frappe.session.user}", json.dumps(current))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def sync_user_settings():
 	"""Sync from cache to database (called asynchronously via the browser)"""
+<<<<<<< HEAD
 	for key, data in frappe.cache.hgetall("_user_settings").items():
+=======
+	for key, data in frappe.cache().hgetall("_user_settings").items():
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		key = safe_decode(key)
 		doctype, user = key.split("::")  # WTF?
 		frappe.db.multisql(
@@ -102,4 +114,8 @@ def update_user_settings_data(
 			)
 
 			# clear that user settings from the redis cache
+<<<<<<< HEAD
 			frappe.cache.hset("_user_settings", f"{user_setting.doctype}::{user_setting.user}", None)
+=======
+			frappe.cache().hset("_user_settings", f"{user_setting.doctype}::{user_setting.user}", None)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

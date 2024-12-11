@@ -13,9 +13,12 @@ charset = utf-8
 indent_style = tab
 indent_size = 4
 max_line_length = 99
+<<<<<<< HEAD
 
 # JSON files - mostly doctype schema files
 [{*.json}]
 insert_final_newline = false
 indent_style = space
 indent_size = 2
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

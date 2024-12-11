@@ -52,7 +52,12 @@ def pass_context(f):
 
 def get_site(context, raise_err=True):
 	try:
+<<<<<<< HEAD
 		return context.sites[0]
+=======
+		site = context.sites[0]
+		return site
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	except (IndexError, TypeError):
 		if raise_err:
 			raise frappe.SiteNotSpecifiedError
@@ -105,13 +110,17 @@ def call_command(cmd, context):
 
 def get_commands():
 	# prevent circular imports
+<<<<<<< HEAD
 	from .gettext import commands as gettext_commands
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	from .redis_utils import commands as redis_commands
 	from .scheduler import commands as scheduler_commands
 	from .site import commands as site_commands
 	from .translate import commands as translate_commands
 	from .utils import commands as utils_commands
 
+<<<<<<< HEAD
 	clickable_link = "https://frappeframework.com/docs"
 	all_commands = (
 		scheduler_commands
@@ -121,6 +130,10 @@ def get_commands():
 		+ utils_commands
 		+ redis_commands
 	)
+=======
+	clickable_link = "\x1b]8;;https://frappeframework.com/docs\afrappeframework.com\x1b]8;;\a"
+	all_commands = scheduler_commands + site_commands + translate_commands + utils_commands + redis_commands
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	for command in all_commands:
 		if not command.help:

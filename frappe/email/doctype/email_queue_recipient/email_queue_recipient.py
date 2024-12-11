@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class EmailQueueRecipient(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -21,6 +22,8 @@ class EmailQueueRecipient(Document):
 		recipient: DF.Data | None
 		status: DF.Literal["", "Not Sent", "Sent"]
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	DOCTYPE = "Email Queue Recipient"
 
 	def is_mail_to_be_sent(self):
@@ -33,8 +36,11 @@ class EmailQueueRecipient(Document):
 		frappe.db.set_value(self.DOCTYPE, self.name, kwargs)
 		if commit:
 			frappe.db.commit()
+<<<<<<< HEAD
 
 
 def on_doctype_update():
 	"""Index required for log clearing, modified is not indexed on child table by default"""
 	frappe.db.add_index("Email Queue Recipient", ["modified"])
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

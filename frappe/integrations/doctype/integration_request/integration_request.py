@@ -9,6 +9,7 @@ from frappe.model.document import Document
 
 
 class IntegrationRequest(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -31,6 +32,8 @@ class IntegrationRequest(Document):
 		url: DF.SmallText | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def autoname(self):
 		if self.flags._name:
 			self.name = self.flags._name

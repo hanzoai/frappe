@@ -53,11 +53,18 @@
   }
  ],
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-08-28 22:29:39.662726",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Calendar View",
  "naming_rule": "Set by user",
+=======
+ "modified": "2020-09-18 17:26:09.703215",
+ "modified_by": "Administrator",
+ "module": "Desk",
+ "name": "Calendar View",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "owner": "Administrator",
  "permissions": [
   {
@@ -74,10 +81,18 @@
   },
   {
    "read": 1,
+<<<<<<< HEAD
    "role": "Desk User"
   }
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []
+=======
+   "role": "All"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }

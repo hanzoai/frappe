@@ -8,6 +8,7 @@ from frappe.utils import add_to_date, getdate, today
 
 
 class EnergyPointSettings(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -26,6 +27,9 @@ class EnergyPointSettings(Document):
 	def on_update(self):
 		if self.has_value_changed("enabled"):
 			frappe.cache.delete_key("bootinfo")
+=======
+	pass
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def is_energy_point_enabled():

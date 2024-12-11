@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class WebsiteMetaTag(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -21,6 +22,8 @@ class WebsiteMetaTag(Document):
 		value: DF.Text
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def get_content(self):
 		# can't have new lines in meta content
 		return (self.value or "").replace("\n", " ")

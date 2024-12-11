@@ -123,7 +123,11 @@
    "link_fieldname": "module"
   }
  ],
+<<<<<<< HEAD
  "modified": "2023-12-08 15:52:37.525003",
+=======
+ "modified": "2022-01-03 13:56:52.817954",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Module Def",
@@ -160,7 +164,11 @@
  ],
  "show_name_in_global_search": 1,
  "sort_field": "modified",
+<<<<<<< HEAD
  "sort_order": "DESC",
+=======
+ "sort_order": "ASC",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "states": [],
  "track_changes": 1
 }

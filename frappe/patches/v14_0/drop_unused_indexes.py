@@ -30,7 +30,11 @@ def execute():
 		table = f"tab{doctype}"
 		if table not in db_tables:
 			continue
+<<<<<<< HEAD
 		drop_index_if_exists(table, "parent")
+=======
+		_drop_index_if_exists(table, "parent")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# Unused composite indexes
 	for doctype, index_fields in UNUSED_INDEXES:
@@ -38,10 +42,17 @@ def execute():
 		index_name = frappe.db.get_index_name(index_fields)
 		if table not in db_tables:
 			continue
+<<<<<<< HEAD
 		drop_index_if_exists(table, index_name)
 
 
 def drop_index_if_exists(table: str, index: str):
+=======
+		_drop_index_if_exists(table, index_name)
+
+
+def _drop_index_if_exists(table: str, index: str):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if not frappe.db.has_index(table, index):
 		click.echo(f"- Skipped {index} index for {table} because it doesn't exist")
 		return

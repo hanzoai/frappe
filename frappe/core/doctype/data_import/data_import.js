@@ -443,6 +443,10 @@ frappe.ui.form.on("Data Import", {
 							}
 						} else {
 							let messages = JSON.parse(log.messages || "[]")
+<<<<<<< HEAD
+=======
+								.map(JSON.parse)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 								.map((m) => {
 									let title = m.title ? `<strong>${m.title}</strong>` : "";
 									let message = m.message ? `<div>${m.message}</div>` : "";

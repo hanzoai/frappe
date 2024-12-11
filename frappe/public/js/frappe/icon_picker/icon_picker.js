@@ -16,7 +16,11 @@ class Picker {
 		this.icon_picker_wrapper = $(`
 			<div class="icon-picker">
 				<div class="search-icons">
+<<<<<<< HEAD
 					<input type="search" placeholder="${__("Search for icons...")}" class="form-control">
+=======
+					<input type="search" placeholder="Search for icons.." class="form-control">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					<span class="search-icon">${frappe.utils.icon("search", "sm")}</span>
 				</div>
 				<div class="icon-section">

@@ -10,6 +10,10 @@ frappe.ui.form.on("System Console", {
 			description: __("Execute Console script"),
 			ignore_inputs: true,
 		});
+<<<<<<< HEAD
+=======
+		frm.set_value("type", "Python");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 
 	refresh: function (frm) {
@@ -21,6 +25,7 @@ frappe.ui.form.on("System Console", {
 				.then(() => frm.trigger("render_sql_output"))
 				.finally(() => $btn.text(__("Execute")));
 		});
+<<<<<<< HEAD
 		if (
 			window.localStorage.getItem("system_console_code") &&
 			window.localStorage.getItem("system_console_type")
@@ -31,6 +36,8 @@ frappe.ui.form.on("System Console", {
 			window.localStorage.removeItem("system_console_code");
 			window.localStorage.removeItem("system_console_type");
 		}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 
 	type: function (frm) {

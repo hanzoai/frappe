@@ -3,7 +3,11 @@
 		<div class="mb-4 d-flex justify-content-between">
 			<div class="d-flex align-items-center">
 				<div
+<<<<<<< HEAD
 					v-if="letterhead && store.edit_letterhead"
+=======
+					v-if="letterhead && $store.edit_letterhead"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					class="btn-group"
 					role="group"
 					aria-label="Align Letterhead"
@@ -20,7 +24,11 @@
 				</div>
 				<input
 					class="ml-4 custom-range"
+<<<<<<< HEAD
 					v-if="letterhead && store.edit_letterhead"
+=======
+					v-if="letterhead && $store.edit_letterhead"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					type="range"
 					name="image-resize"
 					min="20"
@@ -32,13 +40,21 @@
 			<div>
 				<button
 					class="ml-2 btn btn-default btn-xs"
+<<<<<<< HEAD
 					v-if="letterhead && store.edit_letterhead"
+=======
+					v-if="letterhead && $store.edit_letterhead"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					@click="upload_image"
 				>
 					{{ __("Change Image") }}
 				</button>
 				<button
+<<<<<<< HEAD
 					v-if="letterhead && store.edit_letterhead"
+=======
+					v-if="letterhead && $store.edit_letterhead"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					class="ml-2 btn btn-default btn-xs btn-change-letterhead"
 					@click="change_letterhead"
 				>
@@ -49,7 +65,11 @@
 					class="ml-2 btn btn-default btn-xs btn-edit"
 					@click="toggle_edit_letterhead"
 				>
+<<<<<<< HEAD
 					{{ !store.edit_letterhead ? __("Edit Letter Head") : __("Done") }}
+=======
+					{{ !$store.edit_letterhead ? __("Edit Letter Head") : __("Done") }}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				</button>
 				<button
 					v-if="!letterhead"
@@ -60,11 +80,19 @@
 				</button>
 			</div>
 		</div>
+<<<<<<< HEAD
 		<div v-if="letterhead && !store.edit_letterhead" v-html="letterhead.content"></div>
 		<!-- <div v-show="letterhead && store.edit_letterhead" ref="editor"></div> -->
 		<div
 			class="edit-letterhead"
 			v-if="letterhead && store.edit_letterhead"
+=======
+		<div v-if="letterhead && !$store.edit_letterhead" v-html="letterhead.content"></div>
+		<!-- <div v-show="letterhead && $store.edit_letterhead" ref="editor"></div> -->
+		<div
+			class="edit-letterhead"
+			v-if="letterhead && $store.edit_letterhead"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			:style="{
 				justifyContent: {
 					Left: 'flex-start',
@@ -96,6 +124,7 @@
 		</div>
 	</div>
 </template>
+<<<<<<< HEAD
 
 <script setup>
 import { useStore } from "./store";
@@ -265,6 +294,175 @@ watch(
 );
 </script>
 
+=======
+<script>
+import { storeMixin } from "./store";
+import { get_image_dimensions } from "./utils";
+export default {
+	name: "LetterHeadEditor",
+	mixins: [storeMixin],
+	data() {
+		return {
+			range_input_field: null,
+			aspect_ratio: null,
+		};
+	},
+	watch: {
+		letterhead: {
+			deep: true,
+			immediate: true,
+			handler(letterhead) {
+				if (!letterhead) return;
+				if (letterhead.image_width && letterhead.image_height) {
+					let dimension =
+						letterhead.image_width > letterhead.image_height ? "width" : "height";
+					let dimension_value = letterhead["image_" + dimension];
+					letterhead.content = `
+						<div style="text-align: ${letterhead.align.toLowerCase()};">
+							<img
+								src="${letterhead.image}"
+								alt="${letterhead.name}"
+								${dimension}="${dimension_value}"
+								style="${dimension}: ${dimension_value}px;">
+						</div>
+					`;
+				}
+			},
+		},
+	},
+	mounted() {
+		if (!this.letterhead && frappe.boot.sysdefaults.letter_head) {
+			this.set_letterhead(frappe.boot.sysdefaults.letter_head);
+		}
+
+		this.$watch(
+			function () {
+				return this.letterhead ? this.letterhead[this.range_input_field] : null;
+			},
+			function () {
+				if (this.aspect_ratio === null) return;
+
+				let update_field =
+					this.range_input_field == "image_width" ? "image_height" : "image_width";
+				this.letterhead[update_field] =
+					update_field == "image_width"
+						? this.aspect_ratio * this.letterhead.image_height
+						: this.letterhead.image_width / this.aspect_ratio;
+			}
+		);
+	},
+	methods: {
+		toggle_edit_letterhead() {
+			if (this.$store.edit_letterhead) {
+				this.$store.edit_letterhead = false;
+				return;
+			}
+			this.$store.edit_letterhead = true;
+			if (!this.control) {
+				this.control = frappe.ui.form.make_control({
+					parent: this.$refs.editor,
+					df: {
+						fieldname: "letterhead",
+						fieldtype: "Comment",
+						change: () => {
+							this.letterhead._dirty = true;
+							this.letterhead.content = this.control.get_value();
+						},
+					},
+					render_input: true,
+					only_input: true,
+					no_wrapper: true,
+				});
+			}
+			this.control.set_value(this.letterhead.content);
+		},
+		change_letterhead() {
+			let d = new frappe.ui.Dialog({
+				title: __("Change Letter Head"),
+				fields: [
+					{
+						label: __("Letter Head"),
+						fieldname: "letterhead",
+						fieldtype: "Link",
+						options: "Letter Head",
+					},
+				],
+				primary_action: ({ letterhead }) => {
+					if (letterhead) {
+						this.set_letterhead(letterhead);
+					}
+					d.hide();
+				},
+			});
+			d.show();
+		},
+		upload_image() {
+			new frappe.ui.FileUploader({
+				folder: "Home/Attachments",
+				on_success: (file_doc) => {
+					get_image_dimensions(file_doc.file_url).then(({ width, height }) => {
+						this.$set(this.letterhead, "image", file_doc.file_url);
+						let new_width = width;
+						let new_height = height;
+						this.aspect_ratio = width / height;
+						this.range_input_field =
+							this.aspect_ratio > 1 ? "image_width" : "image_height";
+
+						if (width > 200) {
+							new_width = 200;
+							new_height = new_width / aspect_ratio;
+						}
+						if (height > 80) {
+							new_height = 80;
+							new_width = aspect_ratio * new_height;
+						}
+
+						this.$set(this.letterhead, "image_height", new_height);
+						this.$set(this.letterhead, "image_width", new_width);
+					});
+				},
+			});
+		},
+		set_letterhead(letterhead) {
+			this.$store.change_letterhead(letterhead).then(() => {
+				get_image_dimensions(this.letterhead.image).then(({ width, height }) => {
+					this.aspect_ratio = width / height;
+					this.range_input_field =
+						this.aspect_ratio > 1 ? "image_width" : "image_height";
+				});
+			});
+		},
+		create_letterhead() {
+			let d = new frappe.ui.Dialog({
+				title: __("Create Letter Head"),
+				fields: [
+					{
+						label: __("Letter Head Name"),
+						fieldname: "name",
+						fieldtype: "Data",
+					},
+				],
+				primary_action: ({ name }) => {
+					return frappe.db
+						.insert({
+							doctype: "Letter Head",
+							letter_head_name: name,
+							source: "Image",
+						})
+						.then((doc) => {
+							d.hide();
+							this.$store.change_letterhead(doc.name).then(() => {
+								this.toggle_edit_letterhead();
+							});
+						});
+				},
+			});
+			d.show();
+		},
+	},
+};
+</script>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 <style scoped>
 .letterhead {
 	position: relative;

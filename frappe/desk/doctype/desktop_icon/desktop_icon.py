@@ -11,6 +11,7 @@ from frappe.utils.user import UserPermissions
 
 
 class DesktopIcon(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -39,6 +40,8 @@ class DesktopIcon(Document):
 		type: DF.Literal["module", "list", "link", "page", "query-report"]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		if not self.label:
 			self.label = self.module_name
@@ -56,7 +59,11 @@ def get_desktop_icons(user=None):
 	if not user:
 		user = frappe.session.user
 
+<<<<<<< HEAD
 	user_icons = frappe.cache.hget("desktop_icons", user)
+=======
+	user_icons = frappe.cache().hget("desktop_icons", user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not user_icons:
 		fields = [
@@ -143,9 +150,15 @@ def get_desktop_icons(user=None):
 		# translate
 		for d in user_icons:
 			if d.label:
+<<<<<<< HEAD
 				d.label = _(d.label, context=d.parent)
 
 		frappe.cache.hset("desktop_icons", user, user_icons)
+=======
+				d.label = _(d.label)
+
+		frappe.cache().hset("desktop_icons", user, user_icons)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return user_icons
 
@@ -279,7 +292,12 @@ def set_desktop_icons(visible_list, ignore_duplicate=True):
 						raise e
 					else:
 						visible_list.remove(module_name)
+<<<<<<< HEAD
 						frappe.clear_last_message()
+=======
+						if frappe.message_log:
+							frappe.message_log.pop()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# set the order
 	set_order(visible_list)
@@ -334,8 +352,13 @@ def get_all_icons():
 
 
 def clear_desktop_icons_cache(user=None):
+<<<<<<< HEAD
 	frappe.cache.hdel("desktop_icons", user or frappe.session.user)
 	frappe.cache.hdel("bootinfo", user or frappe.session.user)
+=======
+	frappe.cache().hdel("desktop_icons", user or frappe.session.user)
+	frappe.cache().hdel("bootinfo", user or frappe.session.user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_user_copy(module_name, user=None):
@@ -466,7 +489,11 @@ def get_module_icons(user=None):
 	if not user:
 		icons = frappe.get_all("Desktop Icon", fields="*", filters={"standard": 1}, order_by="idx")
 	else:
+<<<<<<< HEAD
 		frappe.cache.hdel("desktop_icons", user)
+=======
+		frappe.cache().hdel("desktop_icons", user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		icons = get_user_icons(user)
 
 	for icon in icons:

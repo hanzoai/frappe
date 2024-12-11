@@ -17,7 +17,10 @@
   "options",
   "max_length",
   "max_value",
+<<<<<<< HEAD
   "precision",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "property_depends_on_section",
   "depends_on",
   "mandatory_depends_on",
@@ -144,6 +147,7 @@
    "fieldtype": "Code",
    "label": "Read Only Depends On",
    "options": "JS"
+<<<<<<< HEAD
   },
   {
    "depends_on": "eval:in_list([\"Float\", \"Currency\", \"Percent\"], doc.fieldtype)",
@@ -152,6 +156,8 @@
    "fieldtype": "Select",
    "label": "Precision",
    "options": "\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "istable": 1,

@@ -4,15 +4,23 @@
 import json
 import os
 import subprocess  # nosec
+<<<<<<< HEAD
 from contextlib import suppress
 
 from semantic_version import SimpleSpec, Version
+=======
+
+from semantic_version import Version
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 from frappe import _, safe_decode
 from frappe.utils import cstr
+<<<<<<< HEAD
 from frappe.utils.caching import redis_cache
 from frappe.utils.frappecloud import on_frappecloud
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_change_log(user=None):
@@ -132,7 +140,11 @@ def get_versions():
 
 
 def get_app_branch(app):
+<<<<<<< HEAD
 	"""Return branch of an app."""
+=======
+	"""Returns branch of an app"""
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	try:
 		with open(os.devnull, "wb") as null_stream:
 			result = subprocess.check_output(
@@ -165,13 +177,17 @@ def get_app_last_commit_ref(app):
 
 
 def check_for_update():
+<<<<<<< HEAD
 	if frappe.get_system_settings("disable_system_update_notification"):
 		return
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	updates = frappe._dict(major=[], minor=[], patch=[])
 	apps = get_versions()
 
 	for app in apps:
+<<<<<<< HEAD
 		remote_url = get_source_url(app)
 		if not remote_url:
 			continue
@@ -181,6 +197,15 @@ def check_for_update():
 			continue
 
 		# Get local instance's current version or the app
+=======
+		app_details = check_release_on_github(app)
+		if not app_details:
+			continue
+
+		github_version, org_name = app_details
+		# Get local instance's current version or the app
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		branch_version = (
 			apps[app]["branch_version"].split(" ", 1)[0] if apps[app].get("branch_version", "") else ""
 		)
@@ -188,11 +213,14 @@ def check_for_update():
 			return updates
 
 		instance_version = Version(branch_version or apps[app].get("version"))
+<<<<<<< HEAD
 
 		github_version, org_name = check_release_on_github(owner, repo, instance_version)
 		if not github_version or not org_name:
 			continue
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		# Compare and popup update message
 		for update_type in updates:
 			if github_version.__dict__[update_type] > instance_version.__dict__[update_type]:
@@ -203,7 +231,10 @@ def check_for_update():
 						org_name=org_name,
 						app_name=app,
 						title=apps[app]["title"],
+<<<<<<< HEAD
 						security_issues=security_issues_count(owner, repo, instance_version, github_version),
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					)
 				)
 				break
@@ -211,6 +242,7 @@ def check_for_update():
 				break
 
 	add_message_to_redis(updates)
+<<<<<<< HEAD
 	return updates
 
 
@@ -226,21 +258,40 @@ def parse_latest_non_beta_release(response: list, current_version: Version) -> l
 	response (list): response object returned by github
 
 	Return a json object pertaining to the latest non-beta release
+=======
+
+
+def parse_latest_non_beta_release(response):
+	"""
+	Parses the response JSON for all the releases and returns the latest non prerelease
+
+	Parameters
+	response (list): response object returned by github
+
+	Returns
+	json   : json object pertaining to the latest non-beta release
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""
 	version_list = [
 		release.get("tag_name").strip("v") for release in response if not release.get("prerelease")
 	]
 
+<<<<<<< HEAD
 	def prioritize_minor_update(v: str) -> Version:
 		target = Version(v)
 		return (current_version.major == target.major, target)
 
 	if version_list:
 		return sorted(version_list, key=prioritize_minor_update, reverse=True)[0]
+=======
+	if version_list:
+		return sorted(version_list, key=Version, reverse=True)[0]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return None
 
 
+<<<<<<< HEAD
 def check_release_on_github(
 	owner: str, repo: str, current_version: Version
 ) -> tuple[Version, str] | tuple[None, None]:
@@ -325,24 +376,86 @@ def get_source_url(app: str) -> str | None:
 		return
 	if remote_url := pyproject.get("project", {}).get("urls", {}).get("Repository"):
 		return remote_url.rstrip("/")
+=======
+def check_release_on_github(app: str):
+	"""
+	Check the latest release for a given Frappe application hosted on Github.
+
+	Args:
+	        app (str): The name of the Frappe application.
+
+	Returns:
+	        tuple(Version, str): The semantic version object of the latest release and the
+	                organization name, if the application exists, otherwise None.
+	"""
+
+	import requests
+	from giturlparse import parse
+	from giturlparse.parser import ParserError
+
+	try:
+		# Check if repo remote is on github
+		remote_url = subprocess.check_output(f"cd ../apps/{app} && git ls-remote --get-url", shell=True)
+	except subprocess.CalledProcessError:
+		# Passing this since some apps may not have git initialized in them
+		return
+
+	if isinstance(remote_url, bytes):
+		remote_url = remote_url.decode()
+
+	try:
+		parsed_url = parse(remote_url)
+	except ParserError:
+		# Invalid URL
+		return
+
+	if parsed_url.resource != "github.com":
+		return
+
+	owner = parsed_url.owner
+	repo = parsed_url.name
+
+	# Get latest version from GitHub
+	r = requests.get(f"https://api.github.com/repos/{owner}/{repo}/releases")
+	if r.ok:
+		latest_non_beta_release = parse_latest_non_beta_release(r.json())
+		if latest_non_beta_release:
+			return Version(latest_non_beta_release), owner
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def add_message_to_redis(update_json):
 	# "update-message" will store the update message string
+<<<<<<< HEAD
 	# "changelog-update-user-set" will be a set of users
 	frappe.cache.set_value("changelog-update-info", json.dumps(update_json))
 	user_list = [x.name for x in frappe.get_all("User", filters={"enabled": True})]
 	system_managers = [user for user in user_list if "System Manager" in frappe.get_roles(user)]
 	frappe.cache.sadd("changelog-update-user-set", *system_managers)
+=======
+	# "update-user-set" will be a set of users
+	cache = frappe.cache()
+	cache.set_value("update-info", json.dumps(update_json))
+	user_list = [x.name for x in frappe.get_all("User", filters={"enabled": True})]
+	system_managers = [user for user in user_list if "System Manager" in frappe.get_roles(user)]
+	cache.sadd("update-user-set", *system_managers)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()
 def show_update_popup():
+<<<<<<< HEAD
 	if frappe.get_system_settings("disable_system_update_notification"):
 		return
 	user = frappe.session.user
 
 	update_info = frappe.cache.get_value("changelog-update-info")
+=======
+	cache = frappe.cache()
+	user = frappe.session.user
+
+	update_info = cache.get_value("update-info")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if not update_info:
 		return
 
@@ -350,11 +463,16 @@ def show_update_popup():
 
 	# Check if user is int the set of users to send update message to
 	update_message = ""
+<<<<<<< HEAD
 	if frappe.cache.sismember("changelog-update-user-set", user):
+=======
+	if cache.sismember("update-user-set", user):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		for update_type in updates:
 			release_links = ""
 			for app in updates[update_type]:
 				app = frappe._dict(app)
+<<<<<<< HEAD
 				security_msg = ""
 				if app.security_issues:
 					security_msg = (
@@ -372,6 +490,14 @@ def show_update_popup():
 							v{app.available_version}
 						</a> {security_msg}<br>
 					"""
+=======
+				release_links += "<b>{title}</b>: <a href='https://github.com/{org_name}/{app_name}/releases/tag/v{available_version}'>v{available_version}</a><br>".format(
+					available_version=app.available_version,
+					org_name=app.org_name,
+					app_name=app.app_name,
+					title=app.title,
+				)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if release_links:
 				message = _("New {} releases for the following apps are available").format(_(update_type))
 				update_message += (
@@ -380,6 +506,7 @@ def show_update_popup():
 					)
 				)
 
+<<<<<<< HEAD
 	primary_action = None
 	if on_frappecloud():
 		primary_action = {
@@ -408,3 +535,8 @@ def get_pyproject(app: str) -> dict | None:
 
 	with open(pyproject_path, "rb") as f:
 		return load(f)
+=======
+	if update_message:
+		frappe.msgprint(update_message, title=_("New updates are available"), indicator="green")
+		cache.srem("update-user-set", user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

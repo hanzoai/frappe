@@ -6,7 +6,11 @@
 			{% set count = (parents | length) + 1 %}
 			{% for parent in parents %}
 				<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" class="breadcrumb-item">
+<<<<<<< HEAD
 					<a itemprop="item" href="{{ url_prefix }}{{ parent.route | abs_url }}">
+=======
+					<a itemprop="item" href="{{ url_prefix }}{{ parent.route | abs_url }}" itemprop="url">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						<span itemprop="name">{{ parent.title or parent.label or parent.name or "" }}</span>
 						<meta itemprop="position" content="{{ loop.index }}" />
 					</a>

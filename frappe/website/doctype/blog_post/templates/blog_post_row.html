@@ -33,7 +33,11 @@
 					<a href="/blog?blogger={{ post.blogger }}">{{ post.full_name }}</a>
 					<div class="small">
 						{{ frappe.format_date(post.published_on) }}
+<<<<<<< HEAD
 						{% if post.read_time %} &middot; {{ post.read_time }} {{ _('min read') }} {% endif %}
+=======
+						{% if post.read_time %} &middot; {{ post.read_time }} min read {% endif %}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					</div>
 				</div>
 			</div>

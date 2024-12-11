@@ -1,6 +1,7 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+<<<<<<< HEAD
 import functools
 import gc
 import logging
@@ -16,12 +17,28 @@ from werkzeug.wsgi import ClosingIterator
 
 import frappe
 import frappe.api
+=======
+import gc
+import logging
+import os
+
+from werkzeug.exceptions import HTTPException, NotFound
+from werkzeug.local import LocalManager
+from werkzeug.middleware.profiler import ProfilerMiddleware
+from werkzeug.middleware.shared_data import SharedDataMiddleware
+from werkzeug.wrappers import Request, Response
+
+import frappe
+import frappe.api
+import frappe.auth
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import frappe.handler
 import frappe.monitor
 import frappe.rate_limiter
 import frappe.recorder
 import frappe.utils.response
 from frappe import _
+<<<<<<< HEAD
 from frappe.auth import SAFE_HTTP_METHODS, UNSAFE_HTTP_METHODS, HTTPRequest, validate_auth
 from frappe.middlewares import StaticDataMiddleware
 from frappe.utils import CallbackManager, cint, get_site_name
@@ -32,10 +49,37 @@ from frappe.website.serve import get_response
 
 _site = None
 _sites_path = os.environ.get("SITES_PATH", ".")
+=======
+from frappe.core.doctype.comment.comment import update_comments_in_parent_after_request
+from frappe.middlewares import StaticDataMiddleware
+from frappe.utils import cint, get_site_name, sanitize_html
+from frappe.utils.data import escape_html
+from frappe.utils.error import make_error_snapshot
+from frappe.website.serve import get_response
+
+local_manager = LocalManager(frappe.local)
+
+_site = None
+_sites_path = os.environ.get("SITES_PATH", ".")
+SAFE_HTTP_METHODS = ("GET", "HEAD", "OPTIONS")
+UNSAFE_HTTP_METHODS = ("POST", "PUT", "DELETE", "PATCH")
+
+
+class RequestContext:
+	def __init__(self, environ):
+		self.request = Request(environ)
+
+	def __enter__(self):
+		init_request(self.request)
+
+	def __exit__(self, type, value, traceback):
+		frappe.destroy()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 # If gc.freeze is done then importing modules before forking allows us to share the memory
 if frappe._tune_gc:
+<<<<<<< HEAD
 	import gettext
 
 	import babel
@@ -43,6 +87,11 @@ if frappe._tune_gc:
 	import bleach
 	import num2words
 	import pydantic
+=======
+	import babel.dates
+	import bleach
+	import num2words
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	import frappe.boot
 	import frappe.client
@@ -60,7 +109,10 @@ if frappe._tune_gc:
 	import frappe.utils.jinja_globals
 	import frappe.utils.redis_wrapper  # Exact redis_wrapper
 	import frappe.utils.safe_exec
+<<<<<<< HEAD
 	import frappe.utils.typing_validations  # any whitelisted method uses this
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	import frappe.website.path_resolver  # all the page types and resolver
 	import frappe.website.router  # Website router
 	import frappe.website.website_generator  # web page doctypes
@@ -68,6 +120,7 @@ if frappe._tune_gc:
 # end: module pre-loading
 
 
+<<<<<<< HEAD
 def after_response_wrapper(app):
 	"""Wrap a WSGI application to call after_response hooks after we have responded.
 
@@ -89,6 +142,9 @@ def after_response_wrapper(app):
 
 
 @after_response_wrapper
+=======
+@local_manager.middleware
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 @Request.application
 def application(request: Request):
 	response = None
@@ -98,12 +154,17 @@ def application(request: Request):
 
 		init_request(request)
 
+<<<<<<< HEAD
 		validate_auth()
+=======
+		frappe.api.validate_auth()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if request.method == "OPTIONS":
 			response = Response()
 
 		elif frappe.form_dict.cmd:
+<<<<<<< HEAD
 			deprecation_warning(
 				f"{frappe.form_dict.cmd}: Sending `cmd` for RPC calls is deprecated, call REST API instead `/api/method/cmd`"
 			)
@@ -112,6 +173,12 @@ def application(request: Request):
 
 		elif request.path.startswith("/api/"):
 			response = frappe.api.handle(request)
+=======
+			response = frappe.handler.handle()
+
+		elif request.path.startswith("/api/"):
+			response = frappe.api.handle()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		elif request.path.startswith("/backups"):
 			response = frappe.utils.response.download_backup(request.path)
@@ -139,7 +206,11 @@ def application(request: Request):
 		# this function *must* always return a response, hence any exception thrown outside of
 		# try..catch block like this finally block needs to be handled appropriately.
 
+<<<<<<< HEAD
 		if rollback and request.method in UNSAFE_HTTP_METHODS and frappe.db:
+=======
+		if request.method in UNSAFE_HTTP_METHODS and frappe.db and rollback:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			frappe.db.rollback()
 
 		try:
@@ -150,6 +221,10 @@ def application(request: Request):
 
 		log_request(request, response)
 		process_response(response)
+<<<<<<< HEAD
+=======
+		frappe.destroy()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return response
 
@@ -164,8 +239,11 @@ def run_after_request_hooks(request, response):
 
 def init_request(request):
 	frappe.local.request = request
+<<<<<<< HEAD
 	frappe.local.request.after_response = CallbackManager()
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	frappe.local.is_ajax = frappe.get_request_header("X-Requested-With") == "XMLHttpRequest"
 
 	site = _site or request.headers.get("X-Frappe-Site-Name") or get_site_name(request.host)
@@ -192,7 +270,11 @@ def init_request(request):
 	make_form_dict(request)
 
 	if request.method != "OPTIONS":
+<<<<<<< HEAD
 		frappe.local.http_request = HTTPRequest()
+=======
+		frappe.local.http_request = frappe.auth.HTTPRequest()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	for before_request_task in frappe.get_hooks("before_request"):
 		frappe.call(before_request_task)
@@ -222,8 +304,11 @@ def log_request(request, response):
 			{
 				"site": get_site_name(request.host),
 				"remote_addr": getattr(request, "remote_addr", "NOTFOUND"),
+<<<<<<< HEAD
 				"pid": os.getpid(),
 				"user": getattr(frappe.local.session, "user", "NOTFOUND"),
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				"base_url": getattr(request, "base_url", "NOTFOUND"),
 				"full_path": getattr(request, "full_path", "NOTFOUND"),
 				"method": getattr(request, "method", "NOTFOUND"),
@@ -245,9 +330,12 @@ def process_response(response):
 	if hasattr(frappe.local, "rate_limiter"):
 		response.headers.extend(frappe.local.rate_limiter.headers())
 
+<<<<<<< HEAD
 	if trace_id := frappe.monitor.get_trace_id():
 		response.headers.extend({"X-Frappe-Request-Id": trace_id})
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	# CORS headers
 	if hasattr(frappe.local, "conf"):
 		set_cors_headers(response)
@@ -299,6 +387,7 @@ def make_form_dict(request: Request):
 		args.update(request.args or {})
 		args.update(request.form or {})
 
+<<<<<<< HEAD
 	if isinstance(args, dict):
 		frappe.local.form_dict = frappe._dict(args)
 		# _ is passed by $.ajax so that the request is not cached by the browser. So, remove _ from form_dict
@@ -308,6 +397,16 @@ def make_form_dict(request: Request):
 	else:
 		frappe.throw(_("Invalid request arguments"))
 
+=======
+	if not isinstance(args, dict):
+		frappe.throw(_("Invalid request arguments"))
+
+	frappe.local.form_dict = frappe._dict(args)
+
+	# _ is passed by $.ajax so that the request is not cached by the browser. So, remove _ from form_dict
+	frappe.local.form_dict.pop("_", None)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def handle_exception(e):
 	response = None
@@ -319,7 +418,10 @@ def handle_exception(e):
 		and (frappe.local.is_ajax or "application/json" in accept_header)
 		or (frappe.local.request.path.startswith("/api/") and not accept_header.startswith("text"))
 	)
+<<<<<<< HEAD
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	allow_traceback = frappe.get_system_settings("allow_error_traceback") if frappe.db else False
 
 	if not frappe.session.user:
@@ -389,7 +491,11 @@ def handle_exception(e):
 			frappe.local.login_manager.clear_cookies()
 
 	if http_status_code >= 500:
+<<<<<<< HEAD
 		log_error_snapshot(e)
+=======
+		make_error_snapshot(e)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if return_as_message:
 		response = get_response("message", http_status_code=http_status_code)
@@ -413,6 +519,7 @@ def sync_database(rollback: bool) -> bool:
 	# update session
 	if session := getattr(frappe.local, "session_obj", None):
 		if session.update():
+<<<<<<< HEAD
 			rollback = False
 
 	return rollback
@@ -474,6 +581,17 @@ def serve(
 	sites_path=".",
 	proxy=False,
 ):
+=======
+			frappe.db.commit()
+			rollback = False
+
+	update_comments_in_parent_after_request()
+
+	return rollback
+
+
+def serve(port=8000, profile=False, no_reload=False, no_threading=False, site=None, sites_path="."):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	global application, _site, _sites_path
 	_site = site
 	_sites_path = sites_path
@@ -484,6 +602,7 @@ def serve(
 		application = ProfilerMiddleware(application, sort_by=("cumtime", "calls"))
 
 	if not os.environ.get("NO_STATICS"):
+<<<<<<< HEAD
 		application = application_with_statics()
 
 	if proxy or os.environ.get("USE_PROXY"):
@@ -491,6 +610,14 @@ def serve(
 
 	application.debug = True
 	application.config = {"SERVER_NAME": "127.0.0.1:8000"}
+=======
+		application = SharedDataMiddleware(application, {"/assets": str(os.path.join(sites_path, "assets"))})
+
+		application = StaticDataMiddleware(application, {"/files": str(os.path.abspath(sites_path))})
+
+	application.debug = True
+	application.config = {"SERVER_NAME": "localhost:8000"}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	log = logging.getLogger("werkzeug")
 	log.propagate = False
@@ -511,6 +638,7 @@ def serve(
 	)
 
 
+<<<<<<< HEAD
 def application_with_statics():
 	global application, _sites_path
 
@@ -524,6 +652,8 @@ def application_with_statics():
 # Remove references to pattern that are pre-compiled and loaded to global scopes.
 re.purge()
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 # Both Gunicorn and RQ use forking to spawn workers. In an ideal world, the fork should be sharing
 # most of the memory if there are no writes made to data because of Copy on Write, however,
 # python's GC is not CoW friendly and writes to data even if user-code doesn't. Specifically, the

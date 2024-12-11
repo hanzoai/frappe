@@ -9,11 +9,16 @@ frappe.ui.form.Layout = class Layout {
 		this.tabs = [];
 		this.sections = [];
 		this.page_breaks = [];
+<<<<<<< HEAD
 		this.sections_dict = {};
 		this.fields_list = [];
 		this.fields_dict = {};
 		this.section_count = 0;
 		this.column_count = 0;
+=======
+		this.fields_list = [];
+		this.fields_dict = {};
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		$.extend(this, opts);
 	}
@@ -35,7 +40,10 @@ frappe.ui.form.Layout = class Layout {
 		}
 
 		this.setup_tab_events();
+<<<<<<< HEAD
 		this.frm && this.setup_tooltip_events();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.render();
 	}
 
@@ -45,7 +53,11 @@ frappe.ui.form.Layout = class Layout {
 				<ul class="nav form-tabs" id="form-tabs" role="tablist"></ul>
 			</div>
 		`).appendTo(this.page);
+<<<<<<< HEAD
 		this.tab_link_container = this.page.find(".form-tabs");
+=======
+		this.tabs_list = this.page.find(".form-tabs");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.tabs_content = $(`<div class="form-tab-content tab-content"></div>`).appendTo(
 			this.page
 		);
@@ -102,7 +114,10 @@ frappe.ui.form.Layout = class Layout {
 			// remove previous color
 			this.message.removeClass(this.message_color);
 		}
+<<<<<<< HEAD
 		let close_message = $(`<div class="close-message">${frappe.utils.icon("close")}</div>`);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.message_color =
 			color && ["yellow", "blue", "red", "green", "orange"].includes(color) ? color : "blue";
 		if (html) {
@@ -112,8 +127,11 @@ frappe.ui.form.Layout = class Layout {
 			}
 			this.message.removeClass("hidden").addClass(this.message_color);
 			$(html).appendTo(this.message);
+<<<<<<< HEAD
 			close_message.appendTo(this.message);
 			close_message.on("click", () => this.message.empty().addClass("hidden"));
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		} else {
 			this.message.empty().addClass("hidden");
 		}
@@ -210,7 +228,11 @@ frappe.ui.form.Layout = class Layout {
 		!this.section && this.make_section();
 		!this.column && this.make_column();
 
+<<<<<<< HEAD
 		const parent = this.column.form.get(0);
+=======
+		const parent = this.column.wrapper.get(0);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		const fieldobj = this.init_field(df, parent, render);
 
 		// An invalid control name will return in a null fieldobj
@@ -219,11 +241,22 @@ frappe.ui.form.Layout = class Layout {
 		this.fields_list.push(fieldobj);
 		this.fields_dict[df.fieldname] = fieldobj;
 
+<<<<<<< HEAD
 		this.section.add_field(fieldobj);
 		this.column.add_field(fieldobj);
 
 		if (this.current_tab) {
 			this.current_tab.add_field(fieldobj);
+=======
+		this.section.fields_list.push(fieldobj);
+		this.section.fields_dict[df.fieldname] = fieldobj;
+		fieldobj.section = this.section;
+
+		if (this.current_tab) {
+			fieldobj.tab = this.current_tab;
+			this.current_tab.fields_list.push(fieldobj);
+			this.current_tab.fields_dict[df.fieldname] = fieldobj;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 
@@ -251,6 +284,10 @@ frappe.ui.form.Layout = class Layout {
 	}
 
 	make_page(df) {
+<<<<<<< HEAD
+=======
+		// eslint-disable-line no-unused-vars
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		let me = this;
 		let head = $(`
 			<div class="form-clickable-section text-center">
@@ -284,6 +321,7 @@ frappe.ui.form.Layout = class Layout {
 		this.fold_btn.trigger("click");
 	}
 
+<<<<<<< HEAD
 	make_section(df = {}) {
 		this.section_count++;
 		if (!df.fieldname) {
@@ -291,14 +329,20 @@ frappe.ui.form.Layout = class Layout {
 			df.fieldtype = "Section Break";
 		}
 
+=======
+	make_section(df) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.section = new Section(
 			this.current_tab ? this.current_tab.wrapper : this.page,
 			df,
 			this.card_layout,
 			this
 		);
+<<<<<<< HEAD
 		this.sections.push(this.section);
 		this.sections_dict[df.fieldname] = this.section;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		// append to layout fields
 		if (df) {
@@ -309,6 +353,7 @@ frappe.ui.form.Layout = class Layout {
 		this.column = null;
 	}
 
+<<<<<<< HEAD
 	make_column(df = {}) {
 		this.column_count++;
 		if (!df.fieldname) {
@@ -316,6 +361,9 @@ frappe.ui.form.Layout = class Layout {
 			df.fieldtype = "Column Break";
 		}
 
+=======
+	make_column(df) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.column = new Column(this.section, df);
 		if (df && df.fieldname) {
 			this.fields_list.push(this.column);
@@ -324,7 +372,11 @@ frappe.ui.form.Layout = class Layout {
 
 	make_tab(df) {
 		this.section = null;
+<<<<<<< HEAD
 		let tab = new Tab(this, df, this.frm, this.tab_link_container, this.tabs_content);
+=======
+		let tab = new Tab(this, df, this.frm, this.tabs_list, this.tabs_content);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.current_tab = tab;
 		this.make_section({ fieldtype: "Section Break" });
 		this.tabs.push(tab);
@@ -375,10 +427,14 @@ frappe.ui.form.Layout = class Layout {
 			const section = $(this).removeClass("empty-section visible-section");
 			if (section.find(".frappe-control:not(.hide-control)").length) {
 				section.addClass("visible-section");
+<<<<<<< HEAD
 			} else if (
 				section.parent().hasClass("tab-pane") ||
 				section.parent().hasClass("form-page")
 			) {
+=======
+			} else {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				// nothing visible, hide the section
 				section.addClass("empty-section");
 			}
@@ -395,11 +451,16 @@ frappe.ui.form.Layout = class Layout {
 
 		const visible_tabs = this.tabs.filter((tab) => !tab.hidden);
 		if (visible_tabs && visible_tabs.length == 1) {
+<<<<<<< HEAD
 			visible_tabs[0].tab_link.toggleClass("hide show");
+=======
+			visible_tabs[0].parent.toggleClass("hide show");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		this.set_tab_as_active();
 	}
 
+<<<<<<< HEAD
 	select_tab(label_or_fieldname) {
 		for (let tab of this.tabs) {
 			if (
@@ -414,6 +475,10 @@ frappe.ui.form.Layout = class Layout {
 
 	set_tab_as_active() {
 		let frm_active_tab = this.frm?.get_active_tab?.();
+=======
+	set_tab_as_active() {
+		let frm_active_tab = this?.frm.get_active_tab?.();
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (frm_active_tab) {
 			frm_active_tab.set_active();
 		} else if (this.tabs.length) {
@@ -507,7 +572,11 @@ frappe.ui.form.Layout = class Layout {
 			}, 500)
 		);
 
+<<<<<<< HEAD
 		this.tab_link_container.off("click").on("click", ".nav-link", (e) => {
+=======
+		this.tabs_list.off("click").on("click", ".nav-link", (e) => {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			e.preventDefault();
 			e.stopImmediatePropagation();
 			$(e.currentTarget).tab("show");
@@ -535,6 +604,7 @@ frappe.ui.form.Layout = class Layout {
 		});
 	}
 
+<<<<<<< HEAD
 	setup_tooltip_events() {
 		$(document).on("keydown", (e) => {
 			if (e.altKey) {
@@ -554,6 +624,8 @@ frappe.ui.form.Layout = class Layout {
 			});
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	handle_tab(doctype, fieldname, shift) {
 		let grid_row = null,
 			prev = null,
@@ -631,7 +703,11 @@ frappe.ui.form.Layout = class Layout {
 					return true;
 				} else if (
 					field.df.fieldtype === "Table MultiSelect" ||
+<<<<<<< HEAD
 					!frappe.model.no_value_type.includes(field.df.fieldtype)
+=======
+					!in_list(frappe.model.no_value_type, field.df.fieldtype)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				) {
 					this.set_focus(field);
 					return true;

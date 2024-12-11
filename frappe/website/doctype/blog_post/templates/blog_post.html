@@ -22,7 +22,11 @@
 				<time datetime="{{ published_on }}">{{ frappe.format_date(published_on) }}</time>
 				{%- if read_time -%}
 				&nbsp;&middot;
+<<<<<<< HEAD
 				<span>{{ read_time }} {{ _('min read') }} </span>
+=======
+				<span>{{ read_time }} min read</span>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				{%- endif -%}
 			</div>
 		</div>

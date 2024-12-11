@@ -38,7 +38,10 @@ def xmlrunner_wrapper(output):
 
 
 def main(
+<<<<<<< HEAD
 	site=None,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	app=None,
 	module=None,
 	doctype=None,
@@ -48,21 +51,38 @@ def main(
 	force=False,
 	profile=False,
 	junit_xml_output=None,
+<<<<<<< HEAD
 	doctype_list_path=None,
+=======
+	ui_tests=False,
+	doctype_list_path=None,
+	skip_test_records=False,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	failfast=False,
 	case=None,
 ):
 	global unittest_runner
 
+<<<<<<< HEAD
 	frappe.init(site=site)
 	if not frappe.db:
 		frappe.connect()
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if doctype_list_path:
 		app, doctype_list_path = doctype_list_path.split(os.path.sep, 1)
 		with open(frappe.get_app_path(app, doctype_list_path)) as f:
 			doctype = f.read().strip().splitlines()
 
+<<<<<<< HEAD
+=======
+	if ui_tests:
+		print(
+			"Selenium testing has been deprecated\nUse bench --site {site_name} run-ui-tests for Cypress tests"
+		)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	xmloutput_fh = None
 	if junit_xml_output:
 		xmloutput_fh = open(junit_xml_output, "wb")
@@ -74,9 +94,18 @@ def main(
 		frappe.flags.print_messages = verbose
 		frappe.flags.in_test = True
 
+<<<<<<< HEAD
 		# workaround! since there is no separate test db
 		frappe.clear_cache()
 		scheduler_disabled_by_user = frappe.utils.scheduler.is_scheduler_disabled(verbose=False)
+=======
+		if not frappe.db:
+			frappe.connect()
+
+		# workaround! since there is no separate test db
+		frappe.clear_cache()
+		scheduler_disabled_by_user = frappe.utils.scheduler.is_scheduler_disabled()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if not scheduler_disabled_by_user:
 			frappe.utils.scheduler.disable_scheduler()
 
@@ -108,7 +137,13 @@ def main(
 				case=case,
 			)
 		else:
+<<<<<<< HEAD
 			ret = run_all_tests(app, verbose, profile, failfast=failfast, junit_xml_output=junit_xml_output)
+=======
+			ret = run_all_tests(
+				app, verbose, profile, ui_tests, failfast=failfast, junit_xml_output=junit_xml_output
+			)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if not scheduler_disabled_by_user:
 			frappe.utils.scheduler.enable_scheduler()
@@ -128,25 +163,43 @@ def main(
 
 class TimeLoggingTestResult(unittest.TextTestResult):
 	def startTest(self, test):
+<<<<<<< HEAD
 		self._started_at = time.monotonic()
 		super().startTest(test)
 
 	def addSuccess(self, test):
 		elapsed = time.monotonic() - self._started_at
+=======
+		self._started_at = time.time()
+		super().startTest(test)
+
+	def addSuccess(self, test):
+		elapsed = time.time() - self._started_at
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		name = self.getDescription(test)
 		if elapsed >= SLOW_TEST_THRESHOLD:
 			self.stream.write(f"\n{name} ({elapsed:.03}s)\n")
 		super().addSuccess(test)
 
 
+<<<<<<< HEAD
 def run_all_tests(app=None, verbose=False, profile=False, failfast=False, junit_xml_output=False):
+=======
+def run_all_tests(
+	app=None, verbose=False, profile=False, ui_tests=False, failfast=False, junit_xml_output=False
+):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	import os
 
 	apps = [app] if app else frappe.get_installed_apps()
 
 	test_suite = unittest.TestSuite()
 	for app in apps:
+<<<<<<< HEAD
 		for path, folders, files in os.walk(frappe.get_app_path(app)):
+=======
+		for path, folders, files in os.walk(frappe.get_pymodule_path(app)):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			for dontwalk in ("locals", ".git", "public", "__pycache__"):
 				if dontwalk in folders:
 					folders.remove(dontwalk)
@@ -159,7 +212,11 @@ def run_all_tests(app=None, verbose=False, profile=False, failfast=False, junit_
 			for filename in files:
 				if filename.startswith("test_") and filename.endswith(".py") and filename != "test_runner.py":
 					# print filename[:-3]
+<<<<<<< HEAD
 					_add_test(app, path, filename, verbose, test_suite)
+=======
+					_add_test(app, path, filename, verbose, test_suite, ui_tests)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if junit_xml_output:
 		runner = unittest_runner(verbosity=1 + cint(verbose), failfast=failfast)
@@ -294,14 +351,22 @@ def _run_unittest(
 	return out
 
 
+<<<<<<< HEAD
 def _add_test(app, path, filename, verbose, test_suite=None):
+=======
+def _add_test(app, path, filename, verbose, test_suite=None, ui_tests=False):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	import os
 
 	if os.path.sep.join(["doctype", "doctype", "boilerplate"]) in path:
 		# in /doctype/doctype/boilerplate/
 		return
 
+<<<<<<< HEAD
 	app_path = frappe.get_app_path(app)
+=======
+	app_path = frappe.get_pymodule_path(app)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	relative_path = os.path.relpath(path, app_path)
 	if relative_path == ".":
 		module_name = app
@@ -316,6 +381,14 @@ def _add_test(app, path, filename, verbose, test_suite=None):
 		for doctype in module.test_dependencies:
 			make_test_records(doctype, verbose=verbose, commit=True)
 
+<<<<<<< HEAD
+=======
+	is_ui_test = True if hasattr(module, "TestDriver") else False
+
+	if is_ui_test != ui_tests:
+		return
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if not test_suite:
 		test_suite = unittest.TestSuite()
 
@@ -331,6 +404,12 @@ def _add_test(app, path, filename, verbose, test_suite=None):
 
 
 def make_test_records(doctype, verbose=0, force=False, commit=False):
+<<<<<<< HEAD
+=======
+	if not frappe.db:
+		frappe.connect()
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if frappe.flags.skip_test_records:
 		return
 

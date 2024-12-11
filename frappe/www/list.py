@@ -227,11 +227,22 @@ def get_list(
 
 	if txt:
 		if meta.search_fields:
+<<<<<<< HEAD
 			or_filters.extend(
 				[doctype, f, "like", "%" + txt + "%"]
 				for f in meta.get_search_fields()
 				if f == "name" or meta.get_field(f).fieldtype in ("Data", "Text", "Small Text", "Text Editor")
 			)
+=======
+			for f in meta.get_search_fields():
+				if f == "name" or meta.get_field(f).fieldtype in (
+					"Data",
+					"Text",
+					"Small Text",
+					"Text Editor",
+				):
+					or_filters.append([doctype, f, "like", "%" + txt + "%"])
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		else:
 			if isinstance(filters, dict):
 				filters["name"] = ("like", "%" + txt + "%")

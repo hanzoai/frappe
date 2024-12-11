@@ -1,5 +1,6 @@
 .tree {
 	padding: var(--padding-sm);
+<<<<<<< HEAD
 	.btn-group {
 		.btn {
 			box-shadow: none;
@@ -14,6 +15,8 @@
 			}
 		}
 	}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .tree li {
@@ -72,6 +75,7 @@
 	}
 }
 
+<<<<<<< HEAD
 .tree-link .file-doc-link {
 	opacity: 0;
 }
@@ -85,6 +89,8 @@
 	opacity: 0.5;
 }
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .tree-hover {
 	background-color: var(--highlight-color);
 	min-height: 25px;

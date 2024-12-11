@@ -37,7 +37,11 @@ frappe.ui.Scanner = class Scanner {
 						try {
 							this.options.on_scan(decodedResult);
 						} catch (error) {
+<<<<<<< HEAD
 							console.error(error);
+=======
+							console.error(error); // eslint-disable-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						}
 					}
 					if (!this.options.multiple) {
@@ -46,13 +50,21 @@ frappe.ui.Scanner = class Scanner {
 					}
 				},
 				(errorMessage) => {
+<<<<<<< HEAD
+=======
+					// eslint-disable-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					// parse error, ignore it.
 				}
 			)
 			.catch((err) => {
 				this.is_alive = false;
 				this.hide_dialog();
+<<<<<<< HEAD
 				console.error(err);
+=======
+				console.error(err); // eslint-disable-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			});
 		this.is_alive = true;
 	}
@@ -94,6 +106,10 @@ frappe.ui.Scanner = class Scanner {
 	}
 
 	load_lib() {
+<<<<<<< HEAD
 		return frappe.require("/assets/frappe/node_modules/html5-qrcode/html5-qrcode.min.js");
+=======
+		return frappe.require("/assets/frappe/node_modules/html5-qrcode/dist/html5-qrcode.min.js");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 };

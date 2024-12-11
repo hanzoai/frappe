@@ -3,14 +3,20 @@ import logging
 import os
 from copy import deepcopy
 from logging.handlers import RotatingFileHandler
+<<<<<<< HEAD
 from typing import Literal
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 # imports - module imports
 import frappe
 from frappe.utils import get_sites
 
 default_log_level = logging.WARNING if frappe._dev_server else logging.ERROR
+<<<<<<< HEAD
 stream_logging = os.environ.get("FRAPPE_STREAM_LOGGING")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_logger(
@@ -20,7 +26,11 @@ def get_logger(
 	filter=None,
 	max_size=100_000,
 	file_count=20,
+<<<<<<< HEAD
 	stream_only=stream_logging,
+=======
+	stream_only=False,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 ) -> "logging.Logger":
 	"""Application Logger for your given module
 
@@ -98,7 +108,11 @@ class SiteContextFilter(logging.Filter):
 			return True
 
 
+<<<<<<< HEAD
 def set_log_level(level: Literal["ERROR", "WARNING", "WARN", "INFO", "DEBUG"]) -> None:
+=======
+def set_log_level(level: int) -> None:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""Use this method to set log level to something other than the default DEBUG"""
 	frappe.log_level = getattr(logging, (level or "").upper(), None) or default_log_level
 	frappe.loggers = {}

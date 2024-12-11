@@ -9,12 +9,21 @@
 			<select class="group-by form-control input-xs">
 				<option value="" disabled selected>{{ __("Select Group By...") }}</option>
 				{% for (var parent_doctype in group_by_conditions) { %}
+<<<<<<< HEAD
 					{% for (var val of group_by_conditions[parent_doctype]) { %}
 						<option
 							data-doctype="{{parent_doctype}}"
 							value="{{val.fieldname}}"
 						>
 							{{ __(val.label || val.fieldname, null, val.parent ) }}
+=======
+					{% for (var val in group_by_conditions[parent_doctype]) { %}
+						<option
+							data-doctype="{{parent_doctype}}"
+							value="{{group_by_conditions[parent_doctype][val].fieldname}}"
+						>
+							{{ __(group_by_conditions[parent_doctype][val].label || group_by_conditions[parent_doctype][val].fieldname) }}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						</option>
 					{% } %}
 				{% } %}

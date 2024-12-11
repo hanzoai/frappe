@@ -4,11 +4,17 @@
 import io
 import json
 import os
+<<<<<<< HEAD
 import sys
 from datetime import date, datetime, time, timedelta
 from decimal import ROUND_HALF_UP, Decimal, localcontext
 from enum import Enum
 from io import StringIO
+=======
+from datetime import date, datetime, time, timedelta
+from decimal import ROUND_HALF_UP, Decimal, localcontext
+from enum import Enum
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from mimetypes import guess_type
 from unittest.mock import patch
 
@@ -19,11 +25,17 @@ from PIL import Image
 
 import frappe
 from frappe.installer import parse_app_name
+<<<<<<< HEAD
 from frappe.model.document import Document
 from frappe.tests.utils import FrappeTestCase, MockedRequestTestCase, change_settings
 from frappe.utils import (
 	ceil,
 	dict_to_str,
+=======
+from frappe.tests.utils import FrappeTestCase, change_settings
+from frappe.utils import (
+	ceil,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	evaluate_filters,
 	execute_in_shell,
 	floor,
@@ -31,12 +43,16 @@ from frappe.utils import (
 	format_timedelta,
 	get_bench_path,
 	get_file_timestamp,
+<<<<<<< HEAD
 	get_gravatar,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	get_site_info,
 	get_sites,
 	get_url,
 	money_in_words,
 	parse_timedelta,
+<<<<<<< HEAD
 	random_string,
 	remove_blanks,
 	safe_json_loads,
@@ -71,17 +87,43 @@ from frappe.utils.data import (
 	rounded,
 	sha256_hash,
 	to_timedelta,
+=======
+	safe_json_loads,
+	scrub_urls,
+	validate_email_address,
+	validate_url,
+)
+from frappe.utils.data import (
+	add_to_date,
+	cast,
+	cint,
+	cstr,
+	expand_relative_urls,
+	get_first_day_of_week,
+	get_time,
+	get_timedelta,
+	getdate,
+	now_datetime,
+	nowtime,
+	rounded,
+	sha256_hash,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	validate_python_code,
 )
 from frappe.utils.dateutils import get_dates_from_timegrain
 from frappe.utils.diff import _get_value_from_version, get_version_diff, version_query
+<<<<<<< HEAD
 from frappe.utils.identicon import Identicon
 from frappe.utils.image import optimize_image, strip_exif_data
 from frappe.utils.make_random import can_make, get_random, how_many
+=======
+from frappe.utils.image import optimize_image, strip_exif_data
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils.response import json_handler
 from frappe.utils.synchronization import LockTimeoutError, filelock
 
 
+<<<<<<< HEAD
 class Capturing(list):
 	# ref: https://stackoverflow.com/a/16571630/10309266
 	def __enter__(self):
@@ -95,6 +137,8 @@ class Capturing(list):
 		sys.stdout = self._stdout
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 class TestFilters(FrappeTestCase):
 	def test_simple_dict(self):
 		self.assertTrue(evaluate_filters({"doctype": "User", "status": "Open"}, {"status": "Open"}))
@@ -180,6 +224,7 @@ class TestFilters(FrappeTestCase):
 			)
 		)
 
+<<<<<<< HEAD
 	def test_filter_evaluation(self):
 		doc = {
 			"doctype": "User",
@@ -209,6 +254,8 @@ class TestFilters(FrappeTestCase):
 		for filter, expected_result in test_cases:
 			self.assertEqual(evaluate_filters(doc, filter), expected_result, msg=f"{filter}")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 class TestMoney(FrappeTestCase):
 	def test_money_in_words(self):
@@ -399,17 +446,24 @@ class TestValidationUtils(FrappeTestCase):
 		# Valid addresses
 		self.assertTrue(validate_email_address("someone@frappe.com"))
 		self.assertTrue(validate_email_address("someone@frappe.com, anyone@frappe.io"))
+<<<<<<< HEAD
 		self.assertTrue(validate_email_address("test%201@frappe.com"))
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# Invalid address
 		self.assertFalse(validate_email_address("someone"))
 		self.assertFalse(validate_email_address("someone@----.com"))
+<<<<<<< HEAD
 		self.assertFalse(validate_email_address("test 1@frappe.com"))
 		self.assertFalse(validate_email_address("test@example.com test2@example.com,undisclosed-recipient"))
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# Invalid with throw
 		self.assertRaises(frappe.InvalidEmailAddressError, validate_email_address, "someone.com", throw=True)
 
+<<<<<<< HEAD
 		self.assertEqual(validate_email_address("Some%20One@frappe.com"), "Some%20One@frappe.com")
 		self.assertEqual(
 			validate_email_address("erp+Job%20Applicant=JA00004@frappe.com"),
@@ -443,6 +497,14 @@ class TestImage(FrappeTestCase):
 		original_image = Image.open(frappe.get_app_path("frappe", "tests", "data", "exif_sample_image.jpg"))
 		original_image_content = open(
 			frappe.get_app_path("frappe", "tests", "data", "exif_sample_image.jpg"), mode="rb"
+=======
+
+class TestImage(FrappeTestCase):
+	def test_strip_exif_data(self):
+		original_image = Image.open("../apps/frappe/frappe/tests/data/exif_sample_image.jpg")
+		original_image_content = open(
+			"../apps/frappe/frappe/tests/data/exif_sample_image.jpg", mode="rb"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		).read()
 
 		new_image_content = strip_exif_data(original_image_content, "image/jpeg")
@@ -452,7 +514,11 @@ class TestImage(FrappeTestCase):
 		self.assertNotEqual(original_image._getexif(), new_image._getexif())
 
 	def test_optimize_image(self):
+<<<<<<< HEAD
 		image_file_path = frappe.get_app_path("frappe", "tests", "data", "sample_image_for_optimization.jpg")
+=======
+		image_file_path = "../apps/frappe/frappe/tests/data/sample_image_for_optimization.jpg"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		content_type = guess_type(image_file_path)[0]
 		original_content = open(image_file_path, mode="rb").read()
 
@@ -553,10 +619,13 @@ class TestDateUtils(FrappeTestCase):
 		self.assertEqual(frappe.utils.get_last_day_of_week("2020-12-24"), frappe.utils.getdate("2020-12-26"))
 		self.assertEqual(frappe.utils.get_last_day_of_week("2020-12-28"), frappe.utils.getdate("2021-01-02"))
 
+<<<<<<< HEAD
 	def test_is_last_day_of_the_month(self):
 		self.assertEqual(frappe.utils.is_last_day_of_the_month("2020-12-24"), False)
 		self.assertEqual(frappe.utils.is_last_day_of_the_month("2020-12-31"), True)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_get_time(self):
 		datetime_input = now_datetime()
 		timedelta_input = get_timedelta()
@@ -584,6 +653,7 @@ class TestDateUtils(FrappeTestCase):
 		self.assertIsInstance(get_timedelta(str(time_input)), timedelta)
 		self.assertIsInstance(get_timedelta(get_timedelta("100:2:12")), timedelta)
 
+<<<<<<< HEAD
 	def test_to_timedelta(self):
 		self.assertEqual(to_timedelta("00:00:01"), timedelta(seconds=1))
 		self.assertEqual(to_timedelta("10:00:01"), timedelta(seconds=1, hours=10))
@@ -656,6 +726,8 @@ class TestDateUtils(FrappeTestCase):
 		for dt, exp_message in test_cases.items():
 			self.assertEqual(pretty_date(dt), exp_message)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_date_from_timegrain(self):
 		start_date = getdate("2021-01-01")
 
@@ -840,6 +912,7 @@ class TestLinkTitle(FrappeTestCase):
 		prop_setter.delete()
 
 
+<<<<<<< HEAD
 class TestAppParser(MockedRequestTestCase):
 	def test_app_name_parser(self):
 		self.responses.add(
@@ -848,6 +921,10 @@ class TestAppParser(MockedRequestTestCase):
 			status=200,
 			json={},
 		)
+=======
+class TestAppParser(FrappeTestCase):
+	def test_app_name_parser(self):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		bench_path = get_bench_path()
 		frappe_app = os.path.join(bench_path, "apps", "frappe")
 		self.assertEqual("frappe", parse_app_name(frappe_app))
@@ -883,6 +960,7 @@ class TestIntrospectionMagic(FrappeTestCase):
 		self.assertEqual(frappe.get_newargs(lambda: None, args), {})
 
 
+<<<<<<< HEAD
 class TestMakeRandom(FrappeTestCase):
 	def test_get_random(self):
 		self.assertIsInstance(get_random("DocType", doc=True), Document)
@@ -944,6 +1022,8 @@ class TestContainerUtils(FrappeTestCase):
 		self.assertEqual(a["c"], "d")
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 class TestLocks(FrappeTestCase):
 	def test_locktimeout(self):
 		lock_name = "test_lock"
@@ -971,6 +1051,7 @@ class TestMiscUtils(FrappeTestCase):
 	def test_get_all_sites(self):
 		self.assertIn(frappe.local.site, get_sites())
 
+<<<<<<< HEAD
 	def test_get_site_info(self):
 		info = get_site_info()
 
@@ -978,6 +1059,8 @@ class TestMiscUtils(FrappeTestCase):
 		self.assertIn("frappe", installed_apps)
 		self.assertGreaterEqual(len(info["users"]), 1)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_safe_json_load(self):
 		self.assertEqual(safe_json_loads("{}"), {})
 		self.assertEqual(safe_json_loads("{ /}"), "{ /}")
@@ -999,6 +1082,7 @@ class TestMiscUtils(FrappeTestCase):
 			self.assertEqual(output, expand_relative_urls(input))
 
 
+<<<<<<< HEAD
 class TestTypingValidations(FrappeTestCase):
 	ERR_REGEX = "^Argument '.*' should be of type '.*' but got '.*' instead.$"
 
@@ -1043,6 +1127,18 @@ class TestTBSanitization(FrappeTestCase):
 		except Exception:
 			traceback = frappe.get_traceback(with_context=True)
 			self.assertNotIn(password, traceback)
+=======
+class TestTBSanitization(FrappeTestCase):
+	def test_traceback_sanitzation(self):
+		try:
+			password = "42"  # noqa: F841
+			args = {"password": "42", "pwd": "42", "safe": "safe_value"}
+			args = frappe._dict({"password": "42", "pwd": "42", "safe": "safe_value"})  # noqa: F841
+			raise Exception
+		except Exception:
+			traceback = frappe.get_traceback(with_context=True)
+			self.assertNotIn("42", traceback)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			self.assertIn("********", traceback)
 			self.assertIn("password =", traceback)
 			self.assertIn("safe_value", traceback)
@@ -1196,9 +1292,12 @@ class TestRounding(FrappeTestCase):
 	def test_bankers_rounding_property(self, number, precision):
 		self.assertEqual(Decimal(str(flt(float(number), precision))), round(number, precision))
 
+<<<<<<< HEAD
 	def test_default_rounding(self):
 		self.assertEqual(frappe.get_system_settings("rounding_method"), "Banker's Rounding")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@given(
 		st.floats(min_value=-(2**32) - 1, max_value=2**32 + 1),
 		st.integers(min_value=-(2**63) - 1, max_value=2**63 + 1),
@@ -1209,6 +1308,7 @@ class TestRounding(FrappeTestCase):
 		self.assertEqual(cint(str(floating_point)), int(floating_point))
 
 
+<<<<<<< HEAD
 class TestArgumentTypingValidations(FrappeTestCase):
 	def test_validate_argument_types(self):
 		from frappe.core.doctype.doctype.doctype import DocType
@@ -1275,6 +1375,8 @@ class TestChangeLog(FrappeTestCase):
 		self.assertRaises(ValueError, parse_github_url, remote_url=None)
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 class TestCrypto(FrappeTestCase):
 	def test_hashing(self):
 		self.assertEqual(sha256_hash(""), "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")

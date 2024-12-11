@@ -22,7 +22,11 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
+<<<<<<< HEAD
    "options": "\nNot Sent\nSent",
+=======
+   "options": "\nNot Sent\nSending\nSent\nError\nExpired",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "search_index": 1
   },
   {
@@ -33,7 +37,11 @@
  ],
  "istable": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2022-09-06 13:38:10.644417",
+=======
+ "modified": "2022-07-11 16:38:10.644417",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Email",
  "name": "Email Queue Recipient",

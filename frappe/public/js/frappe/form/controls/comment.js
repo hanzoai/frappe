@@ -9,6 +9,7 @@ frappe.ui.form.ControlComment = class ControlComment extends frappe.ui.form.Cont
 			? $(`
 			<div class="comment-input-wrapper">
 				<div class="comment-input-header">
+<<<<<<< HEAD
 				<span>${__("Comments")}</span>
 				</div>
 				<div class="comment-input-container">
@@ -16,6 +17,17 @@ frappe.ui.form.ControlComment = class ControlComment extends frappe.ui.form.Cont
 					<div class="frappe-control col"></div>
 				</div>
 				<button class="btn hidden btn-comment btn-xs" style="margin-left:48px;">
+=======
+					<span>${__("Add a comment")}</span>
+				</div>
+				<div class="comment-input-container">
+					<div class="frappe-control"></div>
+					<div class="text-muted small">
+						${__("Ctrl+Enter to add comment")}
+					</div>
+				</div>
+				<button class="btn btn-default btn-comment btn-xs">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					${__("Comment")}
 				</button>
 			</div>
@@ -64,9 +76,15 @@ frappe.ui.form.ControlComment = class ControlComment extends frappe.ui.form.Cont
 	update_state() {
 		const value = this.get_value();
 		if (strip_html(value).trim() != "" || value.includes("img")) {
+<<<<<<< HEAD
 			this.button.removeClass("hidden").addClass("btn-primary");
 		} else {
 			this.button.addClass("hidden").removeClass("btn-primary");
+=======
+			this.button.removeClass("btn-default").addClass("btn-primary");
+		} else {
+			this.button.addClass("btn-default").removeClass("btn-primary");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 
@@ -75,7 +93,10 @@ frappe.ui.form.ControlComment = class ControlComment extends frappe.ui.form.Cont
 		return Object.assign(options, {
 			theme: "bubble",
 			bounds: this.quill_container[0],
+<<<<<<< HEAD
 			placeholder: __("Type a reply / comment"),
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		});
 	}
 

@@ -2,8 +2,11 @@
 // Adapted from John Resig - http://ejohn.org/ - MIT Licensed
 
 frappe.template = { compiled: {}, debug: {} };
+<<<<<<< HEAD
 
 /* eslint-disable */
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 frappe.template.compile = function (str, name) {
 	var key = name || str;
 
@@ -98,17 +101,27 @@ frappe.template.compile = function (str, name) {
 
 	return frappe.template.compiled[key];
 };
+<<<<<<< HEAD
 /* eslint-enable */
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 frappe.render = function (str, data, name) {
 	return frappe.template.compile(str, name)(data);
 };
 frappe.render_template = function (name, data) {
+<<<<<<< HEAD
 	let template;
 	if (name.indexOf(" ") !== -1) {
 		template = name;
 	} else {
 		template = frappe.templates[name];
+=======
+	if (name.indexOf(" ") !== -1) {
+		var template = name;
+	} else {
+		var template = frappe.templates[name];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	if (data === undefined) {
 		data = {};

@@ -49,10 +49,13 @@ frappe.form.formatters = {
 		return __(frappe.form.formatters["Data"](value, df));
 	},
 	Float: function (value, docfield, options, doc) {
+<<<<<<< HEAD
 		if (value === null) {
 			return "";
 		}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		// don't allow 0 precision for Floats, hence or'ing with null
 		var precision =
 			docfield.precision ||
@@ -77,6 +80,7 @@ frappe.form.formatters = {
 		}
 	},
 	Int: function (value, docfield, options) {
+<<<<<<< HEAD
 		if (value === null) {
 			return "";
 		}
@@ -91,6 +95,11 @@ frappe.form.formatters = {
 			return "";
 		}
 
+=======
+		return frappe.form.formatters._right(value == null ? "" : cint(value), options);
+	},
+	Percent: function (value, docfield, options) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		const precision =
 			docfield.precision ||
 			cint(frappe.boot.sysdefaults && frappe.boot.sysdefaults.float_precision) ||
@@ -117,10 +126,13 @@ frappe.form.formatters = {
 		</div>`;
 	},
 	Currency: function (value, docfield, options, doc) {
+<<<<<<< HEAD
 		if (value === null) {
 			return "";
 		}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		var currency = frappe.meta.get_field_currency(docfield, doc);
 
 		let precision;
@@ -363,11 +375,18 @@ frappe.form.formatters = {
 		return $("<div></div>").text(value).html();
 	},
 	FileSize: function (value) {
+<<<<<<< HEAD
 		value = cint(value);
 		if (value > 1048576) {
 			return (value / 1048576).toFixed(2) + "M";
 		} else if (value > 1024) {
 			return (value / 1024).toFixed(2) + "K";
+=======
+		if (value > 1048576) {
+			value = flt(flt(value) / 1048576, 1) + "M";
+		} else if (value > 1024) {
+			value = flt(flt(value) / 1024, 1) + "K";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		return value;
 	},
@@ -377,9 +396,13 @@ frappe.form.formatters = {
 		const link_field = meta.fields.find((df) => df.fieldtype === "Link");
 		const formatted_values = rows.map((row) => {
 			const value = row[link_field.fieldname];
+<<<<<<< HEAD
 			return `<span class="text-nowrap">
 				${frappe.format(value, link_field, options, row)}
 			</span>`;
+=======
+			return frappe.format(value, link_field, options, row);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		});
 		return formatted_values.join(", ");
 	},

@@ -8,6 +8,7 @@ from frappe.model.document import Document
 
 
 class RoleProfile(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -21,11 +22,14 @@ class RoleProfile(Document):
 		roles: DF.Table[HasRole]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def autoname(self):
 		"""set name as Role Profile name"""
 		self.name = self.role_profile
 
 	def on_update(self):
+<<<<<<< HEAD
 		self.queue_action(
 			"update_all_users",
 			now=frappe.flags.in_test or frappe.flags.in_install,
@@ -33,6 +37,8 @@ class RoleProfile(Document):
 		)
 
 	def update_all_users(self):
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""Changes in role_profile reflected across all its user"""
 		has_role = frappe.qb.DocType("Has Role")
 		user = frappe.qb.DocType("User")

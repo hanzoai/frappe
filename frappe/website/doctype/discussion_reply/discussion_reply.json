@@ -12,7 +12,11 @@
  "fields": [
   {
    "fieldname": "reply",
+<<<<<<< HEAD
    "fieldtype": "Text Editor",
+=======
+   "fieldtype": "Long Text",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "in_list_view": 1,
    "label": "Reply"
   },
@@ -27,7 +31,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2021-09-28 12:09:10.875929",
+=======
+ "modified": "2021-09-28 12:09:10.875927",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Website",
  "name": "Discussion Reply",
@@ -49,6 +57,9 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+<<<<<<< HEAD
  "states": [],
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "track_changes": 1
 }

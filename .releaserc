@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
 	"branches": ["version-15"],
+=======
+	"branches": ["version-14"],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"plugins": [
 		"@semantic-release/commit-analyzer", {
 			"preset": "angular",

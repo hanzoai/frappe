@@ -32,6 +32,7 @@ exclude_from_linked_with = True
 
 
 class Communication(Document, CommunicationEmailMixin):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -119,6 +120,8 @@ class Communication(Document, CommunicationEmailMixin):
 		unread_notification_sent: DF.Check
 		user: DF.Link | None
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""Communication represents an external communication like Email."""
 
 	no_feed_on_delete = True
@@ -163,9 +166,12 @@ class Communication(Document, CommunicationEmailMixin):
 			self.seen = 1
 			self.sent_or_received = "Sent"
 
+<<<<<<< HEAD
 		if not self.send_after:  # Handle empty string, always set NULL
 			self.send_after = None
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		validate_email(self)
 
 		if self.communication_medium == "Email":
@@ -279,11 +285,14 @@ class Communication(Document, CommunicationEmailMixin):
 		# comments count for the list view
 		update_comment_in_doc(self)
 
+<<<<<<< HEAD
 		parent = get_parent_doc(self)
 		if (method := getattr(parent, "on_communication_update", None)) and callable(method):
 			parent.on_communication_update(self)
 			return
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if self.comment_type != "Updated":
 			update_parent_document_on_communication(self)
 
@@ -320,6 +329,7 @@ class Communication(Document, CommunicationEmailMixin):
 		return self._get_emails_list(self.bcc, exclude_displayname=exclude_displayname)
 
 	def get_attachments(self):
+<<<<<<< HEAD
 		return frappe.get_all(
 			"File",
 			fields=["name", "file_name", "file_url", "is_private"],
@@ -328,6 +338,14 @@ class Communication(Document, CommunicationEmailMixin):
 				"attached_to_doctype": self.DOCTYPE,
 			},
 		)
+=======
+		attachments = frappe.get_all(
+			"File",
+			fields=["name", "file_name", "file_url", "is_private"],
+			filters={"attached_to_name": self.name, "attached_to_doctype": self.DOCTYPE},
+		)
+		return attachments
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def notify_change(self, action):
 		frappe.publish_realtime(
@@ -346,9 +364,12 @@ class Communication(Document, CommunicationEmailMixin):
 		else:
 			self.status = "Closed"
 
+<<<<<<< HEAD
 		if self.send_after and self.is_new():
 			self.delivery_status = "Scheduled"
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def mark_email_as_spam(self):
 		if (
 			self.communication_type == "Communication"
@@ -485,7 +506,11 @@ class Communication(Document, CommunicationEmailMixin):
 		return self.timeline_links
 
 	def remove_link(self, link_doctype, link_name, autosave=False, ignore_permissions=True):
+<<<<<<< HEAD
 		for l in list(self.timeline_links):
+=======
+		for l in self.timeline_links:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if l.link_doctype == link_doctype and l.link_name == link_name:
 				self.timeline_links.remove(l)
 
@@ -500,15 +525,23 @@ def on_doctype_update():
 	frappe.db.add_index("Communication", ["message_id(140)"])
 
 
+<<<<<<< HEAD
 def has_permission(doc, ptype, user=None, debug=False):
+=======
+def has_permission(doc, ptype, user):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if ptype == "read":
 		if doc.reference_doctype == "Communication" and doc.reference_name == doc.name:
 			return
 
 		if doc.reference_doctype and doc.reference_name:
+<<<<<<< HEAD
 			return frappe.has_permission(
 				doc.reference_doctype, ptype="read", doc=doc.reference_name, user=user, debug=debug
 			)
+=======
+			return frappe.has_permission(doc.reference_doctype, ptype="read", doc=doc.reference_name)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_permission_query_conditions_for_communication(user):
@@ -568,7 +601,14 @@ def get_emails(email_strings: list[str]) -> list[str]:
 	for email_string in email_strings:
 		if email_string:
 			result = getaddresses([email_string])
+<<<<<<< HEAD
 			email_addrs.extend(email[1] for email in result)
+=======
+			for email in result:
+				if "@" in email[1]:
+					email_addrs.append(email[1])
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return email_addrs
 
 
@@ -649,6 +689,7 @@ def update_parent_document_on_communication(doc):
 	if status_field:
 		options = (status_field.options or "").splitlines()
 
+<<<<<<< HEAD
 		# if status has a "Open" option and status is "Replied", then update the status for received communication
 		if (
 			("Open" in options)
@@ -658,6 +699,10 @@ def update_parent_document_on_communication(doc):
 				parent.doctype == "Issue" and ("Open" in options) and doc.sent_or_received == "Received"
 			)  # For 'Issue', current status is not considered.
 		):
+=======
+		# if status has a "Replied" option, then update the status for received communication
+		if ("Replied" in options) and doc.sent_or_received == "Received":
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			parent.db_set("status", "Open")
 			parent.run_method("handle_hold_time", "Replied")
 			apply_assignment_rule(parent)

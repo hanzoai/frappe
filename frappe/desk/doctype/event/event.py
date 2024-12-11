@@ -38,6 +38,7 @@ communication_mapping = {
 
 
 class Event(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -78,6 +79,8 @@ class Event(Document):
 		wednesday: DF.Check
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		if not self.starts_on:
 			self.starts_on = now_datetime()
@@ -262,7 +265,11 @@ def send_event_digest():
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 def get_events(start, end, user=None, for_reminder=False, filters=None) -> list[frappe._dict]:
+=======
+def get_events(start, end, user=None, for_reminder=False, filters=None):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if not user:
 		user = frappe.session.user
 
@@ -396,9 +403,12 @@ def get_events(start, end, user=None, for_reminder=False, filters=None) -> list[
 				try:
 					getdate(date)
 				except Exception:
+<<<<<<< HEAD
 					# Don't show any message to the user
 					frappe.clear_last_message()
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					date = date.split("-")
 					date = date[0] + "-" + str(cint(date[1]) - 1) + "-" + date[2]
 

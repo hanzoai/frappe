@@ -372,7 +372,12 @@ Object.assign(frappe.utils, {
 	get_scroll_position: function (element, additional_offset) {
 		let header_offset =
 			$(".navbar").height() + $(".page-head:visible").height() || $(".navbar").height();
+<<<<<<< HEAD
 		return $(element).offset().top - header_offset - cint(additional_offset);
+=======
+		let scroll_top = $(element).offset().top - header_offset - cint(additional_offset);
+		return scroll_top;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 	filter_dict: function (dict, filters) {
 		var ret = [];
@@ -478,7 +483,11 @@ Object.assign(frappe.utils, {
 				break;
 			case "url":
 				regExp =
+<<<<<<< HEAD
 					/^((([A-Za-z0-9.+-]+:(?:\/\/)?)(?:[-;:&=\+\,\w]@)?[A-Za-z0-9.-]+(:[0-9]+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/i; // eslint-disable-line
+=======
+					/^((([A-Za-z0-9.+-]+:(?:\/\/)?)(?:[-;:&=\+\,\w]@)?[A-Za-z0-9.-]+(:[0-9]+)?|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)$/i;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				break;
 			case "dateIso":
 				regExp = /^(\d{4})\D?(0[1-9]|1[0-2])\D?([12]\d|0[1-9]|3[01])$/;
@@ -494,7 +503,10 @@ Object.assign(frappe.utils, {
 		var style = default_style || "default";
 		var colour = "gray";
 		if (text) {
+<<<<<<< HEAD
 			text = cstr(text);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if (has_words(["Pending", "Review", "Medium", "Not Approved"], text)) {
 				style = "warning";
 				colour = "orange";
@@ -790,6 +802,13 @@ Object.assign(frappe.utils, {
 		frappe.msgprint(__("Note: Changing the Page Name will break previous URL to this page."));
 	},
 
+<<<<<<< HEAD
+=======
+	notify: function (subject, body, route, onclick) {
+		console.log("push notifications are evil and deprecated");
+	},
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	set_title: function (title) {
 		frappe._original_title = title;
 		if (frappe._title_prefix) {
@@ -1082,8 +1101,13 @@ Object.assign(frappe.utils, {
 			let expression_function = new Function(...variable_names, code);
 			return expression_function(...variables);
 		} catch (error) {
+<<<<<<< HEAD
 			console.log("Error evaluating the following expression:");
 			console.error(code);
+=======
+			console.log("Error evaluating the following expression:"); // eslint-disable-line no-console
+			console.error(code); // eslint-disable-line no-console
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			throw error;
 		}
 	},
@@ -1178,10 +1202,18 @@ Object.assign(frappe.utils, {
 	},
 
 	get_duration_options: function (docfield) {
+<<<<<<< HEAD
 		return {
 			hide_days: docfield.hide_days,
 			hide_seconds: docfield.hide_seconds,
 		};
+=======
+		let duration_options = {
+			hide_days: docfield.hide_days,
+			hide_seconds: docfield.hide_seconds,
+		};
+		return duration_options;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 
 	get_number_system: function (country) {
@@ -1197,7 +1229,11 @@ Object.assign(frappe.utils, {
 	map_defaults: {
 		center: [19.08, 72.8961],
 		zoom: 13,
+<<<<<<< HEAD
 		tiles: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+=======
+		tiles: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		options: {
 			attribution:
 				'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -1207,14 +1243,19 @@ Object.assign(frappe.utils, {
 
 	icon(icon_name, size = "sm", icon_class = "", icon_style = "", svg_class = "") {
 		let size_class = "";
+<<<<<<< HEAD
 		let is_espresso = icon_name.startsWith("es-");
 
 		icon_name = is_espresso ? `${"#" + icon_name}` : `${"#icon-" + icon_name}`;
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (typeof size == "object") {
 			icon_style += ` width: ${size.width}; height: ${size.height}`;
 		} else {
 			size_class = `icon-${size}`;
 		}
+<<<<<<< HEAD
 		return `<svg class="${
 			is_espresso
 				? icon_name.startsWith("es-solid")
@@ -1223,6 +1264,10 @@ Object.assign(frappe.utils, {
 				: "icon"
 		} ${svg_class} ${size_class}" style="${icon_style}" aria-hidden="true">
 			<use class="${icon_class}" href="${icon_name}"></use>
+=======
+		return `<svg class="icon ${svg_class} ${size_class}" style="${icon_style}">
+			<use class="${icon_class}" href="#icon-${icon_name}"></use>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		</svg>`;
 	},
 
@@ -1310,11 +1355,18 @@ Object.assign(frappe.utils, {
 			} else if (type === "report") {
 				if (item.is_query_report) {
 					route = "query-report/" + item.name;
+<<<<<<< HEAD
 				} else if (!item.is_query_report && item.report_ref_doctype) {
 					route =
 						frappe.router.slug(item.report_ref_doctype) + "/view/report/" + item.name;
 				} else {
 					route = "/report/" + item.name;
+=======
+				} else if (!item.doctype) {
+					route = "/report/" + item.name;
+				} else {
+					route = frappe.router.slug(item.doctype) + "/view/report/" + item.name;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				}
 			} else if (type === "page") {
 				route = item.name;
@@ -1581,8 +1633,13 @@ Object.assign(frappe.utils, {
 					return title;
 				});
 		} catch (error) {
+<<<<<<< HEAD
 			console.log("Error while fetching link title.");
 			console.log(error);
+=======
+			console.log("Error while fetching link title."); // eslint-disable-line
+			console.log(error); // eslint-disable-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			return Promise.resolve(name);
 		}
 	},
@@ -1590,7 +1647,11 @@ Object.assign(frappe.utils, {
 	only_allow_num_decimal(input) {
 		input.on("input", (e) => {
 			let self = $(e.target);
+<<<<<<< HEAD
 			self.val(self.val().replace(/[^0-9.\-]/g, ""));
+=======
+			self.val(self.val().replace(/[^0-9.]/g, ""));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if (
 				(e.which != 46 || self.val().indexOf(".") != -1) &&
 				(e.which < 48 || e.which > 57)
@@ -1711,6 +1772,7 @@ Object.assign(frappe.utils, {
 			});
 		},
 	},
+<<<<<<< HEAD
 	generate_tracking_url() {
 		frappe.prompt(
 			[
@@ -1772,4 +1834,6 @@ Object.assign(frappe.utils, {
 			__("Generate Tracking URL")
 		);
 	},
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 });

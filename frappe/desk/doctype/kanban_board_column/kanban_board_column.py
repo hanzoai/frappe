@@ -5,6 +5,7 @@ from frappe.model.document import Document
 
 
 class KanbanBoardColumn(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -33,4 +34,6 @@ class KanbanBoardColumn(Document):
 		parenttype: DF.Data
 		status: DF.Literal["Active", "Archived"]
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	pass

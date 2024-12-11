@@ -99,19 +99,53 @@ def get_patches_from_app(app: str, patch_type: PatchType | None = None) -> list[
 	        1. ini like file with section for different patch_type
 	        2. plain text file with each line representing a patch.
 	"""
+<<<<<<< HEAD
 	patches_file = frappe.get_app_path(app, "patches.txt")
 
 	try:
 		return parse_as_configfile(patches_file, patch_type)
+=======
+
+	patches_txt = frappe.get_pymodule_path(app, "patches.txt")
+
+	try:
+		# Attempt to parse as ini file with pre/post patches
+		# allow_no_value: patches are not key value pairs
+		# delimiters = '\n' to avoid treating default `:` and `=` in execute as k:v delimiter
+		parser = configparser.ConfigParser(allow_no_value=True, delimiters="\n")
+		# preserve case
+		parser.optionxform = str
+		parser.read(patches_txt)
+
+		# empty file
+		if not parser.sections():
+			return []
+
+		if not patch_type:
+			return [patch for patch in parser[PatchType.pre_model_sync.value]] + [
+				patch for patch in parser[PatchType.post_model_sync.value]
+			]
+
+		if patch_type.value in parser.sections():
+			return [patch for patch in parser[patch_type.value]]
+		else:
+			frappe.throw(frappe._("Patch type {} not found in patches.txt").format(patch_type))
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	except configparser.MissingSectionHeaderError:
 		# treat as old format with each line representing a single patch
 		# backward compatbility with old patches.txt format
 		if not patch_type or patch_type == PatchType.pre_model_sync:
+<<<<<<< HEAD
 			return frappe.get_file_items(patches_file)
+=======
+			return frappe.get_file_items(patches_txt)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return []
 
 
+<<<<<<< HEAD
 def parse_as_configfile(patches_file: str, patch_type: PatchType | None = None) -> list[str]:
 	# Attempt to parse as ini file with pre/post patches
 	# allow_no_value: patches are not key value pairs
@@ -136,6 +170,8 @@ def parse_as_configfile(patches_file: str, patch_type: PatchType | None = None) 
 		frappe.throw(frappe._("Patch type {} not found in patches.txt").format(patch_type))
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def reload_doc(args):
 	import frappe.modules
 
@@ -175,7 +211,11 @@ def execute_patch(patchmodule: str, method=None, methodargs=None):
 		f"Executing {patchmodule or methodargs} in {frappe.local.site} ({frappe.db.cur_db_name}){docstring}"
 	)
 
+<<<<<<< HEAD
 	start_time = time.monotonic()
+=======
+	start_time = time.time()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	frappe.db.begin()
 	frappe.db.auto_commit_on_many_writes = 0
 	try:
@@ -199,7 +239,11 @@ def execute_patch(patchmodule: str, method=None, methodargs=None):
 
 	else:
 		frappe.db.commit()
+<<<<<<< HEAD
 		end_time = time.monotonic()
+=======
+		end_time = time.time()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		_patch_mode(False)
 		print(f"Success: Done in {round(end_time - start_time, 3)}s")
 
@@ -232,3 +276,13 @@ def _patch_mode(enable):
 	"""stop/start execution till patch is run"""
 	frappe.local.flags.in_patch = enable
 	frappe.db.commit()
+<<<<<<< HEAD
+=======
+
+
+def check_session_stopped():
+	"""This function is deprecated. Use maintenance_mode in site config instead."""
+	if frappe.db.get_global("__session_status") == "stop":
+		frappe.msgprint(frappe.db.get_global("__session_status_message"))
+		raise frappe.SessionStopped("Session Stopped")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

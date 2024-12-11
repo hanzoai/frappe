@@ -64,10 +64,13 @@
   "name": "English (United States)"
  },
  {
+<<<<<<< HEAD
   "code": "eo",
   "name": "In-Context Translation"
  },
  {
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "code": "es",
   "name": "Espa\u00f1ol"
  },

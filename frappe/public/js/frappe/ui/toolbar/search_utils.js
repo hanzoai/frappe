@@ -100,6 +100,10 @@ frappe.search.utils = {
 				out.label = frappe.utils.escape_html(match[0]).bold();
 				out.value = match[0];
 			} else {
+<<<<<<< HEAD
+=======
+				// eslint-disable-next-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				console.log("Illegal match", match);
 			}
 			out.index = 80;
@@ -129,21 +133,38 @@ frappe.search.utils = {
 	get_search_in_list: function (keywords) {
 		var me = this;
 		var out = [];
+<<<<<<< HEAD
 		if (keywords.split(" ").includes("in") && keywords.slice(-2) !== "in") {
 			var parts = keywords.split(" in ");
 			frappe.boot.user.can_read.forEach(function (item) {
 				if (frappe.boot.user.can_search.includes(item)) {
 					const search_result = me.fuzzy_search(parts[1], item, true);
 					if (search_result.score) {
+=======
+		if (in_list(keywords.split(" "), "in") && keywords.slice(-2) !== "in") {
+			var parts = keywords.split(" in ");
+			frappe.boot.user.can_read.forEach(function (item) {
+				if (frappe.boot.user.can_search.includes(item)) {
+					var level = me.fuzzy_search(parts[1], item);
+					if (level) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						out.push({
 							type: "In List",
 							label: __("Find {0} in {1}", [
 								__(parts[0]),
+<<<<<<< HEAD
 								search_result.marked_string,
 							]),
 							value: __("Find {0} in {1}", [__(parts[0]), __(item)]),
 							route_options: { name: ["like", "%" + parts[0] + "%"] },
 							index: 1 + search_result.score,
+=======
+								me.bolden_match_part(__(item), parts[1]),
+							]),
+							value: __("Find {0} in {1}", [__(parts[0]), __(item)]),
+							route_options: { name: ["like", "%" + parts[0] + "%"] },
+							index: 1 + level,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							route: ["List", item],
 						});
 					}
@@ -159,12 +180,20 @@ frappe.search.utils = {
 		var firstKeyword = keywords.split(" ")[0];
 		if (firstKeyword.toLowerCase() === __("new")) {
 			frappe.boot.user.can_create.forEach(function (item) {
+<<<<<<< HEAD
 				const search_result = me.fuzzy_search(keywords.substr(4), item, true);
 				var level = search_result.score;
 				if (level) {
 					out.push({
 						type: "New",
 						label: __("New {0}", [search_result.marked_string || __(item)]),
+=======
+				var level = me.fuzzy_search(keywords.substr(4), item);
+				if (level) {
+					out.push({
+						type: "New",
+						label: __("New {0}", [me.bolden_match_part(__(item), keywords.substr(4))]),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						value: __("New {0}", [__(item)]),
 						index: 1 + level,
 						match: item,
@@ -182,26 +211,45 @@ frappe.search.utils = {
 		var me = this;
 		var out = [];
 
+<<<<<<< HEAD
 		var score, marked_string, target;
+=======
+		var level, target;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		var option = function (type, route, order) {
 			// check to skip extra list in the text
 			// eg. Price List List should be only Price List
 			let skip_list = type === "List" && target.endsWith("List");
+<<<<<<< HEAD
 			if (skip_list) {
 				var label = marked_string || __(target);
 			} else {
 				label = __(`{0} ${skip_list ? "" : type}`, [marked_string || __(target)]);
 			}
+=======
+			let label_without_type = me.bolden_match_part(__(target), keywords);
+			if (skip_list) {
+				var label = label_without_type;
+			} else {
+				label = __(`{0} ${skip_list ? "" : type}`, [label_without_type]);
+			}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			return {
 				type: type,
 				label: label,
 				value: __(`{0} ${type}`, [target]),
+<<<<<<< HEAD
 				index: score + order,
+=======
+				index: level + order,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				match: target,
 				route: route,
 			};
 		};
 		frappe.boot.user.can_read.forEach(function (item) {
+<<<<<<< HEAD
 			const search_result = me.fuzzy_search(keywords, item, true);
 			({ score, marked_string } = search_result);
 			if (score) {
@@ -217,6 +265,22 @@ frappe.search.utils = {
 							label: __("New {0}", [search_result.marked_string || __(item)]),
 							value: __("New {0}", [__(item)]),
 							index: score + 0.015,
+=======
+			level = me.fuzzy_search(keywords, item);
+			if (level) {
+				target = item;
+				if (in_list(frappe.boot.single_types, item)) {
+					out.push(option("", ["Form", item, item], 0.05));
+				} else if (frappe.boot.user.can_search.includes(item)) {
+					// include 'making new' option
+					if (in_list(frappe.boot.user.can_create, item)) {
+						var match = item;
+						out.push({
+							type: "New",
+							label: __("New {0}", [me.bolden_match_part(__(item), keywords)]),
+							value: __("New {0}", [__(item)]),
+							index: level + 0.015,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							match: item,
 							onclick: function () {
 								frappe.new_doc(match, true);
@@ -239,8 +303,12 @@ frappe.search.utils = {
 		var out = [];
 		var route;
 		Object.keys(frappe.boot.user.all_reports).forEach(function (item) {
+<<<<<<< HEAD
 			const search_result = me.fuzzy_search(keywords, item, true);
 			var level = search_result.score;
+=======
+			var level = me.fuzzy_search(keywords, item);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if (level > 0) {
 				var report = frappe.boot.user.all_reports[item];
 				if (report.report_type == "Report Builder")
@@ -248,7 +316,11 @@ frappe.search.utils = {
 				else route = ["query-report", item];
 				out.push({
 					type: "Report",
+<<<<<<< HEAD
 					label: __("Report {0}", [search_result.marked_string || __(item)]),
+=======
+					label: __("Report {0}", [me.bolden_match_part(__(item), keywords)]),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					value: __("Report {0}", [__(item)]),
 					index: level,
 					route: route,
@@ -268,13 +340,21 @@ frappe.search.utils = {
 		});
 		Object.keys(this.pages).forEach(function (item) {
 			if (item == "Hub" || item == "hub") return;
+<<<<<<< HEAD
 			const search_result = me.fuzzy_search(keywords, item, true);
 			var level = search_result.score;
+=======
+			var level = me.fuzzy_search(keywords, item);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if (level) {
 				var page = me.pages[item];
 				out.push({
 					type: "Page",
+<<<<<<< HEAD
 					label: __("Open {0}", [search_result.marked_string || __(item)]),
+=======
+					label: __("Open {0}", [me.bolden_match_part(__(item), keywords)]),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					value: __("Open {0}", [__(item)]),
 					match: item,
 					index: level,
@@ -318,12 +398,20 @@ frappe.search.utils = {
 		var me = this;
 		var out = [];
 		frappe.boot.allowed_workspaces.forEach(function (item) {
+<<<<<<< HEAD
 			const search_result = me.fuzzy_search(keywords, item.name, true);
 			var level = search_result.score;
 			if (level > 0) {
 				var ret = {
 					type: "Workspace",
 					label: __("Open {0}", [search_result.marked_string || __(item.name)]),
+=======
+			var level = me.fuzzy_search(keywords, item.name);
+			if (level > 0) {
+				var ret = {
+					type: "Workspace",
+					label: __("Open {0}", [me.bolden_match_part(__(item.name), keywords)]),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					value: __("Open {0}", [__(item.name)]),
 					index: level,
 					route: [frappe.router.slug(item.name)],
@@ -339,12 +427,20 @@ frappe.search.utils = {
 		var me = this;
 		var out = [];
 		frappe.boot.dashboards.forEach(function (item) {
+<<<<<<< HEAD
 			const search_result = me.fuzzy_search(keywords, item.name, true);
 			var level = search_result.score;
 			if (level > 0) {
 				var ret = {
 					type: "Dashboard",
 					label: __("{0} Dashboard", [search_result.marked_string || __(item.name)]),
+=======
+			var level = me.fuzzy_search(keywords, item.name);
+			if (level > 0) {
+				var ret = {
+					type: "Dashboard",
+					label: __("{0} Dashboard", [me.bolden_match_part(__(item.name), keywords)]),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					value: __("{0} Dashboard", [__(item.name)]),
 					index: level,
 					route: ["dashboard-view", item.name],
@@ -379,6 +475,7 @@ frappe.search.utils = {
 					var part = parts[i];
 					if (part.toLowerCase().indexOf(keywords) !== -1) {
 						// If the field contains the keyword
+<<<<<<< HEAD
 						let colon_index, field_value;
 						if (part.indexOf(" &&& ") !== -1) {
 							colon_index = part.indexOf(" &&& ");
@@ -386,6 +483,14 @@ frappe.search.utils = {
 						} else {
 							colon_index = part.indexOf(" : ");
 							field_value = part.slice(colon_index + 3);
+=======
+						if (part.indexOf(" &&& ") !== -1) {
+							var colon_index = part.indexOf(" &&& ");
+							var field_value = part.slice(colon_index + 5);
+						} else {
+							var colon_index = part.indexOf(" : ");
+							var field_value = part.slice(colon_index + 3);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						}
 						if (field_value.length > field_length) {
 							// If field value exceeds field_length, find the keyword in it
@@ -407,15 +512,24 @@ frappe.search.utils = {
 						// Find remaining result_length and add field length to result_current_length
 						var remaining_length = result_max_length - result_current_length;
 						result_current_length += field_name.length + field_value.length + 2;
+<<<<<<< HEAD
 						const search_result_name = me.fuzzy_search(keywords, field_name, true);
 						const search_result_value = me.fuzzy_search(keywords, field_value, true);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						if (result_current_length < result_max_length) {
 							// We have room, push the entire field
 							field_text =
 								'<span class="field-name text-muted">' +
+<<<<<<< HEAD
 								search_result_name.marked_string +
 								": </span> " +
 								search_result_value.marked_string;
+=======
+								me.bolden_match_part(field_name, keywords) +
+								": </span> " +
+								me.bolden_match_part(field_value, keywords);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							if (fields.indexOf(field_text) === -1 && doc_name !== field_value) {
 								fields.push(field_text);
 							}
@@ -426,12 +540,20 @@ frappe.search.utils = {
 								remaining_length -= field_name.length;
 								field_text =
 									'<span class="field-name text-muted">' +
+<<<<<<< HEAD
 									search_result_name.marked_string +
+=======
+									me.bolden_match_part(field_name, keywords) +
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 									": </span> ";
 								field_value = field_value.slice(0, remaining_length);
 								field_value =
 									field_value.slice(0, field_value.lastIndexOf(" ")) + " ...";
+<<<<<<< HEAD
 								field_text += search_result_value.marked_string;
+=======
+								field_text += me.bolden_match_part(field_value, keywords);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 								fields.push(field_text);
 							} else {
 								// No room for even the field name, skip
@@ -576,6 +698,7 @@ frappe.search.utils = {
 		];
 	},
 
+<<<<<<< HEAD
 	fuzzy_search: function (keywords = "", _item = "", return_marked_string = false) {
 		const item = __(_item);
 
@@ -614,6 +737,13 @@ frappe.search.utils = {
 		marked_string += flushBuffer();
 
 		return { score, marked_string };
+=======
+	fuzzy_search: function (keywords, _item) {
+		keywords = keywords || "";
+		var item = __(_item || "");
+		var match = fuzzy_match(keywords, item);
+		return match[1];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 
 	bolden_match_part: function (str, subseq) {
@@ -658,11 +788,18 @@ frappe.search.utils = {
 			const target = item.label.toLowerCase();
 			const txt = keywords.toLowerCase();
 			if (txt === target || target.indexOf(txt) === 0) {
+<<<<<<< HEAD
 				const search_result = this.fuzzy_search(txt, item.label, true);
 				results.push({
 					type: "Executable",
 					value: search_result.marked_string,
 					index: search_result.score,
+=======
+				results.push({
+					type: "Executable",
+					value: this.bolden_match_part(__(item.label), txt),
+					index: this.fuzzy_search(txt, target),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					match: item.label,
 					onclick: () => item.action.apply(this, item.args),
 				});
@@ -681,6 +818,7 @@ frappe.search.utils = {
 			args: args,
 		});
 	},
+<<<<<<< HEAD
 	get_marketplace_apps: function (keywords) {
 		var me = this;
 		var out = [];
@@ -702,5 +840,7 @@ frappe.search.utils = {
 		});
 		return out;
 	},
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	searchable_functions: [],
 };

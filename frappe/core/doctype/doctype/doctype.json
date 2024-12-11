@@ -8,9 +8,12 @@
  "document_type": "Document",
  "engine": "InnoDB",
  "field_order": [
+<<<<<<< HEAD
   "form_builder_tab",
   "form_builder",
   "settings_tab",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "sb0",
   "module",
   "is_submittable",
@@ -27,10 +30,19 @@
   "custom",
   "beta",
   "is_virtual",
+<<<<<<< HEAD
   "queue_in_background",
   "sb1",
   "naming_rule",
   "autoname",
+=======
+  "fields_section_break",
+  "fields",
+  "sb1",
+  "naming_rule",
+  "autoname",
+  "name_case",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "allow_rename",
   "column_break_15",
   "description",
@@ -90,10 +102,14 @@
   "website_search_field",
   "advanced",
   "engine",
+<<<<<<< HEAD
   "migration_hash",
   "fields_section",
   "fields",
   "connections_tab"
+=======
+  "migration_hash"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  ],
  "fields": [
   {
@@ -194,12 +210,24 @@
   },
   {
    "default": "0",
+<<<<<<< HEAD
    "depends_on": "eval:!doc.istable",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "beta",
    "fieldtype": "Check",
    "label": "Beta"
   },
   {
+<<<<<<< HEAD
+=======
+   "fieldname": "fields_section_break",
+   "fieldtype": "Section Break",
+   "label": "Fields",
+   "oldfieldtype": "Section Break"
+  },
+  {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "fields",
    "fieldtype": "Table",
    "label": "Fields",
@@ -221,6 +249,18 @@
    "oldfieldtype": "Data"
   },
   {
+<<<<<<< HEAD
+=======
+   "depends_on": "eval:doc.naming_rule !== \"Autoincrement\"",
+   "fieldname": "name_case",
+   "fieldtype": "Select",
+   "label": "Name Case",
+   "oldfieldname": "name_case",
+   "oldfieldtype": "Select",
+   "options": "\nTitle Case\nUPPER CASE"
+  },
+  {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "column_break_15",
    "fieldtype": "Column Break"
   },
@@ -266,7 +306,11 @@
    "default": "0",
    "fieldname": "hide_toolbar",
    "fieldtype": "Check",
+<<<<<<< HEAD
    "label": "Hide Sidebar, Menu, and Comments",
+=======
+   "label": "Hide Sidebar and Menu",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "oldfieldname": "hide_toolbar",
    "oldfieldtype": "Check"
   },
@@ -465,7 +509,10 @@
   },
   {
    "default": "0",
+<<<<<<< HEAD
    "depends_on": "eval:!doc.istable",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "description": "Tree structures are implemented using Nested Set",
    "fieldname": "is_tree",
    "fieldtype": "Check",
@@ -609,6 +656,7 @@
    "label": "Make Attachments Public by Default"
   },
   {
+<<<<<<< HEAD
    "default": "0",
    "depends_on": "eval: doc.is_submittable",
    "description": "Enabling this will submit documents in background",
@@ -617,6 +665,8 @@
    "label": "Queue in Background (BETA)"
   },
   {
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "default_view",
    "fieldtype": "Select",
    "label": "Default View"
@@ -629,13 +679,17 @@
   },
   {
    "default": "0",
+<<<<<<< HEAD
    "depends_on": "eval:!doc.istable",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "description": "Enables Calendar and Gantt views.",
    "fieldname": "is_calendar_and_gantt",
    "fieldtype": "Check",
    "label": "Is Calendar and Gantt"
   },
   {
+<<<<<<< HEAD
    "fieldname": "settings_tab",
    "fieldtype": "Tab Break",
    "label": "Settings"
@@ -664,6 +718,8 @@
    "show_dashboard": 1
   },
   {
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "depends_on": "email_append_to",
    "fieldname": "sender_name_field",
    "fieldtype": "Data",
@@ -787,4 +843,8 @@
  "states": [],
  "track_changes": 1,
  "translated_doctype": 1
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -4,6 +4,7 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 		this.load_lib().then(() => this.make_ace_editor());
 	}
 
+<<<<<<< HEAD
 	make_wrapper() {
 		super.make_wrapper();
 		this.set_copy_button();
@@ -37,6 +38,8 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 		}
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	make_ace_editor() {
 		if (this.editor) return;
 		this.ace_editor_target = $('<div class="ace-editor-target"></div>').appendTo(
@@ -71,15 +74,19 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 				.appendTo(this.$input_wrapper);
 		}
 
+<<<<<<< HEAD
 		if (this.disabled) {
 			this.editor.setReadOnly(true);
 			$(this.ace_editor_target).css("pointer-events", "none");
 		}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.editor.setTheme("ace/theme/tomorrow");
 		this.editor.setOption("showPrintMargin", false);
 		this.editor.setOption("wrap", this.df.wrap);
 		this.set_language();
+<<<<<<< HEAD
 		this.is_setting_content = false;
 
 		// events
@@ -92,6 +99,17 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 			const input_value = this.get_input_value();
 			this.parse_validate_and_set_in_model(input_value);
 		}, 300);
+=======
+
+		// events
+		this.editor.session.on(
+			"change",
+			frappe.utils.debounce(() => {
+				const input_value = this.get_input_value();
+				this.parse_validate_and_set_in_model(input_value);
+			}, 300)
+		);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		// setup autocompletion when it is set the first time
 		Object.defineProperty(this.df, "autocompletions", {
@@ -200,6 +218,10 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 
 		const valid_languages = Object.keys(language_map);
 		if (language && !valid_languages.includes(language)) {
+<<<<<<< HEAD
+=======
+			// eslint-disable-next-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			console.warn(
 				`Invalid language option provided for field "${
 					this.df.label
@@ -224,9 +246,13 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 			if (!this.editor) return;
 			if (!value) value = "";
 			if (value === this.get_input_value()) return;
+<<<<<<< HEAD
 			this.is_setting_content = true;
 			this.editor.session.setValue(value);
 			this.is_setting_content = false;
+=======
+			this.editor.session.setValue(value);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		});
 	}
 

@@ -8,6 +8,7 @@ from frappe.model.document import Document
 
 
 class DocumentShareKey(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -22,6 +23,8 @@ class DocumentShareKey(Document):
 		reference_doctype: DF.Link | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def before_insert(self):
 		self.key = frappe.generate_hash(length=randrange(25, 35))
 		if not self.expires_on and not self.flags.no_expiry:

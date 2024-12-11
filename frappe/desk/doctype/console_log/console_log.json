@@ -6,9 +6,13 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+<<<<<<< HEAD
   "script",
   "type",
   "committed"
+=======
+  "script"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  ],
  "fields": [
   {
@@ -17,6 +21,7 @@
    "in_list_view": 1,
    "label": "Script",
    "read_only": 1
+<<<<<<< HEAD
   },
   {
    "fieldname": "type",
@@ -31,6 +36,8 @@
    "fieldtype": "Check",
    "label": "Committed",
    "read_only": 1
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "index_web_pages_for_search": 1,

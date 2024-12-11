@@ -43,8 +43,11 @@ frappe.ui.form.FormTour = class FormTour {
 			}
 		}
 
+<<<<<<< HEAD
 		if (!this.tour.steps) return;
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (on_finish) this.on_finish = on_finish;
 
 		this.init_driver();

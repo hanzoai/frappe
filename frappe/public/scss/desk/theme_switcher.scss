@@ -32,6 +32,7 @@
 		}
 	}
 
+<<<<<<< HEAD
 	.theme-title {
 		color: var(--text-color);
 	}
@@ -39,6 +40,11 @@
 	.selected {
 		.background {
 			box-shadow: var(--focus-default);
+=======
+	.selected {
+		.background {
+			box-shadow: 0 0 0pt 3pt var(--primary-color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		.preview-check {
@@ -89,6 +95,7 @@
 }
 
 // TODO: Replace with better alternative
+<<<<<<< HEAD
 [data-theme="dark"] {
 	.background {
 		border: 1px solid var(--gray-500);
@@ -102,6 +109,8 @@
 		}
 	}
 }
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 [data-is-auto-theme="true"] {
 	.background::after {
 		content: "";

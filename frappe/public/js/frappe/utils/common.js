@@ -219,7 +219,11 @@ window.lstrip = function lstrip(s, chars) {
 	if (!chars) chars = ["\n", "\t", " "];
 	// strip left
 	let first_char = s.substr(0, 1);
+<<<<<<< HEAD
 	while (chars.includes(first_char)) {
+=======
+	while (in_list(chars, first_char)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		s = s.substr(1);
 		first_char = s.substr(0, 1);
 	}
@@ -229,7 +233,11 @@ window.lstrip = function lstrip(s, chars) {
 window.rstrip = function (s, chars) {
 	if (!chars) chars = ["\n", "\t", " "];
 	let last_char = s.substr(s.length - 1);
+<<<<<<< HEAD
 	while (chars.includes(last_char)) {
+=======
+	while (in_list(chars, last_char)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		s = s.substr(0, s.length - 1);
 		last_char = s.substr(s.length - 1);
 	}
@@ -336,6 +344,7 @@ frappe.utils.sanitise_redirect = (url) => {
 		};
 	})();
 
+<<<<<<< HEAD
 	/*
 	 * Strips out url containing the text `javascript` with or without any HTML Entities in it
 	 **/
@@ -369,6 +378,12 @@ frappe.utils.sanitise_redirect = (url) => {
 			Array.from("javascript").join(REGEX_ESC_UNIT.source),
 			"gi"
 		);
+=======
+	const sanitise_javascript = (url) => {
+		// please do not ask how or why
+		const REGEX_SCRIPT =
+			/j[\s]*(&#x.{1,7})?a[\s]*(&#x.{1,7})?v[\s]*(&#x.{1,7})?a[\s]*(&#x.{1,7})?s[\s]*(&#x.{1,7})?c[\s]*(&#x.{1,7})?r[\s]*(&#x.{1,7})?i[\s]*(&#x.{1,7})?p[\s]*(&#x.{1,7})?t/gi;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		return url.replace(REGEX_SCRIPT, "");
 	};

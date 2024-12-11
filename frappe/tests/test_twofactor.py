@@ -61,7 +61,11 @@ class TestTwoFactor(FrappeTestCase):
 		self.assertTrue(verification_obj)
 		self.assertTrue(tmp_id)
 		for k in ["_usr", "_pwd", "_otp_secret"]:
+<<<<<<< HEAD
 			self.assertTrue(frappe.cache.get(f"{tmp_id}{k}"), f"{k} not available")
+=======
+			self.assertTrue(frappe.cache().get(f"{tmp_id}{k}"), f"{k} not available")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_two_factor_is_enabled(self):
 		"""
@@ -205,7 +209,12 @@ def create_http_request():
 	frappe.form_dict["usr"] = "test@example.com"
 	frappe.form_dict["pwd"] = "Eastern_43A1W"
 	frappe.local.form_dict["cmd"] = "login"
+<<<<<<< HEAD
 	return HTTPRequest()
+=======
+	http_requests = HTTPRequest()
+	return http_requests
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def enable_2fa(bypass_two_factor_auth=0, bypass_restrict_ip_check=0):

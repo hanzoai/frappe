@@ -9,6 +9,10 @@ Action,Veprim,
 Actions,Veprimet,
 Active,Aktiv,
 Add,Shtoj,
+<<<<<<< HEAD
+=======
+Add Comment,Shto koment,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,Shto Row,
 Address,Adresë,
 Address Line 2,Adresa Line 2,
@@ -143,6 +147,10 @@ Monday,E hënë,
 Monthly,Mujor,
 More,Më shumë,
 More Information,Me shume informacion,
+<<<<<<< HEAD
+=======
+More...,Më shumë ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,veprim,
 My Account,Llogaria ime,
 New Address,Adresa e re,
@@ -155,6 +163,10 @@ No items found.,Asnjë artikull nuk u gjet.,
 None,Asnje,
 Not Permitted,Nuk lejohet,
 Not active,Jo aktiv,
+<<<<<<< HEAD
+=======
+Notes,Shënime,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,numër,
 Online,online,
 Operation,Operacion,
@@ -164,12 +176,25 @@ Owner,Pronar,
 Page Missing or Moved,Faqe zhdukur ose lëvizur,
 Parameter,Parametër,
 Password,Fjalëkalim,
+<<<<<<< HEAD
 Period,Periudhë,
 Pincode,Pincode,
+=======
+Payment Gateway,Gateway Pagesa,
+Payment Gateway Name,Emri i portës së pagesës,
+Payments,Pagesat,
+Period,Periudhë,
+Pincode,Pincode,
+Plan Name,Emri i Planit,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,Ju lutem aktivizoni pop-ups,
 Please select Company,"Ju lutem, përzgjidhni Company",
 Please select {0},"Ju lutem, përzgjidhni {0}",
 Please set Email Address,Ju lutemi të vendosur Email Adresa,
+<<<<<<< HEAD
+=======
+Portal,Portal,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,Cilësimet Portal,
 Preview,Preview,
 Primary,Kryesor,
@@ -214,6 +239,10 @@ Salutation,përshëndetje,
 Sample,Mostër,
 Saturday,E shtunë,
 Saved,Saved,
+<<<<<<< HEAD
+=======
+Scan Barcode,Skanoni barkodin,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,Planifikuar,
 Search,Kërkim,
 Secret Key,Key sekret,
@@ -228,6 +257,10 @@ Settings,Cilësimet,
 Shipping,Transporti,
 Short Name,Emri i shkurtër,
 Slideshow,Slideshow,
+<<<<<<< HEAD
+=======
+Some information is missing,Disa informata mungon,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,Burim,
 Source Name,burimi Emri,
 Standard,Standard,
@@ -237,6 +270,10 @@ State,Shtet,
 Stopped,U ndal,
 Subject,Subjekt,
 Submit,Paraqes,
+<<<<<<< HEAD
+=======
+Successful,E suksesshme,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,përmbledhje,
 Sunday,E diel,
 System Manager,Sistemi Menaxher,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,Intervalin kohor,
 To,në,
 To Date,Deri më sot,
+<<<<<<< HEAD
 Traceback,Gjurmim,
 URL,URL,
 Unsubscribed,Unsubscribed,
+=======
+Tools,Mjete,
+Traceback,Gjurmim,
+URL,URL,
+Unsubscribed,Unsubscribed,
+Use Sandbox,Përdorimi Sandbox,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,përdorues,
 User ID,User ID,
 Users,përdoruesit,
@@ -556,6 +601,10 @@ Bulk Delete,Fshij pjesa më e madhe,
 Bulk Edit {0},Bulk Ndrysho {0},
 Bulk Rename,Bulk Rename,
 Bulk Update,Update Bulk,
+<<<<<<< HEAD
+=======
+Busy,I zënë,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,Buton,
 Button Help,Button Ndihmë,
 Button Label,Button Label,
@@ -692,6 +741,10 @@ Compiled Successfully,Hartuar me sukses,
 Complete By,Complete Nga,
 Complete Registration,Complete Regjistrimi,
 Complete Setup,Setup Complete,
+<<<<<<< HEAD
+=======
+Completed By,Përfunduar nga,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,Harto Email,
 Condition Detail,Detajet e gjendjes,
 Conditions,Kushtet,
@@ -1380,7 +1433,11 @@ Is Submittable,Është Submittable,
 Is Table,A Tabela,
 Is Your Company Address,Është kompania juaj Adresa,
 It is risky to delete this file: {0}. Please contact your System Manager.,Kjo është e rrezikshme për të fshirë këtë skedë: {0}. Ju lutemi të kontaktoni Sistemit Soccer tuaj.,
+<<<<<<< HEAD
 Item cannot be added to its own descendants,Item nuk mund të shtohet për të pasardhësve të vet,
+=======
+Item cannot be added to its own descendents,Item nuk mund të shtohet për të pasardhësve të vet,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,JSON,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},JavaScript Formati: frappe.query_reports [&#39;REPORTNAME&#39;] = {},
@@ -1675,8 +1732,13 @@ Not a valid Workflow Action,Nuk është një veprim i vlefshëm i fluksit të pu
 Not a valid user,Nuk është një përdorues i vlefshëm,
 Not a zip file,Nuk është një skedar zip,
 Not allowed for {0}: {1},Nuk lejohet për {0}: {1},
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}","Nuk lejohet që të hyrë në {0} sepse është i lidhur me {1} &#39;{2}&#39; në rresht {3}, fushë {4}",
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},Nuk lejohet që të hyrë në këtë {0} rekord sepse është i lidhur me {1} &#39;{2}&#39; në fushë {3},
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},Nuk lejohet {0}: {1} në Rresht {2}. Fusha e kufizuar: {3},
+Not allowed for {0}: {1}. Restricted field: {2},Nuk lejohet për {0}: {1}. Fusha e kufizuar: {2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,Nuk lejohet që të importojë,
 Not allowed to change {0} after submission,Nuk lejohet të ndryshojë {0} pas dorëzimit,
 Not allowed to print cancelled documents,Nuk lejohet për të shtypur dokumentet anuluar,
@@ -1804,6 +1866,10 @@ Path to private Key File,Shtegu te Dosja kryesore e çelësit,
 PayPal Settings,Cilësimet PayPal,
 PayPal payment gateway settings,PayPal settings portë e pagesës,
 Payment Cancelled,pagesa Anullohen,
+<<<<<<< HEAD
+=======
+Payment Failed,pagesa Dështoi,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,Suksesi pagesa,
 Pending Approval,Miratim në pritje,
 Pending Verification,Verifikimi në pritje,
@@ -3200,6 +3266,10 @@ Click on the link below to approve the request,Klikoni në lidhjen më poshtë p
 Click on the lock icon to toggle public/private,Klikoni në ikonën e kyçjes për të ndryshuar publikun / privat,
 Click on {0} to generate Refresh Token.,Klikoni në {0} për të gjeneruar Refresh Token.,
 Close Condition,Gjendja e ngushtë,
+<<<<<<< HEAD
+=======
+Column {0},Kolona {0,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,Kolonat / fushat,
 "Configure notifications for mentions, assignments, energy points and more.","Konfiguroni njoftimet për përmendjet, caktimet, pikat e energjisë dhe më shumë.",
 Contact Email,Kontakti Email,
@@ -3281,6 +3351,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,dështim,
 Fetching default Global Search documents.,Marrja e dokumenteve të paracaktuar të Kërkimit Global.,
 Fetching posts...,Duke ndjekur postimet ...,
+<<<<<<< HEAD
+=======
+Field Mapping,Hartimi në terren,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,Fusha për të kontrolluar,
 File Information,Informacioni i skedarit,
 Filter By,Filtri nga,
@@ -3435,6 +3509,10 @@ No posts yet,Ende nuk ka postime,
 No records will be exported,Asnjë rekord nuk do të eksportohet,
 No results found for {0} in Global Search,Nuk u gjet asnjë rezultat për {0} në Kërkimin Global,
 No user found,Asnjë përdorues nuk u gjet,
+<<<<<<< HEAD
+=======
+Not Specified,E paspecifikuar,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,Regjistri i njoftimeve,
 Notification Settings,Cilësimet e njoftimit,
 Notification Subscribed Document,Njoftim Dokument i pajtuar,
@@ -3590,6 +3668,10 @@ Untitled Column,Kolona pa titull,
 Untranslated,papërkthyera,
 Upcoming Events,Ngjarje të ardhshme,
 Update Existing Records,Azhurnoni rekordet ekzistuese,
+<<<<<<< HEAD
+=======
+Update Type,Lloji i azhurnimit,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,Përditësuar në një version të ri,
 "Updating {0} of {1}, {2}","Përditësimi i {0} nga {1}, {2",
 Upload file,Ngarko skedarin,
@@ -3696,16 +3778,28 @@ Designation,Përcaktim,
 Disabled,I paaftë,
 Doctype,DOCTYPE,
 Download Template,Shkarko Template,
+<<<<<<< HEAD
+=======
+Dr,Dr,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,Për shkak Date,
 Duplicate,I kopjuar,
 Edit Profile,Ndrysho Profilin,
 Email,Email,
+<<<<<<< HEAD
+=======
+End Time,Fundi Koha,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,Shkruani Vlera,
 Entity Type,Lloji i entitetit,
 Error,Gabim,
 Expired,Skaduar,
 Export,Eksport,
 Export not allowed. You need {0} role to export.,Eksporti nuk lejohet. Ju duhet {0} rol për eksport.,
+<<<<<<< HEAD
+=======
+Fetching...,Ngarkuar ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,fushë,
 File Manager,File Manager,
 Filters,Filtra,
@@ -3720,8 +3814,16 @@ Import Data from CSV / Excel files.,Importo të dhënat nga dosjet CSV / Excel.,
 In Progress,Në progres,
 Intermediate,i ndërmjetëm,
 Invite as User,Fto si Përdorues,
+<<<<<<< HEAD
 Loading...,Duke u ngarkuar ...,
 Location,Vend,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.","Duket se ka një problem me konfigurimin e shiritit të serverit. Në rast të dështimit, shuma do të kthehet në llogarinë tuaj.",
+Loading...,Duke u ngarkuar ...,
+Location,Vend,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,"Duket sikur dikush ju ka dërguar në një URL jo të plotë. Ju lutem, pyesni ata për të shikojmë në të.",
+Master,Mjeshtër,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,mesazh,
 Missing Values Required,Vlerave të zhdukur kërkuar,
 Mobile No,Mobile Asnjë,
@@ -3733,6 +3835,10 @@ Note,Shënim,
 Offline,në linjë,
 Open,hapur,
 Page {0} of {1},Faqe {0} prej {1},
+<<<<<<< HEAD
+=======
+Pay,Kushtoj,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,Në pritje të,
 Phone,Telefon,
 Please click on the following link to set your new password,Ju lutem klikoni në linkun e mëposhtëm për të vendosur fjalëkalimin tuaj të ri,
@@ -3782,6 +3888,10 @@ Welcome to {0},Mirëpritur tek {0},
 Year,Vit,
 Yearly,Vjetor,
 You,Ju,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,Ju gjithashtu mund të kopjoni-ngjisni këtë lidhje në shfletuesin tuaj,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,dhe,
 {0} Name,{0} Emri,
 {0} is required,{0} është e nevojshme,
@@ -4085,6 +4195,10 @@ Custom SCSS,SCSS me porosi,
 Navbar,Navbar,
 Source Message,Mesazhi i burimit,
 Translated Message,Mesazh i perkthyer,
+<<<<<<< HEAD
+=======
+Verified By,Verifikuar nga,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,Përdorimi i kësaj konsolë mund të lejojë që sulmuesit të ju përvetësojnë dhe të vjedhin informacionin tuaj. Mos fut ose ngjit kod që nuk e kupton.,
 {0} m,{0} m,
 {0} h,{0} orë,
@@ -4108,7 +4222,11 @@ No changes in document,Asnjë ndryshim në dokument,
 by Role,nga Roli,
 Document is only editable by users with role,Dokumenti është i redaktueshëm vetëm nga përdoruesit me rol,
 {0}: Other permission rules may also apply,{0}: Mund të zbatohen edhe rregulla të tjera të lejes,
+<<<<<<< HEAD
 {0} Web page views,{0} Shikimet e faqeve,
+=======
+{0} Page Views,{0} Shikimet e faqeve,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,Zgjero,
 Collapse,Shembje,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.","Shenjë e pavlefshme e Bartësit, ju lutemi siguroni një shenjë të vlefshme të hyrjes me parashtesën &quot;Bartës&quot;.",
@@ -4117,6 +4235,10 @@ Collapse,Shembje,
 {0} is not a valid Name,{0} nuk është një emër i vlefshëm,
 Your system is being updated. Please refresh again after a few moments.,Sistemi juaj po azhurnohet. Ju lutemi rifreskoni përsëri pas disa çastesh.,
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}: Regjistrimi i paraqitur nuk mund të fshihet. Së pari duhet ta {2} Anuloni {3}.,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},Seri të pavlefshme emërtimesh (. Mungon) për {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},Gabim ka ndodhur në {0},
 Status Updated,Statusi u azhurnua,
 You can also copy-paste this {0} to your browser,Ju gjithashtu mund ta kopjoni-ngjisni këtë {0} në shfletuesin tuaj,
@@ -4138,11 +4260,21 @@ Is Billing Contact,A është kontakti i faturimit,
 Address And Contacts,Adresa dhe Kontaktet,
 Lead Conversion Time,Koha e konvertimit të plumbit,
 Due Date Based On,Datë e bazuar në bazë,
+<<<<<<< HEAD
 Linked Documents,Dokumente të lidhura,
+=======
+Phone Number,Numri i telefonit,
+Linked Documents,Dokumente të lidhura,
+Account SID,SID llogari,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,Hapat,
 email,email,
 Component,komponent,
 Subtitle,nëntitull,
+<<<<<<< HEAD
+=======
+Global Defaults,Defaults Global,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,Parashtesë,
 Is Public,Publicshtë Publik,
 This chart will be available to all Users if this is set,Kjo tabelë do të jetë në dispozicion për të gjithë përdoruesit nëse është vendosur,
@@ -4329,6 +4461,10 @@ Dynamic Filters Section,Seksioni i Filtrave Dinamik,
 Please create Card first,Ju lutemi krijoni Kartën së pari,
 Onboarding Permission,Leja e bordit,
 Onboarding Step,Hapi i bordit,
+<<<<<<< HEAD
+=======
+Is Mandatory,Shtë e Detyrueshme,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,Sshtë kapërcyer,
 Create Entry,Krijo hyrjen,
 Update Settings,Cilësimet e azhurnimit,
@@ -4366,6 +4502,10 @@ Message (HTML),Mesazhi (HTML),
 Send Attachments,Dërgoni bashkëngjitje,
 Testing,Duke testuar,
 System Notification,Njoftimi i sistemit,
+<<<<<<< HEAD
+=======
+WhatsApp,WhatsApp,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,Numri Twilio,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","Për të përdorur WhatsApp për Biznes, <a href=""#Form/Twilio Settings"">filloni Cilësimet e Twilio</a> .",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","Për të përdorur Slack Channel, shtoni një <a href=""#List/Slack%20Webhook%20URL/List"">URL Slack Webhook</a> .",
@@ -4500,6 +4640,10 @@ Add to ToDo,Shto në ToDo,
 {0} are currently {1},{0} aktualisht janë {1},
 Currently Replying,Përgjigjja Aktualisht,
 created {0},krijuar {0},
+<<<<<<< HEAD
+=======
+Make a call,Bej nje telefonate,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,Ndryshimi,Coins
 Too Many Requests,Shumë kërkesa,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.","Titra të pavlefshëm të Autorizimit, shtoni një shenjë me një parashtesë nga një prej mëposhtme: {0}.",
@@ -4664,6 +4808,7 @@ Value cannot be negative for {0}: {1},Vlera nuk mund të jetë negative për {0}
 Negative Value,Vlera negative,
 Authentication failed while receiving emails from Email Account: {0}.,Vërtetimi dështoi gjatë marrjes së postave elektronike nga llogaria e postës elektronike: {0}.,
 Message from server: {0},Mesazh nga serveri: {0},
+<<<<<<< HEAD
 Add Row,Shto Row,
 Analytics,analitikë,
 Anonymous,anonim,
@@ -4796,3 +4941,5 @@ West Bengal,Bengali Perëndimor,
 Published on,Botuar më,
 Bottom,Fund,
 Top,Top,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

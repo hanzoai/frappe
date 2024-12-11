@@ -29,8 +29,13 @@ def get_query_key():
 def get_user_svg_from_cache():
 	"""Get User and SVG code from cache."""
 	key = get_query_key()
+<<<<<<< HEAD
 	totp_uri = frappe.cache.get_value(f"{key}_uri")
 	user = frappe.cache.get_value(f"{key}_user")
+=======
+	totp_uri = frappe.cache().get_value(f"{key}_uri")
+	user = frappe.cache().get_value(f"{key}_user")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if not totp_uri or not user:
 		frappe.throw(_("Page has expired!"), frappe.PermissionError)
 	if not frappe.db.exists("User", user):

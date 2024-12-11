@@ -9,6 +9,10 @@ Action,行动,
 Actions,操作,
 Active,活动,
 Add,添加,
+<<<<<<< HEAD
+=======
+Add Comment,添加评论,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,添加行,
 Address,地址,
 Address Line 2,地址行2,
@@ -143,6 +147,10 @@ Monday,星期一,
 Monthly,每月,
 More,更多,
 More Information,更多信息,
+<<<<<<< HEAD
+=======
+More...,更多...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,移动,
 My Account,我的账户,
 New Address,新地址,
@@ -155,6 +163,10 @@ No items found.,未找到任何项目。,
 None,没有,
 Not Permitted,不允许,
 Not active,非活动,
+<<<<<<< HEAD
+=======
+Notes,便签,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,数,
 Online,线上,
 Operation,操作,
@@ -164,12 +176,25 @@ Owner,业主,
 Page Missing or Moved,页面丢失或已被移动,
 Parameter,参数,
 Password,密码,
+<<<<<<< HEAD
 Period,期,
 Pincode,PIN代码,
+=======
+Payment Gateway,支付网关,
+Payment Gateway Name,支付网关名称,
+Payments,付款,
+Period,期,
+Pincode,PIN代码,
+Plan Name,计划名称,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,请启用弹出窗口,
 Please select Company,请选择公司,
 Please select {0},请选择{0},
 Please set Email Address,请设置电子邮件地址,
+<<<<<<< HEAD
+=======
+Portal,门户,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,门户网站设置,
 Preview,预览,
 Primary,初级,
@@ -214,6 +239,10 @@ Salutation,称呼,
 Sample,样本,
 Saturday,星期六,
 Saved,已保存,
+<<<<<<< HEAD
+=======
+Scan Barcode,扫条码,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,已计划,
 Search,搜索,
 Secret Key,密钥,
@@ -228,6 +257,10 @@ Settings,设置,
 Shipping,运输中,
 Short Name,简称,
 Slideshow,幻灯片,
+<<<<<<< HEAD
+=======
+Some information is missing,一些信息缺失,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,源,
 Source Name,源名称,
 Standard,标准,
@@ -237,6 +270,10 @@ State,州,
 Stopped,已停止,
 Subject,主题,
 Submit,提交,
+<<<<<<< HEAD
+=======
+Successful,成功,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,概要,
 Sunday,星期天,
 System Manager,系统管理员,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,时间跨度,
 To,至,
 To Date,至今,
+<<<<<<< HEAD
 Traceback,回溯,
 URL,网址,
 Unsubscribed,已退订,
+=======
+Tools,工具,
+Traceback,回溯,
+URL,网址,
+Unsubscribed,已退订,
+Use Sandbox,使用沙盒,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,用户,
 User ID,用户ID,
 Users,用户,
@@ -556,6 +601,10 @@ Bulk Delete,批量删除,
 Bulk Edit {0},批量编辑{0},
 Bulk Rename,批量重命名,
 Bulk Update,批量更新,
+<<<<<<< HEAD
+=======
+Busy,忙,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,按钮,
 Button Help,按钮帮助,
 Button Label,按钮标签,
@@ -692,6 +741,10 @@ Compiled Successfully,编译成功,
 Complete By,由...完成,
 Complete Registration,完成注册,
 Complete Setup,完成安装,
+<<<<<<< HEAD
+=======
+Completed By,由...完成,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,写邮件,
 Condition Detail,状况细节,
 Conditions,条件,
@@ -1380,7 +1433,11 @@ Is Submittable,是否可以提交,
 Is Table,为表,
 Is Your Company Address,是你的公司地址,
 It is risky to delete this file: {0}. Please contact your System Manager.,删除这个文件是有风险的：{0}。请联系您的系统管理员。,
+<<<<<<< HEAD
 Item cannot be added to its own descendants,项目不能被添加到自己的后代,
+=======
+Item cannot be added to its own descendents,项目不能被添加到自己的后代,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,JSON,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},JavaScript格式：frappe.query_reports ['REPORTNAME'] = {},
@@ -1675,8 +1732,13 @@ Not a valid Workflow Action,不是有效的工作流程操作,
 Not a valid user,不是有效的用户,
 Not a zip file,没有一个zip文件,
 Not allowed for {0}: {1},不允许{0}：{1},
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}",您无权访问{0}，因为它链接到{1}“{2}”在行{3}，字段{4},
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},您无权访问此{0}记录，因为它链接到{1}“{2}”在字段{3},
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},第{2}行中不允许{0}：{1}。受限制的字段：{3},
+Not allowed for {0}: {1}. Restricted field: {2},不允许{0}：{1}。受限制的字段：{2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,不允许导入,
 Not allowed to change {0} after submission,不允许提交后更改{0},
 Not allowed to print cancelled documents,不允许打印已取消文件,
@@ -1804,6 +1866,10 @@ Path to private Key File,私钥文件的路径,
 PayPal Settings,贝宝设置,
 PayPal payment gateway settings,贝宝支付网关设置,
 Payment Cancelled,付款已取消,
+<<<<<<< HEAD
+=======
+Payment Failed,支付失败,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,支付成功,
 Pending Approval,待批准,
 Pending Verification,待验证,
@@ -3200,6 +3266,10 @@ Click on the link below to approve the request,单击下面的链接批准该请
 Click on the lock icon to toggle public/private,单击锁定图标以切换公共/私人,
 Click on {0} to generate Refresh Token.,单击{0}以生成刷新令牌。,
 Close Condition,关闭条件,
+<<<<<<< HEAD
+=======
+Column {0},列{0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,列/字段,
 "Configure notifications for mentions, assignments, energy points and more.",配置有关提及，任务，能量点等的通知。,
 Contact Email,联络人电邮,
@@ -3281,6 +3351,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,失败,
 Fetching default Global Search documents.,正在获取默认的全局搜索文档。,
 Fetching posts...,获取帖子......,
+<<<<<<< HEAD
+=======
+Field Mapping,场图,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,现场检查,
 File Information,文件信息,
 Filter By,过滤,
@@ -3435,6 +3509,10 @@ No posts yet,还没有帖子,
 No records will be exported,没有记录将被导出,
 No results found for {0} in Global Search,在全局搜索中找不到与{0}相关的结果,
 No user found,找不到用户,
+<<<<<<< HEAD
+=======
+Not Specified,未标明,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,通知日志,
 Notification Settings,通知设置,
 Notification Subscribed Document,通知订阅文件,
@@ -3590,6 +3668,10 @@ Untitled Column,无标题栏,
 Untranslated,未翻译,
 Upcoming Events,即将举行的活动,
 Update Existing Records,更新现有记录,
+<<<<<<< HEAD
+=======
+Update Type,更新类型,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,更新到新版本🎉,
 "Updating {0} of {1}, {2}",更新{1}，{2}中的{0},
 Upload file,上传文件,
@@ -3696,16 +3778,28 @@ Designation,职位,
 Disabled,禁用,
 Doctype,文档类型,
 Download Template,下载模板,
+<<<<<<< HEAD
+=======
+Dr,借方,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,到期日,
 Duplicate,复制,
 Edit Profile,编辑个人资料,
 Email,电子邮件,
+<<<<<<< HEAD
+=======
+End Time,结束时间,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,输入值,
 Entity Type,实体类型,
 Error,错误,
 Expired,已过期,
 Export,导出,
 Export not allowed. You need {0} role to export.,不允许导出，您没有{0}的角色。,
+<<<<<<< HEAD
+=======
+Fetching...,正在获取...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,字段,
 File Manager,文件管理器,
 Filters,过滤器,
@@ -3720,8 +3814,16 @@ Import Data from CSV / Excel files.,从CSV / Excel文件导入数据。,
 In Progress,进行中,
 Intermediate,中间,
 Invite as User,邀请成为用户,
+<<<<<<< HEAD
 Loading...,载入中...,
 Location,位置,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.",看起来服务器的条带配置存在问题。如果失败，这笔款项将退还给您的账户。,
+Loading...,载入中...,
+Location,位置,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,貌似有人送你一个不完整的URL。请让他们寻找到它。,
+Master,大师,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,信息,
 Missing Values Required,缺少需要的值,
 Mobile No,手机号码,
@@ -3733,6 +3835,10 @@ Note,注,
 Offline,离线,
 Open,开,
 Page {0} of {1},第{0} {1},
+<<<<<<< HEAD
+=======
+Pay,支付,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,有待,
 Phone,电话,
 Please click on the following link to set your new password,请点击以下链接来设置新密码,
@@ -3782,6 +3888,10 @@ Welcome to {0},欢迎{0},
 Year,年,
 Yearly,每年,
 You,你,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,您也可以复制粘贴此链接到您的浏览器地址栏中,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,和,
 {0} Name,{0}名称,
 {0} is required,{0}是必填项,
@@ -4085,6 +4195,10 @@ Custom SCSS,自定义SCSS,
 Navbar,导航栏,
 Source Message,源消息,
 Translated Message,翻译的讯息,
+<<<<<<< HEAD
+=======
+Verified By,认证,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,使用此控制台可能使攻击者冒充您并窃取您的信息。不要输入或粘贴您不理解的代码。,
 {0} m,{0}米,
 {0} h,{0}小时,
@@ -4108,7 +4222,11 @@ No changes in document,文件无变化,
 by Role,按角色,
 Document is only editable by users with role,只有具有角色的用户才能编辑文档,
 {0}: Other permission rules may also apply,{0}：其他许可规则也可能适用,
+<<<<<<< HEAD
 {0} Web page views,{0}浏览量,
+=======
+{0} Page Views,{0}浏览量,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,扩大,
 Collapse,坍方,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.",无效的承载令牌，请提供带有前缀“承载”的有效访问令牌。,
@@ -4117,6 +4235,10 @@ Collapse,坍方,
 {0} is not a valid Name,{0}不是有效的名称,
 Your system is being updated. Please refresh again after a few moments.,您的系统正在更新。请稍后再刷新。,
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}：无法删除已提交的记录。您必须先{2}取消{3}。,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},{0}的无效命名系列（。丢失）,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},{0}中发生错误,
 Status Updated,状态已更新,
 You can also copy-paste this {0} to your browser,您也可以将此{0}复制粘贴到浏览器中,
@@ -4138,11 +4260,21 @@ Is Billing Contact,帐单联络人,
 Address And Contacts,地址和联系方式,
 Lead Conversion Time,商机转换时间,
 Due Date Based On,到期日基于,
+<<<<<<< HEAD
 Linked Documents,链接文件,
+=======
+Phone Number,电话号码,
+Linked Documents,链接文件,
+Account SID,帐户SID,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,脚步,
 email,电子邮件,
 Component,薪资构成,
 Subtitle,字幕,
+<<<<<<< HEAD
+=======
+Global Defaults,全局默认值,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,字首,
 Is Public,是公开的,
 This chart will be available to all Users if this is set,如果设置此图表，则所有用户均可使用,
@@ -4329,6 +4461,10 @@ Dynamic Filters Section,动态过滤器部分,
 Please create Card first,请先创建卡,
 Onboarding Permission,入职许可,
 Onboarding Step,入职步骤,
+<<<<<<< HEAD
+=======
+Is Mandatory,是强制性的,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,被跳过,
 Create Entry,创建条目,
 Update Settings,更新设定,
@@ -4366,6 +4502,10 @@ Message (HTML),讯息（HTML）,
 Send Attachments,发送附件,
 Testing,测验,
 System Notification,系统通知,
+<<<<<<< HEAD
+=======
+WhatsApp,WhatsApp的,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,特维里奥数,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","要使用WhatsApp for Business，请初始化<a href=""#Form/Twilio Settings"">Twilio设置</a>。",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","要使用Slack Channel，请添加<a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a> 。",
@@ -4500,6 +4640,10 @@ Add to ToDo,添加到待办事项,
 {0} are currently {1},{0}当前为{1},
 Currently Replying,目前回覆,
 created {0},已创建{0},
+<<<<<<< HEAD
+=======
+Make a call,打个电话,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,更改,Coins
 Too Many Requests,请求太多,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.",无效的授权标头，请添加带有以下任一前缀的令牌：{0}。,
@@ -4664,6 +4808,7 @@ Value cannot be negative for {0}: {1},{0}的值不能为负：{1},
 Negative Value,负值,
 Authentication failed while receiving emails from Email Account: {0}.,从电子邮件帐户{0}接收电子邮件时，身份验证失败。,
 Message from server: {0},来自服务器的消息：{0},
+<<<<<<< HEAD
 Add Row,添加行,
 Analytics,Analytics（分析）,
 Anonymous,匿名,
@@ -4795,3 +4940,5 @@ West Bengal,西孟加拉邦,
 Published on,发表于,
 Bottom,底部,
 Top,最佳,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

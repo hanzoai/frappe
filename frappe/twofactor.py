@@ -74,8 +74,13 @@ def get_cached_user_pass():
 	user = pwd = None
 	tmp_id = frappe.form_dict.get("tmp_id")
 	if tmp_id:
+<<<<<<< HEAD
 		user = frappe.safe_decode(frappe.cache.get(tmp_id + "_usr"))
 		pwd = frappe.safe_decode(frappe.cache.get(tmp_id + "_pwd"))
+=======
+		user = frappe.safe_decode(frappe.cache().get(tmp_id + "_usr"))
+		pwd = frappe.safe_decode(frappe.cache().get(tmp_id + "_pwd"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return (user, pwd)
 
 
@@ -101,6 +106,7 @@ def cache_2fa_data(user, token, otp_secret, tmp_id):
 	# set increased expiry time for SMS and Email
 	if verification_method in ["SMS", "Email"]:
 		expiry_time = frappe.flags.token_expiry or 300
+<<<<<<< HEAD
 		frappe.cache.set(tmp_id + "_token", token)
 		frappe.cache.expire(tmp_id + "_token", expiry_time)
 	else:
@@ -108,6 +114,15 @@ def cache_2fa_data(user, token, otp_secret, tmp_id):
 	for k, v in {"_usr": user, "_pwd": pwd, "_otp_secret": otp_secret}.items():
 		frappe.cache.set(f"{tmp_id}{k}", v)
 		frappe.cache.expire(f"{tmp_id}{k}", expiry_time)
+=======
+		frappe.cache().set(tmp_id + "_token", token)
+		frappe.cache().expire(tmp_id + "_token", expiry_time)
+	else:
+		expiry_time = frappe.flags.otp_expiry or 180
+	for k, v in {"_usr": user, "_pwd": pwd, "_otp_secret": otp_secret}.items():
+		frappe.cache().set(f"{tmp_id}{k}", v)
+		frappe.cache().expire(f"{tmp_id}{k}", expiry_time)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def two_factor_is_enabled_for_(user):
@@ -159,8 +174,13 @@ def confirm_otp_token(login_manager, otp=None, tmp_id=None):
 		return True
 	if not tmp_id:
 		tmp_id = frappe.form_dict.get("tmp_id")
+<<<<<<< HEAD
 	hotp_token = frappe.cache.get(tmp_id + "_token")
 	otp_secret = frappe.cache.get(tmp_id + "_otp_secret")
+=======
+	hotp_token = frappe.cache().get(tmp_id + "_token")
+	otp_secret = frappe.cache().get(tmp_id + "_otp_secret")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if not otp_secret:
 		raise ExpiredLoginException(_("Login session expired, refresh page to retry"))
 
@@ -169,7 +189,11 @@ def confirm_otp_token(login_manager, otp=None, tmp_id=None):
 	hotp = pyotp.HOTP(otp_secret)
 	if hotp_token:
 		if hotp.verify(otp, int(hotp_token)):
+<<<<<<< HEAD
 			frappe.cache.delete(tmp_id + "_token")
+=======
+			frappe.cache().delete(tmp_id + "_token")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			tracker.add_success_attempt()
 			return True
 		else:
@@ -211,22 +235,39 @@ def process_2fa_for_sms(user, token, otp_secret):
 	phone = frappe.db.get_value("User", user, ["phone", "mobile_no"], as_dict=1)
 	phone = phone.mobile_no or phone.phone
 	status = send_token_via_sms(otp_secret, token=token, phone_no=phone)
+<<<<<<< HEAD
 	return {
+=======
+	verification_obj = {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"token_delivery": status,
 		"prompt": status and "Enter verification code sent to {}".format(phone[:4] + "******" + phone[-3:]),
 		"method": "SMS",
 		"setup": status,
 	}
+<<<<<<< HEAD
+=======
+	return verification_obj
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def process_2fa_for_otp_app(user, otp_secret, otp_issuer):
 	"""Process OTP App method for 2fa."""
+<<<<<<< HEAD
+=======
+	pyotp.TOTP(otp_secret).provisioning_uri(user, issuer_name=otp_issuer)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if get_default(user + "_otplogin"):
 		otp_setup_completed = True
 	else:
 		otp_setup_completed = False
 
+<<<<<<< HEAD
 	return {"method": "OTP App", "setup": otp_setup_completed}
+=======
+	verification_obj = {"method": "OTP App", "setup": otp_setup_completed}
+	return verification_obj
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def process_2fa_for_email(user, token, otp_secret, otp_issuer, method="Email"):
@@ -248,12 +289,20 @@ def process_2fa_for_email(user, token, otp_secret, otp_issuer, method="Email"):
 		"""Sending email verification"""
 		prompt = _("Verification code has been sent to your registered email address.")
 	status = send_token_via_email(user, token, otp_secret, otp_issuer, subject=subject, message=message)
+<<<<<<< HEAD
 	return {
+=======
+	verification_obj = {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"token_delivery": status,
 		"prompt": status and prompt,
 		"method": "Email",
 		"setup": status,
 	}
+<<<<<<< HEAD
+=======
+	return verification_obj
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_email_subject_for_2fa(kwargs_dict):
@@ -261,7 +310,12 @@ def get_email_subject_for_2fa(kwargs_dict):
 	subject_template = _("Login Verification Code from {}").format(
 		frappe.db.get_single_value("System Settings", "otp_issuer_name")
 	)
+<<<<<<< HEAD
 	return frappe.render_template(subject_template, kwargs_dict)
+=======
+	subject = frappe.render_template(subject_template, kwargs_dict)
+	return subject
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_email_body_for_2fa(kwargs_dict):
@@ -271,7 +325,12 @@ def get_email_body_for_2fa(kwargs_dict):
 		<br><br>
 		<b style="font-size: 18px;">{{ otp }}</b>
 	"""
+<<<<<<< HEAD
 	return frappe.render_template(body_template, kwargs_dict)
+=======
+	body = frappe.render_template(body_template, kwargs_dict)
+	return body
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_email_subject_for_qr_code(kwargs_dict):
@@ -279,7 +338,12 @@ def get_email_subject_for_qr_code(kwargs_dict):
 	subject_template = _("One Time Password (OTP) Registration Code from {}").format(
 		frappe.db.get_single_value("System Settings", "otp_issuer_name")
 	)
+<<<<<<< HEAD
 	return frappe.render_template(subject_template, kwargs_dict)
+=======
+	subject = frappe.render_template(subject_template, kwargs_dict)
+	return subject
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_email_body_for_qr_code(kwargs_dict):
@@ -287,7 +351,12 @@ def get_email_body_for_qr_code(kwargs_dict):
 	body_template = _(
 		"Please click on the following link and follow the instructions on the page. {0}"
 	).format("<br><br> <a href='{{qrcode_link}}'>{{qrcode_link}}</a>")
+<<<<<<< HEAD
 	return frappe.render_template(body_template, kwargs_dict)
+=======
+	body = frappe.render_template(body_template, kwargs_dict)
+	return body
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_link_for_qrcode(user, totp_uri):
@@ -296,8 +365,13 @@ def get_link_for_qrcode(user, totp_uri):
 	key_user = f"{key}_user"
 	key_uri = f"{key}_uri"
 	lifespan = int(frappe.db.get_single_value("System Settings", "lifespan_qrcode_image")) or 240
+<<<<<<< HEAD
 	frappe.cache.set_value(key_uri, totp_uri, expires_in_sec=lifespan)
 	frappe.cache.set_value(key_user, user, expires_in_sec=lifespan)
+=======
+	frappe.cache().set_value(key_uri, totp_uri, expires_in_sec=lifespan)
+	frappe.cache().set_value(key_user, user, expires_in_sec=lifespan)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return get_url(f"/qrcode?k={key}")
 
 
@@ -373,6 +447,35 @@ def get_qr_svg_code(totp_uri):
 	return svg
 
 
+<<<<<<< HEAD
+=======
+def qrcode_as_png(user, totp_uri):
+	"""Save temporary Qrcode to server."""
+	from pyqrcode import create as qrcreate
+
+	folder = create_barcode_folder()
+	png_file_name = f"{frappe.generate_hash(length=20)}.png"
+	_file = frappe.get_doc(
+		{
+			"doctype": "File",
+			"file_name": png_file_name,
+			"attached_to_doctype": "User",
+			"attached_to_name": user,
+			"folder": folder,
+			"content": png_file_name,
+		}
+	)
+	_file.save()
+	frappe.db.commit()
+	file_url = get_url(_file.file_url)
+	file_path = os.path.join(frappe.get_site_path("public", "files"), _file.file_name)
+	url = qrcreate(totp_uri)
+	with open(file_path, "w") as png_file:
+		url.png(png_file, scale=8, module_color=[0, 0, 0, 180], background=[0xFF, 0xFF, 0xCC])
+	return file_url
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def create_barcode_folder():
 	"""Get Barcodes folder."""
 	folder_name = "Barcodes"

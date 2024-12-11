@@ -117,7 +117,13 @@ class PrintFormatGenerator:
 
 		if self.header_html or self.footer_html:
 			self._apply_overlay_on_main(main_doc, self.header_body, self.footer_body)
+<<<<<<< HEAD
 		return main_doc.write_pdf()
+=======
+		pdf = main_doc.write_pdf()
+
+		return pdf
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def _compute_overlay_element(self, element: str):
 		"""

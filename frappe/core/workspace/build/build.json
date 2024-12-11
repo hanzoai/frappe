@@ -1,6 +1,10 @@
 {
  "charts": [],
+<<<<<<< HEAD
  "content": "[{\"id\":\"5nnLaQeoFa\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px; letter-spacing: 0.18px;\\\"><b>Get started</b><br></span>\",\"col\":12}},{\"id\":\"HXRmktXYHy\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"DocType\",\"col\":3}},{\"id\":\"pYALX3MwBW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customize Form\",\"col\":3}},{\"id\":\"XC78DuYB65\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Report\",\"col\":3}},{\"id\":\"XPm50Ppq3J\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Client Script\",\"col\":3}},{\"id\":\"yoU6nWiT83\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Server Script\",\"col\":3}},{\"id\":\"5UgFESBY0N\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Print Format Builder\",\"col\":3}},{\"id\":\"0gE0s-S70E\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"System Settings\",\"col\":3}},{\"id\":\"62hseENHbd\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"tOCrOgLW1G\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px; letter-spacing: 0.18px;\\\"><b>Components to build your app</b></span>\",\"col\":12}},{\"id\":\"cJ6CVsa8qW\",\"type\":\"card\",\"data\":{\"card_name\":\"Models\",\"col\":4}},{\"id\":\"MmEJpjEdGR\",\"type\":\"card\",\"data\":{\"card_name\":\"Views\",\"col\":4}},{\"id\":\"2ZdtgxQZqq\",\"type\":\"card\",\"data\":{\"card_name\":\"Customization\",\"col\":4}},{\"id\":\"NPFolijIcb\",\"type\":\"card\",\"data\":{\"card_name\":\"Scripting\",\"col\":4}},{\"id\":\"BIHjudL0T_\",\"type\":\"card\",\"data\":{\"card_name\":\"Modules\",\"col\":4}},{\"id\":\"iK3JQ9RXJE\",\"type\":\"card\",\"data\":{\"card_name\":\"Packages\",\"col\":4}},{\"id\":\"TiO9FCUUeC\",\"type\":\"card\",\"data\":{\"card_name\":\"System Logs\",\"col\":4}}]",
+=======
+ "content": "[{\"id\":\"5nnLaQeoFa\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Your Shortcuts</b></span>\",\"col\":12}},{\"id\":\"HXRmktXYHy\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"DocType\",\"col\":3}},{\"id\":\"pYALX3MwBW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customize Form\",\"col\":3}},{\"id\":\"XC78DuYB65\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Report\",\"col\":3}},{\"id\":\"XPm50Ppq3J\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Client Script\",\"col\":3}},{\"id\":\"yoU6nWiT83\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Server Script\",\"col\":3}},{\"id\":\"5UgFESBY0N\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Print Format Builder\",\"col\":3}},{\"id\":\"62hseENHbd\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"tOCrOgLW1G\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Elements</b></span>\",\"col\":12}},{\"id\":\"BIHjudL0T_\",\"type\":\"card\",\"data\":{\"card_name\":\"Modules\",\"col\":4}},{\"id\":\"cJ6CVsa8qW\",\"type\":\"card\",\"data\":{\"card_name\":\"Models\",\"col\":4}},{\"id\":\"MmEJpjEdGR\",\"type\":\"card\",\"data\":{\"card_name\":\"Views\",\"col\":4}},{\"id\":\"2ZdtgxQZqq\",\"type\":\"card\",\"data\":{\"card_name\":\"Customization\",\"col\":4}},{\"id\":\"NPFolijIcb\",\"type\":\"card\",\"data\":{\"card_name\":\"Scripting\",\"col\":4}},{\"id\":\"iK3JQ9RXJE\",\"type\":\"card\",\"data\":{\"card_name\":\"Packages\",\"col\":4}},{\"id\":\"TiO9FCUUeC\",\"type\":\"card\",\"data\":{\"card_name\":\"System Logs\",\"col\":4}}]",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "creation": "2021-01-02 10:51:16.579957",
  "custom_blocks": [],
  "docstatus": 0,
@@ -8,11 +12,16 @@
  "for_user": "",
  "hide_custom": 0,
  "icon": "tool",
+<<<<<<< HEAD
  "idx": 1,
+=======
+ "idx": 0,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "is_hidden": 0,
  "label": "Build",
  "links": [
   {
+<<<<<<< HEAD
    "description": "Customize properties, naming, fields and more for standard doctypes",
    "hidden": 0,
    "is_query_report": 0,
@@ -20,11 +29,21 @@
    "link_count": 4,
    "link_type": "DocType",
    "onboard": 0,
+=======
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Models",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "type": "Card Break"
   },
   {
    "hidden": 0,
    "is_query_report": 0,
+<<<<<<< HEAD
    "label": "Customize Form",
    "link_count": 0,
    "link_to": "Customize Form",
@@ -78,6 +97,11 @@
    "label": "Module Def",
    "link_count": 0,
    "link_to": "Module Def",
+=======
+   "label": "DocType",
+   "link_count": 0,
+   "link_to": "DocType",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "link_type": "DocType",
    "onboard": 0,
    "only_for": "",
@@ -86,15 +110,22 @@
   {
    "hidden": 0,
    "is_query_report": 0,
+<<<<<<< HEAD
    "label": "Module Onboarding",
    "link_count": 0,
    "link_to": "Module Onboarding",
+=======
+   "label": "Workflow",
+   "link_count": 0,
+   "link_to": "Workflow",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "link_type": "DocType",
    "onboard": 0,
    "only_for": "",
    "type": "Link"
   },
   {
+<<<<<<< HEAD
    "description": "Monitor logs for errors, background jobs, communications, and user activity",
    "hidden": 0,
    "is_query_report": 0,
@@ -192,6 +223,15 @@
    "link_count": 3,
    "link_type": "DocType",
    "onboard": 0,
+=======
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Scripting",
+   "link_count": 0,
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "type": "Card Break"
   },
   {
@@ -228,12 +268,154 @@
    "type": "Link"
   },
   {
+<<<<<<< HEAD
    "description": "Build your own reports, print formats, and dashboards. Create personalized workspaces for easier navigation",
+=======
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Packages",
+   "link_count": 2,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Package",
+   "link_count": 0,
+   "link_to": "Package",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Package Import",
+   "link_count": 0,
+   "link_to": "Package Import",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Modules",
+   "link_count": 3,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Module Def",
+   "link_count": 0,
+   "link_to": "Module Def",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Module Onboarding",
+   "link_count": 0,
+   "link_to": "Module Onboarding",
+   "link_type": "DocType",
+   "onboard": 0,
+   "only_for": "",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Module Profile",
+   "link_count": 0,
+   "link_to": "Module Profile",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "System Logs",
+   "link_count": 6,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Background Jobs",
+   "link_count": 0,
+   "link_to": "RQ Job",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Scheduled Jobs Logs",
+   "link_count": 0,
+   "link_to": "Scheduled Job Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Error Logs",
+   "link_count": 0,
+   "link_to": "Error Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Error Snapshot",
+   "link_count": 0,
+   "link_to": "Error Snapshot",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Communication Logs",
+   "link_count": 0,
+   "link_to": "Communication",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Activity Log",
+   "link_count": 0,
+   "link_to": "Activity Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "hidden": 0,
    "is_query_report": 0,
    "label": "Views",
    "link_count": 5,
+<<<<<<< HEAD
    "link_type": "DocType",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "onboard": 0,
    "type": "Card Break"
   },
@@ -291,29 +473,45 @@
    "type": "Link"
   },
   {
+<<<<<<< HEAD
    "description": "Create new forms and views with doctypes. Set up multi-level workflows for approval",
    "hidden": 0,
    "is_query_report": 0,
    "label": "Models",
    "link_count": 2,
    "link_type": "DocType",
+=======
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Customization",
+   "link_count": 4,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "onboard": 0,
    "type": "Card Break"
   },
   {
    "hidden": 0,
    "is_query_report": 0,
+<<<<<<< HEAD
    "label": "DocType",
    "link_count": 0,
    "link_to": "DocType",
    "link_type": "DocType",
    "onboard": 0,
    "only_for": "",
+=======
+   "label": "Customize Form",
+   "link_count": 0,
+   "link_to": "Customize Form",
+   "link_type": "DocType",
+   "onboard": 0,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "type": "Link"
   },
   {
    "hidden": 0,
    "is_query_report": 0,
+<<<<<<< HEAD
    "label": "Workflow",
    "link_count": 0,
    "link_to": "Workflow",
@@ -324,6 +522,37 @@
   }
  ],
  "modified": "2024-01-24 12:27:44.769958",
+=======
+   "label": "Custom Field",
+   "link_count": 0,
+   "link_to": "Custom Field",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Custom Translation",
+   "link_count": 0,
+   "link_to": "Translation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Navbar Settings",
+   "link_count": 0,
+   "link_to": "Navbar Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2023-05-24 14:47:24.395259",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Build",
@@ -334,7 +563,11 @@
  "quick_lists": [],
  "restrict_to_domain": "",
  "roles": [],
+<<<<<<< HEAD
  "sequence_id": 27.0,
+=======
+ "sequence_id": 16.0,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "shortcuts": [
   {
    "color": "Grey",
@@ -346,6 +579,7 @@
   {
    "color": "Grey",
    "doc_view": "List",
+<<<<<<< HEAD
    "label": "System Settings",
    "link_to": "System Settings",
    "type": "DocType",
@@ -354,6 +588,8 @@
   {
    "color": "Grey",
    "doc_view": "List",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "label": "Client Script",
    "link_to": "Client Script",
    "type": "DocType"

@@ -102,7 +102,12 @@
    "fieldname": "url",
    "fieldtype": "Data",
    "in_list_view": 1,
+<<<<<<< HEAD
    "label": "URL"
+=======
+   "label": "URL",
+   "options": "URL"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "depends_on": "eval:doc.doc_view == \"Kanban\"",
@@ -115,7 +120,11 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-11-27 14:13:38.489737",
+=======
+ "modified": "2023-07-18 16:12:53.546430",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Workspace Shortcut",

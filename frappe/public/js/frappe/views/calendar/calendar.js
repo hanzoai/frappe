@@ -105,7 +105,11 @@ frappe.views.CalendarView = class CalendarView extends frappe.views.ListView {
 			"assets/frappe/js/lib/fullcalendar/fullcalendar.min.css",
 			"assets/frappe/js/lib/fullcalendar/fullcalendar.min.js",
 		];
+<<<<<<< HEAD
 		let user_language = frappe.boot.lang;
+=======
+		let user_language = frappe.boot.user.language;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (user_language && user_language !== "en") {
 			assets.push("assets/frappe/js/lib/fullcalendar/locale-all.js");
 		}
@@ -251,7 +255,11 @@ frappe.views.Calendar = class Calendar {
 		var me = this;
 		defaults.meridiem = "false";
 		this.cal_options = {
+<<<<<<< HEAD
 			locale: frappe.boot.lang,
+=======
+			locale: frappe.boot.user.language || "en",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			header: {
 				left: "prev, title, next",
 				right: "today, month, agendaWeek, agendaDay",

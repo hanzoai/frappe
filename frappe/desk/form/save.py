@@ -4,11 +4,17 @@
 import json
 
 import frappe
+<<<<<<< HEAD
 from frappe.core.doctype.submission_queue.submission_queue import queue_submission
 from frappe.desk.form.load import run_onload
 from frappe.model.docstatus import DocStatus
 from frappe.monitor import add_data_to_monitor
 from frappe.utils.scheduler import is_scheduler_inactive
+=======
+from frappe.desk.form.load import run_onload
+from frappe.model.docstatus import DocStatus
+from frappe.monitor import add_data_to_monitor
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils.telemetry import capture_doc
 
 
@@ -30,6 +36,7 @@ def savedocs(doc, action):
 		"Cancel": DocStatus.cancelled(),
 	}[action]
 
+<<<<<<< HEAD
 	if doc.docstatus.is_submitted():
 		if action == "Submit" and doc.meta.queue_in_background and not is_scheduler_inactive():
 			queue_submission(doc, action)
@@ -37,12 +44,19 @@ def savedocs(doc, action):
 		doc.submit()
 	else:
 		doc.save()
+=======
+	doc.save()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# update recent documents
 	run_onload(doc)
 	send_updated_docs(doc)
 
 	add_data_to_monitor(doctype=doc.doctype, action=action)
+<<<<<<< HEAD
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	frappe.msgprint(frappe._("Saved"), indicator="green", alert=True)
 
 

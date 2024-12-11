@@ -19,8 +19,15 @@ class TestSearch(FrappeTestCase):
 			self.addCleanup(teardown_test_link_field_order, self)
 
 	def test_search_field_sanitizer(self):
+<<<<<<< HEAD
 		results = search_link("DocType", "User", query=None, filters=None, page_length=20, searchfield="name")
 		self.assertTrue("User" in results[0]["value"])
+=======
+		# pass
+		search_link("DocType", "User", query=None, filters=None, page_length=20, searchfield="name")
+		result = frappe.response["results"][0]
+		self.assertTrue("User" in result["value"])
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# raise exception on injection
 		for searchfield in (
@@ -65,7 +72,11 @@ class TestSearch(FrappeTestCase):
 
 	def test_link_field_order(self):
 		# Making a request to the search_link with the tree doctype
+<<<<<<< HEAD
 		results = search_link(
+=======
+		search_link(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			doctype=self.tree_doctype_name,
 			txt="all",
 			query=None,
@@ -73,18 +84,33 @@ class TestSearch(FrappeTestCase):
 			page_length=20,
 			searchfield=None,
 		)
+<<<<<<< HEAD
 
 		# Check whether the result is sorted or not
 		self.assertEqual(self.parent_doctype_name, results[0]["value"])
 
 		# Check whether searching for parent also list out children
 		self.assertEqual(len(results), len(self.child_doctypes_names) + 1)
+=======
+		result = frappe.response["results"]
+
+		# Check whether the result is sorted or not
+		self.assertEqual(self.parent_doctype_name, result[0]["value"])
+
+		# Check whether searching for parent also list out children
+		self.assertEqual(len(result), len(self.child_doctypes_names) + 1)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# Search for the word "pay", part of the word "pays" (country) in french.
 	def test_link_search_in_foreign_language(self):
 		try:
 			frappe.local.lang = "fr"
+<<<<<<< HEAD
 			output = search_widget(doctype="DocType", txt="pay", page_length=20)
+=======
+			search_widget(doctype="DocType", txt="pay", page_length=20)
+			output = frappe.response["values"]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			result = [["found" for x in y if x == "Country"] for y in output]
 			self.assertTrue(["found"] in result)
@@ -93,7 +119,11 @@ class TestSearch(FrappeTestCase):
 
 	def test_doctype_search_in_foreign_language(self):
 		def do_search(txt: str):
+<<<<<<< HEAD
 			return search_link(
+=======
+			search_link(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				doctype="DocType",
 				txt=txt,
 				query="frappe.core.report.permitted_documents_for_user.permitted_documents_for_user.query_doctypes",
@@ -101,6 +131,10 @@ class TestSearch(FrappeTestCase):
 				page_length=20,
 				searchfield=None,
 			)
+<<<<<<< HEAD
+=======
+			return frappe.response["results"]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		try:
 			frappe.local.lang = "en"
@@ -149,12 +183,21 @@ class TestSearch(FrappeTestCase):
 		self.assertListEqual(frappe.call("frappe.tests.test_search.get_data", *args, **kwargs), [])
 
 		# should not fail if query has @ symbol in it
+<<<<<<< HEAD
 		results = search_link("User", "user@random", searchfield="name")
 		self.assertListEqual(results, [])
 
 	def test_reference_doctype(self):
 		"""search query methods should get reference_doctype if they want"""
 		results = search_link(
+=======
+		search_link("User", "user@random", searchfield="name")
+		self.assertListEqual(frappe.response["results"], [])
+
+	def test_reference_doctype(self):
+		"""search query methods should get reference_doctype if they want"""
+		results = test_search(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			doctype="User",
 			txt="",
 			filters=None,
@@ -165,7 +208,11 @@ class TestSearch(FrappeTestCase):
 		self.assertListEqual(results, [])
 
 	def test_search_relevance(self):
+<<<<<<< HEAD
 		search = partial(search_link, doctype="Language", filters=None, page_length=10)
+=======
+		search = partial(test_search, doctype="Language", filters=None, page_length=10)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		for row in search(txt="e"):
 			self.assertTrue(row["value"].startswith("e"))
 
@@ -176,10 +223,17 @@ class TestSearch(FrappeTestCase):
 		frappe.db.set_value("Language", "es", "idx", 10)
 		self.assertEqual("es", search(txt="es")[0]["value"])
 
+<<<<<<< HEAD
 	def test_search_with_paren(self):
 		search = partial(search_link, doctype="Language", filters=None, page_length=10)
 		result = search(txt="(txt)")
 		self.assertEqual(result, [])
+=======
+
+def test_search(*args, **kwargs):
+	search_link(*args, **kwargs)
+	return frappe.response["results"]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.validate_and_sanitize_search_inputs

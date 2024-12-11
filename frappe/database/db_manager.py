@@ -1,5 +1,8 @@
 import frappe
+<<<<<<< HEAD
 from frappe import _
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class DbManager:
@@ -25,7 +28,11 @@ class DbManager:
 	def create_database(self, target):
 		if target in self.get_database_list():
 			self.drop_database(target)
+<<<<<<< HEAD
 		self.db.sql(f"CREATE DATABASE `{target}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")
+=======
+		self.db.sql(f"CREATE DATABASE `{target}`")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def drop_database(self, target):
 		self.db.sql_ddl(f"DROP DATABASE IF EXISTS `{target}`")
@@ -50,6 +57,7 @@ class DbManager:
 		return self.db.sql("SHOW DATABASES", pluck=True)
 
 	@staticmethod
+<<<<<<< HEAD
 	def restore_database(verbose: bool, target: str, source: str, user: str, password: str) -> None:
 		"""
 		Function to restore the given SQL file to the target database.
@@ -100,3 +108,39 @@ class DbManager:
 
 		execute_in_shell(" ".join(command), check_exit_code=True, verbose=verbose)
 		frappe.cache.delete_keys("")  # Delete all keys associated with this site.
+=======
+	def restore_database(target, source, user, password):
+		import os
+		from distutils.spawn import find_executable
+
+		from frappe.utils import make_esc
+
+		esc = make_esc("$ ")
+		pv = find_executable("pv")
+
+		if pv:
+			pipe = f"{pv} {source} | " + r"sed '/\/\*M\{0,1\}!999999\\- enable the sandbox mode \*\//d' |"
+		else:
+			pipe = f"cat {source} | " + r"sed '/\/\*M\{0,1\}!999999\\- enable the sandbox mode \*\//d' |"
+
+		if pipe:
+			print("Restoring Database file...")
+
+		command = (
+			"{pipe} mysql -u {user} -p{password} -h{host} "
+			+ ("-P{port}" if frappe.db.port else "")
+			+ " {target}"
+		)
+
+		command = command.format(
+			pipe=pipe,
+			user=esc(user),
+			password=esc(password),
+			host=esc(frappe.db.host),
+			target=esc(target),
+			port=frappe.db.port,
+		)
+
+		os.system(command)
+		frappe.cache().delete_keys("")  # Delete all keys associated with this site.
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

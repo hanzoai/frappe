@@ -6,7 +6,11 @@ import subprocess
 import sys
 import time
 import urllib.request
+<<<<<<< HEAD
 from functools import cache
+=======
+from functools import cache, lru_cache
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from urllib.error import HTTPError
 
 
@@ -98,7 +102,12 @@ if __name__ == "__main__":
 
 	# this is a push build, run all builds
 	if not pr_number:
+<<<<<<< HEAD
 		os.system('echo "build=strawberry" >> $GITHUB_OUTPUT')
+=======
+		os.system('echo "::set-output name=build::strawberry"')
+		os.system('echo "::set-output name=build-server::strawberry"')
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		sys.exit(0)
 
 	files_list = files_list or get_files_list(pr_number=pr_number, repo=repo)
@@ -141,4 +150,8 @@ if __name__ == "__main__":
 		print("Only Python code was updated, stopping Cypress build process.")
 		sys.exit(0)
 
+<<<<<<< HEAD
 	os.system('echo "build=strawberry" >> $GITHUB_OUTPUT')
+=======
+	os.system('echo "::set-output name=build::strawberry"')
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

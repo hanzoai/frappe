@@ -2,9 +2,12 @@
 // MIT License. See license.txt
 import DataTable from "frappe-datatable";
 
+<<<<<<< HEAD
 // Expose DataTable globally to allow customizations.
 window.DataTable = DataTable;
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 frappe.provide("frappe.widget.utils");
 frappe.provide("frappe.views");
 frappe.provide("frappe.query_reports");
@@ -90,6 +93,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 	set_default_secondary_action() {
 		this.refresh_button && this.refresh_button.remove();
+<<<<<<< HEAD
 		this.refresh_button = this.page.add_action_icon(
 			"es-line-reload",
 			() => {
@@ -99,6 +103,12 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			"",
 			__("Reload Report")
 		);
+=======
+		this.refresh_button = this.page.add_action_icon("refresh", () => {
+			this.setup_progress_bar();
+			this.refresh();
+		});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	get_no_result_message() {
@@ -183,6 +193,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 	add_card_button_to_toolbar() {
 		if (!frappe.model.can_create("Number Card")) return;
+<<<<<<< HEAD
 		this.page.add_inner_button(
 			__("Create Card"),
 			() => {
@@ -190,12 +201,18 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			},
 			__("Actions")
 		);
+=======
+		this.page.add_inner_button(__("Create Card"), () => {
+			this.add_card_to_dashboard();
+		});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	add_chart_buttons_to_toolbar(show) {
 		if (!frappe.model.can_create("Dashboard Chart")) return;
 		if (show) {
 			this.create_chart_button && this.create_chart_button.remove();
+<<<<<<< HEAD
 			this.create_chart_button = this.page.add_inner_button(
 				__("Set Chart"),
 				() => {
@@ -212,6 +229,19 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 						this.add_chart_to_dashboard();
 					},
 					__("Actions")
+=======
+			this.create_chart_button = this.page.add_button(__("Set Chart"), () => {
+				this.open_create_chart_dialog();
+			});
+
+			if (this.chart_fields || this.chart_options) {
+				this.add_to_dashboard_button && this.add_to_dashboard_button.remove();
+				this.add_to_dashboard_button = this.page.add_button(
+					__("Add Chart to Dashboard"),
+					() => {
+						this.add_chart_to_dashboard();
+					}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				);
 			}
 		} else {
@@ -757,7 +787,12 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 	get_query_params() {
 		const query_string = frappe.utils.get_query_string(frappe.get_route_str());
+<<<<<<< HEAD
 		return frappe.utils.get_query_params(query_string);
+=======
+		const query_params = frappe.utils.get_query_params(query_string);
+		return query_params;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	add_prepared_report_buttons(doc) {
@@ -924,7 +959,11 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			let filters = this.get_filter_values(true);
 			return new Promise((resolve) =>
 				frappe.call({
+<<<<<<< HEAD
 					method: "frappe.core.doctype.prepared_report.prepared_report.make_prepared_report",
+=======
+					method: "frappe.desk.query_report.background_enqueue_run",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					args: {
 						report_name: this.report_name,
 						filters: filters,
@@ -1001,7 +1040,11 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			if (this.report_settings.get_datatable_options) {
 				datatable_options = this.report_settings.get_datatable_options(datatable_options);
 			}
+<<<<<<< HEAD
 			this.datatable = new window.DataTable(this.$report[0], datatable_options);
+=======
+			this.datatable = new DataTable(this.$report[0], datatable_options);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		if (typeof this.report_settings.initial_depth == "number") {
@@ -1246,7 +1289,11 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 					if (column.colIndex === index && !value) {
 						value = "Total";
 						column = { fieldtype: "Data" }; // avoid type issues for value if Date column
+<<<<<<< HEAD
 					} else if (["Currency", "Float"].includes(column.fieldtype)) {
+=======
+					} else if (in_list(["Currency", "Float"], column.fieldtype)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						// proxy for currency and float
 						data = this.data[0];
 					}
@@ -1466,12 +1513,16 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			if (name_len > 200) break;
 			filter_values.push(applied_filters[key]);
 		}
+<<<<<<< HEAD
 
 		if (filter_values.length) {
 			print_settings.report_name = `${__(this.report_name)}_${filter_values.join("_")}.pdf`;
 		} else {
 			print_settings.report_name = `${__(this.report_name)}.pdf`;
 		}
+=======
+		print_settings.report_name = `${__(this.report_name)}_${filter_values.join("_")}.pdf`;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.render_pdf(html, print_settings);
 	}
 
@@ -1481,11 +1532,14 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			.map((fieldname) => {
 				const docfield = frappe.query_report.get_filter(fieldname).df;
 				const value = applied_filters[fieldname];
+<<<<<<< HEAD
 
 				if (docfield.hidden_due_to_dependency) {
 					return null;
 				}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				return `<div class="filter-row">
 					<b>${__(docfield.label, null, docfield.parent)}:</b> ${frappe.format(value, docfield)}
 				</div>`;
@@ -1500,6 +1554,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			return;
 		}
 
+<<<<<<< HEAD
 		let extra_fields = [];
 
 		if (this.tree_report) {
@@ -1516,11 +1571,23 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				fieldname: "include_filters",
 				fieldtype: "Check",
 			});
+=======
+		let extra_fields = null;
+		if (this.tree_report) {
+			extra_fields = [
+				{
+					label: __("Include indentation"),
+					fieldname: "include_indentation",
+					fieldtype: "Check",
+				},
+			];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		this.export_dialog = frappe.report_utils.get_export_dialog(
 			__(this.report_name),
 			extra_fields,
+<<<<<<< HEAD
 			({
 				file_format,
 				include_indentation,
@@ -1542,6 +1609,12 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 					}
 				}
 
+=======
+			({ file_format, include_indentation, csv_delimiter, csv_quoting }) => {
+				this.make_access_log("Export", file_format);
+
+				let filters = this.get_filter_values(true);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				if (this.prepared_report_name) {
 					filters.prepared_report_name = this.prepared_report_name;
 				}
@@ -1554,15 +1627,24 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				const args = {
 					cmd: "frappe.desk.query_report.export_query",
 					report_name: this.report_name,
+<<<<<<< HEAD
 					custom_columns: this.custom_columns?.length ? this.custom_columns : [],
 					file_format_type: file_format,
 					filters: filters,
 					applied_filters: applied_filters,
+=======
+					custom_columns: this.custom_columns.length ? this.custom_columns : [],
+					file_format_type: file_format,
+					filters: filters,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					visible_idx,
 					csv_delimiter,
 					csv_quoting,
 					include_indentation,
+<<<<<<< HEAD
 					include_filters,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				};
 
 				open_url_post(frappe.request.url, args);
@@ -1801,7 +1883,11 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 						doctype: "Report",
 						name: this.report_name,
 					}),
+<<<<<<< HEAD
 				condition: () => frappe.user.has_role("System Manager"),
+=======
+				condition: () => frappe.model.can_set_user_permissions("Report"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				standard: true,
 			},
 		];
@@ -2069,3 +2155,15 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		return this.get_filter_values;
 	}
 };
+<<<<<<< HEAD
+=======
+
+Object.defineProperty(frappe, "query_report_filters_by_name", {
+	get() {
+		console.warn(
+			"[Query Report] frappe.query_report_filters_by_name is deprecated. Please use the new api: frappe.query_report.get_filter_value(fieldname) and frappe.query_report.set_filter_value(fieldname, value)"
+		);
+		return null;
+	},
+});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -40,7 +40,13 @@ class SMTPServer:
 
 		if not self.server:
 			frappe.msgprint(
+<<<<<<< HEAD
 				_("Email Account not setup. Please create a new Email Account from Settings > Email Account"),
+=======
+				_(
+					"Email Account not setup. Please create a new Email Account from Setup > Email > Email Account"
+				),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				raise_exception=frappe.OutgoingEmailError,
 			)
 
@@ -62,10 +68,13 @@ class SMTPServer:
 
 	@property
 	def session(self):
+<<<<<<< HEAD
 		"""Get SMTP session.
 
 		We make best effort to revive connection if it's disconnected by checking the connection
 		health before returning it to user."""
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if self.is_session_active():
 			return self._session
 
@@ -91,7 +100,10 @@ class SMTPServer:
 					frappe.msgprint(res[1], raise_exception=frappe.OutgoingEmailError)
 
 			self._session = _session
+<<<<<<< HEAD
 			self._enqueue_connection_closure()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			return self._session
 
 		except smtplib.SMTPAuthenticationError:
@@ -104,6 +116,7 @@ class SMTPServer:
 				title=_("Incorrect Configuration"),
 			)
 
+<<<<<<< HEAD
 	def _enqueue_connection_closure(self):
 		if frappe.request and hasattr(frappe.request, "after_response"):
 			frappe.request.after_response.add(self.quit)
@@ -115,6 +128,8 @@ class SMTPServer:
 
 			atexit.register(self.quit)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def is_session_active(self):
 		if self._session:
 			try:

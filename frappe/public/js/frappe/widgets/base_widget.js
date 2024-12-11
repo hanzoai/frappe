@@ -27,7 +27,11 @@ export default class Widget {
 
 		options.allow_sorting &&
 			frappe.utils.add_custom_button(
+<<<<<<< HEAD
 				frappe.utils.icon("es-line-drag", "xs"),
+=======
+				frappe.utils.icon("drag", "xs"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				null,
 				"drag-handle",
 				__("Drag"),
@@ -58,7 +62,11 @@ export default class Widget {
 
 		options.allow_edit &&
 			frappe.utils.add_custom_button(
+<<<<<<< HEAD
 				frappe.utils.icon("es-line-edit-alt", "xs"),
+=======
+				frappe.utils.icon("edit", "xs"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				() => this.edit(),
 				"edit-button",
 				__("Edit"),
@@ -98,11 +106,22 @@ export default class Widget {
 		let base = this.title || this.label || this.name;
 		let title = max_chars ? frappe.ellipsis(base, max_chars) : base;
 
+<<<<<<< HEAD
 		this.title_field[0].innerHTML = `<span class="ellipsis" title="${__(title)}">${__(
 			title
 		)}</span>`;
 		if (max_chars) {
 			this.title_field[0].setAttribute("title", this.title || this.label);
+=======
+		if (this.icon) {
+			let icon = frappe.utils.icon(this.icon, "lg");
+			this.title_field[0].innerHTML = `${icon} <span class="ellipsis" title="${title}">${title}</span>`;
+		} else {
+			this.title_field[0].innerHTML = `<span class="ellipsis" title="${title}">${title}</span>`;
+			if (max_chars) {
+				this.title_field[0].setAttribute("title", this.title || this.label);
+			}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		this.subtitle && this.subtitle_field.html(this.subtitle);
 	}

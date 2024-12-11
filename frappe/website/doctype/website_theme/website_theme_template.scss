@@ -1,5 +1,6 @@
 {% if google_font %}
 @import url("https://fonts.googleapis.com/css2?family={{ google_font.replace(' ', '+') }}:{{ font_properties }}&display=swap");
+<<<<<<< HEAD
 // backward compatibility. deprecated in v15
 $font-family-sans-serif: "{{ google_font }}", "InterVariable", "Inter", -apple-system, BlinkMacSystemFont,
 	"Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
@@ -11,6 +12,11 @@ $font-family-sans-serif: "{{ google_font }}", "InterVariable", "Inter", -apple-s
 	"Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
 	"Droid Sans", "Helvetica Neue", sans-serif !important;
 }
+=======
+$font-family-sans-serif: "{{ google_font }}", -apple-system, BlinkMacSystemFont,
+	"Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+	"Droid Sans", "Helvetica Neue", sans-serif;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 {% endif -%}
 
 {% if primary_color %}$primary: {{ frappe.db.get_value('Color', primary_color, 'color') }};{% endif -%}

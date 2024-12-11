@@ -10,6 +10,10 @@ def execute():
 	for theme in themes:
 		doc = frappe.get_doc("Website Theme", theme.name)
 		try:
+<<<<<<< HEAD
+=======
+			doc.generate_bootstrap_theme()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			doc.save()
 		except Exception:
 			print("Ignoring....")

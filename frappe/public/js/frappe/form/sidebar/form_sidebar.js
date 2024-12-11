@@ -5,7 +5,10 @@ import "./review";
 import "./document_follow";
 import "./user_image";
 import "./form_sidebar_users";
+<<<<<<< HEAD
 import { get_user_link, get_user_message } from "../footer/version_timeline_content_builder";
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 frappe.ui.form.Sidebar = class {
 	constructor(opts) {
@@ -16,7 +19,10 @@ frappe.ui.form.Sidebar = class {
 		var sidebar_content = frappe.render_template("form_sidebar", {
 			doctype: this.frm.doctype,
 			frm: this.frm,
+<<<<<<< HEAD
 			can_write: frappe.model.can_write(this.frm.doctype, this.frm.docname),
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		});
 
 		this.sidebar = $('<div class="form-sidebar overlay-sidebar hidden-xs hidden-sm"></div>')
@@ -83,13 +89,18 @@ frappe.ui.form.Sidebar = class {
 				frappe.utils.get_page_view_count(route).then((res) => {
 					this.sidebar
 						.find(".pageview-count")
+<<<<<<< HEAD
 						.html(__("{0} Web page views", [String(res.message).bold()]));
+=======
+						.html(__("{0} Page Views", [String(res.message).bold()]));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				});
 			}
 
 			this.sidebar
 				.find(".modified-by")
 				.html(
+<<<<<<< HEAD
 					get_user_message(
 						this.frm.doc.modified_by,
 						__("You last edited this", null),
@@ -97,10 +108,21 @@ frappe.ui.form.Sidebar = class {
 					) +
 						" · " +
 						comment_when(this.frm.doc.modified)
+=======
+					__(
+						"{0} edited this {1}",
+						[
+							frappe.user.full_name(this.frm.doc.modified_by).bold(),
+							" · " + comment_when(this.frm.doc.modified),
+						],
+						"For example, 'Jon Doe edited this 5 minutes ago'."
+					)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				);
 			this.sidebar
 				.find(".created-by")
 				.html(
+<<<<<<< HEAD
 					get_user_message(
 						this.frm.doc.owner,
 						__("You created this", null),
@@ -108,6 +130,16 @@ frappe.ui.form.Sidebar = class {
 					) +
 						" · " +
 						comment_when(this.frm.doc.creation)
+=======
+					__(
+						"{0} created this {1}",
+						[
+							frappe.user.full_name(this.frm.doc.owner).bold(),
+							" · " + comment_when(this.frm.doc.creation),
+						],
+						"For example, 'Jon Doe created this 5 minutes ago'."
+					)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				);
 
 			this.refresh_like();

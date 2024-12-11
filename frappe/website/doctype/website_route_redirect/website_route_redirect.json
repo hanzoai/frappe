@@ -1,12 +1,19 @@
 {
+<<<<<<< HEAD
  "actions": [],
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "creation": "2019-05-07 11:08:35.889625",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "source",
+<<<<<<< HEAD
   "target",
   "redirect_http_status"
+=======
+  "target"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  ],
  "fields": [
   {
@@ -22,6 +29,7 @@
    "in_list_view": 1,
    "label": "Target",
    "reqd": 1
+<<<<<<< HEAD
   },
   {
    "default": "301",
@@ -34,6 +42,12 @@
  "istable": 1,
  "links": [],
  "modified": "2023-12-22 12:21:28.436139",
+=======
+  }
+ ],
+ "istable": 1,
+ "modified": "2019-05-07 11:11:46.867684",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Website",
  "name": "Website Route Redirect",
@@ -41,6 +55,10 @@
  "permissions": [],
  "quick_entry": 1,
  "sort_field": "modified",
+<<<<<<< HEAD
  "sort_order": "ASC",
  "states": []
+=======
+ "sort_order": "ASC"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }

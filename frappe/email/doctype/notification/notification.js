@@ -17,7 +17,11 @@ frappe.notification = {
 
 				return {
 					value: select_value,
+<<<<<<< HEAD
 					label: df.fieldname + " (" + __(df.label, null, df.parent) + ")",
+=======
+					label: df.fieldname + " (" + __(df.label) + ")",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				};
 			};
 
@@ -36,7 +40,11 @@ frappe.notification = {
 
 			let fields = frappe.get_doc("DocType", frm.doc.document_type).fields;
 			let options = $.map(fields, function (d) {
+<<<<<<< HEAD
 				return frappe.model.no_value_type.includes(d.fieldtype)
+=======
+				return in_list(frappe.model.no_value_type, d.fieldtype)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					? null
 					: get_select_options(d);
 			});
@@ -68,7 +76,11 @@ frappe.notification = {
 							: null;
 					}
 				});
+<<<<<<< HEAD
 			} else if (["WhatsApp", "SMS"].includes(frm.doc.channel)) {
+=======
+			} else if (in_list(["WhatsApp", "SMS"], frm.doc.channel)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				receiver_fields = $.map(fields, function (d) {
 					return d.options == "Phone" ? get_select_options(d) : null;
 				});
@@ -104,7 +116,11 @@ Last comment: {{ comments[-1].comment }} by {{ comments[-1].by }}
 &lt;/ul&gt;
 </pre>
 			`;
+<<<<<<< HEAD
 		} else if (["Slack", "System Notification", "SMS"].includes(frm.doc.channel)) {
+=======
+		} else if (in_list(["Slack", "System Notification", "SMS"], frm.doc.channel)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			template = `<h5>Message Example</h5>
 
 <pre>*Order Overdue*

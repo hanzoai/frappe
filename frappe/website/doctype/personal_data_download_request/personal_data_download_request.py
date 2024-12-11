@@ -10,6 +10,7 @@ from frappe.utils.verified_command import get_signed_params
 
 
 class PersonalDataDownloadRequest(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -23,6 +24,8 @@ class PersonalDataDownloadRequest(Document):
 		user_name: DF.Data | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def after_insert(self):
 		personal_data = get_user_data(self.user)
 

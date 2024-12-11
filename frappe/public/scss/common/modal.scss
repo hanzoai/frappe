@@ -85,8 +85,12 @@ body.modal-open[style^="padding-right"] {
 		}
 	}
 
+<<<<<<< HEAD
 	.awesomplete ul,
 	.awesomplete [role="listbox"] {
+=======
+	.awesomplete ul {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		z-index: 2;
 	}
 
@@ -150,10 +154,13 @@ body.modal-open[style^="padding-right"] {
 	}
 }
 
+<<<<<<< HEAD
 .modal-backdrop.show {
 	opacity: 0.8;
 }
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .modal-minimize {
 	position: initial;
 	height: 0;

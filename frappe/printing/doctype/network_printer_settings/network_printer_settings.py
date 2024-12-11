@@ -7,6 +7,7 @@ from frappe.model.document import Document
 
 
 class NetworkPrinterSettings(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -22,6 +23,10 @@ class NetworkPrinterSettings(Document):
 	# end: auto-generated types
 	@frappe.whitelist()
 	def get_printers_list(self, ip="127.0.0.1", port=631):
+=======
+	@frappe.whitelist()
+	def get_printers_list(self, ip="localhost", port=631):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		printer_list = []
 		try:
 			import cups
@@ -38,10 +43,16 @@ class NetworkPrinterSettings(Document):
 			cups.setPort(self.port)
 			conn = cups.Connection()
 			printers = conn.getPrinters()
+<<<<<<< HEAD
 			printer_list.extend(
 				{"value": printer_id, "label": printer["printer-make-and-model"]}
 				for printer_id, printer in printers.items()
 			)
+=======
+			for printer_id, printer in printers.items():
+				printer_list.append({"value": printer_id, "label": printer["printer-make-and-model"]})
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		except RuntimeError:
 			frappe.throw(_("Failed to connect to server"))
 		except frappe.ValidationError:

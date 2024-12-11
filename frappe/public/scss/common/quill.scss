@@ -32,6 +32,7 @@
 }
 /*rtl:end:ignore*/
 
+<<<<<<< HEAD
 // Quill doesn't use variables for :(
 .ql-snow.ql-toolbar button:hover,
 .ql-snow .ql-toolbar button:hover,
@@ -130,6 +131,17 @@
 
 .ql-container.ql-snow {
 	background-color: var(--gray-100);
+=======
+.ql-toolbar.ql-snow {
+	border-top-left-radius: var(--border-radius);
+	border-top-right-radius: var(--border-radius);
+	background-color: var(--fg-color);
+	box-shadow: var(--shadow-inset);
+	padding-bottom: 0;
+}
+
+.ql-container.ql-snow {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	border-bottom-left-radius: var(--border-radius);
 	border-bottom-right-radius: var(--border-radius);
 }
@@ -171,7 +183,11 @@
 }
 
 .ql-snow .ql-picker {
+<<<<<<< HEAD
 	@include get_textstyle("sm", "regular");
+=======
+	font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	color: var(--text-light);
 }
 
@@ -248,7 +264,11 @@
 	border-radius: var(--border-radius-lg);
 	border: 1px solid var(--border-color);
 	padding: 2px 5px;
+<<<<<<< HEAD
 	@include get_textstyle("sm", "regular");
+=======
+	font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	background-color: var(--user-mention-bg-color);
 	a[href] {
 		text-decoration: none;
@@ -299,7 +319,11 @@
 .ql-editor blockquote {
 	border-left: 4px solid var(--gray-300);
 	padding-left: var(--padding-sm);
+<<<<<<< HEAD
 	@include get_textstyle("sm", "regular");
+=======
+	font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	margin-top: 0px !important;
 	margin-bottom: 0px !important;
 }
@@ -331,9 +355,12 @@
 		margin-left: 4px;
 	}
 }
+<<<<<<< HEAD
 
 .comment-input-wrapper .ql-editor.ql-blank::before {
 	left: 8px;
 	color: var(--text-muted);
 	font-style: normal;
 }
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

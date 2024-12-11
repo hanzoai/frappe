@@ -65,6 +65,7 @@ framework_days = {
 
 
 class GoogleCalendar(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -84,6 +85,8 @@ class GoogleCalendar(Document):
 		user: DF.Link
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		google_settings = frappe.get_single("Google Settings")
 		if not google_settings.enable:
@@ -130,7 +133,10 @@ def authorize_access(g_calendar, reauthorize=None):
 	"""
 	google_settings = frappe.get_doc("Google Settings")
 	google_calendar = frappe.get_doc("Google Calendar", g_calendar)
+<<<<<<< HEAD
 	google_calendar.check_permission("write")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	redirect_uri = (
 		get_request_site_address(True)
@@ -138,7 +144,11 @@ def authorize_access(g_calendar, reauthorize=None):
 	)
 
 	if not google_calendar.authorization_code or reauthorize:
+<<<<<<< HEAD
 		frappe.cache.hset("google_calendar", "google_calendar", google_calendar.name)
+=======
+		frappe.cache().hset("google_calendar", "google_calendar", google_calendar.name)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return get_authentication_url(client_id=google_settings.client_id, redirect_uri=redirect_uri)
 	else:
 		try:
@@ -182,7 +192,11 @@ def google_callback(code=None):
 	"""
 	Authorization code is sent to callback as per the API configuration
 	"""
+<<<<<<< HEAD
 	google_calendar = frappe.cache.hget("google_calendar", "google_calendar")
+=======
+	google_calendar = frappe.cache().hget("google_calendar", "google_calendar")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	frappe.db.set_value("Google Calendar", google_calendar, "authorization_code", code)
 	frappe.db.commit()
 
@@ -215,7 +229,11 @@ def get_google_calendar_object(g_calendar):
 		"token_uri": GoogleOAuth.OAUTH_URL,
 		"client_id": google_settings.client_id,
 		"client_secret": google_settings.get_password(fieldname="client_secret", raise_exception=False),
+<<<<<<< HEAD
 		"scopes": [SCOPES],
+=======
+		"scopes": ["https://www.googleapis.com/auth/calendar/v3"],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	credentials = google.oauth2.credentials.Credentials(**credentials_dict)
@@ -300,7 +318,13 @@ def sync_events_from_google_calendar(g_calendar, method=None):
 			else:
 				frappe.throw(msg)
 
+<<<<<<< HEAD
 		results.extend(event for event in events.get("items", []))
+=======
+		for event in events.get("items", []):
+			results.append(event)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if not events.get("nextPageToken"):
 			if events.get("nextSyncToken"):
 				account.next_sync_token = events.get("nextSyncToken")
@@ -403,9 +427,15 @@ def insert_event_in_google_calendar(doc, method=None):
 	Insert Events in Google Calendar if sync_with_google_calendar is checked.
 	"""
 	if (
+<<<<<<< HEAD
 		not doc.sync_with_google_calendar
 		or doc.pulled_from_google_calendar
 		or not frappe.db.exists("Google Calendar", {"name": doc.google_calendar})
+=======
+		not frappe.db.exists("Google Calendar", {"name": doc.google_calendar})
+		or doc.pulled_from_google_calendar
+		or not doc.sync_with_google_calendar
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	):
 		return
 
@@ -467,9 +497,15 @@ def update_event_in_google_calendar(doc, method=None):
 	# Workaround to avoid triggering updation when Event is being inserted since
 	# creation and modified are same when inserting doc
 	if (
+<<<<<<< HEAD
 		not doc.sync_with_google_calendar
 		or doc.modified == doc.creation
 		or not frappe.db.exists("Google Calendar", {"name": doc.google_calendar})
+=======
+		not frappe.db.exists("Google Calendar", {"name": doc.google_calendar})
+		or doc.modified == doc.creation
+		or not doc.sync_with_google_calendar
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	):
 		return
 
@@ -494,7 +530,11 @@ def update_event_in_google_calendar(doc, method=None):
 		event["description"] = doc.description
 		event["recurrence"] = repeat_on_to_google_calendar_recurrence_rule(doc)
 		event["status"] = (
+<<<<<<< HEAD
 			"cancelled" if doc.status == "Cancelled" or doc.status == "Closed" else event.get("status")
+=======
+			"cancelled" if doc.event_type == "Cancelled" or doc.status == "Closed" else event.get("status")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 		event.update(
 			format_date_according_to_google_calendar(

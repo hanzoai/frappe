@@ -8,7 +8,10 @@ from jinja2.exceptions import TemplateSyntaxError
 import frappe
 from frappe import _
 from frappe.utils import get_datetime, now, quoted, strip_html
+<<<<<<< HEAD
 from frappe.utils.caching import redis_cache
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils.jinja import render_template
 from frappe.utils.safe_exec import safe_exec
 from frappe.website.doctype.website_slideshow.website_slideshow import get_slideshow
@@ -25,6 +28,7 @@ H_TAG_PATTERN = re.compile("<h.>")
 
 
 class WebPage(WebsiteGenerator):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -66,12 +70,26 @@ class WebPage(WebsiteGenerator):
 		website_sidebar: DF.Link | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		self.validate_dates()
 		self.set_route()
 		if not self.dynamic_route:
 			self.route = quoted(self.route)
 
+<<<<<<< HEAD
+=======
+	def get_feed(self):
+		return self.title
+
+	def on_update(self):
+		super().on_update()
+
+	def on_trash(self):
+		super().on_trash()
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def get_context(self, context):
 		context.main_section = get_html_content_based_on_type(self, "main_section", self.content_type)
 		context.source_content_type = self.content_type
@@ -79,7 +97,11 @@ class WebPage(WebsiteGenerator):
 
 		if self.context_script:
 			_locals = dict(context=frappe._dict())
+<<<<<<< HEAD
 			safe_exec(self.context_script, None, _locals, script_filename=f"web page {self.name}")
+=======
+			safe_exec(self.context_script, None, _locals)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			context.update(_locals["context"])
 
 		self.render_dynamic(context)
@@ -283,6 +305,7 @@ def extract_script_and_style_tags(html):
 		style.extract()
 
 	return str(soup), scripts, styles
+<<<<<<< HEAD
 
 
 @redis_cache(ttl=60 * 60)
@@ -297,3 +320,5 @@ def get_dynamic_web_pages() -> dict[str, str]:
 	for method in get_web_pages_with_dynamic_routes:
 		pages.extend(frappe.get_attr(method)())
 	return pages
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

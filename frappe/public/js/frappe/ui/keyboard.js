@@ -154,7 +154,11 @@ frappe.ui.keys.get_key = function (e) {
 		key = "ctrl+" + key;
 	}
 	if (e.shiftKey) {
+<<<<<<< HEAD
 		// add shift+ the key
+=======
+		// add ctrl+ the key
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		key = "shift+" + key;
 	}
 	if (e.altKey) {
@@ -218,7 +222,11 @@ frappe.ui.keys.add_shortcut({
 	shortcut: "alt+s",
 	action: function (e) {
 		e.preventDefault();
+<<<<<<< HEAD
 		$(".dropdown-navbar-user button").eq(0).click();
+=======
+		$(".dropdown-navbar-user a").eq(0).click();
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 	description: __("Open Settings"),
 });
@@ -235,7 +243,11 @@ frappe.ui.keys.add_shortcut({
 	shortcut: "alt+h",
 	action: function (e) {
 		e.preventDefault();
+<<<<<<< HEAD
 		$(".dropdown-help button").eq(0).click();
+=======
+		$(".dropdown-help a").eq(0).click();
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 	description: __("Open Help"),
 });

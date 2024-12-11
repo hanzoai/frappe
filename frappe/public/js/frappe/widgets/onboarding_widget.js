@@ -50,6 +50,7 @@ export default class OnboardingWidget extends Widget {
 
 		let $step = $(`<a class="onboarding-step ${status}">
 				<div class="step-title">
+<<<<<<< HEAD
 					<div class="step-index step-pending">${frappe.utils.icon(
 						"es-line-success",
 						"md",
@@ -72,6 +73,12 @@ export default class OnboardingWidget extends Widget {
 						"step-icon"
 					)}</div>
 					<div class="step-text">${__(step.title)}</div>
+=======
+					<div class="step-index step-pending">${__(index + 1)}</div>
+					<div class="step-index step-skipped">${frappe.utils.icon("tick", "xs")}</div>
+					<div class="step-index step-complete">${frappe.utils.icon("tick", "xs")}</div>
+					<div>${__(step.title)}</div>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				</div>
 			</a>`);
 
@@ -124,12 +131,20 @@ export default class OnboardingWidget extends Widget {
 			set_description();
 
 			if (step.intro_video_url) {
+<<<<<<< HEAD
 				$(`<button class="btn btn-default btn-sm">${__("Watch Tutorial")}</button>`)
+=======
+				$(`<button class="btn btn-primary btn-sm">${__("Watch Tutorial")}</button>`)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					.appendTo(this.step_footer)
 					.on("click", toggle_video);
 			} else {
 				$(
+<<<<<<< HEAD
 					`<button class="btn btn-default btn-sm">${__(
+=======
+					`<button class="btn btn-primary btn-sm">${__(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						step.action_label || step.action
 					)}</button>`
 				)
@@ -574,7 +589,11 @@ export default class OnboardingWidget extends Widget {
 
 		this.action_area.empty();
 		const dismiss = $(
+<<<<<<< HEAD
 			`<div class="btn btn-sm btn-secondary small" style="cursor:pointer;">${__(
+=======
+			`<div class="small" style="cursor:pointer;">${__(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				"Dismiss",
 				null,
 				"Stop showing the onboarding widget."

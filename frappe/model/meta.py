@@ -21,7 +21,11 @@ from datetime import datetime
 import click
 
 import frappe
+<<<<<<< HEAD
 from frappe import _, _lt
+=======
+from frappe import _
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.model import (
 	child_table_fields,
 	data_fieldtypes,
@@ -41,6 +45,7 @@ from frappe.modules import load_doctype_module
 from frappe.utils import cast, cint, cstr
 
 DEFAULT_FIELD_LABELS = {
+<<<<<<< HEAD
 	"name": _lt("ID"),
 	"creation": _lt("Created On"),
 	"docstatus": _lt("Document Status"),
@@ -52,16 +57,40 @@ DEFAULT_FIELD_LABELS = {
 	"_liked_by": _lt("Liked By"),
 	"_comments": _lt("Comments"),
 	"_assign": _lt("Assigned To"),
+=======
+	"name": lambda: _("ID"),
+	"creation": lambda: _("Created On"),
+	"docstatus": lambda: _("Document Status"),
+	"idx": lambda: _("Index"),
+	"modified": lambda: _("Last Updated On"),
+	"modified_by": lambda: _("Last Updated By"),
+	"owner": lambda: _("Created By"),
+	"_user_tags": lambda: _("Tags"),
+	"_liked_by": lambda: _("Liked By"),
+	"_comments": lambda: _("Comments"),
+	"_assign": lambda: _("Assigned To"),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 
 def get_meta(doctype, cached=True) -> "Meta":
+<<<<<<< HEAD
 	cached = cached and isinstance(doctype, str)
 	if cached and (meta := frappe.cache.hget("doctype_meta", doctype)):
 		return meta
 
 	meta = Meta(doctype)
 	frappe.cache.hset("doctype_meta", meta.name, meta)
+=======
+	if not cached:
+		return Meta(doctype)
+
+	if meta := frappe.cache().hget("doctype_meta", doctype):
+		return meta
+
+	meta = Meta(doctype)
+	frappe.cache().hset("doctype_meta", doctype, meta)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return meta
 
 
@@ -95,7 +124,11 @@ class Meta(Document):
 	_metaclass = True
 	default_fields = list(default_fields)[1:]
 	special_doctypes = frozenset(
+<<<<<<< HEAD
 		(
+=======
+		{
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			"DocField",
 			"DocPerm",
 			"DocType",
@@ -103,7 +136,11 @@ class Meta(Document):
 			"DocType Action",
 			"DocType Link",
 			"DocType State",
+<<<<<<< HEAD
 		)
+=======
+		}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	)
 	standard_set_once_fields = (
 		frappe._dict(fieldname="creation", fieldtype="Datetime"),
@@ -213,7 +250,11 @@ class Meta(Document):
 
 		return fields
 
+<<<<<<< HEAD
 	def get_valid_columns(self) -> list[str]:
+=======
+	def get_valid_columns(self):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if not hasattr(self, "_valid_columns"):
 			table_exists = frappe.db.table_exists(self.name)
 			if self.name in self.special_doctypes and table_exists:
@@ -242,13 +283,23 @@ class Meta(Document):
 
 	def get_label(self, fieldname):
 		"""Get label of the given fieldname"""
+<<<<<<< HEAD
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if df := self.get_field(fieldname):
 			return df.get("label")
 
 		if fieldname in DEFAULT_FIELD_LABELS:
+<<<<<<< HEAD
 			return str(DEFAULT_FIELD_LABELS[fieldname])
 
 		return "No Label"
+=======
+			return DEFAULT_FIELD_LABELS[fieldname]()
+
+		return _("No Label")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def get_options(self, fieldname):
 		return self.get_field(fieldname).options
@@ -421,7 +472,15 @@ class Meta(Document):
 			order = json.loads(self.get(f"{fieldname}_order") or "[]")
 			if order:
 				name_map = {d.name: d for d in self.get(fieldname)}
+<<<<<<< HEAD
 				new_list = [name_map[name] for name in order if name in name_map]
+=======
+				new_list = []
+				for name in order:
+					if name in name_map:
+						new_list.append(name_map[name])
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				# add the missing items that have not be added
 				# maybe these items were added to the standard product
 				# after the customization was done
@@ -562,7 +621,15 @@ class Meta(Document):
 	def get_high_permlevel_fields(self):
 		"""Build list of fields with high perm level and all the higher perm levels defined."""
 		if not hasattr(self, "high_permlevel_fields"):
+<<<<<<< HEAD
 			self.high_permlevel_fields = [df for df in self.fields if df.permlevel > 0]
+=======
+			self.high_permlevel_fields = []
+			for df in self.fields:
+				if df.permlevel > 0:
+					self.high_permlevel_fields.append(df)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return self.high_permlevel_fields
 
 	def get_permitted_fieldnames(
@@ -595,6 +662,7 @@ class Meta(Document):
 			self.get_permlevel_access(permission_type=permission_type, parenttype=parenttype, user=user)
 		)
 
+<<<<<<< HEAD
 		if 0 not in permlevel_access and permission_type in ("read", "select"):
 			if frappe.share.get_shared(self.name, user, rights=[permission_type], limit=1):
 				permlevel_access.add(0)
@@ -606,6 +674,14 @@ class Meta(Document):
 			)
 			if df.permlevel in permlevel_access
 		)
+=======
+		for df in self.get_fieldnames_with_value(
+			with_field_meta=True, with_virtual_fields=with_virtual_fields
+		):
+			if df.permlevel in permlevel_access:
+				permitted_fieldnames.append(df.fieldname)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return permitted_fieldnames
 
 	def get_permlevel_access(self, permission_type="read", parenttype=None, *, user=None):
@@ -852,7 +928,11 @@ def trim_tables(doctype=None, dry_run=False, quiet=False):
 
 
 def trim_table(doctype, dry_run=True):
+<<<<<<< HEAD
 	frappe.cache.hdel("table_columns", f"tab{doctype}")
+=======
+	frappe.cache().hdel("table_columns", f"tab{doctype}")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	ignore_fields = default_fields + optional_fields + child_table_fields
 	columns = frappe.db.get_table_columns(doctype)
 	fields = frappe.get_meta(doctype, cached=False).get_fieldnames_with_value()

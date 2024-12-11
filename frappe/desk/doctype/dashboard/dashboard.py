@@ -12,6 +12,7 @@ from frappe.query_builder import DocType
 
 
 class Dashboard(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -31,6 +32,8 @@ class Dashboard(Document):
 		module: DF.Link | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def on_update(self):
 		if self.is_default:
 			# make all other dashboards non-default
@@ -102,8 +105,17 @@ def get_permitted_charts(dashboard_name):
 
 @frappe.whitelist()
 def get_permitted_cards(dashboard_name):
+<<<<<<< HEAD
 	dashboard = frappe.get_doc("Dashboard", dashboard_name)
 	return [card for card in dashboard.cards if frappe.has_permission("Number Card", doc=card.card)]
+=======
+	permitted_cards = []
+	dashboard = frappe.get_doc("Dashboard", dashboard_name)
+	for card in dashboard.cards:
+		if frappe.has_permission("Number Card", doc=card.card):
+			permitted_cards.append(card)
+	return permitted_cards
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_non_standard_charts_in_dashboard(dashboard):

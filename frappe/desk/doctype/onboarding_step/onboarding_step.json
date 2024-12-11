@@ -217,7 +217,11 @@
   }
  ],
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-08-28 22:23:48.174317",
+=======
+ "modified": "2021-12-02 10:56:04.448580",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Onboarding Step",
@@ -242,7 +246,11 @@
    "print": 1,
    "read": 1,
    "report": 1,
+<<<<<<< HEAD
    "role": "Desk User",
+=======
+   "role": "All",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "share": 1
   }
  ],
@@ -250,6 +258,9 @@
  "read_only": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
+<<<<<<< HEAD
  "states": [],
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "track_changes": 1
 }

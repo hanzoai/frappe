@@ -22,8 +22,12 @@
   "use_ssl_for_outgoing",
   "column_break_18",
   "smtp_port",
+<<<<<<< HEAD
   "append_emails_to_sent_folder",
   "sent_folder_name"
+=======
+  "append_emails_to_sent_folder"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  ],
  "fields": [
   {
@@ -126,6 +130,7 @@
   {
    "fieldname": "column_break_18",
    "fieldtype": "Column Break"
+<<<<<<< HEAD
   },
   {
    "default": "Sent",
@@ -134,6 +139,8 @@
    "fieldname": "sent_folder_name",
    "fieldtype": "Data",
    "label": "Sent Folder Name"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "icon": "icon-inbox",
@@ -143,7 +150,11 @@
    "link_fieldname": "domain"
   }
  ],
+<<<<<<< HEAD
  "modified": "2024-12-05 12:41:16.753751",
+=======
+ "modified": "2023-06-05 12:55:06.434541",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Email",
  "name": "Email Domain",
@@ -155,6 +166,10 @@
    "delete": 1,
    "read": 1,
    "role": "System Manager",
+<<<<<<< HEAD
+=======
+   "set_user_permissions": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "share": 1,
    "write": 1
   }

@@ -14,9 +14,17 @@ frappe.webhook = {
 							!frappe.model.table_fields.includes(d.fieldtype)
 						) {
 							return null;
+<<<<<<< HEAD
 						} else {
 							return {
 								label: `${__(d.label, null, d.parent)} (${__(d.fieldtype)})`,
+=======
+						} else if (d.fieldtype === "Currency" || d.fieldtype === "Float") {
+							return { label: d.label, value: d.fieldname };
+						} else {
+							return {
+								label: `${__(d.label)} (${d.fieldtype})`,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 								value: d.fieldname,
 							};
 						}
@@ -26,12 +34,19 @@ frappe.webhook = {
 				// add meta fields
 				for (let field of frappe.model.std_fields) {
 					if (field.fieldname == "name") {
+<<<<<<< HEAD
 						fields.unshift({ label: __("Name (Doc Name)"), value: "name" });
 					} else {
 						fields.push({
 							label: `${__(field.label, null, field.parent)} (${__(
 								field.fieldtype
 							)})`,
+=======
+						fields.unshift({ label: "Name (Doc Name)", value: "name" });
+					} else {
+						fields.push({
+							label: `${__(field.label)} (${field.fieldtype})`,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							value: field.fieldname,
 						});
 					}
@@ -81,10 +96,13 @@ frappe.webhook = {
 frappe.ui.form.on("Webhook", {
 	refresh: (frm) => {
 		frappe.webhook.set_fieldname_select(frm);
+<<<<<<< HEAD
 		frm.set_query(
 			"background_jobs_queue",
 			"frappe.integrations.doctype.webhook.webhook.get_all_queues"
 		);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 
 	request_structure: (frm) => {

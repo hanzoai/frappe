@@ -31,18 +31,32 @@ frappe.Application = class Application {
 	}
 
 	startup() {
+<<<<<<< HEAD
 		frappe.realtime.init();
 		frappe.model.init();
 
+=======
+		frappe.socketio.init();
+		frappe.model.init();
+
+		this.setup_frappe_vue();
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.load_bootinfo();
 		this.load_user_permissions();
 		this.make_nav_bar();
 		this.set_favicon();
+<<<<<<< HEAD
+=======
+		this.setup_analytics();
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.set_fullwidth_if_enabled();
 		this.add_browser_class();
 		this.setup_energy_point_listeners();
 		this.setup_copy_doc_listener();
+<<<<<<< HEAD
 		this.setup_broadcast_listeners();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		frappe.ui.keys.setup();
 
@@ -151,11 +165,14 @@ frappe.Application = class Application {
 
 		// REDESIGN-TODO: Fix preview popovers
 		this.link_preview = new frappe.ui.LinkPreview();
+<<<<<<< HEAD
 
 		frappe.broadcast.emit("boot", {
 			csrf_token: frappe.csrf_token,
 			user: frappe.session.user,
 		});
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	set_route() {
@@ -171,6 +188,14 @@ frappe.Application = class Application {
 		});
 	}
 
+<<<<<<< HEAD
+=======
+	setup_frappe_vue() {
+		Vue.prototype.__ = window.__;
+		Vue.prototype.frappe = window.frappe;
+	}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	set_password(user) {
 		var me = this;
 		frappe.call({
@@ -314,6 +339,61 @@ frappe.Application = class Application {
 			.replace("mm", "%m")
 			.replace("yyyy", "%Y");
 		frappe.boot.user.last_selected_values = {};
+<<<<<<< HEAD
+=======
+
+		// Proxy for user globals
+		Object.defineProperties(window, {
+			user: {
+				get: function () {
+					console.warn(
+						"Please use `frappe.session.user` instead of `user`. It will be deprecated soon."
+					);
+					return frappe.session.user;
+				},
+			},
+			user_fullname: {
+				get: function () {
+					console.warn(
+						"Please use `frappe.session.user_fullname` instead of `user_fullname`. It will be deprecated soon."
+					);
+					return frappe.session.user;
+				},
+			},
+			user_email: {
+				get: function () {
+					console.warn(
+						"Please use `frappe.session.user_email` instead of `user_email`. It will be deprecated soon."
+					);
+					return frappe.session.user_email;
+				},
+			},
+			user_defaults: {
+				get: function () {
+					console.warn(
+						"Please use `frappe.user_defaults` instead of `user_defaults`. It will be deprecated soon."
+					);
+					return frappe.user_defaults;
+				},
+			},
+			roles: {
+				get: function () {
+					console.warn(
+						"Please use `frappe.user_roles` instead of `roles`. It will be deprecated soon."
+					);
+					return frappe.user_roles;
+				},
+			},
+			sys_defaults: {
+				get: function () {
+					console.warn(
+						"Please use `frappe.sys_defaults` instead of `sys_defaults`. It will be deprecated soon."
+					);
+					return frappe.user_roles;
+				},
+			},
+		});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	sync_pages() {
 		// clear cached pages if timestamp is not found
@@ -369,12 +449,71 @@ frappe.Application = class Application {
 		});
 	}
 	handle_session_expired() {
+<<<<<<< HEAD
 		frappe.app.redirect_to_login();
 	}
 	redirect_to_login() {
 		window.location.href = `/login?redirect-to=${encodeURIComponent(
 			window.location.pathname + window.location.search
 		)}`;
+=======
+		if (!frappe.app.session_expired_dialog) {
+			var dialog = new frappe.ui.Dialog({
+				title: __("Session Expired"),
+				keep_open: true,
+				fields: [
+					{
+						fieldtype: "Password",
+						fieldname: "password",
+						label: __("Please Enter Your Password to Continue"),
+					},
+				],
+				onhide: () => {
+					if (!dialog.logged_in) {
+						frappe.app.redirect_to_login();
+					}
+				},
+			});
+			dialog.get_field("password").disable_password_checks();
+			dialog.set_primary_action(__("Login"), () => {
+				dialog.set_message(__("Authenticating..."));
+				frappe.call({
+					method: "login",
+					args: {
+						usr: frappe.session.user,
+						pwd: dialog.get_values().password,
+					},
+					callback: (r) => {
+						if (r.message === "Logged In") {
+							dialog.logged_in = true;
+
+							// revert backdrop
+							$(".modal-backdrop").css({
+								opacity: "",
+								"background-color": "#334143",
+							});
+						}
+						dialog.hide();
+					},
+					statusCode: () => {
+						dialog.hide();
+					},
+				});
+			});
+			frappe.app.session_expired_dialog = dialog;
+		}
+		if (!frappe.app.session_expired_dialog.display) {
+			frappe.app.session_expired_dialog.show();
+			// add backdrop
+			$(".modal-backdrop").css({
+				opacity: 1,
+				"background-color": "#4B4C9D",
+			});
+		}
+	}
+	redirect_to_login() {
+		window.location.href = "/";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	set_favicon() {
 		var link = $('link[type="image/x-icon"]').remove().attr("href");
@@ -436,8 +575,28 @@ frappe.Application = class Application {
 	}
 
 	show_update_available() {
+<<<<<<< HEAD
 		if (!frappe.boot.has_app_updates) return;
 		frappe.xcall("frappe.utils.change_log.show_update_popup");
+=======
+		if (frappe.boot.sysdefaults.disable_system_update_notification) return;
+
+		frappe.call({
+			method: "frappe.utils.change_log.show_update_popup",
+		});
+	}
+
+	setup_analytics() {
+		if (window.mixpanel) {
+			window.mixpanel.identify(frappe.session.user);
+			window.mixpanel.people.set({
+				$first_name: frappe.boot.user.first_name,
+				$last_name: frappe.boot.user.last_name,
+				$created: frappe.boot.user.creation,
+				$email: frappe.session.user,
+			});
+		}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	add_browser_class() {
@@ -510,7 +669,11 @@ frappe.Application = class Application {
 							frappe.set_route("Form", newdoc.doctype, newdoc.name);
 							frappe.dom.unfreeze();
 						});
+<<<<<<< HEAD
 						res && res.fail?.(frappe.dom.unfreeze);
+=======
+						res && res.fail(frappe.dom.unfreeze);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					});
 				}
 			} catch (e) {
@@ -519,6 +682,7 @@ frappe.Application = class Application {
 		});
 	}
 
+<<<<<<< HEAD
 	/// Setup event listeners for events across browser tabs / web workers.
 	setup_broadcast_listeners() {
 		// booted in another tab -> refresh csrf to avoid invalid requests.
@@ -546,6 +710,8 @@ frappe.Application = class Application {
 		});
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	setup_moment() {
 		moment.updateLocale("en", {
 			week: {

@@ -432,6 +432,10 @@ frappe.ui.Slides = class Slides {
 		this.slide_dict[id] = null;
 	}
 
+<<<<<<< HEAD
+=======
+	// eslint-disable-next-line no-unused-vars
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	on_update(completed, total) {}
 
 	show_hide_prev_next(id) {

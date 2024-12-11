@@ -142,7 +142,10 @@ class SiteMigration:
 		sync_customizations()
 		sync_languages()
 		flush_deferred_inserts()
+<<<<<<< HEAD
 		frappe.model.sync.remove_orphan_doctypes()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		frappe.get_single("Portal Settings").sync_menu()
 		frappe.get_single("Installed Applications").update_versions()
@@ -170,8 +173,11 @@ class SiteMigration:
 		"""Run Migrate operation on site specified. This method initializes
 		and destroys connections to the site database.
 		"""
+<<<<<<< HEAD
 		from frappe.utils.synchronization import filelock
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if site:
 			frappe.init(site=site)
 			frappe.connect()
@@ -179,6 +185,7 @@ class SiteMigration:
 		if not self.required_services_running():
 			raise SystemExit(1)
 
+<<<<<<< HEAD
 		with filelock("bench_migrate", timeout=1):
 			self.setUp()
 			try:
@@ -188,3 +195,13 @@ class SiteMigration:
 			finally:
 				self.tearDown()
 				frappe.destroy()
+=======
+		self.setUp()
+		try:
+			self.pre_schema_updates()
+			self.run_schema_updates()
+			self.post_schema_updates()
+		finally:
+			self.tearDown()
+			frappe.destroy()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

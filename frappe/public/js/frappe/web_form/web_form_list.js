@@ -57,7 +57,11 @@ export default class WebFormList {
 							options: field.options,
 							input_class: "input-xs",
 							only_select: true,
+<<<<<<< HEAD
 							label: __(field.label, null, field.parent),
+=======
+							label: __(field.label),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							onchange: (event) => {
 								this.add_filter(field.fieldname, input.value, field.fieldtype);
 								this.refresh();
@@ -70,13 +74,21 @@ export default class WebFormList {
 
 					$(input.wrapper)
 						.addClass("col-md-2")
+<<<<<<< HEAD
 						.attr("title", __(field.label, null, field.parent))
+=======
+						.attr("title", __(field.label))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						.tooltip({
 							delay: { show: 600, hide: 100 },
 							trigger: "hover",
 						});
 
+<<<<<<< HEAD
 					input.$input.attr("placeholder", __(field.label, null, field.parent));
+=======
+					input.$input.attr("placeholder", __(field.label));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					this.filter_input.push(input);
 				});
 				this.refresh();

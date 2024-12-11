@@ -1,5 +1,9 @@
 <div class="timeline-message-box" data-communication-type="{{ doc.communication_type }}">
+<<<<<<< HEAD
 	<span class="flex justify-between m-1 mb-3">
+=======
+	<span class="flex justify-between">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		<span class="text-color flex">
 			{% if (doc.communication_type && doc.communication_type == "Automated Message") { %}
 				<span>
@@ -65,8 +69,13 @@
 
 			{% if (doc._url) { %}
 			<a class="action-btn" href="{{ doc._url }}" title="{{ __("Open Communication") }}">
+<<<<<<< HEAD
 				<svg class="es-icon icon-sm">
 					<use href="#es-line-link"></use>
+=======
+				<svg class="icon icon-sm">
+					<use href="#icon-link-url" class="like-icon"></use>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				</svg>
 			</a>
 			{% } %}

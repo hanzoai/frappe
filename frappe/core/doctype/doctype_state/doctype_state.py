@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class DocTypeState(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -23,4 +24,6 @@ class DocTypeState(Document):
 		parenttype: DF.Data
 		title: DF.Data
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	pass

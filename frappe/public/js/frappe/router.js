@@ -37,10 +37,13 @@ $("body").on("click", "a", function (e) {
 	const href = target_element.getAttribute("href");
 	const is_on_same_host = target_element.hostname === window.location.hostname;
 
+<<<<<<< HEAD
 	if (target_element.getAttribute("target") === "_blank") {
 		return;
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	const override = (route) => {
 		e.preventDefault();
 		frappe.set_route(route);
@@ -177,12 +180,20 @@ frappe.router = {
 		// /app/user/user-001 = ["Form", "User", "user-001"]
 		// /app/event/view/calendar/default = ["List", "Event", "Calendar", "Default"]
 
+<<<<<<< HEAD
+=======
+		let private_workspace = route[1] && `${route[1]}-${frappe.user.name.toLowerCase()}`;
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (frappe.workspaces[route[0]]) {
 			// public workspace
 			route = ["Workspaces", frappe.workspaces[route[0]].title];
 		} else if (route[0] == "private") {
 			// private workspace
+<<<<<<< HEAD
 			let private_workspace = route[1] && `${route[1]}-${frappe.user.name.toLowerCase()}`;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if (!frappe.workspaces[private_workspace] && localStorage.new_workspace) {
 				let new_workspace = JSON.parse(localStorage.new_workspace);
 				if (frappe.router.slug(new_workspace.title) === route[1]) {
@@ -462,6 +473,7 @@ frappe.router = {
 				return encodeURIComponent(String(a));
 			}
 		}).join("/");
+<<<<<<< HEAD
 
 		if (path_string) {
 			return "/app/" + path_string;
@@ -490,6 +502,21 @@ frappe.router = {
 		}
 
 		return "/app";
+=======
+		let private_home = frappe.workspaces[`home-${frappe.user.name.toLowerCase()}`];
+
+		let workspace_name = private_home || frappe.workspaces["home"] ? "home" : "";
+		let is_private = !!private_home;
+		let first_workspace = Object.keys(frappe.workspaces)[0];
+
+		if (!workspace_name && first_workspace) {
+			workspace_name = frappe.workspaces[first_workspace].title;
+			is_private = !frappe.workspaces[first_workspace].public;
+		}
+
+		let default_page = (is_private ? "private/" : "") + frappe.router.slug(workspace_name);
+		return "/app/" + (path_string || default_page);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 
 	push_state(url) {
@@ -520,8 +547,13 @@ frappe.router = {
 
 	strip_prefix(route) {
 		if (route.substr(0, 1) == "/") route = route.substr(1); // for /app/sub
+<<<<<<< HEAD
 		if (route == "app") route = route.substr(4); // for app
 		if (route.startsWith("app/")) route = route.substr(4); // for desk/sub
+=======
+		if (route.startsWith("app/")) route = route.substr(4); // for desk/sub
+		if (route == "app") route = route.substr(4); // for /app
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (route.substr(0, 1) == "/") route = route.substr(1);
 		if (route.substr(0, 1) == "#") route = route.substr(1);
 		if (route.substr(0, 1) == "!") route = route.substr(1);

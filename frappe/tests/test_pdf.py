@@ -2,7 +2,11 @@
 # License: MIT. See LICENSE
 import io
 
+<<<<<<< HEAD
 from pypdf import PdfReader
+=======
+from PyPDF2 import PdfReader
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 import frappe.utils.pdf as pdfgen
@@ -74,7 +78,11 @@ class TestPdf(FrappeTestCase):
 		password = "qwe"
 		pdf = pdfgen.get_pdf(self.html, options={"password": password})
 		reader = PdfReader(io.BytesIO(pdf))
+<<<<<<< HEAD
 		self.assertTrue(reader.is_encrypted)
+=======
+		self.assertTrue(reader.isEncrypted)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertTrue(reader.decrypt(password))
 
 	def test_pdf_generation_as_a_user(self):

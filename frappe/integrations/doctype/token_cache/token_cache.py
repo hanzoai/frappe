@@ -1,7 +1,11 @@
 # Copyright (c) 2019, Frappe Technologies and contributors
 # License: MIT. See LICENSE
 
+<<<<<<< HEAD
 import datetime
+=======
+from datetime import datetime, timedelta
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import pytz
 
@@ -12,6 +16,7 @@ from frappe.utils import cint, cstr, get_system_timezone
 
 
 class TokenCache(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -36,6 +41,13 @@ class TokenCache(Document):
 	def get_auth_header(self):
 		if self.access_token:
 			return {"Authorization": "Bearer " + self.get_password("access_token")}
+=======
+	def get_auth_header(self):
+		if self.access_token:
+			headers = {"Authorization": "Bearer " + self.get_password("access_token")}
+			return headers
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		raise frappe.exceptions.DoesNotExistError
 
 	def update_data(self, data):
@@ -76,8 +88,13 @@ class TokenCache(Document):
 		system_timezone = pytz.timezone(get_system_timezone())
 		modified = frappe.utils.get_datetime(self.modified)
 		modified = system_timezone.localize(modified)
+<<<<<<< HEAD
 		expiry_utc = modified.astimezone(pytz.utc) + datetime.timedelta(seconds=self.expires_in)
 		now_utc = datetime.datetime.now(pytz.utc)
+=======
+		expiry_utc = modified.astimezone(pytz.utc) + timedelta(seconds=self.expires_in)
+		now_utc = datetime.utcnow().replace(tzinfo=pytz.utc)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return cint((expiry_utc - now_utc).total_seconds())
 
 	def is_expired(self):

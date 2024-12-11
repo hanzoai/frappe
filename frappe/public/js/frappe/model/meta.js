@@ -154,7 +154,11 @@ $.extend(frappe.meta, {
 
 	get_doctype_for_field: function (doctype, key) {
 		var out = null;
+<<<<<<< HEAD
 		if (frappe.model.std_fields_list.includes(key)) {
+=======
+		if (in_list(frappe.model.std_fields_list, key)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			// standard
 			out = doctype;
 		} else if (frappe.meta.has_field(doctype, key)) {
@@ -164,7 +168,11 @@ $.extend(frappe.meta, {
 			frappe.meta.get_table_fields(doctype).every(function (d) {
 				if (
 					frappe.meta.has_field(d.options, key) ||
+<<<<<<< HEAD
 					frappe.model.child_table_field_list.includes(key)
+=======
+					in_list(frappe.model.child_table_field_list, key)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				) {
 					out = d.options;
 					return false;
@@ -173,6 +181,10 @@ $.extend(frappe.meta, {
 			});
 
 			if (!out) {
+<<<<<<< HEAD
+=======
+				// eslint-disable-next-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				console.log(
 					__("Warning: Unable to find {0} in any table related to {1}", [
 						key,
@@ -264,7 +276,11 @@ $.extend(frappe.meta, {
 			});
 		$.each(print_formats, function (i, d) {
 			if (
+<<<<<<< HEAD
 				!print_format_list.includes(d.name) &&
+=======
+				!in_list(print_format_list, d.name) &&
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				d.print_format_type !== "JS" &&
 				(cint(enable_raw_printing) || !d.raw_printing)
 			) {
@@ -288,7 +304,11 @@ $.extend(frappe.meta, {
 	},
 
 	get_field_currency: function (df, doc) {
+<<<<<<< HEAD
 		var currency = frappe.boot.sysdefaults.currency || "USD";
+=======
+		var currency = frappe.boot.sysdefaults.currency;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (!doc && cur_frm) doc = cur_frm.doc;
 
 		if (df && df.options) {

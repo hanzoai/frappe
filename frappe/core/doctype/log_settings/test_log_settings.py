@@ -62,6 +62,10 @@ class TestLogSettings(FrappeTestCase):
 			"Activity Log",
 			"Email Queue",
 			"Route History",
+<<<<<<< HEAD
+=======
+			"Error Snapshot",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			"Scheduled Job Log",
 		]
 

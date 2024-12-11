@@ -2,13 +2,18 @@
 # License: MIT. See LICENSE
 
 import frappe
+<<<<<<< HEAD
 from frappe.core.doctype.report.report import is_prepared_report_enabled
+=======
+from frappe.core.doctype.report.report import is_prepared_report_disabled
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.model.document import Document
 from frappe.permissions import ALL_USER_ROLE
 from frappe.utils import cint
 
 
 class RolePermissionforPageandReport(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -25,6 +30,8 @@ class RolePermissionforPageandReport(Document):
 		set_role_for: DF.Literal["", "Page", "Report"]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@frappe.whitelist()
 	def set_report_page_data(self):
 		self.set_custom_roles()
@@ -45,7 +52,11 @@ class RolePermissionforPageandReport(Document):
 
 	def check_prepared_report_disabled(self):
 		if self.report:
+<<<<<<< HEAD
 			self.enable_prepared_report = is_prepared_report_enabled(self.report)
+=======
+			self.disable_prepared_report = is_prepared_report_disabled(self.report)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def get_standard_roles(self):
 		doctype = self.set_role_for
@@ -85,9 +96,15 @@ class RolePermissionforPageandReport(Document):
 		if self.report:
 			# intentionally written update query in frappe.db.sql instead of frappe.db.set_value
 			frappe.db.sql(
+<<<<<<< HEAD
 				"""update `tabReport` set prepared_report = %s
 				where name = %s""",
 				(self.enable_prepared_report, self.report),
+=======
+				"""update `tabReport` set disable_prepared_report = %s, prepared_report = %s
+				where name = %s""",
+				(self.disable_prepared_report, not self.disable_prepared_report, self.report),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			)
 
 	def get_args(self, row=None):

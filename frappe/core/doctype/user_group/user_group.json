@@ -19,11 +19,18 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-08-28 22:25:16.941457",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User Group",
  "naming_rule": "Set by user",
+=======
+ "modified": "2021-04-15 16:12:31.455401",
+ "modified_by": "Administrator",
+ "module": "Core",
+ "name": "User Group",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "owner": "Administrator",
  "permissions": [
   {
@@ -40,11 +47,18 @@
   },
   {
    "read": 1,
+<<<<<<< HEAD
    "role": "Desk User"
+=======
+   "role": "All"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+<<<<<<< HEAD
  "states": [],
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "track_changes": 1
 }

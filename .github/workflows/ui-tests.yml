@@ -3,12 +3,20 @@ name: UI
 on:
   pull_request:
   workflow_dispatch:
+<<<<<<< HEAD
   schedule:
     # Run everday at midnight UTC / 5:30 IST
     - cron: "0 0 * * *"
 
 concurrency:
   group: ui-develop-${{ github.event_name }}-${{ github.event.number }}
+=======
+  push:
+    branches: [ develop ]
+
+concurrency:
+  group: ui-develop-${{ github.event.number }}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   cancel-in-progress: true
 
 permissions:
@@ -16,6 +24,7 @@ permissions:
   contents: read
 
 jobs:
+<<<<<<< HEAD
   checkrun:
     name: Build Check
     runs-on: ubuntu-latest
@@ -50,6 +59,14 @@ jobs:
       matrix:
        # Make sure you modify coverage submission file list if changing this
        container: [1, 2, 3]
+=======
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
     name: UI Tests (Cypress)
 
@@ -64,7 +81,11 @@ jobs:
 
     steps:
       - name: Clone
+<<<<<<< HEAD
         uses: actions/checkout@v4
+=======
+        uses: actions/checkout@v3
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -73,12 +94,17 @@ jobs:
 
       - name: Check for valid Python & Merge Conflicts
         run: |
+<<<<<<< HEAD
           python -m compileall -q -f "${GITHUB_WORKSPACE}"
+=======
+          python -m compileall -f "${GITHUB_WORKSPACE}"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
           if grep -lr --exclude-dir=node_modules "^<<<<<<< " "${GITHUB_WORKSPACE}"
               then echo "Found merge conflicts"
               exit 1
           fi
 
+<<<<<<< HEAD
       - uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -89,6 +115,32 @@ jobs:
           echo "127.0.0.1 test_site" | sudo tee -a /etc/hosts
 
       - name: Cache pip
+=======
+      - name: Check if build should be run
+        id: check-build
+        run: |
+          python "${GITHUB_WORKSPACE}/.github/helper/roulette.py"
+        env:
+          TYPE: "ui"
+          PR_NUMBER: ${{ github.event.number }}
+          REPO_NAME: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v3
+        if: ${{ steps.check-build.outputs.build == 'strawberry' }}
+        with:
+          node-version: 16
+          check-latest: true
+
+      - name: Add to Hosts
+        if: ${{ steps.check-build.outputs.build == 'strawberry' }}
+        run: |
+          echo "127.0.0.1 test_site" | sudo tee -a /etc/hosts
+          echo "127.0.0.1 test_site_producer" | sudo tee -a /etc/hosts
+
+      - name: Cache pip
+        if: ${{ steps.check-build.outputs.build == 'strawberry' }}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
@@ -97,11 +149,34 @@ jobs:
             ${{ runner.os }}-pip-
             ${{ runner.os }}-
 
+<<<<<<< HEAD
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
+=======
+      - name: Cache node modules
+        if: ${{ steps.check-build.outputs.build == 'strawberry' }}
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Get yarn cache directory path
+        if: ${{ steps.check-build.outputs.build == 'strawberry' }}
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v3
+        if: ${{ steps.check-build.outputs.build == 'strawberry' }}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -110,12 +185,20 @@ jobs:
             ${{ runner.os }}-yarn-ui-
 
       - name: Cache cypress binary
+<<<<<<< HEAD
+=======
+        if: ${{ steps.check-build.outputs.build == 'strawberry' }}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
         uses: actions/cache@v3
         with:
           path: ~/.cache/Cypress
           key: ${{ runner.os }}-cypress
 
       - name: Install Dependencies
+<<<<<<< HEAD
+=======
+        if: ${{ steps.check-build.outputs.build == 'strawberry' }}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
         run: |
           bash ${GITHUB_WORKSPACE}/.github/helper/install_dependencies.sh
           bash ${GITHUB_WORKSPACE}/.github/helper/install.sh
@@ -126,6 +209,7 @@ jobs:
           DB: mariadb
 
       - name: Verify yarn.lock
+<<<<<<< HEAD
         run: |
           cd ~/frappe-bench/apps/frappe
           git diff --exit-code yarn.lock
@@ -134,12 +218,31 @@ jobs:
         run: cd ~/frappe-bench/ && bench build --apps frappe
 
       - name: Site Setup
+=======
+        if: ${{ steps.check-build.outputs.build == 'strawberry' }}
+        run: |
+          cd ~/frappe-bench/apps/frappe
+          yarn install --immutable --immutable-cache --check-cache
+          git diff --exit-code yarn.lock
+
+      - name: Instrument Source Code
+        if: ${{ steps.check-build.outputs.build == 'strawberry' }}
+        run: cd ~/frappe-bench/apps/frappe/ && npx nyc instrument -x 'frappe/public/dist/**' -x 'frappe/public/js/lib/**' -x '**/*.bundle.js' --compact=false --in-place frappe
+
+      - name: Build
+        if: ${{ steps.check-build.outputs.build == 'strawberry' }}
+        run: cd ~/frappe-bench/ && bench build --apps frappe
+
+      - name: Site Setup
+        if: ${{ steps.check-build.outputs.build == 'strawberry' }}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
         run: |
           cd ~/frappe-bench/
           bench --site test_site execute frappe.utils.install.complete_setup_wizard
           bench --site test_site execute frappe.tests.ui_test_helpers.create_test_user
 
       - name: UI Tests
+<<<<<<< HEAD
         run: cd ~/frappe-bench/ && bench --site test_site run-ui-tests frappe --headless --parallel --ci-build-id $GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT
         env:
           CYPRESS_RECORD_KEY: 4a48f41c-11b3-425b-aa88-c58048fa69eb
@@ -160,3 +263,15 @@ jobs:
     steps:
       - name: Pass skipped tests unconditionally
         run: "echo Skipped"
+=======
+        if: ${{ steps.check-build.outputs.build == 'strawberry' }}
+        run: |
+          cd ~/frappe-bench/
+          bench --site test_site run-ui-tests frappe --headless -- --record
+        env:
+          CYPRESS_RECORD_KEY: 4a48f41c-11b3-425b-aa88-c58048fa69eb
+
+      - name: Show bench console if tests failed
+        if: ${{ failure() }}
+        run: cat ~/frappe-bench/bench_start.log
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

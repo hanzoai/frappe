@@ -24,6 +24,7 @@ frappe.ui.form.on("Web Form", {
 	},
 
 	refresh: function (frm) {
+<<<<<<< HEAD
 		// get iframe url for web form
 		frm.sidebar
 			.add_user_action(__("Copy Embed Code"))
@@ -34,6 +35,8 @@ frappe.ui.form.on("Web Form", {
 				frappe.utils.copy_to_clipboard(code, __("Embed code copied"));
 			});
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (frm.doc.is_standard && !frappe.boot.developer_mode) {
 			frm.disable_form();
 			frappe.show_alert(
@@ -99,24 +102,36 @@ frappe.ui.form.on("Web Form", {
 
 			get_fields_for_doctype(frm.doc.doc_type).then((fields) => {
 				for (let df of fields) {
+<<<<<<< HEAD
 					let fieldtype = df.fieldtype;
 					if (fieldtype == "Tab Break") {
 						fieldtype = "Page Break";
 					}
 					if (
 						webform_fieldtypes.includes(fieldtype) &&
+=======
+					if (
+						webform_fieldtypes.includes(df.fieldtype) &&
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						!added_fields.includes(df.fieldname) &&
 						!df.hidden
 					) {
 						frm.add_child("web_form_fields", {
 							fieldname: df.fieldname,
 							label: df.label,
+<<<<<<< HEAD
 							fieldtype: fieldtype,
+=======
+							fieldtype: df.fieldtype,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							options: df.options,
 							reqd: df.reqd,
 							default: df.default,
 							read_only: df.read_only,
+<<<<<<< HEAD
 							precision: df.precision,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							depends_on: df.depends_on,
 							mandatory_depends_on: df.mandatory_depends_on,
 							read_only_depends_on: df.read_only_depends_on,
@@ -349,8 +364,12 @@ function get_fields_for_doctype(doctype) {
 			return (
 				(frappe.model.is_value_type(df.fieldtype) &&
 					!["lft", "rgt"].includes(df.fieldname)) ||
+<<<<<<< HEAD
 				["Table", "Table Multiselect"].includes(df.fieldtype) ||
 				frappe.model.layout_fields.includes(df.fieldtype)
+=======
+				["Table", "Table Multiselect"].includes(df.fieldtype)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			);
 		});
 	});

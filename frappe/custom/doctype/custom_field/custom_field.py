@@ -13,6 +13,7 @@ from frappe.utils import cstr, random_string
 
 
 class CustomField(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -118,6 +119,8 @@ class CustomField(Document):
 		width: DF.Data | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def autoname(self):
 		self.set_fieldname()
 		self.name = self.dt + "-" + self.fieldname
@@ -261,7 +264,11 @@ def get_fields_label(doctype=None):
 		return frappe.msgprint(_("Custom Fields can only be added to a standard DocType."))
 
 	return [
+<<<<<<< HEAD
 		{"value": df.fieldname or "", "label": _(df.label, context=df.parent) if df.label else ""}
+=======
+		{"value": df.fieldname or "", "label": _(df.label or "")}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		for df in frappe.get_meta(doctype).get("fields")
 	]
 
@@ -295,7 +302,11 @@ def create_custom_field(doctype, df, ignore_validate=False, is_system_generated=
 		return custom_field
 
 
+<<<<<<< HEAD
 def create_custom_fields(custom_fields: dict, ignore_validate=False, update=True):
+=======
+def create_custom_fields(custom_fields, ignore_validate=False, update=True):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"""Add / update multiple custom fields
 
 	:param custom_fields: example `{'Sales Invoice': [dict(fieldname='test')]}`"""

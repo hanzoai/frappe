@@ -30,6 +30,7 @@ function get_version_timeline_content(version_doc, frm) {
 			if (p[0] === "docstatus") {
 				if (p[2] === 1) {
 					let message = updater_reference_link
+<<<<<<< HEAD
 						? get_user_message(
 								version_doc.owner,
 								__(
@@ -79,16 +80,36 @@ function get_version_timeline_content(version_doc, frm) {
 								)
 						  );
 
+=======
+						? __("{0} submitted this document {1}", [
+								get_user_link(version_doc),
+								updater_reference_link,
+						  ])
+						: __("{0} submitted this document", [get_user_link(version_doc)]);
+					out.push(get_version_comment(version_doc, message));
+				} else if (p[2] === 2) {
+					let message = updater_reference_link
+						? __("{0} cancelled this document {1}", [
+								get_user_link(version_doc),
+								updater_reference_link,
+						  ])
+						: __("{0} cancelled this document", [get_user_link(version_doc)]);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					out.push(get_version_comment(version_doc, message));
 				}
 			} else {
 				const df = frappe.meta.get_docfield(frm.doctype, p[0], frm.docname);
+<<<<<<< HEAD
 				if (df && (!df.hidden || df.show_on_timeline)) {
+=======
+				if (df && !df.hidden) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					const field_display_status = frappe.perm.get_field_display_status(
 						df,
 						null,
 						frm.perm
 					);
+<<<<<<< HEAD
 					if (
 						field_display_status === "Read" ||
 						field_display_status === "Write" ||
@@ -97,6 +118,12 @@ function get_version_timeline_content(version_doc, frm) {
 						parts.push(
 							__("{0} from {1} to {2}", [
 								__(df.label, null, df.parent),
+=======
+					if (field_display_status === "Read" || field_display_status === "Write") {
+						parts.push(
+							__("{0} from {1} to {2}", [
+								__(df.label),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 								format_content_for_timeline(p[1]),
 								format_content_for_timeline(p[2]),
 							])
@@ -107,6 +134,7 @@ function get_version_timeline_content(version_doc, frm) {
 			return parts.length < 3;
 		});
 		if (parts.length) {
+<<<<<<< HEAD
 			let message = updater_reference_link
 				? get_user_message(
 						version_doc.owner,
@@ -129,6 +157,21 @@ function get_version_timeline_content(version_doc, frm) {
 						])
 				  );
 
+=======
+			let message;
+			if (updater_reference_link) {
+				message = __("{0} changed value of {1} {2}", [
+					get_user_link(version_doc),
+					parts.join(", "),
+					updater_reference_link,
+				]);
+			} else {
+				message = __("{0} changed value of {1}", [
+					get_user_link(version_doc),
+					parts.join(", "),
+				]);
+			}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			out.push(get_version_comment(version_doc, message));
 		}
 	}
@@ -146,18 +189,26 @@ function get_version_timeline_content(version_doc, frm) {
 						frm.docname
 					);
 
+<<<<<<< HEAD
 				if (df && (!df.hidden || df.show_on_timeline)) {
+=======
+				if (df && !df.hidden) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					var field_display_status = frappe.perm.get_field_display_status(
 						df,
 						null,
 						frm.perm
 					);
 
+<<<<<<< HEAD
 					if (
 						field_display_status === "Read" ||
 						field_display_status === "Write" ||
 						(df.hidden && df.show_on_timeline)
 					) {
+=======
+					if (field_display_status === "Read" || field_display_status === "Write") {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						parts.push(
 							__("{0} from {1} to {2} in row #{3}", [
 								frappe.meta.get_label(frm.fields_dict[row[0]].grid.doctype, p[0]),
@@ -173,6 +224,7 @@ function get_version_timeline_content(version_doc, frm) {
 			return parts.length < 3;
 		});
 		if (parts.length) {
+<<<<<<< HEAD
 			let message = updater_reference_link
 				? get_user_message(
 						version_doc.owner,
@@ -195,6 +247,21 @@ function get_version_timeline_content(version_doc, frm) {
 						])
 				  );
 
+=======
+			let message;
+			if (updater_reference_link) {
+				message = __("{0} changed values for {1} {2}", [
+					get_user_link(version_doc),
+					parts.join(", "),
+					updater_reference_link,
+				]);
+			} else {
+				message = __("{0} changed values for {1}", [
+					get_user_link(version_doc),
+					parts.join(", "),
+				]);
+			}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			out.push(get_version_comment(version_doc, message));
 		}
 	}
@@ -205,19 +272,27 @@ function get_version_timeline_content(version_doc, frm) {
 		if (data[key] && data[key].length) {
 			let parts = (data[key] || []).map(function (p) {
 				var df = frappe.meta.get_docfield(frm.doctype, p[0], frm.docname);
+<<<<<<< HEAD
 
 				if (df && (!df.hidden || df.show_on_timeline)) {
+=======
+				if (df && !df.hidden) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					var field_display_status = frappe.perm.get_field_display_status(
 						df,
 						null,
 						frm.perm
 					);
 
+<<<<<<< HEAD
 					if (
 						field_display_status === "Read" ||
 						field_display_status === "Write" ||
 						(df.hidden && df.show_on_timeline)
 					) {
+=======
+					if (field_display_status === "Read" || field_display_status === "Write") {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						return __(frappe.meta.get_label(frm.doctype, p[0]));
 					}
 				}
@@ -235,17 +310,25 @@ function get_version_timeline_content(version_doc, frm) {
 				}
 
 				let version_comment = get_version_comment(version_doc, message);
+<<<<<<< HEAD
 				let user_link = get_user_link(version_doc.owner);
+=======
+				let user_link = get_user_link(version_doc);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				out.push(`${user_link} ${version_comment}`);
 			}
 		}
 	});
+<<<<<<< HEAD
 	const impersonated_by = data.impersonated_by;
 
 	if (impersonated_by) {
 		const impersonated_msg = __("Impersonated by {0}", [get_user_link(impersonated_by)]);
 		out = out.map((message) => `${message} · ${impersonated_msg.bold()}`);
 	}
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return out;
 }
 
@@ -302,6 +385,7 @@ function format_content_for_timeline(content) {
 	return content.bold();
 }
 
+<<<<<<< HEAD
 function get_user_link(user) {
 	const user_display_text = frappe.user_info(user).fullname || "";
 	return frappe.utils.get_form_link("User", user, true, user_display_text);
@@ -312,3 +396,12 @@ function get_user_message(user, message_self, message_other) {
 }
 
 export { get_version_timeline_content, get_user_link, get_user_message };
+=======
+function get_user_link(doc) {
+	const user = doc.owner;
+	const user_display_text = (frappe.user_info(user).fullname || "").bold();
+	return frappe.utils.get_form_link("User", user, true, user_display_text);
+}
+
+export { get_version_timeline_content };
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

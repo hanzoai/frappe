@@ -9,6 +9,7 @@ from frappe.utils.jinja import validate_template
 
 
 class EmailTemplate(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -24,6 +25,8 @@ class EmailTemplate(Document):
 
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@property
 	def response_(self):
 		return self.response_html if self.use_html else self.response

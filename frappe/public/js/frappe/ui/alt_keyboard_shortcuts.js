@@ -164,7 +164,10 @@ frappe.ui.keys.AltShortcutGroup = class AltShortcutGroup {
 				return letter;
 			})
 			.join("");
+<<<<<<< HEAD
 		text_html = `<span>${text_html}</span>`;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		let original_text_html = shortcut.$text_el.html();
 		text_html = original_text_html.replace(shortcut.text.trim(), text_html.trim());
 		shortcut.$text_el.html(text_html);

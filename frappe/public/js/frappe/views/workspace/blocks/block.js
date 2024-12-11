@@ -112,7 +112,11 @@ export default class Block {
 				});
 				this.block_widget.customize(this.options);
 				this.wrapper.setAttribute(block_name, this.block_widget.label);
+<<<<<<< HEAD
 				$(this.wrapper).find(".widget").addClass(`${widget_type}`);
+=======
+				$(this.wrapper).find(".widget").addClass(`${widget_type} edit-mode`);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				this.new_block_widget = this.block_widget.get_config();
 				this.add_settings_button();
 			},

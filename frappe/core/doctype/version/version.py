@@ -9,6 +9,7 @@ from frappe.model.document import Document
 
 
 class Version(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -22,6 +23,8 @@ class Version(Document):
 		ref_doctype: DF.Link
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def update_version_info(self, old: Document | None, new: Document) -> bool:
 		"""Update changed info and return true if change contains useful data."""
 		if not old:
@@ -30,6 +33,7 @@ class Version(Document):
 		else:
 			return self.set_diff(old, new)
 
+<<<<<<< HEAD
 	@staticmethod
 	def set_impersonator(data):
 		if not frappe.session:
@@ -37,11 +41,16 @@ class Version(Document):
 		if impersonator := frappe.session.data.get("impersonated_by"):
 			data["impersonated_by"] = impersonator
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def set_diff(self, old: Document, new: Document) -> bool:
 		"""Set the data property with the diff of the docs if present"""
 		diff = get_diff(old, new)
 		if diff:
+<<<<<<< HEAD
 			self.set_impersonator(diff)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			self.ref_doctype = new.doctype
 			self.docname = new.name
 			self.data = frappe.as_json(diff, indent=None, separators=(",", ":"))
@@ -59,7 +68,10 @@ class Version(Document):
 			"updater_reference": updater_reference,
 			"created_by": doc.owner,
 		}
+<<<<<<< HEAD
 		self.set_impersonator(data)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.ref_doctype = doc.doctype
 		self.docname = doc.name
 		self.data = frappe.as_json(data, indent=None, separators=(",", ":"))

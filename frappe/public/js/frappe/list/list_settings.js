@@ -74,6 +74,7 @@ export default class ListSettings {
 		}
 
 		if (!me.dialog.get_value("total_fields")) {
+<<<<<<< HEAD
 			let field_count = this.settings.total_fields;
 
 			if (!field_count) {
@@ -83,6 +84,14 @@ export default class ListSettings {
 				} else if (field_count > 10) {
 					field_count = 10;
 				}
+=======
+			let field_count = me.fields.length;
+
+			if (field_count < 4) {
+				field_count = 4;
+			} else if (field_count > 10) {
+				field_count = 10;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 
 			me.dialog.set_value("total_fields", field_count);
@@ -117,6 +126,7 @@ export default class ListSettings {
 					data-label="${me.fields[idx].label}" data-type="${me.fields[idx].type}">
 
 					<div class="row">
+<<<<<<< HEAD
 						<div class="col-1">
 							${frappe.utils.icon("drag", "xs", "", "", "sortable-handle " + show_sortable_handle)}
 						</div>
@@ -124,6 +134,15 @@ export default class ListSettings {
 							${__(me.fields[idx].label, null, me.doctype)}
 						</div>
 						<div class="col-1 ${can_remove}">
+=======
+						<div class="col-md-1">
+							${frappe.utils.icon("drag", "xs", "", "", "sortable-handle " + show_sortable_handle)}
+						</div>
+						<div class="col-md-10" style="padding-left:0px;">
+							${__(me.fields[idx].label, null, me.doctype)}
+						</div>
+						<div class="col-md-1 ${can_remove}">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							<a class="text-muted remove-field" data-fieldname="${me.fields[idx].fieldname}">
 								${frappe.utils.icon("delete", "xs")}
 							</a>
@@ -319,7 +338,11 @@ export default class ListSettings {
 		meta.fields.forEach((field) => {
 			if (
 				field.in_list_view &&
+<<<<<<< HEAD
 				!frappe.model.no_value_type.includes(field.fieldtype) &&
+=======
+				!in_list(frappe.model.no_value_type, field.fieldtype) &&
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				me.subject_field.fieldname != field.fieldname
 			) {
 				me.fields.push({
@@ -366,11 +389,19 @@ export default class ListSettings {
 		let multiselect_fields = [];
 
 		meta.fields.forEach((field) => {
+<<<<<<< HEAD
 			if (!frappe.model.no_value_type.includes(field.fieldtype)) {
 				multiselect_fields.push({
 					label: __(field.label, null, field.doctype),
 					value: field.fieldname,
 					checked: fields.includes(field.fieldname),
+=======
+			if (!in_list(frappe.model.no_value_type, field.fieldtype)) {
+				multiselect_fields.push({
+					label: __(field.label, null, field.doctype),
+					value: field.fieldname,
+					checked: in_list(fields, field.fieldname),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				});
 			}
 		});
@@ -387,7 +418,11 @@ export default class ListSettings {
 		}
 
 		existing_fields.forEach((column) => {
+<<<<<<< HEAD
 			if (!new_fields.includes(column)) {
+=======
+			if (!in_list(new_fields, column)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				removed_fields.push(column);
 			}
 		});

@@ -7,6 +7,7 @@ from frappe.model.document import Document
 
 
 class NavbarSettings(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -22,6 +23,8 @@ class NavbarSettings(Document):
 		settings_dropdown: DF.Table[NavbarItem]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		self.validate_standard_navbar_items()
 
@@ -44,10 +47,14 @@ class NavbarSettings(Document):
 
 
 def get_app_logo():
+<<<<<<< HEAD
 	app_logo = frappe.get_website_settings("app_logo") or frappe.db.get_single_value(
 		"Navbar Settings", "app_logo", cache=True
 	)
 
+=======
+	app_logo = frappe.db.get_single_value("Navbar Settings", "app_logo", cache=True)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if not app_logo:
 		logos = frappe.get_hooks("app_logo_url")
 		app_logo = logos[0]
@@ -58,4 +65,9 @@ def get_app_logo():
 
 
 def get_navbar_settings():
+<<<<<<< HEAD
 	return frappe.get_single("Navbar Settings")
+=======
+	navbar_settings = frappe.get_single("Navbar Settings")
+	return navbar_settings
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

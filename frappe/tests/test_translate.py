@@ -7,6 +7,7 @@ from unittest.mock import patch
 
 import frappe
 import frappe.translate
+<<<<<<< HEAD
 from frappe import _, _lt
 from frappe.gettext.extractors.javascript import extract_javascript
 from frappe.tests.utils import FrappeTestCase
@@ -14,6 +15,12 @@ from frappe.translate import (
 	MERGED_TRANSLATION_KEY,
 	USER_TRANSLATION_KEY,
 	clear_cache,
+=======
+from frappe import _
+from frappe.tests.utils import FrappeTestCase
+from frappe.translate import (
+	extract_javascript,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	extract_messages_from_javascript_code,
 	extract_messages_from_python_code,
 	get_language,
@@ -21,6 +28,7 @@ from frappe.translate import (
 	get_parent_language,
 	get_translation_dict_from_file,
 )
+<<<<<<< HEAD
 from frappe.utils import get_bench_path, set_request
 
 dirname = os.path.dirname(__file__)
@@ -28,13 +36,25 @@ translation_string_file = os.path.abspath(os.path.join(dirname, "translation_tes
 first_lang, second_lang, third_lang, fourth_lang, fifth_lang = choices(
 	# skip "en*" since it is a default language
 	frappe.get_all("Language", pluck="name", filters=[["name", "not like", "en%"], ["enabled", "=", 1]]),
+=======
+from frappe.utils import set_request
+
+dirname = os.path.dirname(__file__)
+translation_string_file = os.path.join(dirname, "translation_test_file.txt")
+first_lang, second_lang, third_lang, fourth_lang, fifth_lang = choices(
+	# skip "en*" since it is a default language
+	frappe.get_all("Language", pluck="name", filters=[["name", "not like", "en%"]]),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	k=5,
 )
 
 
+<<<<<<< HEAD
 _lazy_translations = _lt("Communication")
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 class TestTranslate(FrappeTestCase):
 	guest_sessions_required = (
 		"test_guest_request_language_resolution_with_cookie",
@@ -49,6 +69,7 @@ class TestTranslate(FrappeTestCase):
 		frappe.form_dict.pop("_lang", None)
 		if self._testMethodName in self.guest_sessions_required:
 			frappe.set_user("Administrator")
+<<<<<<< HEAD
 		frappe.local.lang = "en"
 
 	def test_clear_cache(self):
@@ -67,6 +88,12 @@ class TestTranslate(FrappeTestCase):
 		bench_path = get_bench_path()
 		file_path = frappe.get_app_path("frappe", "tests", "translation_test_file.txt")
 		exp_filename = os.path.relpath(file_path, bench_path)
+=======
+
+	def test_extract_message_from_file(self):
+		data = frappe.translate.get_messages_from_file(translation_string_file)
+		exp_filename = "apps/frappe/frappe/tests/translation_test_file.txt"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.assertEqual(
 			len(data),
@@ -82,6 +109,7 @@ class TestTranslate(FrappeTestCase):
 			self.assertEqual(ext_context, exp_context)
 			self.assertEqual(ext_line, exp_line)
 
+<<<<<<< HEAD
 	def test_read_language_variant(self):
 		self.assertEqual(_("Mobile No"), "Mobile No")
 		try:
@@ -112,6 +140,15 @@ class TestTranslate(FrappeTestCase):
 
 		# f string usually auto-casts
 		self.assertEqual(f"{_lazy_translations}", eager_translation)
+=======
+	def test_translation_with_context(self):
+		try:
+			frappe.local.lang = "fr"
+			self.assertEqual(_("Change"), "Changement")
+			self.assertEqual(_("Change", context="Coins"), "la monnaie")
+		finally:
+			frappe.local.lang = "en"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_request_language_resolution_with_form_dict(self):
 		"""Test for frappe.translate.get_language
@@ -199,7 +236,10 @@ class TestTranslate(FrappeTestCase):
 				)
 			_(not_a_string)
 			_(not_a_string, context="wat")
+<<<<<<< HEAD
 			_lt("Communication")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""
 		)
 		expected_output = [
@@ -209,7 +249,10 @@ class TestTranslate(FrappeTestCase):
 			(5, "name with", "name context"),
 			(6, "broken on", "new line"),
 			(10, "broken on separate line", None),
+<<<<<<< HEAD
 			(15, "Communication", None),
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		]
 
 		output = extract_messages_from_python_code(code)
@@ -268,6 +311,7 @@ class TestTranslate(FrappeTestCase):
 		args = get_args("""__("attr with", ["format", "replacements"])""")
 		self.assertEqual(args, "attr with")
 
+<<<<<<< HEAD
 		args = get_args("""__("attr with", null, "context")""")
 		self.assertEqual(args, ("attr with", None, "context"))
 
@@ -302,6 +346,8 @@ class TestTranslate(FrappeTestCase):
 			args, ("Multiline translation with format replacements and no context {0} {1}", None)
 		)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def verify_translation_files(app):
 	"""Function to verify translation file syntax in app."""

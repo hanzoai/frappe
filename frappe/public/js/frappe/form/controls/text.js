@@ -3,6 +3,7 @@ frappe.ui.form.ControlText = class ControlText extends frappe.ui.form.ControlDat
 	static horizontal = false;
 	make_wrapper() {
 		super.make_wrapper();
+<<<<<<< HEAD
 
 		const disp_area = this.$wrapper.find(".like-disabled-input");
 		disp_area.addClass("for-description");
@@ -10,6 +11,9 @@ frappe.ui.form.ControlText = class ControlText extends frappe.ui.form.ControlDat
 		if (this.df.max_height) {
 			disp_area.css({ "max-height": this.df.max_height, overflow: "auto" });
 		}
+=======
+		this.$wrapper.find(".like-disabled-input").addClass("for-description");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	make_input() {
 		super.make_input();

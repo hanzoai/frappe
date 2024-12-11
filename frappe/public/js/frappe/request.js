@@ -19,7 +19,11 @@ frappe.xcall = function (method, params) {
 				resolve(r.message);
 			},
 			error: (r) => {
+<<<<<<< HEAD
 				reject(r?.message);
+=======
+				reject(r.message);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			},
 		});
 	});
@@ -75,7 +79,11 @@ frappe.call = function (opts) {
 	var callback = function (data, response_text) {
 		if (data.task_id) {
 			// async call, subscribe
+<<<<<<< HEAD
 			frappe.realtime.subscribe(data.task_id, opts);
+=======
+			frappe.socketio.subscribe(data.task_id, opts);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			if (opts.queued) {
 				opts.queued(data);
@@ -88,11 +96,15 @@ frappe.call = function (opts) {
 
 	let url = opts.url;
 	if (!url) {
+<<<<<<< HEAD
 		let prefix = "/api/method/";
 		if (opts.api_version) {
 			prefix = `/api/${opts.api_version}/method/`;
 		}
 		url = prefix + args.cmd;
+=======
+		url = "/api/method/" + args.cmd;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (window.cordova) {
 			let host = frappe.request.url;
 			host = host.slice(0, host.length - 1);
@@ -120,7 +132,10 @@ frappe.call = function (opts) {
 		// show_spinner: !opts.no_spinner,
 		async: opts.async,
 		silent: opts.silent,
+<<<<<<< HEAD
 		api_version: opts.api_version,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		url,
 	});
 };
@@ -138,7 +153,10 @@ frappe.request.call = function (opts) {
 			} else {
 				frappe.app.handle_session_expired();
 			}
+<<<<<<< HEAD
 			opts.error_callback && opts.error_callback();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		},
 		404: function (xhr) {
 			frappe.msgprint({
@@ -146,7 +164,10 @@ frappe.request.call = function (opts) {
 				indicator: "red",
 				message: __("The resource you are looking for is not available"),
 			});
+<<<<<<< HEAD
 			opts.error_callback && opts.error_callback();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		},
 		403: function (xhr) {
 			if (frappe.session.user === "Guest" && frappe.session.logged_in_user !== "Guest") {
@@ -176,7 +197,10 @@ frappe.request.call = function (opts) {
 					),
 				});
 			}
+<<<<<<< HEAD
 			opts.error_callback && opts.error_callback();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		},
 		508: function (xhr) {
 			frappe.utils.play_sound("error");
@@ -187,7 +211,10 @@ frappe.request.call = function (opts) {
 					"Another transaction is blocking this one. Please try again in a few seconds."
 				),
 			});
+<<<<<<< HEAD
 			opts.error_callback && opts.error_callback();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		},
 		413: function (data, xhr) {
 			frappe.msgprint({
@@ -197,7 +224,10 @@ frappe.request.call = function (opts) {
 					(frappe.boot.max_file_size || 5242880) / 1048576,
 				]),
 			});
+<<<<<<< HEAD
 			opts.error_callback && opts.error_callback();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		},
 		417: function (xhr) {
 			var r = xhr.responseJSON;
@@ -230,7 +260,10 @@ frappe.request.call = function (opts) {
 		},
 		502: function (xhr) {
 			frappe.msgprint(__("Internal Server Error"));
+<<<<<<< HEAD
 			opts.error_callback && opts.error_callback();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		},
 	};
 
@@ -305,8 +338,13 @@ frappe.request.call = function (opts) {
 					status_code_handler(data, xhr);
 				}
 			} catch (e) {
+<<<<<<< HEAD
 				console.log("Unable to handle success response", data);
 				console.error(e);
+=======
+				console.log("Unable to handle success response", data); // eslint-disable-line
+				console.error(e); // eslint-disable-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		})
 		.always(function (data, textStatus, xhr) {
@@ -315,7 +353,11 @@ frappe.request.call = function (opts) {
 					data = JSON.parse(data);
 				}
 				if (data.responseText) {
+<<<<<<< HEAD
 					var xhr = data; // eslint-disable-line
+=======
+					var xhr = data;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					data = JSON.parse(data.responseText);
 				}
 			} catch (e) {
@@ -359,8 +401,13 @@ frappe.request.call = function (opts) {
 				// if not handled by error handler!
 				opts.error_callback && opts.error_callback(xhr);
 			} catch (e) {
+<<<<<<< HEAD
 				console.log("Unable to handle failed response");
 				console.error(e);
+=======
+				console.log("Unable to handle failed response"); // eslint-disable-line
+				console.error(e); // eslint-disable-line
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		});
 };
@@ -377,6 +424,10 @@ frappe.request.is_fresh = function (args, threshold) {
 			new Date() - past_request.timestamp < threshold &&
 			frappe.utils.deep_equal(args, past_request.args)
 		) {
+<<<<<<< HEAD
+=======
+			// eslint-disable-next-line no-console
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			console.log("throttled");
 			return true;
 		}
@@ -449,6 +500,7 @@ frappe.request.cleanup = function (opts, r) {
 		}
 
 		// show messages
+<<<<<<< HEAD
 		//
 		let messages;
 		if (opts.api_version == "v2") {
@@ -461,6 +513,14 @@ frappe.request.cleanup = function (opts, r) {
 			if (handlers.length === 0) {
 				frappe.hide_msgprint();
 				frappe.msgprint(messages);
+=======
+		if (r._server_messages && !opts.silent) {
+			// show server messages if no handlers exist
+			if (handlers.length === 0) {
+				r._server_messages = JSON.parse(r._server_messages);
+				frappe.hide_msgprint();
+				frappe.msgprint(r._server_messages);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		}
 
@@ -483,8 +543,13 @@ frappe.request.cleanup = function (opts, r) {
 			if (opts.args) {
 				console.log("======== arguments ========");
 				console.log(opts.args);
+<<<<<<< HEAD
 			}
 			console.log("======== debug messages ========");
+=======
+				console.log("========");
+			}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			$.each(JSON.parse(r._debug_messages), function (i, v) {
 				console.log(v);
 			});
@@ -540,9 +605,12 @@ frappe.request.report_error = function (xhr, request_opts) {
 
 	const copy_markdown_to_clipboard = () => {
 		const code_block = (snippet) => "```\n" + snippet + "\n```";
+<<<<<<< HEAD
 
 		let request_data = Object.assign({}, request_opts);
 		request_data.request_id = xhr.getResponseHeader("X-Frappe-Request-Id");
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		const traceback_info = [
 			"### App Versions",
 			code_block(JSON.stringify(frappe.boot.versions, null, "\t")),
@@ -551,7 +619,11 @@ frappe.request.report_error = function (xhr, request_opts) {
 			"### Traceback",
 			code_block(exc),
 			"### Request Data",
+<<<<<<< HEAD
 			code_block(JSON.stringify(request_data, null, "\t")),
+=======
+			code_block(JSON.stringify(request_opts, null, "\t")),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			"### Response Data",
 			code_block(JSON.stringify(data, null, "\t")),
 		].join("\n");
@@ -604,6 +676,7 @@ frappe.request.report_error = function (xhr, request_opts) {
 		if (!frappe.error_dialog) {
 			frappe.error_dialog = new frappe.ui.Dialog({
 				title: __("Server Error"),
+<<<<<<< HEAD
 			});
 
 			if (error_report_email) {
@@ -617,11 +690,29 @@ frappe.request.report_error = function (xhr, request_opts) {
 					frappe.error_dialog.hide();
 				});
 			}
+=======
+				primary_action_label: __("Report"),
+				primary_action: () => {
+					if (error_report_email) {
+						show_communication();
+					} else {
+						frappe.msgprint(__("Support Email Address Not Specified"));
+					}
+					frappe.error_dialog.hide();
+				},
+				secondary_action_label: __("Copy error to clipboard"),
+				secondary_action: () => {
+					copy_markdown_to_clipboard();
+					frappe.error_dialog.hide();
+				},
+			});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			frappe.error_dialog.wrapper.classList.add("msgprint-dialog");
 		}
 
 		let parts = strip(exc).split("\n");
 
+<<<<<<< HEAD
 		let dialog_html = parts[parts.length - 1];
 
 		if (data._exc_source) {
@@ -630,6 +721,9 @@ frappe.request.report_error = function (xhr, request_opts) {
 		}
 
 		frappe.error_dialog.$body.html(dialog_html);
+=======
+		frappe.error_dialog.$body.html(parts[parts.length - 1]);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.error_dialog.show();
 	}
 };

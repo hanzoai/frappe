@@ -47,9 +47,23 @@ def setup_patched_blog_post():
 	yield
 
 
+<<<<<<< HEAD
 class TestDBQuery(FrappeTestCase):
 	def setUp(self):
 		frappe.set_user("Administrator")
+=======
+@contextmanager
+def enable_permlevel_restrictions():
+	frappe.db.set_single_value("System Settings", "apply_perm_level_on_api_calls", 1)
+	yield
+	frappe.db.set_single_value("System Settings", "apply_perm_level_on_api_calls", 0)
+
+
+class TestReportview(FrappeTestCase):
+	def setUp(self):
+		frappe.set_user("Administrator")
+		return super().setUp()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_basic(self):
 		self.assertTrue({"name": "DocType"} in DatabaseQuery("DocType").execute(limit_page_length=None))
@@ -58,11 +72,15 @@ class TestDBQuery(FrappeTestCase):
 		db_query = DatabaseQuery("DocType")
 		add_custom_field("DocType", "test_tab_field", "Data")
 
+<<<<<<< HEAD
 		db_query.fields = [
 			"tabNote.creation",
 			"test_tab_field",
 			"tabDocType.test_tab_field",
 		]
+=======
+		db_query.fields = ["tabNote.creation", "test_tab_field", "tabDocType.test_tab_field"]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		db_query.extract_tables()
 		self.assertIn("`tabNote`", db_query.tables)
 		self.assertIn("`tabDocType`", db_query.tables)
@@ -109,7 +127,10 @@ class TestDBQuery(FrappeTestCase):
 				"doctype": "DocType",
 				"name": "Parent DocType 1",
 				"module": "Custom",
+<<<<<<< HEAD
 				"autoname": "Prompt",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				"custom": 1,
 				"fields": [
 					{"label": "Title", "fieldname": "title", "fieldtype": "Data"},
@@ -128,7 +149,10 @@ class TestDBQuery(FrappeTestCase):
 			{
 				"doctype": "DocType",
 				"name": "Parent DocType 2",
+<<<<<<< HEAD
 				"autoname": "Prompt",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				"module": "Custom",
 				"custom": 1,
 				"fields": [
@@ -153,10 +177,14 @@ class TestDBQuery(FrappeTestCase):
 		frappe.get_doc(
 			doctype="Parent DocType 1",
 			title="test",
+<<<<<<< HEAD
 			child=[
 				{"title": "parent 1 child record 1"},
 				{"title": "parent 1 child record 2"},
 			],
+=======
+			child=[{"title": "parent 1 child record 1"}, {"title": "parent 1 child record 2"}],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			__newname="test_parent",
 		).insert(ignore_if_duplicate=True)
 		frappe.get_doc(
@@ -223,8 +251,11 @@ class TestDBQuery(FrappeTestCase):
 
 		self.assertEqual(build_match_conditions(as_condition=True), assertion_string)
 
+<<<<<<< HEAD
 		frappe.set_user("Administrator")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_fields(self):
 		self.assertTrue(
 			{"name": "DocType", "issingle": 0}
@@ -303,8 +334,12 @@ class TestDBQuery(FrappeTestCase):
 
 		# if both from and to_date values are passed
 		data = DatabaseQuery("Event").execute(
+<<<<<<< HEAD
 			filters={"starts_on": ["between", ["2016-07-06", "2016-07-07"]]},
 			fields=["name"],
+=======
+			filters={"starts_on": ["between", ["2016-07-06", "2016-07-07"]]}, fields=["name"]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 
 		self.assertIn({"name": event2.name}, data)
@@ -325,8 +360,12 @@ class TestDBQuery(FrappeTestCase):
 
 		# test between is formatted for creation column
 		data = DatabaseQuery("Event").execute(
+<<<<<<< HEAD
 			filters={"creation": ["between", ["2016-07-06", "2016-07-07"]]},
 			fields=["name"],
+=======
+			filters={"creation": ["between", ["2016-07-06", "2016-07-07"]]}, fields=["name"]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 
 	def test_between_filters_date_bounds(self):
@@ -364,7 +403,10 @@ class TestDBQuery(FrappeTestCase):
 		frappe.set_user("test2@example.com")
 		self.assertRaises(frappe.PermissionError, get_filters_cond, "DocType", dict(istable=1), [])
 		self.assertTrue(get_filters_cond("DocType", dict(istable=1), [], ignore_permissions=True))
+<<<<<<< HEAD
 		frappe.set_user("Administrator")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_query_fields_sanitizer(self):
 		self.assertRaises(
@@ -378,10 +420,14 @@ class TestDBQuery(FrappeTestCase):
 		self.assertRaises(
 			frappe.DataError,
 			DatabaseQuery("DocType").execute,
+<<<<<<< HEAD
 			fields=[
 				"name",
 				"issingle, IF(issingle=1, (select name from tabUser), count(name))",
 			],
+=======
+			fields=["name", "issingle, IF(issingle=1, (select name from tabUser), count(name))"],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			limit_start=0,
 			limit_page_length=1,
 		)
@@ -405,10 +451,14 @@ class TestDBQuery(FrappeTestCase):
 		self.assertRaises(
 			frappe.DataError,
 			DatabaseQuery("DocType").execute,
+<<<<<<< HEAD
 			fields=[
 				"name",
 				"issingle, IF(issingle=1, (SELECT name from tabUser), count(*))",
 			],
+=======
+			fields=["name", "issingle, IF(issingle=1, (SELECT name from tabUser), count(*))"],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			limit_start=0,
 			limit_page_length=1,
 		)
@@ -482,20 +532,28 @@ class TestDBQuery(FrappeTestCase):
 		self.assertTrue("_relevance" in data[0])
 
 		data = DatabaseQuery("DocType").execute(
+<<<<<<< HEAD
 			fields=["name", "issingle", "date(creation) as creation"],
 			limit_start=0,
 			limit_page_length=1,
+=======
+			fields=["name", "issingle", "date(creation) as creation"], limit_start=0, limit_page_length=1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 		self.assertTrue("creation" in data[0])
 
 		if frappe.db.db_type != "postgres":
 			# datediff function does not exist in postgres
 			data = DatabaseQuery("DocType").execute(
+<<<<<<< HEAD
 				fields=[
 					"name",
 					"issingle",
 					"datediff(modified, creation) as date_diff",
 				],
+=======
+				fields=["name", "issingle", "datediff(modified, creation) as date_diff"],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				limit_start=0,
 				limit_page_length=1,
 			)
@@ -503,22 +561,30 @@ class TestDBQuery(FrappeTestCase):
 
 		with self.assertRaises(frappe.DataError):
 			DatabaseQuery("DocType").execute(
+<<<<<<< HEAD
 				fields=[
 					"name",
 					"issingle",
 					"if (issingle=1, (select name from tabUser), count(name))",
 				],
+=======
+				fields=["name", "issingle", "if (issingle=1, (select name from tabUser), count(name))"],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				limit_start=0,
 				limit_page_length=1,
 			)
 
 		with self.assertRaises(frappe.DataError):
 			DatabaseQuery("DocType").execute(
+<<<<<<< HEAD
 				fields=[
 					"name",
 					"issingle",
 					"if(issingle=1, (select name from tabUser), count(name))",
 				],
+=======
+				fields=["name", "issingle", "if(issingle=1, (select name from tabUser), count(name))"],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				limit_start=0,
 				limit_page_length=1,
 			)
@@ -547,7 +613,10 @@ class TestDBQuery(FrappeTestCase):
 			)
 
 	def test_nested_permission(self):
+<<<<<<< HEAD
 		frappe.set_user("Administrator")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		create_nested_doctype()
 		create_nested_doctype_records()
 		clear_user_permissions_for_doctype("Nested DocType")
@@ -571,7 +640,10 @@ class TestDBQuery(FrappeTestCase):
 		self.assertFalse({"name": "Level 1 B"} in data)
 		self.assertFalse({"name": "Level 2 B"} in data)
 		update("Nested DocType", "All", 0, "if_owner", 1)
+<<<<<<< HEAD
 		frappe.set_user("Administrator")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_filter_sanitizer(self):
 		self.assertRaises(
@@ -608,10 +680,14 @@ class TestDBQuery(FrappeTestCase):
 			DatabaseQuery("DocType").execute,
 			fields=["name"],
 			filters={"editable_grid,": 1},
+<<<<<<< HEAD
 			or_filters=[
 				["DocType", "istable", "=", 1],
 				["DocType", "beta and 1=1", "=", 0],
 			],
+=======
+			or_filters=[["DocType", "istable", "=", 1], ["DocType", "beta and 1=1", "=", 0]],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			limit_start=0,
 			limit_page_length=1,
 		)
@@ -633,18 +709,26 @@ class TestDBQuery(FrappeTestCase):
 		self.assertTrue("Role Permission for Page and Report" in [d["name"] for d in out])
 
 		out = DatabaseQuery("DocType").execute(
+<<<<<<< HEAD
 			fields=["name"],
 			filters={"track_changes": 1, "module": "Core"},
 			order_by="creation",
+=======
+			fields=["name"], filters={"track_changes": 1, "module": "Core"}, order_by="creation"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 		self.assertTrue("File" in [d["name"] for d in out])
 
 		out = DatabaseQuery("DocType").execute(
 			fields=["name"],
+<<<<<<< HEAD
 			filters=[
 				["DocType", "ifnull(track_changes, 0)", "=", 0],
 				["DocType", "module", "=", "Core"],
 			],
+=======
+			filters=[["DocType", "ifnull(track_changes, 0)", "=", 0], ["DocType", "module", "=", "Core"]],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			order_by="creation",
 		)
 		self.assertTrue("DefaultValue" in [d["name"] for d in out])
@@ -690,7 +774,10 @@ class TestDBQuery(FrappeTestCase):
 			)
 
 	def test_of_not_of_descendant_ancestors(self):
+<<<<<<< HEAD
 		frappe.set_user("Administrator")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		clear_user_permissions_for_doctype("Nested DocType")
 
 		# in descendants filter
@@ -841,32 +928,46 @@ class TestDBQuery(FrappeTestCase):
 		self.assertNotEqual(users_edited[0].modified, users_edited[0].creation)
 
 	def test_permlevel_fields(self):
+<<<<<<< HEAD
 		with setup_patched_blog_post(), setup_test_user(set_user=True):
 			data = frappe.get_list(
 				"Blog Post",
 				filters={"published": 1},
 				fields=["name", "published"],
 				limit=1,
+=======
+		with enable_permlevel_restrictions(), setup_patched_blog_post(), setup_test_user(set_user=True):
+			data = frappe.get_list(
+				"Blog Post", filters={"published": 1}, fields=["name", "published"], limit=1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			)
 			self.assertFalse("published" in data[0])
 			self.assertTrue("name" in data[0])
 			self.assertEqual(len(data[0]), 1)
 
 			data = frappe.get_list(
+<<<<<<< HEAD
 				"Blog Post",
 				filters={"published": 1},
 				fields=["name", "`published`"],
 				limit=1,
+=======
+				"Blog Post", filters={"published": 1}, fields=["name", "`published`"], limit=1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			)
 			self.assertFalse("published" in data[0])
 			self.assertTrue("name" in data[0])
 			self.assertEqual(len(data[0]), 1)
 
 			data = frappe.get_list(
+<<<<<<< HEAD
 				"Blog Post",
 				filters={"published": 1},
 				fields=["name", "`tabBlog Post`.`published`"],
 				limit=1,
+=======
+				"Blog Post", filters={"published": 1}, fields=["name", "`tabBlog Post`.`published`"], limit=1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			)
 			self.assertFalse("published" in data[0])
 			self.assertTrue("name" in data[0])
@@ -883,19 +984,27 @@ class TestDBQuery(FrappeTestCase):
 			self.assertEqual(len(data[0]), 1)
 
 			data = frappe.get_list(
+<<<<<<< HEAD
 				"Blog Post",
 				filters={"published": 1},
 				fields=["name", "MAX(`published`)"],
 				limit=1,
+=======
+				"Blog Post", filters={"published": 1}, fields=["name", "MAX(`published`)"], limit=1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			)
 			self.assertTrue("name" in data[0])
 			self.assertEqual(len(data[0]), 1)
 
 			data = frappe.get_list(
+<<<<<<< HEAD
 				"Blog Post",
 				filters={"published": 1},
 				fields=["name", "LAST(published)"],
 				limit=1,
+=======
+				"Blog Post", filters={"published": 1}, fields=["name", "LAST(published)"], limit=1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			)
 			self.assertTrue("name" in data[0])
 			self.assertEqual(len(data[0]), 1)
@@ -911,20 +1020,28 @@ class TestDBQuery(FrappeTestCase):
 			self.assertEqual(len(data[0]), 2)
 
 			data = frappe.get_list(
+<<<<<<< HEAD
 				"Blog Post",
 				filters={"published": 1},
 				fields=["name", "now() abhi"],
 				limit=1,
+=======
+				"Blog Post", filters={"published": 1}, fields=["name", "now() abhi"], limit=1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			)
 			self.assertIsInstance(data[0]["abhi"], datetime.datetime)
 			self.assertEqual(len(data[0]), 2)
 
+<<<<<<< HEAD
 			data = frappe.get_list(
 				"Blog Post",
 				filters={"published": 1},
 				fields=["name", "'LABEL'"],
 				limit=1,
 			)
+=======
+			data = frappe.get_list("Blog Post", filters={"published": 1}, fields=["name", "'LABEL'"], limit=1)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			self.assertTrue("name" in data[0])
 			self.assertTrue("LABEL" in data[0].values())
 			self.assertEqual(len(data[0]), 2)
@@ -953,16 +1070,62 @@ class TestDBQuery(FrappeTestCase):
 
 			data = frappe.get_list(
 				"Blog Post",
+<<<<<<< HEAD
 				fields=[
 					"name",
 					"blogger.full_name as blogger_full_name",
 					"blog_category.description",
 				],
+=======
+				fields=["name", "blogger.full_name as blogger_full_name", "blog_category.description"],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				limit=1,
 			)
 			self.assertTrue("name" in data[0])
 			self.assertTrue("blogger_full_name" in data[0])
+<<<<<<< HEAD
 			self.assertTrue("description" in data[0])
+=======
+			self.assertTrue("description" not in data[0])  # field does not exist
+
+	def test_reportview_get_permlevel_system_users(self):
+		with setup_patched_blog_post(), setup_test_user(set_user=True):
+			frappe.local.request = frappe._dict()
+			frappe.local.request.method = "POST"
+			frappe.local.form_dict = frappe._dict(
+				{
+					"doctype": "Blog Post",
+					"fields": ["published", "title", "`tabTest Child`.`test_field`"],
+				}
+			)
+
+			# even if * is passed, fields which are not accessible should be filtered out
+			response = execute_cmd("frappe.desk.reportview.get")
+			self.assertListEqual(response["keys"], ["title"])
+			frappe.local.form_dict = frappe._dict(
+				{
+					"doctype": "Blog Post",
+					"fields": ["*"],
+				}
+			)
+
+			response = execute_cmd("frappe.desk.reportview.get")
+			self.assertNotIn("published", response["keys"])
+
+	def test_reportview_get_admin(self):
+		# Admin should be able to see access all fields
+		with setup_patched_blog_post():
+			frappe.local.request = frappe._dict()
+			frappe.local.request.method = "POST"
+			frappe.local.form_dict = frappe._dict(
+				{
+					"doctype": "Blog Post",
+					"fields": ["published", "title", "`tabTest Child`.`test_field`"],
+				}
+			)
+			response = execute_cmd("frappe.desk.reportview.get")
+			self.assertListEqual(response["keys"], ["published", "title", "test_field"])
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_cast_name(self):
 		from frappe.core.doctype.doctype.test_doctype import new_doctype
@@ -971,11 +1134,15 @@ class TestDBQuery(FrappeTestCase):
 		dt = new_doctype("autoinc_dt_test", autoname="autoincrement").insert(ignore_permissions=True)
 
 		query = DatabaseQuery("autoinc_dt_test").execute(
+<<<<<<< HEAD
 			fields=[
 				"locate('1', `tabautoinc_dt_test`.`name`)",
 				"name",
 				"locate('1', name)",
 			],
+=======
+			fields=["locate('1', `tabautoinc_dt_test`.`name`)", "name", "locate('1', name)"],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			filters={"name": 1},
 			run=False,
 		)
@@ -998,9 +1165,13 @@ class TestDBQuery(FrappeTestCase):
 		frappe.delete_doc_if_exists("DocType", "table_dt")
 
 		table_dt = new_doctype(
+<<<<<<< HEAD
 			"table_dt",
 			istable=1,
 			fields=[{"label": "1field", "fieldname": "2field", "fieldtype": "Data"}],
+=======
+			"table_dt", istable=1, fields=[{"label": "1field", "fieldname": "2field", "fieldtype": "Data"}]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		).insert()
 
 		dt = new_doctype(
@@ -1045,9 +1216,13 @@ class TestDBQuery(FrappeTestCase):
 		table_dt.delete()
 
 	def test_permission_query_condition(self):
+<<<<<<< HEAD
 		from frappe.desk.doctype.dashboard_settings.dashboard_settings import (
 			create_dashboard_settings,
 		)
+=======
+		from frappe.desk.doctype.dashboard_settings.dashboard_settings import create_dashboard_settings
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.doctype = "Dashboard Settings"
 		self.user = "test'5@example.com"
@@ -1079,10 +1254,14 @@ class TestDBQuery(FrappeTestCase):
 			def get_list(args):
 				...
 
+<<<<<<< HEAD
 		with patch(
 			"frappe.controllers",
 			new={frappe.local.site: {"Virtual DocType": VirtualDocType}},
 		):
+=======
+		with patch("frappe.controllers", new={frappe.local.site: {"Virtual DocType": VirtualDocType}}):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			VirtualDocType.get_list = MagicMock()
 
 			frappe.get_all("Virtual DocType", filters={"name": "test"}, fields=["name"], limit=1)
@@ -1190,6 +1369,7 @@ class TestDBQuery(FrappeTestCase):
 		data = get()
 		self.assertEqual(len(data["values"]), 1)
 
+<<<<<<< HEAD
 	def test_select_star_expansion(self):
 		count = frappe.get_list("Language", ["SUM(1)", "COUNT(*)"], as_list=1, order_by=None)[0]
 		self.assertEqual(count[0], frappe.db.count("Language"))
@@ -1197,6 +1377,14 @@ class TestDBQuery(FrappeTestCase):
 
 
 class TestReportView(FrappeTestCase):
+=======
+
+class TestReportView(FrappeTestCase):
+	def setUp(self) -> None:
+		frappe.set_user("Administrator")
+		return super().setUp()
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@run_only_if(db_type_is.MARIADB)  # TODO: postgres name casting is messed up
 	def test_get_count(self):
 		frappe.local.request = frappe._dict()
@@ -1213,11 +1401,15 @@ class TestReportView(FrappeTestCase):
 		)
 		count = execute_cmd("frappe.desk.reportview.get_count")
 		frappe.local.form_dict = frappe._dict(
+<<<<<<< HEAD
 			{
 				"doctype": "DocType",
 				"filters": {"show_title_field_in_link": 1},
 				"distinct": "true",
 			}
+=======
+			{"doctype": "DocType", "filters": {"show_title_field_in_link": 1}, "distinct": "true"}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 		dict_filter_response = execute_cmd("frappe.desk.reportview.get_count")
 		self.assertIsInstance(count, int)
@@ -1325,9 +1517,12 @@ class TestReportView(FrappeTestCase):
 
 		frappe.set_user("Administrator")
 		user.add_roles("Website Manager")
+<<<<<<< HEAD
 		frappe.set_user(user.name)
 
 		frappe.set_user("Administrator")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# Admin should be able to see access all fields
 		frappe.local.form_dict = frappe._dict(
@@ -1346,8 +1541,12 @@ class TestReportView(FrappeTestCase):
 
 	def test_reportview_get_aggregation(self):
 		# test aggregation based on child table field
+<<<<<<< HEAD
 		frappe.local.request = frappe._dict()
 		frappe.local.request.method = "POST"
+=======
+		frappe.local.request = frappe._dict(method="GET")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.local.form_dict = frappe._dict(
 			{
 				"doctype": "DocType",
@@ -1368,6 +1567,7 @@ class TestReportView(FrappeTestCase):
 		response = execute_cmd("frappe.desk.reportview.get")
 		self.assertListEqual(response["keys"], ["field_label", "field_name", "_aggregate_column"])
 
+<<<<<<< HEAD
 	def test_reportview_get_permlevel_system_users(self):
 		with setup_patched_blog_post(), setup_test_user(set_user=True):
 			frappe.local.request = frappe._dict()
@@ -1409,6 +1609,8 @@ class TestReportView(FrappeTestCase):
 			response = execute_cmd("frappe.desk.reportview.get")
 			self.assertListEqual(response["keys"], ["published", "title", "test_field"])
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def add_child_table_to_blog_post():
 	child_table = frappe.get_doc(

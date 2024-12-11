@@ -31,7 +31,11 @@ frappe.ui.TagEditor = class TagEditor {
 
 		this.tags = new frappe.ui.Tags({
 			parent: this.wrapper,
+<<<<<<< HEAD
 			placeholder: '<svg class="es-icon icon-sm"><use href="#es-line-add"></use></svg>',
+=======
+			placeholder: __("Add a tag ..."),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			onTagAdd: (tag) => {
 				if (me.initialized && !me.refreshing) {
 					return frappe.call({

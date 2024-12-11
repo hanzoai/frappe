@@ -13,38 +13,63 @@ $threshold: 34;
 		"clamp(var(--zero-px), 50% - #{$badge-size}/2, max(var(--zero-px), (#{$threshold}px - (50% - #{$badge-size}/2)) * #{$threshold}))"
 	);
 	left: calc(-1 * (#{$badge-size} / 2));
+<<<<<<< HEAD
 	background-color: var(--timeline-badge-bg);
 	@extend .center-content;
 	--icon-stroke: var(--timeline-badge-color);
+=======
+	background-color: var(--fg-color);
+	border: 1px solid var(--dark-border-color);
+	@extend .center-content;
+	--icon-stroke: var(--gray-600);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .new-timeline {
 	position: relative;
+<<<<<<< HEAD
+=======
+	padding-left: var(--timeline-left-padding);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	padding-top: var(--padding-lg);
 
 	@include media-breakpoint-down(xs) {
 		padding-left: calc(var(--padding-sm) + var(--timeline-item-icon-size) / 2);
 	}
+<<<<<<< HEAD
 	&:before {
 		content: " ";
 		top: 90px; // TODO: get top and bottom programmatically
 		left: calc(var(--timeline-item-icon-size) / 2);
+=======
+
+	&:before {
+		content: " ";
+		top: 40px; // TODO: get top and bottom programmatically
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		position: absolute;
 		border-left: 1px solid var(--dark-border-color);
 		bottom: calc(-1 * var(--timeline-item-bottom-margin) + 25px);
 	}
 	.timeline-dot {
 		@include timeline-badge(16px);
+<<<<<<< HEAD
 		left: calc(-1.25 * var(--timeline-item-left-margin) / 2);
 		background: var(--bg-color);
 		&:before {
 			content: " ";
 			background: var(--timeline-badge-color);
+=======
+		&:before {
+			content: " ";
+			background: var(--gray-600);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			border-radius: 50%;
 			height: 4px;
 			width: 4px;
 		}
 	}
+<<<<<<< HEAD
 	.activity-title,
 	.timeline-actions {
 		margin-bottom: 0 !important;
@@ -75,6 +100,29 @@ $threshold: 34;
 		b {
 			color: var(--text-color);
 			@include get_textstyle("base", "medium");
+=======
+	.activity-toggle {
+		h4 {
+			margin-bottom: 0;
+			font-weight: 700;
+		}
+		nav {
+			margin-left: var(--margin-md);
+			.nav-link {
+				padding: var(--padding-xs) var(--padding-sm);
+				margin-right: var(--margin-xs);
+				border-radius: 50px;
+			}
+		}
+	}
+	.timeline-item {
+		font-size: var(--text-md);
+		position: relative;
+		margin-bottom: var(--timeline-item-bottom-margin);
+		b {
+			color: var(--text-color);
+			font-weight: var(--text-bold);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		.action-buttons {
 			display: inline-flex;
@@ -94,6 +142,7 @@ $threshold: 34;
 			}
 		}
 		.timeline-content {
+<<<<<<< HEAD
 			position: relative;
 			max-width: var(--timeline-content-max-width);
 			padding: var(--padding-sm);
@@ -119,11 +168,23 @@ $threshold: 34;
 						padding: 0;
 					}
 				}
+=======
+			max-width: var(--timeline-content-max-width);
+			padding: var(--padding-sm);
+			margin-left: var(--timeline-item-left-margin);
+			&.frappe-card {
+				@include card($padding: var(--padding-md));
+				margin: calc(var(--timeline-item-bottom-margin) + var(--padding-md)) 0;
+				margin-left: calc(var(--timeline-item-left-margin) + var(--padding-sm));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		}
 		.timeline-badge {
 			@include timeline-badge(var(--timeline-item-icon-size));
+<<<<<<< HEAD
 			left: calc(-1 * var(--timeline-item-left-margin));
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		.timeline-load-more {
 			margin-left: calc(var(--timeline-item-left-margin) + var(--padding-sm));
@@ -133,6 +194,7 @@ $threshold: 34;
 
 		.timeline-message-box {
 			.content {
+<<<<<<< HEAD
 				overflow: auto;
 				max-height: 500px;
 				&::before {
@@ -144,6 +206,11 @@ $threshold: 34;
 					position: absolute;
 					background-color: var(--border-color);
 				}
+=======
+				margin-top: var(--margin-md);
+				overflow: auto;
+				max-height: 500px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 
 			.actions {
@@ -157,6 +224,7 @@ $threshold: 34;
 				padding: 0;
 				padding-bottom: 0;
 				margin-left: var(--margin-sm);
+<<<<<<< HEAD
 				background-color: transparent;
 				--icon-stroke: var(--text-muted);
 			}
@@ -164,6 +232,10 @@ $threshold: 34;
 			.custom-actions {
 				@include get_textstyle("sm", "regular");
 			}
+=======
+				--icon-stroke: var(--text-muted);
+			}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			.action-btn:hover {
 				text-decoration: none;

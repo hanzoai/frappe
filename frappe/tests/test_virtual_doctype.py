@@ -7,11 +7,17 @@ import frappe.modules.utils
 from frappe.core.doctype.doctype.test_doctype import new_doctype
 from frappe.desk.form.save import savedocs
 from frappe.model.document import Document
+<<<<<<< HEAD
 from frappe.model.virtual_doctype import validate_controller
 from frappe.tests.utils import FrappeTestCase
 
 TEST_DOCTYPE_NAME = "VirtualDoctypeTest"
 TEST_CHILD_DOCTYPE_NAME = "VirtualDoctypeTestChild"
+=======
+from frappe.tests.utils import FrappeTestCase
+
+TEST_DOCTYPE_NAME = "VirtualDoctypeTest"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 class VirtualDoctypeTest(Document):
@@ -88,6 +94,7 @@ class TestVirtualDoctypes(FrappeTestCase):
 		frappe.flags.allow_doctype_export = True
 		cls.addClassCleanup(frappe.flags.pop, "allow_doctype_export", None)
 
+<<<<<<< HEAD
 		cdt = new_doctype(name=TEST_CHILD_DOCTYPE_NAME, is_virtual=1, istable=1, custom=0).insert()
 		vdt = new_doctype(
 			name=TEST_DOCTYPE_NAME,
@@ -104,6 +111,10 @@ class TestVirtualDoctypes(FrappeTestCase):
 		).insert()
 		cls.addClassCleanup(vdt.delete, force=True)
 		cls.addClassCleanup(cdt.delete, force=True)
+=======
+		vdt = new_doctype(name=TEST_DOCTYPE_NAME, is_virtual=1, custom=0).insert()
+		cls.addClassCleanup(vdt.delete)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		patch_virtual_doc = patch(
 			"frappe.controllers", new={frappe.local.site: {TEST_DOCTYPE_NAME: VirtualDoctypeTest}}
@@ -135,6 +146,7 @@ class TestVirtualDoctypes(FrappeTestCase):
 		docname = frappe.response.docs[0]["name"]
 
 		doc = frappe.get_doc(TEST_DOCTYPE_NAME, docname)
+<<<<<<< HEAD
 
 		doc.update({"child_table": [{"name": "child-1", "some_fieldname": "child1-field-value"}]})
 
@@ -149,6 +161,18 @@ class TestVirtualDoctypes(FrappeTestCase):
 		doc2 = frappe.new_doc(doctype=TEST_DOCTYPE_NAME)
 		doc2.append("child_table", {"name": "second", "some_fieldname": "second-value"})
 		doc2.insert()
+=======
+		doc.some_fieldname = "New Data"
+
+		savedocs(doc.as_json(), "Save")
+
+		doc.reload()
+		self.assertEqual(doc.some_fieldname, "New Data")
+
+	def test_multiple_doc_insert_and_get_list(self):
+		doc1 = frappe.get_doc(doctype=TEST_DOCTYPE_NAME, some_fieldname="first").insert()
+		doc2 = frappe.get_doc(doctype=TEST_DOCTYPE_NAME, some_fieldname="second").insert()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		docs = {doc1.name, doc2.name}
 
@@ -165,13 +189,20 @@ class TestVirtualDoctypes(FrappeTestCase):
 		self.assertIsInstance(VirtualDoctypeTest.get_count(args), int)
 
 	def test_delete_doc(self):
+<<<<<<< HEAD
 		doc = frappe.get_doc(doctype=TEST_DOCTYPE_NAME).insert()
+=======
+		doc = frappe.get_doc(doctype=TEST_DOCTYPE_NAME, some_fieldname="data").insert()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		frappe.delete_doc(doc.doctype, doc.name)
 
 		listed_docs = {d.name for d in VirtualDoctypeTest.get_list({})}
 		self.assertNotIn(doc.name, listed_docs)
+<<<<<<< HEAD
 
 	def test_controller_validity(self):
 		validate_controller(TEST_DOCTYPE_NAME)
 		validate_controller(TEST_CHILD_DOCTYPE_NAME)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

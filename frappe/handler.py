@@ -10,12 +10,19 @@ from werkzeug.wrappers import Response
 import frappe
 import frappe.sessions
 import frappe.utils
+<<<<<<< HEAD
 from frappe import _, is_whitelisted, ping
+=======
+from frappe import _, is_whitelisted
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.core.doctype.server_script.server_script_utils import get_server_script_map
 from frappe.monitor import add_data_to_monitor
 from frappe.utils import cint
 from frappe.utils.csvutils import build_csv_response
+<<<<<<< HEAD
 from frappe.utils.deprecations import deprecation_warning
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils.image import optimize_image
 from frappe.utils.response import build_response
 
@@ -57,11 +64,21 @@ def handle():
 		# add the response to `message` label
 		frappe.response["message"] = data
 
+<<<<<<< HEAD
 
 def execute_cmd(cmd, from_async=False):
 	"""execute a request as python module"""
 	for hook in reversed(frappe.get_hooks("override_whitelisted_methods", {}).get(cmd, [])):
 		# override using the last hook
+=======
+	return build_response("json")
+
+
+def execute_cmd(cmd, from_async=False):
+	"""execute a request as python module"""
+	for hook in frappe.get_hooks("override_whitelisted_methods", {}).get(cmd, []):
+		# override using the first hook
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		cmd = hook
 		break
 
@@ -126,9 +143,12 @@ def web_logout():
 
 @frappe.whitelist()
 def uploadfile():
+<<<<<<< HEAD
 	deprecation_warning(
 		"uploadfile is deprecated and will be removed in v16. Use upload_file instead.",
 	)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	ret = None
 	check_write_permission(frappe.form_dict.doctype, frappe.form_dict.docname)
 
@@ -190,6 +210,12 @@ def upload_file():
 	optimize = frappe.form_dict.optimize
 	content = None
 
+<<<<<<< HEAD
+=======
+	if not ignore_permissions:
+		check_write_permission(doctype, docname)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if library_file := frappe.form_dict.get("library_file_name"):
 		frappe.has_permission("File", doc=library_file, throw=True)
 		doc = frappe.get_value(
@@ -202,9 +228,12 @@ def upload_file():
 		file_url = doc.file_url
 		filename = doc.file_name
 
+<<<<<<< HEAD
 	if not ignore_permissions:
 		check_write_permission(doctype, docname)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if "file" in files:
 		file = files["file"]
 		content = file.stream.read()
@@ -256,8 +285,12 @@ def check_write_permission(doctype: str | None = None, name: str | None = None):
 			doc.check_permission("write")
 		except frappe.DoesNotExistError:
 			# doc has not been inserted yet, name is set to "new-some-doctype"
+<<<<<<< HEAD
 			# If doc inserts fine then only this attachment will be linked see file/utils.py:relink_mismatched_files
 			return
+=======
+			check_doctype = True
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if check_doctype:
 		frappe.has_permission(doctype, "write", throw=True)
@@ -287,6 +320,7 @@ def get_attr(cmd):
 	if "." in cmd:
 		method = frappe.get_attr(cmd)
 	else:
+<<<<<<< HEAD
 		deprecation_warning(
 			f"Calling shorthand for {cmd} is deprecated, please specify full path in RPC call."
 		)
@@ -297,6 +331,21 @@ def get_attr(cmd):
 def run_doc_method(method, docs=None, dt=None, dn=None, arg=None, args=None):
 	"""run a whitelisted controller method"""
 	from inspect import signature
+=======
+		method = globals()[cmd]
+	frappe.log("method:" + cmd)
+	return method
+
+
+@frappe.whitelist(allow_guest=True)
+def ping():
+	return "pong"
+
+
+def run_doc_method(method, docs=None, dt=None, dn=None, arg=None, args=None):
+	"""run a whitelisted controller method"""
+	from inspect import getfullargspec
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not args and arg:
 		args = arg
@@ -325,7 +374,11 @@ def run_doc_method(method, docs=None, dt=None, dn=None, arg=None, args=None):
 	is_whitelisted(fn)
 	is_valid_http_method(fn)
 
+<<<<<<< HEAD
 	fnargs = list(signature(method_obj).parameters)
+=======
+	fnargs = getfullargspec(method_obj).args
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not fnargs or (len(fnargs) == 1 and fnargs[0] == "self"):
 		response = doc.run_method(method)

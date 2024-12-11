@@ -32,12 +32,17 @@ frappe.ui.form.Share = class Share {
 		}
 
 		this.shares.show();
+<<<<<<< HEAD
 		let avatar_group = frappe.avatar_group(shared_users, 5, { align: "left", overlap: true });
 		avatar_group.on("click", () => {
 			this.frm.share_doc();
 		});
 		// REDESIGN-TODO: handle "shared with everyone"
 		this.shares.append(avatar_group);
+=======
+		// REDESIGN-TODO: handle "shared with everyone"
+		this.shares.append(frappe.avatar_group(shared_users, 5, { align: "left", overlap: true }));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	show() {
 		var me = this;

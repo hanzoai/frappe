@@ -5,6 +5,7 @@ html {
 body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+<<<<<<< HEAD
 	@include get_textstyle("lg", "regular");
 	color: $body-color;
 	display: flex;
@@ -20,6 +21,12 @@ kbd {
 	height: 20px;
 	padding: 4px 8px;
 }
+=======
+	font-size: 16px;
+	color: $body-color;
+}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 img {
 	max-width: 100%;
 	height: auto;
@@ -98,7 +105,10 @@ h4 {
 
 	a {
 		color: $body-color;
+<<<<<<< HEAD
 		text-decoration: underline !important;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 }
 

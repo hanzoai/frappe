@@ -23,6 +23,7 @@ DATE_BASED_EVENTS = frozenset(("Days Before", "Days After"))
 
 
 class Notification(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -69,6 +70,8 @@ class Notification(Document):
 		value_changed: DF.Literal[None]
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def onload(self):
 		"""load message"""
 		if self.is_standard:
@@ -93,10 +96,17 @@ class Notification(Document):
 		self.validate_forbidden_document_types()
 		self.validate_condition()
 		self.validate_standard()
+<<<<<<< HEAD
 		frappe.cache.hdel("notifications", self.document_type)
 
 	def on_update(self):
 		frappe.cache.hdel("notifications", self.document_type)
+=======
+		frappe.cache().hdel("notifications", self.document_type)
+
+	def on_update(self):
+		frappe.cache().hdel("notifications", self.document_type)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		path = export_module_json(self, self.is_standard, self.module)
 		if path and self.message:
 			extension = FORMATS.get(self.message_type, ".md")
@@ -268,6 +278,7 @@ def get_context(context):
 		message = frappe.render_template(self.message, context)
 		if self.sender and self.sender_email:
 			sender = formataddr((self.sender, self.sender_email))
+<<<<<<< HEAD
 
 		communication = None
 		# Add mail notification to communication list
@@ -288,6 +299,8 @@ def get_context(context):
 				communication_type="Automated Message",
 			).get("name")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.sendmail(
 			recipients=recipients,
 			subject=subject,
@@ -300,9 +313,32 @@ def get_context(context):
 			attachments=attachments,
 			expose_recipients="header",
 			print_letterhead=((attachments and attachments[0].get("print_letterhead")) or False),
+<<<<<<< HEAD
 			communication=communication,
 		)
 
+=======
+		)
+
+		# Add mail notification to communication list
+		# No need to add if it is already a communication.
+		if doc.doctype != "Communication":
+			make_communication(
+				doctype=doc.doctype,
+				name=doc.name,
+				content=message,
+				subject=subject,
+				sender=sender,
+				recipients=recipients,
+				communication_medium="Email",
+				send_email=False,
+				attachments=attachments,
+				cc=cc,
+				bcc=bcc,
+				communication_type="Automated Message",
+			)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def send_a_slack_msg(self, doc, context):
 		send_slack_message(
 			webhook_url=self.slack_webhook_url,
@@ -372,9 +408,13 @@ def get_context(context):
 
 			# For sending messages to specified role
 			if recipient.receiver_by_role:
+<<<<<<< HEAD
 				receiver_list += get_info_based_on_role(
 					recipient.receiver_by_role, "mobile_no", ignore_permissions=True
 				)
+=======
+				receiver_list += get_info_based_on_role(recipient.receiver_by_role, "mobile_no")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		return receiver_list
 
@@ -442,7 +482,11 @@ def get_context(context):
 		self.message = self.get_template(md_as_html=True)
 
 	def on_trash(self):
+<<<<<<< HEAD
 		frappe.cache.hdel("notifications", self.document_type)
+=======
+		frappe.cache().hdel("notifications", self.document_type)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()
@@ -512,8 +556,14 @@ def evaluate_alert(doc: Document, alert, event):
 		frappe.throw(message, title=_("Error in Notification"))
 	except Exception as e:
 		title = str(e)
+<<<<<<< HEAD
 		message = frappe.get_traceback(with_context=True)
 		frappe.log_error(title=title, message=message)
+=======
+		message = frappe.get_traceback()
+		frappe.log_error(message=message, title=title)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		msg = f"<details><summary>{title}</summary>{message}</details>"
 		frappe.throw(msg, title=_("Error in Notification"))
 
@@ -535,7 +585,13 @@ def get_assignees(doc):
 		fields=["allocated_to"],
 	)
 
+<<<<<<< HEAD
 	return [d.allocated_to for d in assignees]
+=======
+	recipients = [d.allocated_to for d in assignees]
+
+	return recipients
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_emails_from_template(template, context):

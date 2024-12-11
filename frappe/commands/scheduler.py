@@ -80,6 +80,10 @@ def disable_scheduler(context):
 def scheduler(context, state: str, format: str, verbose: bool = False, site: str | None = None):
 	"""Control scheduler state."""
 	import frappe
+<<<<<<< HEAD
+=======
+	import frappe.utils.scheduler
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	from frappe.utils.scheduler import is_scheduler_inactive, toggle_scheduler
 
 	site = site or get_site(context)
@@ -112,7 +116,10 @@ def scheduler(context, state: str, format: str, verbose: bool = False, site: str
 @click.argument("state", type=click.Choice(["on", "off"]))
 @pass_context
 def set_maintenance_mode(context, state, site=None):
+<<<<<<< HEAD
 	"""Put the site in maintenance mode for upgrades."""
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	from frappe.installer import update_site_config
 
 	if not site:
@@ -173,7 +180,10 @@ def purge_jobs(site=None, queue=None, event=None):
 
 @click.command("schedule")
 def start_scheduler():
+<<<<<<< HEAD
 	"""Start scheduler process which is responsible for enqueueing the scheduled job types."""
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	from frappe.utils.scheduler import start_scheduler
 
 	start_scheduler()
@@ -196,7 +206,10 @@ def start_scheduler():
 	help="Dequeuing strategy to use",
 )
 def start_worker(queue, quiet=False, rq_username=None, rq_password=None, burst=False, strategy=None):
+<<<<<<< HEAD
 	"""Start a backgrond worker"""
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	from frappe.utils.background_jobs import start_worker
 
 	start_worker(
@@ -209,6 +222,7 @@ def start_worker(queue, quiet=False, rq_username=None, rq_password=None, burst=F
 	)
 
 
+<<<<<<< HEAD
 @click.command("worker-pool")
 @click.option(
 	"--queue",
@@ -230,18 +244,28 @@ def start_worker_pool(queue, quiet=False, num_workers=2, burst=False):
 	)
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 @click.command("ready-for-migration")
 @click.option("--site", help="site name")
 @pass_context
 def ready_for_migration(context, site=None):
+<<<<<<< HEAD
 	from frappe.utils.doctor import any_job_pending
+=======
+	from frappe.utils.doctor import get_pending_jobs
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not site:
 		site = get_site(context)
 
 	try:
 		frappe.init(site=site)
+<<<<<<< HEAD
 		pending_jobs = any_job_pending(site=site)
+=======
+		pending_jobs = get_pending_jobs(site=site)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if pending_jobs:
 			print(f"NOT READY for migration: site {site} has pending background jobs")
@@ -266,6 +290,9 @@ commands = [
 	show_pending_jobs,
 	start_scheduler,
 	start_worker,
+<<<<<<< HEAD
 	start_worker_pool,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	trigger_scheduler_event,
 ]

@@ -7,6 +7,7 @@ frappe.ui.form.ControlPassword = class ControlPassword extends frappe.ui.form.Co
 	make_input() {
 		var me = this;
 		super.make_input();
+<<<<<<< HEAD
 
 		this.indicator = $(
 			`<div class="password-strength-indicator hidden">
@@ -50,6 +51,24 @@ frappe.ui.form.ControlPassword = class ControlPassword extends frappe.ui.form.Co
 		});
 
 		!this.value && this.toggle_password.removeClass("hidden");
+=======
+		this.$input
+			.parent()
+			.append($('<span class="password-strength-indicator indicator"></span>'));
+		this.$wrapper
+			.find(".control-input-wrapper")
+			.append($('<p class="password-strength-message text-muted small hidden"></p>'));
+
+		this.indicator = this.$wrapper.find(".password-strength-indicator");
+		this.message = this.$wrapper.find(".help-box");
+
+		this.$input.on("keyup", () => {
+			clearTimeout(this.check_password_timeout);
+			this.check_password_timeout = setTimeout(() => {
+				me.get_password_strength(me.$input.val());
+			}, 500);
+		});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	disable_password_checks() {
@@ -60,6 +79,7 @@ frappe.ui.form.ControlPassword = class ControlPassword extends frappe.ui.form.Co
 		if (!this.enable_password_checks) {
 			return;
 		}
+<<<<<<< HEAD
 
 		if (!value) {
 			this.indicator.addClass("hidden");
@@ -67,6 +87,8 @@ frappe.ui.form.ControlPassword = class ControlPassword extends frappe.ui.form.Co
 			return;
 		}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		var me = this;
 		frappe.call({
 			type: "POST",
@@ -77,13 +99,18 @@ frappe.ui.form.ControlPassword = class ControlPassword extends frappe.ui.form.Co
 			callback: function (r) {
 				if (r.message) {
 					let score = r.message.score;
+<<<<<<< HEAD
 					var indicators = ["red", "red", "orange", "blue", "green"];
+=======
+					var indicators = ["red", "red", "orange", "yellow", "green"];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					me.set_strength_indicator(indicators[score]);
 				}
 			},
 		});
 	}
 	set_strength_indicator(color) {
+<<<<<<< HEAD
 		let strength = {
 			red: [__("Weak"), "danger", 25],
 			orange: [__("Average"), "warning", 50],
@@ -105,6 +132,10 @@ frappe.ui.form.ControlPassword = class ControlPassword extends frappe.ui.form.Co
 			.addClass("progress-bar progress-bar-" + progress_color);
 
 		let message = __("Include symbols, numbers and capital letters in the password");
+=======
+		var message = __("Include symbols, numbers and capital letters in the password");
+		this.indicator.removeClass().addClass("password-strength-indicator indicator " + color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.message.html(message).toggleClass("hidden", color == "green");
 	}
 };

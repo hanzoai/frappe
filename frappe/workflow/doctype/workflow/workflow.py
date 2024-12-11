@@ -8,6 +8,7 @@ from frappe.model.document import Document
 
 
 class Workflow(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -31,6 +32,8 @@ class Workflow(Document):
 		workflow_state_field: DF.Data
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		self.set_active()
 		self.create_custom_field_for_workflow_state()
@@ -120,6 +123,15 @@ class Workflow(Document):
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
+=======
+def get_fieldnames_for(doctype):
+	frappe.has_permission(doctype=doctype, ptype="read", throw=True)
+	return [f.fieldname for f in frappe.get_meta(doctype).fields if f.fieldname not in no_value_fields]
+
+
+@frappe.whitelist()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def get_workflow_state_count(doctype, workflow_state_field, states):
 	frappe.has_permission(doctype=doctype, ptype="read", throw=True)
 	states = frappe.parse_json(states)

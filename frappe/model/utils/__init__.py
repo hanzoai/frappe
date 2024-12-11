@@ -61,7 +61,11 @@ def render_include(content):
 	content = cstr(content)
 
 	# try 5 levels of includes
+<<<<<<< HEAD
 	for _ignore in range(5):
+=======
+	for _i in range(5):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if "{% include" in content:
 			paths = INCLUDE_DIRECTIVE_PATTERN.findall(content)
 			if not paths:
@@ -134,6 +138,7 @@ def is_virtual_doctype(doctype: str):
 	if frappe.db.has_column("DocType", "is_virtual"):
 		return frappe.db.get_value("DocType", doctype, "is_virtual")
 	return False
+<<<<<<< HEAD
 
 
 @site_cache()
@@ -144,3 +149,5 @@ def is_single_doctype(doctype: str) -> bool:
 		return False
 
 	return frappe.db.get_value("DocType", doctype, "issingle")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

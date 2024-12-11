@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import inspect
 from typing import Protocol, runtime_checkable
 
@@ -7,6 +8,13 @@ from frappe.model.base_document import get_controller
 
 
 @runtime_checkable
+=======
+from typing import Protocol
+
+import frappe
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 class VirtualDoctype(Protocol):
 	"""This class documents requirements that must be met by a doctype controller to function as virtual doctype
 
@@ -54,6 +62,7 @@ class VirtualDoctype(Protocol):
 	def delete(self, *args, **kwargs) -> None:
 		"""Delete the current document from backend"""
 		...
+<<<<<<< HEAD
 
 
 def validate_controller(doctype: str) -> None:
@@ -91,3 +100,5 @@ def validate_controller(doctype: str) -> None:
 				),
 				title=_("Incomplete Virtual Doctype Implementation"),
 			)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -74,11 +74,16 @@ frappe.data_import.DataExporter = class DataExporter {
 					let child_fieldname = df.fieldname;
 					let label = df.reqd
 						? // prettier-ignore
+<<<<<<< HEAD
 						  __('{0} ({1}) (1 row mandatory)', [__(df.label || df.fieldname, null, df.parent), __(doctype)])
 						: __("{0} ({1})", [
 								__(df.label || df.fieldname, null, df.parent),
 								__(doctype),
 						  ]);
+=======
+						  __('{0} ({1}) (1 row mandatory)', [__(df.label || df.fieldname), __(doctype)])
+						: __("{0} ({1})", [__(df.label || df.fieldname), __(doctype)]);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					return {
 						label,
 						fieldname: child_fieldname,
@@ -295,7 +300,11 @@ frappe.data_import.DataExporter = class DataExporter {
 			})
 			.map((df) => {
 				return {
+<<<<<<< HEAD
 					label: __(df.label, null, df.parent),
+=======
+					label: __(df.label),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					value: df.fieldname,
 					danger: is_field_mandatory(df),
 					checked: false,

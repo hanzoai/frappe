@@ -15,6 +15,7 @@ from .exceptions import NewsletterAlreadySentError, NewsletterNotSavedError, NoR
 
 
 class Newsletter(WebsiteGenerator):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -56,6 +57,13 @@ class Newsletter(WebsiteGenerator):
 		self.validate_sender_address()
 		self.validate_publishing()
 		self.validate_scheduling_date()
+=======
+	def validate(self):
+		self.route = f"newsletters/{self.name}"
+		self.validate_sender_address()
+		self.validate_recipient_address()
+		self.validate_publishing()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@property
 	def newsletter_recipients(self) -> list[str]:
@@ -90,7 +98,11 @@ class Newsletter(WebsiteGenerator):
 	@frappe.whitelist()
 	def send_test_email(self, email):
 		test_emails = frappe.utils.validate_email_address(email, throw=True)
+<<<<<<< HEAD
 		self.send_newsletter(emails=test_emails, test_email=True)
+=======
+		self.send_newsletter(emails=test_emails)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.msgprint(_("Test email sent to {0}").format(email), alert=True)
 
 	@frappe.whitelist()
@@ -135,6 +147,10 @@ class Newsletter(WebsiteGenerator):
 	def validate_newsletter_recipients(self):
 		if not self.newsletter_recipients:
 			frappe.throw(_("Newsletter should have atleast one recipient"), exc=NoRecipientFoundError)
+<<<<<<< HEAD
+=======
+		self.validate_recipient_address()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def validate_sender_address(self):
 		"""Validate self.send_from is a valid email address or not."""
@@ -144,10 +160,19 @@ class Newsletter(WebsiteGenerator):
 				f"{self.sender_name} <{self.sender_email}>" if self.sender_name else self.sender_email
 			)
 
+<<<<<<< HEAD
+=======
+	def validate_recipient_address(self):
+		"""Validate if self.newsletter_recipients are all valid email addresses or not."""
+		for recipient in self.newsletter_recipients:
+			frappe.utils.validate_email_address(recipient, throw=True)
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate_publishing(self):
 		if self.send_webview_link and not self.published:
 			frappe.throw(_("Newsletter must be published to send webview link in email"))
 
+<<<<<<< HEAD
 	def validate_scheduling_date(self):
 		if getattr(frappe.flags, "is_scheduler_running", False):
 			return
@@ -158,6 +183,8 @@ class Newsletter(WebsiteGenerator):
 		):
 			frappe.throw(_("Past dates are not allowed for Scheduling."))
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def get_linked_email_queue(self) -> list[str]:
 		"""Get list of email queue linked to this newsletter."""
 		return frappe.get_all(
@@ -169,11 +196,23 @@ class Newsletter(WebsiteGenerator):
 			pluck="name",
 		)
 
+<<<<<<< HEAD
 	def get_queued_recipients(self) -> list[str]:
 		"""Recipients who have already been queued for receiving the newsletter."""
 		return frappe.get_all(
 			"Email Queue Recipient",
 			filters={
+=======
+	def get_success_recipients(self) -> list[str]:
+		"""Recipients who have already received the newsletter.
+
+		Couldn't think of a better name ;)
+		"""
+		return frappe.get_all(
+			"Email Queue Recipient",
+			filters={
+				"status": ("in", ["Not Sent", "Sending", "Sent"]),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				"parent": ("in", self.get_linked_email_queue()),
 			},
 			pluck="recipient",
@@ -183,9 +222,14 @@ class Newsletter(WebsiteGenerator):
 		"""Get list of pending recipients of the newsletter. These
 		recipients may not have receive the newsletter in the previous iteration.
 		"""
+<<<<<<< HEAD
 
 		queued_recipients = set(self.get_queued_recipients())
 		return [x for x in self.newsletter_recipients if x not in queued_recipients]
+=======
+		success_recipients = set(self.get_success_recipients())
+		return [x for x in self.newsletter_recipients if x not in success_recipients]
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def queue_all(self):
 		"""Queue Newsletter to all the recipients generated from the `Email Group` table"""
@@ -204,12 +248,20 @@ class Newsletter(WebsiteGenerator):
 		"""Get list of attachments on current Newsletter"""
 		return [{"file_url": row.attachment} for row in self.attachments]
 
+<<<<<<< HEAD
 	def send_newsletter(self, emails: list[str], test_email: bool = False):
+=======
+	def send_newsletter(self, emails: list[str]):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""Trigger email generation for `emails` and add it in Email Queue."""
 		attachments = self.get_newsletter_attachments()
 		sender = self.send_from or frappe.utils.get_formatted_email(self.owner)
 		args = self.as_dict()
+<<<<<<< HEAD
 		args["message"] = self.get_message(medium="email")
+=======
+		args["message"] = self.get_message()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		is_auto_commit_set = bool(frappe.db.auto_commit_on_many_writes)
 		frappe.db.auto_commit_on_many_writes = not frappe.flags.in_test
@@ -228,20 +280,28 @@ class Newsletter(WebsiteGenerator):
 			queue_separately=True,
 			send_priority=0,
 			args=args,
+<<<<<<< HEAD
 			email_read_tracker_url=None
 			if test_email
 			else "/api/method/frappe.email.doctype.newsletter.newsletter.newsletter_email_read",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 
 		frappe.db.auto_commit_on_many_writes = is_auto_commit_set
 
+<<<<<<< HEAD
 	def get_message(self, medium=None) -> str:
+=======
+	def get_message(self) -> str:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		message = self.message
 		if self.content_type == "Markdown":
 			message = frappe.utils.md_to_html(self.message_md)
 		if self.content_type == "HTML":
 			message = self.message_html
 
+<<<<<<< HEAD
 		html = frappe.render_template(message, {"doc": self.as_dict()})
 
 		return self.add_source(html, medium=medium)
@@ -264,6 +324,9 @@ class Newsletter(WebsiteGenerator):
 				link["href"] = new_href
 
 		return str(soup)
+=======
+		return frappe.render_template(message, {"doc": self.as_dict()})
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def get_recipients(self) -> list[str]:
 		"""Get recipients from Email Group"""
@@ -399,8 +462,11 @@ def get_list_context(context=None):
 
 def send_scheduled_email():
 	"""Send scheduled newsletter to the recipients."""
+<<<<<<< HEAD
 	frappe.flags.is_scheduler_running = True
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	scheduled_newsletter = frappe.get_all(
 		"Newsletter",
 		filters={
@@ -427,6 +493,7 @@ def send_scheduled_email():
 		if not frappe.flags.in_test:
 			frappe.db.commit()
 
+<<<<<<< HEAD
 	frappe.flags.is_scheduler_running = False
 
 
@@ -455,6 +522,8 @@ def newsletter_email_read(recipient_email=None, reference_doctype=None, referenc
 	finally:
 		frappe.response.update(frappe.utils.get_imaginary_pixel_response())
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 def get_default_email_group():
 	return _("Website", lang=frappe.db.get_default("language"))

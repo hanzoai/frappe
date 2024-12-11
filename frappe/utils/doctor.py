@@ -9,7 +9,12 @@ from frappe.utils.scheduler import is_scheduler_disabled, is_scheduler_inactive
 
 def get_workers():
 	with Connection(get_redis_conn()):
+<<<<<<< HEAD
 		return Worker.all()
+=======
+		workers = Worker.all()
+		return workers
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def purge_pending_jobs(event=None, site=None, queue=None):
@@ -78,6 +83,7 @@ def get_pending_jobs(site=None):
 	return jobs_per_queue
 
 
+<<<<<<< HEAD
 def any_job_pending(site: str) -> bool:
 	for queue in get_queue_list():
 		q = get_queue(queue)
@@ -87,6 +93,8 @@ def any_job_pending(site: str) -> bool:
 	return False
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def check_number_of_workers():
 	return len(get_workers())
 

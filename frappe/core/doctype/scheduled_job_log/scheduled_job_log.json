@@ -7,8 +7,12 @@
  "field_order": [
   "status",
   "scheduled_job_type",
+<<<<<<< HEAD
   "details",
   "debug_log"
+=======
+  "details"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  ],
  "fields": [
   {
@@ -36,6 +40,7 @@
    "options": "Scheduled Job Type",
    "read_only": 1,
    "reqd": 1
+<<<<<<< HEAD
   },
   {
    "fieldname": "debug_log",
@@ -46,6 +51,12 @@
  ],
  "links": [],
  "modified": "2023-11-09 12:06:41.781270",
+=======
+  }
+ ],
+ "links": [],
+ "modified": "2022-06-13 05:41:21.090972",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Scheduled Job Log",

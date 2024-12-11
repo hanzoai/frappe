@@ -60,12 +60,19 @@ frappe.ui.form.QuickEntryForm = class QuickEntryForm {
 		this.meta = frappe.get_meta(this.doctype);
 		let fields = this.meta.fields;
 
+<<<<<<< HEAD
 		this.mandatory = fields.filter((df) => {
 			return (
 				(df.reqd || df.allow_in_quick_entry) &&
 				!df.read_only &&
 				!df.is_virtual &&
 				df.fieldtype !== "Tab Break"
+=======
+		// prepare a list of mandatory, bold and allow in quick entry fields
+		this.mandatory = fields.filter((df) => {
+			return (
+				(df.reqd || df.bold || df.allow_in_quick_entry) && !df.read_only && !df.is_virtual
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			);
 		});
 	}

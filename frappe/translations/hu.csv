@@ -9,6 +9,10 @@ Action,Művelet,
 Actions,Műveletek,
 Active,Aktív,
 Add,Hozzáadás,
+<<<<<<< HEAD
+=======
+Add Comment,Megjegyzés hozzáadása,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,Sor hozzáadás,
 Address,Cím,
 Address Line 2,2. cím sor,
@@ -143,6 +147,10 @@ Monday,Hétfő,
 Monthly,Havi,
 More,Tovább,
 More Information,Több információ,
+<<<<<<< HEAD
+=======
+More...,Több...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,mozgás,
 My Account,Fiókom,
 New Address,Új cím,
@@ -155,6 +163,10 @@ No items found.,Nincs találat.,
 None,Semelyik,
 Not Permitted,Nem engedélyezett,
 Not active,Nem aktív,
+<<<<<<< HEAD
+=======
+Notes,Jegyzetek,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,Szám,
 Online,Online,
 Operation,Üzemeltetés,
@@ -164,12 +176,25 @@ Owner,Tulajdonos,
 Page Missing or Moved,Oldal hiányzó vagy áthelyezték,
 Parameter,Paraméter,
 Password,Jelszó,
+<<<<<<< HEAD
 Period,Időszak,
 Pincode,Irányítószám,
+=======
+Payment Gateway,Fizetési átjáró,
+Payment Gateway Name,Fizetési átjáró elnevezése,
+Payments,Kifizetések,
+Period,Időszak,
+Pincode,Irányítószám,
+Plan Name,Terv megnevezése,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,"Kérjük, engedélyezze a felugrókat",
 Please select Company,"Kérjük, válasszon Vállalkozást először",
 Please select {0},"Kérjük, válassza ki a {0}",
 Please set Email Address,"Kérjük, állítsa be az e-mail címet",
+<<<<<<< HEAD
+=======
+Portal,Portál,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,Portál Beállítások,
 Preview,Előnézet,
 Primary,Elsődleges,
@@ -214,6 +239,10 @@ Salutation,Megszólítás,
 Sample,Minta,
 Saturday,Szombat,
 Saved,Mentett,
+<<<<<<< HEAD
+=======
+Scan Barcode,Barcode beolvasás,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,Ütemezett,
 Search,Keresés,
 Secret Key,Titkos kulcs,
@@ -228,6 +257,10 @@ Settings,Beállítások,
 Shipping,Szállítás,
 Short Name,Rövid név,
 Slideshow,Diavetítés,
+<<<<<<< HEAD
+=======
+Some information is missing,Néhány információ hiányzik,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,Forrás,
 Source Name,Forrá név,
 Standard,Általános,
@@ -237,6 +270,10 @@ State,Állapot,
 Stopped,Megállítva,
 Subject,Tárgy,
 Submit,Elküld,
+<<<<<<< HEAD
+=======
+Successful,Sikeres,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,Összefoglalás,
 Sunday,Vasárnap,
 System Manager,Rendszer menedzser,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,Időtartam,
 To,Nak nek,
 To Date,Dátumig,
+<<<<<<< HEAD
 Traceback,Visszakövet,
 URL,URL,
 Unsubscribed,Leiratkozott,
+=======
+Tools,Eszközök,
+Traceback,Visszakövet,
+URL,URL,
+Unsubscribed,Leiratkozott,
+Use Sandbox,Sandbox felhasználása,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,használó,
 User ID,Felhasználó ID,
 Users,Felhasználók,
@@ -556,6 +601,10 @@ Bulk Delete,Tömeges törlés,
 Bulk Edit {0},Tömeges szerkesztés {0},
 Bulk Rename,Tömeges átnevezés,
 Bulk Update,Tömeges frissítés,
+<<<<<<< HEAD
+=======
+Busy,Elfoglalt,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,Gomb,
 Button Help,Gomb Súgó,
 Button Label,Gomb felirat,
@@ -692,6 +741,10 @@ Compiled Successfully,Sikeresen összeállítva,
 Complete By,Kiegészítette,
 Complete Registration,Regisztráció befejezéséhez,
 Complete Setup,Teljes telepítés,
+<<<<<<< HEAD
+=======
+Completed By,Által befejeztve,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,E-mail írás,
 Condition Detail,Feltétel részletei,
 Conditions,Körülmények,
@@ -1380,7 +1433,11 @@ Is Submittable,Ez küldhető,
 Is Table,Ez táblázat,
 Is Your Company Address,Az Ön cége címe,
 It is risky to delete this file: {0}. Please contact your System Manager.,"Kockázatos törölni ezt a fájlt: {0}. Kérjük, forduljon a Rendszergazdához.",
+<<<<<<< HEAD
 Item cannot be added to its own descendants,Tételt nem lehet hozzáadni a saját leszármazottaikhoz,
+=======
+Item cannot be added to its own descendents,Tételt nem lehet hozzáadni a saját leszármazottaikhoz,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,JSON,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},JavaScript Format: frappe.query_reports ['JELENTÉSNÉV'] = {},
@@ -1675,8 +1732,13 @@ Not a valid Workflow Action,Nem érvényes munkafolyamat művelet,
 Not a valid user,Nem érvényes felhasználó,
 Not a zip file,Nem egy zip fájl,
 Not allowed for {0}: {1},Nem engedélyezett a (z) {0} számára: {1},
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}","Nem engedélyezett hozzáférni {0} mert kapcsolódik {1} &#39;{2}&#39; a {3} sorban, {4} mezőben",
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},"Nem engedélyezett hozzáférni ehhez a {0} rekordhoz, mert kapcsolódik {1} &#39;{2}&#39; a {3} mezőben",
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},Nem engedélyezett a (z) {0} számára: {1} a (z) {2} sorban. Korlátozott mező: {3},
+Not allowed for {0}: {1}. Restricted field: {2},Nem engedélyezett a (z) {0} számára: {1}. Korlátozott mező: {2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,Nem engedélyezett importáláshoz,
 Not allowed to change {0} after submission,Nem szabad változtatni {0} benyújtás követően,
 Not allowed to print cancelled documents,Nem lehetséges a nyomtatás törölt dokumentumokkal,
@@ -1804,6 +1866,10 @@ Path to private Key File,A privát kulcsfájl elérési útja,
 PayPal Settings,PayPal beállításai,
 PayPal payment gateway settings,PayPal fizetési átjáró beállításai,
 Payment Cancelled,Fizetés törölt,
+<<<<<<< HEAD
+=======
+Payment Failed,Fizetés meghiúsult,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,Fizetési sikeres,
 Pending Approval,Elbírálás alatt,
 Pending Verification,Az ellenőrzés függőben van,
@@ -3200,6 +3266,10 @@ Click on the link below to approve the request,Kattintson az alábbi linkre a k�
 Click on the lock icon to toggle public/private,A nyilvános / privát váltáshoz kattintson a zár ikonra,
 Click on {0} to generate Refresh Token.,Kattintson a (z) {0} -ra a Refresh Token létrehozásához.,
 Close Condition,Bezárás feltétel,
+<<<<<<< HEAD
+=======
+Column {0},{0} oszlop,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,Oszlopok / mezők,
 "Configure notifications for mentions, assignments, energy points and more.","Konfigurálja az értesítéseket megemlítések, feladatok, energiapontok és így tovább.",
 Contact Email,Kapcsolattartó e-mailcíme,
@@ -3281,6 +3351,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,Kudarc,
 Fetching default Global Search documents.,Az alapértelmezett globális keresési dokumentumok letöltése.,
 Fetching posts...,Bejegyzések lekérése ...,
+<<<<<<< HEAD
+=======
+Field Mapping,Field Mapping,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,Ellenőrizendő mező,
 File Information,Fájlinformációk,
 Filter By,Szűrés ez alapján,
@@ -3435,6 +3509,10 @@ No posts yet,Még nincs hozzászólás,
 No records will be exported,Nincs rekord exportálva,
 No results found for {0} in Global Search,Nem található a (z) {0} eredmény a Globális keresésben,
 No user found,Nem található felhasználó,
+<<<<<<< HEAD
+=======
+Not Specified,Nem meghatározott,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,Értesítési napló,
 Notification Settings,Értesítési beállítások,
 Notification Subscribed Document,Értesítés előfizetött dokumentum,
@@ -3590,6 +3668,10 @@ Untitled Column,Név nélküli oszlop,
 Untranslated,lefordítatlan,
 Upcoming Events,Közelgő események,
 Update Existing Records,Frissítse a meglévő rekordokat,
+<<<<<<< HEAD
+=======
+Update Type,Frissítés típusa,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,Új verzióra frissítve 🎉,
 "Updating {0} of {1}, {2}","A (z) {1}, {2} {0} frissítése",
 Upload file,Fájl feltöltés,
@@ -3696,16 +3778,28 @@ Designation,Titulus,
 Disabled,Tiltva,
 Doctype,doctype,
 Download Template,Sablon letöltése,
+<<<<<<< HEAD
+=======
+Dr,Dr,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,Határidő,
 Duplicate,Megsokszoroz,
 Edit Profile,Profil szerkesztése,
 Email,Email,
+<<<<<<< HEAD
+=======
+End Time,Befejezés dátuma,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,Adjon Értéket,
 Entity Type,Jogi alany típus,
 Error,Hiba,
 Expired,Lejárt,
 Export,Export,
 Export not allowed. You need {0} role to export.,Export nem engedélyezett. A {0} beosztás szükséges az exporthoz.,
+<<<<<<< HEAD
+=======
+Fetching...,Elragadó...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,Mező,
 File Manager,Fájlkezelő,
 Filters,Szűrők,
@@ -3720,8 +3814,16 @@ Import Data from CSV / Excel files.,Adat importálása CSV / Excel fájlokból.,
 In Progress,Folyamatban,
 Intermediate,Közbülső,
 Invite as User,Meghívás Felhasználóként,
+<<<<<<< HEAD
 Loading...,Betöltés...,
 Location,Tartózkodási hely,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.","Úgy tűnik, hogy probléma van a kiszolgáló sávszélesség konfigurációjával. Hiba esetén az összeg visszafizetésre kerül a számlájára.",
+Loading...,Betöltés...,
+Location,Tartózkodási hely,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,"Úgy néz ki, mintha valaki küldött egy hiányos URL-t. Kérjük, kérje meg, hogy nézzen utána.",
+Master,Fő adat,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,Üzenet,
 Missing Values Required,Hiányzó szükséges értékek,
 Mobile No,Mobil:,
@@ -3733,6 +3835,10 @@ Note,Jegyzet,
 Offline,Offline,
 Open,Megnyitva,
 Page {0} of {1},Oldal {0} ennyiből {1},
+<<<<<<< HEAD
+=======
+Pay,Fizet,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,Függő,
 Phone,Telefon,
 Please click on the following link to set your new password,"Kérjük, kattintson az alábbi linkre, az új jelszó beállításához",
@@ -3782,6 +3888,10 @@ Welcome to {0},Üdvözöljük itt {0},
 Year,Év,
 Yearly,Évi,
 You,Ön,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,Másol-beillesztheti ezt az elérési linket a böngészőben,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,és,
 {0} Name,{0} Név,
 {0} is required,{0} szükséges,
@@ -4085,6 +4195,10 @@ Custom SCSS,Egyéni SCSS,
 Navbar,Navbar,
 Source Message,Forrásüzenet,
 Translated Message,Lefordított üzenet,
+<<<<<<< HEAD
+=======
+Verified By,Ellenőrizte,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,"Ennek a konzolnak a használata lehetővé teheti a támadók számára, hogy megszemélyesítsék Önt és ellopják az adatait. Ne írjon be és ne illesszen be olyan kódot, amelyet nem ért.",
 {0} m,{0} m,
 {0} h,{0} h,
@@ -4108,7 +4222,11 @@ No changes in document,Nincs változás a dokumentumban,
 by Role,Role által,
 Document is only editable by users with role,A dokumentumot csak szerepkörrel rendelkező felhasználók szerkeszthetik,
 {0}: Other permission rules may also apply,{0}: Egyéb engedélyezési szabályok is érvényesek lehetnek,
+<<<<<<< HEAD
 {0} Web page views,{0} Oldalmegtekintések,
+=======
+{0} Page Views,{0} Oldalmegtekintések,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,Kiterjed,
 Collapse,Összeomlás,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.","Érvénytelen hordozó token, kérjük, adjon meg egy érvényes hozzáférési jogkivonatot a „hordozó” előtaggal.",
@@ -4117,6 +4235,10 @@ Collapse,Összeomlás,
 {0} is not a valid Name,A (z) {0} nem érvényes név,
 Your system is being updated. Please refresh again after a few moments.,"Rendszerét frissítjük. Kérjük, frissítse újra néhány pillanat múlva.",
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}: A beküldött rekordot nem lehet törölni. Először {2} le kell mondania {3}.,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},Érvénytelen névsor (. Hiányzik) a következőhöz: {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},Hiba történt itt: {0},
 Status Updated,Állapot frissítve,
 You can also copy-paste this {0} to your browser,Ezt a {0} fájlt másolhatja be a böngészőjébe is,
@@ -4138,11 +4260,21 @@ Is Billing Contact,Számlázási kapcsolattartó,
 Address And Contacts,Cím és kapcsolattartók,
 Lead Conversion Time,Érdeklődésre átváltás ideje,
 Due Date Based On,Határidő dátuma ez alapján,
+<<<<<<< HEAD
 Linked Documents,Kapcsolódó dokumentumok,
+=======
+Phone Number,Telefonszám,
+Linked Documents,Kapcsolódó dokumentumok,
+Account SID,Fiók SID,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,Lépések,
 email,email,
 Component,Összetevő,
 Subtitle,Felirat,
+<<<<<<< HEAD
+=======
+Global Defaults,Általános beállítások,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,Előtag,
 Is Public,Nyilvános,
 This chart will be available to all Users if this is set,"Ez a diagram minden felhasználó számára elérhető lesz, ha ez be van állítva",
@@ -4329,6 +4461,10 @@ Dynamic Filters Section,Dinamikus szűrők szakasz,
 Please create Card first,"Kérjük, először hozza létre a kártyát",
 Onboarding Permission,Fedélzeti engedély,
 Onboarding Step,Fedélzeti lépés,
+<<<<<<< HEAD
+=======
+Is Mandatory,Kötelező,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,Átugrott,
 Create Entry,Hozzon létre bejegyzést,
 Update Settings,Frissítse a beállításokat,
@@ -4366,6 +4502,10 @@ Message (HTML),Üzenet (HTML),
 Send Attachments,Mellékletek küldése,
 Testing,Tesztelés,
 System Notification,Rendszer értesítés,
+<<<<<<< HEAD
+=======
+WhatsApp,WhatsApp,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,Twilio szám,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","A WhatsApp for Business használatához inicializálja a <a href=""#Form/Twilio Settings"">Twilio beállításokat</a> .",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","A Slack Channel használatához adjon hozzá egy <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL-t</a> .",
@@ -4500,6 +4640,10 @@ Add to ToDo,Hozzáadás a Teendőkhöz,
 {0} are currently {1},{0} jelenleg {1},
 Currently Replying,Jelenleg válaszol,
 created {0},létrehozta: {0},
+<<<<<<< HEAD
+=======
+Make a call,Hívást kezdeményezni,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,változás,Coins
 Too Many Requests,Túl sok kérés,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.","Érvénytelen engedélyezési fejlécek, adjon hozzá egy tokent egy előtaggal a következők egyikéből: {0}",
@@ -4664,6 +4808,7 @@ Value cannot be negative for {0}: {1},Az érték nem lehet negatív a következ�
 Negative Value,Negatív érték,
 Authentication failed while receiving emails from Email Account: {0}.,"A hitelesítés meghiúsult, amikor e-maileket kapott az e-mail fiókból: {0}.",
 Message from server: {0},Üzenet a szerverről: {0},
+<<<<<<< HEAD
 Add Row,Sor hozzáadás,
 Analytics,Elemzés,
 Anonymous,Névtelen,
@@ -4796,3 +4941,5 @@ West Bengal,Nyugat-Bengál,
 Published on,Megjelent,
 Bottom,Alsó,
 Top,Felül,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

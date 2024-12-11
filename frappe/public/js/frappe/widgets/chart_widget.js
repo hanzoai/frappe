@@ -280,7 +280,12 @@ export default class ChartWidget extends Widget {
 				return frappe.report_utils.prepare_field_from_column(col);
 			});
 
+<<<<<<< HEAD
 			return frappe.report_utils.make_chart_options(columns, result, chart_fields).data;
+=======
+			let data = frappe.report_utils.make_chart_options(columns, result, chart_fields).data;
+			return data;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 
@@ -459,6 +464,10 @@ export default class ChartWidget extends Widget {
 	}
 
 	set_chart_actions(actions) {
+<<<<<<< HEAD
+=======
+		/* eslint-disable indent */
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.chart_actions = $(`<div class="chart-actions dropdown pull-right">
 			<button data-toggle="dropdown"
 				aria-haspopup="true"aria-expanded="false"

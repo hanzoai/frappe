@@ -11,10 +11,13 @@ frappe.ui.form.on("Notification Log", {
 	},
 
 	open_reference_document: function (frm) {
+<<<<<<< HEAD
 		if (frm.doc?.link) {
 			frappe.set_route(frm.doc.link);
 			return;
 		}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		const dt = frm.doc.document_type;
 		const dn = frm.doc.document_name;
 		frappe.set_route("Form", dt, dn);

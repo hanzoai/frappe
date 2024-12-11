@@ -2,6 +2,7 @@ import types
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
+<<<<<<< HEAD
 from frappe.utils.safe_exec import ServerScriptNotEnabled, get_safe_globals, safe_exec
 
 
@@ -11,6 +12,12 @@ class TestSafeExec(FrappeTestCase):
 		cls.enable_safe_exec()
 		return super().setUpClass()
 
+=======
+from frappe.utils.safe_exec import get_safe_globals, safe_exec
+
+
+class TestSafeExec(FrappeTestCase):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_import_fails(self):
 		self.assertRaises(ImportError, safe_exec, "import os")
 
@@ -104,6 +111,7 @@ class TestSafeExec(FrappeTestCase):
 		unsafe_global = {"frappe": frappe}
 		self.assertRaises(SyntaxError, safe_exec, """frappe.msgprint("Hello")""", unsafe_global)
 
+<<<<<<< HEAD
 	def test_attrdict(self):
 		# jinja
 		frappe.render_template("{% set my_dict = _dict() %} {{- my_dict.works -}}")
@@ -111,12 +119,15 @@ class TestSafeExec(FrappeTestCase):
 		# RestrictedPython
 		safe_exec("my_dict = _dict()")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_write_wrapper(self):
 		# Allow modifying _dict instance
 		safe_exec("_dict().x = 1")
 
 		# dont Allow modifying _dict class
 		self.assertRaises(Exception, safe_exec, "_dict.x = 1")
+<<<<<<< HEAD
 
 	def test_print(self):
 		test_str = frappe.generate_hash()
@@ -127,3 +138,5 @@ class TestSafeExec(FrappeTestCase):
 class TestNoSafeExec(FrappeTestCase):
 	def test_safe_exec_disabled_by_default(self):
 		self.assertRaises(ServerScriptNotEnabled, safe_exec, "pass")
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

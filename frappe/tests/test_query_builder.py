@@ -479,6 +479,7 @@ class TestMisc(FrappeTestCase):
 
 		DocType = Table("DocType")
 		self.assertEqual(DocType.get_sql(), "DocType")
+<<<<<<< HEAD
 
 	def test_union(self):
 		user = frappe.qb.DocType("User")
@@ -487,3 +488,5 @@ class TestMisc(FrappeTestCase):
 		roles = frappe.qb.from_(role).select(role.name)
 
 		self.assertEqual(set(users.run() + roles.run()), set((users + roles).run()))
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

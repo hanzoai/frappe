@@ -33,6 +33,7 @@ class ClientSecretNotSetError(frappe.ValidationError):
 
 
 class SocialLoginKey(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -69,6 +70,8 @@ class SocialLoginKey(Document):
 		user_id_property: DF.Data | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def autoname(self):
 		self.name = frappe.scrub(self.provider_name)
 
@@ -214,6 +217,7 @@ class SocialLoginKey(Document):
 			"auth_url_data": json.dumps({"response_type": "code", "scope": "openid"}),
 		}
 
+<<<<<<< HEAD
 		providers["Keycloak"] = {
 			"provider_name": "Keycloak",
 			"enable_social_login": 1,
@@ -227,6 +231,8 @@ class SocialLoginKey(Document):
 			"auth_url_data": json.dumps({"response_type": "code", "scope": "openid"}),
 		}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		# Initialize the doc and return, used in patch
 		# Or can be used for creating key from controller
 		if initialize and provider:
@@ -235,6 +241,7 @@ class SocialLoginKey(Document):
 			return
 
 		return providers.get(provider) if provider else providers
+<<<<<<< HEAD
 
 
 def provider_allows_signup(provider: str) -> bool:
@@ -245,3 +252,5 @@ def provider_allows_signup(provider: str) -> bool:
 	if not sign_up_config:  # fallback to global settings
 		return not is_signup_disabled()
 	return sign_up_config == "Allow"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

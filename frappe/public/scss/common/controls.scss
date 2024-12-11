@@ -5,6 +5,7 @@
 @import "phone_picker";
 
 // password
+<<<<<<< HEAD
 .frappe-control[data-fieldtype="Password"] {
 	.control-input-wrapper {
 		position: relative;
@@ -42,6 +43,22 @@
 			cursor: pointer;
 		}
 	}
+=======
+.form-control[data-fieldtype="Password"] {
+	position: inherit;
+}
+
+.password-strength-indicator {
+	// TODO: Review
+	float: right;
+	padding: 15px;
+	margin-top: -41px;
+	margin-right: -7px;
+}
+
+.password-strength-message {
+	margin-top: -10px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 // select
@@ -49,7 +66,10 @@ select.form-control {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
+<<<<<<< HEAD
 	padding-block: 0;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 /* table multiselect */
@@ -60,6 +80,7 @@ select.form-control {
 	height: auto;
 	padding: 10px;
 	padding-bottom: 5px;
+<<<<<<< HEAD
 	gap: 6px;
 	.link-field {
 		width: 100%;
@@ -72,6 +93,11 @@ select.form-control {
 		background-color: var(--bg-color);
 		border: 1px solid var(--border-color);
 	}
+=======
+	.link-field {
+		width: 100%;
+	}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .table-multiselect.form-control input {
@@ -141,11 +167,18 @@ select.form-control {
 }
 
 .frappe-control {
+<<<<<<< HEAD
 	@include get_textstyle("base", "regular");
 	.control-label.reqd:after {
 		content: " *";
 		color: var(--red-400);
 		white-space: nowrap;
+=======
+	font-size: var(--text-md);
+	.control-label.reqd:after {
+		content: " *";
+		color: var(--red-400);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	.help:empty {
 		display: none;
@@ -159,6 +192,7 @@ select.form-control {
 		margin-bottom: var(--margin-sm);
 		border: 1px solid var(--border-color);
 		border-radius: var(--border-radius);
+<<<<<<< HEAD
 		@include get_textstyle("sm", "regular");
 		word-wrap: break-word;
 		position: relative;
@@ -178,6 +212,17 @@ select.form-control {
 	.action-btn {
 		position: absolute;
 		top: 0px;
+=======
+		font-size: var(--text-sm);
+		word-wrap: break-word;
+		p:last-child {
+			margin-bottom: 0;
+		}
+	}
+	.action-btn {
+		position: absolute;
+		top: 4px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		right: 4px;
 		padding: 3px;
 		z-index: 3;
@@ -218,7 +263,10 @@ select.form-control {
 }
 
 .ace_editor {
+<<<<<<< HEAD
 	min-height: 48px;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	background-color: var(--control-bg);
 	color: var(--text-color);
 	.ace_gutter {
@@ -247,6 +295,7 @@ select.form-control {
 		padding: 6px 10px;
 		background: var(--control-bg);
 		border-radius: var(--border-radius);
+<<<<<<< HEAD
 		@include get_textstyle("base", "regular");
 
 		.es-icon {
@@ -255,6 +304,9 @@ select.form-control {
 		.btn {
 			padding: 0px 8px;
 		}
+=======
+		font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 }
 
@@ -289,10 +341,13 @@ a.progress-small {
 	background-color: var(--red-500);
 }
 
+<<<<<<< HEAD
 .progress-bar-info {
 	background-color: var(--blue-500);
 }
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .progress-bar-warning {
 	background-color: var(--orange-500);
 }
@@ -389,6 +444,17 @@ textarea.form-control {
 	margin-bottom: var(--margin-xs);
 }
 
+<<<<<<< HEAD
+=======
+.tb-selected-value {
+	display: inline-block;
+	margin-right: var(--margin-xs);
+	margin-bottom: var(--margin-xs);
+	box-shadow: none;
+	border: 1px solid var(--dark-border-color);
+}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .barcode-scanner {
 	position: relative;
 
@@ -521,6 +587,7 @@ button.data-pill {
 	height: var(--btn-height);
 	background-color: var(--fg-color);
 	border-radius: var(--border-radius);
+<<<<<<< HEAD
 	color: var(--text-color);
 	background-color: var(--subtle-fg);
 	justify-content: space-between;
@@ -528,6 +595,12 @@ button.data-pill {
 	.pill-label {
 		color: var(--text-color);
 	}
+=======
+	padding: calc(var(--padding-xs) - 2px) var(--padding-sm);
+	color: var(--text-color);
+	justify-content: space-between;
+	align-items: center;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .capture-remove-btn {

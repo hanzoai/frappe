@@ -4,12 +4,15 @@ body {
 	@include media-breakpoint-up(sm) {
 		background-color: var(--bg-light-gray);
 	}
+<<<<<<< HEAD
 	.page-content-wrapper {
 		min-height: calc(100vh - 220px);
 	}
 	.web-footer {
 		display: none;
 	}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .for-forgot,
@@ -24,6 +27,7 @@ body {
 .for-login-with-email-link,
 .for-signup,
 .for-email-login {
+<<<<<<< HEAD
 	.page-card {
 		padding: 45px 10px;
 		background-color: #fff;
@@ -31,6 +35,23 @@ body {
 		margin: 0 auto;
 		border-radius: var(--border-radius-md);
 		border: 1px solid var(--border-color);
+=======
+	padding: max(10vh, 60px) 0;
+
+	@include media-breakpoint-up(sm) {
+		.page-card {
+			padding-top: 45px;
+			padding-bottom: 45px;
+			background-color: #fff;
+			box-shadow: var(--shadow-base);
+		}
+	}
+
+	.page-card {
+		max-width: 400px;
+		margin: 0 auto;
+		border-radius: var(--border-radius-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		form {
 			max-width: 320px;
@@ -58,7 +79,11 @@ body {
 			input[type="password"] {
 				border: none;
 				color: var(--text-color);
+<<<<<<< HEAD
 				@include get_textstyle("base", "regular");
+=======
+				font-size: var(--text-base);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				background-color: var(--control-bg);
 				margin-bottom: 1rem;
 			}
@@ -72,7 +97,11 @@ body {
 			}
 
 			.form-label {
+<<<<<<< HEAD
 				@include get_textstyle("base", "regular");
+=======
+				font-size: var(--text-base);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 
 			.forgot-password-message {
@@ -81,13 +110,21 @@ body {
 
 				> * {
 					color: var(--text-light);
+<<<<<<< HEAD
 					@include get_textstyle("sm", "regular");
+=======
+					font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				}
 			}
 
 			.field-icon {
 				left: 9px;
+<<<<<<< HEAD
 				top: 5px;
+=======
+				top: 8px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				position: absolute;
 				z-index: 2;
 			}
@@ -102,7 +139,11 @@ body {
 
 				.toggle-password {
 					right: 9px;
+<<<<<<< HEAD
 					top: 5px;
+=======
+					top: 9px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					position: absolute;
 					z-index: 2;
 					cursor: pointer;
@@ -111,7 +152,12 @@ body {
 			}
 
 			.btn-login-option {
+<<<<<<< HEAD
 				@include get_textstyle("base", "medium");
+=======
+				font-size: var(--text-md);
+				font-weight: 500;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				color: var(--text-gray-700);
 				background: var(--gray-100);
 				box-shadow: none;
@@ -137,7 +183,11 @@ body {
 
 			.social-logins {
 				margin-top: var(--margin-md);
+<<<<<<< HEAD
 				@include get_textstyle("base", "regular");
+=======
+				font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 				.social-login-buttons {
 					margin-top: var(--margin-md);
@@ -163,12 +213,41 @@ body {
 		}
 	}
 
+<<<<<<< HEAD
 	.sign-up-message {
 		margin-top: 1rem;
 		margin-bottom: 0;
 		color: var(--text-light);
 		@include get_textstyle("base", "regular");
 		a {
+=======
+	.page-card-head {
+		margin: 0 auto;
+		text-align: center;
+		font-size: var(--text-xl);
+		font-weight: 600;
+		margin-bottom: 2.5rem;
+
+		img {
+			max-height: 42px;
+			margin-bottom: var(--margin-lg, 30px);
+		}
+
+		h4 {
+			margin-top: 1rem;
+			font-size: var(--text-xl);
+			color: var(--text-color);
+		}
+	}
+
+	.sign-up-message {
+		margin-top: 2rem;
+		color: var(--text-light);
+		font-size: var(--text-md);
+
+		a {
+			font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			color: var(--primary);
 		}
 	}
@@ -198,6 +277,7 @@ body {
 		}
 	}
 }
+<<<<<<< HEAD
 
 .page-card-head {
 	padding: max(5vh, 30px) 0 14px 0px;
@@ -218,3 +298,5 @@ body {
 		color: var(--text-color);
 	}
 }
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

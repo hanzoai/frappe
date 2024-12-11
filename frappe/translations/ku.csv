@@ -9,6 +9,10 @@ Action,Çalakî,
 Actions,Actions,
 Active,Jîr,
 Add,Lêzêdekirin,
+<<<<<<< HEAD
+=======
+Add Comment,lê zêde bike Comment,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Add Row,lê zêde bike Row,
 Address,Navnîşan,
 Address Line 2,Line Address 2,
@@ -143,6 +147,10 @@ Monday,Duşem,
 Monthly,Mehane,
 More,Zêde,
 More Information,Information More,
+<<<<<<< HEAD
+=======
+More...,Zêde...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Move,Barkirin,
 My Account,My Account,
 New Address,New Address,
@@ -155,6 +163,10 @@ No items found.,Ti tişt nehat dîtin.,
 None,Netû,
 Not Permitted,destûrdayî ne,
 Not active,çalak ne,
+<<<<<<< HEAD
+=======
+Notes,Notes,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Number,Jimare,
 Online,bike,
 Operation,Emelî,
@@ -164,12 +176,25 @@ Owner,Xwedî,
 Page Missing or Moved,Page kêm an jî koçî,
 Parameter,parametreyê,
 Password,Şîfre,
+<<<<<<< HEAD
 Period,Nixte,
 Pincode,Pincode,
+=======
+Payment Gateway,Gateway Payment,
+Payment Gateway Name,Navnîşana Gatewayê,
+Payments,Payments,
+Period,Nixte,
+Pincode,Pincode,
+Plan Name,Plan Navê,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Please enable pop-ups,Ji kerema xwe ve pop-ups çalak,
 Please select Company,Ji kerema xwe ve Company hilbijêre,
 Please select {0},{0} ji kerema xwe hilbijêre,
 Please set Email Address,Ji kerema xwe ve set Email Address,
+<<<<<<< HEAD
+=======
+Portal,Portal,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Portal Settings,Settings Portal,
 Preview,Pêşnerîn,
 Primary,Bingehîn,
@@ -214,6 +239,10 @@ Salutation,Silav,
 Sample,Mînak,
 Saturday,Şemî,
 Saved,xilas,
+<<<<<<< HEAD
+=======
+Scan Barcode,Barcode kişandin,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Scheduled,scheduled,
 Search,Gerr,
 Secret Key,Key Secret,
@@ -228,6 +257,10 @@ Settings,Mîhengên,
 Shipping,Shipping,
 Short Name,Navê Short,
 Slideshow,Slideshow,
+<<<<<<< HEAD
+=======
+Some information is missing,Hinek agahî kêm,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Source,Kanî,
 Source Name,Navê Source,
 Standard,Wek herdem,
@@ -237,6 +270,10 @@ State,Rewş,
 Stopped,rawestandin,
 Subject,Mijar,
 Submit,Nermijîn,
+<<<<<<< HEAD
+=======
+Successful,Serfiraz,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Summary,Berhevkirinî,
 Sunday,Yekşem,
 System Manager,sîstema Manager,
@@ -249,9 +286,17 @@ The page you are looking for is missing. This could be because it is moved or th
 Timespan,Timespan,
 To,Ber,
 To Date,to Date,
+<<<<<<< HEAD
 Traceback,Traceback,
 URL,URL,
 Unsubscribed,Unsubscribed,
+=======
+Tools,Amûrên,
+Traceback,Traceback,
+URL,URL,
+Unsubscribed,Unsubscribed,
+Use Sandbox,bikaranîna Ceriban,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 User,Bikaranîvan,
 User ID,ID&#39;ya bikarhêner,
 Users,Bikarhêner li,
@@ -556,6 +601,10 @@ Bulk Delete,Bulk Jêkirin,
 Bulk Edit {0},Edit Gir {0},
 Bulk Rename,rename Gir,
 Bulk Update,Update Gir,
+<<<<<<< HEAD
+=======
+Busy,Bikar,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Button,Pişkov,
 Button Help,Button Alîkarî,
 Button Label,Label Button,
@@ -692,6 +741,10 @@ Compiled Successfully,Berhevkirin Serkeftin,
 Complete By,Complete By,
 Complete Registration,Registration Complete,
 Complete Setup,Setup Complete,
+<<<<<<< HEAD
+=======
+Completed By,Bi tevahî,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Compose Email,compose Email,
 Condition Detail,Rewşê Determ,
 Conditions,Şertên,
@@ -1380,7 +1433,11 @@ Is Submittable,Submittable e,
 Is Table,e Table,
 Is Your Company Address,E Company te Address,
 It is risky to delete this file: {0}. Please contact your System Manager.,Ev metirsiyek e li vê pelê jê bibî: {0}. Ji kerema xwe ve Manager Pergala xwe re bikeve têkiliyê.,
+<<<<<<< HEAD
 Item cannot be added to its own descendants,Babetê dikarin ji bo neviyên xwe bi xwe ne bê added,
+=======
+Item cannot be added to its own descendents,Babetê dikarin ji bo neviyên xwe bi xwe ne bê added,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 JS,JS,
 JSON,JSON,
 JavaScript Format: frappe.query_reports['REPORTNAME'] = {},JavaScript Format: frappe.query_reports [ &#39;REPORTNAME&#39;] = {},
@@ -1675,8 +1732,13 @@ Not a valid Workflow Action,Çalakiyek Karker a Nayê,
 Not a valid user,Ne bikarhênerek derbasdar,
 Not a zip file,Ne pel zip,
 Not allowed for {0}: {1},Ji bo {0}: {1} nayê destûr kirin,
+<<<<<<< HEAD
 "You are not allowed to access {0} because it is linked to {1} '{2}' in row {3}, field {4}","Tu destûr ne ji bo derxistina {0} ji ber ku ew li rêza {3}, {4} girêdayî ye &#39;{1}&#39;",
 You are not allowed to access this {0} record because it is linked to {1} '{2}' in field {3},Tu destûr ne ji bo derxistina {0} ti qeyd ji ber ku ew li rêza {3} girêdayî ye &#39;{1}&#39;,
+=======
+Not allowed for {0}: {1} in Row {2}. Restricted field: {3},Ji bo {0}: {1} di Row {2} de tune ye. Qada sînorkirî: {3},
+Not allowed for {0}: {1}. Restricted field: {2},Ji bo {0}: {1} nayê destûr kirin. Qada sînorkirî: {2},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Not allowed to Import,destûr ne ji bo derxe,
 Not allowed to change {0} after submission,destûr ne ji bo guhertina {0} piştî sertewandina,
 Not allowed to print cancelled documents,destûr ne ji bo print belgeyên betalkirin,
@@ -1804,6 +1866,10 @@ Path to private Key File,Rê li ber Peleya Keysê Taybet,
 PayPal Settings,Settings PayPal,
 PayPal payment gateway settings,PayPal settings peredana derîyek,
 Payment Cancelled,Payment Hilandin,
+<<<<<<< HEAD
+=======
+Payment Failed,Payment biserneket,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Payment Success,Serkeftina Payment,
 Pending Approval,Li benda erêkirinê ye,
 Pending Verification,Li benda Verêkirinê,
@@ -3200,6 +3266,10 @@ Click on the link below to approve the request,Ji bo pejirandina daxwazê li ser
 Click on the lock icon to toggle public/private,Li ser îkonê hilkişînê bikirtînin da ku guhastina gelemperî / taybet,
 Click on {0} to generate Refresh Token.,On 0 Click bikirtînin da ku Refresh Token hilberînin.,
 Close Condition,Rewşa nêzîk,
+<<<<<<< HEAD
+=======
+Column {0},Column {0},
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Columns / Fields,Kolan / Zevî,
 "Configure notifications for mentions, assignments, energy points and more.","Ji bo bîranînan, peywiran, xalên enerjiyê û hêj bêtir notifications bicîh bikin.",
 Contact Email,Contact Email,
@@ -3281,6 +3351,10 @@ Failed to create an Event Consumer or an Event Consumer for the current site is 
 Failure,Têkçûnî,
 Fetching default Global Search documents.,Daxuyaniya belgeyên Lêgerîna Gloverî yên default.,
 Fetching posts...,Fetching postên ...,
+<<<<<<< HEAD
+=======
+Field Mapping,Nexşeya zeviyê,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field To Check,Field To Kontrol bike,
 File Information,Agahdariya Pelê,
 Filter By,Filter By,
@@ -3435,6 +3509,10 @@ No posts yet,No peyam hê jî,
 No records will be exported,Dê qeyd neyên hinartin,
 No results found for {0} in Global Search,Di Lêgerîna Gloverî de ti encam ji bo {0} nehatin dîtin,
 No user found,Bikarhêner nehat dîtin,
+<<<<<<< HEAD
+=======
+Not Specified,Ne diyar e,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Notification Log,Têketina Notification,
 Notification Settings,Mîhengên Danûstendinê,
 Notification Subscribed Document,Belavkirina Belgeya Pêşkeftinê,
@@ -3590,6 +3668,10 @@ Untitled Column,Kolona Untitled,
 Untranslated,Bêtevger kirin,
 Upcoming Events,Upcoming Events,
 Update Existing Records,Dîmenên Xwe Veşînin,
+<<<<<<< HEAD
+=======
+Update Type,Type nûvekirin,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Updated To A New Version 🎉,Nûvekir Ji Bo Guhertoyek Nû,
 "Updating {0} of {1}, {2}","Rojanekirina {0} ji {1}, {2",
 Upload file,Pelê hilînin,
@@ -3696,16 +3778,28 @@ Designation,teklîfê,
 Disabled,Bêmecel,
 Doctype,Doctype,
 Download Template,download Şablon,
+<<<<<<< HEAD
+=======
+Dr,Dr,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Due Date,Serdem,
 Duplicate,Cote,
 Edit Profile,biguherîne Profile,
 Email,Email,
+<<<<<<< HEAD
+=======
+End Time,Time End,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Enter Value,Enter Nirx,
 Entity Type,Type Type,
 Error,Şaşî,
 Expired,kapê de,
 Export,Eksport,
 Export not allowed. You need {0} role to export.,Export qedexe ne. Ji we re lazim {0} roleke ji bo îxracata.,
+<<<<<<< HEAD
+=======
+Fetching...,Fetching ...,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Field,Erd,
 File Manager,file Manager,
 Filters,Parzûn,
@@ -3720,8 +3814,16 @@ Import Data from CSV / Excel files.,Daneyên Importê ji pelên CSV / Excel.,
 In Progress,Ez teslîm nabim,
 Intermediate,Di nav,
 Invite as User,Gazî yên wek Bikarhêner,
+<<<<<<< HEAD
 Loading...,Loading ...,
 Location,Cîh,
+=======
+"It seems that there is an issue with the server's stripe configuration. In case of failure, the amount will get refunded to your account.","Ew xuya dike ku pirsgirêkek bi sazkirina pergala serverê heye. Di rewşeke neyê de, hejmar dê dê hesabê we vegerîne.",
+Loading...,Loading ...,
+Location,Cîh,
+Looks like someone sent you to an incomplete URL. Please ask them to look into it.,Dişibe kesekî ku tu ji bo URL ne temam şandin. Ji kerema xwe ve ji wan bixwazin ku nav lê binêre.,
+Master,Mamoste,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Message,Agah,
 Missing Values Required,Nirxên Missing pêwîst,
 Mobile No,Mobile No,
@@ -3733,6 +3835,10 @@ Note,Not,
 Offline,Ne girêdayî,
 Open,Vekirî,
 Page {0} of {1},Page {0} ji {1},
+<<<<<<< HEAD
+=======
+Pay,Diravdanî,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Pending,Nexelas,
 Phone,Phone,
 Please click on the following link to set your new password,Ji kerema xwe li ser vê lînkê click to set şîfreya xwe ya nû,
@@ -3782,6 +3888,10 @@ Welcome to {0},Bi xêr hatî {0},
 Year,Sal,
 Yearly,Hit,
 You,Hûn,
+<<<<<<< HEAD
+=======
+You can also copy-paste this link in your browser,Tu dikarî li vê lînkê bitikîne we kopî-bîlkêne,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 and,û,
 {0} Name,{0} Name,
 {0} is required,{0} pêwîst e,
@@ -4085,6 +4195,10 @@ Custom SCSS,SCSS xwerû,
 Navbar,Navbar,
 Source Message,Source Message,
 Translated Message,Peyama Wergerandî,
+<<<<<<< HEAD
+=======
+Verified By,Sîîrtê By,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand.,Bi karanîna vê konsolê dibe ku êrişkar bihêlin ku bibin şexsê we û agahiya we bidizin. Koda ku hûn jê fam nakin têkevin û nexin.,
 {0} m,{0} m,
 {0} h,{0} h,
@@ -4108,7 +4222,11 @@ No changes in document,Di belgeyê de guhertin tune,
 by Role,ji hêla Role ve,
 Document is only editable by users with role,Belge tenê ji hêla bikarhênerên bi rol ve têne guherandin,
 {0}: Other permission rules may also apply,{0}: Dibe ku qaîdeyên destûra din jî derbas bibin,
+<<<<<<< HEAD
 {0} Web page views,{0} Dîtinên Rûpelê,
+=======
+{0} Page Views,{0} Dîtinên Rûpelê,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Expand,Firehkirin,
 Collapse,Jiberhevketin,
 "Invalid Bearer token, please provide a valid access token with prefix 'Bearer'.","Tokenek Hilbera nederbasdar, ji kerema xwe bi pêşgiriya &#39;Bearer&#39; nîşanek gihîştina derbasdar peyda bikin.",
@@ -4117,6 +4235,10 @@ Collapse,Jiberhevketin,
 {0} is not a valid Name,{0} Navek ne derbasdar e,
 Your system is being updated. Please refresh again after a few moments.,Pergala we tê nûve kirin. Ji kerema xwe piştî çend hûrdeman dîsa nû bikin.,
 {0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first.,{0} {1}: Tomara şandî nayê jêbirin. Pêşî divê hûn wê {2} Betal {3} bikin.,
+<<<<<<< HEAD
+=======
+Invalid naming series (. missing) for {0},Ji bo {0} rêze navên nederbasdar (. Winda ye),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Error has occurred in {0},Çewtî di {0} de çêbû,
 Status Updated,Rewş Nûvekirî,
 You can also copy-paste this {0} to your browser,Her weha hûn dikarin vê {0} -ê li rûgera xwe kopî-paste bikin,
@@ -4138,11 +4260,21 @@ Is Billing Contact,Têkiliya Billing e,
 Address And Contacts,Navnîşan Contacts Têkilî,
 Lead Conversion Time,Demjimêrîna Rêberê Demjimêr,
 Due Date Based On,Li ser Bingeha Dîroka Girêdanê,
+<<<<<<< HEAD
 Linked Documents,Belgeyên girêdayî,
+=======
+Phone Number,Jimare telefon,
+Linked Documents,Belgeyên girêdayî,
+Account SID,Hesabê SID,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Steps,Gavên,
 email,email,
 Component,Perçe,
 Subtitle,Binnivîs,
+<<<<<<< HEAD
+=======
+Global Defaults,Têrbûn Global,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Prefix,Pêşkîte,
 Is Public,Gel e,
 This chart will be available to all Users if this is set,Ger ev saz kirin dê ev xet ji hemî Bikarhêneran re hebe,
@@ -4329,6 +4461,10 @@ Dynamic Filters Section,Beşa Parzûnên Dînamîk,
 Please create Card first,Ji kerema xwe pêşî Kartê çêbikin,
 Onboarding Permission,Destûra Keştiyê,
 Onboarding Step,Step Onboarding,
+<<<<<<< HEAD
+=======
+Is Mandatory,Erkdar e,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Is Skipped,Tê Girtin,
 Create Entry,Navnîşê çêbikin,
 Update Settings,Mîhengên Rojanekirin,
@@ -4366,6 +4502,10 @@ Message (HTML),Peyam (HTML),
 Send Attachments,Attachments bişînin,
 Testing,Testkirin,
 System Notification,Ragihandina Pergalê,
+<<<<<<< HEAD
+=======
+WhatsApp,WhatsApp,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Twilio Number,Hejmara Twilio,
 "To use WhatsApp for Business, initialize <a href=""#Form/Twilio Settings"">Twilio Settings</a>.","Ji bo ku WhatsApp-ê ji bo Karsaziyê bikar bînin, <a href=""#Form/Twilio Settings"">Mîhengên Twilio destpê bikin</a> .",
 "To use Slack Channel, add a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook URL</a>.","Ji bo karanîna Kanala Slack, <a href=""#List/Slack%20Webhook%20URL/List"">URL-</a> a <a href=""#List/Slack%20Webhook%20URL/List"">Slack Webhook</a> lê zêde bikin.",
@@ -4500,6 +4640,10 @@ Add to ToDo,Add to ToDo,
 {0} are currently {1},{0} naha {1},
 Currently Replying,Niha Bersiv didin,
 created {0},{0} hate afirandin,
+<<<<<<< HEAD
+=======
+Make a call,Bang bikin,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 Change,Gûherrandinî,Coins
 Too Many Requests,Pir Pir Daxwazan,
 "Invalid Authorization headers, add a token with a prefix from one of the following: {0}.","Sernavên Destûrdayîna nederbasdar, ji yek ji yên jêrîn nîşanek bi pêşpirtûkek zêde bikin: {0}.",
@@ -4664,6 +4808,7 @@ Value cannot be negative for {0}: {1},Nirx nikare ji bo {0} neyînî be: {1},
 Negative Value,Nirxê Neyînî,
 Authentication failed while receiving emails from Email Account: {0}.,Dema ku hûn e-nameyên ji Hesabê E-nameyê werdigirin rastnivîsîn têk çû: {0}.,
 Message from server: {0},Peyama serverê: {0},
+<<<<<<< HEAD
 Add Row,lê zêde bike Row,
 Analytics,Analytics,
 Anonymous,Bênav,
@@ -4796,3 +4941,5 @@ West Bengal,West Bengal,
 Published on,Li ser hate weşandin,
 Bottom,Erd,
 Top,Lûtik,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

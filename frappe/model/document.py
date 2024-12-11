@@ -3,8 +3,11 @@
 import hashlib
 import json
 import time
+<<<<<<< HEAD
 from collections.abc import Generator, Iterable
 from typing import TYPE_CHECKING, Any, Optional
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 from werkzeug.exceptions import NotFound
 
@@ -20,6 +23,7 @@ from frappe.model.docstatus import DocStatus
 from frappe.model.naming import set_new_name, validate_name
 from frappe.model.utils import is_virtual_doctype
 from frappe.model.workflow import set_workflow_state_on_action, validate_workflow
+<<<<<<< HEAD
 from frappe.types import DF
 from frappe.utils import compare, cstr, date_diff, file_lock, flt, get_datetime_str, now
 from frappe.utils.data import get_absolute_url, get_datetime, get_timedelta, getdate
@@ -29,6 +33,12 @@ if TYPE_CHECKING:
 	from frappe.core.doctype.docfield.docfield import DocField
 
 
+=======
+from frappe.utils import cstr, date_diff, file_lock, flt, get_datetime_str, now
+from frappe.utils.data import get_absolute_url, get_datetime, get_timedelta, getdate
+from frappe.utils.global_search import update_global_search
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 DOCUMENT_LOCK_EXPIRTY = 12 * 60 * 60  # All locks expire in 12 hours automatically
 DOCUMENT_LOCK_SOFT_EXPIRY = 60 * 60  # Let users force-unlock after 60 minutes
 
@@ -90,6 +100,7 @@ def get_doc(*args, **kwargs):
 class Document(BaseDocument):
 	"""All controllers inherit from `Document`."""
 
+<<<<<<< HEAD
 	doctype: DF.Data
 	name: DF.Data | None
 	flags: frappe._dict[str, Any]
@@ -99,6 +110,8 @@ class Document(BaseDocument):
 	modified_by: DF.Link
 	idx: DF.Int
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def __init__(self, *args, **kwargs):
 		"""Constructor.
 
@@ -140,9 +153,17 @@ class Document(BaseDocument):
 			# incorrect arguments. let's not proceed.
 			raise ValueError("Illegal arguments")
 
+<<<<<<< HEAD
 	@property
 	def is_locked(self):
 		return file_lock.lock_exists(self.get_signature())
+=======
+	@staticmethod
+	def whitelist(fn):
+		"""Decorator: Whitelist method to be called remotely via REST API."""
+		frappe.whitelist()(fn)
+		return fn
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def load_from_db(self):
 		"""Load document and children from database and create properties
@@ -160,6 +181,7 @@ class Document(BaseDocument):
 			self._fix_numeric_types()
 
 		else:
+<<<<<<< HEAD
 			get_value_kwargs = {"for_update": self.flags.for_update, "as_dict": True}
 			if not isinstance(self.name, dict | list):
 				get_value_kwargs["order_by"] = None
@@ -168,6 +190,9 @@ class Document(BaseDocument):
 				doctype=self.doctype, filters=self.name, fieldname="*", **get_value_kwargs
 			)
 
+=======
+			d = frappe.db.get_value(self.doctype, self.name, "*", as_dict=1, for_update=self.flags.for_update)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			if not d:
 				frappe.throw(
 					_("{0} {1} not found").format(_(self.doctype), self.name), frappe.DoesNotExistError
@@ -219,11 +244,19 @@ class Document(BaseDocument):
 		if not self.has_permission(permtype):
 			self.raise_no_permission_to(permtype)
 
+<<<<<<< HEAD
 	def has_permission(self, permtype="read", *, debug=False, user=None) -> bool:
+=======
+	def has_permission(self, permtype="read", verbose=False) -> bool:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""
 		Call `frappe.permissions.has_permission` if `ignore_permissions` flag isn't truthy
 
 		:param permtype: `read`, `write`, `submit`, `cancel`, `delete`, etc.
+<<<<<<< HEAD
+=======
+		:param verbose: DEPRECATED, will be removed in a future release.
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""
 
 		if self.flags.ignore_permissions:
@@ -231,6 +264,7 @@ class Document(BaseDocument):
 
 		import frappe.permissions
 
+<<<<<<< HEAD
 		return frappe.permissions.has_permission(self.doctype, permtype, self, debug=debug, user=user)
 
 	def raise_no_permission_to(self, perm_type):
@@ -241,6 +275,14 @@ class Document(BaseDocument):
 			_(perm_type),
 			frappe.bold(_(self.doctype)),
 			self.name or "",
+=======
+		return frappe.permissions.has_permission(self.doctype, permtype, self)
+
+	def raise_no_permission_to(self, perm_type):
+		"""Raise `frappe.PermissionError`."""
+		frappe.flags.error_message = (
+			_("Insufficient Permission for {0}").format(self.doctype) + f" ({frappe.bold(_(perm_type))})"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 		raise frappe.PermissionError
 
@@ -257,6 +299,7 @@ class Document(BaseDocument):
 		This will check for user permissions and execute `before_insert`,
 		`validate`, `on_update`, `after_insert` methods if they are written.
 
+<<<<<<< HEAD
 		:param ignore_permissions: Do not check permissions if True.
 		:param ignore_links: Do not check validity of links if True.
 		:param ignore_if_duplicate: Do not raise error if a duplicate entry exists.
@@ -266,6 +309,11 @@ class Document(BaseDocument):
 		"""
 		if self.flags.in_print:
 			return self
+=======
+		:param ignore_permissions: Do not check permissions if True."""
+		if self.flags.in_print:
+			return
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.flags.notifications_executed = []
 
@@ -313,9 +361,17 @@ class Document(BaseDocument):
 		self.flags.in_insert = True
 
 		if self.get("amended_from"):
+<<<<<<< HEAD
 			self.validate_amended_from()
 			self.copy_attachments_from_amended_from()
 
+=======
+			self.copy_attachments_from_amended_from()
+
+		# flag to prevent creation of event update log for create and update both
+		# during document creation
+		self.flags.update_log_for_doc_creation = True
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		relink_mismatched_files(self)
 		self.run_post_save_methods()
 		self.flags.in_insert = False
@@ -333,10 +389,13 @@ class Document(BaseDocument):
 				follow_document(self.doctype, self.name, frappe.session.user)
 		return self
 
+<<<<<<< HEAD
 	def check_if_locked(self):
 		if self.creation and self.is_locked:
 			raise frappe.DocumentLockedError
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def save(self, *args, **kwargs):
 		"""Wrapper for _save"""
 		return self._save(*args, **kwargs)
@@ -363,7 +422,10 @@ class Document(BaseDocument):
 		if self.get("__islocal") or not self.get("name"):
 			return self.insert()
 
+<<<<<<< HEAD
 		self.check_if_locked()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self._set_defaults()
 		self.check_permission("write", "save")
 
@@ -400,6 +462,7 @@ class Document(BaseDocument):
 
 		return self
 
+<<<<<<< HEAD
 	def validate_amended_from(self):
 		if frappe.db.get_value(self.doctype, self.get("amended_from"), "docstatus") != 2:
 			message = _(
@@ -407,6 +470,8 @@ class Document(BaseDocument):
 			).format(frappe.utils.get_link_to_form(self.doctype, self.get("amended_from")))
 			frappe.throw(message, title=_("Amendment Not Allowed"))
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def copy_attachments_from_amended_from(self):
 		"""Copy attachments from `amended_from`"""
 		from frappe.desk.form.load import get_attachments
@@ -432,9 +497,15 @@ class Document(BaseDocument):
 		for df in self.meta.get_table_fields():
 			self.update_child_table(df.fieldname, df)
 
+<<<<<<< HEAD
 	def update_child_table(self, fieldname: str, df: Optional["DocField"] = None):
 		"""sync child table for given fieldname"""
 		df: "DocField" = df or self.meta.get_field(fieldname)
+=======
+	def update_child_table(self, fieldname, df=None):
+		"""sync child table for given fieldname"""
+		df = df or self.meta.get_field(fieldname)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		all_rows = self.get(df.fieldname)
 
 		# delete rows that do not match the ones in the document
@@ -461,10 +532,16 @@ class Document(BaseDocument):
 
 		# update / insert
 		for d in all_rows:
+<<<<<<< HEAD
 			d: Document
 			d.db_update()
 
 	def get_doc_before_save(self) -> "Document":
+=======
+			d.db_update()
+
+	def get_doc_before_save(self):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return getattr(self, "_doc_before_save", None)
 
 	def has_value_changed(self, fieldname):
@@ -494,10 +571,15 @@ class Document(BaseDocument):
 		if self.flags.name_set and not force:
 			return
 
+<<<<<<< HEAD
 		autoname = self.meta.autoname or ""
 
 		# If autoname has set as Prompt (name)
 		if self.get("__newname") and autoname.lower() == "prompt":
+=======
+		# If autoname has set as Prompt (name)
+		if self.get("__newname"):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			self.name = validate_name(self.doctype, self.get("__newname"))
 			self.flags.name_set = True
 			return
@@ -622,11 +704,19 @@ class Document(BaseDocument):
 					_("Row"),
 					self.idx,
 					_("Value cannot be negative for"),
+<<<<<<< HEAD
 					frappe.bold(_(df.label, context=df.parent)),
 				)
 			else:
 				return _("Value cannot be negative for {0}: {1}").format(
 					_(df.parent), frappe.bold(_(df.label, context=df.parent))
+=======
+					frappe.bold(_(df.label)),
+				)
+			else:
+				return _("Value cannot be negative for {0}: {1}").format(
+					_(df.parent), frappe.bold(_(df.label))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				)
 
 		for df in self.meta.get(
@@ -914,7 +1004,11 @@ class Document(BaseDocument):
 		if not missing:
 			return
 
+<<<<<<< HEAD
 		for idx, msg in missing:  # noqa: B007
+=======
+		for _fieldname, msg in missing:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			msgprint(msg)
 
 		if frappe.flags.print_messages:
@@ -1007,17 +1101,27 @@ class Document(BaseDocument):
 					filters={"enabled": 1, "document_type": self.doctype},
 				)
 
+<<<<<<< HEAD
 			self.flags.notifications = frappe.cache.hget("notifications", self.doctype, _get_notifications)
+=======
+			self.flags.notifications = frappe.cache().hget("notifications", self.doctype, _get_notifications)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if not self.flags.notifications:
 			return
 
 		def _evaluate_alert(alert):
+<<<<<<< HEAD
 			if alert.name in self.flags.notifications_executed:
 				return
 
 			evaluate_alert(self, alert.name, alert.event)
 			self.flags.notifications_executed.append(alert.name)
+=======
+			if alert.name not in self.flags.notifications_executed:
+				evaluate_alert(self, alert.name, alert.event)
+				self.flags.notifications_executed.append(alert.name)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		event_map = {
 			"on_update": "Save",
@@ -1037,16 +1141,28 @@ class Document(BaseDocument):
 			elif alert.event == "Method" and method == alert.method:
 				_evaluate_alert(alert)
 
+<<<<<<< HEAD
+=======
+	@whitelist.__func__
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def _submit(self):
 		"""Submit the document. Sets `docstatus` = 1, then saves."""
 		self.docstatus = DocStatus.submitted()
 		return self.save()
 
+<<<<<<< HEAD
+=======
+	@whitelist.__func__
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def _cancel(self):
 		"""Cancel the document. Sets `docstatus` = 2, then saves."""
 		self.docstatus = DocStatus.cancelled()
 		return self.save()
 
+<<<<<<< HEAD
+=======
+	@whitelist.__func__
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def _rename(self, name: str, merge: bool = False, force: bool = False, validate_rename: bool = True):
 		"""Rename the document. Triggers frappe.rename_doc, then reloads."""
 		from frappe.model.rename_doc import rename_doc
@@ -1054,22 +1170,39 @@ class Document(BaseDocument):
 		self.name = rename_doc(doc=self, new=name, merge=merge, force=force, validate=validate_rename)
 		self.reload()
 
+<<<<<<< HEAD
 	@frappe.whitelist()
+=======
+	@whitelist.__func__
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def submit(self):
 		"""Submit the document. Sets `docstatus` = 1, then saves."""
 		return self._submit()
 
+<<<<<<< HEAD
 	@frappe.whitelist()
+=======
+	@whitelist.__func__
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def cancel(self):
 		"""Cancel the document. Sets `docstatus` = 2, then saves."""
 		return self._cancel()
 
+<<<<<<< HEAD
 	@frappe.whitelist()
 	def rename(self, name: str, merge=False, force=False, validate_rename=True):
 		"""Rename the document to `name`. This transforms the current object."""
 		return self._rename(name=name, merge=merge, force=force, validate_rename=validate_rename)
 
 	def delete(self, ignore_permissions=False, force=False, *, delete_permanently=False):
+=======
+	@whitelist.__func__
+	def rename(self, name: str, merge: bool = False, force: bool = False, validate_rename: bool = True):
+		"""Rename the document to `name`. This transforms the current object."""
+		return self._rename(name=name, merge=merge, force=force, validate_rename=validate_rename)
+
+	def delete(self, ignore_permissions=False, *, force=False, delete_permanently=False):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""Delete document."""
 		return frappe.delete_doc(
 			self.doctype,
@@ -1225,6 +1358,7 @@ class Document(BaseDocument):
 		if self.name is None:
 			return
 
+<<<<<<< HEAD
 		if self.meta.issingle:
 			frappe.db.set_single_value(
 				self.doctype,
@@ -1244,12 +1378,27 @@ class Document(BaseDocument):
 				self.modified_by,
 				update_modified=update_modified,
 			)
+=======
+		frappe.db.set_value(
+			self.doctype,
+			self.name,
+			fieldname,
+			value,
+			self.modified,
+			self.modified_by,
+			update_modified=update_modified,
+		)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.run_method("on_change")
 
 		if notify:
 			self.notify_update()
 
+<<<<<<< HEAD
+=======
+		self.clear_cache()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if commit:
 			frappe.db.commit()
 
@@ -1345,6 +1494,15 @@ class Document(BaseDocument):
 	def validate_value(self, fieldname, condition, val2, doc=None, raise_exception=None):
 		"""Check that value of fieldname should be 'condition' val2
 		else throw Exception."""
+<<<<<<< HEAD
+=======
+		error_condition_map = {
+			"in": _("one of"),
+			"not in": _("none of"),
+			"^": _("beginning with"),
+		}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if not doc:
 			doc = self
 
@@ -1353,6 +1511,7 @@ class Document(BaseDocument):
 		df = doc.meta.get_field(fieldname)
 		val2 = doc.cast(val2, df)
 
+<<<<<<< HEAD
 		if not compare(val1, condition, val2):
 			label = doc.meta.get_label(fieldname)
 			if doc.get("parentfield"):
@@ -1370,6 +1529,17 @@ class Document(BaseDocument):
 				msg += _("{0} must be equal to '{1}'").format(label, val2)
 			else:
 				msg += _("{0} must be {1} {2}").format(label, condition, val2)
+=======
+		if not frappe.compare(val1, condition, val2):
+			label = doc.meta.get_label(fieldname)
+			condition_str = error_condition_map.get(condition, condition)
+			if doc.get("parentfield"):
+				msg = _("Incorrect value in row {0}: {1} must be {2} {3}").format(
+					doc.idx, label, condition_str, val2
+				)
+			else:
+				msg = _("Incorrect value: {0} must be {1} {2}").format(label, condition_str, val2)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 			# raise passed exception or True
 			msgprint(msg, raise_exception=raise_exception or True)
@@ -1400,7 +1570,10 @@ class Document(BaseDocument):
 		"""Returns Desk URL for this document."""
 		return get_absolute_url(self.doctype, self.name)
 
+<<<<<<< HEAD
 	@frappe.whitelist()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def add_comment(
 		self,
 		comment_type="Comment",
@@ -1412,7 +1585,11 @@ class Document(BaseDocument):
 
 		:param comment_type: e.g. `Comment`. See Communication for more info."""
 
+<<<<<<< HEAD
 		return frappe.get_doc(
+=======
+		out = frappe.get_doc(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			{
 				"doctype": "Comment",
 				"comment_type": comment_type,
@@ -1423,13 +1600,21 @@ class Document(BaseDocument):
 				"content": text or comment_type,
 			}
 		).insert(ignore_permissions=True)
+<<<<<<< HEAD
+=======
+		return out
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def add_seen(self, user=None):
 		"""add the given/current user to list of users who have seen this document (_seen)"""
 		if not user:
 			user = frappe.session.user
 
+<<<<<<< HEAD
 		if self.meta.track_seen and not frappe.flags.read_only and not self.meta.issingle:
+=======
+		if self.meta.track_seen and not frappe.flags.read_only:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			_seen = self.get("_seen") or []
 			_seen = frappe.parse_json(_seen)
 
@@ -1440,11 +1625,16 @@ class Document(BaseDocument):
 				)
 				frappe.local.flags.commit = True
 
+<<<<<<< HEAD
 	def add_viewed(self, user=None, force=False, unique_views=False):
+=======
+	def add_viewed(self, user=None):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		"""add log to communication when a user views a document"""
 		if not user:
 			user = frappe.session.user
 
+<<<<<<< HEAD
 		if unique_views and frappe.db.exists(
 			"View Log", {"reference_doctype": self.doctype, "reference_name": self.name, "viewed_by": user}
 		):
@@ -1455,6 +1645,13 @@ class Document(BaseDocument):
 				{
 					"doctype": "View Log",
 					"viewed_by": user,
+=======
+		if hasattr(self.meta, "track_views") and self.meta.track_views:
+			view_log = frappe.get_doc(
+				{
+					"doctype": "View Log",
+					"viewed_by": frappe.session.user,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					"reference_doctype": self.doctype,
 					"reference_name": self.name,
 				}
@@ -1465,8 +1662,11 @@ class Document(BaseDocument):
 				view_log.insert(ignore_permissions=True)
 				frappe.local.flags.commit = True
 
+<<<<<<< HEAD
 			return view_log
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def log_error(self, title=None, message=None):
 		"""Helper function to create an Error Log"""
 		return frappe.log_error(
@@ -1579,7 +1779,11 @@ class Document(BaseDocument):
 				file_lock.delete_lock(signature)
 				lock_exists = False
 			if timeout:
+<<<<<<< HEAD
 				for _ in range(timeout):
+=======
+				for _i in range(timeout):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					time.sleep(1)
 					if not file_lock.lock_exists(signature):
 						lock_exists = False
@@ -1595,6 +1799,7 @@ class Document(BaseDocument):
 		if self in frappe.local.locked_documents:
 			frappe.local.locked_documents.remove(self)
 
+<<<<<<< HEAD
 	def validate_from_to_dates(self, from_date_field: str, to_date_field: str) -> None:
 		"""Validate that the value of `from_date_field` is not later than the value of `to_date_field`."""
 		from_date = self.get(from_date_field)
@@ -1607,6 +1812,18 @@ class Document(BaseDocument):
 				_("{0} must be after {1}").format(
 					frappe.bold(_(self.meta.get_label(to_date_field))),
 					frappe.bold(_(self.meta.get_label(from_date_field))),
+=======
+	# validation helpers
+	def validate_from_to_dates(self, from_date_field, to_date_field):
+		"""
+		Generic validation to verify date sequence
+		"""
+		if date_diff(self.get(to_date_field), self.get(from_date_field)) < 0:
+			frappe.throw(
+				_("{0} must be after {1}").format(
+					frappe.bold(self.meta.get_label(to_date_field)),
+					frappe.bold(self.meta.get_label(from_date_field)),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				),
 				frappe.exceptions.InvalidDates,
 			)
@@ -1623,7 +1840,12 @@ class Document(BaseDocument):
 			pluck="allocated_to",
 		)
 
+<<<<<<< HEAD
 		return set(assigned_users)
+=======
+		users = set(assigned_users)
+		return users
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def add_tag(self, tag):
 		"""Add a Tag to this document"""
@@ -1631,12 +1853,15 @@ class Document(BaseDocument):
 
 		DocTags(self.doctype).add(self.name, tag)
 
+<<<<<<< HEAD
 	def remove_tag(self, tag):
 		"""Remove a Tag to this document"""
 		from frappe.desk.doctype.tag.tag import DocTags
 
 		DocTags(self.doctype).remove(self.name, tag)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def get_tags(self):
 		"""Return a list of Tags attached to this document"""
 		from frappe.desk.doctype.tag.tag import DocTags
@@ -1683,8 +1908,13 @@ def execute_action(__doctype, __name, __action, **kwargs):
 		frappe.db.rollback()
 
 		# add a comment (?)
+<<<<<<< HEAD
 		if frappe.message_log:
 			msg = frappe.message_log[-1].get("message")
+=======
+		if frappe.local.message_log:
+			msg = json.loads(frappe.local.message_log[-1]).get("message")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		else:
 			msg = "<pre><code>" + frappe.get_traceback() + "</pre></code>"
 
@@ -1692,6 +1922,7 @@ def execute_action(__doctype, __name, __action, **kwargs):
 	doc.notify_update()
 
 
+<<<<<<< HEAD
 def bulk_insert(
 	doctype: str,
 	documents: Iterable["Document"],
@@ -1749,6 +1980,8 @@ def _document_values_generator(
 		yield tuple(doc_values.get(col) for col in columns)
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 @frappe.whitelist()
 def unlock_document(doctype: str | None = None, name: str | None = None, args=None):
 	# Backward compatibility

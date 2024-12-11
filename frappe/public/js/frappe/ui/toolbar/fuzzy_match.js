@@ -25,14 +25,25 @@ const UNMATCHED_LETTER_PENALTY = -1;
 
 /**
  * Does a fuzzy search to find pattern inside a string.
+<<<<<<< HEAD
  * @param {*} pattern string				Pattern to search for
  * @param {*} str string    				String being searched
  * @returns [boolean, number, Array<number>]		A boolean whether the pattern was found or not, a search score,
  * 							and an array with the positional match indices.
+=======
+ * @param {*} pattern string				pattern to search for
+ * @param {*} str string    				string which is being searched
+ * @returns [boolean, number]   			a boolean which tells if pattern was
+ *											found or not and a search score
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  */
 export function fuzzy_match(pattern, str) {
 	const recursion_count = 0;
 	const recursion_limit = 10;
+<<<<<<< HEAD
+=======
+	const matches = [];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	const max_matches = 256;
 
 	return fuzzy_match_recursive(
@@ -41,7 +52,11 @@ export function fuzzy_match(pattern, str) {
 		0 /* pattern_cur_index */,
 		0 /* str_curr_index */,
 		null /* src_matches */,
+<<<<<<< HEAD
 		[] /* matches */,
+=======
+		matches,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		max_matches,
 		0 /* next_match */,
 		recursion_count,
@@ -65,12 +80,20 @@ function fuzzy_match_recursive(
 
 	// Return if recursion limit is reached.
 	if (++recursion_count >= recursion_limit) {
+<<<<<<< HEAD
 		return [false, out_score, matches];
+=======
+		return [false, out_score];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	// Return if we reached ends of strings.
 	if (pattern_cur_index === pattern.length || str_curr_index === str.length) {
+<<<<<<< HEAD
 		return [false, out_score, matches];
+=======
+		return [false, out_score];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	// Recursion params
@@ -84,7 +107,11 @@ function fuzzy_match_recursive(
 		// Match found.
 		if (pattern[pattern_cur_index].toLowerCase() === str[str_curr_index].toLowerCase()) {
 			if (next_match >= max_matches) {
+<<<<<<< HEAD
 				return [false, out_score, matches];
+=======
+				return [false, out_score];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 
 			if (first_match && src_matches) {
@@ -92,13 +119,22 @@ function fuzzy_match_recursive(
 				first_match = false;
 			}
 
+<<<<<<< HEAD
 			const [matched, recursive_score, recursive_matches] = fuzzy_match_recursive(
+=======
+			const recursive_matches = [];
+			const [matched, recursive_score] = fuzzy_match_recursive(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				pattern,
 				str,
 				pattern_cur_index,
 				str_curr_index + 1,
 				matches,
+<<<<<<< HEAD
 				[] /* recursive_matches */,
+=======
+				recursive_matches,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				max_matches,
 				next_match,
 				recursion_count,
@@ -168,6 +204,7 @@ function fuzzy_match_recursive(
 			// Recursive score is better than "this"
 			matches = [...best_recursive_matches];
 			out_score = best_recursive_score;
+<<<<<<< HEAD
 			return [true, out_score, matches];
 		} else if (matched) {
 			// "this" score is better than recursive
@@ -177,4 +214,15 @@ function fuzzy_match_recursive(
 		}
 	}
 	return [false, out_score, matches];
+=======
+			return [true, out_score];
+		} else if (matched) {
+			// "this" score is better than recursive
+			return [true, out_score];
+		} else {
+			return [false, out_score];
+		}
+	}
+	return [false, out_score];
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }

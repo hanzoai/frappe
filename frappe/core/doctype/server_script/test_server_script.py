@@ -4,7 +4,10 @@ import requests
 
 import frappe
 from frappe.core.doctype.scheduled_job_type.scheduled_job_type import sync_jobs
+<<<<<<< HEAD
 from frappe.frappeclient import FrappeClient, FrappeException
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.tests.utils import FrappeTestCase
 from frappe.utils import get_site_url
 
@@ -84,6 +87,7 @@ frappe.db.commit()
 frappe.db.add_index("Todo", ["color", "date"])
 """,
 	),
+<<<<<<< HEAD
 	dict(
 		name="test_before_rename",
 		script_type="DocType Event",
@@ -104,6 +108,8 @@ doc.disabled =1
 doc.save()
 """,
 	),
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 ]
 
 
@@ -117,18 +123,30 @@ class TestServerScript(FrappeTestCase):
 			script_doc = frappe.get_doc(doctype="Server Script")
 			script_doc.update(script)
 			script_doc.insert()
+<<<<<<< HEAD
 		cls.enable_safe_exec()
 		frappe.db.commit()
 		return super().setUpClass()
+=======
+
+		frappe.db.commit()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	@classmethod
 	def tearDownClass(cls):
 		frappe.db.commit()
 		frappe.db.truncate("Server Script")
+<<<<<<< HEAD
 		frappe.cache.delete_value("server_script_map")
 
 	def setUp(self):
 		frappe.cache.delete_value("server_script_map")
+=======
+		frappe.cache().delete_value("server_script_map")
+
+	def setUp(self):
+		frappe.cache().delete_value("server_script_map")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def test_doctype_event(self):
 		todo = frappe.get_doc(dict(doctype="ToDo", description="hello")).insert()
@@ -141,12 +159,15 @@ class TestServerScript(FrappeTestCase):
 			frappe.ValidationError, frappe.get_doc(dict(doctype="ToDo", description="validate me")).insert
 		)
 
+<<<<<<< HEAD
 		role = frappe.get_doc(doctype="Role", role_name="_Test Role 9").insert(ignore_if_duplicate=True)
 		role.rename("_Test Role 10")
 		role.reload()
 		self.assertEqual(role.disabled, 1)
 		self.assertEqual(role.desk_access, 0)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_api(self):
 		response = requests.post(get_site_url(frappe.local.site) + "/api/method/test_server_script")
 		self.assertEqual(response.status_code, 200)
@@ -259,6 +280,7 @@ frappe.qb.from_(todo).select(todo.name).where(todo.name == "{todo.name}").run()
 		script.insert()
 		script.execute_method()
 
+<<<<<<< HEAD
 	def test_server_script_rate_limiting(self):
 		script1 = frappe.get_doc(
 			doctype="Server Script",
@@ -307,6 +329,8 @@ frappe.qb.from_(todo).select(todo.name).where(todo.name == "{todo.name}").run()
 		script2.delete()
 		frappe.db.commit()
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_server_script_scheduled(self):
 		scheduled_script = frappe.get_doc(
 			doctype="Server Script",

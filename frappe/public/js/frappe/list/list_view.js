@@ -29,11 +29,19 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			2000
 		);
 		this.count_upper_bound = 1001;
+<<<<<<< HEAD
 		this._element_factory = new ElementFactory(this.doctype);
 	}
 
 	has_permissions() {
 		return frappe.perm.has_perm(this.doctype, 0, "read");
+=======
+	}
+
+	has_permissions() {
+		const can_read = frappe.perm.has_perm(this.doctype, 0, "read");
+		return can_read;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	show() {
@@ -309,7 +317,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	refresh(refresh_header = false) {
+<<<<<<< HEAD
 		return super.refresh().then(() => {
+=======
+		super.refresh().then(() => {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this.render_header(refresh_header);
 			this.update_checkbox();
 			this.update_url_with_filters();
@@ -467,10 +479,14 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			? __("No {0} found with matching filters. Clear filters to see all {0}.", [
 					__(this.doctype),
 			  ])
+<<<<<<< HEAD
 			: this.meta.description
 			? __(this.meta.description)
 			: __("You haven't created a {0} yet", [__(this.doctype)]);
 
+=======
+			: __("You haven't created a {0} yet", [__(this.doctype)]);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		let new_button_label = has_filters_set
 			? __("Create a new {0}", [__(this.doctype)], "Create a new document from list view")
 			: __(
@@ -483,7 +499,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			"/assets/frappe/images/ui-states/list-empty-state.svg";
 
 		const new_button = this.can_create
+<<<<<<< HEAD
 			? `<p><button class="btn btn-default btn-sm btn-new-doc hidden-xs">
+=======
+			? `<p><button class="btn btn-primary btn-sm btn-new-doc hidden-xs">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				${new_button_label}
 			</button> <button class="btn btn-primary btn-new-doc visible-xs">
 				${__("Create New", null, "Create a new document from list view")}
@@ -511,6 +531,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	get_args() {
 		const args = super.get_args();
 
+<<<<<<< HEAD
 		if (this.list_view_settings && !this.list_view_settings.disable_comment_count) {
 			args.with_comment_count = 1;
 		} else {
@@ -518,6 +539,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		}
 
 		return args;
+=======
+		return Object.assign(args, {
+			with_comment_count: true,
+		});
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	before_refresh() {
@@ -658,10 +684,17 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		let subject_html = `
 			<input class="level-item list-check-all" type="checkbox"
 				title="${__("Select All")}">
+<<<<<<< HEAD
 			<span class="level-item" data-sort-by="${subject_field.fieldname}"
 				title="${__("Click to sort by {0}", [subject_field.label])}">
 				${__(subject_field.label)}
 			</span>
+=======
+			<span class="level-item list-liked-by-me hidden-xs">
+				<span title="${__("Likes")}">${frappe.utils.icon("heart", "sm", "like-icon")}</span>
+			</span>
+			<span class="level-item">${__(subject_field.label)}</span>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		`;
 		const $columns = this.columns
 			.map((col) => {
@@ -672,6 +705,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 					frappe.model.is_numeric_field(col.df) ? "text-right" : "",
 				].join(" ");
 
+<<<<<<< HEAD
 				let html = "";
 				if (col.type === "Subject") {
 					html = subject_html;
@@ -684,10 +718,22 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 				}
 
 				return `<div class="${classes}">${html}</div>
+=======
+				return `
+				<div class="${classes}">
+					${
+						col.type === "Subject"
+							? subject_html
+							: `
+						<span>${__((col.df && col.df.label) || col.type)}</span>`
+					}
+				</div>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			`;
 			})
 			.join("");
 
+<<<<<<< HEAD
 		const right_html = `
 			<span class="list-count"></span>
 			<span class="level-item list-liked-by-me hidden-xs">
@@ -698,6 +744,9 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		`;
 
 		return this.get_header_html_skeleton($columns, right_html);
+=======
+		return this.get_header_html_skeleton($columns, '<span class="list-count"></span>');
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	get_header_html_skeleton(left = "", right = "") {
@@ -743,7 +792,10 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 						${right}
 					</div>
 				</div>
+<<<<<<< HEAD
 				<div class="list-row-border"></div>
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			</div>
 		`;
 	}
@@ -761,7 +813,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		if (col.type === "Tag") {
 			const tags_display_class = !this.tags_shown ? "hide" : "";
 			let tags_html = doc._user_tags
+<<<<<<< HEAD
 				? this.get_tags_html(doc._user_tags, 2, true)
+=======
+				? this.get_tags_html(doc._user_tags, 2)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				: '<div class="tags-empty">-</div>';
 			return `
 				<div class="list-row-col tag-col ${tags_display_class} hidden-xs ellipsis">
@@ -780,12 +836,22 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			: value;
 
 		let translated_doctypes = frappe.boot?.translated_doctypes || [];
+<<<<<<< HEAD
 		if (translated_doctypes.includes(df.options)) {
+=======
+		if (in_list(translated_doctypes, df.options)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			value_display = __(value_display);
 		}
 
 		const format = () => {
+<<<<<<< HEAD
 			if (df.fieldtype === "Percent") {
+=======
+			if (df.fieldtype === "Code") {
+				return value;
+			} else if (df.fieldtype === "Percent") {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				return `<div class="progress" style="margin: 0px;">
 						<div class="progress-bar progress-bar-success" role="progressbar"
 							aria-valuenow="${value}"
@@ -837,7 +903,15 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 					data-filter="${fieldname},=,${value}">
 					${_value}
 				</a>`;
+<<<<<<< HEAD
 			} else if (frappe.model.html_fieldtypes.includes(df.fieldtype)) {
+=======
+			} else if (
+				["Text Editor", "Text", "Small Text", "HTML Editor", "Markdown Editor"].includes(
+					df.fieldtype
+				)
+			) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				html = `<span class="ellipsis">
 					${_value}
 				</span>`;
@@ -873,7 +947,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			column_html = this.settings.formatters[fieldname](value, df, doc);
 		} else {
 			column_html = {
+<<<<<<< HEAD
 				Subject: this.get_subject_element(doc, value_display).innerHTML,
+=======
+				Subject: this.get_subject_html(doc, value_display),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				Field: field_html(),
 			}[col.type];
 		}
@@ -923,15 +1001,27 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 
 		const modified = comment_when(doc.modified, true);
 
+<<<<<<< HEAD
 		let assigned_to = ``;
 
 		let assigned_users = doc._assign ? JSON.parse(doc._assign) : [];
 		if (assigned_users.length) {
 			assigned_to = `<div class="list-assignments d-flex align-items-center">
+=======
+		let assigned_to = `<div class="list-assignments">
+			<span class="avatar avatar-small">
+			<span class="avatar-empty"></span>
+		</div>`;
+
+		let assigned_users = doc._assign ? JSON.parse(doc._assign) : [];
+		if (assigned_users.length) {
+			assigned_to = `<div class="list-assignments">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					${frappe.avatar_group(assigned_users, 3, { filterable: true })[0].outerHTML}
 				</div>`;
 		}
 
+<<<<<<< HEAD
 		let comment_count = null;
 		if (this.list_view_settings && !this.list_view_settings.disable_comment_count) {
 			comment_count = `<span class="comment-count d-flex align-items-center">
@@ -939,18 +1029,29 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 				${doc._comment_count > 99 ? "99+" : doc._comment_count || 0}
 			</span>`;
 		}
+=======
+		const comment_count = `<span class="comment-count">
+				${frappe.utils.icon("small-message")}
+				${doc._comment_count > 99 ? "99+" : doc._comment_count || 0}
+			</span>`;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		html += `
 			<div class="level-item list-row-activity hidden-xs">
 				<div class="hidden-md hidden-xs">
 					${settings_button || assigned_to}
 				</div>
+<<<<<<< HEAD
 				<span class="modified">${modified}</span>
 				${comment_count || ""}
 				${comment_count ? '<span class="mx-2">·</span>' : ""}
 				<span class="list-row-like hidden-xs" style="margin-bottom: 1px;">
 					${this.get_like_html(doc)}
 				</span>
+=======
+				${modified}
+				${comment_count}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			</div>
 			<div class="level-item visible-xs text-right">
 				${this.get_indicator_html(doc)}
@@ -1004,6 +1105,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	get_seen_class(doc) {
+<<<<<<< HEAD
 		const seen_by = doc._seen ? JSON.parse(doc._seen) : [];
 		return seen_by.includes(frappe.session.user) ? "" : "bold";
 	}
@@ -1017,10 +1119,36 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		div.appendChild(
 			this._element_factory.get_like_element(doc.name, is_liked, liked_by, title)
 		);
+=======
+		return JSON.parse(doc._seen || "[]").includes(frappe.session.user) ? "" : "bold";
+	}
+
+	get_like_html(doc) {
+		const liked_by = JSON.parse(doc._liked_by || "[]");
+		const heart_class = liked_by.includes(frappe.session.user)
+			? "liked-by liked"
+			: "not-liked";
+		const title = liked_by.map((u) => frappe.user_info(u).fullname).join(", ");
+
+		const div = document.createElement("div");
+		div.innerHTML = `
+			<span class="like-action ${heart_class}">
+				${frappe.utils.icon("heart", "sm", "like-icon")}
+			</span>
+			<span class="likes-count">${liked_by.length}</span>
+		`;
+
+		const like = div.querySelector(".like-action");
+		like.setAttribute("data-liked-by", doc._liked_by || "[]");
+		like.setAttribute("data-doctype", this.doctype);
+		like.setAttribute("data-name", doc.name);
+		like.setAttribute("title", title);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		return div.innerHTML;
 	}
 
+<<<<<<< HEAD
 	get_subject_element(doc, title) {
 		const ef = this._element_factory;
 		const div = document.createElement("div");
@@ -1046,22 +1174,62 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 
 	get_subject_text(doc, title) {
 		const subject_field = this.columns[0].df;
+=======
+	get_subject_html(doc, title) {
+		let subject_field = this.columns[0].df;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		let value = title || doc[subject_field.fieldname];
 		if (this.settings.formatters && this.settings.formatters[subject_field.fieldname]) {
 			let formatter = this.settings.formatters[subject_field.fieldname];
 			value = formatter(value, subject_field, doc);
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (!value) {
 			value = doc.name;
 		}
 
+<<<<<<< HEAD
 		if (frappe.model.html_fieldtypes.includes(subject_field.fieldtype)) {
 			// NOTE: this is very slow, so only do it for HTML fields
 			return frappe.utils.html2text(value);
 		} else {
 			return value;
 		}
+=======
+		const seen = this.get_seen_class(doc);
+
+		const div = document.createElement("div");
+		div.innerHTML = `
+			<span class="level-item select-like">
+				<input class="list-row-checkbox" type="checkbox">
+				<span class="list-row-like hidden-xs style="margin-bottom: 1px;">
+					${this.get_like_html(doc)}
+				</span>
+			</span>
+			<span class="level-item ${seen} ellipsis">
+				<a class="ellipsis"></a>
+			</span>
+		`;
+
+		const checkbox = div.querySelector(".list-row-checkbox");
+		checkbox.dataset.doctype = this.doctype;
+		checkbox.dataset.name = doc.name;
+
+		const link = div.querySelector(".level-item a");
+		link.dataset.doctype = this.doctype;
+		link.dataset.name = doc.name;
+		link.href = this.get_form_link(doc);
+		// "Text Editor" and some other fieldtypes can have html tags in them so strip and show text.
+		// If no text is found show "No Text Found in {Field Label}"
+		let textValue = frappe.utils.html2text(value);
+		link.title = textValue;
+		link.textContent = textValue;
+
+		return div.innerHTML;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	get_indicator_html(doc, show_workflow_state) {
@@ -1074,9 +1242,13 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		];
 		const title = docstatus_description[doc.docstatus || 0];
 		if (indicator) {
+<<<<<<< HEAD
 			return `<span class="indicator-pill ${
 				indicator[1]
 			} filterable no-indicator-dot ellipsis"
+=======
+			return `<span class="indicator-pill ${indicator[1]} filterable ellipsis"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				data-filter='${indicator[2]}' title='${title}'>
 				<span class="ellipsis"> ${__(indicator[0])}</span>
 			</span>`;
@@ -1101,7 +1273,10 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 
 	setup_events() {
 		this.setup_filterable();
+<<<<<<< HEAD
 		this.setup_sort_by();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.setup_list_click();
 		this.setup_drag_click();
 		this.setup_tag_event();
@@ -1243,6 +1418,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		});
 	}
 
+<<<<<<< HEAD
 	setup_sort_by() {
 		this.$result.on("click", "[data-sort-by]", (e) => {
 			const sort_by = e.currentTarget.getAttribute("data-sort-by");
@@ -1257,6 +1433,8 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		});
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	setup_list_click() {
 		this.$result.on("click", ".list-row, .image-view-header, .file-header", (e) => {
 			const $target = $(e.target);
@@ -1306,8 +1484,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		*/
 		this.dragClick = false;
 		this.$result.on("mousedown", ".list-row-checkbox", (e) => {
+<<<<<<< HEAD
 			e.stopPropagation?.();
 			e.preventDefault?.();
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			this.dragClick = true;
 			this.check = !e.target.checked;
 		});
@@ -1393,6 +1574,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	setup_like() {
+<<<<<<< HEAD
 		this.$result.on("click", ".like-action", (e) => {
 			const $this = $(e.currentTarget);
 			const { doctype, name } = $this.data();
@@ -1401,6 +1583,9 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			return false;
 		});
 
+=======
+		this.$result.on("click", ".like-action", frappe.ui.click_toggle_like);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.$result.on("click", ".list-liked-by-me", (e) => {
 			const $this = $(e.currentTarget);
 			$this.toggleClass("active");
@@ -1443,7 +1628,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		if (this.list_view_settings?.disable_auto_refresh || this.realtime_events_setup) {
 			return;
 		}
+<<<<<<< HEAD
 		frappe.realtime.doctype_subscribe(this.doctype);
+=======
+		frappe.socketio.doctype_subscribe(this.doctype);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.realtime.off("list_update");
 		frappe.realtime.on("list_update", (data) => {
 			if (data?.doctype !== this.doctype) {
@@ -1466,7 +1655,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	disable_realtime_updates() {
+<<<<<<< HEAD
 		frappe.realtime.doctype_unsubscribe(this.doctype);
+=======
+		frappe.socketio.doctype_unsubscribe(this.doctype);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.realtime_events_setup = false;
 	}
 
@@ -1550,7 +1743,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	avoid_realtime_update() {
+<<<<<<< HEAD
 		if (this.filter_area?.is_being_edited()) {
+=======
+		if (this.filter_area.is_being_edited()) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			return true;
 		}
 		// this is set when a bulk operation is called from a list view which might update the list view
@@ -1563,10 +1760,13 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	set_rows_as_checked() {
+<<<<<<< HEAD
 		if (!this.$checks || !this.$checks.length) {
 			return;
 		}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		$.each(this.$checks, (i, el) => {
 			let docname = $(el).attr("data-name");
 			this.$result.find(`.list-row-checkbox[data-name='${docname}']`).prop("checked", true);
@@ -1634,15 +1834,35 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	get_url_with_filters() {
+<<<<<<< HEAD
 		let search_params = this.get_search_params();
 
 		let full_url = window.location.href.replace(window.location.search, "");
 		if (search_params.size) {
 			full_url += "?" + search_params.toString();
+=======
+		const query_params = this.get_filters_for_args()
+			.map((filter) => {
+				if (filter[2] === "=") {
+					return `${filter[1]}=${encodeURIComponent(filter[3])}`;
+				}
+				return [
+					filter[1],
+					"=",
+					encodeURIComponent(JSON.stringify([filter[2], filter[3]])),
+				].join("");
+			})
+			.join("&");
+
+		let full_url = window.location.href.replace(window.location.search, "");
+		if (query_params) {
+			full_url += "?" + query_params;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		return full_url;
 	}
 
+<<<<<<< HEAD
 	get_search_params() {
 		let search_params = new URLSearchParams();
 
@@ -1656,6 +1876,8 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		return search_params;
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	get_menu_items() {
 		const doctype = this.doctype;
 		const items = [];
@@ -1671,7 +1893,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			});
 		}
 
+<<<<<<< HEAD
 		if (frappe.user_roles.includes("System Manager")) {
+=======
+		if (frappe.model.can_set_user_permissions(doctype)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			items.push({
 				label: __("User Permissions", null, "Button in list view menu"),
 				action: () =>
@@ -1859,6 +2085,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			};
 		};
 
+<<<<<<< HEAD
 		const bulk_assignment_clear = () => {
 			return {
 				label: __("Clear Assignment", null, "Button in list view actions menu"),
@@ -1883,6 +2110,8 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			};
 		};
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		const bulk_assignment_rule = () => {
 			return {
 				label: __("Apply Assignment Rule", null, "Button in list view actions menu"),
@@ -2051,8 +2280,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		// bulk assignment
 		actions_menu_items.push(bulk_assignment());
 
+<<<<<<< HEAD
 		actions_menu_items.push(bulk_assignment_clear());
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		actions_menu_items.push(bulk_assignment_rule());
 
 		actions_menu_items.push(bulk_add_tags());
@@ -2141,6 +2373,7 @@ frappe.get_list_view = (doctype) => {
 	let route = `List/${doctype}/List`;
 	return frappe.views.list_view[route];
 };
+<<<<<<< HEAD
 
 class ElementFactory {
 	/* Pre-create templates for HTML Elements on initialization and provide them
@@ -2219,3 +2452,5 @@ class ElementFactory {
 		return like;
 	}
 }
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

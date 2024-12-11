@@ -5,11 +5,14 @@ from frappe.tests.utils import FrappeTestCase
 
 
 class TestSystemConsole(FrappeTestCase):
+<<<<<<< HEAD
 	@classmethod
 	def setUpClass(cls) -> None:
 		cls.enable_safe_exec()
 		return super().setUpClass()
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def test_system_console(self):
 		system_console = frappe.get_doc("System Console")
 		system_console.console = 'log("hello")'

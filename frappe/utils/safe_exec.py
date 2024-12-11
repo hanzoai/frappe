@@ -1,18 +1,27 @@
 import ast
 import copy
 import inspect
+<<<<<<< HEAD
 import io
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import json
 import mimetypes
 import types
 from contextlib import contextmanager
 from functools import lru_cache
+<<<<<<< HEAD
 from itertools import chain
 from types import FunctionType, MethodType, ModuleType
 from typing import TYPE_CHECKING, Any
 
 import RestrictedPython.Guards
 from RestrictedPython import PrintCollector, compile_restricted, safe_globals
+=======
+
+import RestrictedPython.Guards
+from RestrictedPython import compile_restricted, safe_globals
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from RestrictedPython.transformer import RestrictingNodeTransformer
 
 import frappe
@@ -29,7 +38,11 @@ from frappe.model.mapper import get_mapped_doc
 from frappe.model.rename_doc import rename_doc
 from frappe.modules import scrub
 from frappe.utils.background_jobs import enqueue, get_jobs
+<<<<<<< HEAD
 from frappe.website.utils import get_next_link, get_toc
+=======
+from frappe.website.utils import get_next_link, get_shade, get_toc
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.www.printview import get_visible_columns
 
 
@@ -39,9 +52,12 @@ class ServerScriptNotEnabled(frappe.PermissionError):
 
 ARGUMENT_NOT_SET = object()
 
+<<<<<<< HEAD
 SAFE_EXEC_CONFIG_KEY = "server_script_enabled"
 SERVER_SCRIPT_FILE_PREFIX = "<serverscript>"
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 class NamespaceDict(frappe._dict):
 	"""Raise AttributeError if function not found in namespace"""
@@ -65,6 +81,7 @@ class FrappeTransformer(RestrictingNodeTransformer):
 		return super().check_name(node, name, *args, **kwargs)
 
 
+<<<<<<< HEAD
 class FrappePrintCollector(PrintCollector):
 	"""Collect written text, and return it when called."""
 
@@ -93,6 +110,18 @@ def safe_exec(
 		docs_cta = _("Read the documentation to know more")
 		msg += f"<br><a href='https://frappeframework.com/docs/user/en/desk/scripting/server-script'>{docs_cta}</a>"
 		frappe.throw(msg, ServerScriptNotEnabled, title="Server Scripts Disabled")
+=======
+def safe_exec(script, _globals=None, _locals=None, restrict_commit_rollback=False):
+	# server scripts can be disabled via site_config.json
+	# they are enabled by default
+	if "server_script_enabled" in frappe.conf:
+		enabled = frappe.conf.server_script_enabled
+	else:
+		enabled = True
+
+	if not enabled:
+		frappe.throw(_("Please Enable Server Scripts"), ServerScriptNotEnabled)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	# build globals
 	exec_globals = get_safe_globals()
@@ -105,6 +134,7 @@ def safe_exec(
 		exec_globals.frappe.db.pop("rollback", None)
 		exec_globals.frappe.db.pop("add_index", None)
 
+<<<<<<< HEAD
 	filename = SERVER_SCRIPT_FILE_PREFIX
 	if script_filename:
 		filename += f": {frappe.scrub(script_filename)}"
@@ -113,6 +143,12 @@ def safe_exec(
 		# execute script compiled by RestrictedPython
 		exec(
 			compile_restricted(script, filename=filename, policy=FrappeTransformer),
+=======
+	with safe_exec_flags(), patched_qb():
+		# execute script compiled by RestrictedPython
+		exec(
+			compile_restricted(script, filename="<serverscript>", policy=FrappeTransformer),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			exec_globals,
 			_locals,
 		)
@@ -259,10 +295,13 @@ def get_safe_globals():
 				sql=read_sql,
 				commit=frappe.db.commit,
 				rollback=frappe.db.rollback,
+<<<<<<< HEAD
 				after_commit=frappe.db.after_commit,
 				before_commit=frappe.db.before_commit,
 				after_rollback=frappe.db.after_rollback,
 				before_rollback=frappe.db.before_rollback,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				add_index=frappe.db.add_index,
 			),
 			lang=getattr(frappe.local, "lang", "en"),
@@ -272,6 +311,10 @@ def get_safe_globals():
 		get_toc=get_toc,
 		get_next_link=get_next_link,
 		_=frappe._,
+<<<<<<< HEAD
+=======
+		get_shade=get_shade,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		scrub=scrub,
 		guess_mimetype=mimetypes.guess_type,
 		html2text=html2text,
@@ -295,9 +338,12 @@ def get_safe_globals():
 	out._getitem_ = _getitem
 	out._getattr_ = _getattr_for_safe_exec
 
+<<<<<<< HEAD
 	# Allow using `print()` calls with `safe_exec()`
 	out._print_ = FrappePrintCollector
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	# allow iterators and list comprehension
 	out._getiter_ = iter
 	out._iter_unpack_sequence_ = RestrictedPython.Guards.guarded_iter_unpack_sequence
@@ -308,6 +354,7 @@ def get_safe_globals():
 	return out
 
 
+<<<<<<< HEAD
 def get_keys_for_autocomplete(
 	key: str,
 	value: Any,
@@ -354,6 +401,8 @@ def get_keys_for_autocomplete(
 		yield {"value": full_key, "score": score, "meta": meta}
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def is_job_queued(job_name, queue="default"):
 	"""
 	:param job_name: used to identify a queued job, usually dotted path to function
@@ -603,7 +652,13 @@ VALID_UTILS = (
 	"now_datetime",
 	"get_timestamp",
 	"get_eta",
+<<<<<<< HEAD
 	"get_system_timezone",
+=======
+	"get_time_zone",
+	"get_system_timezone",
+	"convert_utc_to_user_timezone",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	"convert_utc_to_system_timezone",
 	"now",
 	"nowdate",

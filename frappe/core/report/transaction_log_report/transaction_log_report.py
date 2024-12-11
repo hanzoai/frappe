@@ -77,7 +77,11 @@ def calculate_chain(transaction_hash, previous_hash):
 
 
 def get_columns(filters=None):
+<<<<<<< HEAD
 	return [
+=======
+	columns = [
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		{
 			"label": _("Chain Integrity"),
 			"fieldname": "chain_integrity",
@@ -90,6 +94,7 @@ def get_columns(filters=None):
 			"fieldtype": "Data",
 			"width": 150,
 		},
+<<<<<<< HEAD
 		{
 			"label": _("Reference Name"),
 			"fieldname": "reference_name",
@@ -115,3 +120,11 @@ def get_columns(filters=None):
 			"width": 100,
 		},
 	]
+=======
+		{"label": _("Reference Name"), "fieldname": "reference_name", "fieldtype": "Data", "width": 150},
+		{"label": _("Owner"), "fieldname": "owner", "fieldtype": "Data", "width": 100},
+		{"label": _("Modified By"), "fieldname": "modified_by", "fieldtype": "Data", "width": 100},
+		{"label": _("Timestamp"), "fieldname": "timestamp", "fieldtype": "Data", "width": 100},
+	]
+	return columns
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

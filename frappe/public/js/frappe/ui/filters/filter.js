@@ -20,17 +20,27 @@ frappe.ui.Filter = class {
 			["in", __("In")],
 			["not in", __("Not In")],
 			["is", __("Is")],
+<<<<<<< HEAD
 			[">", __("Greater Than")],
 			["<", __("Less Than")],
 			[">=", __("Greater Than Or Equal To")],
 			["<=", __("Less Than Or Equal To")],
+=======
+			[">", ">"],
+			["<", "<"],
+			[">=", ">="],
+			["<=", "<="],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			["Between", __("Between")],
 			["Timespan", __("Timespan")],
 		];
 
 		this.nested_set_conditions = [
 			["descendants of", __("Descendants Of")],
+<<<<<<< HEAD
 			["descendants of (inclusive)", __("Descendants Of (inclusive)")],
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			["not descendants of", __("Not Descendants Of")],
 			["ancestors of", __("Ancestors Of")],
 			["not ancestors of", __("Not Ancestors Of")],
@@ -52,6 +62,7 @@ frappe.ui.Filter = class {
 			"Markdown Editor": ["Between", "Timespan", ">", "<", ">=", "<=", "in", "not in"],
 			Password: ["Between", "Timespan", ">", "<", ">=", "<=", "in", "not in"],
 			Rating: ["like", "not like", "Between", "in", "not in", "Timespan"],
+<<<<<<< HEAD
 			Float: ["like", "not like", "Between", "in", "not in", "Timespan"],
 		};
 
@@ -68,6 +79,8 @@ frappe.ui.Filter = class {
 				"<=": __("On or Before"),
 				">=": __("On or After"),
 			},
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		};
 	}
 
@@ -287,7 +300,10 @@ frappe.ui.Filter = class {
 	make_field(df, old_fieldtype) {
 		let old_text = this.field ? this.field.get_value() : null;
 		this.hide_invalid_conditions(df.fieldtype, df.original_type);
+<<<<<<< HEAD
 		this.set_special_condition_labels(df.original_type);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		this.toggle_nested_set_conditions(df);
 		let field_area = this.filter_edit_area.find(".filter-field").empty().get(0);
 		df.input_class = "input-xs";
@@ -412,6 +428,7 @@ frappe.ui.Filter = class {
 		}
 	}
 
+<<<<<<< HEAD
 	set_special_condition_labels(original_type) {
 		let special_conditions = this.special_condition_labels[original_type] || {};
 		for (let condition of this.conditions) {
@@ -428,6 +445,8 @@ frappe.ui.Filter = class {
 		}
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	toggle_nested_set_conditions(df) {
 		let show_condition =
 			df.fieldtype === "Link" && frappe.boot.nested_set_doctypes.includes(df.options);
@@ -492,7 +511,11 @@ frappe.ui.filter_utils = {
 	},
 
 	get_selected_label(field) {
+<<<<<<< HEAD
 		if (["Link", "Dynamic Link"].includes(field.df.fieldtype)) {
+=======
+		if (in_list(["Link", "Dynamic Link"], field.df.fieldtype)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			return field.get_label_value();
 		}
 	},
@@ -565,7 +588,10 @@ frappe.ui.filter_utils = {
 				"=",
 				"!=",
 				"descendants of",
+<<<<<<< HEAD
 				"descendants of (inclusive)",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				"ancestors of",
 				"not descendants of",
 				"not ancestors of",

@@ -1,6 +1,10 @@
 @import "frappe/public/css/fonts/fontawesome/font-awesome.min.css";
 @import "frappe/public/css/octicons/octicons.css";
+<<<<<<< HEAD
 @import "frappe/public/css/fonts/inter/inter.scss";
+=======
+@import "frappe/public/css/fonts/inter/inter.css";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 @import "~frappe-charts/dist/frappe-charts.min";
 @import "~plyr/dist/plyr";
 @import "./desk/index";

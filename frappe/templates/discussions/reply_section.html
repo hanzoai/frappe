@@ -1,6 +1,7 @@
 {% if topic %}
 
 {% set replies = frappe.get_all("Discussion Reply", {"topic": topic.name},
+<<<<<<< HEAD
 	["reply", "owner", "creation", "name"], order_by="creation")%}
 
 {% endif %}
@@ -23,6 +24,28 @@
 		{% endif %}
 	</div>
 	{% endif %}
+=======
+["reply", "owner", "creation", "name"], order_by="creation")%}
+
+{% endif %}
+
+<div class=" {% if not single_thread %} collapse {% endif %} discussion-on-page card-style" data-parent="#discussion-group"
+	{% if topic %} id="t{{ topic.name }}" data-topic="{{ topic.name }}" {% endif %}>
+
+	<div class="reply-section-header">
+		{% if not single_thread %}
+		<div class="back-button">
+			<svg class="icon icon-md mr-0">
+				<use class="" href="#icon-left"></use>
+			</svg>
+		</div>
+		{% endif %}
+
+		{% if topic and topic.title %}
+		<div class="discussion-heading p-0">{{ topic.title }}</div>
+		{% endif %}
+	</div>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	{% for reply in replies %}
 	{% set index = loop.index %}

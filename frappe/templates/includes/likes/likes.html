@@ -9,10 +9,17 @@
 		let like_count = parseInt("{{ like_count or 0 }}");
 
 		let toggle_like_icon = function(active) {
+<<<<<<< HEAD
 			active ? $('.like-icon').addClass('liked') : $('.like-icon').removeClass('liked');
 		}
 
 		$('.like-icon').append(frappe.utils.icon('es-solid-heart', 'md'))
+=======
+			active ? $('.like-icon').addClass('gray') : $('.like-icon').removeClass('gray');
+		}
+
+		$('.like-icon').append(frappe.utils.icon('heart', 'md'))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		toggle_like_icon(like);
 
 		$('.like-count').text(like_count);

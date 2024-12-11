@@ -21,6 +21,7 @@ frappe.ui.form.on("Server Script", {
 			.then((items) => {
 				frm.set_df_property("script", "autocompletions", items);
 			});
+<<<<<<< HEAD
 
 		frm.trigger("check_safe_exec");
 	},
@@ -38,6 +39,8 @@ frappe.ui.form.on("Server Script", {
 				frm.dashboard.add_comment(msg, "yellow", true);
 			}
 		});
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	},
 
 	setup_help(frm) {
@@ -85,7 +88,11 @@ else:
 <pre><code>
 # generate dynamic conditions and set it in the conditions variable
 tenant_id = frappe.db.get_value(...)
+<<<<<<< HEAD
 conditions = f'tenant_id = {tenant_id}'
+=======
+conditions = 'tenant_id = {}'.format(tenant_id)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 # resulting select query
 select name from \`tabPerson\`

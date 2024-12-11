@@ -215,6 +215,7 @@ context("View", () => {
 	});
 
 	it("Route to Form", () => {
+<<<<<<< HEAD
 		const test_user = cy.config("testUser");
 		cy.visit(`/app/user/${test_user}`);
 		cy.window()
@@ -227,5 +228,20 @@ context("View", () => {
 	it("Route to Website Workspace", () => {
 		cy.visit("/app/website");
 		cy.get(".title-text").should("contain", "Website");
+=======
+		cy.call("frappe.tests.ui_test_helpers.create_note").then(() => {
+			cy.visit("/app/note/Routing Test");
+			cy.window()
+				.its("cur_frm")
+				.then((frm) => {
+					expect(frm.doc.title).to.equal("Routing Test");
+				});
+		});
+	});
+
+	it("Route to Settings Workspace", () => {
+		cy.visit("/app/settings");
+		cy.get(".title-text").should("contain", "Settings");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	});
 });

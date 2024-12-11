@@ -8,9 +8,14 @@
 	z-index: 9999 !important;
 	background: var(--fg-color);
 	color: var(--text-color);
+<<<<<<< HEAD
 	border-radius: var(--border-radius-lg);
 	border: 1px solid var(--border-color);
 	box-shadow: var(--shadow-2xl);
+=======
+	border-radius: var(--border-radius);
+	border: 1px solid var(--border-color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	position: fixed;
 
 	&.active {
@@ -20,10 +25,13 @@
 	&--nav {
 		border-bottom: 1px solid var(--border-color);
 	}
+<<<<<<< HEAD
 	&--nav-title:hover,
 	&--nav-action:hover {
 		background-color: var(--fg-hover-color);
 	}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	&--time-current-hours,
 	&--time-current-minutes,
@@ -41,6 +49,7 @@
 
 	&--cell {
 		&.-current- {
+<<<<<<< HEAD
 			color: var(--text-color);
 			&:not(.-selected-):not(.-in-range-) {
 				font-weight: var(--weight-bold);
@@ -48,17 +57,29 @@
 
 			&.-in-range- {
 				color: var(--text-color);
+=======
+			color: var(--brand-color);
+
+			&.-in-range- {
+				color: var(--brand-color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		}
 
 		&.-range-from-,
 		&.-range-to- {
+<<<<<<< HEAD
 			border: 1px solid var(--border-color);
 			background: var(--date-range-bg);
+=======
+			border: 1px solid fade(#0089ff, 30%);
+			background: fade(#0089ff, 10%);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		&.-selected-,
 		&.-current-.-selected- {
+<<<<<<< HEAD
 			color: var(--date-active-text);
 			background: var(--date-active-bg);
 			border-radius: var(--border-radius-tiny);
@@ -72,6 +93,17 @@
 		&.-in-range-.-focus- {
 			color: var(--date-active-text);
 			background: var(--date-active-bg);
+=======
+			background: #0089ff;
+		}
+
+		&.-in-range- {
+			background: fade(#0089ff, 5%);
+		}
+
+		&.-in-range-.-focus- {
+			background: fade(#0089ff, 10%);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		&.-focus- {
@@ -79,8 +111,12 @@
 		}
 
 		&.-selected-.-focus- {
+<<<<<<< HEAD
 			color: var(--date-active-text);
 			background: var(--date-active-bg);
+=======
+			background: fade(#0089ff, 90%);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 
@@ -90,7 +126,11 @@
 	}
 
 	&--time-row {
+<<<<<<< HEAD
 		background-image: linear-gradient(to right, var(--gray-600), var(--gray-600));
+=======
+		background-image: linear-gradient(to right, #0089ff, #0089ff);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		background-repeat: no-repeat;
 		background-size: 100% 1px;
 		background-position: left 50%;
@@ -108,7 +148,11 @@
 	}
 
 	&--button {
+<<<<<<< HEAD
 		color: var(--text-color);
+=======
+		color: var(--brand-color);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		&:hover {
 			color: var(--text-color);
 			background-color: var(--fg-hover-color);

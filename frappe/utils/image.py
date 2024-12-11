@@ -10,7 +10,11 @@ import frappe
 
 def resize_images(path, maxdim=700):
 	size = (maxdim, maxdim)
+<<<<<<< HEAD
 	for basepath, folders, files in os.walk(path):  # noqa: B007
+=======
+	for basepath, _folders, files in os.walk(path):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		for fname in files:
 			extn = fname.rsplit(".", 1)[1]
 			if extn in ("jpg", "jpeg", "png", "gif"):
@@ -47,16 +51,23 @@ def strip_exif_data(content, content_type):
 	return content
 
 
+<<<<<<< HEAD
 def optimize_image(content, content_type, max_width=1024, max_height=768, optimize=True, quality=85):
+=======
+def optimize_image(content, content_type, max_width=1920, max_height=1080, optimize=True, quality=85):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if content_type == "image/svg+xml":
 		return content
 
 	try:
 		image = Image.open(io.BytesIO(content))
 		exif = image.getexif()
+<<<<<<< HEAD
 		width, height = image.size
 		max_height = max(min(max_height, height * 0.8), 200)
 		max_width = max(min(max_width, width * 0.8), 200)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		image_format = content_type.split("/")[1]
 		size = max_width, max_height
 		image.thumbnail(size, Image.Resampling.LANCZOS)

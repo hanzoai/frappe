@@ -16,13 +16,21 @@
 				height: 52px;
 
 				.standard-image {
+<<<<<<< HEAD
 					@include get_textstyle("lg", "regular");
+=======
+					font-size: var(--text-lg);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				}
 			}
 		}
 
 		.preview-name {
+<<<<<<< HEAD
 			@include get_textstyle("base", "regular");
+=======
+			font-size: var(--text-base);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			font-weight: 500;
 		}
 

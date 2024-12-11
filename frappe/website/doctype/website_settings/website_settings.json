@@ -11,22 +11,31 @@
  "document_type": "Other",
  "engine": "InnoDB",
  "field_order": [
+<<<<<<< HEAD
   "home_tab",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "sb0",
   "home_page",
   "cb4",
   "title_prefix",
+<<<<<<< HEAD
   "misc_section",
   "app_name",
   "disable_signup",
   "show_footer_on_login",
   "column_break_9",
   "app_logo",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "section_break_6",
   "website_theme",
   "website_theme_image",
   "website_theme_image_link",
+<<<<<<< HEAD
   "navbar_tab",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "brand",
   "banner_image",
   "splash_image",
@@ -46,6 +55,7 @@
   "call_to_action_url",
   "banner",
   "banner_html",
+<<<<<<< HEAD
   "footer_tab",
   "footer",
   "footer_items",
@@ -62,6 +72,19 @@
   "edit_footer_template_values",
   "integrations",
   "analytics_section",
+=======
+  "footer",
+  "footer_logo",
+  "copyright",
+  "address",
+  "footer_items",
+  "footer_powered",
+  "footer_template",
+  "footer_template_values",
+  "edit_footer_template_values",
+  "hide_footer_signup",
+  "integrations",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "enable_view_tracking",
   "enable_google_indexing",
   "authorize_api_indexing_access",
@@ -70,15 +93,29 @@
   "column_break_17",
   "google_analytics_id",
   "google_analytics_anonymize_ip",
+<<<<<<< HEAD
   "account_deletion_settings_section",
   "auto_account_deletion",
   "show_account_deletion_link",
+=======
+  "misc_section",
+  "app_name",
+  "app_logo",
+  "disable_signup",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "section_break_38",
   "subdomain",
   "head_html",
   "robots_txt",
+<<<<<<< HEAD
   "redirects_tab",
   "route_redirects"
+=======
+  "route_redirects",
+  "account_deletion_settings_section",
+  "show_account_deletion_link",
+  "auto_account_deletion"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  ],
  "fields": [
   {
@@ -106,8 +143,12 @@
   },
   {
    "fieldname": "section_break_6",
+<<<<<<< HEAD
    "fieldtype": "Section Break",
    "label": "Theme"
+=======
+   "fieldtype": "Section Break"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "default": "Standard",
@@ -127,7 +168,11 @@
    "fieldname": "website_theme_image_link",
    "fieldtype": "Code",
    "hidden": 1,
+<<<<<<< HEAD
    "label": "Website Theme image link"
+=======
+   "label": "Website Theme Image Link"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "collapsible": 1,
@@ -154,6 +199,10 @@
    "label": "Set Banner from Image"
   },
   {
+<<<<<<< HEAD
+=======
+   "collapsible": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "top_bar",
    "fieldtype": "Section Break",
    "label": "Navbar"
@@ -185,10 +234,18 @@
    "options": "HTML"
   },
   {
+<<<<<<< HEAD
    "collapsible_depends_on": "footer_items",
    "fieldname": "footer",
    "fieldtype": "Section Break",
    "label": "Footer Items"
+=======
+   "collapsible": 1,
+   "collapsible_depends_on": "footer_items",
+   "fieldname": "footer",
+   "fieldtype": "Section Break",
+   "label": "Footer"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "copyright",
@@ -198,7 +255,11 @@
   {
    "description": "Address and other legal information you may want to put in the footer.",
    "fieldname": "address",
+<<<<<<< HEAD
    "fieldtype": "Small Text",
+=======
+   "fieldtype": "Text Editor",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "label": "Address",
    "max_height": "8rem"
   },
@@ -212,12 +273,20 @@
    "default": "0",
    "fieldname": "hide_footer_signup",
    "fieldtype": "Check",
+<<<<<<< HEAD
    "label": "Hide footer signup"
+=======
+   "label": "Hide Footer Signup"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "collapsible": 1,
    "fieldname": "integrations",
+<<<<<<< HEAD
    "fieldtype": "Tab Break",
+=======
+   "fieldtype": "Section Break",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "label": "Integrations"
   },
   {
@@ -230,6 +299,10 @@
    "fieldtype": "Column Break"
   },
   {
+<<<<<<< HEAD
+=======
+   "collapsible": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "misc_section",
    "fieldtype": "Section Break",
    "label": "Login Page"
@@ -249,16 +322,28 @@
   },
   {
    "default": "1",
+<<<<<<< HEAD
    "description": "New users will have to be manually registered by system managers.",
    "fieldname": "disable_signup",
    "fieldtype": "Check",
    "label": "Disable signups"
+=======
+   "description": "Disable Customer Signup link in Login page",
+   "fieldname": "disable_signup",
+   "fieldtype": "Check",
+   "label": "Disable Signup"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "collapsible": 1,
    "fieldname": "section_break_38",
+<<<<<<< HEAD
    "fieldtype": "Tab Break",
    "label": "Header, Robots"
+=======
+   "fieldtype": "Section Break",
+   "label": "HTML Header, Robots and Redirects"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "description": "Added HTML in the &lt;head&gt; section of the web page, primarily used for website verification and SEO",
@@ -283,20 +368,32 @@
    "description": "To use Google Indexing, enable <a href=\"/app/google-settings\">Google Settings</a>.",
    "fieldname": "enable_google_indexing",
    "fieldtype": "Check",
+<<<<<<< HEAD
    "label": "Enable Google indexing"
+=======
+   "label": "Enable Google Indexing"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "indexing_refresh_token",
    "fieldtype": "Data",
    "hidden": 1,
+<<<<<<< HEAD
    "label": "Indexing refresh token",
+=======
+   "label": "Indexing Refresh Token",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "read_only": 1
   },
   {
    "fieldname": "indexing_authorization_code",
    "fieldtype": "Data",
    "hidden": 1,
+<<<<<<< HEAD
    "label": "Indexing authorization code",
+=======
+   "label": "Indexing Authorization Code",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "read_only": 1
   },
   {
@@ -309,7 +406,11 @@
    "default": "0",
    "fieldname": "enable_view_tracking",
    "fieldtype": "Check",
+<<<<<<< HEAD
    "label": "Enable in-app website tracking"
+=======
+   "label": "Enable In App Website Tracking"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "footer_logo",
@@ -374,7 +475,11 @@
    "default": "1",
    "fieldname": "google_analytics_anonymize_ip",
    "fieldtype": "Check",
+<<<<<<< HEAD
    "label": "Google Analytics anonymise IP"
+=======
+   "label": "Google Analytics Anonymize IP"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "default": "0",
@@ -401,6 +506,10 @@
    "label": "App Logo"
   },
   {
+<<<<<<< HEAD
+=======
+   "collapsible": 1,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "fieldname": "account_deletion_settings_section",
    "fieldtype": "Section Break",
    "label": "Account Deletion Settings"
@@ -409,24 +518,37 @@
    "default": "0",
    "fieldname": "show_account_deletion_link",
    "fieldtype": "Check",
+<<<<<<< HEAD
    "label": "Show account deletion link in My Account page"
+=======
+   "label": "Show Account Deletion Link in My Account Page"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "default": "72",
    "fieldname": "auto_account_deletion",
    "fieldtype": "Int",
+<<<<<<< HEAD
    "label": "Automatically delete account within (hours)"
+=======
+   "label": "Auto Account Deletion within (Hours)"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "footer_powered",
    "fieldtype": "Small Text",
+<<<<<<< HEAD
    "label": "Footer \"Powered By\"",
    "max_height": "2rem"
+=======
+   "label": "Footer \"Powered By\""
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "splash_image",
    "fieldtype": "Attach Image",
    "label": "Splash Image"
+<<<<<<< HEAD
   },
   {
    "fieldname": "home_tab",
@@ -476,6 +598,8 @@
    "fieldname": "show_footer_on_login",
    "fieldtype": "Check",
    "label": "Show footer on login"
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "icon": "fa fa-cog",
@@ -483,7 +607,11 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-01-08 11:50:34.750809",
+=======
+ "modified": "2022-12-05 04:17:56.478757",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Website",
  "name": "Website Settings",
@@ -505,7 +633,14 @@
   }
  ],
  "sort_field": "modified",
+<<<<<<< HEAD
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
 }
+=======
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

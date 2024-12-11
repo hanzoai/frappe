@@ -1,6 +1,10 @@
 {% if frappe.session.user != "Guest" and
 (condition is not defined or (condition is defined and condition )) %}
+<<<<<<< HEAD
 <span class="btn btn-sm btn-secondary reply">
+=======
+<span class="btn btn-md btn-secondary-dark reply">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	{{ _(cta_title) }}
 </span>
 {% endif %}

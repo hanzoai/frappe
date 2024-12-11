@@ -4,8 +4,11 @@
 html,
 body {
 	height: 100%;
+<<<<<<< HEAD
 	font-family: var(--font-stack);
 	font-variation-settings: "opsz" 24;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 /* checkbox */
@@ -18,8 +21,12 @@ body {
 	--checkbox-right-margin: 8px;
 
 	.label-area {
+<<<<<<< HEAD
 		@include get_textstyle("sm", "medium");
 		color: var(--text-color);
+=======
+		font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	.input-area,
@@ -30,8 +37,11 @@ body {
 
 .frappe-card {
 	@include card();
+<<<<<<< HEAD
 	box-shadow: none;
 	border: 1px solid var(--gray-300);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .frappe-control[data-fieldtype="Select"].frappe-control[data-fieldname="color"] {
@@ -66,7 +76,11 @@ body {
 		padding-right: inherit;
 		position: absolute;
 		pointer-events: none;
+<<<<<<< HEAD
 		top: 3px;
+=======
+		top: 7px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		right: 12px;
 
 		&.xs {
@@ -86,7 +100,11 @@ body {
 		padding-right: inherit;
 		position: absolute;
 		pointer-events: none;
+<<<<<<< HEAD
 		top: 3px;
+=======
+		top: 7px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		left: 12px;
 		max-width: 80%;
 

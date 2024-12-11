@@ -13,6 +13,11 @@ frappe.listview_settings["Communication"] = {
 		"communication_date",
 	],
 
+<<<<<<< HEAD
+=======
+	filters: [["status", "=", "Open"]],
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	onload: function (list_view) {
 		let method = "frappe.email.inbox.create_email_flag_queue";
 

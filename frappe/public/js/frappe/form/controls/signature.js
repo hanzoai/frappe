@@ -6,7 +6,11 @@ frappe.ui.form.ControlSignature = class ControlSignature extends frappe.ui.form.
 		super.make();
 
 		if (this.df.label) {
+<<<<<<< HEAD
 			$(this.wrapper).find("label").text(__(this.df.label, null, this.df.parent));
+=======
+			$(this.wrapper).find("label").text(__(this.df.label));
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		this.set_doc_url();
 
@@ -43,7 +47,11 @@ frappe.ui.form.ControlSignature = class ControlSignature extends frappe.ui.form.
 			this.$reset_button_wrapper = $(`
 					<div class="signature-btn-row">
 						<a href="#" type="button" class="signature-reset btn icon-btn">
+<<<<<<< HEAD
 							${frappe.utils.icon("es-line-reload", "sm")}
+=======
+							${frappe.utils.icon("refresh", "sm")}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						</a>
 					</div>
 				`)

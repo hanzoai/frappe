@@ -14,9 +14,14 @@ import typing
 from code import compile_command
 from enum import Enum
 from typing import Any, Literal, Optional, TypeVar, Union
+<<<<<<< HEAD
 from urllib.parse import parse_qsl, quote, urlencode, urljoin, urlparse, urlunparse
 
 import pytz
+=======
+from urllib.parse import quote, urljoin
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from click import secho
 from dateutil import parser
 from dateutil.parser import ParserError
@@ -24,6 +29,10 @@ from dateutil.relativedelta import relativedelta
 
 import frappe
 from frappe.desk.utils import slug
+<<<<<<< HEAD
+=======
+from frappe.utils.deprecations import deprecation_warning
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 DateTimeLikeObject = str | datetime.date | datetime.datetime
 NumericType = int | float
@@ -301,7 +310,11 @@ def time_diff_in_hours(string_ed_date, string_st_date):
 
 
 def now_datetime():
+<<<<<<< HEAD
 	dt = convert_utc_to_system_timezone(datetime.datetime.now(pytz.UTC))
+=======
+	dt = convert_utc_to_system_timezone(datetime.datetime.utcnow())
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return dt.replace(tzinfo=None)
 
 
@@ -314,14 +327,34 @@ def get_eta(from_time, percent_complete):
 	return str(datetime.timedelta(seconds=(100 - percent_complete) / percent_complete * diff))
 
 
+<<<<<<< HEAD
 def get_system_timezone() -> str:
 	"""Return the system timezone."""
 	return frappe.get_system_settings("time_zone") or "Asia/Kolkata"  # Default to India ?!
+=======
+def _get_system_timezone():
+	return frappe.db.get_system_setting("time_zone") or "Asia/Kolkata"  # Default to India ?!
+
+
+def get_system_timezone():
+	if frappe.local.flags.in_test:
+		return _get_system_timezone()
+
+	return frappe.cache().get_value("time_zone", _get_system_timezone)
+
+
+def get_time_zone():
+	deprecation_warning(
+		"`get_time_zone` is deprecated and will be removed in version 15. Use `get_system_timezone` instead."
+	)
+	return get_system_timezone()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def convert_utc_to_timezone(utc_timestamp, time_zone):
 	from pytz import UnknownTimeZoneError, timezone
 
+<<<<<<< HEAD
 	if utc_timestamp.tzinfo is None:
 		utc_timestamp = timezone("UTC").localize(utc_timestamp)
 	try:
@@ -332,6 +365,17 @@ def convert_utc_to_timezone(utc_timestamp, time_zone):
 
 def get_datetime_in_timezone(time_zone):
 	utc_timestamp = datetime.datetime.now(pytz.UTC)
+=======
+	utcnow = timezone("UTC").localize(utc_timestamp)
+	try:
+		return utcnow.astimezone(timezone(time_zone))
+	except UnknownTimeZoneError:
+		return utcnow
+
+
+def get_datetime_in_timezone(time_zone):
+	utc_timestamp = datetime.datetime.utcnow()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return convert_utc_to_timezone(utc_timestamp, time_zone)
 
 
@@ -340,6 +384,16 @@ def convert_utc_to_system_timezone(utc_timestamp):
 	return convert_utc_to_timezone(utc_timestamp, time_zone)
 
 
+<<<<<<< HEAD
+=======
+def convert_utc_to_user_timezone(utc_timestamp):
+	deprecation_warning(
+		"`convert_utc_to_user_timezone` is deprecated and will be removed in version 15. Use `convert_utc_to_system_timezone` instead."
+	)
+	return convert_utc_to_system_timezone(utc_timestamp)
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def now() -> str:
 	"""return current datetime as yyyy-mm-dd hh:mm:ss"""
 	if frappe.flags.current_date:
@@ -461,12 +515,15 @@ def get_last_day(dt):
 	return get_first_day(dt, 0, 1) + datetime.timedelta(-1)
 
 
+<<<<<<< HEAD
 def is_last_day_of_the_month(dt):
 	last_day_of_the_month = get_last_day(dt)
 
 	return getdate(dt) == getdate(last_day_of_the_month)
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def get_quarter_ending(date):
 	date = getdate(date)
 
@@ -482,11 +539,21 @@ def get_quarter_ending(date):
 	return date
 
 
+<<<<<<< HEAD
 def get_year_ending(date) -> datetime.date:
 	"""returns year ending of the given date"""
 	date = getdate(date)
 	next_year_start = datetime.date(date.year + 1, 1, 1)
 	return add_to_date(next_year_start, days=-1)
+=======
+def get_year_ending(date):
+	"""returns year ending of the given date"""
+	date = getdate(date)
+	# first day of next year (note year starts from 1)
+	date = add_to_date(f"{date.year}-01-01", months=12)
+	# last day of this month
+	return add_to_date(date, days=-1)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_time(time_str: str) -> datetime.time:
@@ -718,6 +785,10 @@ def get_weekday(datetime: datetime.datetime | None = None) -> str:
 
 def get_month(datetime: DateTimeLikeObject | None = None) -> str:
 	"""Return the month name (e.g. 'January') for the given datetime like object (datetime.date, datetime.datetime, string).
+<<<<<<< HEAD
+=======
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	If `datetime` argument is not provided, the current month name is returned.
 	"""
 	if not datetime:
@@ -729,6 +800,7 @@ def get_month(datetime: DateTimeLikeObject | None = None) -> str:
 	return calendar.month_name[datetime.month]
 
 
+<<<<<<< HEAD
 def get_timespan_date_range(timespan: str) -> tuple[datetime.datetime, datetime.datetime] | None:
 	today = getdate()
 
@@ -800,6 +872,62 @@ def get_timespan_date_range(timespan: str) -> tuple[datetime.datetime, datetime.
 			)
 		case _:
 			return
+=======
+def get_timespan_date_range(timespan: str) -> tuple[datetime.datetime, datetime.datetime]:
+	today = nowdate()
+	date_range_map = {
+		"last week": lambda: (
+			get_first_day_of_week(add_to_date(today, days=-7)),
+			get_last_day_of_week(add_to_date(today, days=-7)),
+		),
+		"last month": lambda: (
+			get_first_day(add_to_date(today, months=-1)),
+			get_last_day(add_to_date(today, months=-1)),
+		),
+		"last quarter": lambda: (
+			get_quarter_start(add_to_date(today, months=-3)),
+			get_quarter_ending(add_to_date(today, months=-3)),
+		),
+		"last 6 months": lambda: (
+			get_quarter_start(add_to_date(today, months=-6)),
+			get_quarter_ending(add_to_date(today, months=-3)),
+		),
+		"last year": lambda: (
+			get_year_start(add_to_date(today, years=-1)),
+			get_year_ending(add_to_date(today, years=-1)),
+		),
+		"yesterday": lambda: (add_to_date(today, days=-1),) * 2,
+		"today": lambda: (today, today),
+		"tomorrow": lambda: (add_to_date(today, days=1),) * 2,
+		"this week": lambda: (get_first_day_of_week(today), get_last_day_of_week(today)),
+		"this month": lambda: (get_first_day(today), get_last_day(today)),
+		"this quarter": lambda: (get_quarter_start(today), get_quarter_ending(today)),
+		"this year": lambda: (get_year_start(today), get_year_ending(today)),
+		"next week": lambda: (
+			get_first_day_of_week(add_to_date(today, days=7)),
+			get_last_day_of_week(add_to_date(today, days=7)),
+		),
+		"next month": lambda: (
+			get_first_day(add_to_date(today, months=1)),
+			get_last_day(add_to_date(today, months=1)),
+		),
+		"next quarter": lambda: (
+			get_quarter_start(add_to_date(today, months=3)),
+			get_quarter_ending(add_to_date(today, months=3)),
+		),
+		"next 6 months": lambda: (
+			get_quarter_start(add_to_date(today, months=3)),
+			get_quarter_ending(add_to_date(today, months=6)),
+		),
+		"next year": lambda: (
+			get_year_start(add_to_date(today, years=1)),
+			get_year_ending(add_to_date(today, years=1)),
+		),
+	}
+
+	if timespan in date_range_map:
+		return date_range_map[timespan]()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def global_date_format(date, format="long"):
@@ -807,7 +935,14 @@ def global_date_format(date, format="long"):
 	import babel.dates
 
 	date = getdate(date)
+<<<<<<< HEAD
 	return babel.dates.format_date(date, locale=(frappe.local.lang or "en").replace("-", "_"), format=format)
+=======
+	formatted_date = babel.dates.format_date(
+		date, locale=(frappe.local.lang or "en").replace("-", "_"), format=format
+	)
+	return formatted_date
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def has_common(l1: typing.Hashable, l2: typing.Hashable) -> bool:
@@ -1455,7 +1590,12 @@ def image_to_base64(image, extn: str) -> bytes:
 	if extn.lower() in ("jpg", "jpe"):
 		extn = "JPEG"
 	image.save(buffered, extn)
+<<<<<<< HEAD
 	return base64.b64encode(buffered.getvalue())
+=======
+	img_str = base64.b64encode(buffered.getvalue())
+	return img_str
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def pdf_to_base64(filename: str) -> bytes | None:
@@ -1500,6 +1640,7 @@ def escape_html(text: str) -> str:
 
 def pretty_date(iso_datetime: datetime.datetime | str) -> str:
 	"""
+<<<<<<< HEAD
 	Return a localized string representation of the delta to the current system time.
 
 	For example, "1 hour ago", "2 days ago", "in 5 seconds", etc.
@@ -1508,12 +1649,62 @@ def pretty_date(iso_datetime: datetime.datetime | str) -> str:
 		return ""
 
 	from babel.dates import format_timedelta
+=======
+	Takes an ISO time and returns a string representing how
+	long ago the date represents.
+	Ported from PrettyDate by John Resig
+	"""
+	from frappe import _
+
+	if not iso_datetime:
+		return ""
+	import math
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if isinstance(iso_datetime, str):
 		iso_datetime = datetime.datetime.strptime(iso_datetime, DATETIME_FORMAT)
 	now_dt = datetime.datetime.strptime(now(), DATETIME_FORMAT)
+<<<<<<< HEAD
 	locale = frappe.local.lang.replace("-", "_") if frappe.local.lang else None
 	return format_timedelta(iso_datetime - now_dt, add_direction=True, locale=locale)
+=======
+	dt_diff = now_dt - iso_datetime
+
+	# available only in python 2.7+
+	# dt_diff_seconds = dt_diff.total_seconds()
+
+	dt_diff_seconds = dt_diff.days * 86400.0 + dt_diff.seconds
+
+	dt_diff_days = math.floor(dt_diff_seconds / 86400.0)
+
+	# differnt cases
+	if dt_diff_seconds < 60.0:
+		return _("just now")
+	elif dt_diff_seconds < 120.0:
+		return _("1 minute ago")
+	elif dt_diff_seconds < 3600.0:
+		return _("{0} minutes ago").format(cint(math.floor(dt_diff_seconds / 60.0)))
+	elif dt_diff_seconds < 7200.0:
+		return _("1 hour ago")
+	elif dt_diff_seconds < 86400.0:
+		return _("{0} hours ago").format(cint(math.floor(dt_diff_seconds / 3600.0)))
+	elif dt_diff_days == 1.0:
+		return _("Yesterday")
+	elif dt_diff_days < 7.0:
+		return _("{0} days ago").format(cint(dt_diff_days))
+	elif dt_diff_days < 14:
+		return _("1 week ago")
+	elif dt_diff_days < 31.0:
+		return _("{0} weeks ago").format(dt_diff_days // 7)
+	elif dt_diff_days < 61.0:
+		return _("1 month ago")
+	elif dt_diff_days < 365.0:
+		return _("{0} months ago").format(dt_diff_days // 30)
+	elif dt_diff_days < 730.0:
+		return _("1 year ago")
+	else:
+		return f"{cint(math.floor(dt_diff_days / 365.0))} years ago"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def comma_or(some_list, add_quotes=True):
@@ -1593,7 +1784,11 @@ def get_url(uri: str | None = None, full_address: bool = False) -> str:
 			host_name = frappe.db.get_single_value("Website Settings", "subdomain")
 
 			if not host_name:
+<<<<<<< HEAD
 				host_name = "http://127.0.0.1"
+=======
+				host_name = "http://localhost"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if host_name and not (host_name.startswith("http://") or host_name.startswith("https://")):
 		host_name = "http://" + host_name
@@ -1611,7 +1806,13 @@ def get_url(uri: str | None = None, full_address: bool = False) -> str:
 	):
 		host_name = host_name + ":" + str(port)
 
+<<<<<<< HEAD
 	return urljoin(host_name, uri) if uri else host_name
+=======
+	url = urljoin(host_name, uri) if uri else host_name
+
+	return url
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_host_name_from_request() -> str:
@@ -1650,10 +1851,17 @@ def get_link_to_report(
 		conditions = []
 		for k, v in filters.items():
 			if isinstance(v, list):
+<<<<<<< HEAD
 				conditions.extend(
 					str(k) + "=" + '["' + str(value[0] + '"' + "," + '"' + str(value[1]) + '"]')
 					for value in v
 				)
+=======
+				for value in v:
+					conditions.append(
+						str(k) + "=" + '["' + str(value[0] + '"' + "," + '"' + str(value[1]) + '"]')
+					)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			else:
 				conditions.append(str(k) + "=" + str(v))
 
@@ -1692,6 +1900,7 @@ def get_url_to_report_with_filters(name, filters, report_type=None, doctype=None
 	return get_url(uri=f"/app/query-report/{quoted(name)}?{filters}")
 
 
+<<<<<<< HEAD
 def sql_like(value: str, pattern: str) -> bool:
 	if not isinstance(pattern, str) and isinstance(value, str):
 		return False
@@ -1725,6 +1934,8 @@ def filter_operator_is(value: str, pattern: str) -> bool:
 		frappe.throw(frappe._(f"Invalid argument for operator 'IS': {pattern}"))
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 operator_map = {
 	# startswith
 	"^": lambda a, b: (a or "").startswith(b),
@@ -1732,6 +1943,7 @@ operator_map = {
 	"in": lambda a, b: operator.contains(b, a),
 	"not in": lambda a, b: not operator.contains(b, a),
 	# comparison operators
+<<<<<<< HEAD
 	"=": operator.eq,
 	"!=": operator.ne,
 	">": operator.gt,
@@ -1743,6 +1955,16 @@ operator_map = {
 	"like": sql_like,
 	"not like": lambda a, b: not sql_like(a, b),
 	"is": filter_operator_is,
+=======
+	"=": lambda a, b: operator.eq(a, b),
+	"!=": lambda a, b: operator.ne(a, b),
+	">": lambda a, b: operator.gt(a, b),
+	"<": lambda a, b: operator.lt(a, b),
+	">=": lambda a, b: operator.ge(a, b),
+	"<=": lambda a, b: operator.le(a, b),
+	"not None": lambda a, b: a and True or False,
+	"None": lambda a, b: (not a) and True or False,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 
@@ -1764,13 +1986,23 @@ def evaluate_filters(doc, filters: dict | list | tuple):
 
 
 def compare(val1: Any, condition: str, val2: Any, fieldtype: str | None = None):
+<<<<<<< HEAD
+=======
+	ret = False
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if fieldtype:
 		val1 = cast(fieldtype, val1)
 		val2 = cast(fieldtype, val2)
 	if condition in operator_map:
+<<<<<<< HEAD
 		return operator_map[condition](val1, val2)
 
 	return False
+=======
+		ret = operator_map[condition](val1, val2)
+
+	return ret
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_filter(doctype: str, f: dict | list | tuple, filters_config=None) -> "frappe._dict":
@@ -1784,7 +2016,10 @@ def get_filter(doctype: str, f: dict | list | tuple, filters_config=None) -> "fr
 	        "fieldtype":
 	}
 	"""
+<<<<<<< HEAD
 	from frappe.database.utils import NestedSetHierarchy
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	from frappe.model import child_table_fields, default_fields, optional_fields
 
 	if isinstance(f, dict):
@@ -1824,6 +2059,7 @@ def get_filter(doctype: str, f: dict | list | tuple, filters_config=None) -> "fr
 		"not in",
 		"is",
 		"between",
+<<<<<<< HEAD
 		"timespan",
 		"previous",
 		"next",
@@ -1832,6 +2068,21 @@ def get_filter(doctype: str, f: dict | list | tuple, filters_config=None) -> "fr
 
 	if filters_config:
 		additional_operators = [key.lower() for key in filters_config]
+=======
+		"descendants of",
+		"ancestors of",
+		"not descendants of",
+		"not ancestors of",
+		"timespan",
+		"previous",
+		"next",
+	)
+
+	if filters_config:
+		additional_operators = []
+		for key in filters_config:
+			additional_operators.append(key.lower())
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		valid_operators = tuple(set(valid_operators + tuple(additional_operators)))
 
 	if f.operator.lower() not in valid_operators:
@@ -1848,7 +2099,11 @@ def get_filter(doctype: str, f: dict | list | tuple, filters_config=None) -> "fr
 					break
 
 	try:
+<<<<<<< HEAD
 		df = frappe.get_meta(f.doctype).get_field(f.fieldname) if f.doctype else None
+=======
+		df = frappe.get_meta(f.doctype).get_field(f.fieldname)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	except frappe.exceptions.DoesNotExistError:
 		df = None
 
@@ -1917,7 +2172,14 @@ def sanitize_column(column_name: str) -> None:
 
 
 def scrub_urls(html: str) -> str:
+<<<<<<< HEAD
 	return expand_relative_urls(html)
+=======
+	html = expand_relative_urls(html)
+	# encoding should be responsibility of the composer
+	# html = quote_urls(html)
+	return html
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def expand_relative_urls(html: str) -> str:
@@ -2220,6 +2482,7 @@ def get_job_name(key: str, doctype: str | None = None, doc_name: str | None = No
 	return job_name
 
 
+<<<<<<< HEAD
 def get_imaginary_pixel_response():
 	return {
 		"type": "binary",
@@ -2258,6 +2521,8 @@ def add_trackers_to_url(url: str, source: str, campaign: str, medium: str = "ema
 	return urlunparse(url_parts)
 
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 # This is used in test to count memory overhead of default imports.
 def _get_rss_memory_usage():
 	import psutil

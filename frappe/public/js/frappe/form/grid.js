@@ -85,6 +85,7 @@ export default class Grid {
 				<div class="small form-clickable-section grid-footer">
 					<div class="flex justify-between">
 						<div class="grid-buttons">
+<<<<<<< HEAD
 							<button type="button" class="btn btn-xs btn-danger grid-remove-rows hidden"
 								data-action="delete_rows">
 								${__("Delete")}
@@ -100,14 +101,38 @@ export default class Grid {
 							<button type="button" class="grid-add-multiple-rows btn btn-xs btn-secondary hidden">
 								${__("Add Multiple")}</a>
 							</button>
+=======
+							<button class="btn btn-xs btn-danger grid-remove-rows hidden"
+								data-action="delete_rows">
+								${__("Delete")}
+							</button>
+							<button class="btn btn-xs btn-danger grid-remove-all-rows hidden"
+								data-action="delete_all_rows">
+								${__("Delete All")}
+							</button>
+							<button class="grid-add-multiple-rows btn btn-xs btn-secondary hidden">
+								${__("Add Multiple")}</a>
+							</button>
+							<!-- hack to allow firefox include this in tabs -->
+							<button class="btn btn-xs btn-secondary grid-add-row">
+								${__("Add Row")}
+							</button>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						</div>
 						<div class="grid-pagination">
 						</div>
 						<div class="grid-bulk-actions text-right">
+<<<<<<< HEAD
 							<button type="button" class="grid-download btn btn-xs btn-secondary hidden">
 								${__("Download")}
 							</button>
 							<button type="button" class="grid-upload btn btn-xs btn-secondary hidden">
+=======
+							<button class="grid-download btn btn-xs btn-secondary hidden">
+								${__("Download")}
+							</button>
+							<button class="grid-upload btn btn-xs btn-secondary hidden">
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 								${__("Upload")}
 							</button>
 						</div>
@@ -158,7 +183,11 @@ export default class Grid {
 		if (
 			!this.df.label ||
 			!this.df?.documentation_url ||
+<<<<<<< HEAD
 			unsupported_fieldtypes.includes(this.df.fieldtype)
+=======
+			in_list(unsupported_fieldtypes, this.df.fieldtype)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 			return;
 
@@ -362,12 +391,15 @@ export default class Grid {
 			grid: this,
 			show_search: true,
 		});
+<<<<<<< HEAD
 		this.header_search.row.addClass("filter-row");
 		if (this.header_search.show_search || this.header_search.show_search_row()) {
 			$(this.parent).find(".grid-heading-row").addClass("with-filter");
 		} else {
 			$(this.parent).find(".grid-heading-row").removeClass("with-filter");
 		}
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		this.filter_applied && this.update_search_columns();
 	}
@@ -472,6 +504,7 @@ export default class Grid {
 			if (d.name === undefined) {
 				d.name = "row " + d.idx;
 			}
+<<<<<<< HEAD
 			let grid_row;
 			if (this.grid_rows[ri] && !append_row) {
 				grid_row = this.grid_rows[ri];
@@ -479,6 +512,14 @@ export default class Grid {
 				grid_row.refresh();
 			} else {
 				grid_row = new GridRow({
+=======
+			if (this.grid_rows[ri] && !append_row) {
+				var grid_row = this.grid_rows[ri];
+				grid_row.doc = d;
+				grid_row.refresh();
+			} else {
+				var grid_row = new GridRow({
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					parent: $rows,
 					parent_df: this.df,
 					docfields: this.docfields,
@@ -680,7 +721,11 @@ export default class Grid {
 	get_modal_data() {
 		return this.df.get_data
 			? this.df.get_data().filter((data) => {
+<<<<<<< HEAD
 					if (!this.deleted_docs || !this.deleted_docs.includes(data.name)) {
+=======
+					if (!this.deleted_docs || !in_list(this.deleted_docs, data.name)) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 						return data;
 					}
 			  })
@@ -942,7 +987,11 @@ export default class Grid {
 				!df.hidden &&
 				(this.editable_fields || df.in_list_view) &&
 				((this.frm && this.frm.get_perm(df.permlevel, "read")) || !this.frm) &&
+<<<<<<< HEAD
 				!frappe.model.layout_fields.includes(df.fieldtype)
+=======
+				!in_list(frappe.model.layout_fields, df.fieldtype)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			) {
 				if (df.columns) {
 					df.colsize = df.columns;
@@ -1199,8 +1248,12 @@ export default class Grid {
 		const $wrapper = position === "top" ? this.grid_custom_buttons : this.grid_buttons;
 		let $btn = this.custom_buttons[label];
 		if (!$btn) {
+<<<<<<< HEAD
 			$btn = $(`<button type="button" class="btn btn-secondary btn-xs btn-custom">`)
 				.html(__(label))
+=======
+			$btn = $(`<button class="btn btn-secondary btn-xs btn-custom">${__(label)}</button>`)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				.prependTo($wrapper)
 				.on("click", click);
 			this.custom_buttons[label] = $btn;

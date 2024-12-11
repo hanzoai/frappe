@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class NotificationSettings(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -31,6 +32,8 @@ class NotificationSettings(Document):
 		user: DF.Link | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def on_update(self):
 		from frappe.desk.notifications import clear_notification_config
 
@@ -59,10 +62,16 @@ def is_email_notifications_enabled_for_type(user, notification_type):
 		return False
 
 	fieldname = "enable_email_" + frappe.scrub(notification_type)
+<<<<<<< HEAD
 	enabled = frappe.db.get_value("Notification Settings", user, fieldname, ignore=True)
 	if enabled is None:
 		return True
 
+=======
+	enabled = frappe.db.get_value("Notification Settings", user, fieldname)
+	if enabled is None:
+		return True
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return enabled
 
 
@@ -116,6 +125,7 @@ def get_permission_query_conditions(user):
 	return f"""(`tabNotification Settings`.name = {frappe.db.escape(user)})"""
 
 
+<<<<<<< HEAD
 def has_permission(doc, ptype="read", user=None):
 	# - Administrator can access everything.
 	# - System managers can access everything except admin.
@@ -136,4 +146,8 @@ def set_seen_value(value, user):
 	if frappe.flags.read_only:
 		return
 
+=======
+@frappe.whitelist()
+def set_seen_value(value, user):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	frappe.db.set_value("Notification Settings", user, "seen", value, update_modified=False)

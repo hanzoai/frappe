@@ -12,6 +12,10 @@
 	}
 
 	.back-to-home {
+<<<<<<< HEAD
 		@include get_textstyle("base", "regular");
+=======
+		font-size: var(--text-base);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 }

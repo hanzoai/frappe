@@ -8,7 +8,11 @@
  "for_user": "",
  "hide_custom": 0,
  "icon": "image-view",
+<<<<<<< HEAD
  "idx": 1,
+=======
+ "idx": 0,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "is_hidden": 0,
  "label": "Welcome Workspace",
  "links": [],

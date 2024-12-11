@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class WorkspaceLink(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -32,4 +33,6 @@ class WorkspaceLink(Document):
 		type: DF.Literal["Link", "Card Break"]
 	# end: auto-generated types
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	pass

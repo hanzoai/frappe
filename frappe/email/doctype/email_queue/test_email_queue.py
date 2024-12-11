@@ -1,9 +1,14 @@
 # Copyright (c) 2015, Frappe Technologies and Contributors
 # License: MIT. See LICENSE
+<<<<<<< HEAD
 import textwrap
 
 import frappe
 from frappe.email.doctype.email_queue.email_queue import SendMailContext, get_email_retry_limit
+=======
+
+import frappe
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.tests.utils import FrappeTestCase
 
 
@@ -41,6 +46,7 @@ class TestEmailQueue(FrappeTestCase):
 
 		self.assertTrue(frappe.db.exists("Email Queue", new_record.name))
 		self.assertTrue(frappe.db.exists("Email Queue Recipient", {"parent": new_record.name}))
+<<<<<<< HEAD
 
 	def test_failed_email_notification(self):
 		subject = frappe.generate_hash()
@@ -93,3 +99,5 @@ class TestEmailQueue(FrappeTestCase):
 		q2 = frappe.new_doc("Email Queue", email_account="_Test Email Account 1")
 		self.assertIsNot(get_server(frappe.new_doc("Email Queue")), get_server(q1))
 		self.assertIs(get_server(q1), get_server(q2))
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

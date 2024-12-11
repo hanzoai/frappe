@@ -290,6 +290,7 @@ frappe.unscrub = function (txt) {
 	return frappe.model.unscrub(txt);
 };
 
+<<<<<<< HEAD
 frappe.get_data_pill = (
 	label,
 	target_id = null,
@@ -311,11 +312,24 @@ frappe.get_data_pill = (
 			</div>
 		</button>
 	`);
+=======
+frappe.get_data_pill = (label, target_id = null, remove_action = null, image = null) => {
+	let data_pill_wrapper = $(`
+		<button class="data-pill btn">
+			<div class="flex align-center ellipsis">
+				${image ? image : ""}
+				<span class="pill-label ${image ? "ml-2" : ""}">${label}</span>
+			</div>
+		</button>
+	`);
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if (remove_action) {
 		let remove_btn = $(`
 			<span class="remove-btn cursor-pointer">
 				${frappe.utils.icon("close", "sm")}
 			</span>
+<<<<<<< HEAD
 		`);
 		if (typeof remove_action === "function") {
 			remove_btn.click(() => {
@@ -324,6 +338,14 @@ frappe.get_data_pill = (
 		}
 		data_pill_wrapper.append(remove_btn);
 	}
+=======
+		`).click(() => {
+			remove_action(target_id || label, data_pill_wrapper);
+		});
+		data_pill_wrapper.append(remove_btn);
+	}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return data_pill_wrapper;
 };
 

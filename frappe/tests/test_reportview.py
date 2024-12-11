@@ -2,7 +2,11 @@
 # License: MIT. See LICENSE
 
 import frappe
+<<<<<<< HEAD
 from frappe.desk.reportview import export_query, extract_fieldnames
+=======
+from frappe.desk.reportview import export_query
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.tests.utils import FrappeTestCase
 
 
@@ -32,6 +36,7 @@ class TestReportview(FrappeTestCase):
 					for row in reader:
 						self.assertEqual(int(row["Is Single"]), 1)
 						self.assertEqual(row["Module"], "Core")
+<<<<<<< HEAD
 
 	def test_extract_fieldname(self):
 		self.assertEqual(
@@ -87,3 +92,5 @@ class TestReportview(FrappeTestCase):
 		self.assertEqual(extract_fieldnames("`tabChild DocType`.`fiedname`")[0], "tabChild DocType.fiedname")
 
 		self.assertEqual(extract_fieldnames("sum(1)"), [])
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

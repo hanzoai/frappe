@@ -24,6 +24,7 @@ from frappe.website.website_generator import WebsiteGenerator
 
 
 class BlogPost(WebsiteGenerator):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -55,6 +56,8 @@ class BlogPost(WebsiteGenerator):
 		title: DF.Data
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	@frappe.whitelist()
 	def make_route(self):
 		if not self.route:
@@ -64,6 +67,12 @@ class BlogPost(WebsiteGenerator):
 				+ self.scrub(self.title)
 			)
 
+<<<<<<< HEAD
+=======
+	def get_feed(self):
+		return self.title
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		super().validate()
 
@@ -176,11 +185,16 @@ class BlogPost(WebsiteGenerator):
 
 		url = frappe.local.site + "/" + self.route
 
+<<<<<<< HEAD
 		return [
+=======
+		social_links = [
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			{
 				"icon": "twitter",
 				"link": "https://twitter.com/intent/tweet?text=" + self.title + "&url=" + url,
 			},
+<<<<<<< HEAD
 			{
 				"icon": "facebook",
 				"link": "https://www.facebook.com/sharer.php?u=" + url,
@@ -195,6 +209,15 @@ class BlogPost(WebsiteGenerator):
 			},
 		]
 
+=======
+			{"icon": "facebook", "link": "https://www.facebook.com/sharer.php?u=" + url},
+			{"icon": "linkedin", "link": "https://www.linkedin.com/sharing/share-offsite/?url=" + url},
+			{"icon": "envelope", "link": "mailto:?subject=" + self.title + "&body=" + url},
+		]
+
+		return social_links
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def load_comments(self, context):
 		context.comment_list = get_comment_list(self.doctype, self.name)
 
@@ -239,6 +262,7 @@ def get_list_context(context=None):
 		title=_("Blog"),
 	)
 
+<<<<<<< HEAD
 	blog_settings = frappe.get_doc("Blog Settings").as_dict(no_default_fields=True)
 	list_context.update(blog_settings)
 
@@ -252,6 +276,15 @@ def get_list_context(context=None):
 		)
 		list_context.blog_title = category.title
 		list_context.preview_image = category.preview_image
+=======
+	category = frappe.utils.escape_html(
+		frappe.local.form_dict.blog_category or frappe.local.form_dict.category
+	)
+	if category:
+		category_title = get_blog_category(category)
+		list_context.sub_title = _("Posts filed under {0}").format(category_title)
+		list_context.title = category_title
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	elif frappe.local.form_dict.blogger:
 		blogger = frappe.db.get_value("Blogger", {"name": frappe.local.form_dict.blogger}, "full_name")
@@ -266,6 +299,7 @@ def get_list_context(context=None):
 	else:
 		list_context.parents = [{"name": _("Home"), "route": "/"}]
 
+<<<<<<< HEAD
 	if blog_settings.browse_by_category:
 		list_context.blog_categories = get_blog_categories()
 
@@ -276,6 +310,14 @@ def get_list_context(context=None):
 		"image": list_context.preview_image,
 	}
 
+=======
+	blog_settings = frappe.get_doc("Blog Settings").as_dict(no_default_fields=True)
+	list_context.update(blog_settings)
+
+	if blog_settings.browse_by_category:
+		list_context.blog_categories = get_blog_categories()
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return list_context
 
 
@@ -301,12 +343,26 @@ def get_blog_categories():
 
 
 def clear_blog_cache():
+<<<<<<< HEAD
 	for blog in frappe.db.get_list("Blog Post", fields=["route"], pluck="route", filters={"published": True}):
+=======
+	for blog in frappe.db.sql_list(
+		"""select route from
+		`tabBlog Post` where ifnull(published,0)=1"""
+	):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		clear_cache(blog)
 
 	clear_cache("writers")
 
 
+<<<<<<< HEAD
+=======
+def get_blog_category(route):
+	return frappe.db.get_value("Blog Category", {"name": route}, "title") or route
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def get_blog_list(doctype, txt=None, filters=None, limit_start=0, limit_page_length=20, order_by=None):
 	conditions = []
 	if filters and filters.get("blog_category"):
@@ -349,7 +405,11 @@ def get_blog_list(doctype, txt=None, filters=None, limit_start=0, limit_page_len
 						and reference_doctype='Blog Post'
 						and reference_name=t1.name) as comments
 		from `tabBlog Post` t1, `tabBlogger` t2
+<<<<<<< HEAD
 		where t1.published = 1
+=======
+		where ifnull(t1.published,0)=1
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		and t1.blogger = t2.name
 		{condition}
 		order by featured desc, published_on desc, name asc

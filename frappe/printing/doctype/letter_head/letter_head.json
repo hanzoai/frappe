@@ -113,7 +113,11 @@
    "description": "Footer will display correctly only in PDF",
    "fieldname": "footer",
    "fieldtype": "HTML Editor",
+<<<<<<< HEAD
    "label": "Footer HTML"
+=======
+   "label": "Footer HTML (visible only in PDF)"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "default": "Left",
@@ -220,11 +224,19 @@
   },
   {
    "read": 1,
+<<<<<<< HEAD
    "role": "Desk User"
   }
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+=======
+   "role": "All"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "ASC",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "states": [],
  "track_changes": 1
 }

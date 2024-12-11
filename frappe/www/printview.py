@@ -1,11 +1,18 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+<<<<<<< HEAD
+=======
+import contextlib
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 import copy
 import json
 import os
 import re
+<<<<<<< HEAD
 from typing import TYPE_CHECKING, Optional
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 from frappe import _, cstr, get_module_path
@@ -14,10 +21,13 @@ from frappe.core.doctype.document_share_key.document_share_key import is_expired
 from frappe.utils import cint, escape_html, strip_html
 from frappe.utils.jinja_globals import is_rtl
 
+<<<<<<< HEAD
 if TYPE_CHECKING:
 	from frappe.model.document import Document
 	from frappe.printing.doctype.print_format.print_format import PrintFormat
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 no_cache = 1
 
 standard_format = "templates/print_formats/standard.html"
@@ -96,12 +106,22 @@ def get_print_format_doc(print_format_name, meta):
 
 
 def get_rendered_template(
+<<<<<<< HEAD
 	doc: "Document",
 	print_format: str | None = None,
 	meta=None,
 	no_letterhead: bool | None = None,
 	letterhead: str | None = None,
 	trigger_print: bool = False,
+=======
+	doc,
+	name=None,
+	print_format=None,
+	meta=None,
+	no_letterhead=None,
+	letterhead=None,
+	trigger_print=False,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	settings=None,
 ):
 	print_settings = frappe.get_single("Print Settings").as_dict()
@@ -149,6 +169,7 @@ def get_rendered_template(
 		def get_template_from_string():
 			return jenv.from_string(get_print_format(doc.doctype, print_format))
 
+<<<<<<< HEAD
 		template = None
 		if hook_func := frappe.get_hooks("get_print_format_template"):
 			template = frappe.get_attr(hook_func[-1])(jenv=jenv, print_format=print_format)
@@ -156,6 +177,9 @@ def get_rendered_template(
 		if template:
 			pass
 		elif print_format.custom_format:
+=======
+		if print_format.custom_format:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			template = get_template_from_string()
 
 		elif print_format.format_data:
@@ -204,7 +228,11 @@ def get_rendered_template(
 				</script>
 			"""
 
+<<<<<<< HEAD
 	convert_markdown(doc)
+=======
+	convert_markdown(doc, meta)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	args = {}
 	# extract `print_heading_template` from the first field and remove it
@@ -223,8 +251,22 @@ def get_rendered_template(
 			"print_settings": print_settings,
 		}
 	)
+<<<<<<< HEAD
 	hook_func = frappe.get_hooks("pdf_body_html")
 	html = frappe.get_attr(hook_func[-1])(jenv=jenv, template=template, print_format=print_format, args=args)
+=======
+
+	try:
+		html = template.render(args, filters={"len": len})
+	except Exception as e:
+		frappe.throw(
+			_("Error in print format on line {0}: {1}").format(
+				_guess_template_error_line_number(template), e
+			),
+			exc=frappe.PrintFormatError,
+			title=_("Print Format Error"),
+		)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if cint(trigger_print):
 		html += trigger_print_script
@@ -232,6 +274,22 @@ def get_rendered_template(
 	return html
 
 
+<<<<<<< HEAD
+=======
+def _guess_template_error_line_number(template) -> int | None:
+	"""Guess line on which exception occured from current traceback."""
+	with contextlib.suppress(Exception):
+		import sys
+		import traceback
+
+		_, _, tb = sys.exc_info()
+
+		for frame in reversed(traceback.extract_tb(tb)):
+			if template.filename in frame.filename:
+				return frame.lineno
+
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def set_link_titles(doc):
 	# Adds name with title of link field doctype to __link_titles
 	if not doc.get("__link_titles"):
@@ -277,9 +335,15 @@ def set_title_values_for_table_and_multiselect_fields(meta, doc):
 			set_title_values_for_link_and_dynamic_link_fields(_meta, value, doc)
 
 
+<<<<<<< HEAD
 def convert_markdown(doc: "Document"):
 	"""Convert text field values to markdown if necessary"""
 	for field in doc.meta.fields:
+=======
+def convert_markdown(doc, meta):
+	"""Convert text field values to markdown if necessary"""
+	for field in meta.fields:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if field.fieldtype == "Text Editor":
 			value = doc.get(field.fieldname)
 			if value and "<!-- markdown -->" in value:
@@ -288,6 +352,7 @@ def convert_markdown(doc: "Document"):
 
 @frappe.whitelist()
 def get_html_and_style(
+<<<<<<< HEAD
 	doc: str,
 	name: str | None = None,
 	print_format: str | None = None,
@@ -314,6 +379,36 @@ def get_html_and_style(
 			doc=document,
 			print_format=print_format,
 			meta=document.meta,
+=======
+	doc,
+	name=None,
+	print_format=None,
+	meta=None,
+	no_letterhead=None,
+	letterhead=None,
+	trigger_print=False,
+	style=None,
+	settings=None,
+	templates=None,
+):
+	"""Returns `html` and `style` of print format, used in PDF etc"""
+
+	if isinstance(doc, str) and isinstance(name, str):
+		doc = frappe.get_doc(doc, name)
+
+	if isinstance(doc, str):
+		doc = frappe.get_doc(json.loads(doc))
+
+	print_format = get_print_format_doc(print_format, meta=meta or frappe.get_meta(doc.doctype))
+	set_link_titles(doc)
+
+	try:
+		html = get_rendered_template(
+			doc,
+			name=name,
+			print_format=print_format,
+			meta=meta,
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			no_letterhead=no_letterhead,
 			letterhead=letterhead,
 			trigger_print=trigger_print,
@@ -327,6 +422,7 @@ def get_html_and_style(
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 def get_rendered_raw_commands(doc: str, name: str | None = None, print_format: str | None = None):
 	"""Returns Rendered Raw Commands of print format, used to send directly to printer"""
 
@@ -338,15 +434,31 @@ def get_rendered_raw_commands(doc: str, name: str | None = None, print_format: s
 	document.check_permission()
 
 	print_format = get_print_format_doc(print_format, meta=document.meta)
+=======
+def get_rendered_raw_commands(doc, name=None, print_format=None, meta=None, lang=None):
+	"""Returns Rendered Raw Commands of print format, used to send directly to printer"""
+
+	if isinstance(doc, str) and isinstance(name, str):
+		doc = frappe.get_doc(doc, name)
+
+	if isinstance(doc, str):
+		doc = frappe.get_doc(json.loads(doc))
+
+	print_format = get_print_format_doc(print_format, meta=meta or frappe.get_meta(doc.doctype))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not print_format or (print_format and not print_format.raw_printing):
 		frappe.throw(
 			_("{0} is not a raw printing format.").format(print_format), frappe.TemplateNotFoundError
 		)
 
+<<<<<<< HEAD
 	return {
 		"raw_commands": get_rendered_template(doc=document, print_format=print_format, meta=document.meta)
 	}
+=======
+	return {"raw_commands": get_rendered_template(doc, name=name, print_format=print_format, meta=meta)}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def validate_print_permission(doc):
@@ -380,7 +492,11 @@ def validate_key(key, doc):
 	raise frappe.exceptions.InvalidKeyError
 
 
+<<<<<<< HEAD
 def get_letter_head(doc: "Document", no_letterhead: bool, letterhead: str | None = None):
+=======
+def get_letter_head(doc, no_letterhead, letterhead=None):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	if no_letterhead:
 		return {}
 
@@ -461,7 +577,11 @@ def make_layout(doc, meta, format_data=None):
 
 		if df.fieldtype == "Section Break" or page == []:
 			if len(page) > 1:
+<<<<<<< HEAD
 				if not page[-1]["has_data"]:
+=======
+				if page[-1]["has_data"] is False:
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					# truncate last section if empty
 					del page[-1]
 
@@ -547,9 +667,13 @@ def has_value(df, doc):
 	return True
 
 
+<<<<<<< HEAD
 def get_print_style(
 	style: str | None = None, print_format: Optional["PrintFormat"] = None, for_legacy: bool = False
 ):
+=======
+def get_print_style(style=None, print_format=None, for_legacy=False):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	print_settings = frappe.get_doc("Print Settings")
 
 	if not style:

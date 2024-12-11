@@ -10,22 +10,34 @@ import zipfile
 from urllib.parse import quote, unquote
 
 from PIL import Image, ImageFile, ImageOps
+<<<<<<< HEAD
+=======
+from requests.exceptions import HTTPError, SSLError
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import frappe
 from frappe import _
 from frappe.database.schema import SPECIAL_CHAR_PATTERN
 from frappe.model.document import Document
+<<<<<<< HEAD
 from frappe.permissions import SYSTEM_USER_ROLE, get_doctypes_with_read
+=======
+from frappe.permissions import get_doctypes_with_read
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from frappe.utils import call_hook_method, cint, get_files_path, get_hook_method, get_url
 from frappe.utils.file_manager import is_safe_path
 from frappe.utils.image import optimize_image, strip_exif_data
 
+<<<<<<< HEAD
 from .exceptions import (
 	AttachmentLimitReached,
 	FileTypeNotAllowed,
 	FolderNotEmpty,
 	MaxFileSizeReachedError,
 )
+=======
+from .exceptions import AttachmentLimitReached, FolderNotEmpty, MaxFileSizeReachedError
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 from .utils import *
 
 exclude_from_linked_with = True
@@ -34,6 +46,7 @@ URL_PREFIXES = ("http://", "https://")
 
 
 class File(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -60,6 +73,8 @@ class File(Document):
 		uploaded_to_dropbox: DF.Check
 		uploaded_to_google_drive: DF.Check
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	no_feed_on_delete = True
 
 	def __init__(self, *args, **kwargs):
@@ -93,7 +108,10 @@ class File(Document):
 		self.set_file_name()
 		self.validate_attachment_limit()
 		self.set_file_type()
+<<<<<<< HEAD
 		self.validate_file_extension()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		if self.is_folder:
 			return
@@ -103,7 +121,11 @@ class File(Document):
 		else:
 			self.save_file(content=self.get_content())
 			self.flags.new_file = True
+<<<<<<< HEAD
 			frappe.db.after_rollback.add(self.on_rollback)
+=======
+			frappe.local.rollback_observers.append(self)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.validate_duplicate_entry()  # Hash is generated in save_file
 
@@ -154,6 +176,7 @@ class File(Document):
 			self.add_comment_in_reference_doc("Attachment Removed", _("Removed {0}").format(self.file_name))
 
 	def on_rollback(self):
+<<<<<<< HEAD
 		rollback_flags = ("new_file", "original_content", "original_path")
 
 		def pop_rollback_flags():
@@ -164,6 +187,12 @@ class File(Document):
 		if self.flags.new_file:
 			self._delete_file_on_disk()
 			pop_rollback_flags()
+=======
+		# following condition is only executed when an insert has been rolledback
+		if self.flags.new_file:
+			self._delete_file_on_disk()
+			self.flags.pop("new_file")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			return
 
 		# if original_content flag is set, this rollback should revert the file to its original state
@@ -178,14 +207,22 @@ class File(Document):
 			with open(file_path, mode) as f:
 				f.write(self.flags.original_content)
 				os.fsync(f.fileno())
+<<<<<<< HEAD
 				pop_rollback_flags()
+=======
+				self.flags.pop("original_content")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# used in case file path (File.file_url) has been changed
 		if self.flags.original_path:
 			target = self.flags.original_path["old"]
 			source = self.flags.original_path["new"]
 			shutil.move(source, target)
+<<<<<<< HEAD
 			pop_rollback_flags()
+=======
+			self.flags.pop("original_path")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def get_name_based_on_parent_folder(self) -> str | None:
 		if self.folder:
@@ -257,7 +294,11 @@ class File(Document):
 		# Uses os.rename which is an atomic operation
 		shutil.move(source, target)
 		self.flags.original_path = {"old": source, "new": target}
+<<<<<<< HEAD
 		frappe.db.after_rollback.add(self.on_rollback)
+=======
+		frappe.local.rollback_observers.append(self)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		self.file_url = updated_file_url
 		update_existing_file_docs(self)
@@ -269,6 +310,7 @@ class File(Document):
 		):
 			return
 
+<<<<<<< HEAD
 		if frappe.get_meta(self.attached_to_doctype).issingle:
 			frappe.db.set_single_value(
 				self.attached_to_doctype,
@@ -282,6 +324,14 @@ class File(Document):
 				self.attached_to_field,
 				self.file_url,
 			)
+=======
+		frappe.db.set_value(
+			self.attached_to_doctype,
+			self.attached_to_name,
+			self.attached_to_field,
+			self.file_url,
+		)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	def fetch_attached_to_field(self, old_file_url):
 		if self.attached_to_field:
@@ -358,6 +408,7 @@ class File(Document):
 		if not os.path.exists(full_path):
 			frappe.throw(_("File {0} does not exist").format(self.file_url), IOError)
 
+<<<<<<< HEAD
 	def validate_file_extension(self):
 		# Only validate uploaded files, not generated by code/integrations.
 		if not self.file_type or not frappe.request:
@@ -370,6 +421,8 @@ class File(Document):
 		if self.file_type not in allowed_extensions.splitlines():
 			frappe.throw(_("File type of {0} is not allowed").format(self.file_type), exc=FileTypeNotAllowed)
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate_duplicate_entry(self):
 		if not self.flags.ignore_duplicate_entry_error and not self.is_folder:
 			if not self.content_hash:
@@ -426,8 +479,11 @@ class File(Document):
 		suffix: str = "small",
 		crop: bool = False,
 	) -> str:
+<<<<<<< HEAD
 		from requests.exceptions import HTTPError, SSLError
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if not self.file_url:
 			return
 
@@ -596,7 +652,11 @@ class File(Document):
 			f.write(self._content)
 			os.fsync(f.fileno())
 
+<<<<<<< HEAD
 		frappe.db.after_rollback.add(self.on_rollback)
+=======
+		frappe.local.rollback_observers.append(self)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		return file_path
 
@@ -790,14 +850,22 @@ def on_doctype_update():
 	frappe.db.add_index("File", ["attached_to_doctype", "attached_to_name"])
 
 
+<<<<<<< HEAD
 def has_permission(doc, ptype=None, user=None, debug=False):
+=======
+def has_permission(doc, ptype=None, user=None):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	user = user or frappe.session.user
 
 	if user == "Administrator":
 		return True
 
 	if ptype == "create":
+<<<<<<< HEAD
 		return frappe.has_permission("File", "create", user=user, debug=debug)
+=======
+		return frappe.has_permission("File", "create", user=user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if not doc.is_private and ptype in ("read", "select"):
 		return True
@@ -816,9 +884,15 @@ def has_permission(doc, ptype=None, user=None, debug=False):
 			return False
 
 		if ptype in ["write", "create", "delete"]:
+<<<<<<< HEAD
 			return ref_doc.has_permission("write", debug=debug, user=user)
 		else:
 			return ref_doc.has_permission("read", debug=debug, user=user)
+=======
+			return ref_doc.has_permission("write")
+		else:
+			return ref_doc.has_permission("read")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	return False
 
@@ -828,7 +902,11 @@ def get_permission_query_conditions(user: str | None = None) -> str:
 	if user == "Administrator":
 		return ""
 
+<<<<<<< HEAD
 	if SYSTEM_USER_ROLE not in frappe.get_roles(user):
+=======
+	if frappe.get_cached_value("User", user, "user_type") != "System User":
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return f""" `tabFile`.`owner` = {frappe.db.escape(user)} """
 
 	readable_doctypes = ", ".join(repr(dt) for dt in get_doctypes_with_read())

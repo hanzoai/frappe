@@ -1,6 +1,7 @@
 # Copyright (c) 2022, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+<<<<<<< HEAD
 import frappe
 from frappe.model.document import Document, bulk_insert
 
@@ -75,3 +76,10 @@ def get_countries_and_currencies():
 			)
 
 	return countries, currencies
+=======
+from frappe.model.document import Document
+
+
+class Country(Document):
+	pass
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

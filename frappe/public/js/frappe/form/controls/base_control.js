@@ -2,6 +2,15 @@ frappe.ui.form.Control = class BaseControl {
 	constructor(opts) {
 		$.extend(this, opts);
 		this.make();
+<<<<<<< HEAD
+=======
+
+		// if developer_mode=1, show fieldname as tooltip
+		if (frappe.boot.user && frappe.boot.developer_mode === 1 && this.$wrapper) {
+			this.$wrapper.attr("title", __(this.df.fieldname));
+		}
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		if (this.render_input) {
 			this.refresh();
 		}
@@ -13,6 +22,7 @@ frappe.ui.form.Control = class BaseControl {
 			.attr("data-fieldname", this.df.fieldname);
 		this.wrapper = this.$wrapper.get(0);
 		this.wrapper.fieldobj = this; // reference for event handlers
+<<<<<<< HEAD
 
 		this.tooltip = $(`<span class="tooltip-content">${__(this.df.fieldname)}</span>`);
 		this.$wrapper.append(this.tooltip);
@@ -21,6 +31,8 @@ frappe.ui.form.Control = class BaseControl {
 			let text = $(e.target).text();
 			frappe.utils.copy_to_clipboard(text);
 		});
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 
 	make_wrapper() {
@@ -59,22 +71,40 @@ frappe.ui.form.Control = class BaseControl {
 
 			// like in case of a dialog box
 			if (cint(this.df.hidden)) {
+<<<<<<< HEAD
 				if (explain) console.log("By Hidden: None");
 				return "None";
 			} else if (cint(this.df.hidden_due_to_dependency)) {
 				if (explain) console.log("By Hidden Dependency: None");
+=======
+				// eslint-disable-next-line
+				if (explain) console.log("By Hidden: None"); // eslint-disable-line no-console
+				return "None";
+			} else if (cint(this.df.hidden_due_to_dependency)) {
+				// eslint-disable-next-line
+				if (explain) console.log("By Hidden Dependency: None"); // eslint-disable-line no-console
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				return "None";
 			} else if (
 				cint(this.df.read_only || this.df.is_virtual || this.df.fieldtype === "Read Only")
 			) {
+<<<<<<< HEAD
 				if (explain) console.log("By Read Only: Read");
+=======
+				// eslint-disable-next-line
+				if (explain) console.log("By Read Only: Read"); // eslint-disable-line no-console
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				status = "Read";
 			} else if (
 				(this.grid && this.grid.display_status == "Read") ||
 				(this.layout && this.layout.grid && this.layout.grid.display_status == "Read")
 			) {
 				// parent grid is read
+<<<<<<< HEAD
 				if (explain) console.log("By Parent Grid Read-only: Read");
+=======
+				if (explain) console.log("By Parent Grid Read-only: Read"); // eslint-disable-line no-console
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				status = "Read";
 			}
 
@@ -84,7 +114,11 @@ frappe.ui.form.Control = class BaseControl {
 			if (
 				status === "Read" &&
 				is_null(value) &&
+<<<<<<< HEAD
 				!["HTML", "Image", "Button"].includes(this.df.fieldtype)
+=======
+				!in_list(["HTML", "Image", "Button"], this.df.fieldtype)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			)
 				status = "Read";
 
@@ -106,13 +140,21 @@ frappe.ui.form.Control = class BaseControl {
 			var grid = this.grid || this.layout.grid;
 			if (grid.display_status == "Read") {
 				status = "Read";
+<<<<<<< HEAD
 				if (explain) console.log("By Parent Grid Read-only: Read");
+=======
+				if (explain) console.log("By Parent Grid Read-only: Read"); // eslint-disable-line no-console
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			}
 		}
 
 		let value = frappe.model.get_value(this.doctype, this.docname, this.df.fieldname);
 
+<<<<<<< HEAD
 		if (["Date", "Datetime"].includes(this.df.fieldtype) && value) {
+=======
+		if (in_list(["Date", "Datetime"], this.df.fieldtype) && value) {
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			value = frappe.datetime.str_to_user(value);
 		}
 
@@ -124,9 +166,16 @@ frappe.ui.form.Control = class BaseControl {
 			status === "Read" &&
 			!this.only_input &&
 			is_null(value) &&
+<<<<<<< HEAD
 			!["HTML", "Image", "Button", "Geolocation"].includes(this.df.fieldtype)
 		) {
 			if (explain) console.log("By Hide Read-only, null fields: None");
+=======
+			!in_list(["HTML", "Image", "Button", "Geolocation"], this.df.fieldtype)
+		) {
+			// eslint-disable-next-line
+			if (explain) console.log("By Hide Read-only, null fields: None"); // eslint-disable-line no-console
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			status = "None";
 		}
 

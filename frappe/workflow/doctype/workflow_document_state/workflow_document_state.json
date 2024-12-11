@@ -17,8 +17,12 @@
   "next_action_email_template",
   "allow_edit",
   "section_break_9",
+<<<<<<< HEAD
   "message",
   "workflow_builder_id"
+=======
+  "message"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  ],
  "fields": [
   {
@@ -32,7 +36,10 @@
    "width": "160px"
   },
   {
+<<<<<<< HEAD
    "default": "0",
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "description": "0 - Draft; 1 - Submitted; 2 - Cancelled",
    "fieldname": "doc_status",
    "fieldtype": "Select",
@@ -94,12 +101,15 @@
    "fieldtype": "Section Break"
   },
   {
+<<<<<<< HEAD
    "fieldname": "workflow_builder_id",
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Workflow Builder ID"
   },
   {
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "default": "0",
    "description": "If Checked workflow status will not override status in list view",
    "fieldname": "avoid_status_override",

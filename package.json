@@ -5,7 +5,12 @@
     "production": "node esbuild --production",
     "watch": "node esbuild --watch",
     "coverage:report": "npx nyc report --reporter=clover",
+<<<<<<< HEAD
     "postinstall": "cd billing && yarn install"
+=======
+    "prepare": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   "repository": {
     "type": "git",
@@ -17,6 +22,7 @@
     "url": "https://github.com/frappe/frappe/issues"
   },
   "engines": {
+<<<<<<< HEAD
     "node": ">=18"
   },
   "homepage": "https://frappeframework.com",
@@ -31,11 +37,25 @@
     "@vue-flow/core": "^1.16.2",
     "@vue/component-compiler": "^4.2.4",
     "@vueuse/core": "^9.5.0",
+=======
+    "node": ">=14"
+  },
+  "homepage": "https://frappeframework.com",
+  "dependencies": {
+    "@editorjs/editorjs": "^2.26.3",
+    "@frappe/esbuild-plugin-postcss2": "^0.1.3",
+    "@snyk/protect": "^1.1107.0",
+    "@vue/component-compiler": "^4.2.4",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
     "ace-builds": "^1.4.8",
     "air-datepicker": "github:frappe/air-datepicker",
     "autoprefixer": "10",
     "awesomplete": "^1.1.5",
+<<<<<<< HEAD
     "bootstrap": "4.6.2",
+=======
+    "bootstrap": "4.5.0",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
     "chalk": "^2.3.2",
     "cliui": "^7.0.4",
     "cookie": "^0.4.0",
@@ -44,13 +64,18 @@
     "driver.js": "^0.9.8",
     "editorjs-undo": "0.1.6",
     "esbuild": "^0.14.29",
+<<<<<<< HEAD
     "esbuild-plugin-vue3": "^0.3.0",
+=======
+    "esbuild-vue": "^1.2.1",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
     "fast-deep-equal": "^2.0.1",
     "fast-glob": "^3.2.5",
     "frappe-charts": "2.0.0-rc22",
     "frappe-datatable": "1.17.16",
     "frappe-gantt": "^0.6.0",
     "highlight.js": "^10.4.1",
+<<<<<<< HEAD
     "html5-qrcode": "^2.3.8",
     "jquery": "3.7.0",
     "js-sha256": "^0.9.0",
@@ -62,12 +87,25 @@
     "moment-timezone": "^0.5.35",
     "pinia": "^2.0.23",
     "plyr": "^3.7.8",
+=======
+    "html5-qrcode": "^2.0.11",
+    "jquery": "3.6.0",
+    "js-sha256": "^0.9.0",
+    "jsbarcode": "^3.9.0",
+    "launch-editor": "^2.2.1",
+    "localforage": "^1.9.0",
+    "md5": "^2.3.0",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.28",
+    "plyr": "^3.7.2",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
     "popper.js": "^1.16.0",
     "postcss": "8",
     "quill": "2.0.0-dev.4",
     "quill-image-resize": "^3.0.9",
     "quill-magic-url": "^3.0.0",
     "qz-tray": "^2.0.8",
+<<<<<<< HEAD
     "rtlcss": "^4.0.0",
     "sass": "^1.63.0",
     "showdown": "^2.1.0",
@@ -88,5 +126,26 @@
   "optionalDependencies": {
     "bufferutil": "^4.0.8",
     "utf-8-validate": "^6.0.3"
+=======
+    "redis": "^3.1.1",
+    "rtlcss": "^3.2.1",
+    "sass": "^1.53.0",
+    "showdown": "^2.1.0",
+    "socket.io": "^4.7.1",
+    "socket.io-client": "^4.7.1",
+    "sortablejs": "1.9.0",
+    "superagent": "^3.8.2",
+    "touch": "^3.1.0",
+    "vue": "2.6.14",
+    "vue-router": "^2.0.0",
+    "vue-template-compiler": "2.6.14",
+    "vuedraggable": "^2.24.3",
+    "vuex": "3",
+    "yargs": "^17.5.1"
+  },
+  "snyk": true,
+  "nyc": {
+    "report-dir": ".cypress-coverage"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
 }

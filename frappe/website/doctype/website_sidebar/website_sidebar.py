@@ -6,6 +6,7 @@ from frappe.model.document import Document
 
 
 class WebsiteSidebar(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -19,6 +20,8 @@ class WebsiteSidebar(Document):
 		title: DF.Data
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def get_items(self):
 		items = frappe.get_all(
 			"Website Sidebar Item",
@@ -35,6 +38,13 @@ class WebsiteSidebar(Document):
 			else:
 				items_without_group.append(item)
 
+<<<<<<< HEAD
 		out = [{"group_title": group, "group_items": items} for group, items in items_by_group.items()]
+=======
+		out = []
+		for group, items in items_by_group.items():
+			out.append({"group_title": group, "group_items": items})
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		out += items_without_group
 		return out

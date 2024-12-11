@@ -8,7 +8,11 @@ def execute():
 	workspaces_to_update = frappe.get_all(
 		"Workspace",
 		filters={"module": ("is", "not set")},
+<<<<<<< HEAD
 		fields=["name", "title", "icon", "indicator_color", "parent_page as parent", "public"],
+=======
+		fields=["name", "title", "icon", "parent_page as parent", "public"],
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	)
 	for workspace in workspaces_to_update:
 		new_title = strip_html(unescape_html(workspace.title))

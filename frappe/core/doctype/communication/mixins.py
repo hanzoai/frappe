@@ -184,7 +184,11 @@ class CommunicationEmailMixin:
 			)
 		return self._incoming_email_account
 
+<<<<<<< HEAD
 	def mail_attachments(self, print_format=None, print_html=None, print_language=None):
+=======
+	def mail_attachments(self, print_format=None, print_html=None):
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		final_attachments = []
 
 		if print_format or print_html:
@@ -194,11 +198,21 @@ class CommunicationEmailMixin:
 				"print_format_attachment": 1,
 				"doctype": self.reference_doctype,
 				"name": self.reference_name,
+<<<<<<< HEAD
 				"lang": print_language or frappe.local.lang,
 			}
 			final_attachments.append(d)
 
 		final_attachments.extend({"fid": a["name"]} for a in self.get_attachments() or [])
+=======
+				"lang": frappe.local.lang,
+			}
+			final_attachments.append(d)
+
+		for a in self.get_attachments() or []:
+			final_attachments.append({"fid": a["name"]})
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		return final_attachments
 
 	def get_unsubscribe_message(self):
@@ -257,7 +271,10 @@ class CommunicationEmailMixin:
 		send_me_a_copy=None,
 		print_letterhead=None,
 		is_inbound_mail_communcation=None,
+<<<<<<< HEAD
 		print_language=None,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	) -> dict:
 		outgoing_email_account = self.get_outgoing_email_account()
 		if not outgoing_email_account:
@@ -274,9 +291,13 @@ class CommunicationEmailMixin:
 		if not (recipients or cc):
 			return {}
 
+<<<<<<< HEAD
 		final_attachments = self.mail_attachments(
 			print_format=print_format, print_html=print_html, print_language=print_language
 		)
+=======
+		final_attachments = self.mail_attachments(print_format=print_format, print_html=print_html)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		incoming_email_account = self.get_incoming_email_account()
 		return {
 			"recipients": recipients,
@@ -297,7 +318,10 @@ class CommunicationEmailMixin:
 			"read_receipt": self.read_receipt,
 			"is_notification": (self.sent_or_received == "Received" and True) or False,
 			"print_letterhead": print_letterhead,
+<<<<<<< HEAD
 			"send_after": self.send_after,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 	def send_email(
@@ -307,7 +331,10 @@ class CommunicationEmailMixin:
 		send_me_a_copy=None,
 		print_letterhead=None,
 		is_inbound_mail_communcation=None,
+<<<<<<< HEAD
 		print_language=None,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		now=False,
 	):
 		if input_dict := self.sendmail_input_dict(
@@ -316,6 +343,9 @@ class CommunicationEmailMixin:
 			send_me_a_copy=send_me_a_copy,
 			print_letterhead=print_letterhead,
 			is_inbound_mail_communcation=is_inbound_mail_communcation,
+<<<<<<< HEAD
 			print_language=print_language,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		):
 			frappe.sendmail(now=now, **input_dict)

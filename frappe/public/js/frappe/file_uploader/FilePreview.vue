@@ -7,14 +7,24 @@
 		<div>
 			<div>
 				<a class="flex" :href="file.doc.file_url" v-if="file.doc" target="_blank">
+<<<<<<< HEAD
 					<span class="file-name">{{ file.name }}</span>
 				</a>
 				<span class="file-name" v-else>{{ file.name }}</span>
+=======
+					<span class="file-name">{{ file.name | file_name }}</span>
+				</a>
+				<span class="file-name" v-else>{{ file.name | file_name }}</span>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			</div>
 
 			<div>
 				<span class="file-size">
+<<<<<<< HEAD
 					{{ file_size }}
+=======
+					{{ file.file_obj.size | file_size }}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				</span>
 			</div>
 
@@ -23,15 +33,25 @@
 					><input
 						type="checkbox"
 						:checked="optimize"
+<<<<<<< HEAD
 						@change="emit('toggle_optimize')"
 					/>{{ __("Optimize") }}</label
+=======
+						@change="$emit('toggle_optimize')"
+					/>Optimize</label
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				>
 				<label class="frappe-checkbox"
 					><input
 						type="checkbox"
 						:checked="file.private"
+<<<<<<< HEAD
 						@change="emit('toggle_private')"
 					/>{{ __("Private") }}</label
+=======
+						@change="$emit('toggle_private')"
+					/>Private</label
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				>
 			</div>
 			<div>
@@ -55,13 +75,21 @@
 				<button
 					v-if="is_cropable"
 					class="btn btn-crop muted"
+<<<<<<< HEAD
 					@click="emit('toggle_image_cropper')"
+=======
+					@click="$emit('toggle_image_cropper')"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					v-html="frappe.utils.icon('crop', 'md')"
 				></button>
 				<button
 					v-if="!uploaded && !file.uploading && !file.failed"
 					class="btn muted"
+<<<<<<< HEAD
 					@click="emit('remove')"
+=======
+					@click="$emit('remove')"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 					v-html="frappe.utils.icon('delete', 'md')"
 				></button>
 			</div>
@@ -69,6 +97,7 @@
 	</div>
 </template>
 
+<<<<<<< HEAD
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import ProgressRing from "./ProgressRing.vue";
@@ -132,6 +161,75 @@ onMounted(() => {
 </script>
 
 <style scoped>
+=======
+<script>
+import ProgressRing from "./ProgressRing.vue";
+export default {
+	name: "FilePreview",
+	props: ["file"],
+	components: {
+		ProgressRing,
+	},
+	data() {
+		return {
+			src: null,
+			optimize: this.file.optimize,
+		};
+	},
+	mounted() {
+		if (this.is_image) {
+			if (window.FileReader) {
+				let fr = new FileReader();
+				fr.onload = () => (this.src = fr.result);
+				fr.readAsDataURL(this.file.file_obj);
+			}
+		}
+	},
+	filters: {
+		file_size(value) {
+			return frappe.form.formatters.FileSize(value);
+		},
+		file_name(value) {
+			return value;
+			// return frappe.utils.file_name_ellipsis(value, 9);
+		},
+	},
+	computed: {
+		is_private() {
+			return this.file.doc ? this.file.doc.is_private : this.file.private;
+		},
+		uploaded() {
+			return this.file.request_succeeded;
+		},
+		is_image() {
+			return this.file.file_obj.type.startsWith("image");
+		},
+		is_optimizable() {
+			let is_svg = this.file.file_obj.type == "image/svg+xml";
+			return this.is_image && !is_svg && !this.uploaded && !this.file.failed;
+		},
+		is_cropable() {
+			let croppable_types = ["image/jpeg", "image/png"];
+			return (
+				!this.uploaded &&
+				!this.file.uploading &&
+				!this.file.failed &&
+				croppable_types.includes(this.file.file_obj.type)
+			);
+		},
+		progress() {
+			let value = Math.round((this.file.progress * 100) / this.file.total);
+			if (isNaN(value)) {
+				value = 0;
+			}
+			return value;
+		},
+	},
+};
+</script>
+
+<style>
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 .file-preview {
 	display: flex;
 	align-items: center;

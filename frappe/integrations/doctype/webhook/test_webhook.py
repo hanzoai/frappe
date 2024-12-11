@@ -2,6 +2,10 @@
 # License: MIT. See LICENSE
 import json
 from contextlib import contextmanager
+<<<<<<< HEAD
+=======
+from unittest import skip
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 import responses
 from responses.matchers import json_params_matcher
@@ -18,10 +22,14 @@ from frappe.tests.utils import FrappeTestCase
 
 @contextmanager
 def get_test_webhook(config):
+<<<<<<< HEAD
 	wh = frappe.get_doc(config)
 	if not wh.name:
 		wh.name = frappe.generate_hash()
 	wh.insert()
+=======
+	wh = frappe.get_doc(config).insert()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	wh.reload()
 	try:
 		yield wh
@@ -44,7 +52,10 @@ class TestWebhook(FrappeTestCase):
 	def create_sample_webhooks(cls):
 		samples_webhooks_data = [
 			{
+<<<<<<< HEAD
 				"name": frappe.generate_hash(),
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				"webhook_doctype": "User",
 				"webhook_docevent": "after_insert",
 				"request_url": "https://httpbin.org/post",
@@ -52,7 +63,10 @@ class TestWebhook(FrappeTestCase):
 				"enabled": True,
 			},
 			{
+<<<<<<< HEAD
 				"name": frappe.generate_hash(),
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 				"webhook_doctype": "User",
 				"webhook_docevent": "after_insert",
 				"request_url": "https://httpbin.org/post",
@@ -77,8 +91,11 @@ class TestWebhook(FrappeTestCase):
 
 	def setUp(self):
 		# retrieve or create a User webhook for `after_insert`
+<<<<<<< HEAD
 		self.responses = responses.RequestsMock()
 		self.responses.start()
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		webhook_fields = {
 			"webhook_doctype": "User",
 			"webhook_docevent": "after_insert",
@@ -103,6 +120,12 @@ class TestWebhook(FrappeTestCase):
 		self.test_user.first_name = "user1"
 		self.test_user.send_welcome_email = False
 
+<<<<<<< HEAD
+=======
+		self.responses = responses.RequestsMock()
+		self.responses.start()
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def tearDown(self) -> None:
 		self.user.delete()
 		self.test_user.delete()
@@ -114,12 +137,20 @@ class TestWebhook(FrappeTestCase):
 	def test_webhook_trigger_with_enabled_webhooks(self):
 		"""Test webhook trigger for enabled webhooks"""
 
+<<<<<<< HEAD
 		frappe.cache.delete_value("webhooks")
+=======
+		frappe.cache().delete_value("webhooks")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		# Insert the user to db
 		self.test_user.insert()
 
+<<<<<<< HEAD
 		webhooks = frappe.cache.get_value("webhooks")
+=======
+		webhooks = frappe.cache().get_value("webhooks")
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		self.assertTrue("User" in webhooks)
 		self.assertEqual(len(webhooks.get("User")), 1)
 
@@ -248,6 +279,7 @@ class TestWebhook(FrappeTestCase):
 			flush_webhook_execution_queue()
 			log = frappe.get_last_doc("Webhook Request Log")
 			self.assertEqual(len(json.loads(log.response)), 3)
+<<<<<<< HEAD
 
 	def test_webhook_with_dynamic_url_enabled(self):
 		wh_config = {
@@ -310,3 +342,5 @@ class TestWebhook(FrappeTestCase):
 			doc = frappe.new_doc("Note")
 			doc.title = "Test Webhook Note"
 			enqueue_webhook(doc, wh)
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

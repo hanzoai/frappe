@@ -54,12 +54,28 @@ def upload():
 
 	comment = {}
 	if dt and dn:
+<<<<<<< HEAD
 		file_url = file_doc.file_url.replace("#", "%23") if file_doc.file_name else file_doc.file_url
 		icon = ' <i class="fa fa-lock text-warning"></i>' if file_doc.is_private else ""
 		file_name = file_doc.file_name or file_doc.file_url
 		comment = frappe.get_doc(dt, dn).add_comment(
 			"Attachment",
 			f"<a href='{file_url}' target='_blank'>{file_name}</a>{icon}",
+=======
+		comment = frappe.get_doc(dt, dn).add_comment(
+			"Attachment",
+			_("added {0}").format(
+				"<a href='{file_url}' target='_blank'>{file_name}</a>{icon}".format(
+					**{
+						"icon": ' <i class="fa fa-lock text-warning"></i>' if file_doc.is_private else "",
+						"file_url": file_doc.file_url.replace("#", "%23")
+						if file_doc.file_name
+						else file_doc.file_url,
+						"file_name": file_doc.file_name or file_doc.file_url,
+					}
+				)
+			),
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		)
 
 	return {
@@ -284,7 +300,11 @@ def remove_file(
 			ignore_permissions = True
 		if not file_name:
 			file_name = frappe.db.get_value("File", fid, "file_name")
+<<<<<<< HEAD
 		comment = doc.add_comment("Attachment Removed", file_name)
+=======
+		comment = doc.add_comment("Attachment Removed", _("Removed {0}").format(file_name))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.delete_doc(
 			"File", fid, ignore_permissions=ignore_permissions, delete_permanently=delete_permanently
 		)
@@ -380,7 +400,11 @@ def get_file_path(file_name):
 def get_content_hash(content):
 	if isinstance(content, str):
 		content = content.encode()
+<<<<<<< HEAD
 	return hashlib.md5(content, usedforsecurity=False).hexdigest()
+=======
+	return hashlib.md5(content).hexdigest()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_file_name(fname, optional_suffix):
@@ -399,6 +423,30 @@ def get_file_name(fname, optional_suffix):
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
+=======
+def download_file(file_url):
+	"""
+	Download file using token and REST API. Valid session or
+	token is required to download private files.
+
+	Method : GET
+	Endpoint : frappe.utils.file_manager.download_file
+	URL Params : file_name = /path/to/file relative to site path
+	"""
+	file_doc = frappe.get_doc("File", {"file_url": file_url})
+	file_doc.check_permission("read")
+	path = os.path.join(get_files_path(), os.path.basename(file_url))
+
+	with open(path, "rb") as fileobj:
+		filedata = fileobj.read()
+	frappe.local.response.filename = os.path.basename(file_url)
+	frappe.local.response.filecontent = filedata
+	frappe.local.response.type = "download"
+
+
+@frappe.whitelist()
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 def add_attachments(doctype, name, attachments):
 	"""Add attachments to the given DocType"""
 	if isinstance(attachments, str):

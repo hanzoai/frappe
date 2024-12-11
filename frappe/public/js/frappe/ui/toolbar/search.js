@@ -59,6 +59,10 @@ frappe.search.SearchDialog = class {
 							callback(results, keywords);
 						},
 						(err) => {
+<<<<<<< HEAD
+=======
+							// eslint-disable-next-line no-console
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							console.error(err);
 						}
 					);
@@ -77,6 +81,10 @@ frappe.search.SearchDialog = class {
 							callback(results, keywords);
 						},
 						(err) => {
+<<<<<<< HEAD
+=======
+							// eslint-disable-next-line no-console
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							console.error(err);
 						}
 					);
@@ -175,6 +183,10 @@ frappe.search.SearchDialog = class {
 							doctype_results.length && this.add_more_results(doctype_results);
 						},
 						(err) => {
+<<<<<<< HEAD
+=======
+							// eslint-disable-next-line no-console
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 							console.error(err);
 						}
 					);

@@ -1,12 +1,20 @@
 {
  "actions": [],
+<<<<<<< HEAD
  "autoname": "prompt",
+=======
+ "autoname": "naming_series:",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "creation": "2017-09-08 16:16:13.060641",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "sb_doc_events",
+<<<<<<< HEAD
+=======
+  "naming_series",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "webhook_doctype",
   "cb_doc_events",
   "webhook_docevent",
@@ -17,11 +25,17 @@
   "html_condition",
   "sb_webhook",
   "request_url",
+<<<<<<< HEAD
   "is_dynamic_url",
   "timeout",
   "background_jobs_queue",
   "cb_webhook",
   "request_method",
+=======
+  "timeout",
+  "request_method",
+  "cb_webhook",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   "request_structure",
   "sb_security",
   "enable_security",
@@ -47,7 +61,10 @@
   {
    "fieldname": "webhook_doctype",
    "fieldtype": "Link",
+<<<<<<< HEAD
    "in_list_view": 1,
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "label": "DocType",
    "options": "DocType",
    "reqd": 1,
@@ -132,11 +149,23 @@
   },
   {
    "depends_on": "eval: doc.request_structure == \"JSON\"",
+<<<<<<< HEAD
    "description": "To add dynamic values from the document, use jinja tags like\n\n<div>\n<pre><code>{ \"id\": \"{{ doc.name }}\" }</code>\n</pre>\n</div>",
    "fieldname": "webhook_json",
    "fieldtype": "Code",
    "label": "JSON Request Body",
    "options": "Jinja"
+=======
+   "fieldname": "webhook_json",
+   "fieldtype": "Code",
+   "label": "JSON Request Body"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "\nHOOK-.####"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   },
   {
    "fieldname": "sb_security",
@@ -201,6 +230,7 @@
    "fieldtype": "Section Break"
   },
   {
+<<<<<<< HEAD
    "default": "0",
    "description": "On checking this option, URL will be treated like a jinja template string",
    "fieldname": "is_dynamic_url",
@@ -208,10 +238,13 @@
    "label": "Is Dynamic URL?"
   },
   {
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
    "default": "5",
    "description": "The number of seconds until the request expires",
    "fieldname": "timeout",
    "fieldtype": "Int",
+<<<<<<< HEAD
    "label": "Request Timeout"
   },
   {
@@ -231,6 +264,18 @@
  "module": "Integrations",
  "name": "Webhook",
  "naming_rule": "Set by user",
+=======
+   "label": "Request Timeout",
+   "reqd": 1
+  }
+ ],
+ "links": [],
+ "modified": "2024-02-05 17:49:50.203001",
+ "modified_by": "Administrator",
+ "module": "Integrations",
+ "name": "Webhook",
+ "naming_rule": "By \"Naming Series\" field",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "owner": "Administrator",
  "permissions": [
   {
@@ -249,5 +294,11 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
+<<<<<<< HEAD
  "track_changes": 1
 }
+=======
+ "title_field": "webhook_doctype",
+ "track_changes": 1
+}
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

@@ -42,6 +42,7 @@ week_map = {
 
 
 class AutoRepeat(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -71,6 +72,8 @@ class AutoRepeat(Document):
 		template: DF.Link | None
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		self.update_status()
 		self.validate_reference_doctype()
@@ -122,9 +125,13 @@ class AutoRepeat(Document):
 	def validate_submit_on_creation(self):
 		if self.submit_on_creation and not frappe.get_meta(self.reference_doctype).is_submittable:
 			frappe.throw(
+<<<<<<< HEAD
 				_("Cannot enable {0} for a non-submittable doctype").format(
 					frappe.bold(_("Submit on Creation"))
 				)
+=======
+				_("Cannot enable {0} for a non-submittable doctype").format(frappe.bold("Submit on Creation"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			)
 
 	def validate_dates(self):
@@ -136,9 +143,13 @@ class AutoRepeat(Document):
 
 		if self.end_date == self.start_date:
 			frappe.throw(
+<<<<<<< HEAD
 				_("{0} should not be same as {1}").format(
 					frappe.bold(_("End Date")), frappe.bold(_("Start Date"))
 				)
+=======
+				_("{0} should not be same as {1}").format(frappe.bold("End Date"), frappe.bold("Start Date"))
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			)
 
 	def validate_email_id(self):

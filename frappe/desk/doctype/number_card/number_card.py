@@ -14,6 +14,7 @@ from frappe.utils import cint, flt
 
 
 class NumberCard(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -43,6 +44,8 @@ class NumberCard(Document):
 		type: DF.Literal["Document Type", "Report", "Custom"]
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def autoname(self):
 		if not self.name:
 			self.name = self.label
@@ -192,7 +195,12 @@ def calculate_previous_result(doc, filters):
 	else:
 		previous_date = add_to_date(current_date, years=-1)
 
+<<<<<<< HEAD
 	return get_result(doc, filters, previous_date)
+=======
+	number = get_result(doc, filters, previous_date)
+	return number
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 @frappe.whitelist()

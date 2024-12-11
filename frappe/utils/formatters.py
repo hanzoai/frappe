@@ -138,8 +138,11 @@ def format_value(value, df=None, doc=None, currency=None, translated=False, form
 
 		return doc.__link_titles.get(f"{doctype}::{value}", value)
 
+<<<<<<< HEAD
 	elif df.get("fieldtype") == "Select":
 		if isinstance(value, str):
 			return frappe._(value, context=df.parent or "")
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	return value

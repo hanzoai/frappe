@@ -8,6 +8,7 @@ from frappe.model.document import Document
 
 
 class CompanyHistory(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -22,4 +23,6 @@ class CompanyHistory(Document):
 		parenttype: DF.Data
 		year: DF.Data | None
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	pass

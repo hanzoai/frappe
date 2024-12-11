@@ -12,6 +12,7 @@ from frappe.utils import cstr
 
 
 class UserPermission(Document):
+<<<<<<< HEAD
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -29,16 +30,26 @@ class UserPermission(Document):
 		user: DF.Link
 
 	# end: auto-generated types
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	def validate(self):
 		self.validate_user_permission()
 		self.validate_default_permission()
 
 	def on_update(self):
+<<<<<<< HEAD
 		frappe.cache.hdel("user_permissions", self.user)
 		frappe.publish_realtime("update_user_permissions", user=self.user, after_commit=True)
 
 	def on_trash(self):
 		frappe.cache.hdel("user_permissions", self.user)
+=======
+		frappe.cache().hdel("user_permissions", self.user)
+		frappe.publish_realtime("update_user_permissions", user=self.user, after_commit=True)
+
+	def on_trash(self):
+		frappe.cache().hdel("user_permissions", self.user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		frappe.publish_realtime("update_user_permissions", user=self.user, after_commit=True)
 
 	def validate_user_permission(self):
@@ -95,7 +106,11 @@ def get_user_permissions(user=None):
 	if not user or user in ("Administrator", "Guest"):
 		return {}
 
+<<<<<<< HEAD
 	cached_user_permissions = frappe.cache.hget("user_permissions", user)
+=======
+	cached_user_permissions = frappe.cache().hget("user_permissions", user)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 	if cached_user_permissions is not None:
 		return cached_user_permissions
@@ -130,7 +145,11 @@ def get_user_permissions(user=None):
 					add_doc_to_perm(perm, doc, False)
 
 		out = frappe._dict(out)
+<<<<<<< HEAD
 		frappe.cache.hset("user_permissions", user, out)
+=======
+		frappe.cache().hset("user_permissions", user, out)
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	except frappe.db.SQLError as e:
 		if frappe.db.is_table_missing(e):
 			# called from patch
@@ -144,11 +163,20 @@ def user_permission_exists(user, allow, for_value, applicable_for=None):
 	user_permissions = get_user_permissions(user).get(allow, [])
 	if not user_permissions:
 		return None
+<<<<<<< HEAD
 	return find(
+=======
+	has_same_user_permission = find(
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		user_permissions,
 		lambda perm: perm["doc"] == for_value and perm.get("applicable_for") == applicable_for,
 	)
 
+<<<<<<< HEAD
+=======
+	return has_same_user_permission
+
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 @frappe.whitelist()
 @frappe.validate_and_sanitize_search_inputs
@@ -169,7 +197,15 @@ def get_applicable_for_doctype_list(doctype, txt, searchfield, start, page_len, 
 
 	linked_doctypes.sort()
 
+<<<<<<< HEAD
 	return [[doctype] for doctype in linked_doctypes[start:page_len]]
+=======
+	return_list = []
+	for doctype in linked_doctypes[start:page_len]:
+		return_list.append([doctype])
+
+	return return_list
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 
 def get_permitted_documents(doctype):

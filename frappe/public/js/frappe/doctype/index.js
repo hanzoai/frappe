@@ -22,6 +22,7 @@ frappe.model.DocTypeController = class DocTypeController extends frappe.ui.form.
 		};
 	}
 
+<<<<<<< HEAD
 	refresh() {
 		this.show_db_utilization();
 	}
@@ -45,6 +46,8 @@ frappe.model.DocTypeController = class DocTypeController extends frappe.ui.form.
 			});
 	}
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	max_attachments() {
 		if (!this.frm.doc.max_attachments) {
 			return;
@@ -134,6 +137,7 @@ frappe.model.DocTypeController = class DocTypeController extends frappe.ui.form.
 
 			setTimeout(() => (this.frm.__from_autoname = false), 500);
 		}
+<<<<<<< HEAD
 	}
 
 	setup_fetch_from_fields(doc, doctype, docname) {
@@ -220,5 +224,9 @@ frappe.model.DocTypeController = class DocTypeController extends frappe.ui.form.
 			$doctype_select.val(curr_value.doctype);
 			update_fieldname_options();
 		}
+=======
+
+		this.frm.set_df_property("fields", "reqd", this.frm.doc.autoname !== "Prompt");
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 };

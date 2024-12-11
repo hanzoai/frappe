@@ -166,10 +166,17 @@ frappe.ui.FieldSelect = class FieldSelect {
 		let table = null;
 
 		if (me.doctype && df.parent == me.doctype) {
+<<<<<<< HEAD
 			label = __(df.label, null, df.parent);
 			table = me.doctype;
 		} else {
 			label = __(df.label, null, df.parent) + " (" + __(df.parent) + ")";
+=======
+			label = __(df.label);
+			table = me.doctype;
+		} else {
+			label = __(df.label) + " (" + __(df.parent) + ")";
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 			table = df.parent;
 		}
 

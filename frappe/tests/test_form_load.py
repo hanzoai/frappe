@@ -197,4 +197,9 @@ class TestFormLoad(FrappeTestCase):
 def get_blog(blog_name):
 	frappe.response.docs = []
 	getdoc("Blog Post", blog_name)
+<<<<<<< HEAD
 	return frappe.response.docs[0]
+=======
+	doc = frappe.response.docs[0]
+	return doc
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)

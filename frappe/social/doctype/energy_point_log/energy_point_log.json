@@ -110,7 +110,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-08-28 22:33:08.420000",
+=======
+ "modified": "2022-09-13 16:10:37.747013",
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
  "modified_by": "Administrator",
  "module": "Social",
  "name": "Energy Point Log",
@@ -124,7 +128,11 @@
   {
    "read": 1,
    "report": 1,
+<<<<<<< HEAD
    "role": "Desk User"
+=======
+   "role": "All"
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
   }
  ],
  "sort_field": "modified",

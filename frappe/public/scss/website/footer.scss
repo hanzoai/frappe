@@ -3,7 +3,10 @@
 	min-height: 140px;
 	background-color: var(--fg-color);
 	border-top: 1px solid $border-color;
+<<<<<<< HEAD
 	margin-top: auto;
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .footer-logo {
@@ -87,7 +90,11 @@
 
 .form-control {
 	border: none;
+<<<<<<< HEAD
 	@include get_textstyle("base", "regular");
+=======
+	font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .footer-logo-extension {

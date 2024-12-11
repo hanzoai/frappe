@@ -5,7 +5,11 @@
 		display: flex;
 		margin-right: var(--margin-sm);
 		cursor: pointer;
+<<<<<<< HEAD
 		--icon-stroke: var(--gray-700);
+=======
+		--icon-stroke: var(--gray-500);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		.sidebar-toggle-icon {
 			display: none;
 		}
@@ -28,17 +32,28 @@
 		display: inline-flex;
 		align-items: center;
 		.title-text {
+<<<<<<< HEAD
 			@include get_textstyle("2xl", "bold");
 			cursor: pointer;
 			margin-bottom: 0px;
 			margin-right: var(--margin-sm);
 			max-width: 25vw;
+=======
+			cursor: pointer;
+			margin-bottom: 0px;
+			margin-right: var(--margin-sm);
+			max-width: 500px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 		.indicator-pill {
 			margin-top: 2px;
 		}
 		.sub-heading {
+<<<<<<< HEAD
 			@include get_textstyle("sm", "regular");
+=======
+			font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 	}
 }
@@ -58,6 +73,7 @@
 		height: var(--btn-height);
 		margin-left: var(--margin-sm, 8px);
 		border-radius: var(--border-radius);
+<<<<<<< HEAD
 		line-height: 1;
 		padding: 4px 8px;
 		&,
@@ -69,6 +85,11 @@
 	}
 	.btn:not(.icon-btn) {
 		padding: 4px 8px;
+=======
+	}
+	.btn:not(.icon-btn) {
+		padding: 4px 10px;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 	.btn-primary,
 	.btn-secondary {
@@ -85,14 +106,21 @@
 }
 
 .layout-main-section-wrapper {
+<<<<<<< HEAD
 	min-width: 0;
+=======
+	margin-bottom: var(--page-bottom-margin);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .layout-main-section.frappe-card {
 	overflow: hidden;
 	@include card($padding: 0px);
+<<<<<<< HEAD
 	box-shadow: none;
 	border: 1px solid var(--border-color);
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 }
 
 .page-head {
@@ -104,13 +132,24 @@
 	transition: 0.5s top;
 	.page-head-content {
 		height: var(--page-head-height);
+<<<<<<< HEAD
 		padding: 8px 0px;
+=======
+	}
+	&.drop-shadow {
+		box-shadow: var(--shadow-sm);
+		background-color: var(--fg-color) !important;
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	}
 }
 
 .page-form {
 	margin: 0;
+<<<<<<< HEAD
 	padding: var(--padding-xs);
+=======
+	padding: var(--padding-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	display: flex;
 	flex-wrap: wrap;
 	background-color: var(--card-bg);
@@ -163,8 +202,11 @@
 	}
 }
 .layout-main-section {
+<<<<<<< HEAD
 	scroll-margin-top: var(--navbar-height);
 
+=======
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 	.frappe-list,
 	.report-wrapper {
 		padding: 0 var(--padding-xs);
@@ -178,7 +220,11 @@
 
 	.msg-box {
 		margin-bottom: 4em;
+<<<<<<< HEAD
 		@include get_textstyle("sm", "regular");
+=======
+		font-size: var(--text-sm);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 
 		// To compensate for perceived centering
 		.null-state {
@@ -190,7 +236,11 @@
 			}
 		}
 		p {
+<<<<<<< HEAD
 			@include get_textstyle("base", "regular");
+=======
+			font-size: var(--text-md);
+>>>>>>> c3bd8892e6 (fix: in case of owner, always include owner in count data)
 		}
 
 		.meta-description {
