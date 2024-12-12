@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2024-12-01 09:33+0000\n"
-"PO-Revision-Date: 2024-12-02 19:38\n"
+"PO-Revision-Date: 2024-12-09 20:01\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -6922,7 +6922,7 @@ msgstr "حذف این سند فقط در حالت توسعه دهنده مجاز
 #. Label of the delimiter_options (Data) field in DocType 'Data Import'
 #: frappe/core/doctype/data_import/data_import.json
 msgid "Delimiter Options"
-msgstr ""
+msgstr "گزینه های جداکننده"
 
 #: frappe/utils/csvutils.py:73
 msgid "Delimiter detection failed. Try to enable custom delimiters and adjust the delimiter options as per your data."
@@ -15166,7 +15166,7 @@ msgstr ""
 
 #: frappe/public/js/frappe/data_import/import_preview.js:290
 msgid "Map columns from {0} to fields in {1}"
-msgstr "ستون‌های نقشه از {0} تا فیلدها در {1}"
+msgstr "نگاشت ستون‌ها از {0} به فیلدها در {1}"
 
 #. Description of the 'Dynamic Route' (Check) field in DocType 'Web Page'
 #: frappe/website/doctype/web_page/web_page.json
@@ -16021,7 +16021,7 @@ msgstr "فیلد ضرب"
 #. Import'
 #: frappe/core/doctype/data_import/data_import.json
 msgid "Must be a publicly accessible Google Sheets URL"
-msgstr "باید یک URL برای عموم کاربرگ‌نگار باشد"
+msgstr "باید یک URL کاربرگ‌نگار در دسترس عموم باشد"
 
 #. Description of the 'LDAP Search String' (Data) field in DocType 'LDAP
 #. Settings'

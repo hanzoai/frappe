@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2024-12-01 09:33+0000\n"
-"PO-Revision-Date: 2024-12-03 19:36\n"
+"PO-Revision-Date: 2024-12-11 20:01\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -4604,7 +4604,7 @@ msgstr "Chatta"
 #: frappe/website/doctype/web_form_field/web_form_field.json
 #: frappe/website/doctype/web_template_field/web_template_field.json
 msgid "Check"
-msgstr "Check"
+msgstr "Markera"
 
 #: frappe/integrations/doctype/webhook/webhook.py:95
 msgid "Check Request URL"
@@ -8911,7 +8911,7 @@ msgstr "E-post meddelanden hämtas redan från detta konto."
 
 #: frappe/email/queue.py:137
 msgid "Emails are muted"
-msgstr "E-post är Dämpad"
+msgstr "E-post är dämpad"
 
 #. Description of the 'Send Email Alert' (Check) field in DocType 'Workflow'
 #: frappe/workflow/doctype/workflow/workflow.json
@@ -11280,7 +11280,7 @@ msgstr "Hämta Fält"
 
 #: frappe/printing/doctype/letter_head/letter_head.js:32
 msgid "Get Header and Footer wkhtmltopdf variables"
-msgstr "Hämta wkhtmltopdf variabler för sidhuvud och sidfot"
+msgstr "Hämta Sidhuvud och Sidfot wkhtmltopdf variabler"
 
 #: frappe/public/js/frappe/form/multi_select_dialog.js:87
 msgid "Get Items"
@@ -11852,7 +11852,7 @@ msgstr "Sidhuvud, Robotar"
 
 #: frappe/printing/doctype/letter_head/letter_head.js:30
 msgid "Header/Footer scripts can be used to add dynamic behaviours."
-msgstr "Skript för Brevhuvud/Sidfot kan användas för att lägga till dynamisk beteende."
+msgstr "Skript för Sidhuvud/Sidfot kan användas för att lägga till dynamisk beteende."
 
 #. Label of the webhook_headers (Table) field in DocType 'Webhook'
 #. Label of the headers (Code) field in DocType 'Webhook Request Log'
@@ -20766,7 +20766,7 @@ msgstr "Omdirigera URI"
 #: frappe/core/doctype/user/user.json
 #: frappe/integrations/doctype/social_login_key/social_login_key.json
 msgid "Redirect URL"
-msgstr "Omdirigering Adress"
+msgstr "Omdirigering URL"
 
 #. Description of the 'Default App' (Select) field in DocType 'System Settings'
 #. Description of the 'Default App' (Select) field in DocType 'User'
@@ -25405,7 +25405,7 @@ msgstr "Ändra Tema"
 
 #: frappe/templates/includes/navbar/navbar_login.html:17
 msgid "Switch To Desk"
-msgstr "Ändra till Skrivbord"
+msgstr "Växla till Skrivbord"
 
 #: frappe/public/js/frappe/ui/capture.js:281
 msgid "Switching Camera"
@@ -31417,7 +31417,7 @@ msgstr "{0} är inte Direkt Utskrift Mall."
 
 #: frappe/public/js/frappe/views/calendar/calendar.js:82
 msgid "{0} is not a valid Calendar. Redirecting to default Calendar."
-msgstr "{0} är inte en giltig kalender. Omdirigerar till standardkalendern."
+msgstr "{0} är inte giltig Kalender. Omdirigerar till standard Kalender."
 
 #: frappe/core/doctype/scheduled_job_type/scheduled_job_type.py:63
 msgid "{0} is not a valid Cron expression."

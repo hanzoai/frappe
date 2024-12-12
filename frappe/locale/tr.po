@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2024-12-01 09:33+0000\n"
-"PO-Revision-Date: 2024-12-01 19:09\n"
+"PO-Revision-Date: 2024-12-10 20:05\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -297,7 +297,45 @@ msgid "<div class=\"well\">\n"
 "    </ul>\n"
 "</div>\n"
 "<br>\n"
-msgstr ""
+msgstr "<div class=\"well\">\n"
+"    Kutudaki Seri listesini düzenleyin. Kurallar:\n"
+"    <ul>\n"
+"        <li>Her Seri Öneki yeni bir satırda.</li>\n"
+"        <li>İzin verilen özel karakterler \"/\" ve \"-\" dir</li>\n"
+"        <li>\n"
+"            İsteğe bağlı olarak, nokta (.)\n"
+"            ve ardından karma (#) kullanarak serideki basamak sayısını ayarlayın. Örneğin, \".####\",\n"
+"            serisinin dört basamaklı olacağı anlamına gelir. Varsayılan değer beş hanedir.\n"
+"        </li>\n"
+"        <li>\n"
+"            Değişkenleri seri adında (.) noktalarının arasına\n"
+"            koyarak da kullanabilirsiniz\n"
+"            <br>\n"
+"            Desteklenen Değişkenler:\n"
+"            <ul>\n"
+"                <li><code>.YYYY.</code> - 4 basamaklı yıl</li>\n"
+"                <li><code>.YY.</code> - 2 basamaklı yıl</li>\n"
+"                <li><code>.MM.</code> - Ay</li>\n"
+"                <li><code>.DD.</code> - Ayın günü</li>\n"
+"                <li><code>.WW.</code> - Yılın haftası</li>\n"
+"                <li>\n"
+"                    <code>.{fieldname}.</code> - belgedeki alan adı, örneğin\n"
+"                    <code>şubesi</code>\n"
+"                </li>\n"
+"                <li><code>.FY.</code> - Mali Yıl (ERPNext'in kurulu olmasını gerektirir)</li>\n"
+"                <li><code>.ABBR.</code> - Şirket Kısaltması (ERPNext'in kurulu olmasını gerektirir)</li>\n"
+"            </ul>\n"
+"        </li>\n"
+"    </ul>\n"
+"    Örnekler:\n"
+"    <ul>\n"
+"        <li>INV-</li>\n"
+"        <li>INV-10-</li>\n"
+"        <li>INVK-</li>\n"
+"        <li>INV-.YYYY.-.{branch}.-.MM.-.####</li>\n"
+"    </ul>\n"
+"</div>\n"
+"<br>\n"
 
 #. Content of the 'Custom HTML Help' (HTML) field in DocType 'Print Format'
 #: frappe/printing/doctype/print_format/print_format.json
@@ -3066,7 +3104,7 @@ msgstr "Belgeleri Kullanıcılara Otomatik Olarak Ata"
 #. Label of the auto_account_deletion (Int) field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Automatically delete account within (hours)"
-msgstr ""
+msgstr "Hesabı otomatik olarak sil"
 
 #. Label of a Card Break in the Tools Workspace
 #: frappe/automation/workspace/tools/tools.json
@@ -3618,7 +3656,7 @@ msgstr "Kalın"
 #. Option for the 'Comment Type' (Select) field in DocType 'Comment'
 #: frappe/core/doctype/comment/comment.json
 msgid "Bot"
-msgstr ""
+msgstr "Bot"
 
 #: frappe/printing/page/print_format_builder/print_format_builder.js:126
 msgid "Both DocType and Name required"
@@ -3861,7 +3899,7 @@ msgstr "Alana Göre"
 #: frappe/core/doctype/doctype/doctype.json
 #: frappe/custom/doctype/customize_form/customize_form.json
 msgid "By script"
-msgstr ""
+msgstr "Script ile"
 
 #. Label of the bypass_restrict_ip_check_if_2fa_enabled (Check) field in
 #. DocType 'User'
@@ -6856,7 +6894,7 @@ msgstr "Varsayılan Çalışma Alanı"
 #. Description of the 'Currency' (Link) field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Default display currency"
-msgstr ""
+msgstr "Varsayılan Olarak Görüntülenecek Para Birimi"
 
 #: frappe/core/doctype/doctype/doctype.py:1379
 msgid "Default for 'Check' type of field {0} must be either '0' or '1'"
@@ -10951,7 +10989,7 @@ msgstr "Veriyi Biçimlendir"
 
 #: frappe/core/doctype/communication/communication.js:70
 msgid "Forward"
-msgstr ""
+msgstr "İlet"
 
 #. Label of the forward_to_email (Data) field in DocType 'Contact Us Settings'
 #: frappe/website/doctype/contact_us_settings/contact_us_settings.json
@@ -11006,7 +11044,7 @@ msgstr "Frappe Desteği"
 
 #: frappe/website/doctype/web_page/web_page.js:92
 msgid "Frappe page builder using components"
-msgstr ""
+msgstr "Frappe sayfa oluşturucunun kullandığı bileşenşer"
 
 #: frappe/public/js/frappe/file_uploader/ImageCropper.vue:112
 msgctxt "Image Cropper"
@@ -11215,12 +11253,12 @@ msgstr ""
 #: frappe/custom/doctype/custom_field/custom_field.json
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
 msgid "Geolocation"
-msgstr ""
+msgstr "Konum"
 
 #. Name of a DocType
 #: frappe/integrations/doctype/geolocation_settings/geolocation_settings.json
 msgid "Geolocation Settings"
-msgstr ""
+msgstr "Coğrafi Konum Ayarları"
 
 #: frappe/email/doctype/notification/notification.js:219
 msgid "Get Alerts for Today"
@@ -11575,11 +11613,11 @@ msgstr "Gri"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:23
 msgid "Greater Than"
-msgstr ""
+msgstr "Büyüktür"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:25
 msgid "Greater Than Or Equal To"
-msgstr ""
+msgstr "Büyüktür ve Eşittir"
 
 #. Option for the 'Color' (Select) field in DocType 'DocType State'
 #. Option for the 'Indicator' (Select) field in DocType 'Kanban Board Column'
@@ -15537,7 +15575,7 @@ msgstr "Bellek Kullanımı"
 #. Option for the 'Type' (Select) field in DocType 'Notification Log'
 #: frappe/desk/doctype/notification_log/notification_log.json
 msgid "Mention"
-msgstr ""
+msgstr "Bahsetme"
 
 #. Label of the enable_email_mention (Check) field in DocType 'Notification
 #. Settings'
@@ -18071,7 +18109,7 @@ msgstr "OpenLDAP"
 #. Option for the 'Delivery Status' (Select) field in DocType 'Communication'
 #: frappe/core/doctype/communication/communication.json
 msgid "Opened"
-msgstr ""
+msgstr "Açıldı"
 
 #. Label of the operation (Select) field in DocType 'Activity Log'
 #: frappe/core/doctype/activity_log/activity_log.json
@@ -19187,7 +19225,7 @@ msgstr "Lütfen Yetkilendirme URL'sini girin"
 
 #: frappe/integrations/doctype/social_login_key/social_login_key.py:78
 msgid "Please enter Base URL"
-msgstr ""
+msgstr "Lütfen geçerli bir URL girin"
 
 #: frappe/integrations/doctype/social_login_key/social_login_key.py:86
 msgid "Please enter Client ID before social login is enabled"
@@ -20721,7 +20759,7 @@ msgstr ""
 #. Label of the redirect_uris (Text) field in DocType 'OAuth Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
 msgid "Redirect URIs"
-msgstr ""
+msgstr "Yönlendirilen Bağlantılar"
 
 #. Label of the redirect_url (Small Text) field in DocType 'User'
 #. Label of the redirect_url (Data) field in DocType 'Social Login Key'
@@ -23894,7 +23932,7 @@ msgstr "Paylaş"
 
 #: frappe/public/js/frappe/form/templates/set_sharing.html:49
 msgid "Share this document with"
-msgstr "Dökümanı Şu Kişiyle Paylaş"
+msgstr "Dökümanı Paylaş"
 
 #: frappe/public/js/frappe/form/sidebar/share.js:45
 msgid "Share {0} with"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2024-12-01 09:33+0000\n"
-"PO-Revision-Date: 2024-12-02 19:38\n"
+"PO-Revision-Date: 2024-12-11 20:01\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -24765,7 +24765,7 @@ msgstr "Hora de inicio"
 
 #: frappe/templates/includes/comments/comments.html:8
 msgid "Start a new discussion"
-msgstr "Empezar un nuevo debate"
+msgstr "Empezar una nueva conversación"
 
 #: frappe/core/doctype/data_export/exporter.py:22
 msgid "Start entering data below this line"
@@ -25252,7 +25252,7 @@ msgstr "Título de \"éxito\""
 
 #: frappe/www/update-password.html:68
 msgid "Success! You are good to go 👍"
-msgstr "¡Éxito! Eres bueno para ir 👍"
+msgstr "¡Éxito! La nueva contraseña es correcta 👍"
 
 #. Label of the successful_job_count (Int) field in DocType 'RQ Worker'
 #: frappe/core/doctype/rq_worker/rq_worker.json
