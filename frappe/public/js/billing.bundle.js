@@ -27,7 +27,7 @@ $(document).ready(function () {
 });
 
 function initiateRequestForLoginToFrappeCloud() {
-	frappe.confirm("Are you sure you want to login to Frappe Cloud dashboard?", () => {
+	frappe.confirm(__("Are you sure you want to login to Frappe Cloud dashboard?"), () => {
 		requestLoginToFC();
 	});
 }
@@ -36,15 +36,13 @@ function requestLoginToFC(freezing_msg = "Initating login to Frappe Cloud...") {
 	frappe.call({
 		method: "frappe.integrations.frappe_providers.frappecloud_billing.send_verification_code",
 		freeze: true,
-		freeze_message: freezing_msg,
+		freeze_message: __(freezing_msg),
 		callback: function (r) {
-			console.log(r);
-
 			showFCLoginDialog(r.message.email);
 			setErrorMessage("");
 		},
 		error: function (r) {
-			frappe.throw("Failed to login to Frappe Cloud. Please try again");
+			frappe.throw(__("Failed to login to Frappe Cloud. Please try again"));
 		},
 	});
 }
@@ -98,12 +96,11 @@ function showFCLoginDialog(email) {
 				verification_code: otp,
 			},
 			freeze: true,
-			// silent: true,
-			freeze_message: "Validating verification code...",
+			freeze_message: __("Validating verification code..."),
 			callback: function (r) {
 				const message = r.message;
 				if (message.login_token) {
-					fc_login_dialog.hide();
+					window.fc_login_dialog.hide();
 					window.open(
 						`${frappeCloudBaseEndpoint}/api/method/press.api.developer.saas.login_to_fc?token=${message.login_token}`,
 						"_blank"
@@ -111,9 +108,13 @@ function showFCLoginDialog(email) {
 					frappe.msgprint({
 						title: __("Frappe Cloud Login Successful"),
 						indicator: "green",
-						message: __(
-							`<p>You will be redirected to Frappe Cloud soon.</p><p>If you haven\'t been redirected, <a href="${frappeCloudBaseEndpoint}/api/method/press.api.developer.saas.login_to_fc?token=${message.login_token}" target="_blank">Click here to login</a></p>`
-						),
+						message: `<p>${__(
+							"You will be redirected to Frappe Cloud soon."
+						)}</p><p>${__(
+							"If you haven't been redirected,"
+						)} <a href="${frappeCloudBaseEndpoint}/api/method/press.api.developer.saas.login_to_fc?token=${
+							message.login_token
+						}" target="_blank">${__("Click here to login")}</a></p>`,
 					});
 				} else {
 					setErrorMessage("Login failed. Please try again");
@@ -127,7 +128,7 @@ function showFCLoginDialog(email) {
 		});
 	}
 
-	fc_login_dialog.show();
+	window.fc_login_dialog.show();
 }
 
 function addLoginToFCDropdownItem() {
