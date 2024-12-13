@@ -192,8 +192,15 @@ cypress/videos
 
 # JetBrains IDEs
 .idea/
+<<<<<<< HEAD
 
 # frappecloud billing
 billing/node_modules
 frappe/public/billing
 frappe/www/billing.html
+=======
+# Helix Editor
+.helix/
+# Aider AI Chat
+.aider*
+>>>>>>> bf97db2de9 (refactor: remove billing pages and navigate user to Frappe Cloud directly)
