@@ -509,6 +509,8 @@ def get_link_fields(doctype: str) -> list[dict]:
 		)
 		if virtual_doctypes:
 			custom_fields = custom_fields.where(cf.dt.notin(virtual_doctypes))
+		if frappe.db.has_column("Custom Field", "is_virtual"):
+			custom_fields = custom_fields.where(cf.is_virtual == 0)
 		custom_fields = custom_fields.run(as_dict=True)
 
 		ps_issingle = frappe.qb.from_(dt).select(dt.issingle).where(dt.name == ps.doc_type).as_("issingle")
