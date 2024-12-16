@@ -595,7 +595,7 @@ class Database:
 		"""
 		out = None
 		cache_key = None
-		if cache and isinstance(filters, Hashable):
+		if cache and isinstance(filters, str):
 			cache_key = (doctype, filters, fieldname)
 			if cache_key in self.value_cache:
 				return self.value_cache[cache_key]
