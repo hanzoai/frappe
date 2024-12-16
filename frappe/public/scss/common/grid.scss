@@ -653,8 +653,20 @@
 			max-width: 550px;
 		}
 		.grid-row > .row .col:last-child,
+		.grid-row > .row .col:first-child,
+		.grid-row > .dialog-assignment-row .col:first-child,
 		.grid-row > .dialog-assignment-row .col:last-child {
+			max-width: 30px;
+			min-width: 30px;
+		}
+		.grid-row > .row .col:nth-child(2),
+		.grid-row > .dialog-assignment-row .col:nth-child(2) {
+			max-width: 40px;
 			min-width: 40px;
+		}
+		.grid-heading-row .grid-row .data-row.row,
+		.grid-body .rows .grid-row .data-row.row {
+			justify-content: space-between;
 		}
 	}
 }
