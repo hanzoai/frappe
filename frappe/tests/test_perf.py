@@ -204,6 +204,16 @@ class TestPerformance(IntegrationTestCase):
 		with self.assertRedisCallCounts(1):
 			frappe.get_doc("User", "Administrator")
 
+	def test_one_time_setup(self):
+		site = frappe.local.site
+		frappe.init(site, force=True)
+		run = frappe.qb._BuilderClasss.run
+
+		frappe.init(site, force=True)
+		patched_run = frappe.qb._BuilderClasss.run
+
+		self.assertIs(run, patched_run, "frappe.init should run one-time patching code just once")
+
 
 @run_only_if(db_type_is.MARIADB)
 class TestOverheadCalls(FrappeAPITestCase):
