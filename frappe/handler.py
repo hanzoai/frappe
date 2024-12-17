@@ -36,6 +36,7 @@ ALLOWED_MIMETYPES = (
 	"text/plain",
 	"video/quicktime",
 	"video/mp4",
+	"text/csv",
 )
 
 
