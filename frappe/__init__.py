@@ -87,7 +87,7 @@ bench = Bench()
 cache: Optional["RedisWrapper"] = None
 STANDARD_USERS = ("Guest", "Administrator")
 
-_qb_patched: dict[str, bool] = {}
+_one_time_setup: dict[str, bool] = {}
 _dev_server = int(sbool(os.environ.get("DEV_SERVER", False)))
 _tune_gc = bool(sbool(os.environ.get("FRAPPE_TUNE_GC", True)))
 
@@ -281,10 +281,11 @@ def init(site: str, sites_path: str = ".", new_site: bool = False, force: bool =
 	local.qb.get_query = get_query
 	setup_redis_cache_connection()
 
-	if not _qb_patched.get(local.conf.db_type):
+	if not _one_time_setup.get(local.conf.db_type):
 		patch_query_execute()
 		patch_query_aggregation()
 		_register_fault_handler()
+		_one_time_setup[local.conf.db_type] = True
 
 	setup_module_map(include_all_apps=not (frappe.request or frappe.job or frappe.flags.in_migrate))
 
