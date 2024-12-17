@@ -1,8 +1,8 @@
 # Copyright (c) 2022, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. Check LICENSE
 
-import datetime
 import json
+import time
 from collections import defaultdict
 from collections.abc import Callable
 from functools import wraps
@@ -113,9 +113,7 @@ def site_cache(ttl: int | None = None, maxsize: int | None = None) -> Callable:
 
 		if ttl is not None and not callable(ttl):
 			func.ttl = ttl
-			func.expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
-				seconds=func.ttl
-			)
+			func.expiration = time.monotonic() + func.ttl
 
 		if maxsize is not None and not callable(maxsize):
 			func.maxsize = maxsize
@@ -125,13 +123,12 @@ def site_cache(ttl: int | None = None, maxsize: int | None = None) -> Callable:
 			if site := getattr(frappe.local, "site", None):
 				func_call_key = json.dumps((args, kwargs))
 
-				if hasattr(func, "ttl") and datetime.datetime.now(datetime.timezone.utc) >= func.expiration:
+				if hasattr(func, "ttl") and time.monotonic() >= func.expiration:
 					func.clear_cache()
-					func.expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
-						seconds=func.ttl
-					)
+					func.expiration = time.monotonic() + func.ttl
 
 				if hasattr(func, "maxsize") and len(_SITE_CACHE[func_key][site]) >= func.maxsize:
+					# Note: This implements FIFO eviction policty
 					_SITE_CACHE[func_key][site].pop(next(iter(_SITE_CACHE[func_key][site])), None)
 
 				if func_call_key not in _SITE_CACHE[func_key][site]:
