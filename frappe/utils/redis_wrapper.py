@@ -60,8 +60,7 @@ class RedisWrapper(redis.Redis):
 		"""
 		key = self.make_key(key, user, shared)
 
-		if not expires_in_sec:
-			frappe.local.cache[key] = val
+		frappe.local.cache[key] = val
 
 		with suppress(redis.exceptions.ConnectionError):
 			self.set(name=key, value=pickle.dumps(val), ex=expires_in_sec)
