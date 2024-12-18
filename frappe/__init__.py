@@ -1118,6 +1118,7 @@ def get_cached_doc(*args, **kwargs) -> "Document":
 
 
 def _set_document_in_cache(key: str, doc: "Document") -> None:
+<<<<<<< HEAD
 	local.document_cache[key] = doc
 
 	# Avoid setting in local.cache since we're already using local.document_cache above
@@ -1126,6 +1127,9 @@ def _set_document_in_cache(key: str, doc: "Document") -> None:
 		cache().hset("document_cache", key, doc, cache_locally=False)
 	except Exception:
 		cache().hset("document_cache", key, doc.as_dict(), cache_locally=False)
+=======
+	cache.set_value(key, doc, expires_in_sec=3600)
+>>>>>>> 6040145109 (fix: Set some expiry for cached documents)
 
 
 def can_cache_doc(args) -> str | None:
