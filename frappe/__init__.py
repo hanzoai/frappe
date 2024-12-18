@@ -1264,7 +1264,7 @@ def get_cached_doc(*args: Any, **kwargs: Any) -> "Document":
 
 
 def _set_document_in_cache(key: str, doc: "Document") -> None:
-	cache.set_value(key, doc)
+	cache.set_value(key, doc, expires_in_sec=3600)
 
 
 def can_cache_doc(args) -> str | None:
