@@ -436,3 +436,128 @@ extend_bootinfo = [
 ]
 
 get_changelog_feed = "frappe.desk.doctype.changelog_feed.changelog_feed.get_feed"
+<<<<<<< HEAD
+=======
+
+export_python_type_annotations = True
+
+standard_navbar_items = [
+	{
+		"item_label": "User Settings",
+		"item_type": "Action",
+		"action": "frappe.ui.toolbar.route_to_user()",
+		"is_standard": 1,
+	},
+	{
+		"item_label": "Workspace Settings",
+		"item_type": "Action",
+		"action": "frappe.quick_edit('Workspace Settings')",
+		"is_standard": 1,
+	},
+	{
+		"item_label": "Manage Billing",
+		"item_type": "Route",
+		"route": "/billing",
+		"is_standard": 1,
+		"condition": "frappe.boot.fc_communication_secret && frappe.boot.setup_complete && !frappe.is_mobile() && frappe.user.has_role('System Manager')",
+	},
+	{
+		"item_label": "Session Defaults",
+		"item_type": "Action",
+		"action": "frappe.ui.toolbar.setup_session_defaults()",
+		"is_standard": 1,
+	},
+	{
+		"item_label": "Reload",
+		"item_type": "Action",
+		"action": "frappe.ui.toolbar.clear_cache()",
+		"is_standard": 1,
+	},
+	{
+		"item_label": "View Website",
+		"item_type": "Action",
+		"action": "frappe.ui.toolbar.view_website()",
+		"is_standard": 1,
+	},
+	{
+		"item_label": "Apps",
+		"item_type": "Route",
+		"route": "/apps",
+		"is_standard": 1,
+	},
+	{
+		"item_label": "Toggle Full Width",
+		"item_type": "Action",
+		"action": "frappe.ui.toolbar.toggle_full_width()",
+		"is_standard": 1,
+	},
+	{
+		"item_label": "Toggle Theme",
+		"item_type": "Action",
+		"action": "new frappe.ui.ThemeSwitcher().show()",
+		"is_standard": 1,
+	},
+	{
+		"item_type": "Separator",
+		"is_standard": 1,
+		"item_label": "",
+	},
+	{
+		"item_label": "Log out",
+		"item_type": "Action",
+		"action": "frappe.app.logout()",
+		"is_standard": 1,
+	},
+]
+
+standard_help_items = [
+	{
+		"item_label": "About",
+		"item_type": "Action",
+		"action": "frappe.ui.toolbar.show_about()",
+		"is_standard": 1,
+	},
+	{
+		"item_label": "Keyboard Shortcuts",
+		"item_type": "Action",
+		"action": "frappe.ui.toolbar.show_shortcuts(event)",
+		"is_standard": 1,
+	},
+	{
+		"item_label": "System Health",
+		"item_type": "Route",
+		"route": "/app/system-health-report",
+		"is_standard": 1,
+	},
+	{
+		"item_label": "Frappe Support",
+		"item_type": "Route",
+		"route": "https://frappe.io/support",
+		"is_standard": 1,
+	},
+]
+
+# log doctype cleanups to automatically add in log settings
+default_log_clearing_doctypes = {
+	"Error Log": 14,
+	"Email Queue": 30,
+	"Scheduled Job Log": 7,
+	"Submission Queue": 7,
+	"Prepared Report": 14,
+	"Webhook Request Log": 30,
+	"Unhandled Email": 30,
+	"Reminder": 30,
+	"Integration Request": 90,
+	"Activity Log": 90,
+	"Route History": 90,
+}
+
+# These keys will not be erased when doing frappe.clear_cache()
+persistent_cache_keys = [
+	"changelog-*",  # version update notifications
+	"insert_queue_for_*",  # Deferred Insert
+	"recorder-*",  # Recorder
+	"global_search_queue",
+	"monitor-transactions",
+]
+>>>>>>> 8df9d3acdd (fix: protect monitor logs from cache eviction)
