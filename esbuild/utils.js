@@ -39,17 +39,6 @@ const bundle_map = app_list.reduce((out, app) => {
 
 const get_public_path = (app) => public_paths[app];
 
-const get_build_json_path = (app) => path.resolve(get_public_path(app), "build.json");
-
-function get_build_json(app) {
-	try {
-		return require(get_build_json_path(app));
-	} catch (e) {
-		// build.json does not exist
-		return null;
-	}
-}
-
 function delete_file(path) {
 	if (fs.existsSync(path)) {
 		fs.unlinkSync(path);
@@ -133,9 +122,12 @@ module.exports = {
 	apps_path,
 	bundle_map,
 	get_public_path,
+<<<<<<< HEAD
 	get_build_json_path,
 	get_build_json,
 	get_app_path,
+=======
+>>>>>>> 2f8c7c7b0d (chore: remove dead code)
 	delete_file,
 	run_serially,
 	get_cli_arg,
