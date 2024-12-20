@@ -122,6 +122,7 @@ def generate_report(prepared_report):
 
 	instance.report_end_time = frappe.utils.now()
 	instance.peak_memory_usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+	add_data_to_monitor(peak_memory_usage=instance.peak_memory_usage)
 	instance.save(ignore_permissions=True)
 
 	frappe.publish_realtime(
