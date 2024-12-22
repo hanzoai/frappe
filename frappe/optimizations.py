@@ -180,4 +180,4 @@ def _parse_thread_siblings() -> list[tuple[int, int]] | None:
 		import frappe
 
 		logger = frappe.logger(with_more_info=True)
-		logger.error("failed to parse thread siblings", e)
+		logger.error(f"failed to parse thread siblings: {e}")
