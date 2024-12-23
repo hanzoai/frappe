@@ -103,6 +103,7 @@ def site_cache(ttl: int | None = None, maxsize: int | None = None) -> Callable:
 
 		@wraps(func)
 		def site_cache_wrapper(*args, **kwargs):
+<<<<<<< HEAD
 			if getattr(frappe.local, "initialised", None):
 				func_call_key = json.dumps((args, kwargs))
 
@@ -119,8 +120,39 @@ def site_cache(ttl: int | None = None, maxsize: int | None = None) -> Callable:
 					_SITE_CACHE[func_key][frappe.local.site][func_call_key] = func(*args, **kwargs)
 
 				return _SITE_CACHE[func_key][frappe.local.site][func_call_key]
+=======
+			site = getattr(frappe.local, "site", None)
+			if not site:
+				return func(*args, **kwargs)
 
-			return func(*args, **kwargs)
+			func_call_key = __generate_request_cache_key(args, kwargs)
+
+			if hasattr(func, "ttl") and time.monotonic() >= func.expiration:
+				func.clear_cache()
+				func.expiration = time.monotonic() + func.ttl
+
+			# NOTE: Important things to consider from thread safety POV:
+			#   1. Other thread can issue clear_cache and delete entire func_key dictionary.
+			#   2. Other thread can pop the exact elemement we are reading if maxsize is hit.
+
+			# NOTE: Keep a local reference to dictionary of interest so it doesn't get swapped
+			site_specific_cache = _SITE_CACHE[func_key][site]
+>>>>>>> 17686eba3b (fix(site_cache): site cache thread safety (#28870))
+
+			try:
+				return site_specific_cache[func_call_key]
+			except KeyError:
+				# NOTE: This is just a cache miss
+				pass
+
+			if hasattr(func, "maxsize") and len(site_specific_cache) >= func.maxsize:
+				# Note: This implements FIFO eviction policy
+				site_specific_cache.pop(next(iter(site_specific_cache)), None)
+
+			result = func(*args, **kwargs)
+			site_specific_cache[func_call_key] = result
+
+			return result
 
 		return site_cache_wrapper
 
