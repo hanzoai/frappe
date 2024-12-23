@@ -66,10 +66,24 @@ class DbManager:
 		if pipe:
 			print("Restoring Database file...")
 
+<<<<<<< HEAD
 		command = (
 			"{pipe} mysql -u {user} -p{password} -h{host} "
 			+ ("-P{port}" if frappe.db.port else "")
 			+ " {target}"
+=======
+		# Remove view security definers
+		command.extend(["sed", r"'/\/\*![0-9]* DEFINER=[^ ]* SQL SECURITY DEFINER \*\//d'", "|"])
+
+		# Generate the restore command
+		bin, args, bin_name = get_command(
+			socket=frappe.conf.db_socket,
+			host=frappe.conf.db_host,
+			port=frappe.conf.db_port,
+			user=user,
+			password=password,
+			db_name=target,
+>>>>>>> 098d4896e3 (fix(restore): remove MariaDB view security definers)
 		)
 
 		command = command.format(
