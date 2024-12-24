@@ -14,6 +14,7 @@ from frappe.model.utils import is_virtual_doctype
 from frappe.model.utils.user_settings import get_user_settings
 from frappe.permissions import get_doc_permissions
 from frappe.utils.data import cstr
+from frappe.utils.html_utils import clean_email_html
 
 
 @frappe.whitelist()
@@ -262,6 +263,7 @@ def _get_communications(doctype, name, start=0, limit=20):
 	communications = get_communication_data(doctype, name, start, limit)
 	for c in communications:
 		if c.communication_type in ("Communication", "Automated Message"):
+			clean_email_html(c.content)
 			c.attachments = json.dumps(
 				frappe.get_all(
 					"File",
