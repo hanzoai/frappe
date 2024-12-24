@@ -59,9 +59,17 @@ class DbManager:
 		pv = find_executable("pv")
 
 		if pv:
-			pipe = f"{pv} {source} | " + r"sed '/\/\*M\{0,1\}!999999\\- enable the sandbox mode \*\//d' | " + r"sed '/\/\*![0-9]* DEFINER=[^ ]* SQL SECURITY DEFINER \*\//d'"
+			pipe = (
+				f"{pv} {source} | "
+				+ r"sed '/\/\*M\{0,1\}!999999\\- enable the sandbox mode \*\//d' | "
+				+ r"sed '/\/\*![0-9]* DEFINER=[^ ]* SQL SECURITY DEFINER \*\//d'"
+			)
 		else:
-			pipe = f"cat {source} | " + r"sed '/\/\*M\{0,1\}!999999\\- enable the sandbox mode \*\//d' | " + r"sed '/\/\*![0-9]* DEFINER=[^ ]* SQL SECURITY DEFINER \*\//d'"
+			pipe = (
+				f"cat {source} | "
+				+ r"sed '/\/\*M\{0,1\}!999999\\- enable the sandbox mode \*\//d' | "
+				+ r"sed '/\/\*![0-9]* DEFINER=[^ ]* SQL SECURITY DEFINER \*\//d' | "
+			)
 
 		if pipe:
 			print("Restoring Database file...")
