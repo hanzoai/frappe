@@ -71,13 +71,11 @@ export default class Grid {
 						<div class="grid-heading-row"></div>
 						<div class="grid-body">
 							<div class="rows"></div>
-							<div class="grid-empty text-center">
-								<img
-									src="/assets/frappe/images/ui-states/grid-empty-state.svg"
-									alt="Grid Empty State"
-									class="grid-empty-illustration"
-								>
-								${__("No Data")}
+							<div class="grid-empty text-center text-extra-muted">
+								${__("No rows")}
+							</div>
+							<div class="grid-scroll-bar">
+								<div class="grid-scroll-bar-rows"></div>
 							</div>
 						</div>
 					</div>
@@ -144,7 +142,7 @@ export default class Grid {
 	set_grid_description() {
 		let description_wrapper = $(this.parent).find(".grid-description");
 		if (this.df.description) {
-			description_wrapper.text(__(this.df.description));
+			description_wrapper.html(__(this.df.description));
 		} else {
 			description_wrapper.hide();
 		}
@@ -326,9 +324,9 @@ export default class Grid {
 	}
 
 	get_selected_children() {
-		return (this.grid_rows || [])
+		return (this.data || [])
 			.map((row) => {
-				return row.doc.__checked ? row.doc : null;
+				return row.__checked ? row : 0;
 			})
 			.filter((d) => {
 				return d;
@@ -795,7 +793,7 @@ export default class Grid {
 	}
 
 	set_value(fieldname, value, doc) {
-		if (this.display_status !== "None" && doc?.name && this.grid_rows_by_docname[doc.name]) {
+		if (this.display_status !== "None" && doc?.name && this.grid_rows_by_docname?.[doc.name]) {
 			this.grid_rows_by_docname[doc.name].refresh_field(fieldname, value);
 		}
 	}
@@ -838,7 +836,10 @@ export default class Grid {
 					acc[d.fieldname] = d.default;
 					return acc;
 				}, {});
-				this.df.data.push({ idx: this.df.data.length + 1, __islocal: true, ...defaults });
+
+				const row_idx = this.df.data.length + 1;
+				this.df.data.push({ idx: row_idx, __islocal: true, ...defaults });
+				this.df.on_add_row && this.df.on_add_row(row_idx);
 				this.refresh();
 			}
 
@@ -883,20 +884,25 @@ export default class Grid {
 	}
 
 	duplicate_row(d, copy_doc) {
+		const noCopyFields = new Set([
+			"creation",
+			"modified",
+			"modified_by",
+			"idx",
+			"owner",
+			"parent",
+			"doctype",
+			"name",
+			"parentfield",
+		]);
+
+		const docfields = frappe.get_meta(this.doctype).fields || [];
+		$.each(docfields, function (_index, df) {
+			if (cint(df.no_copy)) noCopyFields.add(df.fieldname);
+		});
+
 		$.each(copy_doc, function (key, value) {
-			if (
-				![
-					"creation",
-					"modified",
-					"modified_by",
-					"idx",
-					"owner",
-					"parent",
-					"doctype",
-					"name",
-					"parentfield",
-				].includes(key)
-			) {
+			if (!noCopyFields.has(key)) {
 				d[key] = value;
 			}
 		});
@@ -966,7 +972,6 @@ export default class Grid {
 				}
 
 				total_colsize += df.colsize;
-				if (total_colsize > 11) return false;
 				this.visible_columns.push([df, df.colsize]);
 			}
 		}
@@ -1072,7 +1077,7 @@ export default class Grid {
 
 	setup_allow_bulk_edit() {
 		let me = this;
-		if (this.frm && this.frm.get_docfield(this.df.fieldname).allow_bulk_edit) {
+		if (this.frm && this.frm.get_docfield(this.df.fieldname)?.allow_bulk_edit) {
 			// download
 			this.setup_download();
 
@@ -1224,7 +1229,7 @@ export default class Grid {
 		}
 
 		for (let row of this.grid_rows) {
-			let docfield = row.docfields.find((d) => d.fieldname === fieldname);
+			let docfield = row?.docfields?.find((d) => d.fieldname === fieldname);
 			if (docfield) {
 				docfield[property] = value;
 			} else {

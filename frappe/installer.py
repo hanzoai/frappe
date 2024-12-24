@@ -25,7 +25,7 @@ from frappe.utils.synchronization import filelock
 def _is_scheduler_enabled(site) -> bool:
 	enable_scheduler = False
 	try:
-		frappe.init(site=site)
+		frappe.init(site)
 		frappe.connect()
 		enable_scheduler = cint(frappe.db.get_single_value("System Settings", "enable_scheduler"))
 	except Exception:
@@ -64,7 +64,7 @@ def _new_site(
 		print(f"Site {site} already exists, use `--force` to proceed anyway")
 		sys.exit(1)
 
-	frappe.init(site=site)
+	frappe.init(site)
 
 	if not db_name:
 		db_name = f"_{frappe.generate_hash(length=16)}"
@@ -142,11 +142,6 @@ def install_db(
 	if not db_type:
 		db_type = frappe.conf.db_type
 
-	if not root_login and db_type == "mariadb":
-		root_login = "root"
-	elif not root_login and db_type == "postgres":
-		root_login = "postgres"
-
 	make_conf(
 		db_name,
 		site_config=site_config,
@@ -159,8 +154,11 @@ def install_db(
 	)
 	frappe.flags.in_install_db = True
 
-	frappe.flags.root_login = root_login
-	frappe.flags.root_password = root_password
+	if root_login:
+		frappe.flags.root_login = root_login
+
+	if root_password:
+		frappe.flags.root_password = root_password
 
 	if setup:
 		setup_database(force, verbose, mariadb_user_host_login_scope)
@@ -753,7 +751,7 @@ def extract_files(site_name, file_path):
 	file_path = get_bench_relative_path(file_path)
 
 	# Need to do frappe.init to maintain the site locals
-	frappe.init(site=site_name)
+	frappe.init(site_name)
 	abs_site_path = os.path.abspath(frappe.get_site_path())
 
 	# Copy the files to the parent directory and extract

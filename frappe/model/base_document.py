@@ -18,6 +18,7 @@ from frappe.model import (
 	table_fields,
 )
 from frappe.model.docstatus import DocStatus
+from frappe.model.dynamic_links import invalidate_distinct_link_doctypes
 from frappe.model.naming import set_new_name
 from frappe.model.utils.link_count import notify_link_count
 from frappe.modules import load_doctype_module
@@ -146,6 +147,9 @@ class BaseDocument:
 		if hasattr(self, "__setup__"):
 			self.__setup__()
 
+	def __json__(self):
+		return self.as_dict(no_nulls=True)
+
 	@cached_property
 	def meta(self):
 		return frappe.get_meta(self.doctype)
@@ -173,6 +177,11 @@ class BaseDocument:
 		state.pop("meta", None)
 		state.pop("permitted_fieldnames", None)
 		state.pop("_parent_doc", None)
+		state.pop("flags", None)
+
+	def __setstate__(self, state):
+		self.__dict__ = state
+		self.flags = _dict()
 
 	def update(self, d):
 		"""Update multiple fields of a doctype using a dictionary of key-value pairs.
@@ -252,7 +261,7 @@ class BaseDocument:
 		if key in self.__dict__:
 			del self.__dict__[key]
 
-	def append(self, key: str, value: D | dict | None = None) -> D:
+	def append(self, key: str, value: D | dict | None = None, position: int = -1) -> D:
 		"""Append an item to a child table.
 
 		Example:
@@ -268,13 +277,22 @@ class BaseDocument:
 		if (table := self.__dict__.get(key)) is None:
 			self.__dict__[key] = table = []
 
-		ret_value = self._init_child(value, key)
-		table.append(ret_value)
+		d = self._init_child(value, key)
+
+		if position == -1:
+			table.append(d)
+		else:
+			# insert at specific position
+			table.insert(position, d)
+
+			# re number idx
+			for i, _d in enumerate(table):
+				_d.idx = i + 1
 
 		# reference parent document but with weak reference, parent_doc will be deleted if self is garbage collected.
-		ret_value.parent_doc = weakref.ref(self)
+		d.parent_doc = weakref.ref(self)
 
-		return ret_value
+		return d
 
 	@property
 	def parent_doc(self):
@@ -307,6 +325,10 @@ class BaseDocument:
 		# to remove that child doc from the child table, thus removing it from the parent doc
 		if doc.get("parentfield"):
 			self.get(doc.parentfield).remove(doc)
+
+			# re-number idx
+			for i, _d in enumerate(self.get(doc.parentfield)):
+				_d.idx = i + 1
 
 	def _init_child(self, value, key):
 		if not isinstance(value, BaseDocument):
@@ -355,7 +377,7 @@ class BaseDocument:
 		d = _dict()
 		field_values = self.__dict__
 
-		for fieldname in self.meta.get_valid_columns():
+		for fieldname in self.meta.get_valid_fields():
 			value = field_values.get(fieldname)
 
 			# if no need for sanitization and value is None, continue
@@ -418,6 +440,9 @@ class BaseDocument:
 				else:
 					value = get_not_null_defaults(df.fieldtype)
 
+			if hasattr(value, "__value__"):
+				value = value.__value__()
+
 			d[fieldname] = value
 
 		return d
@@ -477,6 +502,7 @@ class BaseDocument:
 		no_default_fields=False,
 		convert_dates_to_str=False,
 		no_child_table_fields=False,
+		no_private_properties=False,
 	) -> dict:
 		doc = self.get_valid_dict(convert_dates_to_str=convert_dates_to_str, ignore_nulls=no_nulls)
 		doc["doctype"] = self.doctype
@@ -489,6 +515,7 @@ class BaseDocument:
 					no_nulls=no_nulls,
 					no_default_fields=no_default_fields,
 					no_child_table_fields=no_child_table_fields,
+					no_private_properties=no_private_properties,
 				)
 				for d in children
 			]
@@ -503,16 +530,17 @@ class BaseDocument:
 				if key in doc:
 					del doc[key]
 
-		for key in (
-			"_user_tags",
-			"__islocal",
-			"__onload",
-			"_liked_by",
-			"__run_link_triggers",
-			"__unsaved",
-		):
-			if value := getattr(self, key, None):
-				doc[key] = value
+		if not no_private_properties:
+			for key in (
+				"_user_tags",
+				"__islocal",
+				"__onload",
+				"_liked_by",
+				"__run_link_triggers",
+				"__unsaved",
+			):
+				if value := getattr(self, key, None):
+					doc[key] = value
 
 		return doc
 
@@ -727,18 +755,13 @@ class BaseDocument:
 
 		def get_msg(df):
 			if df.fieldtype in table_fields:
-				return "{}: {}: {}".format(
-					_("Error"), _("Data missing in table"), _(df.label, context=df.parent)
-				)
+				return _("Error: Data missing in table {0}").format(_(df.label, context=df.parent))
 
 			# check if parentfield exists (only applicable for child table doctype)
 			elif self.get("parentfield"):
-				return "{}: {} {} #{}: {}: {}".format(
-					_("Error"),
+				return _("Error: {0} Row #{1}: Value missing for: {2}").format(
 					frappe.bold(_(self.doctype)),
-					_("Row"),
 					self.idx,
-					_("Value missing for"),
 					_(df.label, context=df.parent),
 				)
 
@@ -796,6 +819,7 @@ class BaseDocument:
 					doctype = self.get(df.options)
 					if not doctype:
 						frappe.throw(_("{0} must be set first").format(self.meta.get_label(df.options)))
+					invalidate_distinct_link_doctypes(df.parent, df.options, doctype)
 
 				# MySQL is case insensitive. Preserve case of the original docname in the Link Field.
 
@@ -803,13 +827,14 @@ class BaseDocument:
 				# that are mapped as link_fieldname.source_fieldname in Options of
 				# Readonly or Data or Text type fields
 
+				meta = frappe.get_meta(doctype)
 				fields_to_fetch = [
 					_df
 					for _df in self.meta.get_fields_to_fetch(df.fieldname)
 					if not _df.get("fetch_if_empty")
 					or (_df.get("fetch_if_empty") and not self.get(_df.fieldname))
 				]
-				if not frappe.get_meta(doctype).get("is_virtual"):
+				if not meta.get("is_virtual"):
 					if not fields_to_fetch:
 						# cache a single value type
 						values = _dict(name=frappe.db.get_value(doctype, docname, "name", cache=True))
@@ -827,20 +852,22 @@ class BaseDocument:
 							or empty_values
 						)
 
-				if getattr(frappe.get_meta(doctype), "issingle", 0):
+				if getattr(meta, "issingle", 0):
 					values.name = doctype
 
-				if frappe.get_meta(doctype).get("is_virtual"):
+				if meta.get("is_virtual"):
 					values = frappe.get_doc(doctype, docname).as_dict()
 
 				if values:
-					setattr(self, df.fieldname, values.name)
+					if not df.get("is_virtual"):
+						setattr(self, df.fieldname, values.name)
 
 					for _df in fields_to_fetch:
 						if self.is_new() or not self.docstatus.is_submitted() or _df.allow_on_submit:
 							self.set_fetch_from_value(doctype, _df, values)
 
-					notify_link_count(doctype, docname)
+					if not meta.istable:
+						notify_link_count(doctype, docname)
 
 					if not values.name:
 						invalid_links.append((df.fieldname, docname, get_msg(df, docname)))
@@ -909,13 +936,25 @@ class BaseDocument:
 				)
 
 	def _validate_data_fields(self):
-		# data_field options defined in frappe.model.data_field_options
+		from frappe.utils import (
+			split_emails,
+			validate_email_address,
+			validate_name,
+			validate_phone_number,
+			validate_phone_number_with_country_code,
+			validate_url,
+		)
+
 		for phone_field in self.meta.get_phone_fields():
 			phone = self.get(phone_field.fieldname)
-			frappe.utils.validate_phone_number_with_country_code(phone, phone_field.fieldname)
+			validate_phone_number_with_country_code(phone, phone_field.fieldname)
 
+		# data_field options defined in frappe.model.data_field_options
 		for data_field in self.meta.get_data_fields():
 			data = self.get(data_field.fieldname)
+			if not data:
+				continue
+
 			data_field_options = data_field.get("options")
 			old_fieldtype = data_field.get("oldfieldtype")
 
@@ -925,20 +964,18 @@ class BaseDocument:
 			if data_field_options == "Email":
 				if (self.owner in frappe.STANDARD_USERS) and (data in frappe.STANDARD_USERS):
 					continue
-				for email_address in frappe.utils.split_emails(data):
-					frappe.utils.validate_email_address(email_address, throw=True)
+
+				for email_address in split_emails(data):
+					validate_email_address(email_address, throw=True)
 
 			if data_field_options == "Name":
-				frappe.utils.validate_name(data, throw=True)
+				validate_name(data, throw=True)
 
 			if data_field_options == "Phone":
-				frappe.utils.validate_phone_number(data, throw=True)
+				validate_phone_number(data, throw=True)
 
 			if data_field_options == "URL":
-				if not data:
-					continue
-
-				frappe.utils.validate_url(data, throw=True)
+				validate_url(data, throw=True)
 
 	def _validate_constants(self):
 		if frappe.flags.in_import or self.is_new() or self.flags.ignore_validate_constants:

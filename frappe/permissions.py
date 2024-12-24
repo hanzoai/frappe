@@ -388,7 +388,7 @@ def has_user_permission(doc, user=None, debug=False):
 			# get the list of all allowed values for this link
 			allowed_docs = get_allowed_docs_for_doctype(user_permissions.get(field.options, []), doctype)
 
-			if allowed_docs and d.get(field.fieldname) not in allowed_docs:
+			if allowed_docs and str(d.get(field.fieldname)) not in allowed_docs:
 				# restricted for this link field, and no matching values found
 				# make the right message and exit
 				if d.get("parentfield"):
@@ -593,11 +593,11 @@ def can_import(doctype, raise_exception=False):
 	return True
 
 
-def can_export(doctype, raise_exception=False):
+def can_export(doctype, raise_exception=False, is_owner=False):
 	if "System Manager" in frappe.get_roles():
 		return True
 	else:
-		role_permissions = frappe.permissions.get_role_permissions(doctype)
+		role_permissions = frappe.permissions.get_role_permissions(doctype, is_owner=is_owner)
 		has_access = role_permissions.get("export") or role_permissions.get("if_owner").get("export")
 		if not has_access and raise_exception:
 			raise frappe.PermissionError(_("You are not allowed to export {} doctype").format(doctype))
@@ -614,15 +614,16 @@ def update_permission_property(
 	if_owner=0,
 ):
 	"""Update a property in Custom Perm"""
+	from frappe.core.doctype.custom_docperm.custom_docperm import update_custom_docperm
 	from frappe.core.doctype.doctype.doctype import validate_permissions_for_doctype
 
 	out = setup_custom_perms(doctype)
 
-	name = frappe.db.get_value(
-		"Custom DocPerm", dict(parent=doctype, role=role, permlevel=permlevel, if_owner=if_owner)
+	custom_docperm = frappe.db.get_value(
+		"Custom DocPerm", dict(parent=doctype, role=role, permlevel=permlevel)
 	)
-	table = DocType("Custom DocPerm")
-	frappe.qb.update(table).set(ptype, value).where(table.name == name).run()
+	if custom_docperm:
+		update_custom_docperm(custom_docperm, {ptype: value})
 
 	if validate:
 		validate_permissions_for_doctype(doctype)
@@ -690,7 +691,8 @@ def reset_perms(doctype):
 	from frappe.desk.notifications import delete_notification_count_for
 
 	delete_notification_count_for(doctype)
-	frappe.db.delete("Custom DocPerm", {"parent": doctype})
+	for custom_docperm in frappe.get_all("Custom DocPerm", filters={"parent": doctype}, pluck="name"):
+		frappe.delete_doc("Custom DocPerm", custom_docperm, ignore_permissions=True)
 
 
 def get_linked_doctypes(dt: str) -> list:
@@ -730,7 +732,7 @@ def filter_allowed_docs_for_doctype(user_permissions, doctype, with_default_doc=
 	for doc in user_permissions:
 		if not doc.get("applicable_for") or doc.get("applicable_for") == doctype:
 			allowed_doc.append(doc.get("doc"))
-			if doc.get("is_default") or len(user_permissions) == 1 and with_default_doc:
+			if doc.get("is_default") or (len(user_permissions) == 1 and with_default_doc):
 				default_doc = doc.get("doc")
 
 	return (allowed_doc, default_doc) if with_default_doc else allowed_doc

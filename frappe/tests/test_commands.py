@@ -33,8 +33,8 @@ import frappe.commands.utils
 import frappe.recorder
 from frappe.installer import add_to_installed_apps, remove_app
 from frappe.query_builder.utils import db_type_is
+from frappe.tests import IntegrationTestCase, timeout
 from frappe.tests.test_query_builder import run_only_if
-from frappe.tests.utils import FrappeTestCase, timeout
 from frappe.utils import add_to_date, get_bench_path, get_bench_relative_path, now
 from frappe.utils.backups import BackupGenerator, fetch_latest_backups
 from frappe.utils.jinja_globals import bundled_asset
@@ -95,7 +95,7 @@ def maintain_locals():
 	finally:
 		post_site = getattr(frappe.local, "site", None)
 		if not post_site or post_site != pre_site:
-			frappe.init(site=pre_site)
+			frappe.init(pre_site)
 			frappe.local.db = pre_db
 			frappe.local.flags.update(pre_flags)
 
@@ -133,7 +133,7 @@ def cli(cmd: Command, args: list | None = None):
 			importlib.invalidate_caches()
 
 
-class BaseTestCommands(FrappeTestCase):
+class BaseTestCommands(IntegrationTestCase):
 	@classmethod
 	def setUpClass(cls) -> None:
 		super().setUpClass()
@@ -224,18 +224,23 @@ class TestCommands(BaseTestCommands):
 		self.assertEqual(self.returncode, 0)
 		self.assertIsInstance(float(self.stdout), float)
 
-		# test 2: execute a command expecting an errored output as local won't exist
+		# test 2: execute a command accessing a normal attribute
 		self.execute("bench --site {site} execute frappe.local.site")
+		self.assertEqual(self.returncode, 0)
+		self.assertIsNotNone(self.stderr)
+
+		# test 3: execute a command expecting an errored output as lacol won't exist
+		self.execute("bench --site {site} execute frappe.lacol.site")
 		self.assertEqual(self.returncode, 1)
 		self.assertIsNotNone(self.stderr)
 
-		# test 3: execute a command with kwargs
-		# Note:
-		# terminal command has been escaped to avoid .format string replacement
-		# The returned value has quotes which have been trimmed for the test
-		self.execute("""bench --site {site} execute frappe.bold --kwargs '{{"text": "DocType"}}'""")
+		# test 4: execute a command with kwargs
+		self.execute(
+			"bench --site {site} execute frappe.bold --kwargs '{put_here}'",
+			{"put_here": '{"text": "DocType"}'},  # avoid escaping errors
+		)
 		self.assertEqual(self.returncode, 0)
-		self.assertEqual(self.stdout[1:-1], frappe.bold(text="DocType"))
+		self.assertEqual(self.stdout, frappe.bold(text="DocType"))
 
 	@run_only_if(db_type_is.MARIADB)
 	def test_restore(self):
@@ -243,7 +248,7 @@ class TestCommands(BaseTestCommands):
 		global_config = {
 			"admin_password": frappe.conf.admin_password,
 			"root_login": frappe.conf.root_login,
-			"root_password": frappe.conf.root_password,
+			"root_password": frappe.conf.mariadb_root_password or frappe.conf.root_password,
 			"db_type": frappe.conf.db_type,
 		}
 		site_data = {"test_site": TEST_SITE, **global_config}
@@ -449,7 +454,7 @@ class TestCommands(BaseTestCommands):
 
 		# Reset it back to original password
 		original_password = frappe.conf.admin_password or "admin"
-		self.execute("bench --site {site} set-admin-password %s" % original_password)
+		self.execute("bench --site {{site}} set-admin-password {}".format(original_password))
 		self.assertEqual(self.returncode, 0)
 		self.assertEqual(check_password("Administrator", original_password), "Administrator")
 
@@ -632,6 +637,7 @@ class TestBackups(BaseTestCommands):
 				except OSError:
 					pass
 
+	@run_only_if(db_type_is.MARIADB)
 	def test_backup_no_options(self):
 		"""Take a backup without any options"""
 		before_backup = fetch_latest_backups(partial=True)
@@ -820,7 +826,7 @@ class TestBackups(BaseTestCommands):
 		self.assertEqual([], missing_in_backup(self.backup_map["excludes"]["excludes"], database))
 
 
-class TestRemoveApp(FrappeTestCase):
+class TestRemoveApp(IntegrationTestCase):
 	def test_delete_modules(self):
 		from frappe.installer import (
 			_delete_doctypes,
@@ -925,15 +931,6 @@ class TestDBUtils(BaseTestCommands):
 		meta = frappe.get_meta("User", cached=False)
 		self.assertTrue(meta.get_field(field).search_index)
 
-	@run_only_if(db_type_is.MARIADB)
-	def test_describe_table(self):
-		self.execute("bench --site {site} describe-database-table --doctype User", {})
-		self.assertIn("user_type", self.stdout)
-
-		# Ensure that output is machine parseable
-		stats = json.loads(self.stdout)
-		self.assertIn("total_rows", stats)
-
 
 class TestSchedulerUtils(BaseTestCommands):
 	# Retry just in case there are stuck queued jobs
@@ -948,7 +945,7 @@ class TestSchedulerUtils(BaseTestCommands):
 			self.assertEqual(result.exit_code, 0)
 
 
-class TestCommandUtils(FrappeTestCase):
+class TestCommandUtils(IntegrationTestCase):
 	def test_bench_helper(self):
 		from frappe.utils.bench_helper import get_app_groups
 

@@ -25,6 +25,9 @@ EVENT_MAP = {
 	"on_payment_paid": "On Payment Paid",
 	"on_payment_failed": "On Payment Failed",
 	"on_payment_authorized": "On Payment Authorization",
+	"on_payment_charge_processed": "On Payment Charge Processed",
+	"on_payment_mandated_charge_processed": "On Payment Mandate Charge Processed",
+	"on_payment_mandate_acquisition_processed": "On Payment Mandate Acquisition Processed",
 }
 
 
@@ -43,7 +46,7 @@ def run_server_script_for_doc_event(doc, event):
 	if scripts:
 		# run all scripts for this doctype + event
 		for script_name in scripts:
-			frappe.get_doc("Server Script", script_name).execute_doc(doc)
+			frappe.get_cached_doc("Server Script", script_name).execute_doc(doc)
 
 
 def get_server_script_map():

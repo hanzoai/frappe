@@ -184,6 +184,9 @@ def check_for_update():
 		branch_version = (
 			apps[app]["branch_version"].split(" ", 1)[0] if apps[app].get("branch_version", "") else ""
 		)
+		if "develop" in branch_version:
+			return updates
+
 		instance_version = Version(branch_version or apps[app].get("version"))
 
 		github_version, org_name = check_release_on_github(owner, repo, instance_version)
@@ -212,7 +215,7 @@ def check_for_update():
 
 
 def has_app_update_notifications() -> bool:
-	return bool(frappe.cache.sismember("update-user-set", frappe.session.user))
+	return bool(frappe.cache.sismember("changelog-update-user-set", frappe.session.user))
 
 
 def parse_latest_non_beta_release(response: list, current_version: Version) -> list | None:
@@ -318,17 +321,19 @@ def parse_github_url(remote_url: str) -> tuple[str, str] | tuple[None, None]:
 def get_source_url(app: str) -> str | None:
 	"""Get the remote URL of the app."""
 	pyproject = get_pyproject(app)
+	if not pyproject:
+		return
 	if remote_url := pyproject.get("project", {}).get("urls", {}).get("Repository"):
 		return remote_url.rstrip("/")
 
 
 def add_message_to_redis(update_json):
 	# "update-message" will store the update message string
-	# "update-user-set" will be a set of users
-	frappe.cache.set_value("update-info", json.dumps(update_json))
+	# "changelog-update-user-set" will be a set of users
+	frappe.cache.set_value("changelog-update-info", json.dumps(update_json))
 	user_list = [x.name for x in frappe.get_all("User", filters={"enabled": True})]
 	system_managers = [user for user in user_list if "System Manager" in frappe.get_roles(user)]
-	frappe.cache.sadd("update-user-set", *system_managers)
+	frappe.cache.sadd("changelog-update-user-set", *system_managers)
 
 
 @frappe.whitelist()
@@ -337,7 +342,7 @@ def show_update_popup():
 		return
 	user = frappe.session.user
 
-	update_info = frappe.cache.get_value("update-info")
+	update_info = frappe.cache.get_value("changelog-update-info")
 	if not update_info:
 		return
 
@@ -345,7 +350,7 @@ def show_update_popup():
 
 	# Check if user is int the set of users to send update message to
 	update_message = ""
-	if frappe.cache.sismember("update-user-set", user):
+	if frappe.cache.sismember("changelog-update-user-set", user):
 		for update_type in updates:
 			release_links = ""
 			for app in updates[update_type]:
@@ -390,7 +395,7 @@ def show_update_popup():
 			indicator="green",
 			primary_action=primary_action,
 		)
-		frappe.cache.srem("update-user-set", user)
+		frappe.cache.srem("changelog-update-user-set", user)
 
 
 def get_pyproject(app: str) -> dict | None:

@@ -193,7 +193,6 @@ class DocType(Document):
 		self.validate_name()
 
 		self.set_defaults_for_single_and_table()
-		self.set_defaults_for_autoincremented()
 		self.scrub_field_names()
 		self.set_default_in_list_view()
 		self.set_default_translatable()
@@ -278,10 +277,6 @@ class DocType(Document):
 		elif self.istable:
 			self.allow_import = 0
 			self.permissions = []
-
-	def set_defaults_for_autoincremented(self):
-		if self.autoname and self.autoname == "autoincrement":
-			self.allow_rename = 0
 
 	def set_default_in_list_view(self):
 		"""Set default in-list-view for first 4 mandatory fields"""
@@ -402,9 +397,9 @@ class DocType(Document):
 				frappe.db.sql(query)
 
 	def validate_document_type(self):
-		if self.document_type == "Transaction":
+		if self.document_type == "Transaction":  # type: ignore[comparison-overlap]
 			self.document_type = "Document"
-		if self.document_type == "Master":
+		if self.document_type == "Master":  # type: ignore[comparison-overlap]
 			self.document_type = "Setup"
 
 	def validate_website(self):
@@ -505,6 +500,14 @@ class DocType(Document):
 			if d.unique:
 				d.search_index = 0
 
+	def get_permission_log_options(self, event=None):
+		if self.custom and event != "after_delete":
+			return {
+				"fields": ("permissions", {"fields": ("fieldname", "ignore_user_permissions", "permlevel")})
+			}
+
+		self._no_perm_log = True
+
 	def on_update(self):
 		"""Update database schema, make controller templates if `custom` is not set and clear cache."""
 
@@ -512,7 +515,7 @@ class DocType(Document):
 			self.setup_autoincrement_and_sequence()
 
 		try:
-			frappe.db.updatedb(self.name, Meta(self))
+			frappe.db.updatedb(self.name, Meta(None, bootstrap=self))
 		except Exception as e:
 			print(f"\n\nThere was an issue while migrating the DocType: {self.name}\n")
 			raise e
@@ -701,12 +704,22 @@ class DocType(Document):
 						file_content = code.replace(old, new)  # replace str with full str (js controllers)
 
 					elif fname.endswith(".py"):
-						file_content = code.replace(
-							frappe.scrub(old), frappe.scrub(new)
-						)  # replace str with _ (py imports)
-						file_content = file_content.replace(
-							old.replace(" ", ""), new.replace(" ", "")
-						)  # replace str (py controllers)
+						new_scrub = frappe.scrub(new)
+						new_no_space_no_hyphen = new.replace(" ", "").replace("-", "")
+						new_no_space = new.replace(" ", "")
+						old_scrub = frappe.scrub(old)
+						old_no_space_no_hyphen = old.replace(" ", "").replace("-", "")
+						old_no_space = old.replace(" ", "")
+						# replace in one go
+						file_content = re.sub(
+							rf"{old_scrub}|{old_no_space}|{old_no_space_no_hyphen}",
+							lambda x: new_scrub
+							if x.group() == old_scrub
+							else new_no_space_no_hyphen
+							if x.group() == old_no_space_no_hyphen
+							else new_no_space,
+							code,
+						)
 
 					f.write(file_content)
 
@@ -870,8 +883,10 @@ class DocType(Document):
 	def make_amendable(self):
 		"""If is_submittable is set, add amended_from docfields."""
 		if self.is_submittable:
-			docfield_exists = [f for f in self.fields if f.fieldname == "amended_from"]
-			if not docfield_exists:
+			docfield = [f for f in self.fields if f.fieldname == "amended_from"]
+			if docfield:
+				docfield[0].options = self.name
+			else:
 				self.append(
 					"fields",
 					{
@@ -903,7 +918,7 @@ class DocType(Document):
 					no_copy=1,
 					print_hide=1,
 				)
-				create_custom_field(self.name, df)
+				create_custom_field(self.name, df, ignore_validate=True)
 
 	def validate_nestedset(self):
 		if not self.get("is_tree"):
@@ -988,7 +1003,7 @@ class DocType(Document):
 	def get_max_idx(self):
 		"""Return the highest `idx`."""
 		max_idx = frappe.db.sql("""select max(idx) from `tabDocField` where parent = %s""", self.name)
-		return max_idx and max_idx[0][0] or 0
+		return (max_idx and max_idx[0][0]) or 0
 
 	def validate_name(self, name=None):
 		if not name:
@@ -1070,6 +1085,12 @@ def validate_series(dt, autoname=None, name=None):
 					df.unique = 1
 					break
 
+	if autoname and autoname.startswith("format:"):
+		from frappe.model.naming import BRACED_PARAMS_HASH_PATTERN
+
+		if len(BRACED_PARAMS_HASH_PATTERN.findall(autoname)) > 1:
+			frappe.throw(_("Only one set of {#} pattern is allowed in the format string"))
+
 	if (
 		autoname
 		and (not autoname.startswith("field:"))
@@ -1088,6 +1109,22 @@ def validate_series(dt, autoname=None, name=None):
 		).run()
 		if used_in:
 			frappe.throw(_("Series {0} already used in {1}").format(prefix, used_in[0][0]))
+
+	validate_empty_name(dt, autoname)
+
+
+def validate_empty_name(dt, autoname):
+	if dt.doctype == "Customize Form":
+		return
+
+	if not autoname and not (dt.issingle or dt.istable):
+		try:
+			controller = get_controller(dt.name)
+		except ImportError:
+			controller = None
+
+		if not controller or (not hasattr(controller, "autoname")):
+			frappe.toast(_("Warning: Naming is not set"), indicator="yellow")
 
 
 def validate_autoincrement_autoname(dt: Union[DocType, "CustomizeForm"]) -> bool:
@@ -1111,10 +1148,8 @@ def validate_autoincrement_autoname(dt: Union[DocType, "CustomizeForm"]) -> bool
 		autoname_before_save = get_autoname_before_save(dt)
 		is_autoname_autoincrement = dt.autoname == "autoincrement"
 
-		if (
-			is_autoname_autoincrement
-			and autoname_before_save != "autoincrement"
-			or (not is_autoname_autoincrement and autoname_before_save == "autoincrement")
+		if (is_autoname_autoincrement and autoname_before_save != "autoincrement") or (
+			not is_autoname_autoincrement and autoname_before_save == "autoincrement"
 		):
 			if dt.doctype == "Customize Form":
 				frappe.throw(_("Cannot change to/from autoincrement autoname in Customize Form"))
@@ -1241,7 +1276,7 @@ def validate_fields(meta: Meta):
 
 	def check_unique_fieldname(docname, fieldname):
 		duplicates = list(
-			filter(None, map(lambda df: df.fieldname == fieldname and str(df.idx) or None, fields))
+			filter(None, map(lambda df: (df.fieldname == fieldname and str(df.idx)) or None, fields))
 		)
 		if len(duplicates) > 1:
 			frappe.throw(
@@ -1558,9 +1593,21 @@ def validate_fields(meta: Meta):
 					options_list.append(_option)
 			field.options = "\n".join(options_list)
 
-	def scrub_fetch_from(field):
-		if hasattr(field, "fetch_from") and field.fetch_from:
-			field.fetch_from = field.fetch_from.strip("\n").strip()
+	def validate_fetch_from(field):
+		if not field.get("fetch_from"):
+			return
+
+		field.fetch_from = field.fetch_from.strip()
+
+		if "." not in field.fetch_from:
+			return
+		source_field, _target_field = field.fetch_from.split(".", maxsplit=1)
+
+		if source_field == field.fieldname:
+			msg = _(
+				"{0} contains an invalid Fetch From expression, Fetch From can't be self-referential."
+			).format(_(field.label, context=field.parent))
+			frappe.throw(msg, title=_("Recursive Fetch From"))
 
 	def validate_data_field_type(docfield):
 		if docfield.get("is_virtual"):
@@ -1626,8 +1673,6 @@ def validate_fields(meta: Meta):
 			d.permlevel = 0
 		if d.fieldtype not in table_fields:
 			d.allow_bulk_edit = 0
-		if not d.fieldname:
-			d.fieldname = d.fieldname.lower().strip("?")
 
 		check_illegal_characters(d.fieldname)
 		check_invalid_fieldnames(meta.get("name"), d.fieldname)
@@ -1636,7 +1681,7 @@ def validate_fields(meta: Meta):
 		check_unique_and_text(meta.get("name"), d)
 		check_table_multiselect_option(d)
 		scrub_options_in_select(d)
-		scrub_fetch_from(d)
+		validate_fetch_from(d)
 		validate_data_field_type(d)
 
 		if not frappe.flags.in_migrate or in_ci:

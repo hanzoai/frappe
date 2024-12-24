@@ -6,6 +6,7 @@ from collections import defaultdict
 from collections.abc import Callable
 from contextlib import suppress
 from functools import lru_cache
+from threading import Thread
 from typing import Any, NoReturn
 from uuid import uuid4
 
@@ -25,7 +26,6 @@ import frappe.monitor
 from frappe import _
 from frappe.utils import CallbackManager, cint, get_bench_id
 from frappe.utils.commands import log
-from frappe.utils.deprecations import deprecation_warning
 from frappe.utils.redis_queue import RedisQueue
 
 # TTL to keep RQ job logs in redis for.
@@ -118,11 +118,19 @@ def enqueue(
 	job_id = create_job_id(job_id)
 
 	if job_name:
-		deprecation_warning("Using enqueue with `job_name` is deprecated, use `job_id` instead.")
+		from frappe.deprecation_dumpster import deprecation_warning
+
+		deprecation_warning(
+			"unknown", "v17", "Using enqueue with `job_name` is deprecated, use `job_id` instead."
+		)
 
 	if not is_async and not frappe.flags.in_test:
+		from frappe.deprecation_dumpster import deprecation_warning
+
 		deprecation_warning(
-			"Using enqueue with is_async=False outside of tests is not recommended, use now=True instead."
+			"unknown",
+			"v17",
+			"Using enqueue with is_async=False outside of tests is not recommended, use now=True instead.",
 		)
 
 	call_directly = now or (not is_async and not frappe.flags.in_test)
@@ -162,9 +170,9 @@ def enqueue(
 
 	def enqueue_call():
 		return q.enqueue_call(
-			execute_job,
+			"frappe.utils.background_jobs.execute_job",
 			on_success=Callback(func=on_success) if on_success else None,
-			on_failure=Callback(func=on_failure) if on_failure else None,
+			on_failure=Callback(func=on_failure),
 			timeout=timeout,
 			kwargs=queue_args,
 			at_front=at_front,
@@ -203,7 +211,7 @@ def execute_job(site, method, event, job_name, kwargs, user=None, is_async=True,
 	retval = None
 
 	if is_async:
-		frappe.init(site=site)
+		frappe.init(site)
 		frappe.connect()
 		if os.environ.get("CI"):
 			frappe.flags.in_test = True
@@ -246,6 +254,7 @@ def execute_job(site, method, event, job_name, kwargs, user=None, is_async=True,
 			# 1213 = deadlock
 			# 1205 = lock wait timeout
 			# or RetryBackgroundJobError is explicitly raised
+			frappe.job.after_job.reset()
 			frappe.destroy()
 			time.sleep(retry + 1)
 
@@ -268,6 +277,9 @@ def execute_job(site, method, event, job_name, kwargs, user=None, is_async=True,
 		return retval
 
 	finally:
+		if not hasattr(frappe.local, "site"):
+			frappe.init(site)
+			frappe.connect()
 		for after_job_task in frappe.get_hooks("after_job"):
 			frappe.call(after_job_task, method=method_name, kwargs=kwargs, result=retval)
 		frappe.local.job.after_job.run()
@@ -283,14 +295,13 @@ def start_worker(
 	rq_password: str | None = None,
 	burst: bool = False,
 	strategy: DequeueStrategy | None = DequeueStrategy.DEFAULT,
-) -> None:  # pragma: no cover
+) -> NoReturn:  # pragma: no cover
 	"""Wrapper to start rq worker. Connects to redis and monitors these queues."""
 
 	if not strategy:
 		strategy = DequeueStrategy.DEFAULT
 
 	_start_sentry()
-	_freeze_gc()
 
 	with frappe.init_site():
 		# empty init is required to get redis_queue from common_site_config.json
@@ -319,6 +330,23 @@ def start_worker(
 	)
 
 
+class FrappeWorker(Worker):
+	def work(self, *args, **kwargs):
+		self.start_frappe_scheduler()
+		kwargs["with_scheduler"] = False  # Always disable RQ scheduler
+		return super().work(*args, **kwargs)
+
+	def run_maintenance_tasks(self, *args, **kwargs):
+		"""Attempt to start a scheduler in case the worker doing scheduling died."""
+		self.start_frappe_scheduler()
+		return super().run_maintenance_tasks(*args, **kwargs)
+
+	def start_frappe_scheduler(self):
+		from frappe.utils.scheduler import start_scheduler
+
+		Thread(target=start_scheduler, daemon=True).start()
+
+
 def start_worker_pool(
 	queue: str | None = None,
 	num_workers: int = 1,
@@ -335,14 +363,12 @@ def start_worker_pool(
 	# If gc.freeze is done then importing modules before forking allows us to share the memory
 	import frappe.database.query  # sqlparse and indirect imports
 	import frappe.query_builder  # pypika
-	import frappe.utils.data  # common utils
+	import frappe.utils  # common utils
 	import frappe.utils.safe_exec
+	import frappe.utils.scheduler
 	import frappe.utils.typing_validations  # any whitelisted method uses this
 	import frappe.website.path_resolver  # all the page types and resolver
-
 	# end: module pre-loading
-
-	_freeze_gc()
 
 	with frappe.init_site():
 		redis_connection = get_redis_conn()
@@ -363,14 +389,9 @@ def start_worker_pool(
 		queues=queues,
 		connection=redis_connection,
 		num_workers=num_workers,
+		worker_class=FrappeWorker,  # Auto starts scheduler with workerpool
 	)
 	pool.start(logging_level=logging_level, burst=burst)
-
-
-def _freeze_gc():
-	if frappe._tune_gc:
-		gc.collect()
-		gc.freeze()
 
 
 def get_worker_name(queue):
@@ -480,19 +501,20 @@ def get_redis_conn(username=None, password=None):
 	if not hasattr(frappe.local, "conf"):
 		raise Exception("You need to call frappe.init")
 
-	elif not frappe.local.conf.redis_queue:
+	conf = frappe.get_site_config()
+	if not conf.redis_queue:
 		raise Exception("redis_queue missing in common_site_config.json")
 
 	global _redis_queue_conn
 
 	cred = frappe._dict()
-	if frappe.conf.get("use_rq_auth"):
+	if conf.get("use_rq_auth"):
 		if username:
 			cred["username"] = username
 			cred["password"] = password
 		else:
-			cred["username"] = frappe.get_site_config().rq_username or get_bench_id()
-			cred["password"] = frappe.get_site_config().rq_password
+			cred["username"] = conf.rq_username or get_bench_id()
+			cred["password"] = conf.rq_password
 
 	elif os.environ.get("RQ_ADMIN_PASWORD"):
 		cred["username"] = "default"
@@ -666,6 +688,9 @@ def _start_sentry():
 
 	if tracing_sample_rate := os.getenv("SENTRY_TRACING_SAMPLE_RATE"):
 		kwargs["traces_sample_rate"] = float(tracing_sample_rate)
+
+	if profiling_sample_rate := os.getenv("SENTRY_PROFILING_SAMPLE_RATE"):
+		kwargs["profiles_sample_rate"] = float(profiling_sample_rate)
 
 	sentry_sdk.init(
 		dsn=sentry_dsn,

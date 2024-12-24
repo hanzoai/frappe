@@ -3,8 +3,8 @@ from unittest.mock import MagicMock
 
 import frappe
 from frappe.core.doctype.doctype.test_doctype import new_doctype
+from frappe.tests import IntegrationTestCase
 from frappe.tests.test_api import FrappeAPITestCase
-from frappe.tests.utils import FrappeTestCase
 from frappe.utils.caching import redis_cache, request_cache, site_cache
 
 CACHE_TTL = 4
@@ -35,7 +35,7 @@ def ping_with_ttl() -> str:
 	return frappe.local.site
 
 
-class TestCachingUtils(FrappeTestCase):
+class TestCachingUtils(IntegrationTestCase):
 	def test_request_cache(self):
 		retval = []
 		acceptable_args = [
@@ -110,6 +110,7 @@ class TestRedisCache(FrappeAPITestCase):
 		self.assertEqual(function_call_count, 1)
 
 		time.sleep(CACHE_TTL * 1.5)
+		frappe.local.cache.clear()
 		self.assertEqual(calculate_area(10), 314)
 		self.assertEqual(function_call_count, 2)
 
