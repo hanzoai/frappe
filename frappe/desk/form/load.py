@@ -8,7 +8,7 @@ import frappe
 import frappe.defaults
 import frappe.desk.form.meta
 import frappe.utils
-from frappe import _dict
+from frappe import _, _dict
 from frappe.desk.form.document_follow import is_document_followed
 from frappe.model.utils import is_virtual_doctype
 from frappe.model.utils.user_settings import get_user_settings
