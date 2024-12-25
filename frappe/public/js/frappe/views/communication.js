@@ -55,6 +55,20 @@ frappe.views.CommunicationComposer = class {
 				reqd: 0,
 				fieldname: "recipients",
 				default: this.get_default_recipients("recipients"),
+				onchange: function () {
+					let value = this.get_value();
+					if (!value) return;
+					const sanitizedEmails = value
+						.split(",")
+						.map((email) => {
+							email = frappe.utils.xss_sanitise(email.trim());
+							return email;
+						})
+						.join(", ");
+					if (sanitizedEmails !== value) {
+						this.set_value(sanitizedEmails);
+					}
+				},
 			},
 			{
 				fieldtype: "Button",
@@ -74,12 +88,40 @@ frappe.views.CommunicationComposer = class {
 				fieldtype: "MultiSelect",
 				fieldname: "cc",
 				default: this.get_default_recipients("cc"),
+				onchange: function () {
+					let value = this.get_value();
+					if (!value) return;
+					const sanitizedEmails = value
+						.split(",")
+						.map((email) => {
+							email = frappe.utils.xss_sanitise(email.trim());
+							return email;
+						})
+						.join(", ");
+					if (sanitizedEmails !== value) {
+						this.set_value(sanitizedEmails);
+					}
+				},
 			},
 			{
 				label: __("BCC"),
 				fieldtype: "MultiSelect",
 				fieldname: "bcc",
 				default: this.get_default_recipients("bcc"),
+				onchange: function () {
+					let value = this.get_value();
+					if (!value) return;
+					const sanitizedEmails = value
+						.split(",")
+						.map((email) => {
+							email = frappe.utils.xss_sanitise(email.trim());
+							return email;
+						})
+						.join(", ");
+					if (sanitizedEmails !== value) {
+						this.set_value(sanitizedEmails);
+					}
+				},
 			},
 			{
 				label: __("Schedule Send At"),
