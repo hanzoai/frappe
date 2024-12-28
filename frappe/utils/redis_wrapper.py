@@ -2,9 +2,12 @@
 # License: MIT. See LICENSE
 import pickle
 import re
+import threading
 from contextlib import suppress
 
 import redis
+from redis.cache import CacheConfig
+from redis.client import PubSub
 from redis.commands.search import Search
 
 import frappe
@@ -349,7 +352,7 @@ class RedisWrapper(redis.Redis):
 		return RedisearchWrapper(client=self, index_name=self.make_key(index_name))
 
 
-def setup_cache():
+def setup_cache() -> RedisWrapper:
 	if frappe.conf.redis_cache_sentinel_enabled:
 		sentinels = [tuple(node.split(":")) for node in frappe.conf.get("redis_cache_sentinels", [])]
 		sentinel = get_sentinel_connection(
@@ -389,3 +392,64 @@ def get_sentinel_connection(
 		username=master_username,
 		password=master_password,
 	)
+
+
+class _TrackedConnection(redis.Connection):
+	def __init__(self, *args, **kwargs):
+		self.monitor_id = kwargs.pop("_monitor_id")
+		super().__init__(*args, **kwargs)
+		# Every redis connection needs to enable client tracking to get notified about invalidated
+		# keys.
+		self.register_connect_callback(self._enable_client_tracking)
+
+	def _enable_client_tracking(self, conn):
+		conn.send_command("CLIENT", "TRACKING", "ON", "redirect", self.monitor_id, "NOLOOP")
+		conn.read_response()
+
+
+class _ClientCache:
+	INVALIDATE_CHANNELS = ("__redis__:invalidate", b"__redis__:invalidate")
+
+	def __init__(self) -> None:
+		self.monitor = RedisWrapper.from_url(frappe.conf.get("redis_cache"))
+		self.monitor_id = self.monitor.client_id()
+
+		self.redis: RedisWrapper = RedisWrapper.from_url(
+			frappe.conf.get("redis_cache"),
+			connection_class=_TrackedConnection,
+			_monitor_id=self.monitor_id,
+		)
+		self.invalidator_thread = self.run_invalidator_thread()
+		self.local_cache = {}
+
+	def get_value(self, key):
+		key = self.redis.make_key(key)
+		try:
+			return self.local_cache[key]
+		except KeyError:
+			pass  # cache miss
+		val = self.redis.get_value(key, shared=True)
+
+		# TODO: distinguish between none result and miss
+		if val is not None:
+			self.local_cache[key] = val
+		return val
+
+	def set_value(self, key, val):
+		ret = self.redis.set_value(key, val)
+		return ret
+
+	def delete_value(self, key):
+		ret = self.redis.delete_value(key)
+		return ret
+
+	def run_invalidator_thread(self):
+		self._watcher = self.monitor.pubsub()
+		self._watcher.subscribe(**{"__redis__:invalidate": self.handle_invalidation})
+		return self._watcher.run_in_thread(sleep_time=None, daemon=True)
+
+	def handle_invalidation(self, message):
+		if message["channel"] not in self.INVALIDATE_CHANNELS:
+			return
+		for key in message["data"]:
+			self.local_cache.pop(key, None)
