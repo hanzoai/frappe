@@ -283,12 +283,12 @@ $.extend(frappe.model, {
 	},
 
 	copy_doc: function (doc, from_amend, parent_doc, parentfield) {
-		var no_copy_list = ["name", "amended_from", "amendment_date", "cancel_reason"];
-		var newdoc = frappe.model.get_new_doc(doc.doctype, parent_doc, parentfield);
+		let no_copy_list = ["name", "amended_from", "amendment_date", "cancel_reason"];
+		let newdoc = frappe.model.get_new_doc(doc.doctype, parent_doc, parentfield);
 
-		for (var key in doc) {
-			// dont copy name and blank fields
-			var df = frappe.meta.get_docfield(doc.doctype, key);
+		for (const key in doc) {
+			// don't copy name and blank fields
+			let df = frappe.meta.get_docfield(doc.doctype, key);
 
 			if (
 				df &&
@@ -297,10 +297,10 @@ $.extend(frappe.model, {
 				!(df && !from_amend && cint(df.no_copy) == 1) &&
 				df.fieldtype !== "Password"
 			) {
-				var value = doc[key] || [];
+				let value = doc[key] || [];
 				if (frappe.model.table_fields.includes(df.fieldtype)) {
-					for (var i = 0, j = value.length; i < j; i++) {
-						var d = value[i];
+					for (let i = 0, j = value.length; i < j; i++) {
+						let d = value[i];
 						frappe.model.copy_doc(d, from_amend, newdoc, df.fieldname);
 					}
 				} else {
@@ -309,7 +309,7 @@ $.extend(frappe.model, {
 			}
 		}
 
-		var user = frappe.session.user;
+		let user = frappe.session.user;
 
 		newdoc.__islocal = 1;
 		newdoc.docstatus = 0;
