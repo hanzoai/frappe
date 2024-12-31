@@ -272,7 +272,7 @@ $.extend(frappe.model, {
 		let no_copy_list = ["name", "amended_from", "amendment_date", "cancel_reason"];
 		let newdoc = frappe.model.get_new_doc(doc.doctype, parent_doc, parentfield);
 
-		for (const key in doc) {
+		for (let key in doc) {
 			// don't copy name and blank fields
 			let df = frappe.meta.get_docfield(doc.doctype, key);
 
