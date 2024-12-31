@@ -292,7 +292,7 @@ $.extend(frappe.model, {
 
 			if (
 				df &&
-				key.substr(0, 2) != "__" &&
+				key.substring(0, 2) != "__" &&
 				!no_copy_list.includes(key) &&
 				!(df && !from_amend && cint(df.no_copy) == 1) &&
 				df.fieldtype !== "Password"
