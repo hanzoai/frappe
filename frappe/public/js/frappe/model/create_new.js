@@ -279,8 +279,14 @@ $.extend(frappe.model, {
 			if (
 				df &&
 				key.substr(0, 2) != "__" &&
+<<<<<<< HEAD
 				!in_list(no_copy_list, key) &&
 				!(df && !from_amend && cint(df.no_copy) == 1)
+=======
+				!no_copy_list.includes(key) &&
+				!(df && !from_amend && cint(df.no_copy) == 1) &&
+				df.fieldtype !== "Password"
+>>>>>>> 1997c7ebac (fix(copy_doc): don't copy password fields)
 			) {
 				var value = doc[key] || [];
 				if (frappe.model.table_fields.includes(df.fieldtype)) {
