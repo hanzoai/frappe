@@ -149,6 +149,6 @@ frappe.ui.AppsSwitcher = class AppsSwitcher {
 		frappe.current_app = app;
 
 		// re-render the sidebar
-		this.make_sidebar();
+		frappe.app.sidebar.make_sidebar();
 	}
 };
