@@ -16,7 +16,7 @@ frappe.ui.AppsSwitcher = class AppsSwitcher {
 			this.app_switcher_menu.addClass("hidden");
 
 			// hide any expanded menus as they leave a blank space in the sidebar
-			// this.sidebar_wrapper.find(".drop-icon[data-state='opened'").click();
+			this.sidebar_wrapper.find(".drop-icon[data-state='opened'").click();
 		});
 	}
 	create_app_data_map() {

@@ -252,6 +252,7 @@ body {
 		}
 		.sidebar-item-label {
 			display: flex;
+			align-items: center;
 		}
 		.sidebar-item-control {
 			display: block;
@@ -364,9 +365,10 @@ body {
 		align-items: center;
 		gap: var(--margin-sm);
 		.sidebar-item-icon {
+			line-height: 0px;
 			.app-logo {
 				width: 16px;
-				width: 16px;
+				height: 16px;
 			}
 		}
 	}
