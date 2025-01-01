@@ -276,6 +276,7 @@ $.extend(frappe.model, {
 			// don't copy name and blank fields
 			let df = frappe.meta.get_docfield(doc.doctype, key);
 
+<<<<<<< HEAD
 			if (
 				df &&
 <<<<<<< HEAD
@@ -292,6 +293,14 @@ $.extend(frappe.model, {
 				df.fieldtype !== "Password"
 >>>>>>> 1997c7ebac (fix(copy_doc): don't copy password fields)
 			) {
+=======
+			const is_internal_field = key.substring(0, 2) === "__";
+			const is_blocked_field = no_copy_list.includes(key);
+			const is_no_copy = !from_amend && df && cint(df.no_copy) == 1;
+			const is_password = df && df.fieldtype === "Password";
+
+			if (df && !is_internal_field && !is_blocked_field && !is_no_copy && !is_password) {
+>>>>>>> ed64dd728e (refactor: clean up long conditional)
 				let value = doc[key] || [];
 				if (frappe.model.table_fields.includes(df.fieldtype)) {
 					for (let i = 0, j = value.length; i < j; i++) {
