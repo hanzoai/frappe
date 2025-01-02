@@ -408,8 +408,6 @@ class _TrackedConnection(redis.Connection):
 
 
 class _ClientCache:
-	INVALIDATE_CHANNELS = ("__redis__:invalidate", b"__redis__:invalidate")
-
 	def __init__(self) -> None:
 		self.monitor = RedisWrapper.from_url(frappe.conf.get("redis_cache"))
 		self.monitor_id = self.monitor.client_id()
@@ -449,7 +447,8 @@ class _ClientCache:
 		return self._watcher.run_in_thread(sleep_time=None, daemon=True)
 
 	def handle_invalidation(self, message):
-		if message["channel"] not in self.INVALIDATE_CHANNELS:
-			return
+		if message["data"] is None:
+			# Flushall
+			self.local_cache.clear()
 		for key in message["data"]:
 			self.local_cache.pop(key, None)
