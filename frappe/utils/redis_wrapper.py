@@ -410,10 +410,12 @@ class _TrackedConnection(redis.Connection):
 
 
 class _ClientCache:
-	def __init__(self, maxsize: int = 1024) -> None:
+	def __init__(self, maxsize: int = 1024, ttl=10 * 60) -> None:
 		self.monitor = RedisWrapper.from_url(frappe.conf.get("redis_cache"))
 		self.monitor_id = self.monitor.client_id()
 		self.maxsize = maxsize or 1024  # Expect 1024 * 4kb objects ~ 4MB
+		self.ttl = ttl
+		self.expiration = time.monotonic() + ttl
 
 		self.redis: RedisWrapper = RedisWrapper.from_url(
 			frappe.conf.get("redis_cache"),
@@ -429,10 +431,16 @@ class _ClientCache:
 
 	def get_value(self, key):
 		key = self.redis.make_key(key)
+
+		if time.monotonic() > self.expiration:
+			self.local_cache.clear()
+			self.expiration = time.monotonic() + self.ttl
+
 		try:
 			return self.local_cache[key]
 		except KeyError:
 			pass  # cache miss
+
 		val = self.redis.get_value(key, shared=True)
 
 		# TODO: distinguish between None result and miss
