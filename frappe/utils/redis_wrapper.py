@@ -13,6 +13,7 @@ from redis.commands.search import Search
 
 import frappe
 from frappe.utils import cstr
+from frappe.utils.data import cint
 
 # 5 is faster than default which is 4.
 # Python uses old protocol for backward compatibility, we don't support anything <3.10.
@@ -418,6 +419,9 @@ class _ClientCache:
 			connection_class=_TrackedConnection,
 			_monitor_id=self.monitor_id,
 		)
+		protocol = self.redis.get_connection_kwargs().get("protocol")
+		if cint(protocol) == 3:
+			frappe.throw("RESP3 is not supported.")
 		self.invalidator_thread = self.run_invalidator_thread()
 		self.local_cache = {}
 		self._conn_retries = 0
