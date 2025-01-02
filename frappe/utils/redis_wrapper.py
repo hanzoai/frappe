@@ -455,12 +455,14 @@ class _ClientCache:
 		return val
 
 	def set_value(self, key, val):
-		ret = self.redis.set_value(key, val)
-		return ret
+		key = self.redis.make_key(key)
+		self.redis.set_value(key, val, shared=True)
+		self.local_cache[key] = val
 
 	def delete_value(self, key):
-		ret = self.redis.delete_value(key)
-		return ret
+		key = self.redis.make_key(key)
+		self.redis.delete_value(key, shared=True)
+		self.local_cache.pop(key, None)
 
 	def run_invalidator_thread(self):
 		self._watcher = self.monitor.pubsub()
