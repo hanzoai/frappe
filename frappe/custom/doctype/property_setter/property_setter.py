@@ -95,4 +95,10 @@ def delete_property_setter(doc_type, property, field_name=None, row_name=None):
 	if row_name:
 		filters["row_name"] = row_name
 
+<<<<<<< HEAD
 	frappe.db.delete("Property Setter", filters)
+=======
+	property_setters = frappe.db.get_values("Property Setter", filters)
+	for ps in property_setters:
+		frappe.get_doc("Property Setter", ps).delete(ignore_permissions=True, force=True)
+>>>>>>> 241eb095ce (perf: skip perm checking on property setters (#29031))
