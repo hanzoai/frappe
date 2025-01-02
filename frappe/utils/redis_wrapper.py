@@ -74,7 +74,7 @@ class RedisWrapper(redis.Redis):
 		with suppress(redis.exceptions.ConnectionError):
 			self.set(name=key, value=pickle.dumps(val, protocol=DEFAULT_PICKLE_PROTOCOL), ex=expires_in_sec)
 
-	def get_value(self, key, generator=None, user=None, expires=False, shared=False):
+	def get_value(self, key, generator=None, user=None, expires=False, shared=False, *, use_local_cache=True):
 		"""Return cache value. If not found and generator function is
 		        given, call the generator.
 
@@ -86,7 +86,7 @@ class RedisWrapper(redis.Redis):
 		key = self.make_key(key, user, shared)
 
 		local_cache = frappe.local.cache
-		if key in local_cache:
+		if key in local_cache and use_local_cache:
 			val = local_cache[key]
 
 		else:
@@ -441,7 +441,7 @@ class _ClientCache:
 		except KeyError:
 			pass  # cache miss
 
-		val = self.redis.get_value(key, shared=True)
+		val = self.redis.get_value(key, shared=True, use_local_cache=False)
 
 		# TODO: distinguish between None result and miss
 		if val is None:
