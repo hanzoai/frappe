@@ -3,6 +3,7 @@
 import pickle
 import re
 import threading
+import time
 from contextlib import suppress
 
 import redis
@@ -419,6 +420,7 @@ class _ClientCache:
 		)
 		self.invalidator_thread = self.run_invalidator_thread()
 		self.local_cache = {}
+		self._conn_retries = 0
 
 	def get_value(self, key):
 		key = self.redis.make_key(key)
@@ -443,12 +445,26 @@ class _ClientCache:
 
 	def run_invalidator_thread(self):
 		self._watcher = self.monitor.pubsub()
-		self._watcher.subscribe(**{"__redis__:invalidate": self.handle_invalidation})
-		return self._watcher.run_in_thread(sleep_time=None, daemon=True)
+		self._watcher.subscribe(**{"__redis__:invalidate": self._handle_invalidation})
+		return self._watcher.run_in_thread(
+			sleep_time=None,
+			daemon=True,
+			exception_handler=self._exception_handler,
+		)
 
-	def handle_invalidation(self, message):
+	def _handle_invalidation(self, message):
 		if message["data"] is None:
 			# Flushall
 			self.local_cache.clear()
 		for key in message["data"]:
 			self.local_cache.pop(key, None)
+
+	def _exception_handler(self, exc, pubsub, pubsub_thread):
+		if isinstance(exc, (redis.exceptions.ConnectionError)):
+			self.local_cache.clear()
+			self._conn_retries += 1
+			if self._conn_retries > 10:
+				raise
+			time.sleep(1)
+		else:
+			raise
