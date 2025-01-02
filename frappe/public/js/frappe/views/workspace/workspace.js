@@ -95,6 +95,7 @@ frappe.views.Workspace = class Workspace {
 			this.editor.isReady.then(() => {
 				this.setup_customization_buttons(this._page);
 				this.make_blocks_sortable();
+				frappe.app.sidebar.toggle_sorting();
 			});
 		});
 	}
@@ -342,6 +343,7 @@ frappe.views.Workspace = class Workspace {
 						this.editor.readOnly.toggle();
 						this.is_read_only = true;
 					});
+					frappe.app.sidebar.toggle_sorting();
 				},
 				null,
 				__("Saving")

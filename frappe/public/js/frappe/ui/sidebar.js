@@ -347,14 +347,19 @@ frappe.ui.Sidebar = class Sidebar {
 			$child_item_section.toggleClass("hidden");
 		});
 	}
-
+	toggle_sorting() {
+		this.sorting_items.forEach((item) => {
+			var state = item.option("disabled");
+			item.option("disabled", !state);
+		});
+	}
 	setup_sorting() {
 		if (!this.has_access) return;
-
+		this.sorting_items = [];
 		for (let container of this.$sidebar.find(".nested-container")) {
-			Sortable.create(container, {
+			this.sorting_items[this.sorting_items.length] = Sortable.create(container, {
 				group: "sidebar-items",
-				fitler: ".divider",
+				disabled: true,
 				onEnd: () => {
 					let sidebar_items = [];
 					for (let container of this.$sidebar.find(".nested-container")) {
