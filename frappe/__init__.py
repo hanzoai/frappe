@@ -974,6 +974,7 @@ def clear_cache(user: str | None = None, doctype: str | None = None):
 	if (not doctype and not user) or doctype == "DocType":
 		frappe.utils.caching._SITE_CACHE.clear()
 
+	frappe.client_cache.clear_cache()
 	local.role_permissions = {}
 	if hasattr(local, "request_cache"):
 		local.request_cache.clear()

@@ -66,7 +66,6 @@ user_cache_keys = (
 )
 
 doctype_cache_keys = (
-	"doctype_meta",
 	"doctype_form_meta",
 	"table_columns",
 	"last_modified",
@@ -126,6 +125,7 @@ def clear_doctype_cache(doctype=None):
 
 def _clear_doctype_cache_from_redis(doctype: str | None = None):
 	from frappe.desk.notifications import delete_notification_count_for
+	from frappe.model.meta import clear_meta_cache
 
 	to_del = ["is_table", "doctype_modules"]
 
@@ -134,6 +134,7 @@ def _clear_doctype_cache_from_redis(doctype: str | None = None):
 		def clear_single(dt):
 			frappe.clear_document_cache(dt)
 			frappe.cache.hdel_names(doctype_cache_keys, dt)
+			clear_meta_cache(dt)
 
 		clear_single(doctype)
 
@@ -159,6 +160,7 @@ def _clear_doctype_cache_from_redis(doctype: str | None = None):
 		to_del += frappe.cache.get_keys("document_cache::")
 
 	frappe.cache.delete_value(to_del)
+	clear_meta_cache()
 
 
 def clear_controller_cache(doctype=None):

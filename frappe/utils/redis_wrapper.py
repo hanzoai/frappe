@@ -433,7 +433,7 @@ class _ClientCache:
 		key = self.redis.make_key(key)
 
 		if time.monotonic() > self.expiration:
-			self.local_cache.clear()
+			self.clear_cache()
 			self.expiration = time.monotonic() + self.ttl
 
 		try:
@@ -474,7 +474,7 @@ class _ClientCache:
 	def _handle_invalidation(self, message):
 		if message["data"] is None:
 			# Flushall
-			self.local_cache.clear()
+			self.clear_cache()
 		for key in message["data"]:
 			self.local_cache.pop(key, None)
 
@@ -487,3 +487,6 @@ class _ClientCache:
 			time.sleep(1)
 		else:
 			raise
+
+	def clear_cache(self):
+		self.local_cache.clear()
