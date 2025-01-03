@@ -882,6 +882,7 @@ frappe.ui.form.Form = class FrappeForm {
 				args: {
 					doctype: me.doc.doctype,
 					name: me.doc.name,
+					ignore_doctypes_on_cancel_all: me.ignore_doctypes_on_cancel_all,
 				},
 				freeze: true,
 			})
@@ -891,9 +892,6 @@ frappe.ui.form.Form = class FrappeForm {
 						.map((value) => {
 							return value.doctype;
 						})
-						.filter((value) => {
-							return !me.ignore_doctypes_on_cancel_all.includes(value);
-						});
 
 					if (doctypes_to_cancel.length) {
 						return me._cancel_all(r, btn, callback, on_error);
