@@ -108,14 +108,13 @@ frappe.views.TreeView = class TreeView {
 		}
 
 		if (frappe.meta.has_field(me.doctype, "disabled")) {
-			$(
-				"<div class='checkbox'><label><input type='checkbox'> Include Disabled </label></div>"
-			).appendTo(this.page.inner_toolbar);
-			this.page.inner_toolbar
-				.addClass("flex align-center")
-				.on("click", "input[type='checkbox']", function () {
+			this.page.add_inner_button(
+				__("Include Disabled"),
+				function () {
 					me.rebuild_tree();
-				});
+				},
+				__("Expand")
+			);
 		}
 
 		if (this.opts.show_expand_all) {
