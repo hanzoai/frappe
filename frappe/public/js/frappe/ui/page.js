@@ -636,7 +636,10 @@ frappe.ui.Page = class Page {
 			});
 		}
 	}
-
+	add_divider_to_button_group(group) {
+		var $group = this.get_or_add_inner_group_button(group);
+		$('<li class="dropdown-divider"></li>').appendTo($group.find(".dropdown-menu"));
+	}
 	/*
 	 * Add button to button group. If there exists another button with the same label,
 	 * `add_inner_button` will not add the new button to the button group even if the callback
