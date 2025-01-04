@@ -220,7 +220,7 @@ frappe.ui.keys.add_shortcut({
 	shortcut: "ctrl+h",
 	action: function (e) {
 		e.preventDefault();
-		$(".navbar-home img").click();
+		frappe.set_route("/app");
 	},
 	description: __("Navigate Home"),
 });
