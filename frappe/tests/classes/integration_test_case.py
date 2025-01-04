@@ -63,7 +63,7 @@ class IntegrationTestCase(UnitTestCase):
 			frappe.db.before_commit.add(_commit_watcher)
 
 		# enqueue teardown actions (executed in LIFO order)
-		cls.addClassCleanup(_restore_thread_locals, copy.deepcopy(frappe.local.flags))
+		cls.addClassCleanup(_restore_ctx_locals, copy.deepcopy(frappe.local.flags))
 		cls.addClassCleanup(_rollback_db)
 		cls._integration_test_case_class_setup_done = True
 
@@ -183,12 +183,13 @@ def _rollback_db():
 	frappe.db.rollback()
 
 
-def _restore_thread_locals(flags):
+def _restore_ctx_locals(flags):
 	frappe.local.flags = flags
 	frappe.local.error_log = []
 	frappe.local.message_log = []
 	frappe.local.debug_log = []
 	frappe.local.conf = frappe._dict(frappe.get_site_config())
+	frappe.local.response = frappe._dict({"docs": []})
 	frappe.local.cache = {}
 	frappe.local.lang = "en"
 	frappe.local.preload_assets = {"style": [], "script": [], "icons": []}

@@ -24,7 +24,7 @@ if click_ctx:
 TEST_WEIGHT_OVERRIDES = {
 	# XXX: command tests are significantly overweight, need a better heuristic than test count
 	# Possible better solution: stats from previous test runs.
-	"test_commands.py": 20,
+	"test_commands.py": 10,
 }
 
 
