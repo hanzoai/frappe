@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2024-12-29 09:33+0000\n"
-"PO-Revision-Date: 2024-12-29 21:30\n"
+"PO-Revision-Date: 2025-01-01 22:16\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -1978,7 +1978,7 @@ msgstr "اصلاح نامگذاری لغو"
 
 #: frappe/model/document.py:515
 msgid "Amendment Not Allowed"
-msgstr ""
+msgstr "اصلاحیه مجاز نیست"
 
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.py:207
 msgid "Amendment naming rules updated."
@@ -5539,7 +5539,7 @@ msgstr "ستون {0} به فیلد {1} نگاشت نشد"
 
 #: frappe/desk/page/setup_wizard/setup_wizard.js:222
 msgid "Could not start up: "
-msgstr ""
+msgstr "راه اندازی نشد: "
 
 #: frappe/public/js/frappe/web_form/web_form.js:359
 msgid "Couldn't save, please check the data you have entered"
@@ -6109,7 +6109,7 @@ msgstr "سفارشی‌سازی‌ها حذف شدند"
 
 #: frappe/custom/doctype/customize_form/customize_form.js:465
 msgid "Customizations Reset"
-msgstr "تنظیم مجدد"
+msgstr "بازنشانی سفارشی‌سازی‌ها"
 
 #: frappe/modules/utils.py:96
 msgid "Customizations for <b>{0}</b> exported to:<br>{1}"
@@ -7469,12 +7469,12 @@ msgstr "رویداد DocType"
 #. Name of a DocType
 #: frappe/custom/doctype/doctype_layout/doctype_layout.json
 msgid "DocType Layout"
-msgstr "طرح بندی DocType"
+msgstr "چیدمان DocType"
 
 #. Name of a DocType
 #: frappe/custom/doctype/doctype_layout_field/doctype_layout_field.json
 msgid "DocType Layout Field"
-msgstr "فیلد طرح بندی DocType"
+msgstr "فیلد چیدمان DocType"
 
 #. Name of a DocType
 #. Option for the 'Applied On' (Select) field in DocType 'Property Setter'
@@ -8296,7 +8296,7 @@ msgstr "ویرایش فیلترها"
 
 #: frappe/public/js/print_format_builder/PrintFormat.vue:29
 msgid "Edit Footer"
-msgstr ""
+msgstr "ویرایش پاورقی"
 
 #: frappe/printing/doctype/print_format/print_format.js:28
 msgid "Edit Format"
@@ -8869,7 +8869,7 @@ msgstr "کارهای برنامه ریزی شده را فعال کنید"
 
 #: frappe/core/doctype/rq_job/rq_job_list.js:23
 msgid "Enable Scheduler"
-msgstr "زمانبندی را فعال کنید"
+msgstr "زمان‌بندی را فعال کنید"
 
 #. Label of the enable_security (Check) field in DocType 'Webhook'
 #: frappe/integrations/doctype/webhook/webhook.json
@@ -8956,7 +8956,7 @@ msgstr "فعال"
 
 #: frappe/core/doctype/rq_job/rq_job_list.js:29
 msgid "Enabled Scheduler"
-msgstr "زمانبندی فعال شد"
+msgstr "زمان‌بندی فعال شد"
 
 #: frappe/email/doctype/email_account/email_account.py:1005
 msgid "Enabled email inbox for user {0}"
@@ -9700,7 +9700,7 @@ msgstr ""
 
 #: frappe/core/doctype/rq_job/rq_job_list.js:33
 msgid "Failed to enable scheduler: {0}"
-msgstr "زمانبندی فعال نشد: {0}"
+msgstr "زمان‌بندی فعال نشد: {0}"
 
 #: frappe/email/doctype/notification/notification.py:99
 #: frappe/integrations/doctype/webhook/webhook.py:127
@@ -9713,7 +9713,7 @@ msgstr "پیام‌های نوع پایتون صادر نشد"
 
 #: frappe/integrations/frappe_providers/frappecloud_billing.py:48
 msgid "Failed to generate access token"
-msgstr ""
+msgstr "توکن دسترسی ایجاد نشد"
 
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.py:249
 msgid "Failed to generate names from the series"
@@ -9733,7 +9733,7 @@ msgstr "روش {0} با {1} دریافت نشد"
 
 #: frappe/integrations/frappe_providers/frappecloud_billing.py:68
 msgid "Failed to get site info"
-msgstr ""
+msgstr "اطلاعات سایت دریافت نشد"
 
 #: frappe/model/virtual_doctype.py:63
 msgid "Failed to import virtual doctype {}, is controller file present?"
@@ -10713,7 +10713,7 @@ msgstr "کار توقف اجباری"
 #. Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Force User to Reset Password"
-msgstr "کاربر را مجبور به تنظیم مجدد رمز عبور کنید"
+msgstr "کاربر را مجبور به بازنشانی رمز عبور کنید"
 
 #. Label of the force_web_capture_mode_for_uploads (Check) field in DocType
 #. 'System Settings'
@@ -11855,7 +11855,7 @@ msgstr "پنهان کردن فرزندان"
 #. Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Hide Empty Read-Only Fields"
-msgstr ""
+msgstr "مخفی کردن فیلدهای خالی فقط خواندنی"
 
 #: frappe/www/error.html:62
 msgid "Hide Error"
@@ -12316,7 +12316,7 @@ msgstr "اگر رکوردهای جدیدی را آپلود می کنید، ست�
 
 #: frappe/utils/password.py:204
 msgid "If you have recently restored the site, you may need to copy the site_config.json containing the original encryption key."
-msgstr ""
+msgstr "اگر اخیراً سایت را بازیابی کرده اید، ممکن است لازم باشد site_config.json حاوی کلید رمزگذاری اصلی را کپی کنید."
 
 #. Description of the 'Parent Label' (Select) field in DocType 'Top Bar Item'
 #: frappe/website/doctype/top_bar_item/top_bar_item.json
@@ -13224,7 +13224,7 @@ msgstr "نام کاربری یا رمز عبور پشتیبانی نامعتبر
 
 #: frappe/public/js/frappe/ui/field_group.js:133
 msgid "Invalid Values"
-msgstr ""
+msgstr "مقادیر نامعتبر"
 
 #: frappe/integrations/doctype/webhook/webhook.py:116
 msgid "Invalid Webhook Secret"
@@ -14176,11 +14176,11 @@ msgstr "آخرین همگام سازی {0}"
 
 #: frappe/custom/doctype/customize_form/customize_form.js:194
 msgid "Layout Reset"
-msgstr "تنظیم مجدد طرح"
+msgstr "بازنشانی چیدمان"
 
 #: frappe/custom/doctype/customize_form/customize_form.js:186
 msgid "Layout will be reset to standard layout, are you sure you want to do this?"
-msgstr "طرح‌بندی به طرح‌بندی استاندارد بازنشانی می‌شود، آیا مطمئن هستید که می‌خواهید این کار را انجام دهید؟"
+msgstr "چیدمان به چیدمان استاندارد بازنشانی می‌شود، آیا مطمئن هستید که می‌خواهید این کار را انجام دهید؟"
 
 #: frappe/desk/page/leaderboard/leaderboard.js:15
 #: frappe/desk/page/user_profile/user_profile_sidebar.html:55
@@ -18484,7 +18484,7 @@ msgstr "رمز عبور ایمیل ارسال شد"
 
 #: frappe/core/doctype/user/user.py:450
 msgid "Password Reset"
-msgstr "تنظیم مجدد رمز عبور"
+msgstr "بازنشانی رمز عبور"
 
 #. Label of the password_reset_limit (Int) field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
@@ -18542,7 +18542,7 @@ msgstr "رمزهای ورود مطابقت ندارند!"
 
 #: frappe/email/doctype/newsletter/newsletter.py:157
 msgid "Past dates are not allowed for Scheduling."
-msgstr "تاریخ های گذشته برای زمان بندی مجاز نیستند."
+msgstr "تاریخ های گذشته برای زمان‌بندی مجاز نیستند."
 
 #: frappe/public/js/frappe/views/file/file_view.js:151
 msgid "Paste"
@@ -21498,7 +21498,7 @@ msgstr "رمز عبور LDAP را بازنشانی کنید"
 
 #: frappe/custom/doctype/customize_form/customize_form.js:128
 msgid "Reset Layout"
-msgstr "تنظیم مجدد طرح"
+msgstr "بازنشانی چیدمان"
 
 #: frappe/core/doctype/user/user.js:230
 msgid "Reset OTP Secret"
@@ -21541,7 +21541,7 @@ msgstr "بازنشانی مرتب‌سازی"
 
 #: frappe/public/js/frappe/form/grid_row.js:409
 msgid "Reset to default"
-msgstr "تنظیم مجدد به حالت پیش فرض"
+msgstr "بازنشانی به حالت پیش فرض"
 
 #: frappe/core/doctype/role_permission_for_page_and_report/role_permission_for_page_and_report.js:19
 msgid "Reset to defaults"
@@ -22362,11 +22362,11 @@ msgstr "برنامه"
 
 #: frappe/email/doctype/newsletter/newsletter.js:106
 msgid "Schedule Newsletter"
-msgstr "زمانبندی خبرنامه"
+msgstr "زمان‌بندی خبرنامه"
 
 #: frappe/public/js/frappe/views/communication.js:85
 msgid "Schedule Send At"
-msgstr "زمانبندی ارسال در"
+msgstr "زمان‌بندی ارسال در"
 
 #: frappe/email/doctype/newsletter/newsletter.js:70
 msgid "Schedule sending"
@@ -22438,7 +22438,7 @@ msgstr ""
 #. Option for the 'Script Type' (Select) field in DocType 'Server Script'
 #: frappe/core/doctype/server_script/server_script.json
 msgid "Scheduler Event"
-msgstr "رویداد زمانبندی"
+msgstr "رویداد زمان‌بندی"
 
 #: frappe/core/doctype/data_import/data_import.py:105
 msgid "Scheduler Inactive"
@@ -22459,11 +22459,11 @@ msgstr "زمانبند غیرفعال است. نمی توان داده ها را
 
 #: frappe/core/doctype/rq_job/rq_job_list.js:19
 msgid "Scheduler: Active"
-msgstr "زمانبندی: فعال"
+msgstr "زمان‌بندی: فعال"
 
 #: frappe/core/doctype/rq_job/rq_job_list.js:21
 msgid "Scheduler: Inactive"
-msgstr "زمانبندی: غیر فعال"
+msgstr "زمان‌بندی: غیر فعال"
 
 #. Label of the scope (Data) field in DocType 'OAuth Scope'
 #: frappe/integrations/doctype/oauth_scope/oauth_scope.json
@@ -23718,7 +23718,7 @@ msgstr "راه‌اندازی سری برای تراکنش ها"
 
 #: frappe/desk/page/setup_wizard/setup_wizard.js:224
 msgid "Setup failed"
-msgstr ""
+msgstr "راه اندازی انجام نشد"
 
 #. Label of the share (Check) field in DocType 'Custom DocPerm'
 #. Label of the share (Check) field in DocType 'DocPerm'
@@ -29672,7 +29672,7 @@ msgstr "شما فقط می توانید 3 نوع Doctype سفارشی را در 
 
 #: frappe/handler.py:184
 msgid "You can only upload JPG, PNG, PDF, TXT, CSV or Microsoft documents."
-msgstr ""
+msgstr "شما فقط می توانید اسناد JPG، PNG، PDF، TXT، CSV یا Microsoft را آپلود کنید."
 
 #: frappe/core/doctype/data_export/exporter.py:199
 msgid "You can only upload upto 5000 records in one go. (may be less in some cases)"
