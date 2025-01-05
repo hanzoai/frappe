@@ -14,13 +14,8 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		$(`<div class="link-field ui-front" style="position: relative;">
 			<input type="text" class="input-with-feedback form-control">
 			<span class="link-btn">
-<<<<<<< HEAD
-				<a class="btn-clear no-decoration">
-					${frappe.utils.icon("close-alt", "xs")}
-=======
 				<a class="btn-clear" style="display: inline-block;" title="${__("Clear Link")}">
-					${frappe.utils.icon("close", "xs", "es-icon")}
->>>>>>> bba05d869f (perf: reduce klicks for changing link value (#28988))
+					${frappe.utils.icon("close-alt", "xs")}
 				</a>
 				<a class="btn-open" style="display: inline-block;" title="${__("Open Link")}">
 					${frappe.utils.icon("arrow-right", "xs")}
@@ -248,15 +243,7 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 				) {
 					html += '<br><span class="small">' + __(d.description) + "</span>";
 				}
-<<<<<<< HEAD
 				return $("<li></li>")
-=======
-				return $(`<div role="option">`)
-					.on("click", (event) => {
-						me.awesomplete.select(event.currentTarget, event.currentTarget);
-						me.show_link_and_clear_buttons();
-					})
->>>>>>> bba05d869f (perf: reduce klicks for changing link value (#28988))
 					.data("item.autocomplete", d)
 					.prop("aria-selected", "false")
 					.html(`<a><p title="${frappe.utils.escape_html(_label)}">${html}</p></a>`)
@@ -435,6 +422,7 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 			if (o.text.value.indexOf("__link_option") !== -1) {
 				me.$input.val("");
 			}
+			me.show_link_and_clear_buttons();
 		});
 	}
 
