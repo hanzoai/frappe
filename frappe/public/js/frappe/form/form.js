@@ -919,10 +919,9 @@ frappe.ui.form.Form = class FrappeForm {
 			})
 			.then((r) => {
 				if (!r.exc) {
-					let doctypes_to_cancel = (r.message.docs || [])
-						.map((value) => {
+					let doctypes_to_cancel = (r.message.docs || []).map((value) => {
 							return value.doctype;
-						})
+					});
 
 					if (doctypes_to_cancel.length) {
 						return me._cancel_all(r, btn, callback, on_error);
