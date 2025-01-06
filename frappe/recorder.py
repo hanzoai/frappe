@@ -175,9 +175,10 @@ def normalize_query(query: str) -> str:
 
 
 def record(force=False):
-	if frappe.client_cache.get_value(RECORDER_INTERCEPT_FLAG) or force:
+	flag_value = frappe.client_cache.get_value(RECORDER_INTERCEPT_FLAG)
+	if flag_value or force:
 		frappe.local._recorder = Recorder(force=force)
-	elif frappe.client_cache.get_value(RECORDER_INTERCEPT_FLAG) is None:
+	elif flag_value is None:
 		# Explicitly set it once so next requests can use client-side cache
 		frappe.client_cache.set_value(RECORDER_INTERCEPT_FLAG, False)
 
