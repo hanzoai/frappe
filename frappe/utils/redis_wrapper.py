@@ -3,6 +3,7 @@
 import pickle
 import re
 import time
+import typing
 from contextlib import suppress
 
 import redis
@@ -406,12 +407,15 @@ class _TrackedConnection(redis.Connection):
 		conn.read_response()
 
 
+_ClientCacheValue = tuple[typing.Any, int]
+
+
 class _ClientCache:
 	def __init__(self, maxsize: int = 1024, ttl=10 * 60, monitor: RedisWrapper | None = None) -> None:
 		self.monitor = frappe.cache
 		self.monitor_id = self.monitor.client_id()
 		self.maxsize = maxsize or 1024  # Expect 1024 * 4kb objects ~ 4MB
-		self.ttl = ttl
+		self.local_ttl = ttl
 		self.expiration = time.monotonic() + ttl
 
 		self.redis: RedisWrapper = RedisWrapper.from_url(
@@ -423,18 +427,17 @@ class _ClientCache:
 		if cint(protocol) == 3:
 			frappe.throw("RESP3 is not supported while connecting to Redis.")
 		self.invalidator_thread = self.run_invalidator_thread()
-		self.local_cache = {}
+		self.local_cache: dict[bytes, _ClientCacheValue] = {}
 		self._conn_retries = 0
 
 	def get_value(self, key):
 		key = self.redis.make_key(key)
-
-		if time.monotonic() > self.expiration:
-			self.clear_cache()
-			self.expiration = time.monotonic() + self.ttl
-
 		try:
-			return self.local_cache[key]
+			val = self.local_cache[key]
+			if time.monotonic() < val[1]:
+				return val[0]
+			else:
+				self.local_cache.pop(key, None)  # expired
 		except KeyError:
 			pass  # cache miss
 
@@ -450,13 +453,14 @@ class _ClientCache:
 			with suppress(RuntimeError):
 				self.local_cache.pop(next(iter(self.local_cache)), None)
 
-		self.local_cache[key] = val
+		self.local_cache[key] = (val, time.monotonic() + self.local_ttl)
+
 		return val
 
 	def set_value(self, key, val):
 		key = self.redis.make_key(key)
 		self.redis.set_value(key, val, shared=True)
-		self.local_cache[key] = val
+		self.local_cache[key] = (val, time.monotonic() + self.local_ttl)
 
 	def delete_value(self, key):
 		key = self.redis.make_key(key)
