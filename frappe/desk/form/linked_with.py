@@ -81,7 +81,9 @@ class SubmittableDocumentTree:
 			next_level_children = defaultdict(list)
 			for parent_dt in list(self.to_be_visited_documents):
 				parent_docs = self.to_be_visited_documents.get(parent_dt)
-				if not parent_docs or (ignore_doctypes_on_cancel_all and parent_dt in ignore_doctypes_on_cancel_all):
+				if not parent_docs or (
+					ignore_doctypes_on_cancel_all and parent_dt in ignore_doctypes_on_cancel_all
+				):
 					del self.to_be_visited_documents[parent_dt]
 					continue
 
