@@ -428,13 +428,14 @@ class _ClientCache:
 			frappe.throw("RESP3 is not supported while connecting to Redis.")
 		self.invalidator_thread = self.run_invalidator_thread()
 		self.local_cache: dict[bytes, _ClientCacheValue] = {}
+		self.cache_healthy = True
 		self._conn_retries = 0
 
 	def get_value(self, key):
 		key = self.redis.make_key(key)
 		try:
 			val = self.local_cache[key]
-			if time.monotonic() < val[1]:
+			if time.monotonic() < val[1] and self.cache_healthy:
 				return val[0]
 			else:
 				self.local_cache.pop(key, None)  # expired
@@ -488,9 +489,11 @@ class _ClientCache:
 			self.local_cache.clear()
 			self._conn_retries += 1
 			if self._conn_retries > 10:
+				self.cache_healthy = False
 				raise
 			time.sleep(1)
 		else:
+			self.cache_healthy = False
 			raise
 
 	def clear_cache(self):
