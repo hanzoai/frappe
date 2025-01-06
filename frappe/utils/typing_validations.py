@@ -94,7 +94,12 @@ def transform_parameter_types(func: Callable, args: tuple, kwargs: dict):
 	defined on the function.
 	"""
 
-	if not (args or kwargs) or not func.__annotations__:
+	if (
+		not (args or kwargs)
+		or not func.__annotations__
+		# No input validations to perform
+		or (len(func.__annotations__) == 1 and func.__annotations__.get("return"))
+	):
 		return args, kwargs
 
 	from pydantic import ValidationError as PyValidationError
