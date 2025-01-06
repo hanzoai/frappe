@@ -129,7 +129,7 @@ class IntegrationTestCase(UnitTestCase):
 			frappe.db.__class__.sql = orig_sql
 
 	@contextmanager
-	def assertRedisCallCounts(self, count: int) -> AbstractContextManager[None]:
+	def assertRedisCallCounts(self, count: int, *, exact=False) -> AbstractContextManager[None]:
 		from frappe.utils.redis_wrapper import RedisWrapper
 
 		commands = []
@@ -146,9 +146,11 @@ class IntegrationTestCase(UnitTestCase):
 			orig_execute = RedisWrapper.execute_command
 			RedisWrapper.execute_command = execute_command_and_count
 			yield
-			self.assertLessEqual(
-				len(commands), count, msg="commands executed: \n" + "\n".join(str(c) for c in commands)
-			)
+			msg = "commands executed: \n" + "\n".join(str(c) for c in commands)
+			if exact:
+				self.assertEqual(len(commands), count, msg=msg)
+			else:
+				self.assertLessEqual(len(commands), count, msg=msg)
 		finally:
 			RedisWrapper.execute_command = orig_execute
 

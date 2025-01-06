@@ -450,16 +450,14 @@ class _ClientCache:
 		if val is None:
 			return None
 
-		if len(self.local_cache) >= self.maxsize:
-			with suppress(RuntimeError):
-				self.local_cache.pop(next(iter(self.local_cache)), None)
-
+		self.ensure_max_size()
 		self.local_cache[key] = (val, time.monotonic() + self.local_ttl)
 
 		return val
 
 	def set_value(self, key, val):
 		key = self.redis.make_key(key)
+		self.ensure_max_size()
 		self.redis.set_value(key, val, shared=True)
 		self.local_cache[key] = (val, time.monotonic() + self.local_ttl)
 		# XXX: We need to tell redis that we indeed read this key we just wrote
@@ -468,6 +466,11 @@ class _ClientCache:
 		# - Client B overwrites this key, but since client A never "read" it from Redis, Redis
 		#   doesn't send invalidation.
 		_ = self.redis.get_value(key, shared=True, use_local_cache=False)
+
+	def ensure_max_size(self):
+		if len(self.local_cache) >= self.maxsize:
+			with suppress(RuntimeError):
+				self.local_cache.pop(next(iter(self.local_cache)), None)
 
 	def delete_value(self, key):
 		key = self.redis.make_key(key)
