@@ -2346,23 +2346,6 @@ def get_website_settings(key):
 	return local.website_settings.get(key)
 
 
-def get_system_settings(key: str):
-	"""Return the value associated with the given `key` from System Settings DocType."""
-	if not (system_settings := getattr(local, "system_settings", None)):
-		key = get_document_cache_key("System Settings", "System Settings")
-		try:
-			system_settings = client_cache.get_value(key)
-			if not system_settings:
-				system_settings = frappe.get_doc("System Settings")
-				client_cache.set_value(key, system_settings)
-			local.system_settings = system_settings
-		except DoesNotExistError:  # possible during new install
-			clear_last_message()
-			return
-
-	return system_settings.get(key)
-
-
 def get_active_domains():
 	from frappe.core.doctype.domain_settings.domain_settings import get_active_domains
 
@@ -2498,6 +2481,7 @@ import frappe._optimizations
 
 # Backward compatibility
 from frappe.config import get_common_site_config, get_site_config
+from frappe.core.doctype.system_settings.system_settings import get_system_settings
 from frappe.utils.error import log_error
 
 frappe._optimizations.optimize_all()
