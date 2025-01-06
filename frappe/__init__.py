@@ -1635,7 +1635,7 @@ def setup_module_map(include_all_apps: bool = True) -> None:
 	if include_all_apps:
 		local.app_modules = cache.get_value("app_modules")
 	else:
-		local.app_modules = cache.get_value("installed_app_modules")
+		local.app_modules = client_cache.get_value("installed_app_modules")
 
 	if not local.app_modules:
 		local.app_modules = {}
@@ -1653,7 +1653,7 @@ def setup_module_map(include_all_apps: bool = True) -> None:
 		if include_all_apps:
 			cache.set_value("app_modules", local.app_modules)
 		else:
-			cache.set_value("installed_app_modules", local.app_modules)
+			client_cache.set_value("installed_app_modules", local.app_modules)
 
 	# Init module_app (reverse mapping)
 	local.module_app = {}
