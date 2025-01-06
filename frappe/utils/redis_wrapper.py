@@ -441,7 +441,7 @@ class _ClientCache:
 		except KeyError:
 			pass  # cache miss
 
-		val = self.redis.get_value(key, shared=True, use_local_cache=False)
+		val = self.redis.get_value(key, shared=True, use_local_cache=not self.cache_healthy)
 
 		# Note: We should not "cache" the cache-misses in client cache.
 		# This cache is long lived and "misses" are not tracked by redis so they'll never get
