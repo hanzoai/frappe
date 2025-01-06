@@ -31,7 +31,9 @@ class TestClientCache(IntegrationTestCase):
 		# frappe.cache is our "another client"
 		val = frappe.generate_hash()
 		frappe.cache.set_value(TEST_KEY, val)
-		time.sleep(0.5)
+		# This is almost instant, but obviously not as fast as running the next instruction in
+		# current thread. So we wait.
+		time.sleep(0.1)
 
 		with self.assertRedisCallCounts(1):
 			self.assertEqual(frappe.client_cache.get_value(TEST_KEY), val)

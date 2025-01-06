@@ -462,6 +462,12 @@ class _ClientCache:
 		key = self.redis.make_key(key)
 		self.redis.set_value(key, val, shared=True)
 		self.local_cache[key] = (val, time.monotonic() + self.local_ttl)
+		# XXX: We need to tell redis that we indeed read this key we just wrote
+		# This is an edge case:
+		# - Client A writes a key and reads it again from local cache
+		# - Client B overwrites this key, but since client A never "read" it from Redis, Redis
+		#   doesn't send invalidation.
+		_ = self.redis.get_value(key, shared=True, use_local_cache=False)
 
 	def delete_value(self, key):
 		key = self.redis.make_key(key)
