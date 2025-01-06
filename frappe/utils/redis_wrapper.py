@@ -413,6 +413,33 @@ CachedValue = namedtuple("CachedValue", ["value", "expiry"])
 
 
 class ClientCache:
+	"""A subset of RedisWrapper that keeps "local" cache across requests.
+
+	Main reason for doing this is improving performance while reading things like hooks, schema.
+	This feature is internal to Frappe Framework and is subjected to change without any notice.
+	There aren't many use cases for such aggressive caching outside of core Framework.
+
+	This is an implementation of Redis' "client side caching" concept:
+		- https://redis.io/docs/latest/develop/reference/client-side-caching/
+
+	Usage/Notes:
+		- Cache keys that do not change often: Think hours-days, not minutes.
+		- Cache keys that are read frequently, e.g. every request or at least >10% of the requests.
+		- Cache values are not huge, consider avg size of ~4kb per value. You can deviate here and
+		  there but not go crazy with caching large values in this cache.
+		- We have hardcoded 10 minutes "local" ttl and max 1024 keys.
+			You're not supposed to work with these numbers, not change them.
+		- Same keys can be accessed with `frappe.cache` too, but that won't implement invalidation.
+		- Invalidate things as usual using `delete_value`. Local invalidation should be instant.
+		  Do not expect sub-second invalidation guarantees across processes.
+		  If you need that kind of guarantees, don't use this cache.
+		- When redis connection isn't available or any unknown exceptions are encountered, this
+		  cache automatically turns itself off and falls back to behaviour that is equivalent to
+		  default Redis cache behaviour.
+		- Never use `frappe.cache`'s request local cache along with client-side cache. Two
+		  different copies of same key are a big source of data races.
+	"""
+
 	def __init__(self, maxsize: int = 1024, ttl=10 * 60, monitor: RedisWrapper | None = None) -> None:
 		self.maxsize = maxsize or 1024  # Expect 1024 * 4kb objects ~ 4MB
 		self.local_ttl = ttl

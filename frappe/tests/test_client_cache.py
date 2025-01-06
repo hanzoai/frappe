@@ -56,3 +56,9 @@ class TestClientCache(IntegrationTestCase):
 		c.set_value(frappe.generate_hash(), 42)
 
 		self.assertEqual(len(c.cache), 2)
+
+	def test_shared_keyspace(self):
+		val = frappe.generate_hash()
+		frappe.client_cache.set_value(TEST_KEY, val)
+
+		self.assertEqual(frappe.client_cache.get_value(TEST_KEY), frappe.cache.get_value(TEST_KEY))
