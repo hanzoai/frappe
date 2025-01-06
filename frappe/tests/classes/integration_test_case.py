@@ -130,25 +130,27 @@ class IntegrationTestCase(UnitTestCase):
 
 	@contextmanager
 	def assertRedisCallCounts(self, count: int) -> AbstractContextManager[None]:
+		from frappe.utils.redis_wrapper import RedisWrapper
+
 		commands = []
 
 		def execute_command_and_count(*args, **kwargs):
 			ret = orig_execute(*args, **kwargs)
 			key_len = 2
-			if "H" in args[0]:
+			if "H" in args[1]:
 				key_len = 3
-			commands.append((args)[:key_len])
+			commands.append((args)[1 : key_len + 1])
 			return ret
 
 		try:
-			orig_execute = frappe.cache.execute_command
-			frappe.cache.execute_command = execute_command_and_count
+			orig_execute = RedisWrapper.execute_command
+			RedisWrapper.execute_command = execute_command_and_count
 			yield
 			self.assertLessEqual(
 				len(commands), count, msg="commands executed: \n" + "\n".join(str(c) for c in commands)
 			)
 		finally:
-			frappe.cache.execute_command = orig_execute
+			RedisWrapper.execute_command = orig_execute
 
 	@contextmanager
 	def assertRowsRead(self, count: int) -> AbstractContextManager[None]:
