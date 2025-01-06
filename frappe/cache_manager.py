@@ -158,9 +158,9 @@ def _clear_doctype_cache_from_redis(doctype: str | None = None):
 		# clear all
 		to_del += doctype_cache_keys
 		to_del += frappe.cache.get_keys("document_cache::")
+		clear_meta_cache()
 
 	frappe.cache.delete_value(to_del)
-	clear_meta_cache()
 
 
 def clear_controller_cache(doctype=None):

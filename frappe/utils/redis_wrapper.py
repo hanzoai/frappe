@@ -425,7 +425,7 @@ class _ClientCache:
 		)
 		protocol = self.redis.get_connection_kwargs().get("protocol")
 		if cint(protocol) == 3:
-			frappe.throw("RESP3 is not supported while connecting to Redis.")
+			frappe.throw("RESP3 is not supported while connecting to Redis.")  # nosemgrep
 		self.invalidator_thread = self.run_invalidator_thread()
 		self.local_cache: dict[bytes, _ClientCacheValue] = {}
 		self.cache_healthy = True

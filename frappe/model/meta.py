@@ -87,7 +87,10 @@ def get_meta(doctype: str | dict | DocRef, cached=True) -> "_Meta":
 
 def clear_meta_cache(doctype: str = "*"):
 	key = f"doctype_meta::{doctype}"
-	frappe.cache.delete_keys(key)
+	if doctype == "*":
+		frappe.cache.delete_keys(key)
+	else:
+		frappe.client_cache.delete_value(key)
 
 
 def load_meta(doctype):
