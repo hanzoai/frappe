@@ -1,6 +1,6 @@
 from collections.abc import Callable
 from functools import lru_cache, wraps
-from inspect import _empty, isclass, signature
+from inspect import _empty, isclass
 from types import EllipsisType
 from typing import ForwardRef, TypeVar, Union
 from unittest import mock
@@ -104,6 +104,8 @@ def transform_parameter_types(func: Callable, args: tuple, kwargs: dict):
 
 	from pydantic import ValidationError as PyValidationError
 
+	import frappe
+
 	annotations = func.__annotations__
 	new_args, new_kwargs = list(args), kwargs
 
@@ -122,7 +124,7 @@ def transform_parameter_types(func: Callable, args: tuple, kwargs: dict):
 		prepared_args = dict(zip(arg_names, args, strict=False))
 
 	# check if type hints dont match the default values
-	func_signature = signature(func)
+	func_signature = frappe._cached_inspect_signature(func)
 	func_params = dict(func_signature.parameters)
 
 	# check if the argument types are correct
