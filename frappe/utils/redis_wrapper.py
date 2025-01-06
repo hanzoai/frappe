@@ -2,13 +2,10 @@
 # License: MIT. See LICENSE
 import pickle
 import re
-import threading
 import time
 from contextlib import suppress
 
 import redis
-from redis.cache import CacheConfig
-from redis.client import PubSub
 from redis.commands.search import Search
 
 import frappe
@@ -410,8 +407,8 @@ class _TrackedConnection(redis.Connection):
 
 
 class _ClientCache:
-	def __init__(self, maxsize: int = 1024, ttl=10 * 60) -> None:
-		self.monitor = RedisWrapper.from_url(frappe.conf.get("redis_cache"))
+	def __init__(self, maxsize: int = 1024, ttl=10 * 60, monitor: RedisWrapper | None = None) -> None:
+		self.monitor = frappe.cache
 		self.monitor_id = self.monitor.client_id()
 		self.maxsize = maxsize or 1024  # Expect 1024 * 4kb objects ~ 4MB
 		self.ttl = ttl
@@ -424,7 +421,7 @@ class _ClientCache:
 		)
 		protocol = self.redis.get_connection_kwargs().get("protocol")
 		if cint(protocol) == 3:
-			frappe.throw("RESP3 is not supported.")
+			frappe.throw("RESP3 is not supported while connecting to Redis.")
 		self.invalidator_thread = self.run_invalidator_thread()
 		self.local_cache = {}
 		self._conn_retries = 0
@@ -443,7 +440,9 @@ class _ClientCache:
 
 		val = self.redis.get_value(key, shared=True, use_local_cache=False)
 
-		# TODO: distinguish between None result and miss
+		# Note: We should not "cache" the cache-misses in client cache.
+		# This cache is long lived and "misses" are not tracked by redis so they'll never get
+		# invalidated.
 		if val is None:
 			return None
 
