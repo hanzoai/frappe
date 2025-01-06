@@ -55,4 +55,4 @@ class TestClientCache(IntegrationTestCase):
 		c.set_value(frappe.generate_hash(), 42)
 		c.set_value(frappe.generate_hash(), 42)
 
-		self.assertEqual(len(c.local_cache), 2)
+		self.assertEqual(len(c.cache), 2)
