@@ -5,6 +5,7 @@ import re
 import threading
 import time
 import typing
+from collections import namedtuple
 from contextlib import suppress
 
 import redis
@@ -408,16 +409,16 @@ class _TrackedConnection(redis.Connection):
 		conn.read_response()
 
 
-_ClientCacheValue = tuple[typing.Any, int]
+CachedValue = namedtuple("CachedValue", ["value", "expiry"])
 
 
-class _ClientCache:
+class ClientCache:
 	def __init__(self, maxsize: int = 1024, ttl=10 * 60, monitor: RedisWrapper | None = None) -> None:
 		self.maxsize = maxsize or 1024  # Expect 1024 * 4kb objects ~ 4MB
 		self.local_ttl = ttl
 		# This guards writes to self.cache, reads are done without a lock.
 		self.lock = threading.RLock()
-		self.cache: dict[bytes, _ClientCacheValue] = {}
+		self.cache: dict[bytes, CachedValue] = {}
 
 		self.invalidator = frappe.cache
 		self.invalidator_id = self.invalidator.client_id()
@@ -436,8 +437,8 @@ class _ClientCache:
 		key = self.redis.make_key(key)
 		try:
 			val = self.cache[key]
-			if time.monotonic() < val[1] and self.cache_healthy:
-				return val[0]
+			if time.monotonic() < val.expiry and self.cache_healthy:
+				return val.value
 		except KeyError:
 			pass  # cache miss
 
@@ -451,7 +452,7 @@ class _ClientCache:
 
 		self.ensure_max_size()
 		with self.lock:
-			self.cache[key] = (val, time.monotonic() + self.local_ttl)
+			self.cache[key] = CachedValue(value=val, expiry=time.monotonic() + self.local_ttl)
 
 		return val
 
@@ -460,7 +461,7 @@ class _ClientCache:
 		self.ensure_max_size()
 		self.redis.set_value(key, val, shared=True)
 		with self.lock:
-			self.cache[key] = (val, time.monotonic() + self.local_ttl)
+			self.cache[key] = CachedValue(value=val, expiry=time.monotonic() + self.local_ttl)
 		# XXX: We need to tell redis that we indeed read this key we just wrote
 		# This is an edge case:
 		# - Client A writes a key and reads it again from local cache

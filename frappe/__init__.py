@@ -73,12 +73,12 @@ if TYPE_CHECKING:  # pragma: no cover
 	from frappe.model.document import Document
 	from frappe.query_builder.builder import MariaDB, Postgres
 	from frappe.types.lazytranslatedstring import _LazyTranslate
-	from frappe.utils.redis_wrapper import RedisWrapper, _ClientCache
+	from frappe.utils.redis_wrapper import ClientCache, RedisWrapper
 
 controllers: dict[str, "Document"] = {}
 local = Local()
 cache: Optional["RedisWrapper"] = None
-client_cache: Optional["_ClientCache"] = None
+client_cache: Optional["ClientCache"] = None
 STANDARD_USERS = ("Guest", "Administrator")
 
 _one_time_setup: dict[str, bool] = {}
@@ -398,7 +398,7 @@ _redis_init_lock = threading.Lock()
 
 def setup_redis_cache_connection():
 	"""Defines `frappe.cache` as `RedisWrapper` instance"""
-	from frappe.utils.redis_wrapper import _ClientCache, setup_cache
+	from frappe.utils.redis_wrapper import ClientCache, setup_cache
 
 	global cache
 	global client_cache
@@ -407,7 +407,7 @@ def setup_redis_cache_connection():
 		# We need to check again since someone else might have setup connection before us.
 		if not cache:
 			cache = setup_cache()
-			client_cache = _ClientCache()
+			client_cache = ClientCache()
 
 
 def get_traceback(with_context: bool = False) -> str:

@@ -2,7 +2,7 @@ import time
 
 import frappe
 from frappe.tests import IntegrationTestCase
-from frappe.utils.redis_wrapper import _ClientCache
+from frappe.utils.redis_wrapper import ClientCache
 
 TEST_KEY = "42"
 
@@ -40,7 +40,7 @@ class TestClientCache(IntegrationTestCase):
 			self.assertEqual(frappe.client_cache.get_value(TEST_KEY), val)
 
 	def test_client_local_cache_ttl(self):
-		c = _ClientCache(ttl=1)
+		c = ClientCache(ttl=1)
 		c.set_value(TEST_KEY, 42)
 		with self.assertRedisCallCounts(0):
 			c.get_value(TEST_KEY)
@@ -50,7 +50,7 @@ class TestClientCache(IntegrationTestCase):
 			c.get_value(TEST_KEY)
 
 	def test_client_cache_maxsize(self):
-		c = _ClientCache(maxsize=2)
+		c = ClientCache(maxsize=2)
 		c.set_value(TEST_KEY, 42)
 		c.set_value(frappe.generate_hash(), 42)
 		c.set_value(frappe.generate_hash(), 42)
