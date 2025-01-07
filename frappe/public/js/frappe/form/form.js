@@ -889,7 +889,7 @@ frappe.ui.form.Form = class FrappeForm {
 			.then((r) => {
 				if (!r.exc) {
 					let doctypes_to_cancel = (r.message.docs || []).map((value) => {
-							return value.doctype;
+						return value.doctype;
 					});
 
 					if (doctypes_to_cancel.length) {
