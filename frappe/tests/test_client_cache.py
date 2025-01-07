@@ -44,6 +44,36 @@ class TestClientCache(IntegrationTestCase):
 		self.assertEqual(frappe.client_cache.statistics.misses, 1)
 		self.assertEqual(frappe.client_cache.statistics.hit_ratio, 0.5)
 
+	def test_delete_invalidates(self):
+		val = frappe.generate_hash()
+		frappe.client_cache.set_value(TEST_KEY, val)
+		self.assertEqual(frappe.client_cache.get_value(TEST_KEY), val)
+
+		val = frappe.generate_hash()
+		frappe.cache.delete_value(TEST_KEY)
+		# This is almost instant, but obviously not as fast as running the next instruction in
+		# current thread. So we wait.
+		time.sleep(0.1)
+
+		with self.assertRedisCallCounts(1, exact=True):
+			self.assertIsNone(frappe.client_cache.get_value(TEST_KEY))
+
+		# Flushall should have results
+		frappe.client_cache.set_value(TEST_KEY, val)
+		self.assertEqual(frappe.client_cache.get_value(TEST_KEY), val)
+		frappe.cache.flushall()
+		time.sleep(0.1)
+		with self.assertRedisCallCounts(1, exact=True):
+			self.assertIsNone(frappe.client_cache.get_value(TEST_KEY))
+
+		# frappe.clear_cache should have same results
+		frappe.client_cache.set_value(TEST_KEY, val)
+		self.assertEqual(frappe.client_cache.get_value(TEST_KEY), val)
+		frappe.clear_cache()
+		time.sleep(0.1)
+		with self.assertRedisCallCounts(1, exact=True):
+			self.assertIsNone(frappe.client_cache.get_value(TEST_KEY))
+
 	def test_client_local_cache_ttl(self):
 		c = ClientCache(ttl=1)
 		c.set_value(TEST_KEY, 42)

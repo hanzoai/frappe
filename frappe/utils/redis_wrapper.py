@@ -542,6 +542,7 @@ class ClientCache:
 		if message["data"] is None:
 			# Flushall
 			self.clear_cache()
+			return
 		with self.lock:
 			for key in message["data"]:
 				self.cache.pop(key, None)
