@@ -529,6 +529,13 @@ class ClientCache:
 		with self.lock:
 			self.cache.pop(key, None)
 
+	def delete_keys(self, pattern):
+		keys = self.redis.get_keys(pattern)
+		self.redis.delete_value(keys, shared=True, make_keys=False)
+		with self.lock:
+			for key in keys:
+				self.cache.pop(key, None)
+
 	def run_invalidator_thread(self):
 		self._watcher = self.invalidator.pubsub()
 		self._watcher.subscribe(**{"__redis__:invalidate": self._handle_invalidation})

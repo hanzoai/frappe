@@ -109,9 +109,10 @@ def clear_global_cache():
 
 def clear_defaults_cache(user=None):
 	if user:
-		frappe.cache.hdel("defaults", [user, *common_default_keys])
+		for key in [user, *common_default_keys]:
+			frappe.client_cache.delete_value(f"defaults::{key}")
 	elif frappe.flags.in_install != "frappe":
-		frappe.cache.delete_value("defaults")
+		frappe.client_cache.delete_keys("defaults::*")
 
 
 def clear_doctype_cache(doctype=None):
