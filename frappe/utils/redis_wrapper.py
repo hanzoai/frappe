@@ -410,6 +410,7 @@ class _TrackedConnection(redis.Connection):
 
 
 CachedValue = namedtuple("CachedValue", ["value", "expiry"])
+_PLACEHOLDER_VALUE = CachedValue(value=None, expiry=-1)
 
 
 class ClientCache:
@@ -469,6 +470,10 @@ class ClientCache:
 		except KeyError:
 			pass  # cache miss
 
+		# Store a placeholder value to detect race between GET and parallel invalidation.
+		with self.lock:
+			self.cache[key] = _PLACEHOLDER_VALUE
+
 		val = self.redis.get_value(key, shared=True, use_local_cache=not self.cache_healthy)
 
 		# Note: We should not "cache" the cache-misses in client cache.
@@ -479,7 +484,10 @@ class ClientCache:
 
 		self.ensure_max_size()
 		with self.lock:
-			self.cache[key] = CachedValue(value=val, expiry=time.monotonic() + self.local_ttl)
+			# Note: If our placeholder value is not present then it's possible that value we just
+			# got is invalidated, so we should not store it in local cache.
+			if key in self.cache:
+				self.cache[key] = CachedValue(value=val, expiry=time.monotonic() + self.local_ttl)
 
 		return val
 
