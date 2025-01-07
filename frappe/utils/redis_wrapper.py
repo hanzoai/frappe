@@ -410,6 +410,9 @@ class _TrackedConnection(redis.Connection):
 
 
 CachedValue = namedtuple("CachedValue", ["value", "expiry"])
+CacheStatistics = namedtuple(
+	"CacheStatistics", ["hits", "misses", "capacity", "used", "utilization", "hit_ratio", "healthy"]
+)
 _PLACEHOLDER_VALUE = CachedValue(value=None, expiry=-1)
 
 
@@ -439,6 +442,8 @@ class ClientCache:
 		  default Redis cache behaviour.
 		- Never use `frappe.cache`'s request local cache along with client-side cache. Two
 		  different copies of same key are a big source of data races.
+		- This cache uses simple FIFO eviction policy. Make sure your access patterns don't cause
+		  the worst case behaviour for this policy. E.g. looping over `maxsize` items repeatedly.
 	"""
 
 	def __init__(self, maxsize: int = 1024, ttl=10 * 60, monitor: RedisWrapper | None = None) -> None:
@@ -458,23 +463,32 @@ class ClientCache:
 			protocol=2,
 		)
 		self.invalidator_thread = self.run_invalidator_thread()
-		self.cache_healthy = True
+		self.healthy = True
 		self.connection_retries = 0
+
+		# These are local hits and misses, *not* global.
+		# - Local miss = not found in worker memory
+		# - Global miss = not found in Redis too
+		# These stats can be *slightly* off, these aren't guarded by a mutex.
+		self.hits = self.misses = 0
 
 	def get_value(self, key):
 		key = self.redis.make_key(key)
 		try:
 			val = self.cache[key]
-			if time.monotonic() < val.expiry and self.cache_healthy:
+			if time.monotonic() < val.expiry and self.healthy:
+				self.hits += 1
 				return val.value
 		except KeyError:
-			pass  # cache miss
+			pass
+
+		self.misses += 1
 
 		# Store a placeholder value to detect race between GET and parallel invalidation.
 		with self.lock:
 			self.cache[key] = _PLACEHOLDER_VALUE
 
-		val = self.redis.get_value(key, shared=True, use_local_cache=not self.cache_healthy)
+		val = self.redis.get_value(key, shared=True, use_local_cache=not self.healthy)
 
 		# Note: We should not "cache" the cache-misses in client cache.
 		# This cache is long lived and "misses" are not tracked by redis so they'll never get
@@ -537,13 +551,28 @@ class ClientCache:
 			self.clear_cache()
 			self.connection_retries += 1
 			if self.connection_retries > 10:
-				self.cache_healthy = False
+				self.healthy = False
 				raise
 			time.sleep(1)
 		else:
-			self.cache_healthy = False
+			self.healthy = False
 			raise
 
 	def clear_cache(self):
 		with self.lock:
 			self.cache.clear()
+
+	@property
+	def statistics(self) -> CacheStatistics:
+		return CacheStatistics(
+			hits=self.hits,
+			misses=self.misses,
+			capacity=self.maxsize,
+			used=len(self.cache),
+			healthy=self.healthy,
+			utilization=round(len(self.cache) / self.maxsize, 2),
+			hit_ratio=round(self.hits / (self.hits + self.misses), 2) if self.hits else None,
+		)
+
+	def reset_statistics(self):
+		self.hits = self.misses = 0

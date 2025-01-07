@@ -25,6 +25,7 @@ class TestClientCache(IntegrationTestCase):
 			self.assertEqual(frappe.client_cache.get_value(TEST_KEY), val)
 
 	def test_invalidation_from_another_client_works(self):
+		frappe.client_cache.reset_statistics()
 		val = frappe.generate_hash()
 		frappe.client_cache.set_value(TEST_KEY, val)
 		self.assertEqual(frappe.client_cache.get_value(TEST_KEY), val)
@@ -38,6 +39,10 @@ class TestClientCache(IntegrationTestCase):
 
 		with self.assertRedisCallCounts(1, exact=True):
 			self.assertEqual(frappe.client_cache.get_value(TEST_KEY), val)
+
+		self.assertEqual(frappe.client_cache.statistics.hits, 1)
+		self.assertEqual(frappe.client_cache.statistics.misses, 1)
+		self.assertEqual(frappe.client_cache.statistics.hit_ratio, 0.5)
 
 	def test_client_local_cache_ttl(self):
 		c = ClientCache(ttl=1)
