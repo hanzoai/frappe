@@ -135,6 +135,7 @@ frappe.ui.Page = class Page {
 		this.indicator = this.wrapper.find(".indicator-pill");
 
 		this.page_actions = this.wrapper.find(".page-actions");
+		this.filters = this.wrapper.find(".filters");
 
 		this.btn_primary = this.page_actions.find(".primary-action");
 		this.btn_secondary = this.page_actions.find(".btn-secondary");
@@ -890,6 +891,9 @@ frappe.ui.Page = class Page {
 				delay: { show: 600, hide: 100 },
 				trigger: "hover",
 			});
+		if (parent == this.filters) {
+			this.restyle_field(f);
+		}
 
 		// html fields in toolbar are only for display
 		if (df.fieldtype == "HTML") {
@@ -913,6 +917,12 @@ frappe.ui.Page = class Page {
 		if (df["default"]) f.set_input(df["default"]);
 		this.fields_dict[df.fieldname || df.label] = f;
 		return f;
+	}
+	restyle_field(f) {
+		$(f.wrapper).removeClass("col-md-2").css("margin", "0px");
+
+		$(f.wrapper).find("select").css("width", "140px");
+		$(f.wrapper).find(".select-icon").css("top", "2px");
 	}
 	clear_fields() {
 		this.page_form.empty();

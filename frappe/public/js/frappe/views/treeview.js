@@ -173,7 +173,11 @@ frappe.views.TreeView = class TreeView {
 				};
 			}
 
-			me.page.add_field(filter);
+			if (filter.render_on_toolbar) {
+				me.page.add_field(filter, me.page.filters);
+			} else {
+				me.page.add_field(filter);
+			}
 
 			if (filter.default) {
 				$("[data-fieldname='" + filter.fieldname + "']").trigger("change");
