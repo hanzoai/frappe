@@ -73,11 +73,12 @@ if TYPE_CHECKING:  # pragma: no cover
 	from frappe.model.document import Document
 	from frappe.query_builder.builder import MariaDB, Postgres
 	from frappe.types.lazytranslatedstring import _LazyTranslate
-	from frappe.utils.redis_wrapper import RedisWrapper
+	from frappe.utils.redis_wrapper import ClientCache, RedisWrapper
 
 controllers: dict[str, "Document"] = {}
 local = Local()
 cache: Optional["RedisWrapper"] = None
+client_cache: Optional["ClientCache"] = None
 STANDARD_USERS = ("Guest", "Administrator")
 
 _one_time_setup: dict[str, bool] = {}
@@ -397,14 +398,16 @@ _redis_init_lock = threading.Lock()
 
 def setup_redis_cache_connection():
 	"""Defines `frappe.cache` as `RedisWrapper` instance"""
-	from frappe.utils.redis_wrapper import setup_cache
+	from frappe.utils.redis_wrapper import ClientCache, setup_cache
 
 	global cache
+	global client_cache
 
 	with _redis_init_lock:
 		# We need to check again since someone else might have setup connection before us.
 		if not cache:
 			cache = setup_cache()
+			client_cache = ClientCache()
 
 
 def get_traceback(with_context: bool = False) -> str:
@@ -970,6 +973,7 @@ def clear_cache(user: str | None = None, doctype: str | None = None):
 
 	if (not doctype and not user) or doctype == "DocType":
 		frappe.utils.caching._SITE_CACHE.clear()
+		frappe.client_cache.clear_cache()
 
 	local.role_permissions = {}
 	if hasattr(local, "request_cache"):
@@ -1079,11 +1083,11 @@ def has_website_permission(doc=None, ptype="read", user=None, verbose=False, doc
 
 def is_table(doctype: str) -> bool:
 	"""Return True if `istable` property (indicating child Table) is set for given DocType."""
-
-	def get_tables():
-		return db.get_values("DocType", filters={"istable": 1}, order_by=None, pluck=True)
-
-	tables = cache.get_value("is_table", get_tables)
+	key = "is_table"
+	tables = client_cache.get_value(key)
+	if tables is None:
+		tables = db.get_values("DocType", filters={"istable": 1}, order_by=None, pluck=True)
+		client_cache.set_value(key, tables)
 	return doctype in tables
 
 
@@ -1588,16 +1592,18 @@ def get_hooks(
 	:param app_name: Filter by app."""
 
 	if app_name:
-		hooks = _dict(_load_app_hooks(app_name))
+		hooks = _load_app_hooks(app_name)
 	else:
 		if conf.developer_mode:
-			hooks = _dict(_load_app_hooks())
+			hooks = _load_app_hooks()
 		else:
-			hooks = _dict(cache.get_value("app_hooks", _load_app_hooks))
-
+			hooks = client_cache.get_value("app_hooks")
+			if hooks is None:
+				hooks = _load_app_hooks()
+				client_cache.set_value("app_hooks", hooks)
 	if hook:
 		return hooks.get(hook, ([] if default == "_KEEP_DEFAULT_LIST" else default))
-	return hooks
+	return _dict(hooks)
 
 
 def append_hook(target, key, value):
@@ -1631,7 +1637,7 @@ def setup_module_map(include_all_apps: bool = True) -> None:
 	if include_all_apps:
 		local.app_modules = cache.get_value("app_modules")
 	else:
-		local.app_modules = cache.get_value("installed_app_modules")
+		local.app_modules = client_cache.get_value("installed_app_modules")
 
 	if not local.app_modules:
 		local.app_modules = {}
@@ -1649,7 +1655,7 @@ def setup_module_map(include_all_apps: bool = True) -> None:
 		if include_all_apps:
 			cache.set_value("app_modules", local.app_modules)
 		else:
-			cache.set_value("installed_app_modules", local.app_modules)
+			client_cache.set_value("installed_app_modules", local.app_modules)
 
 	# Init module_app (reverse mapping)
 	local.module_app = {}
@@ -2340,18 +2346,6 @@ def get_website_settings(key):
 	return local.website_settings.get(key)
 
 
-def get_system_settings(key: str):
-	"""Return the value associated with the given `key` from System Settings DocType."""
-	if not (system_settings := getattr(local, "system_settings", None)):
-		try:
-			local.system_settings = system_settings = get_cached_doc("System Settings")
-		except DoesNotExistError:  # possible during new install
-			clear_last_message()
-			return
-
-	return system_settings.get(key)
-
-
 def get_active_domains():
 	from frappe.core.doctype.domain_settings.domain_settings import get_active_domains
 
@@ -2487,6 +2481,7 @@ import frappe._optimizations
 
 # Backward compatibility
 from frappe.config import get_common_site_config, get_site_config
+from frappe.core.doctype.system_settings.system_settings import get_system_settings
 from frappe.utils.error import log_error
 
 frappe._optimizations.optimize_all()

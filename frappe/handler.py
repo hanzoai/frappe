@@ -2,7 +2,6 @@
 # License: MIT. See LICENSE
 
 import os
-from contextlib import suppress
 from mimetypes import guess_type
 from typing import TYPE_CHECKING
 
@@ -67,15 +66,10 @@ def execute_cmd(cmd, from_async=False):
 		cmd = hook
 		break
 
-	method_exists = False
-	with suppress(Exception):
-		method_exists = bool(get_attr(cmd))
-
 	# via server script
-	if not method_exists:
-		server_script = get_server_script_map().get("_api", {}).get(cmd)
-		if server_script:
-			return run_server_script(server_script)
+	server_script = get_server_script_map().get("_api", {}).get(cmd)
+	if server_script:
+		return run_server_script(server_script)
 
 	try:
 		method = get_attr(cmd)
