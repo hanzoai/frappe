@@ -454,7 +454,25 @@ class ClientCache:
 		self.cache: dict[bytes, CachedValue] = {}
 
 		self.invalidator = frappe.cache
-		self.invalidator_id = self.invalidator.client_id()
+		self.healthy = True
+		self.connection_retries = 0
+		self.invalidator_id = None
+
+		try:
+			self.invalidator_id = self.invalidator.client_id()
+		except redis.exceptions.ConnectionError:
+			# Redis not available, this can happen during setup/startup time
+			self.redis = frappe.cache
+			self.healthy = False
+
+		# These are local hits and misses, *not* global.
+		# - Local miss = not found in worker memory
+		# - Global miss = not found in Redis too
+		# These stats can be *slightly* off, these aren't guarded by a mutex.
+		self.hits = self.misses = 0
+
+		if not self.invalidator_id:
+			return
 
 		self.redis: RedisWrapper = RedisWrapper.from_url(
 			frappe.conf.get("redis_cache"),
@@ -463,14 +481,6 @@ class ClientCache:
 			protocol=2,
 		)
 		self.invalidator_thread = self.run_invalidator_thread()
-		self.healthy = True
-		self.connection_retries = 0
-
-		# These are local hits and misses, *not* global.
-		# - Local miss = not found in worker memory
-		# - Global miss = not found in Redis too
-		# These stats can be *slightly* off, these aren't guarded by a mutex.
-		self.hits = self.misses = 0
 
 	def get_value(self, key):
 		key = self.redis.make_key(key)
