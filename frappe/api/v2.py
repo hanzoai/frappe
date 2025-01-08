@@ -72,7 +72,6 @@ def document_list(doctype: str):
 	from frappe.model.base_document import get_controller
 
 	args = frappe.request.args
-	frappe.has_permission(doctype, throw=True)
 
 	fields = frappe.parse_json(args.get("fields", None))
 	filters = frappe.parse_json(args.get("filters", None))
@@ -90,6 +89,7 @@ def document_list(doctype: str):
 		offset=start,
 		limit=limit + 1,
 		group_by=group_by,
+		ignore_permissions=False,
 	)
 	controller = get_controller(doctype)
 	if hasattr(controller, "get_list"):
