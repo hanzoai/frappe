@@ -84,6 +84,7 @@ class SiteMigration:
 		if os.path.exists(self.touched_tables_file):
 			os.remove(self.touched_tables_file)
 
+		self.lower_lock_timeout()
 		frappe.flags.in_migrate = True
 
 	def tearDown(self):
@@ -184,6 +185,13 @@ class SiteMigration:
 			print(BENCH_START_MESSAGE)
 
 		return are_services_running
+
+	def lower_lock_timeout(self):
+		"""Lower timeout for table metadata locks, default is 1 day, reduce it to 5 minutes.
+
+		This is required to avoid indefinitely waiting for metadata lock.
+		"""
+		frappe.db.sql("set session lock_wait_timeout = %s", 5 * 60)
 
 	def run(self, site: str):
 		"""Run Migrate operation on site specified. This method initializes
