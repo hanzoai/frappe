@@ -50,14 +50,10 @@ def write_document_file(doc, record_module=None, create_init=True, folder_name=N
 	write_code_files(folder, fname, doc, doc_export)
 
 	# write the data file
-<<<<<<< HEAD
-	with open(os.path.join(folder, fname + ".json"), "w+") as txtfile:
-=======
-	path = os.path.join(folder, f"{fname}.json")
+	path = os.path.join(folder, fname + ".json")
 	if is_custom_module and not Path(path).resolve().is_relative_to(Path(frappe.get_site_path()).resolve()):
 		frappe.throw("Invalid export path: " + Path(path).as_posix())
 	with open(path, "w+") as txtfile:
->>>>>>> 1e7e83124d (fix(export_file): check paths before writing)
 		txtfile.write(frappe.as_json(doc_export))
 
 
