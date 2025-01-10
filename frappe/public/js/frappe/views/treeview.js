@@ -1,6 +1,5 @@
 // Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 // MIT License. See license.txt
-
 frappe.provide("frappe.treeview_settings");
 frappe.provide("frappe.views.trees");
 window.cur_tree = null;
@@ -110,7 +109,8 @@ frappe.views.TreeView = class TreeView {
 			this.page.add_inner_button(
 				__("Include Disabled"),
 				function () {
-					me.rebuild_tree();
+					me.toggle_disable(event.target);
+					me.make_tree();
 				},
 				__("Expand"),
 				"default",
@@ -203,6 +203,16 @@ frappe.views.TreeView = class TreeView {
 			},
 		});
 	}
+	toggle_disable(el) {
+		if (this.args["include_disabled"]) {
+			this.args["include_disabled"] = false;
+			el.innerText = el.innerText.replace("Exclude", "Include");
+		} else {
+			this.args["include_disabled"] = true;
+			console.log(el);
+			el.innerText = el.innerText.replace("Include", "Exclude");
+		}
+	}
 	make_tree() {
 		$(this.parent).find(".tree").remove();
 
@@ -210,12 +220,6 @@ frappe.views.TreeView = class TreeView {
 		var use_value = this.root_value;
 		if (use_value == null) {
 			use_value = use_label;
-		}
-
-		if (this.page?.inner_toolbar) {
-			this.args["include_disabled"] = this.page.inner_toolbar
-				.find("input[type='checkbox']")
-				.prop("checked");
 		}
 
 		this.tree = new frappe.ui.Tree({
@@ -242,10 +246,11 @@ frappe.views.TreeView = class TreeView {
 		cur_tree.view_name = "Tree";
 		this.post_render();
 	}
-
+	toggle_label() {
+		console.log("hello");
+	}
 	rebuild_tree() {
 		let me = this;
-
 		frappe.call({
 			method: "frappe.utils.nestedset.rebuild_tree",
 			args: {
