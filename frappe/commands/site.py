@@ -64,6 +64,12 @@ def new_site(
 
 	frappe.init(site=site, new_site=True)
 
+	if site in frappe.get_all_apps():
+		click.secho(
+			f"Your bench has an app called {site}, please choose another name for the site.", fg="red"
+		)
+		sys.exit(1)
+
 	if source_sql:
 		source_sql = extract_sql_from_archive(source_sql)
 
