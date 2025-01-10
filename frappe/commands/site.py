@@ -64,8 +64,25 @@ def new_site(
 
 	frappe.init(site=site, new_site=True)
 
+<<<<<<< HEAD
 	if source_sql:
 		source_sql = extract_sql_from_archive(source_sql)
+=======
+	if site in frappe.get_all_apps():
+		click.secho(
+			f"Your bench has an app called {site}, please choose another name for the site.", fg="red"
+		)
+		sys.exit(1)
+
+	if no_mariadb_socket:
+		click.secho(
+			"--no-mariadb-socket is DEPRECATED; "
+			"use --mariadb-user-host-login-scope='%' (wildcard) or --mariadb-user-host-login-scope=<myhostscope>, instead. "
+			"The name of this option was misleading: it had nothing to do with sockets.",
+			fg="yellow",
+		)
+		mariadb_user_host_login_scope = "%"
+>>>>>>> 2610b8435c (fix(new-site): don't allow creating a site with the same name as an app)
 
 	_new_site(
 		db_name,
