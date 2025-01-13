@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2024-12-29 17:34+0000\n"
-"PO-Revision-Date: 2024-12-29 21:29\n"
+"PO-Revision-Date: 2025-01-13 00:35\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -23370,7 +23370,7 @@ msgstr "Afficher le tableau de bord"
 #. Label of a Button field in DocType 'Access Log'
 #: frappe/core/doctype/access_log/access_log.json
 msgid "Show Document"
-msgstr "Afficher le document"
+msgstr ""
 
 #: frappe/www/error.html:41 frappe/www/error.html:59
 msgid "Show Error"
