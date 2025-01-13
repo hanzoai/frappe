@@ -1,3 +1,5 @@
+from urllib.parse import quote_plus
+
 import frappe
 from frappe import _
 from frappe.utils import cstr
@@ -14,8 +16,13 @@ class NotPermittedPage(TemplatePage):
 		return True
 
 	def render(self):
+<<<<<<< HEAD
 		action = f"/login?redirect-to={frappe.request.path}"
 		if frappe.request.path.startswith("/app"):
+=======
+		action = f"/login?redirect-to={quote_plus(frappe.request.path)}"
+		if frappe.request.path.startswith("/app/") or frappe.request.path == "/app":
+>>>>>>> b8fe835d1a (fix(not_permitted_page): escape path)
 			action = "/login"
 		frappe.local.message_title = _("Not Permitted")
 		frappe.local.response["context"] = dict(
