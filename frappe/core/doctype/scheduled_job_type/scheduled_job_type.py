@@ -43,6 +43,7 @@ class ScheduledJobType(Document):
 		last_execution: DF.Datetime | None
 		method: DF.Data
 		next_execution: DF.Datetime | None
+		scheduler_event: DF.Link | None
 		server_script: DF.Link | None
 		stopped: DF.Check
 
@@ -264,5 +265,19 @@ def clear_events(all_events: list):
 		is_server_script = event.server_script
 		is_defined_in_hooks = event.method in all_events
 
+<<<<<<< HEAD
 		if not (is_defined_in_hooks or is_server_script):
+=======
+		if event.scheduler_event:
+			return True
+
+		freq = frappe.scrub(event.frequency)
+		if freq == "cron":
+			return event.method in scheduler_events.get(freq, {}).get(event.cron_format, [])
+		else:
+			return event.method in scheduler_events.get(freq, [])
+
+	for event in frappe.get_all("Scheduled Job Type", fields=["*"]):
+		if not event_exists(event):
+>>>>>>> 8e6feb62c2 (refactor: link to scheduled job type)
 			frappe.delete_doc("Scheduled Job Type", event.name)
