@@ -154,7 +154,7 @@ def get():
 		if frappe.local.request:
 			bootinfo["change_log"] = get_change_log()
 
-	bootinfo["metadata_version"] = frappe.cache.get_value("metadata_version")
+	bootinfo["metadata_version"] = frappe.client_cache.get_value("metadata_version")
 	if not bootinfo["metadata_version"]:
 		bootinfo["metadata_version"] = frappe.reset_metadata_version()
 
