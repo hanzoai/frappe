@@ -2338,7 +2338,7 @@ def safe_eval(code, eval_globals=None, eval_locals=None):
 def get_website_settings(key):
 	if not hasattr(local, "website_settings"):
 		try:
-			local.website_settings = get_cached_doc("Website Settings")
+			local.website_settings = client_cache.get_doc("Website Settings")
 		except DoesNotExistError:
 			clear_last_message()
 			return
