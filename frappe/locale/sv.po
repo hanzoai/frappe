@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2024-12-29 17:34+0000\n"
-"PO-Revision-Date: 2024-12-29 21:29\n"
+"PO-Revision-Date: 2025-01-06 22:25\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -1519,7 +1519,7 @@ msgstr "Adress Titel"
 
 #: frappe/contacts/doctype/address/address.py:72
 msgid "Address Title is mandatory."
-msgstr "Adress Titel erfodras."
+msgstr "Adress Benämning erfodras."
 
 #. Label of a Select field in DocType 'Address'
 #: frappe/contacts/doctype/address/address.json
@@ -3831,7 +3831,7 @@ msgstr "Efter \"Nummer Serie\"."
 #: frappe/website/doctype/web_page/web_page.js:111
 #: frappe/website/doctype/web_page/web_page.js:118
 msgid "By default the title is used as meta title, adding a value here will override it."
-msgstr "Som standard används titel som meta titel. Att lägga till värde här kommer att åsidosätta standard värde."
+msgstr "Som standard används benämning som metabenämning. Att lägga till värde här kommer att åsidosätta standard värde."
 
 #. Description of the 'Send Email for Successful Backup' (Check) field in
 #. DocType 'S3 Backup Settings'
@@ -5684,7 +5684,7 @@ msgstr "Antal"
 
 #: frappe/public/js/frappe/widgets/widget_dialog.js:504
 msgid "Count Customizations"
-msgstr "Antal & Färgkod Status"
+msgstr "Antal Anpassningar"
 
 #. Label of a Section Break field in DocType 'Workspace Shortcut'
 #. Label of a Code field in DocType 'Workspace Shortcut'
@@ -8169,7 +8169,7 @@ msgstr "Rullgardin Meny"
 #. Label of a Date field in DocType 'ToDo'
 #: frappe/desk/doctype/todo/todo.json
 msgid "Due Date"
-msgstr "Förfallodatum"
+msgstr "Förfallo Datum"
 
 #. Label of a Select field in DocType 'Assignment Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
@@ -9871,7 +9871,7 @@ msgstr "Fält \"\"sökväg\"\" erfodras för Webb Vyer"
 
 #: frappe/core/doctype/doctype/doctype.py:1488
 msgid "Field \"title\" is mandatory if \"Website Search Field\" is set."
-msgstr "Fält \"titel\" erfodras om \"Webbplats Sökfält\" är angiven."
+msgstr "Fält \"benämning\" erfodras om \"Webbplats Sökfält\" är angiven."
 
 #: frappe/desk/doctype/bulk_update/bulk_update.js:17
 msgid "Field \"value\" is mandatory. Please specify value to be updated"
@@ -15402,7 +15402,7 @@ msgstr "Meta Taggar"
 #: frappe/website/doctype/blog_post/blog_post.json
 #: frappe/website/doctype/web_page/web_page.js:117
 msgid "Meta Title"
-msgstr "Meta Titel"
+msgstr "Meta Benämning"
 
 #. Label of a Small Text field in DocType 'Web Form'
 #: frappe/website/doctype/web_form/web_form.json
@@ -15417,11 +15417,11 @@ msgstr "Meta Bild"
 #. Label of a Data field in DocType 'Web Form'
 #: frappe/website/doctype/web_form/web_form.json
 msgid "Meta title"
-msgstr "Meta Titel"
+msgstr "Meta Benämning"
 
 #: frappe/website/doctype/web_page/web_page.js:110
 msgid "Meta title for SEO"
-msgstr "Meta Titel för SEO"
+msgstr "Meta Benämning för SEO"
 
 #. Label of a Data field in DocType 'Access Log'
 #. Label of a Select field in DocType 'Recorder'
@@ -20743,7 +20743,7 @@ msgstr "Rendera etikett till vänster och värde till höger i detta sektion"
 #: frappe/core/doctype/communication/communication.js:43
 #: frappe/desk/doctype/todo/todo.js:36
 msgid "Reopen"
-msgstr "Öppna Igen"
+msgstr "Återöppna"
 
 #: frappe/public/js/frappe/form/toolbar.js:480
 msgid "Repeat"
@@ -22284,7 +22284,7 @@ msgstr "Sektion"
 #: frappe/public/js/form_builder/components/Section.vue:28
 #: frappe/public/js/print_format_builder/PrintFormatSection.vue:8
 msgid "Section Title"
-msgstr "Sektion Namn"
+msgstr "Sektion Benämning"
 
 #: frappe/public/js/form_builder/components/Section.vue:217
 #: frappe/public/js/form_builder/components/Section.vue:240
@@ -23728,7 +23728,7 @@ msgstr "Registrering är inaktiverad"
 #: frappe/templates/signup.html:16 frappe/www/login.html:120
 #: frappe/www/login.html:136 frappe/www/update-password.html:35
 msgid "Sign up"
-msgstr "Registrera dig"
+msgstr "Registrera"
 
 #. Label of a Select field in DocType 'Social Login Key'
 #: frappe/integrations/doctype/social_login_key/social_login_key.json
@@ -24033,7 +24033,7 @@ msgstr "Sortering Fält {0} måste vara giltig fält namn"
 #: frappe/website/doctype/website_route_redirect/website_route_redirect.json
 #: frappe/website/report/website_analytics/website_analytics.js:38
 msgid "Source"
-msgstr "Källa"
+msgstr "Från"
 
 #. Label of a Data field in DocType 'Dashboard Chart Source'
 #: frappe/desk/doctype/dashboard_chart_source/dashboard_chart_source.json
@@ -24687,7 +24687,7 @@ msgstr "Klart Meddelande"
 #. Label of a Data field in DocType 'Web Form'
 #: frappe/website/doctype/web_form/web_form.json
 msgid "Success title"
-msgstr "Klart Titel"
+msgstr "Klart Benämning"
 
 #: frappe/www/update-password.html:79
 msgid "Success! You are good to go 👍"
@@ -25948,7 +25948,7 @@ msgstr "Denna webbplats körs i utvecklarläge. Alla ändringar som görs här k
 
 #: frappe/website/doctype/web_page/web_page.js:71
 msgid "This title will be used as the title of the webpage as well as in meta tags"
-msgstr "Denna titel kommer att användas som titel på hemsida såväl som i meta taggar"
+msgstr "Denna benämning kommer att användas som benämning på hemsida såväl som i meta taggar"
 
 #: frappe/public/js/frappe/form/controls/base_input.js:120
 msgid "This value is fetched from {0}'s {1} field"
@@ -26219,7 +26219,7 @@ msgstr "Tid Stämpel"
 #: frappe/website/doctype/website_sidebar/website_sidebar.json
 #: frappe/website/doctype/website_sidebar_item/website_sidebar_item.json
 msgid "Title"
-msgstr "Titel"
+msgstr "Benämning"
 
 #. Label of a Data field in DocType 'DocType'
 #. Label of a Data field in DocType 'Customize Form'
@@ -26235,11 +26235,11 @@ msgstr "Titel Prefix"
 
 #: frappe/core/doctype/doctype/doctype.py:1437
 msgid "Title field must be a valid fieldname"
-msgstr "Titel Fält måste vara giltig fält namn"
+msgstr "Benämning Fält måste vara giltig fält namn"
 
 #: frappe/website/doctype/web_page/web_page.js:70
 msgid "Title of the page"
-msgstr "Sida Titel"
+msgstr "Sida Benämning"
 
 #. Label of a Code field in DocType 'Communication'
 #. Label of a Section Break field in DocType 'Newsletter'
@@ -26879,7 +26879,7 @@ msgstr "Skriv något i sökruta för att söka"
 #: frappe/templates/discussions/reply_section.html:53
 #: frappe/templates/discussions/topic_modal.html:11
 msgid "Type title"
-msgstr "Skriv rubrik"
+msgstr "Benämning"
 
 #: frappe/templates/discussions/discussions.js:341
 msgid "Type your reply here..."
@@ -31762,7 +31762,7 @@ msgstr "{0}/{1} komplett | Lämna denna flik öppen tills den är klar."
 
 #: frappe/model/base_document.py:1025
 msgid "{0}: '{1}' ({3}) will get truncated, as max characters allowed is {2}"
-msgstr "{0}: {1} ({3}) kommer att förminskas då maximum tillåtna antal tecken är {2}"
+msgstr "{0}: '{1}' ({3}) kommer att avkortas, eftersom max tillåtna tecken är {2}"
 
 #: frappe/core/doctype/doctype/doctype.py:1762
 msgid "{0}: Cannot set Amend without Cancel"
