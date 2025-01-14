@@ -1,5 +1,9 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+import frappe
+from frappe.utils.caching import site_cache
+
+
 def get_jenv():
 	import frappe
 
@@ -136,30 +140,32 @@ def guess_is_path(template):
 
 
 def get_jloader():
+	jloader = _get_jloader()
+	frappe.local.jloader = jloader  # backward compat
+	return jloader
+
+
+@site_cache(ttl=10 * 60, maxsize=5)
+def _get_jloader():
+	from jinja2 import ChoiceLoader, PackageLoader, PrefixLoader
+
 	import frappe
 
-	if not getattr(frappe.local, "jloader", None):
-		from jinja2 import ChoiceLoader, PackageLoader, PrefixLoader
+	apps = frappe.get_hooks("template_apps")
+	if not apps:
+		apps = list(reversed(frappe.get_installed_apps(_ensure_on_bench=True)))
 
-		apps = frappe.get_hooks("template_apps")
-		if not apps:
-			apps = list(
-				reversed(
-					frappe.local.flags.web_pages_apps or frappe.get_installed_apps(_ensure_on_bench=True)
-				)
-			)
+	if "frappe" not in apps:
+		apps.append("frappe")
 
-		if "frappe" not in apps:
-			apps.append("frappe")
+	jloader = ChoiceLoader(
+		# search for something like app/templates/...
+		[PrefixLoader({app: PackageLoader(app, ".") for app in apps})]
+		# search for something like templates/...
+		+ [PackageLoader(app, ".") for app in apps]
+	)
 
-		frappe.local.jloader = ChoiceLoader(
-			# search for something like app/templates/...
-			[PrefixLoader({app: PackageLoader(app, ".") for app in apps})]
-			# search for something like templates/...
-			+ [PackageLoader(app, ".") for app in apps]
-		)
-
-	return frappe.local.jloader
+	return jloader
 
 
 def set_filters(jenv):
