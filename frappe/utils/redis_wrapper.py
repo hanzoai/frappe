@@ -482,11 +482,11 @@ class ClientCache:
 		)
 		self.invalidator_thread = self.run_invalidator_thread()
 
-	def get_value(self, key):
+	def get_value(self, key, *, shared=False):
 		if not self.healthy:
-			return self.redis.get_value(key)
+			return self.redis.get_value(key, shared=shared)
 
-		key = self.redis.make_key(key)
+		key = self.redis.make_key(key, shared=shared)
 		try:
 			val = self.cache[key]
 			if time.monotonic() < val.expiry and self.healthy:
@@ -518,8 +518,8 @@ class ClientCache:
 
 		return val
 
-	def set_value(self, key, val):
-		key = self.redis.make_key(key)
+	def set_value(self, key, val, *, shared=False):
+		key = self.redis.make_key(key, shared=shared)
 		self.ensure_max_size()
 		self.redis.set_value(key, val, shared=True)
 		with self.lock:
@@ -536,8 +536,8 @@ class ClientCache:
 			with self.lock, suppress(RuntimeError):
 				self.cache.pop(next(iter(self.cache)), None)
 
-	def delete_value(self, key):
-		key = self.redis.make_key(key)
+	def delete_value(self, key, *, shared=False):
+		key = self.redis.make_key(key, shared=shared)
 		self.redis.delete_value(key, shared=True)
 		with self.lock:
 			self.cache.pop(key, None)
