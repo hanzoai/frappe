@@ -531,6 +531,17 @@ class ClientCache:
 		#   doesn't send invalidation.
 		_ = self.redis.get_value(key, shared=True, use_local_cache=not self.healthy)
 
+	def get_doc(self, doctype: str, name: str | None = None):
+		"""Utility to fetch and store documents in client cache.
+
+		Use sparingly, this should ideally be used for settings and doctypes that have few known
+		number of documents.
+		"""
+		if not name:
+			name = doctype  # singles
+		key = frappe.get_document_cache_key(doctype, name)
+		return self.get_value(key, generator=lambda: frappe.get_doc(doctype, name))
+
 	def ensure_max_size(self):
 		if len(self.cache) >= self.maxsize:
 			with self.lock, suppress(RuntimeError):

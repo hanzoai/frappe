@@ -111,3 +111,8 @@ class TestClientCache(IntegrationTestCase):
 
 		with self.assertRedisCallCounts(0):
 			self.assertEqual(frappe.client_cache.get_value(TEST_KEY, generator=lambda: val), val)
+
+	def test_get_doc(self):
+		frappe.client_cache.get_doc("User", "Guest")
+		with self.assertRedisCallCounts(0):
+			frappe.client_cache.get_doc("User", "Guest")
