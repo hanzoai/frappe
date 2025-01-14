@@ -1118,7 +1118,7 @@ def generate_hash(txt: str | None = None, length: int = 56) -> str:
 def reset_metadata_version():
 	"""Reset `metadata_version` (Client (Javascript) build ID) hash."""
 	v = generate_hash()
-	cache.set_value("metadata_version", v)
+	client_cache.set_value("metadata_version", v)
 	return v
 
 
