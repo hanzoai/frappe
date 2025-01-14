@@ -501,13 +501,18 @@ class ClientCache:
 		with self.lock:
 			self.cache[key] = _PLACEHOLDER_VALUE
 
-		val = self.redis.get_value(key, shared=True, use_local_cache=not self.healthy, generator=generator)
+		val = self.redis.get_value(key, shared=True, use_local_cache=not self.healthy)
 
 		# Note: We should not "cache" the cache-misses in client cache.
 		# This cache is long lived and "misses" are not tracked by redis so they'll never get
 		# invalidated.
 		if val is None:
-			return None
+			if generator:
+				val = generator()
+				self.set_value(key, val, shared=True)
+				return val
+			else:
+				return None
 
 		self.ensure_max_size()
 		with self.lock:
@@ -530,6 +535,17 @@ class ClientCache:
 		# - Client B overwrites this key, but since client A never "read" it from Redis, Redis
 		#   doesn't send invalidation.
 		_ = self.redis.get_value(key, shared=True, use_local_cache=not self.healthy)
+
+	def get_doc(self, doctype: str, name: str | None = None):
+		"""Utility to fetch and store documents in client cache.
+
+		Use sparingly, this should ideally be used for settings and doctypes that have few known
+		number of documents.
+		"""
+		if not name:
+			name = doctype  # singles
+		key = frappe.get_document_cache_key(doctype, name)
+		return self.get_value(key, generator=lambda: frappe.get_doc(doctype, name))
 
 	def ensure_max_size(self):
 		if len(self.cache) >= self.maxsize:
