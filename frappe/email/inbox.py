@@ -57,8 +57,15 @@ def create_email_flag_queue(names, action):
 		uid, seen_status, email_account = frappe.db.get_value(
 			"Communication", name, ["uid", "seen", "email_account"]
 		)
+<<<<<<< HEAD
 		uid = uid if uid else -1
 		seen_status = seen_status if seen_status else 0
+=======
+		if not uid:
+			uid = -1
+		if not seen_status:
+			seen_status = 0
+>>>>>>> 2b08d7c348 (fix: move ifnull logic to applicaiton for better orm support)
 
 		# can not mark email SEEN or UNSEEN without uid
 		if not uid or uid == -1:
