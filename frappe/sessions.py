@@ -126,7 +126,8 @@ def clear_expired_sessions():
 
 def get():
 	"""get session boot info"""
-	from frappe.boot import get_bootinfo, get_unseen_notes
+	from frappe.boot import get_bootinfo
+	from frappe.desk.doctype.note.note import get_unseen_notes
 	from frappe.utils.change_log import get_change_log
 
 	bootinfo = None
