@@ -109,11 +109,7 @@
    "link_fieldname": "scheduled_job_type"
   }
  ],
-<<<<<<< HEAD
- "modified": "2023-10-14 11:26:05.005930",
-=======
  "modified": "2025-01-13 10:39:39.975031",
->>>>>>> 8e6feb62c2 (refactor: link to scheduled job type)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Scheduled Job Type",
