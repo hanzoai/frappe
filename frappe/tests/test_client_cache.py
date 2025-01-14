@@ -103,3 +103,11 @@ class TestClientCache(IntegrationTestCase):
 		frappe.client_cache.set_value(TEST_KEY, val, shared=True)
 		with self.assertRedisCallCounts(0):
 			self.assertEqual(frappe.client_cache.get_value(TEST_KEY, shared=True), val)
+
+	def test_generator(self):
+		val = frappe.generate_hash()
+		with self.assertRedisCallCounts(2, exact=True):
+			self.assertEqual(frappe.client_cache.get_value(TEST_KEY, generator=lambda: val), val)
+
+		with self.assertRedisCallCounts(0):
+			self.assertEqual(frappe.client_cache.get_value(TEST_KEY, generator=lambda: val), val)

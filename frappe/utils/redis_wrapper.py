@@ -482,9 +482,9 @@ class ClientCache:
 		)
 		self.invalidator_thread = self.run_invalidator_thread()
 
-	def get_value(self, key, *, shared=False):
+	def get_value(self, key, *, shared=False, generator=None):
 		if not self.healthy:
-			return self.redis.get_value(key, shared=shared)
+			return self.redis.get_value(key, shared=shared, generator=generator)
 
 		key = self.redis.make_key(key, shared=shared)
 		try:
@@ -501,7 +501,7 @@ class ClientCache:
 		with self.lock:
 			self.cache[key] = _PLACEHOLDER_VALUE
 
-		val = self.redis.get_value(key, shared=True, use_local_cache=not self.healthy)
+		val = self.redis.get_value(key, shared=True, use_local_cache=not self.healthy, generator=generator)
 
 		# Note: We should not "cache" the cache-misses in client cache.
 		# This cache is long lived and "misses" are not tracked by redis so they'll never get
