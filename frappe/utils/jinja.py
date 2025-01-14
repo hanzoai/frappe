@@ -92,11 +92,11 @@ def render_template(template, context=None, is_path=None, safe_render=True):
 	if context is None:
 		context = {}
 
-	jenv: SandboxedEnvironment = get_jenv()
 	if is_path or guess_is_path(template):
 		is_path = True
-		compiled_template = jenv.get_template(template)
+		compiled_template = compile_template(template)
 	else:
+		jenv: SandboxedEnvironment = get_jenv()
 		if safe_render and ".__" in template:
 			throw(_("Illegal template"))
 		try:
@@ -145,7 +145,13 @@ def get_jloader():
 	return jloader
 
 
-@site_cache(ttl=10 * 60, maxsize=5)
+@site_cache(ttl=10 * 60, maxsize=16)
+def compile_template(path):
+	jenv = get_jenv()
+	return jenv.get_template(path)
+
+
+@site_cache(ttl=10 * 60, maxsize=8)
 def _get_jloader():
 	from jinja2 import ChoiceLoader, PackageLoader, PrefixLoader
 
