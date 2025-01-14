@@ -92,22 +92,23 @@ def render_template(template, context=None, is_path=None, safe_render=True):
 	if context is None:
 		context = {}
 
-	if is_path or guess_is_path(template):
-		is_path = True
-		compiled_template = compile_template(template)
-	else:
-		jenv: SandboxedEnvironment = get_jenv()
-		if safe_render and ".__" in template:
-			throw(_("Illegal template"))
-		try:
-			compiled_template = jenv.from_string(template)
-		except TemplateError:
-			import html
+	try:
+		if is_path or guess_is_path(template):
+			is_path = True
+			compiled_template = compile_template(template)
+		else:
+			jenv: SandboxedEnvironment = get_jenv()
+			if safe_render and ".__" in template:
+				throw(_("Illegal template"))
 
-			throw(
-				title="Jinja Template Error",
-				msg=f"<pre>{template}</pre><pre>{html.escape(get_traceback())}</pre>",
-			)
+			compiled_template = jenv.from_string(template)
+	except TemplateError:
+		import html
+
+		throw(
+			title="Jinja Template Error",
+			msg=f"<pre>{template}</pre><pre>{html.escape(get_traceback())}</pre>",
+		)
 
 	import time
 
