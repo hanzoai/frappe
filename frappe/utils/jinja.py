@@ -8,18 +8,39 @@ def get_jenv():
 	import frappe
 	from frappe.utils.safe_exec import get_safe_globals
 
-	jenv = _get_jenv()
-	jenv.globals.update(get_safe_globals())  # TODO: This isn't thread safe.
+	if jenv := getattr(frappe.local, "jenv", None):
+		return jenv
+
+	default_jenv = _get_jenv()
+	jenv = default_jenv.overlay()
+	# XXX: This is safe to share between requests, the only reason why we are overlaying jenv is to
+	# reuse cache but still have request specific jenv object.
+	if not frappe._dev_server:
+		jenv.cache = default_jenv.cache
+
+	jenv.globals = default_jenv.globals.copy()
+	jenv.filters = default_jenv.filters.copy()
+
+	jenv.globals.update(get_safe_globals())
+	methods, filters = get_jinja_hooks()
+	jenv.globals.update(methods or {})
+	jenv.filters.update(filters or {})
+
 	frappe.local.jenv = jenv
+
 	return jenv
 
 
 @site_cache(ttl=10 * 60, maxsize=4)
 def _get_jenv():
+	# XXX: DO NOT use any thread/request specific data in this function!
+	# Some functionality like `get_safe_globals` appears safe but internally uses request local
+	# data.
+
 	from jinja2 import DebugUndefined
 	from jinja2.sandbox import SandboxedEnvironment
 
-	from frappe.utils.safe_exec import UNSAFE_ATTRIBUTES, get_safe_globals
+	from frappe.utils.safe_exec import UNSAFE_ATTRIBUTES
 
 	UNSAFE_ATTRIBUTES = UNSAFE_ATTRIBUTES - {"format", "format_map"}
 
@@ -31,12 +52,8 @@ def _get_jenv():
 			return super().is_safe_attribute(obj, attr, *args, **kwargs)
 
 	# frappe will be loaded last, so app templates will get precedence
-	jenv = FrappeSandboxedEnvironment(loader=get_jloader(), undefined=DebugUndefined)
+	jenv = FrappeSandboxedEnvironment(loader=get_jloader(), undefined=DebugUndefined, cache_size=32)
 	set_filters(jenv)
-
-	methods, filters = get_jinja_hooks()
-	jenv.globals.update(methods or {})
-	jenv.filters.update(filters or {})
 
 	return jenv
 
