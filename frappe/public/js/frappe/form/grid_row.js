@@ -1025,7 +1025,7 @@ export default class GridRow {
 					grid_width
 				);
 				$('div[data-fieldname="' + parent_field_name + '"] .grid-scroll-bar-rows').width(
-					grid_body_width + (grid_width != grid_body_width ? 30 : 0)
+					grid_body_width
 				);
 			});
 
@@ -1038,7 +1038,6 @@ export default class GridRow {
 				// Sync the form grid's left position with the scroll bar
 				form_grid.css("position", "relative");
 				form_grid.css("left", -scroll_left + "px");
-				$(this).css("margin-left", scroll_left + "px");
 			});
 		});
 	}
