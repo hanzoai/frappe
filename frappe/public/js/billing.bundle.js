@@ -15,7 +15,6 @@ $(document).ready(function () {
 					$(".layout-main-section").before(
 						generateTrialSubscriptionBanner(response.trial_end_date)
 					);
-					addLoginToFCDropdownItem();
 
 					$(".login-to-fc").on("click", function () {
 						initiateRequestForLoginToFrappeCloud();
