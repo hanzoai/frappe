@@ -154,6 +154,7 @@ frappe.ui.Sidebar = class Sidebar {
 
 		this.setup_sorting();
 		this.set_active_workspace_item();
+		this.set_hover();
 	}
 
 	build_sidebar_section(title, root_pages) {
