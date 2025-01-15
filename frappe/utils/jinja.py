@@ -18,6 +18,7 @@ def get_jenv():
 	if not frappe._dev_server:
 		jenv.cache = default_jenv.cache
 
+	# Note: Overlay by default is "linked", we need to copy everything we are updating.
 	jenv.globals = default_jenv.globals.copy()
 	jenv.filters = default_jenv.filters.copy()
 
@@ -116,7 +117,7 @@ def render_template(template, context=None, is_path=None, safe_render=True):
 	try:
 		if is_path or guess_is_path(template):
 			is_path = True
-			compiled_template = compile_template(template)
+			compiled_template = get_template(template)
 		else:
 			jenv: SandboxedEnvironment = get_jenv()
 			if safe_render and ".__" in template:
@@ -165,12 +166,6 @@ def get_jloader():
 	jloader = _get_jloader()
 	frappe.local.jloader = jloader  # backward compat
 	return jloader
-
-
-@site_cache(ttl=10 * 60, maxsize=16)
-def compile_template(path):
-	jenv = get_jenv()
-	return jenv.get_template(path)
 
 
 @site_cache(ttl=10 * 60, maxsize=8)
