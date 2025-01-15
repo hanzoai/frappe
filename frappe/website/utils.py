@@ -423,7 +423,7 @@ def get_frontmatter(string):
 		body = result.group(2)
 
 	return {
-		"attributes": yaml.safe_load(frontmatter),
+		"attributes": yaml.safe_load(frontmatter) if frontmatter else "",
 		"body": body,
 	}
 
