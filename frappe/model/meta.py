@@ -188,6 +188,8 @@ class Meta(Document):
 
 	def as_dict(self, no_nulls=False):
 		def serialize(doc):
+			if isinstance(doc, dict):
+				return doc.copy()
 			out = {}
 			for key, value in doc.__dict__.items():
 				if isinstance(value, list | tuple):
