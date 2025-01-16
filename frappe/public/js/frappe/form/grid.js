@@ -134,7 +134,11 @@ export default class Grid {
 				} else {
 					scroll_bar.scrollLeft(scroll_bar.scrollLeft() + delta * 4);
 				}
-				e.preventDefault();
+
+				// prevent default behaviour when it is scrolled horizontally
+				if (e.originalEvent.deltaX != 0) {
+					e.preventDefault();
+				}
 			});
 			let touchStartX = 0;
 			let touchMoveX = 0;
