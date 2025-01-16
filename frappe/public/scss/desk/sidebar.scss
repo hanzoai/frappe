@@ -154,7 +154,6 @@ body {
 	.standard-sidebar-item {
 		display: flex;
 		line-height: 0px;
-		justify-content: space-between;
 		padding: 0px;
 		.sidebar-item-control {
 			display: none;
@@ -340,7 +339,7 @@ body {
 		.d-flex {
 			width: 161px;
 		}
-		gap: 12px;
+		gap: 8px;
 	}
 	.sidebar-item-control {
 		margin: 2px;
