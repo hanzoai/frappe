@@ -123,6 +123,52 @@ export default class Grid {
 
 		this.form_grid = this.wrapper.find(".form-grid");
 
+		if (this.form_grid) {
+			this.form_grid.on("wheel", (e) => {
+				const isTrackpad = Math.abs(e.originalEvent.wheelDeltaY) < 50;
+				const delta = e.originalEvent.deltaX;
+				const scroll_bar = this.wrapper.find(".grid-scroll-bar");
+
+				if (isTrackpad) {
+					scroll_bar.scrollLeft(scroll_bar.scrollLeft() + delta);
+				} else {
+					scroll_bar.scrollLeft(scroll_bar.scrollLeft() + delta * 4);
+				}
+				e.preventDefault();
+			});
+			let touchStartX = 0;
+			let touchMoveX = 0;
+			let isTouchScrolling = false;
+
+			// Handle touch start
+			this.form_grid.on("touchstart", (e) => {
+				const touch = e.originalEvent.touches[0];
+				touchStartX = touch.pageX;
+				isTouchScrolling = true;
+			});
+
+			// Handle touch move
+			this.form_grid.on("touchmove", (e) => {
+				if (!isTouchScrolling) return;
+
+				const touch = e.originalEvent.touches[0];
+				touchMoveX = touch.pageX;
+
+				const scrollBar = this.wrapper.find(".grid-scroll-bar");
+				const deltaX = touchStartX - touchMoveX;
+
+				scrollBar.scrollLeft(scrollBar.scrollLeft() + deltaX);
+
+				touchStartX = touchMoveX;
+
+				e.preventDefault();
+			});
+
+			// Handle touch end
+			this.form_grid.on("touchend", () => {
+				isTouchScrolling = false;
+			});
+		}
 		this.setup_add_row();
 
 		this.setup_grid_pagination();
