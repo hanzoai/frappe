@@ -30,6 +30,7 @@ frappe.ui.Sidebar = class Sidebar {
 		];
 
 		this.setup_pages();
+		this.apps_switcher.populate_apps_menu(this);
 	}
 
 	make_dom() {

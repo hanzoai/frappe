@@ -48,7 +48,6 @@ frappe.views.Workspace = class Workspace {
 		this.sidebar = frappe.app.sidebar;
 		this.app_switcher_menu = frappe.app.app_switcher_menu;
 		this.sidebar.setup_pages();
-		this.sidebar.apps_switcher.populate_apps_menu();
 		this.cached_pages = $.extend(true, {}, frappe.boot.sidebar_pages);
 		this.has_access = frappe.boot.sidebar_pages.has_access;
 		this.has_create_access = frappe.boot.sidebar_pages.has_create_access;

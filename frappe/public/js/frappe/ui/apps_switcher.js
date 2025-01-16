@@ -28,8 +28,8 @@ frappe.ui.AppsSwitcher = class AppsSwitcher {
 			}
 		}
 	}
-	populate_apps_menu() {
-		this.add_private_app();
+	populate_apps_menu(sidebar) {
+		this.add_private_app(sidebar);
 
 		this.add_website_select();
 		this.add_settings_select();
@@ -52,8 +52,8 @@ frappe.ui.AppsSwitcher = class AppsSwitcher {
 		</div>`).appendTo(this.app_switcher_menu);
 	}
 
-	add_private_app() {
-		let private_pages = frappe.app.sidebar.all_pages.filter((p) => p.public === 0);
+	add_private_app(sidebar) {
+		let private_pages = sidebar.all_pages.filter((p) => p.public === 0);
 		if (private_pages.length === 0) return;
 
 		const app = {
