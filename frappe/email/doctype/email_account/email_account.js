@@ -126,6 +126,22 @@ frappe.ui.form.on("Email Account", {
 				frm.set_value(key, value);
 			});
 		}
+		// For better UX
+		if (frm.doc.service == "GMail") {
+			console.log("hello");
+			frm.set_df_property(
+				"password",
+				"description",
+				'To generate password visit <a href="https://knowledge.workspace.google.com/kb/how-to-create-app-passwords-000009237"> here'
+			);
+		}
+		if (frm.doc.service == "Frappe Mail") {
+			frm.set_df_property(
+				"api_secret",
+				"description",
+				'To know more visit <a href="https://github.com/frappe/mail"> here'
+			);
+		}
 	},
 
 	use_imap: function (frm) {
