@@ -30,7 +30,7 @@ frappe.ui.Sidebar = class Sidebar {
 		];
 
 		this.setup_pages();
-		this.apps_switcher.populate_apps_menu(this);
+		this.apps_switcher.populate_apps_menu();
 	}
 
 	make_dom() {
@@ -50,7 +50,7 @@ frappe.ui.Sidebar = class Sidebar {
 			this.toggle_sidebar();
 		});
 
-		this.apps_switcher = new frappe.ui.AppsSwitcher(this.wrapper);
+		this.apps_switcher = new frappe.ui.AppsSwitcher(this);
 		this.apps_switcher.create_app_data_map();
 	}
 
