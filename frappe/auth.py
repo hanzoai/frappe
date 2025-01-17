@@ -176,7 +176,6 @@ class LoginManager:
 		self.info = frappe.get_cached_value(
 			"User", self.user, ["user_type", "first_name", "last_name", "user_image"], as_dict=1
 		)
-		self.user_lang = frappe.translate.get_user_lang()
 		self.user_type = self.info.user_type
 
 	def setup_boot_cache(self):
@@ -212,8 +211,7 @@ class LoginManager:
 		frappe.local.cookie_manager.set_cookie("full_name", self.full_name)
 		frappe.local.cookie_manager.set_cookie("user_id", self.user)
 		frappe.local.cookie_manager.set_cookie("user_image", self.info.user_image or "")
-		# cache control: round trip the effectively delivered language
-		frappe.local.cookie_manager.set_cookie("user_lang", self.user_lang)
+		frappe.local.cookie_manager.set_cookie("user_lang", frappe.local.lang)
 
 	def clear_preferred_language(self):
 		frappe.local.cookie_manager.delete_cookie("preferred_language")
@@ -452,35 +450,25 @@ def validate_ip_address(user):
 	):
 		return True
 
-	from frappe.core.doctype.user.user import get_restricted_ip_list
-
-	# Only fetch required fields - for perf
-	user_fields = ["restrict_ip", "bypass_restrict_ip_check_if_2fa_enabled"]
-	user_info = (
-		frappe.get_cached_value("User", user, user_fields, as_dict=True)
-		if not frappe.flags.in_test
-		else frappe.db.get_value("User", user, user_fields, as_dict=True)
-	)
-	ip_list = get_restricted_ip_list(user_info)
+	user_info = frappe.get_cached_doc("User", user)
+	ip_list = user_info.get_restricted_ip_list()
 	if not ip_list:
 		return
 
-	system_settings = (
-		frappe.get_cached_doc("System Settings")
-		if not frappe.flags.in_test
-		else frappe.get_single("System Settings")
-	)
+	for ip in ip_list:
+		if frappe.local.request_ip.startswith(ip):
+			return
+
 	# check if bypass restrict ip is enabled for all users
-	bypass_restrict_ip_check = system_settings.bypass_restrict_ip_check_if_2fa_enabled
+	bypass_restrict_ip_check = frappe.get_system_settings("bypass_restrict_ip_check_if_2fa_enabled")
 
 	# check if two factor auth is enabled
-	if system_settings.enable_two_factor_auth and not bypass_restrict_ip_check:
+	if frappe.get_system_settings("enable_two_factor_auth") and not bypass_restrict_ip_check:
 		# check if bypass restrict ip is enabled for login user
 		bypass_restrict_ip_check = user_info.bypass_restrict_ip_check_if_2fa_enabled
 
-	for ip in ip_list:
-		if frappe.local.request_ip.startswith(ip) or bypass_restrict_ip_check:
-			return
+	if bypass_restrict_ip_check:
+		return
 
 	frappe.throw(_("Access not allowed from this IP Address"), frappe.AuthenticationError)
 
