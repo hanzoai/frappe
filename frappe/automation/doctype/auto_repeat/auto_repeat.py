@@ -105,7 +105,7 @@ class AutoRepeat(Document):
 		else:
 			self.next_schedule_date = self.get_next_schedule_date(schedule_date=self.start_date)
 			if self.end_date and getdate(self.end_date) < getdate(self.next_schedule_date):
-				frappe.throw("The Next Scheduled Date cannot be later than the End Date.")
+				frappe.throw(_("The Next Scheduled Date cannot be later than the End Date."))
 
 	def unlink_if_applicable(self):
 		if self.status == "Completed" or self.disabled:
@@ -224,7 +224,7 @@ class AutoRepeat(Document):
 				self.send_notification(new_doc)
 		except Exception:
 			error_log = self.log_error(
-				"Auto repeat failed. Please enable auto repeat after fixing the issues."
+				_("Auto repeat failed. Please enable auto repeat after fixing the issues.")
 			)
 
 			self.disable_auto_repeat()
