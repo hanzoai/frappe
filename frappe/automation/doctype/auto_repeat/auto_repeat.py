@@ -104,6 +104,8 @@ class AutoRepeat(Document):
 			self.next_schedule_date = None
 		else:
 			self.next_schedule_date = self.get_next_schedule_date(schedule_date=self.start_date)
+			if self.end_date and getdate(self.end_date) < getdate(self.next_schedule_date):
+				frappe.throw("The Next Scheduled Date cannot be later than the End Date.")
 
 	def unlink_if_applicable(self):
 		if self.status == "Completed" or self.disabled:
@@ -204,7 +206,7 @@ class AutoRepeat(Document):
 		if self.end_date:
 			next_date = self.get_next_schedule_date(schedule_date=start_date, for_full_schedule=True)
 
-			while getdate(next_date) < getdate(end_date):
+			while getdate(next_date) <= getdate(end_date):
 				row = {
 					"reference_document": self.reference_document,
 					"frequency": self.frequency,
@@ -221,7 +223,9 @@ class AutoRepeat(Document):
 			if self.notify_by_email and self.recipients:
 				self.send_notification(new_doc)
 		except Exception:
-			error_log = self.log_error("Auto repeat failed")
+			error_log = self.log_error(
+				"Auto repeat failed. Please enable auto repeat after fixing the issues."
+			)
 
 			self.disable_auto_repeat()
 
@@ -314,14 +318,9 @@ class AutoRepeat(Document):
 			month_count = 0
 
 		day_count = 0
-		if month_count and self.repeat_on_last_day:
-			day_count = 31
+		if month_count:
+			day_count = 31 if self.repeat_on_last_day else self.repeat_on_day or None
 			next_date = get_next_date(self.start_date, month_count, day_count)
-		elif month_count and self.repeat_on_day:
-			day_count = self.repeat_on_day
-			next_date = get_next_date(self.start_date, month_count, day_count)
-		elif month_count:
-			next_date = get_next_date(self.start_date, month_count)
 		else:
 			days = self.get_days(schedule_date)
 			next_date = add_days(schedule_date, days)
@@ -483,6 +482,9 @@ def make_auto_repeat_entry():
 		data = get_auto_repeat_entries(date)
 		frappe.enqueue(enqueued_method, data=data)
 
+	# Set auto-repeat to complete when all auto-repeats are added to the queue
+	set_auto_repeat_as_completed()
+
 
 def create_repeated_entries(data):
 	for d in data:
@@ -501,12 +503,18 @@ def create_repeated_entries(data):
 def get_auto_repeat_entries(date=None):
 	if not date:
 		date = getdate(today())
-	return frappe.get_all(
-		"Auto Repeat", filters=[["next_schedule_date", "<=", date], ["status", "=", "Active"]]
+
+	auto_repeat = frappe.qb.DocType("Auto Repeat")
+	query = frappe.qb.from_(auto_repeat)
+	query = query.select("name")
+	query = query.where(
+		(auto_repeat.next_schedule_date <= date)
+		& (auto_repeat.status == "Active")
+		& ((auto_repeat.end_date <= auto_repeat.next_schedule_date) | (auto_repeat.end_date.isnull()))
 	)
+	return query.run(as_dict=1)
 
 
-# called through hooks
 def set_auto_repeat_as_completed():
 	auto_repeat = frappe.get_all("Auto Repeat", filters={"status": ["!=", "Disabled"]})
 	for entry in auto_repeat:
