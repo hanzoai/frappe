@@ -202,7 +202,10 @@ class LoginManager:
 	def make_session(self, resume=False):
 		# start session
 		frappe.local.session_obj = Session(
-			user=self.user, resume=resume, full_name=self.full_name, user_type=self.user_type
+			user=self.user,
+			resume=resume,
+			full_name=self.full_name,
+			user_type=self.user_type,
 		)
 
 		# reset user if changed to Guest
