@@ -1176,8 +1176,15 @@ def publish_realtime(context: CliCtxObj, event, message, room, user, doctype, do
 @click.argument("site", required=False)
 @click.option("--user", required=False, help="Login as user")
 @click.option("--duration", required=False, help="Session duration (in hh:mm:ss format)")
+@click.option("--user-for-audit", required=False, help="The user to mention in audit trail")
 @pass_context
-def browse(context: CliCtxObj, site, user=None, duration=None):
+def browse(
+	context: CliCtxObj,
+	site,
+	user: str | None = None,
+	duration: str | None = None,
+	user_for_audit: str | None = None,
+):
 	"""Opens the site on web browser"""
 	from frappe.auth import CookieManager, LoginManager
 
@@ -1194,6 +1201,7 @@ def browse(context: CliCtxObj, site, user=None, duration=None):
 	frappe.connect()
 
 	frappe.flags.session_duration = duration
+	frappe.flags.audit_user = user_for_audit
 
 	sid = ""
 	if user:
