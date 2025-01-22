@@ -249,6 +249,10 @@ class Session:
 		self.data.data.session_ip = frappe.local.request_ip
 		if frappe.flags.session_duration:
 			self.data.data.fixed_duration = True
+
+		if frappe.flags.audit_user:
+			self.data.data.impersonated_by = frappe.flags.audit_user
+
 		if self.user != "Guest":
 			self.data.data.update(
 				{
