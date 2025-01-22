@@ -428,7 +428,7 @@ class Session:
 
 		return updated_in_db
 
-	def set_impersonsated(self, original_user):
+	def set_impersonated(self, original_user):
 		self.data.data.impersonated_by = original_user
 		# Forcefully flush session
 		self.update(force=True)
