@@ -244,11 +244,13 @@ class Session:
 		self.sid = self.data.sid = sid
 		self.data.data.user = self.user
 		self.data.data.session_ip = frappe.local.request_ip
+		if frappe.flags.session_duration:
+			self.data.data.fixed_duration = True
 		if self.user != "Guest":
 			self.data.data.update(
 				{
 					"last_updated": frappe.utils.now(),
-					"session_expiry": get_expiry_period(),
+					"session_expiry": frappe.flags.session_duration or get_expiry_period(),
 					"full_name": self.full_name,
 					"user_type": self.user_type,
 				}
@@ -376,6 +378,9 @@ class Session:
 		"""extend session expiry"""
 
 		if frappe.session.user == "Guest":
+			return
+
+		if self.data.data.fixed_duration:
 			return
 
 		now = frappe.utils.now()
