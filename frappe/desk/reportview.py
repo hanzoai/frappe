@@ -69,7 +69,9 @@ def get_count() -> int:
 			count = frappe.db.sql(f"""select count(*) from ( {partial_query} ) p""")[0][0]
 
 			if count == args.limit:
-				frappe.response.can_cache = True
+				frappe.local.response_headers.set(
+					"Cache-Control", "private,max-age=300,stale-while-revalidate=10800"
+				)
 		else:
 			args.fields = [f"count({fieldname}) as total_count"]
 			count = execute(**args)[0].get("total_count")
