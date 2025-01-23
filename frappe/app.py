@@ -263,6 +263,9 @@ def process_response(response: Response):
 	if hasattr(frappe.local, "conf"):
 		set_cors_headers(response)
 
+	# Update custom headers added during request processing
+	response.headers.update(frappe.local.response_headers)
+
 
 def set_cors_headers(response):
 	if not (
