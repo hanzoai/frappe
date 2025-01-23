@@ -254,10 +254,10 @@ def process_response(response: Response):
 
 	# rate limiter headers
 	if hasattr(frappe.local, "rate_limiter"):
-		response.headers.extend(frappe.local.rate_limiter.headers())
+		response.headers.update(frappe.local.rate_limiter.headers())
 
 	if trace_id := frappe.monitor.get_trace_id():
-		response.headers.extend({"X-Frappe-Request-Id": trace_id})
+		response.headers.update({"X-Frappe-Request-Id": trace_id})
 
 	# CORS headers
 	if hasattr(frappe.local, "conf"):
@@ -296,7 +296,7 @@ def set_cors_headers(response):
 		if not frappe.conf.developer_mode:
 			cors_headers["Access-Control-Max-Age"] = "86400"
 
-	response.headers.extend(cors_headers)
+	response.headers.update(cors_headers)
 
 
 def make_form_dict(request: Request):
