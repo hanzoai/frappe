@@ -427,7 +427,11 @@ def validate_link(doctype: str, docname: str, fields=None):
 	values.name = frappe.db.get_value(doctype, docname, cache=True)
 
 	fields = frappe.parse_json(fields)
-	if not values.name or not fields:
+	if not values.name:
+		return values
+
+	if not fields:
+		frappe.local.response_headers.set("Cache-Control", "private,max-age=1800,stale-while-revalidate=7200")
 		return values
 
 	try:
