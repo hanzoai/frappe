@@ -174,6 +174,11 @@ function get_version_timeline_content(version_doc, frm) {
 		}
 	});
 
+	const audit_user = data.audit_user;
+	if (audit_user) {
+		const audit_msg = __("[Action taken by {0}]", [audit_user]);
+		out = out.map((message) => `${message} · ${audit_msg.bold()}`);
+	}
 	return out;
 }
 
