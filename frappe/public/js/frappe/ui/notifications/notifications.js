@@ -329,6 +329,7 @@ class NotificationsView extends BaseNotificationsView {
 			method: "frappe.desk.doctype.notification_log.notification_log.get_notification_logs",
 			args: { limit: limit },
 			type: "GET",
+			cache: true,
 		});
 	}
 
