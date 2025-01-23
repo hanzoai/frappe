@@ -165,7 +165,7 @@ def get_email_header(doc, language: str | None = None):
 
 
 @frappe.whitelist()
-@http_cache(max_age=60, stale_while_revalidate=5 * 60)
+@http_cache(max_age=60, stale_while_revalidate=60 * 60)
 def get_notification_logs(limit=20):
 	notification_logs = frappe.db.get_list(
 		"Notification Log", fields=["*"], limit=limit, order_by="creation desc"

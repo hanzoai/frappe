@@ -393,7 +393,8 @@ class EventsView extends BaseNotificationsView {
 					start: today,
 					end: today,
 				},
-				"GET"
+				"GET",
+				{ cache: true }
 			)
 			.then((event_list) => {
 				this.render_events_html(event_list);
