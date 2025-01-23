@@ -1200,9 +1200,6 @@ def browse(
 	frappe.init(site)
 	frappe.connect()
 
-	frappe.flags.session_duration = duration
-	frappe.flags.audit_user = user_for_audit
-
 	sid = ""
 	if user:
 		if not frappe.db.exists("User", user):
@@ -1213,7 +1210,7 @@ def browse(
 			frappe.utils.set_request(path="/")
 			frappe.local.cookie_manager = CookieManager()
 			frappe.local.login_manager = LoginManager()
-			frappe.local.login_manager.login_as(user)
+			frappe.local.login_manager.login_as(user, duration, user_for_audit)
 			sid = f"/app?sid={frappe.session.sid}"
 		else:
 			click.echo("Please enable developer mode to login as a user")
