@@ -41,6 +41,57 @@ export default class Grid {
 		this.is_grid = true;
 		this.debounced_refresh = this.refresh.bind(this);
 		this.debounced_refresh = frappe.utils.debounce(this.debounced_refresh, 100);
+		this.handle_scroll_bar();
+		this.setup_tab_listeners();
+	}
+
+	setup_tab_listeners() {
+		$(".nav-link").on("shown.bs.tab", () => {
+			this.handle_scroll_bar();
+		});
+	}
+
+	handle_scroll_bar() {
+		console.log("handle_scroll_bar");
+
+		$(document).ready(function () {
+			let $scrollBar = $(".grid-scroll-bar");
+			let form_grid = $(".form-grid");
+			let grid_scroll_bar_rows = $(".grid-scroll-bar-rows");
+			let parent_field_name = "";
+			let grid_width = 0;
+			let grid_body_width = 0;
+			form_grid.each((grid_index, grid) => {
+				console.log("grid", grid, parent_field_name);
+
+				parent_field_name = $(grid)
+					.closest("[data-fieldname][data-fieldtype]")
+					.attr("data-fieldname");
+				grid_width = $($(grid)[0]).width();
+				grid_body_width = $(
+					'div[data-fieldname="' + parent_field_name + '"] .grid-body'
+				).width();
+				console.log("grid_width", grid_width, grid_body_width);
+
+				$('div[data-fieldname="' + parent_field_name + '"] .grid-scroll-bar').width(
+					grid_width
+				);
+				$('div[data-fieldname="' + parent_field_name + '"] .grid-scroll-bar-rows').width(
+					grid_body_width
+				);
+			});
+
+			// Make sure the grid container is scrollable
+			$scrollBar.on("scroll", function (event) {
+				grid_scroll_bar_rows = $(event.currentTarget).closest(".grid-scroll-bar-rows");
+
+				var scroll_left = $(this).scrollLeft();
+
+				// Sync the form grid's left position with the scroll bar
+				form_grid.css("position", "relative");
+				form_grid.css("left", -scroll_left + "px");
+			});
+		});
 	}
 
 	get perm() {

@@ -10,7 +10,6 @@ export default class GridRow {
 		this.columns_list = [];
 		this.row_check_html = '<input type="checkbox" class="grid-row-check">';
 		this.make();
-		this.setup_tab_listeners();
 	}
 	make() {
 		let me = this;
@@ -409,12 +408,18 @@ export default class GridRow {
 			this.columns = {};
 			this.update_user_settings_for_grid();
 			this.grid_settings_dialog.hide();
+			setTimeout(() => {
+				this.grid.handle_scroll_bar();
+			}, 500);
 		});
 
 		this.grid_settings_dialog.set_secondary_action_label(__("Reset to default"));
 		this.grid_settings_dialog.set_secondary_action(() => {
 			this.reset_user_settings_for_grid();
 			this.grid_settings_dialog.hide();
+			setTimeout(() => {
+				this.grid.handle_scroll_bar();
+			}, 500);
 		});
 	}
 
@@ -987,8 +992,6 @@ export default class GridRow {
 		$col.field_area = $('<div class="field-area"></div>').appendTo($col).toggle(false);
 		$col.static_area = $('<div class="static-area ellipsis"></div>').appendTo($col).html(txt);
 
-		this.handle_scroll_bar();
-
 		// set title attribute to see full label for columns in the heading row
 		if (!this.doc) {
 			$col.attr("title", txt);
@@ -1002,50 +1005,6 @@ export default class GridRow {
 		this.columns_list.push($col);
 
 		return $col;
-	}
-
-	handle_scroll_bar() {
-		$(document).ready(function () {
-			let $scrollBar = $(".grid-scroll-bar");
-			let form_grid = $(".form-grid");
-			let grid_scroll_bar_rows = $(".grid-scroll-bar-rows");
-			let parent_field_name = "";
-			let grid_width = 0;
-			let grid_body_width = 0;
-			form_grid.each((grid_index, grid) => {
-				parent_field_name = $(grid)
-					.closest("[data-fieldname][data-fieldtype]")
-					.attr("data-fieldname");
-				grid_width = $($(grid)[0]).width();
-				grid_body_width = $(
-					'div[data-fieldname="' + parent_field_name + '"] .grid-body'
-				).width();
-
-				$('div[data-fieldname="' + parent_field_name + '"] .grid-scroll-bar').width(
-					grid_width
-				);
-				$('div[data-fieldname="' + parent_field_name + '"] .grid-scroll-bar-rows').width(
-					grid_body_width
-				);
-			});
-
-			// Make sure the grid container is scrollable
-			$scrollBar.on("scroll", function (event) {
-				grid_scroll_bar_rows = $(event.currentTarget).closest(".grid-scroll-bar-rows");
-
-				var scroll_left = $(this).scrollLeft();
-
-				// Sync the form grid's left position with the scroll bar
-				form_grid.css("position", "relative");
-				form_grid.css("left", -scroll_left + "px");
-			});
-		});
-	}
-
-	setup_tab_listeners() {
-		$(".nav-link").on("shown.bs.tab", () => {
-			this.handle_scroll_bar();
-		});
 	}
 
 	activate() {
