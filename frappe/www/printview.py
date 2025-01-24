@@ -361,13 +361,20 @@ def get_rendered_raw_commands(doc, name=None, print_format=None, meta=None, lang
 	return {"raw_commands": get_rendered_template(doc, name=name, print_format=print_format, meta=meta)}
 
 
+<<<<<<< HEAD
 def validate_print_permission(doc):
 	if frappe.has_website_permission(doc):
 		return
 
+=======
+def validate_print_permission(doc: "Document") -> None:
+>>>>>>> bbfb26aaab (refactor(printview): first check for doc permissions, then for website)
 	for ptype in ("read", "print"):
 		if frappe.has_permission(doc.doctype, ptype, doc):
 			return
+
+	if frappe.has_website_permission(doc):
+		return
 
 	if (key := frappe.form_dict.key) and isinstance(key, str):
 		validate_key(key, doc)
