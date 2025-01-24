@@ -8,6 +8,7 @@ permission, homepage, default variables, system defaults etc
 """
 
 import json
+from datetime import datetime, timezone
 from urllib.parse import unquote
 
 import redis
@@ -211,7 +212,7 @@ class Session:
 		resume: bool = False,
 		full_name: str | None = None,
 		user_type: str | None = None,
-		duration: str | None = None,
+		session_end: str | None = None,
 		audit_user: str | None = None,
 	):
 		self.sid = cstr(
@@ -233,7 +234,7 @@ class Session:
 		else:
 			if self.user:
 				self.validate_user()
-				self.start(duration, audit_user)
+				self.start(session_end, audit_user)
 
 	def validate_user(self):
 		if not frappe.get_cached_value("User", self.user, "enabled"):
@@ -242,7 +243,7 @@ class Session:
 				frappe.ValidationError,
 			)
 
-	def start(self, duration: str | None = None, audit_user: str | None = None):
+	def start(self, session_end: str | None = None, audit_user: str | None = None):
 		"""start a new session"""
 		# generate sid
 		if self.user == "Guest":
@@ -254,8 +255,9 @@ class Session:
 		self.sid = self.data.sid = sid
 		self.data.data.user = self.user
 		self.data.data.session_ip = frappe.local.request_ip
-		if duration:
-			self.data.data.fixed_duration = True
+
+		if session_end:
+			self.data.data.session_end = session_end
 
 		if audit_user:
 			self.data.data.audit_user = audit_user
@@ -264,7 +266,7 @@ class Session:
 			self.data.data.update(
 				{
 					"last_updated": frappe.utils.now(),
-					"session_expiry": duration or get_expiry_period(),
+					"session_expiry": get_expiry_period(),
 					"full_name": self.full_name,
 					"user_type": self.user_type,
 				}
@@ -361,7 +363,10 @@ class Session:
 			)
 			expiry = get_expiry_in_seconds(session_data.get("session_expiry"))
 
-			if self.time_diff > expiry:
+			if self.time_diff > expiry or (
+				(session_end := session_data.get("session_end"))
+				and datetime.now(tz=timezone.utc) > datetime.fromisoformat(session_end)
+			):
 				self._delete_session()
 				data = None
 
@@ -411,8 +416,7 @@ class Session:
 		if (
 			force or (time_diff is None) or (time_diff > 600) or self._update_in_cache
 		) and not frappe.flags.read_only:
-			if not self.data.data.fixed_duration:
-				self.data.data.last_updated = now
+			self.data.data.last_updated = now
 			self.data.data.lang = str(frappe.lang)
 
 			Sessions = frappe.qb.DocType("Sessions")
