@@ -196,6 +196,8 @@ class User(Document):
 		self.validate_allowed_modules()
 		self.validate_user_image()
 		self.set_time_zone()
+		if self.restrict_ip:
+			self.validate_ip_addr()
 
 		if self.language == "Loading...":
 			self.language = None
@@ -811,6 +813,9 @@ class User(Document):
 			},
 		)
 
+	def validate_ip_addr(self):
+		self.restrict_ip = ",".join(self.get_restricted_ip_list())
+
 
 @frappe.whitelist()
 def get_timezones():
@@ -1314,7 +1319,7 @@ def get_restricted_ip_list(user):
 	if not user.restrict_ip:
 		return
 
-	return [i.strip() for i in user.restrict_ip.split(",")]
+	return [i.strip() for i in user.restrict_ip.strip().split(",")]
 
 
 @frappe.whitelist(methods=["POST"])
