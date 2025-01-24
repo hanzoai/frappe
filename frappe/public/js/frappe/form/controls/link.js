@@ -685,11 +685,16 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		// to avoid unnecessary request
 		if (value) {
 			return frappe
-				.xcall("frappe.client.validate_link", {
-					doctype: options,
-					docname: value,
-					fields: columns_to_fetch,
-				})
+				.xcall(
+					"frappe.client.validate_link",
+					{
+						doctype: options,
+						docname: value,
+						fields: columns_to_fetch,
+					},
+					"GET",
+					{ cache: !columns_to_fetch.length }
+				)
 				.then((response) => {
 					if (!this.docname || !columns_to_fetch.length) {
 						return response.name;

@@ -521,6 +521,8 @@ def cache_html(func):
 	def cache_html_decorator(*args, **kwargs):
 		cache_key = f"{WEBSITE_PAGE_CACHE_PREFIX}{args[0].path}"
 
+		cache_headers = {"Cache-Control": "private,max-age=300,stale-while-revalidate=10800"}
+
 		if can_cache():
 			html = None
 			page_cache = frappe.cache.get_value(cache_key)
@@ -528,7 +530,7 @@ def cache_html(func):
 				html = page_cache[frappe.local.lang]
 			if html:
 				frappe.local.response.from_cache = True
-				frappe.local.response.can_cache = True
+				frappe.local.response_headers.update(cache_headers)
 				return html
 		html = func(*args, **kwargs)
 		context = args[0].context
@@ -536,7 +538,7 @@ def cache_html(func):
 			page_cache = frappe.cache.get_value(cache_key) or {}
 			page_cache[frappe.local.lang] = html
 			frappe.cache.set_value(cache_key, page_cache, expires_in_sec=30 * 60)
-			frappe.local.response.can_cache = True
+			frappe.local.response_headers.update(cache_headers)
 
 		return html
 

@@ -26,7 +26,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		this.show();
 		this.debounced_refresh = frappe.utils.debounce(
 			this.process_document_refreshes.bind(this),
-			2000
+			5000
 		);
 		this.count_upper_bound = 1001;
 		this._element_factory = new ElementFactory(this.doctype);
