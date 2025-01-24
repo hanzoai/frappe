@@ -143,6 +143,9 @@ class EmailAccount(Document):
 		else:
 			self.login_id = None
 
+		if self.service == "Sendgrid":
+			self.login_id = "apikey"
+
 		if self.service == "Frappe Mail":
 			self.use_imap = 0
 			self.always_use_account_email_id_as_sender = 1
