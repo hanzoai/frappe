@@ -335,6 +335,9 @@ class AutoRepeat(Document):
 					days = self.get_days(next_date)
 					next_date = add_days(next_date, days)
 
+			if self.end_date and getdate(next_date) > getdate(self.end_date):
+				next_date = schedule_date
+
 		return next_date
 
 	def get_days(self, schedule_date):
@@ -481,9 +484,8 @@ def make_auto_repeat_entry():
 		date = getdate(today())
 		data = get_auto_repeat_entries(date)
 		frappe.enqueue(enqueued_method, data=data)
-
-	# Set auto-repeat to complete when all auto-repeats are added to the queue
-	set_auto_repeat_as_completed()
+		# Set auto-repeat to complete when all auto-repeats are added to the queue
+		set_auto_repeat_as_completed(data)
 
 
 def create_repeated_entries(data):
@@ -510,13 +512,12 @@ def get_auto_repeat_entries(date=None):
 	query = query.where(
 		(auto_repeat.next_schedule_date <= date)
 		& (auto_repeat.status == "Active")
-		& ((auto_repeat.end_date <= auto_repeat.next_schedule_date) | (auto_repeat.end_date.isnull()))
+		& ((auto_repeat.end_date >= auto_repeat.next_schedule_date) | (auto_repeat.end_date.isnull()))
 	)
 	return query.run(as_dict=1)
 
 
-def set_auto_repeat_as_completed():
-	auto_repeat = frappe.get_all("Auto Repeat", filters={"status": ["!=", "Disabled"]})
+def set_auto_repeat_as_completed(auto_repeat):
 	for entry in auto_repeat:
 		doc = frappe.get_doc("Auto Repeat", entry.name)
 		if doc.is_completed():
