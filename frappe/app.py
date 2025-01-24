@@ -234,12 +234,15 @@ def log_request(request, response):
 		)
 
 
+NO_CACHE_HEADERS = {"Cache-Control": "no-store,no-cache,must-revalidate,max-age=0"}
+
+
 def process_response(response: Response):
 	if not response:
 		return
 
 	# Default for all requests is no-cache unless explicitly opted-in by endpoint
-	response.headers.setdefault("Cache-Control", "no-store,no-cache,must-revalidate,max-age=0")
+	response.headers.update(NO_CACHE_HEADERS)
 
 	# rate limiter headers
 	if hasattr(frappe.local, "rate_limiter"):
@@ -259,6 +262,9 @@ def process_response(response: Response):
 	public_cache = any("public" in h for h in response.headers.getlist("Cache-Control"))
 	if hasattr(frappe.local, "cookie_manager") and not public_cache:
 		frappe.local.cookie_manager.flush_cookies(response=response)
+
+	if frappe._dev_server:
+		response.headers.update(NO_CACHE_HEADERS)
 
 
 def set_cors_headers(response):
