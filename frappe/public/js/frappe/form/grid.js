@@ -62,8 +62,6 @@ export default class Grid {
 			let grid_width = 0;
 			let grid_body_width = 0;
 			form_grid.each((grid_index, grid) => {
-				console.log("grid", grid, parent_field_name);
-
 				parent_field_name = $(grid)
 					.closest("[data-fieldname][data-fieldtype]")
 					.attr("data-fieldname");
