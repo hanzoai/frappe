@@ -12,6 +12,7 @@ from frappe.desk.reportview import validate_args
 from frappe.model.db_query import check_parent_permission
 from frappe.model.utils import is_virtual_doctype
 from frappe.utils import get_safe_filters
+from frappe.utils.caching import http_cache
 
 if TYPE_CHECKING:
 	from frappe.model.document import Document
@@ -385,6 +386,7 @@ def attach_file(
 
 
 @frappe.whitelist()
+@http_cache(max_age=10 * 60)
 def is_document_amended(doctype, docname):
 	if frappe.permissions.has_permission(doctype):
 		try:
