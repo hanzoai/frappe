@@ -11,7 +11,6 @@ base_template_path = "www/website_script.js"
 # NOTE: This is misleading.
 # We want to avoid Redis cache and instead use proxy cache as website_script.js gets loaded on
 # every website page and never really changes.
-# If we don't avoid redis cache then we can't set appropirate headers every time.
 no_cache = True
 
 # 5 minutes public cache, SWR after that to avoid hard "misses".

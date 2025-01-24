@@ -233,11 +233,13 @@ def http_cache(
 		cache_headers.append(f"stale-while-revalidate={stale_while_revalidate}")
 	cache_headers = ",".join(cache_headers)
 
-	def outer(func: Callable | None = None) -> Callable:
+	def outer(func: Callable) -> Callable:
+		qualified_name = f"{func.__module__}.{func.__name__}"
+
 		@wraps(func)
 		def inner(*args, **kwargs):
 			ret = func(*args, **kwargs)
-			if frappe.request and frappe.request.method == "GET":
+			if frappe.request and frappe.request.method == "GET" and qualified_name in frappe.request.path:
 				frappe.local.response_headers.set("Cache-Control", cache_headers)
 			return ret
 
