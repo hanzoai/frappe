@@ -620,7 +620,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		let $count = this.get_count_element();
 		this.get_count_str().then((count) => {
 			$count.html(`<span>${count}</span>`);
-			if (this.count_upper_bound && this.count_upper_bound == this.total_count) {
+			if (this.count_upper_bound) {
 				$count.attr(
 					"title",
 					__(
@@ -1017,13 +1017,15 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 				Boolean(this.count_upper_bound)
 			)
 			.then((total_count) => {
-				this.total_count = total_count || current_count;
+				this.total_count = total_count;
 				this.count_without_children =
 					count_without_children !== current_count ? count_without_children : undefined;
 
 				let count_str;
 				if (this.total_count === this.count_upper_bound) {
 					count_str = `${format_number(this.total_count - 1, null, 0)}+`;
+				} else if (this.total_count == null) {
+					count_str = "??";
 				} else {
 					count_str = format_number(this.total_count, null, 0);
 				}
