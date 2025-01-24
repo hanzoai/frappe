@@ -49,11 +49,7 @@ def get_report_doc(report_name):
 
 	if not doc.is_permitted():
 		frappe.throw(
-<<<<<<< HEAD
-			_("You don't have access to Report: {0}").format(report_name),
-=======
 			_("You don't have access to Report: {0}").format(_(doc.name)),
->>>>>>> a4614da805 (refactor: modify error message for query report with insufficient permissions (#29884))
 			frappe.PermissionError,
 		)
 
