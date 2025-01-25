@@ -75,10 +75,10 @@ def get_count() -> int | None:
 	# We should not attempt to fetch accurate count for 2 entire minutes! (default timeout)
 	# Very short timeout is used to here to set an upper bound on damage a bad request can do.
 	# Users can request accurate count by dropping limit from arguments.
-	frappe.db.set_execution_timeout(1)
+	timeout_clause = "SET STATEMENT max_statement_time=1 FOR" if frappe.db.db_type == "mariadb" else ""
 
 	try:
-		count = frappe.db.sql(f"""select count(*) from ( {partial_query} ) p""")[0][0]
+		count = frappe.db.sql(f"{timeout_clause} select count(*) from ( {partial_query} ) p")[0][0]
 	except Exception as e:
 		if frappe.db.is_statement_timeout(e):  # Skip fetching accurate count
 			count = None
@@ -86,7 +86,7 @@ def get_count() -> int | None:
 			raise
 
 	if count == args.limit or count is None:
-		frappe.local.response_headers.set("Cache-Control", "private,max-age=300,stale-while-revalidate=10800")
+		frappe.local.response_headers.set("Cache-Control", "private,max-age=600,stale-while-revalidate=10800")
 
 	return count
 
