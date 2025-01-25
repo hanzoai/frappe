@@ -10,6 +10,7 @@ from contextlib import suppress
 
 import redis
 from redis.commands.search import Search
+from redis.exceptions import ResponseError
 
 import frappe
 from frappe.utils import cstr
@@ -405,8 +406,17 @@ class _TrackedConnection(redis.Connection):
 		self.register_connect_callback(self._enable_client_tracking)
 
 	def _enable_client_tracking(self, conn):
-		conn.send_command("CLIENT", "TRACKING", "ON", "redirect", self._invalidator_id, "NOLOOP")
-		conn.read_response()
+		try:
+			conn.send_command("CLIENT", "TRACKING", "ON", "redirect", self._invalidator_id, "NOLOOP")
+			conn.read_response()
+		except ResponseError as e:
+			if "client ID" in str(e) and "does not exist" in str(e):
+				# Redis restarted, there's no easy way to recover from this.
+				frappe.client_cache.healthy = False
+			elif "unknown subcommand" in str(e).lower():
+				raise Exception("Redis version is not supported, upgrade to Redis 6.0 or higher.")
+			else:
+				raise
 
 
 CachedValue = namedtuple("CachedValue", ["value", "expiry"])
