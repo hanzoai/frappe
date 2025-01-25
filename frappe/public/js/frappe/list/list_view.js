@@ -628,12 +628,14 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 					)
 				);
 				$count.tooltip({ delay: { show: 600, hide: 100 }, trigger: "hover" });
+				$count.css("cursor", "pointer");
 				$count.on("click", () => {
 					me.count_upper_bound = 0;
 					$count.off("click");
 					$count.tooltip("disable");
 					me.freeze();
 					me.render_count();
+					$count.css("cursor", "");
 				});
 			}
 		});
