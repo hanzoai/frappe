@@ -51,25 +51,19 @@ export default class Grid {
 	}
 	handle_scroll_bar() {
 		frappe.utils.sleep(500).then(() => {
-			let form_grid = $(`div[data-fieldname="${this.df.fieldname}"] .form-grid`);
-			let grid_body_width = $(
-				`div[data-fieldname="${this.df.fieldname}"] .grid-body`
-			).width();
+			let grid_body_width = this.wrapper.find(".grid-body").width();
 
-			let grid_scroll_bar = $(`div[data-fieldname="${this.df.fieldname}"] .grid-scroll-bar`);
-			let grid_scroll_bar_rows = $(
-				`div[data-fieldname="${this.df.fieldname}"] .grid-scroll-bar-rows`
-			);
+			let grid_scroll_bar = this.wrapper.find(".grid-scroll-bar");
 
-			grid_scroll_bar.width(form_grid.width());
+			let grid_scroll_bar_rows = this.wrapper.find(".grid-scroll-bar-rows");
+
+			grid_scroll_bar.width(this.form_grid.width());
 			grid_scroll_bar_rows.width(grid_body_width);
 
-			grid_scroll_bar.on("scroll", function (event) {
-				grid_scroll_bar_rows = $(event.currentTarget).closest(".grid-scroll-bar-rows");
-
+			grid_scroll_bar.on("scroll", (event) => {
 				// Sync the form grid's left position with the scroll bar
-				form_grid.css("position", "relative");
-				form_grid.css("left", -$(this).scrollLeft() + "px");
+				this.form_grid.css("position", "relative");
+				this.form_grid.css("left", -$(event.currentTarget).scrollLeft() + "px");
 			});
 		});
 	}
