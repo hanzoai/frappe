@@ -28,8 +28,12 @@ from frappe.utils import (
 	now_datetime,
 	today,
 )
+<<<<<<< HEAD
 from frappe.utils.data import sha256_hash
 from frappe.utils.deprecations import deprecated
+=======
+from frappe.utils.data import sha256_hash, strip_html
+>>>>>>> 4ef8629228 (fix: use strip_html() instead of escape_html())
 from frappe.utils.password import check_password, get_password_reset_limit
 from frappe.utils.password import update_password as _update_password
 from frappe.utils.user import get_system_managers
@@ -116,9 +120,46 @@ class User(Document):
 			self.set("roles", [])
 			self.append_roles(*[role.role for role in role_profile.roles])
 
+<<<<<<< HEAD
 	@deprecated
 	def validate_roles(self):
 		self.populate_role_profile_roles()
+=======
+		if self.name in STANDARD_USERS:
+			self.role_profiles = []
+			return
+
+		new_roles = set()
+		for role_profile in self.role_profiles:
+			role_profile = frappe.get_cached_doc("Role Profile", role_profile.role_profile)
+			new_roles.update(role.role for role in role_profile.roles)
+
+		# Remove invalid roles and add new ones
+		self.roles = [r for r in self.roles if r.role in new_roles]
+		self.append_roles(*new_roles)
+
+	def move_role_profile_name_to_role_profiles(self):
+		"""This handles old role_profile_name field if programatically set.
+
+		This behaviour will be remoed in future versions."""
+		if not self.role_profile_name:
+			return
+
+		current_role_profiles = [r.role_profile for r in self.role_profiles]
+		if self.role_profile_name in current_role_profiles:
+			self.role_profile_name = None
+			return
+
+		from frappe.deprecation_dumpster import deprecation_warning
+
+		deprecation_warning(
+			"unknown",
+			"v16",
+			"The field `role_profile_name` is deprecated and will be removed in v16, use `role_profiles` child table instead.",
+		)
+		self.append("role_profiles", {"role_profile": self.role_profile_name})
+		self.role_profile_name = None
+>>>>>>> 4ef8629228 (fix: use strip_html() instead of escape_html())
 
 	def validate_allowed_modules(self):
 		if self.module_profile:
@@ -169,9 +210,12 @@ class User(Document):
 		return self.name == frappe.session.user
 
 	def clean_name(self):
-		self.first_name = escape_html(self.first_name)
-		self.middle_name = escape_html(self.middle_name)
-		self.last_name = escape_html(self.last_name)
+		if self.first_name:
+			self.first_name = strip_html(self.first_name)
+		if self.middle_name:
+			self.middle_name = strip_html(self.middle_name)
+		if self.last_name:
+			self.last_name = strip_html(self.last_name)
 
 	def set_full_name(self):
 		self.full_name = " ".join(filter(None, [self.first_name, self.last_name]))
