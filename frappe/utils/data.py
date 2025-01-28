@@ -898,6 +898,21 @@ def get_timespan_date_range(
 	today = getdate()
 
 	match timespan:
+		case "last 7 days":
+			return (
+				add_to_date(today, days=-7),
+				today,
+			)
+		case "last 14 days":
+			return (
+				add_to_date(today, days=-14),
+				today,
+			)
+		case "last 30 days":
+			return (
+				add_to_date(today, days=-30),
+				today,
+			)
 		case "last week":
 			return (
 				get_first_day_of_week(add_to_date(today, days=-7)),
@@ -938,6 +953,21 @@ def get_timespan_date_range(
 			return (get_quarter_start(today), get_quarter_ending(today))
 		case "this year":
 			return (get_year_start(today), get_year_ending(today))
+		case "next 7 days":
+			return (
+				today,
+				add_to_date(today, days=7),
+			)
+		case "next 14 days":
+			return (
+				today,
+				add_to_date(today, days=14),
+			)
+		case "next 30 days":
+			return (
+				today,
+				add_to_date(today, days=30),
+			)
 		case "next week":
 			return (
 				get_first_day_of_week(add_to_date(today, days=7)),
