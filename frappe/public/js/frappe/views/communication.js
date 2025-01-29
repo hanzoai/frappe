@@ -56,18 +56,7 @@ frappe.views.CommunicationComposer = class {
 				fieldname: "recipients",
 				default: this.get_default_recipients("recipients"),
 				onchange: function () {
-					let value = this.get_value();
-					if (!value) return;
-					const sanitizedEmails = value
-						.split(",")
-						.map((email) => {
-							email = frappe.utils.xss_sanitise(email.trim());
-							return email;
-						})
-						.join(", ");
-					if (sanitizedEmails !== value) {
-						this.set_value(sanitizedEmails);
-					}
+					me.sanitize_emails(this);
 				},
 			},
 			{
@@ -89,18 +78,7 @@ frappe.views.CommunicationComposer = class {
 				fieldname: "cc",
 				default: this.get_default_recipients("cc"),
 				onchange: function () {
-					let value = this.get_value();
-					if (!value) return;
-					const sanitizedEmails = value
-						.split(",")
-						.map((email) => {
-							email = frappe.utils.xss_sanitise(email.trim());
-							return email;
-						})
-						.join(", ");
-					if (sanitizedEmails !== value) {
-						this.set_value(sanitizedEmails);
-					}
+					me.sanitize_emails(this);
 				},
 			},
 			{
@@ -109,18 +87,7 @@ frappe.views.CommunicationComposer = class {
 				fieldname: "bcc",
 				default: this.get_default_recipients("bcc"),
 				onchange: function () {
-					let value = this.get_value();
-					if (!value) return;
-					const sanitizedEmails = value
-						.split(",")
-						.map((email) => {
-							email = frappe.utils.xss_sanitise(email.trim());
-							return email;
-						})
-						.join(", ");
-					if (sanitizedEmails !== value) {
-						this.set_value(sanitizedEmails);
-					}
+					me.sanitize_emails(this);
 				},
 			},
 			{
@@ -1012,5 +979,17 @@ frappe.views.CommunicationComposer = class {
 
 		const text = frappe.utils.html2text(html);
 		return text.replace(/\n{3,}/g, "\n\n");
+	}
+
+	sanitize_emails(control) {
+		let emails = control.get_value();
+		if (!emails) return;
+		let sanitized = emails
+			.split(",")
+			.map((email) => frappe.utils.xss_sanitise(email.trim()))
+			.join(",");
+		if (sanitized != emails) {
+			control.set_value(sanitized);
+		}
 	}
 };
