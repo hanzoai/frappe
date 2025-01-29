@@ -607,9 +607,9 @@ frappe.ui.filter_utils = {
 
 	get_timespan_options(periods) {
 		const period_map = {
-			Last: ["Week", "Month", "Quarter", "6 months", "Year"],
+			Last: ["7 Days", "14 Days", "30 Days", "Week", "Month", "Quarter", "6 months", "Year"],
 			This: ["Week", "Month", "Quarter", "Year"],
-			Next: ["Week", "Month", "Quarter", "6 months", "Year"],
+			Next: ["7 Days", "14 Days", "30 Days", "Week", "Month", "Quarter", "6 months", "Year"],
 		};
 		let options = [];
 		periods.forEach((period) => {
