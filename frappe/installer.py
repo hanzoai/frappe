@@ -583,16 +583,20 @@ def make_site_config(
 			if db_type:
 				site_config["db_type"] = db_type
 
-			if db_socket:
-				site_config["db_socket"] = db_socket
+			if db_type == "sqlite":
+				site_config["db_name"] = db_name
 
-			if db_host:
-				site_config["db_host"] = db_host
+			else:
+				if db_socket:
+					site_config["db_socket"] = db_socket
 
-			if db_port:
-				site_config["db_port"] = db_port
+				if db_host:
+					site_config["db_host"] = db_host
 
-			site_config["db_user"] = db_user or db_name
+				if db_port:
+					site_config["db_port"] = db_port
+
+				site_config["db_user"] = db_user or db_name
 
 		with open(site_file, "w") as f:
 			f.write(json.dumps(site_config, indent=1, sort_keys=True))

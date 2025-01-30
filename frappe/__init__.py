@@ -304,9 +304,11 @@ def connect(site: str | None = None, db_name: str | None = None, set_admin_as_us
 	db_name_ = conf.db_name or db_name
 	db_password = conf.db_password
 
-	assert db_user, "site must be fully initialized, db_user missing"
 	assert db_name_, "site must be fully initialized, db_name missing"
-	assert db_password, "site must be fully initialized, db_password missing"
+
+	if frappe.conf.db_type in ("mariadb", "postgres"):
+		assert db_user, "site must be fully initialized, db_user missing"
+		assert db_password, "site must be fully initialized, db_password missing"
 
 	local.db = get_db(
 		socket=conf.db_socket,
