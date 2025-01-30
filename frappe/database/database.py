@@ -252,7 +252,7 @@ class Database:
 			query += f" /* FRAPPE_TRACE_ID: {trace_id} */"
 
 		try:
-			self._cursor.execute(query, values)
+			self.execute_query(query, values)
 		except Exception as e:
 			if self.is_syntax_error(e):
 				frappe.log(f"Syntax error in query:\n{query} {values or ''}")
@@ -345,6 +345,9 @@ class Database:
 				frappe.throw(_("`as_iterator` only works with `as_list=True` or `as_dict=True`"))
 
 		self._clean_up()
+
+	def execute_query(self, query, values=None):
+		return self._cursor.execute(query, values)
 
 	def _log_query(
 		self,
