@@ -202,7 +202,7 @@ function generateTrialSubscriptionBanner(trialEndDate) {
 					border-color: var(--gray-400);
 				}
 			</style>
-			<div class="trial-banner px-3 py-2 my-2">
+			<div class="trial-banner px-3 py-2 m-2">
 				<div>
 					<svg class="info-icon" width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<g clip-path="url(#clip0_3360_13841)">
