@@ -6,7 +6,7 @@ from pypika.dialects import MySQLQueryBuilder, PostgreSQLQueryBuilder, SQLLiteQu
 from pypika.queries import QueryBuilder, Schema, Table
 from pypika.terms import Function
 
-from frappe.query_builder.terms import ParameterizedValueWrapper
+from frappe.query_builder.terms import ParameterizedValueWrapper, SQLiteParameterizedValueWrapper
 from frappe.utils import get_table_name
 
 
@@ -100,11 +100,13 @@ class Postgres(Base, PostgreSQLQuery):
 
 
 class SQLite(Base, SQLLiteQuery):
+	Field = terms.Field
+
 	_BuilderClasss = SQLLiteQueryBuilder
 
 	@classmethod
 	def _builder(cls, *args, **kwargs) -> "SQLLiteQueryBuilder":
-		return super()._builder(*args, wrapper_cls=ParameterizedValueWrapper, **kwargs)
+		return super()._builder(*args, wrapper_cls=SQLiteParameterizedValueWrapper, **kwargs)
 
 	@classmethod
 	def from_(cls, table, *args, **kwargs):

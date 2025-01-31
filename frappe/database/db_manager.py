@@ -3,7 +3,7 @@ from frappe import _
 
 
 class DbManager:
-	def __init__(self, db):
+	def __init__(self, db: frappe.database.database.Database | None = None):
 		"""
 		Pass root_conn here for access to all databases.
 		"""

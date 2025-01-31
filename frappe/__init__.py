@@ -69,9 +69,10 @@ if TYPE_CHECKING:  # pragma: no cover
 	from frappe.database.mariadb.database import MariaDBDatabase as PyMariaDBDatabase
 	from frappe.database.mariadb.mysqlclient import MariaDBDatabase
 	from frappe.database.postgres.database import PostgresDatabase
+	from frappe.database.sqlite.database import SQLiteDatabase
 	from frappe.email.doctype.email_queue.email_queue import EmailQueue
 	from frappe.model.document import Document
-	from frappe.query_builder.builder import MariaDB, Postgres
+	from frappe.query_builder.builder import MariaDB, Postgres, SQLite
 	from frappe.types.lazytranslatedstring import _LazyTranslate
 	from frappe.utils.redis_wrapper import ClientCache, RedisWrapper
 
@@ -161,8 +162,8 @@ ResponseDict: TypeAlias = _dict[str, Any]  # type: ignore[no-any-explicit]
 FlagsDict: TypeAlias = _dict[str, Any]  # type: ignore[no-any-explicit]
 FormDict: TypeAlias = _dict[str, str]
 
-db: LocalProxy[Union["PyMariaDBDatabase", "MariaDBDatabase", "PostgresDatabase"]] = local("db")
-qb: LocalProxy[Union["MariaDB", "Postgres"]] = local("qb")
+db: LocalProxy[Union["PyMariaDBDatabase", "MariaDBDatabase", "PostgresDatabase", "SQLiteDatabase"]] = local("db")
+qb: LocalProxy[Union["MariaDB", "Postgres", "SQLite"]] = local("qb")
 conf: LocalProxy[ConfType] = local("conf")
 form_dict: LocalProxy[FormDict] = local("form_dict")
 form = form_dict
@@ -182,7 +183,7 @@ lang: LocalProxy[str] = local("lang")
 if TYPE_CHECKING:  # pragma: no cover
 	# trick because some type checkers fail to follow "RedisWrapper", etc (written as string literal)
 	# trough a generic wrapper; seems to be a bug
-	db: PyMariaDBDatabase | MariaDBDatabase | PostgresDatabase
+	db: PyMariaDBDatabase | MariaDBDatabase | PostgresDatabase | SQLiteDatabase
 	qb: MariaDB | Postgres
 	conf: ConfType
 	form_dict: FormDict

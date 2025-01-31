@@ -3,6 +3,7 @@
 
 # Database Module
 # --------------------
+from pathlib import Path
 from shutil import which
 
 from frappe.database.database import savepoint
@@ -133,7 +134,10 @@ def get_command(
 
 	elif frappe.conf.db_type == "sqlite":
 		bin, bin_name = which("sqlite3"), "sqlite3"
-		command = []
+		db_path = Path(frappe.get_site_path()) / "db" / f"{db_name}.db"
+		command = [db_path.as_posix()]
+		if dump:
+			command.append(".dump")
 
 	else:
 		if dump:

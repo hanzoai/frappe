@@ -226,6 +226,9 @@ def insert_values_for_multiple_docs(all_contents):
 				(doctype, name, content, published, title, route)
 				VALUES {}
 				ON CONFLICT("name", "doctype") DO NOTHING""".format(", ".join(batch_values)),
+				"sqlite": """INSERT OR IGNORE INTO `__global_search`
+				(doctype, name, content, published, title, route)
+				VALUES {} """.format(", ".join(batch_values)),
 			}
 		)
 
@@ -447,6 +450,10 @@ def sync_value(value: dict):
 				`published`=%(published)s,
 				`title`=%(title)s,
 				`route`=%(route)s
+		""",
+			"sqlite": """INSERT OR REPLACE INTO `__global_search`
+			(`doctype`, `name`, `content`, `published`, `title`, `route`)
+			VALUES (%(doctype)s, %(name)s, %(content)s, %(published)s, %(title)s, %(route)s)
 		""",
 		},
 		value,

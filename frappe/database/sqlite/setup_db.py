@@ -21,8 +21,6 @@ def setup_database(force, verbose):
 def bootstrap_database(verbose, source_sql=None):
 	import sys
 
-	frappe.connect()
-
 	import_db_from_sql(source_sql, verbose)
 
 	frappe.connect()
@@ -32,7 +30,7 @@ def bootstrap_database(verbose, source_sql=None):
 		secho(
 			"Table 'tabDefaultValue' missing in the restored site. "
 			"This happens when the backup fails to restore. Please check that the file is valid\n"
-			"Do go through the above output to check the exact error message from MariaDB",
+			"Do go through the above output to check the exact error message",
 			fg="red",
 		)
 		sys.exit(1)
@@ -44,9 +42,7 @@ def import_db_from_sql(source_sql=None, verbose=False):
 	db_name = frappe.conf.db_name
 	if not source_sql:
 		source_sql = os.path.join(os.path.dirname(__file__), "framework_sqlite.sql")
-	DbManager(frappe.local.db).restore_database(
-		verbose, db_name, source_sql, frappe.conf.db_user, frappe.conf.db_password
-	)
+	DbManager().restore_database(verbose, db_name, source_sql, frappe.conf.db_user, frappe.conf.db_password)
 	if verbose:
 		print("Imported from database {}".format(source_sql))
 

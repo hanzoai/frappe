@@ -431,6 +431,12 @@ class BackupGenerator:
 			elif self.backup_excludes:
 				extra.extend([f"--ignore-table={self.db_name}.{table}" for table in self.backup_excludes])
 
+		elif self.db_type == "sqlite":
+			if self.backup_includes:
+				extra.extend([f'"{table}"' for table in self.backup_includes])
+			elif self.backup_excludes:
+				click.secho("Excluding tables is not supported for SQLite", fg="yellow")
+
 		elif self.db_type == "postgres":
 			if self.backup_includes:
 				extra.extend([f'--table=public."{table}"' for table in self.backup_includes])

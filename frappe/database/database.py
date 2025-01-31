@@ -8,7 +8,7 @@ import re
 import string
 import traceback
 import warnings
-from collections.abc import Hashable, Iterable, Sequence
+from collections.abc import Iterable, Sequence
 from contextlib import contextmanager, suppress
 from time import time
 from typing import TYPE_CHECKING, Any

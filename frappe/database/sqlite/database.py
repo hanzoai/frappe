@@ -1,11 +1,12 @@
 import re
 import sqlite3
-from contextlib import contextmanager
+import warnings
+from pathlib import Path
 
 import frappe
-from frappe.database.database import Database
+from frappe.database.database import TRANSACTION_DISABLED_MSG, Database, ImplicitCommitError, is_query_type
 from frappe.database.sqlite.schema import SQLiteTable
-from frappe.utils import UnicodeWithAttrs, cstr, get_datetime, get_table_name
+from frappe.utils import get_table_name
 
 _PARAM_COMP = re.compile(r"%\([\w]*\)s")
 
@@ -89,22 +90,19 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 	MAX_ROW_SIZE_LIMIT = None
 
 	def get_connection(self):
-		conn = self._get_connection()
+		conn = self.create_connection()
 		conn.isolation_level = None
 		return conn
 
-	def _get_connection(self):
-		"""Return SQLite connection object."""
-		return self.create_connection()
-
 	def create_connection(self):
-		return sqlite3.connect(self.get_connection_settings())
+		db_path = self.get_db_path()
+		return sqlite3.connect(db_path)
+
+	def get_db_path(self):
+		return Path(frappe.get_site_path()) / "db" / f"{self.cur_db_name}.db"
 
 	def set_execution_timeout(self, seconds: int):
 		self.sql(f"PRAGMA busy_timeout = {int(seconds) * 1000}")
-
-	def get_connection_settings(self) -> str:
-		return self.cur_db_name
 
 	def setup_type_map(self):
 		self.db_type = "sqlite"
@@ -245,7 +243,7 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 		return None
 
 	def has_index(self, table_name, index_name):
-		return self.sql(f"PRAGMA index_list(`{table_name}`)")
+		return self.sql(f"SELECT * FROM pragma_index_list(`{table_name}`) WHERE name = '{index_name}'")
 
 	def get_column_index(self, table_name: str, fieldname: str, unique: bool = False) -> frappe._dict | None:
 		"""Check if column exists for a specific fields in specified order."""
@@ -254,18 +252,32 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 			index_info = self.sql(f"PRAGMA index_info(`{index['name']}`)", as_dict=True)
 			if index_info and index_info[0]["name"] == fieldname:
 				return index
-		return None
 
 	def add_index(self, doctype: str, fields: list, index_name: str | None = None):
 		"""Creates an index with given fields if not already created."""
+
+		# We can't specify the length of the index in SQLite
+		fields = [re.sub(r"\(.*?\)", "", field) for field in fields]
+
 		index_name = index_name or self.get_index_name(fields)
 		table_name = get_table_name(doctype)
-		if not self.has_index(table_name, index_name):
-			self.commit()
-			self.sql(f"CREATE INDEX `{index_name}` ON `{table_name}` ({', '.join(fields)})")
+		self.commit()
+		self.sql(f"CREATE INDEX IF NOT EXISTS `{index_name}` ON `{table_name}` ({', '.join(fields)})")
 
 	def add_unique(self, doctype, fields, constraint_name=None):
-		raise NotImplementedError("SQLite does not support adding unique constraints directly.")
+		"""Creates unique constraint on fields."""
+		if isinstance(fields, str):
+			fields = [fields]
+		if not constraint_name:
+			constraint_name = f"unique_{'_'.join(fields)}"
+		table_name = get_table_name(doctype)
+
+		columns = ", ".join(fields)
+		sql_create_unique = (
+			f"CREATE UNIQUE INDEX IF NOT EXISTS `{constraint_name}` ON `{table_name}` ({columns})"
+		)
+		self.commit()  # commit before creating index
+		self.sql(sql_create_unique)
 
 	def updatedb(self, doctype, meta=None):
 		"""Syncs a `DocType` to the table."""
@@ -307,7 +319,8 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 				query = query % {x: f"'{y}'" for x, y in values.items()}
 		except TypeError:
 			pass
-		return self._cursor.execute(query, values)
+
+		return self._cursor.execute(query, values or ())
 
 	def sql(self, *args, **kwargs):
 		if args:
@@ -317,6 +330,90 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 			args = tuple(args)
 		elif kwargs.get("query"):
 			kwargs["query"] = modify_query(kwargs.get("query"))
+
+		return super().sql(*args, **kwargs)
+
+	def begin(self, *, read_only=False):
+		read_only = read_only or frappe.flags.read_only
+		# mode = "READ ONLY" if read_only else ""
+		# TODO: support read_only
+		self.sql("BEGIN")
+
+	def commit(self):
+		"""Commit current transaction. Calls SQL `COMMIT`."""
+		if not self._conn:
+			self.connect()
+
+		if self._disable_transaction_control:
+			warnings.warn(message=TRANSACTION_DISABLED_MSG, stacklevel=2)
+			return
+
+		self.before_rollback.reset()
+		self.after_rollback.reset()
+
+		self.before_commit.run()
+
+		self._conn.commit()
+		self.transaction_writes = 0
+		self.begin()  # explicitly start a new transaction
+
+		self.after_commit.run()
+
+	def rollback(self, *, save_point=None):
+		"""`ROLLBACK` current transaction. Optionally rollback to a known save_point."""
+		if not self._conn:
+			self.connect()
+		if save_point:
+			self.sql(f"rollback to savepoint {save_point}")
+		elif not self._disable_transaction_control:
+			self.before_commit.reset()
+			self.after_commit.reset()
+
+			self.before_rollback.run()
+
+			self._conn.rollback()
+			self.begin()
+
+			self.after_rollback.run()
+		else:
+			warnings.warn(message=TRANSACTION_DISABLED_MSG, stacklevel=2)
+
+	def get_db_table_columns(self, table) -> list[str]:
+		"""Return list of column names from given table."""
+		key = f"table_columns::{table}"
+		columns = frappe.client_cache.get_value(key)
+		if columns is None:
+			columns = self.sql(f"PRAGMA table_info(`{table}`)", as_dict=True)
+			columns = [col["name"] for col in columns]
+
+			if columns:
+				frappe.cache.set_value(key, columns)
+
+		return columns
+
+	def check_implicit_commit(self, query: str):
+		if (
+			self.transaction_writes
+			and query
+			and is_query_type(
+				query,
+				("start", "alter", "drop", "create", "truncate", "vacuum", "attach", "detach"),
+			)
+		):
+			raise ImplicitCommitError("This statement can cause implicit commit", query)
+
+	def estimate_count(self, doctype: str):
+		"""Get estimated count of total rows in a table."""
+		from frappe.utils.data import cint
+
+		table = get_table_name(doctype)
+		try:
+			if count := self.sql(f"SELECT COUNT(*) FROM `{table}`"):
+				return cint(count[0][0])
+		except sqlite3.OperationalError as e:
+			if not self.is_table_missing(e):
+				raise
+		return 0
 
 
 def modify_query(query):
