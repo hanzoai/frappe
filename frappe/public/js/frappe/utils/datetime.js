@@ -18,7 +18,7 @@ $.extend(frappe.datetime, {
 		let date_obj = null;
 		if (frappe.boot.time_zone && frappe.boot.time_zone.system && frappe.boot.time_zone.user) {
 			date_obj = moment
-				.tz(date, frappe.defaultDatetimeFormat, frappe.boot.time_zone.system)
+				.tz(date, frappe.boot.time_zone.system)
 				.clone()
 				.tz(frappe.boot.time_zone.user);
 		} else {
