@@ -2107,6 +2107,7 @@ def get_print(
 	password=None,
 	pdf_options=None,
 	letterhead=None,
+	force_new_backend=False,
 ):
 	"""Get Print Format for given document.
 
@@ -2119,6 +2120,10 @@ def get_print(
 	from frappe.utils.pdf import get_pdf
 	from frappe.website.serve import get_response_without_exception_handling
 
+	new_pdf_backend = force_new_backend or frappe.get_cached_value(
+		"Print Format", print_format, "new_pdf_backend"
+	)
+	local.form_dict.new_pdf_backend = new_pdf_backend
 	original_form_dict = copy.deepcopy(local.form_dict)
 	try:
 		local.form_dict.doctype = doctype
@@ -2138,7 +2143,22 @@ def get_print(
 	finally:
 		local.form_dict = original_form_dict
 
-	return get_pdf(html, options=pdf_options, output=output) if as_pdf else html
+	if not as_pdf:
+		return html
+
+	if new_pdf_backend:
+		hook_func = frappe.get_hooks("new_pdf_backend")
+		if hook_func:
+			return frappe.call(
+				hook_func[-1],
+				print_format=print_format,
+				html=html,
+				options=pdf_options,
+				output=output,
+				new_pdf_backend=new_pdf_backend,
+			)
+
+	return get_pdf(html, options=pdf_options, output=output, new_pdf_backend=new_pdf_backend)
 
 
 def attach_print(

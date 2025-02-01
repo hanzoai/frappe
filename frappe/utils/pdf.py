@@ -33,9 +33,12 @@ PDF_CONTENT_ERRORS = [
 ]
 
 
-def pdf_header_html(soup, head, content, styles, html_id, css):
+def pdf_header_html(soup, head, content, styles, html_id, css, new_pdf_backend=False):
+	path = "templates/print_formats/pdf_header_footer.html"
+	if new_pdf_backend:
+		path = "templates/print_formats/pdf_header_footer_chrome.html"
 	return frappe.render_template(
-		"templates/print_formats/pdf_header_footer.html",
+		path,
 		{
 			"head": head,
 			"content": content,
@@ -44,6 +47,7 @@ def pdf_header_html(soup, head, content, styles, html_id, css):
 			"css": css,
 			"lang": frappe.local.lang,
 			"layout_direction": "rtl" if is_rtl() else "ltr",
+			"new_pdf_backend": new_pdf_backend,
 		},
 	)
 
@@ -75,13 +79,21 @@ def _guess_template_error_line_number(template) -> int | None:
 				return frame.lineno
 
 
-def pdf_footer_html(soup, head, content, styles, html_id, css):
-	return pdf_header_html(soup=soup, head=head, content=content, styles=styles, html_id=html_id, css=css)
+def pdf_footer_html(soup, head, content, styles, html_id, css, new_pdf_backend=False):
+	return pdf_header_html(
+		soup=soup,
+		head=head,
+		content=content,
+		styles=styles,
+		html_id=html_id,
+		css=css,
+		new_pdf_backend=new_pdf_backend,
+	)
 
 
-def get_pdf(html, options=None, output: PdfWriter | None = None):
+def get_pdf(html, options=None, output: PdfWriter | None = None, new_pdf_backend=False):
 	html = scrub_urls(html)
-	html, options = prepare_options(html, options)
+	html, options = prepare_options(html, options, new_pdf_backend)
 
 	options.update({"disable-javascript": "", "disable-local-file-access": ""})
 
@@ -139,7 +151,7 @@ def get_file_data_from_writer(writer_obj):
 	return stream.read()
 
 
-def prepare_options(html, options):
+def prepare_options(html, options, new_pdf_backend):
 	if not options:
 		options = {}
 
@@ -161,7 +173,7 @@ def prepare_options(html, options):
 	if not options.get("margin-left"):
 		options["margin-left"] = "15mm"
 
-	html, html_options = read_options_from_html(html)
+	html, html_options = read_options_from_html(html, new_pdf_backend)
 	options.update(html_options or {})
 
 	# cookies
@@ -203,11 +215,11 @@ def get_cookie_options():
 	return options
 
 
-def read_options_from_html(html):
+def read_options_from_html(html, new_pdf_backend):
 	options = {}
 	soup = BeautifulSoup(html, "html5lib")
 
-	options.update(prepare_header_footer(soup))
+	options.update(prepare_header_footer(soup, new_pdf_backend))
 
 	toggle_visible_pdf(soup)
 
@@ -294,7 +306,7 @@ def _get_base64_image(src):
 		frappe.logger("pdf").error("Failed to convert inline images to base64", exc_info=True)
 
 
-def prepare_header_footer(soup: BeautifulSoup):
+def prepare_header_footer(soup: BeautifulSoup, new_pdf_backend):
 	options = {}
 
 	head = soup.find("head").contents
@@ -316,13 +328,15 @@ def prepare_header_footer(soup: BeautifulSoup):
 			toggle_visible_pdf(content)
 			id_map = {"header-html": "pdf_header_html", "footer-html": "pdf_footer_html"}
 			hook_func = frappe.get_hooks(id_map.get(html_id))
-			html = frappe.get_attr(hook_func[-1])(
+			html = frappe.call(
+				hook_func[-1],
 				soup=soup,
 				head=head,
 				content=content,
 				styles=styles,
 				html_id=html_id,
 				css=css,
+				new_pdf_backend=new_pdf_backend,
 			)
 
 			# create temp file
