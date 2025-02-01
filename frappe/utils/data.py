@@ -898,6 +898,21 @@ def get_timespan_date_range(
 	today = getdate()
 
 	match timespan:
+		case "last 7 days":
+			return (
+				add_to_date(today, days=-7),
+				today,
+			)
+		case "last 14 days":
+			return (
+				add_to_date(today, days=-14),
+				today,
+			)
+		case "last 30 days":
+			return (
+				add_to_date(today, days=-30),
+				today,
+			)
 		case "last week":
 			return (
 				get_first_day_of_week(add_to_date(today, days=-7)),
@@ -938,6 +953,21 @@ def get_timespan_date_range(
 			return (get_quarter_start(today), get_quarter_ending(today))
 		case "this year":
 			return (get_year_start(today), get_year_ending(today))
+		case "next 7 days":
+			return (
+				today,
+				add_to_date(today, days=7),
+			)
+		case "next 14 days":
+			return (
+				today,
+				add_to_date(today, days=14),
+			)
+		case "next 30 days":
+			return (
+				today,
+				add_to_date(today, days=30),
+			)
 		case "next week":
 			return (
 				get_first_day_of_week(add_to_date(today, days=7)),
@@ -2137,7 +2167,7 @@ def _sanitize_column(column_name: str, db_type: str) -> None:
 	def _raise_exception():
 		frappe.throw(_("Invalid field name {0}").format(column_name), frappe.DataError)
 
-	regex = re.compile("^.*[,'();].*")
+	regex = re.compile("^.*[,'();\n].*")
 	if "ifnull" in column_name:
 		if regex.match(column_name):
 			# to avoid and, or
@@ -2597,6 +2627,40 @@ def map_trackers(url_trackers: dict, create: bool = False):
 		frappe_trackers["utm_content"] = url_content
 
 	return frappe_trackers
+
+
+def bold(text: str | int | float) -> str:
+	"""Return `text` wrapped in `<strong>` tags."""
+	return f"<strong>{text}</strong>"
+
+
+def safe_encode(param, encoding="utf-8"):
+	try:
+		param = param.encode(encoding)
+	except Exception:
+		pass
+	return param
+
+
+def safe_decode(param, encoding="utf-8", fallback_map: dict | None = None):
+	"""
+	Method to safely decode data into a string
+
+	:param param: The data to be decoded
+	:param encoding: The encoding to decode into
+	:param fallback_map: A fallback map to reference in case of a LookupError
+	:return:
+	"""
+	try:
+		param = param.decode(encoding)
+	except LookupError:
+		try:
+			param = param.decode((fallback_map or {}).get(encoding, "utf-8"))
+		except Exception:
+			pass
+	except Exception:
+		pass
+	return param
 
 
 # This is used in test to count memory overhead of default imports.

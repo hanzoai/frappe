@@ -41,6 +41,31 @@ export default class Grid {
 		this.is_grid = true;
 		this.debounced_refresh = this.refresh.bind(this);
 		this.debounced_refresh = frappe.utils.debounce(this.debounced_refresh, 100);
+		this.setup_tab_listeners();
+	}
+
+	setup_tab_listeners() {
+		$(".nav-link").on("shown.bs.tab", () => {
+			this.handle_scroll_bar();
+		});
+	}
+	handle_scroll_bar() {
+		frappe.utils.sleep(500).then(() => {
+			let grid_body_width = this.wrapper.find(".grid-body").width();
+
+			let grid_scroll_bar = this.wrapper.find(".grid-scroll-bar");
+
+			let grid_scroll_bar_rows = this.wrapper.find(".grid-scroll-bar-rows");
+
+			grid_scroll_bar.width(this.form_grid.width());
+			grid_scroll_bar_rows.width(grid_body_width);
+
+			grid_scroll_bar.on("scroll", (event) => {
+				// Sync the form grid's left position with the scroll bar
+				this.form_grid.css("position", "relative");
+				this.form_grid.css("left", -$(event.currentTarget).scrollLeft() + "px");
+			});
+		});
 	}
 
 	get perm() {
@@ -172,10 +197,13 @@ export default class Grid {
 			this.form_grid.on("touchend", () => {
 				isTouchScrolling = false;
 			});
+
+			this.handle_scroll_bar();
 		}
 		this.setup_add_row();
 
 		this.setup_grid_pagination();
+		this.update_idx_and_name();
 
 		this.custom_buttons = {};
 		this.grid_buttons = this.wrapper.find(".grid-buttons");
@@ -196,6 +224,17 @@ export default class Grid {
 		} else {
 			description_wrapper.hide();
 		}
+	}
+
+	update_idx_and_name() {
+		this.data.forEach((d, ri) => {
+			if (d.idx === undefined) {
+				d.idx = ri + 1;
+			}
+			if (d.name === undefined) {
+				d.name = "row " + d.idx;
+			}
+		});
 	}
 
 	set_doc_url() {
