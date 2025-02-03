@@ -11,14 +11,6 @@ frappe.ui.AppsSwitcher = class AppsSwitcher {
 		$(".app-switcher-dropdown").on("click", () => {
 			this.app_switcher_menu.toggleClass("hidden");
 		});
-
-		// hover out of the sidebar  move this to sidebar.js
-		this.sidebar_wrapper.find(".body-sidebar").on("mouseleave", () => {
-			this.app_switcher_menu.addClass("hidden");
-
-			// hide any expanded menus as they leave a blank space in the sidebar
-			this.sidebar_wrapper.find(".drop-icon[data-state='opened'").click();
-		});
 	}
 	create_app_data_map() {
 		frappe.boot.app_data_map = {};
