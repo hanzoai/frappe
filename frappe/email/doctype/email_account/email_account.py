@@ -73,19 +73,9 @@ class EmailAccount(Document):
 		else:
 			self.login_id = None
 
-<<<<<<< HEAD
-=======
 		if self.service == "Sendgrid":
 			self.login_id = "apikey"
 
-		if self.service == "Frappe Mail":
-			self.use_imap = 0
-			self.always_use_account_email_id_as_sender = 1
-
-			if self.auth_method == "Basic" or self.get_oauth_token():
-				self.validate_frappe_mail_settings()
-
->>>>>>> c63edc1022 (fix: set login_id for sengrid)
 		# validate the imap settings
 		if self.enable_incoming and self.use_imap and len(self.imap_folder) <= 0:
 			frappe.throw(_("You need to set one IMAP folder for {0}").format(frappe.bold(self.email_id)))
