@@ -16,7 +16,15 @@ $(document).ready(function () {
 						generateTrialSubscriptionBanner(response.trial_end_date)
 					);
 
+					addLoginToFCDropdownItem();
+
 					$(".login-to-fc").on("click", function () {
+						window.route = "dashboard";
+						initiateRequestForLoginToFrappeCloud();
+					});
+
+					$(".upgrade-plan-button").on("click", function () {
+						window.route = "site-dashboard";
 						initiateRequestForLoginToFrappeCloud();
 					});
 				}
@@ -31,14 +39,22 @@ function initiateRequestForLoginToFrappeCloud() {
 	});
 }
 
-function requestLoginToFC(freezing_msg = "Initating login to Frappe Cloud...") {
+function requestLoginToFC(freezing_msg = "Initiating login to Frappe Cloud...") {
 	frappe.call({
 		method: "frappe.integrations.frappe_providers.frappecloud_billing.send_verification_code",
+		args: {
+			route: window.route,
+		},
 		freeze: true,
 		freeze_message: __(freezing_msg),
 		callback: function (r) {
-			showFCLoginDialog(r.message.email);
-			setErrorMessage("");
+			if (r.message.is_user_logged_in) {
+				window.open(`${frappeCloudBaseEndpoint}${r.message.redirect_to}`, "_blank");
+				return;
+			} else {
+				showFCLoginDialog(r.message.email);
+				setErrorMessage("");
+			}
 		},
 		error: function (r) {
 			frappe.throw(__("Failed to login to Frappe Cloud. Please try again"));
@@ -90,12 +106,13 @@ function showFCLoginDialog(email) {
 			return;
 		}
 		frappe.call({
-			method: "frappe.integrations.frappe_providers.frappecloud_billing.verify_and_login",
+			method: "frappe.integrations.frappe_providers.frappecloud_billing.verify_verification_code",
 			args: {
 				verification_code: otp,
+				route: window.route,
 			},
 			freeze: true,
-			freeze_message: __("Validating verification code..."),
+			freeze_message: __("Verifying verification code..."),
 			callback: function (r) {
 				const message = r.message;
 				if (message.login_token) {
@@ -131,7 +148,7 @@ function showFCLoginDialog(email) {
 }
 
 function addLoginToFCDropdownItem() {
-	$(".dropdown-navbar-user .dropdown-menu .dropdown-item:nth-child(2)").after(
+	$(".dropdown-navbar-user .dropdown-menu .dropdown-item:last()").before(
 		`<div class="dropdown-item login-to-fc" target="_blank">Login to Frappe Cloud</div>`
 	);
 }
@@ -185,7 +202,7 @@ function generateTrialSubscriptionBanner(trialEndDate) {
 					border-color: var(--gray-400);
 				}
 			</style>
-			<div class="trial-banner px-3 py-2 my-2">
+			<div class="trial-banner px-3 py-2 m-2">
 				<div>
 					<svg class="info-icon" width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<g clip-path="url(#clip0_3360_13841)">
@@ -207,7 +224,7 @@ function generateTrialSubscriptionBanner(trialEndDate) {
 					</div>
 				</div>
 				<button type="button"
-					class="upgrade-plan-button login-to-fc px-2 py-1"
+					class="upgrade-plan-button px-2 py-1"
 				>
 					<svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path fill-rule="evenodd" clip-rule="evenodd" d="M6.2641 1C5.5758 1 4.97583 1.46845 4.80889 2.1362L3.57555 7.06953C3.33887 8.01625 4.05491 8.93333 5.03077 8.93333H7.50682L6.72168 14.4293C6.68838 14.6624 6.82229 14.8872 7.04319 14.9689C7.26408 15.0507 7.51204 14.9671 7.63849 14.7684L13.2161 6.00354C13.6398 5.33782 13.1616 4.46667 12.3725 4.46667H9.59038L10.3017 1.62127C10.3391 1.4719 10.3055 1.31365 10.2108 1.19229C10.116 1.07094 9.97063 1 9.81666 1H6.2641ZM5.77903 2.37873C5.83468 2.15615 6.03467 2 6.2641 2H9.17627L8.46492 4.8454C8.42758 4.99477 8.46114 5.15302 8.55589 5.27437C8.65064 5.39573 8.79602 5.46667 8.94999 5.46667H12.3725L8.0395 12.2757L8.5783 8.50404C8.5988 8.36056 8.55602 8.21523 8.46105 8.10573C8.36608 7.99623 8.22827 7.93333 8.08332 7.93333H5.03077C4.70548 7.93333 4.4668 7.62764 4.5457 7.31207L5.77903 2.37873Z" fill="currentColor"/>
