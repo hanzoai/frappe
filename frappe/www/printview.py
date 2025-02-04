@@ -176,7 +176,9 @@ def get_rendered_template(
 
 		template = None
 		if hook_func := frappe.get_hooks("get_print_format_template"):
-			template = frappe.get_attr(hook_func[-1])(jenv=jenv, print_format=print_format)
+			template = frappe.get_attr(hook_func[-1])(
+				jenv=jenv, print_format=print_format, new_pdf_backend=new_pdf_backend
+			)
 
 		if template:
 			pass
