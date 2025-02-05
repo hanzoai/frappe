@@ -327,6 +327,7 @@ def start_worker(
 		date_format="%Y-%m-%d %H:%M:%S",
 		log_format="%(asctime)s,%(msecs)03d %(message)s",
 		dequeue_strategy=strategy,
+		with_scheduler=False,
 	)
 
 
@@ -611,7 +612,7 @@ def create_job_id(job_id: str | None = None) -> str:
 
 	if not job_id:
 		job_id = str(uuid4())
-	return f"{frappe.local.site}::{job_id}"
+	return f"{frappe.local.site}||{job_id}"
 
 
 def is_job_enqueued(job_id: str) -> bool:
