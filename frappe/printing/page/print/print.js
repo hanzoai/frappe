@@ -744,6 +744,7 @@ frappe.ui.form.PrintView = class {
 		}
 	}
 
+<<<<<<< HEAD
 	refresh_print_options() {
 		this.print_formats = frappe.meta.get_print_formats(this.frm.doctype);
 		const print_format_select_val = this.print_sel.val();
@@ -757,6 +758,18 @@ frappe.ui.form.PrintView = class {
 			this.print_formats.includes(print_format_select_val) &&
 			this.print_sel.val(print_format_select_val)
 		);
+=======
+	set_default_print_format() {
+		if (
+			frappe.meta
+				.get_print_formats(this.frm.doctype)
+				.includes(this.print_format_selector.val())
+		)
+			return;
+
+		this.print_format_selector.empty();
+		this.print_format_selector.val(this.frm.meta.default_print_format || "");
+>>>>>>> d4ff214a6f (fix: clear print format selector if default print format is absent (#31123))
 	}
 
 	selected_format() {
