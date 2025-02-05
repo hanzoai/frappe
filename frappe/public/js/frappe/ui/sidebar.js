@@ -129,6 +129,9 @@ frappe.ui.Sidebar = class Sidebar {
 		if (localStorage.getItem("sidebar-expanded") !== null) {
 			this.sidebar_expanded = JSON.parse(localStorage.getItem("sidebar-expanded"));
 			this.expand_sidebar();
+		} else {
+			this.sidebar_expanded = true;
+			this.expand_sidebar();
 		}
 	}
 
