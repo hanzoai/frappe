@@ -464,7 +464,7 @@ class Database:
 	@staticmethod
 	def clear_db_table_cache(query):
 		if query and is_query_type(query, ("drop", "create")):
-			frappe.cache.delete_key("db_tables")
+			frappe.client_cache.delete_value("db_tables")
 
 	def get_description(self):
 		"""Return result metadata."""
@@ -1249,6 +1249,10 @@ class Database:
 		if not filters and cache:
 			frappe.cache.set_value(f"doctype:count:{dt}", count, expires_in_sec=86400)
 		return count
+
+	def estimate_count(self, doctype: str) -> int:
+		"""Get estimated count of total rows in a table."""
+		raise NotImplementedError
 
 	@staticmethod
 	def format_date(date):
