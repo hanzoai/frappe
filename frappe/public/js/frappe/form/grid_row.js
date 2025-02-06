@@ -934,19 +934,14 @@ export default class GridRow {
 
 		let add_style = "";
 		if (df.sticky) {
-			// add_style = 'position: sticky; z-index: 1;';
 			add_class += " sticky-grid-col";
-			add_style += `left: ${this.grid.sticky_rows[df.fieldname] || 71}px;`;
-			const html_tag_pattern = /<\/?[a-z][\s\S]*>/i;
-
-			if (!html_tag_pattern.test(txt)) {
-				if (!(df.fieldname in this.grid.sticky_rows)) {
-					this.grid.sticky_rows[df.fieldname] = this.grid.sticky_row_sum;
-					this.grid.sticky_row_sum = Object.keys(this.grid.sticky_rows).length
-						? this.grid.sticky_row_sum + col_sizes[colsize]
-						: this.grid.sticky_row_sum;
-				}
+			if (!(df.fieldname in this.grid.sticky_rows)) {
+				this.grid.sticky_rows[df.fieldname] = this.grid.sticky_row_sum;
+				this.grid.sticky_row_sum = Object.keys(this.grid.sticky_rows).length
+					? this.grid.sticky_row_sum + col_sizes[colsize]
+					: this.grid.sticky_row_sum;
 			}
+			add_style += `left: ${this.grid.sticky_rows[df.fieldname] || 71}px;`;
 		}
 
 		let grid;

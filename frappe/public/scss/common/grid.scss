@@ -757,6 +757,54 @@
 			display: block;
 		}
 	}
+	.column-limit-reached {
+		.form-grid {
+			.grid-static-col.col-xs-2 {
+				flex: 1 0 90px;
+				width: 90px;
+			}
+			.grid-static-col.col-xs-3 {
+				flex: 1 0 120px;
+				width: 120px;
+			}
+			.grid-static-col.col-xs-4 {
+				flex: 1 0 160px;
+				width: 160px;
+			}
+			.grid-static-col.col-xs-5 {
+				flex: 1 0 200px;
+				width: 200px;
+			}
+			.grid-static-col.col-xs-6 {
+				flex: 1 0 240px;
+				width: 240px;
+			}
+			.grid-static-col.col-xs-7 {
+				flex: 1 0 300px;
+				width: 300px;
+			}
+			.grid-static-col.col-xs-8 {
+				flex: 1 0 350px;
+				width: 350px;
+			}
+			.grid-static-col.col-xs-9 {
+				flex: 1 0 400px;
+				width: 400px;
+			}
+			.grid-static-col.col-xs-10 {
+				flex: 1 0 450px;
+				width: 450px;
+			}
+			.grid-static-col.col-xs-11 {
+				flex: 1 0 500px;
+				width: 500px;
+			}
+			.grid-static-col.col-xs-12 {
+				flex: 1 0 550px;
+				width: 550px;
+			}
+		}
+	}
 }
 
 @media (max-width: map-get($grid-breakpoints, "sm")) {
