@@ -408,14 +408,12 @@ export default class GridRow {
 			this.columns = {};
 			this.update_user_settings_for_grid();
 			this.grid_settings_dialog.hide();
-			this.grid.handle_scroll_bar();
 		});
 
 		this.grid_settings_dialog.set_secondary_action_label(__("Reset to default"));
 		this.grid_settings_dialog.set_secondary_action(() => {
 			this.reset_user_settings_for_grid();
 			this.grid_settings_dialog.hide();
-			this.grid.handle_scroll_bar();
 		});
 	}
 
