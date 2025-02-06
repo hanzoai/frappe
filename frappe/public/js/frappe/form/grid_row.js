@@ -718,7 +718,6 @@ export default class GridRow {
 			let df = fields.find((field) => field?.fieldname === col[0].fieldname);
 
 			this.set_dependant_property(df);
-			// console.log(col);
 
 			let colsize = col[1];
 
