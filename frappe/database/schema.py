@@ -410,11 +410,20 @@ def get_definition(fieldtype, precision=None, length=None, *, options=None):
 
 def add_column(doctype, column_name, fieldtype, precision=None, length=None, default=None, not_null=False):
 	frappe.db.commit()
-	query = "alter table `tab{}` add column if not exists {} {}".format(
-		doctype,
-		column_name,
-		get_definition(fieldtype, precision, length),
-	)
+	if frappe.db.db_type == "sqlite":
+		if column_name in frappe.db.get_table_columns(doctype):
+			return
+		query = "alter table `tab{}` add column {} {}".format(
+			doctype,
+			column_name,
+			get_definition(fieldtype, precision, length),
+		)
+	else:
+		query = "alter table `tab{}` add column if not exists {} {}".format(
+			doctype,
+			column_name,
+			get_definition(fieldtype, precision, length),
+		)
 
 	if not_null:
 		query += " not null"
