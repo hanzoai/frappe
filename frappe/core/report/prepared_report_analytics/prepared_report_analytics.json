@@ -9,7 +9,7 @@
  "idx": 0,
  "is_standard": "Yes",
  "letterhead": null,
- "modified": "2024-12-18 11:58:00.693755",
+ "modified": "2025-02-07 17:27:53.441631",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Prepared Report Analytics",
@@ -21,9 +21,6 @@
  "roles": [
   {
    "role": "System Manager"
-  },
-  {
-   "role": "Prepared Report User"
   }
  ],
  "timeout": 0
