@@ -85,7 +85,7 @@ def get_data(filters) -> list[list]:
 	if filters.in_minutes:
 		divisor = 60
 
-	res: list = (
+	query = (
 		qb.from_(pr)
 		.select(
 			pr.name,
@@ -97,10 +97,10 @@ def get_data(filters) -> list[list]:
 		.select(((pr.report_end_time - pr.creation) / divisor).as_("runtime"))
 		.where(Criterion.all(conditions))
 		.orderby(qb.Field("runtime"), order=Order.desc)
-		.run(as_dict=True)
 	)
-
-	res.sort(key=lambda x: x.runtime, reverse=True)
 	if filters.top_10:
-		res = res[:10]
+		query = query.limit(10)
+
+	res = query.run(as_dict=True)
+
 	return res
