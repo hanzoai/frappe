@@ -56,13 +56,13 @@ def get_columns(filters) -> list[dict]:
 		{
 			"label": _("Runtime in Minutes") if filters.in_minutes else _("Runtime in Seconds"),
 			"fieldname": "runtime",
-			"fieldtype": "Int",
+			"fieldtype": "float",
 			"width": 250,
 		},
 		{
-			"label": _("Peak Memory Usage"),
+			"label": _("Memory Usage in MB"),
 			"fieldname": "peak_memory_usage",
-			"fieldtype": "Int",
+			"fieldtype": "float",
 			"width": 250,
 		},
 	]
@@ -81,20 +81,24 @@ def get_data(filters) -> list[list]:
 	if filters.report:
 		conditions.append(pr.report_name.like(f"%{filters.report}%"))
 
-	res: list = (
-		qb.from_(pr)
-		.select(pr.name, pr.report_name, pr.creation, pr.report_end_time, pr.peak_memory_usage)
-		.where(Criterion.all(conditions))
-		.orderby(pr.creation, order=Order.desc)
-		.run(as_dict=True)
-	)
-
 	divisor = 1
 	if filters.in_minutes:
 		divisor = 60
 
-	for x in res:
-		x.runtime = ((x.report_end_time - x.creation).total_seconds()) / divisor
+	res: list = (
+		qb.from_(pr)
+		.select(
+			pr.name,
+			pr.report_name,
+			pr.creation,
+			pr.report_end_time,
+			(pr.peak_memory_usage / 1024).as_("peak_memory_usage"),
+		)
+		.select(((pr.report_end_time - pr.creation) / divisor).as_("runtime"))
+		.where(Criterion.all(conditions))
+		.orderby(qb.Field("runtime"), order=Order.desc)
+		.run(as_dict=True)
+	)
 
 	res.sort(key=lambda x: x.runtime, reverse=True)
 	if filters.top_10:
