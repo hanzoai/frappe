@@ -59,6 +59,12 @@ def get_columns(filters) -> list[dict]:
 			"fieldtype": "Int",
 			"width": 250,
 		},
+		{
+			"label": _("Peak Memory Usage"),
+			"fieldname": "peak_memory_usage",
+			"fieldtype": "Int",
+			"width": 250,
+		},
 	]
 
 
@@ -77,7 +83,7 @@ def get_data(filters) -> list[list]:
 
 	res: list = (
 		qb.from_(pr)
-		.select(pr.name, pr.report_name, pr.creation, pr.report_end_time)
+		.select(pr.name, pr.report_name, pr.creation, pr.report_end_time, pr.peak_memory_usage)
 		.where(Criterion.all(conditions))
 		.orderby(pr.creation, order=Order.desc)
 		.run(as_dict=True)
