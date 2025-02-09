@@ -79,16 +79,61 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	set_active_workspace_item() {
-		if (this.is_route_in_sidebar(decodeURIComponent(window.location.pathname))) {
-			this.active_item.addClass("active-sidebar");
+		if (!frappe.get_route()) return;
+		let current_route = frappe.get_route();
+		let doctype = frappe.get_route()[1];
+		if (current_route[0] == "Workspaces") {
+			if (this.is_route_in_sidebar(doctype)) {
+				this.active_item.addClass("active-sidebar");
+			}
+		} else {
+			let active_workspace = frappe.get_meta(doctype).module;
+			if (frappe.get_meta(doctype).__workspaces) {
+				active_workspace = frappe.get_meta(doctype).__workspaces[0];
+			}
+			if (this.is_route_in_sidebar(active_workspace)) {
+				this.active_item.addClass("active-sidebar");
+			}
+		}
+		if (this.is_nested_item(this.active_item.parent())) {
+			let current_item = this.active_item.parent();
+			this.expand_parent_item(current_item);
+		}
+	}
+	expand_parent_item(item) {
+		let parent_title = item.attr("item-parent");
+		if (!parent_title) return;
+
+		let parent = this.get_sidebar_item(parent_title);
+		$($(parent).children()[1]).removeClass("hidden");
+		if (parent) {
+			if (this.is_nested_item($(parent))) {
+				this.expand_parent_item($(parent));
+			}
+		}
+	}
+	is_nested_item(item) {
+		if (item.attr("item-parent")) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
-	is_route_in_sidebar(route_name) {
+	get_sidebar_item(name) {
+		let sidebar_item = "";
+		$(".sidebar-item-container").each(function () {
+			if ($(this).attr("item-name") == name) {
+				sidebar_item = this;
+			}
+		});
+		return sidebar_item;
+	}
+	is_route_in_sidebar(active_module) {
 		let match = false;
 		const that = this;
 		$(".item-anchor").each(function () {
-			if ($(this).attr("href") == route_name) {
+			if ($(this).attr("title") == active_module) {
 				match = true;
 				if (that.active_item) that.active_item.removeClass("active-sidebar");
 				that.active_item = $(this).parent();
