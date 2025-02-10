@@ -138,13 +138,14 @@ frappe.ui.form.on("Auto Email Report", {
 				if (val.fieldtype != "Break") {
 					if (val.fieldtype === "MultiSelectList") {
 						val.get_data = (txt) => {
-							if (!dialog || !val.options) return;
+							if (!dialog || !val.options) return [];
 
-							let doctype_link = Array.isArray(val.options)
-								? val.options
-								: frappe.scrub(val.options) === val.options
-								? dialog.get_value(val.options)
-								: val.options;
+							if (Array.isArray(val.options)) return val.options;
+
+							const doctype_link =
+								frappe.scrub(val.options) === val.options
+									? dialog.get_value(val.options)
+									: val.options;
 
 							return doctype_link
 								? frappe.db.get_link_options(doctype_link, txt)
