@@ -656,8 +656,10 @@ $.extend(frappe.model, {
 	},
 
 	get_doc_title(doc) {
-		if (doc.name.startsWith("new-" + doc.doctype.toLowerCase().replace(/ /g, "-"))) {
-			return __("New {0}", [__(doc.doctype)]);
+		if (typeof doc.name == "string") {
+			if (doc.name.startsWith("new-" + doc.doctype.toLowerCase().replace(/ /g, "-"))) {
+				return __("New {0}", [__(doc.doctype)]);
+			}
 		}
 		let meta = frappe.get_meta(doc.doctype);
 		if (meta.title_field) {
