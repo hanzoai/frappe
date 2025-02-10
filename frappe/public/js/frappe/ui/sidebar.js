@@ -1,6 +1,7 @@
 frappe.ui.Sidebar = class Sidebar {
 	constructor() {
 		this.items = {};
+		this.child_items = [];
 		this.sidebar_expanded = false;
 
 		if (!frappe.boot.setup_complete) {
@@ -82,22 +83,22 @@ frappe.ui.Sidebar = class Sidebar {
 		if (!frappe.get_route()) return;
 		let current_route = frappe.get_route();
 		let doctype = frappe.get_route()[1];
-		if (current_route[0] == "Workspaces") {
-			if (this.is_route_in_sidebar(doctype)) {
-				this.active_item.addClass("active-sidebar");
-			}
-		} else {
+		let current_item = doctype;
+		if (current_route[0] != "Workspaces") {
 			let active_workspace = frappe.get_meta(doctype).module;
 			if (frappe.get_meta(doctype).__workspaces) {
 				active_workspace = frappe.get_meta(doctype).__workspaces[0];
 			}
-			if (this.is_route_in_sidebar(active_workspace)) {
-				this.active_item.addClass("active-sidebar");
-			}
+			current_item = active_workspace;
 		}
-		if (this.is_nested_item(this.active_item.parent())) {
-			let current_item = this.active_item.parent();
-			this.expand_parent_item(current_item);
+		if (this.is_route_in_sidebar(current_item)) {
+			this.active_item.addClass("active-sidebar");
+		}
+		if (this.active_item) {
+			if (this.is_nested_item(this.active_item.parent())) {
+				let current_item = this.active_item.parent();
+				this.expand_parent_item(current_item);
+			}
 		}
 	}
 	expand_parent_item(item) {
@@ -290,6 +291,7 @@ frappe.ui.Sidebar = class Sidebar {
 			let child_container = $item_container.find(".sidebar-child-item");
 			child_container.addClass("hidden");
 			this.prepare_sidebar(child_items, child_container, $item_container);
+			this.child_items.push(child_container);
 		}
 
 		$item_container.appendTo(container);
@@ -442,10 +444,18 @@ frappe.ui.Sidebar = class Sidebar {
 	close_sidebar() {
 		this.sidebar_expanded = false;
 		this.expand_sidebar();
+		this.close_children_item();
 	}
 	open_sidebar() {
 		this.sidebar_expanded = true;
 		this.expand_sidebar();
+		this.set_active_workspace_item();
+	}
+
+	close_children_item() {
+		this.child_items.forEach((i) => {
+			i.addClass("hidden");
+		});
 	}
 
 	reload() {
