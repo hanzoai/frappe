@@ -210,11 +210,7 @@
   }
  ],
  "links": [],
-<<<<<<< HEAD
- "modified": "2023-11-09 13:44:00.280846",
-=======
  "modified": "2025-01-28 18:22:27.268239",
->>>>>>> 561e3727aa (fix: add multicurrency support in number card and dashboard chart (#31079))
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Number Card",
