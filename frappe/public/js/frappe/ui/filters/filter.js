@@ -571,7 +571,21 @@ frappe.ui.filter_utils = {
 
 	get_timespan_options(periods) {
 		const period_map = {
+<<<<<<< HEAD
 			Last: ["Week", "Month", "Quarter", "6 months", "Year"],
+=======
+			Last: [
+				"7 Days",
+				"14 Days",
+				"30 Days",
+				"90 Days",
+				"Week",
+				"Month",
+				"Quarter",
+				"6 months",
+				"Year",
+			],
+>>>>>>> ef3b0ef008 (perf: Only filter last 3 months of data by default on large tables (#31216))
 			This: ["Week", "Month", "Quarter", "Year"],
 			Next: ["Week", "Month", "Quarter", "6 months", "Year"],
 		};
