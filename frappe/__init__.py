@@ -2082,7 +2082,7 @@ def get_print(
 	password=None,
 	pdf_options=None,
 	letterhead=None,
-	force_new_backend=False,
+	chrome_pdf_generator=None,
 ):
 	"""Get Print Format for given document.
 
@@ -2095,10 +2095,10 @@ def get_print(
 	from frappe.utils.pdf import get_pdf
 	from frappe.website.serve import get_response_without_exception_handling
 
-	new_pdf_backend = force_new_backend or frappe.get_cached_value(
-		"Print Format", print_format, "new_pdf_backend"
-	)
-	local.form_dict.new_pdf_backend = new_pdf_backend
+	# if arg is passed, use that, else get setting from print format
+	if chrome_pdf_generator is None:
+		chrome_pdf_generator = frappe.get_cached_value("Print Format", print_format, "chrome_pdf_generator")
+	local.form_dict.chrome_pdf_generator = chrome_pdf_generator = bool(cint(chrome_pdf_generator))
 	original_form_dict = copy.deepcopy(local.form_dict)
 	try:
 		local.form_dict.doctype = doctype
@@ -2121,8 +2121,8 @@ def get_print(
 	if not as_pdf:
 		return html
 
-	if new_pdf_backend:
-		hook_func = frappe.get_hooks("new_pdf_backend")
+	if chrome_pdf_generator:
+		hook_func = frappe.get_hooks("chrome_pdf_generator")
 		if hook_func:
 			return frappe.call(
 				hook_func[-1],
@@ -2130,10 +2130,9 @@ def get_print(
 				html=html,
 				options=pdf_options,
 				output=output,
-				new_pdf_backend=new_pdf_backend,
 			)
 
-	return get_pdf(html, options=pdf_options, output=output, new_pdf_backend=new_pdf_backend)
+	return get_pdf(html, options=pdf_options, output=output)
 
 
 def attach_print(
