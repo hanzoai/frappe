@@ -13,6 +13,7 @@
   "standard",
   "custom_format",
   "disabled",
+  "chrome_pdf_generator",
   "section_break_6",
   "print_format_type",
   "raw_printing",
@@ -255,12 +256,19 @@
    "fieldtype": "Select",
    "label": "Page Number",
    "options": "Hide\nTop Left\nTop Center\nTop Right\nBottom Left\nBottom Center\nBottom Right"
+  },
+  {
+   "default": "0",
+   "description": "<a href=\"https://github.com/frappe/print_designer/\">Print Designer</a> should be installed to use Chrome.",
+   "fieldname": "chrome_pdf_generator",
+   "fieldtype": "Check",
+   "label": "Use Chrome PDF Generator"
   }
  ],
  "icon": "fa fa-print",
  "idx": 1,
  "links": [],
- "modified": "2024-03-23 16:03:34.964767",
+ "modified": "2025-02-13 18:39:24.319650",
  "modified_by": "Administrator",
  "module": "Printing",
  "name": "Print Format",
