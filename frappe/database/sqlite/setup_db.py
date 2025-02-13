@@ -54,7 +54,14 @@ def copy_db(db_file=None, verbose=False):
 		destination_db_folder.mkdir()
 	destination_db_path = destination_db_folder / f"{db_name}.db"
 
-	shutil.copy(db_path, destination_db_path)
+	if db_path.suffix == ".gz":
+		import gzip
+
+		with gzip.open(db_file, "rb") as input, open(destination_db_path, "wb") as output:
+			shutil.copyfileobj(input, output)
+
+	else:
+		shutil.copy(db_path, destination_db_path)
 	if verbose:
 		print("Imported from database {}".format(db_path))
 
