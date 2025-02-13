@@ -379,6 +379,11 @@ def partial_restore(context: CliCtxObj, sql_file_path, verbose, encryption_key=N
 	verbose = context.verbose or verbose
 	frappe.init(site)
 	frappe.connect()
+
+	if frappe.conf.db_type == "sqlite":
+		click.secho("Partial restore is not supported for SQLite databases", fg="red")
+		sys.exit(1)
+
 	err, out = frappe.utils.execute_in_shell(f"file {sql_file_path}", check_exit_code=True)
 	if err:
 		click.secho("Failed to detect type of backup file", fg="red")
