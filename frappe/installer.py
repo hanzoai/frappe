@@ -838,6 +838,9 @@ def is_partial(sql_file_path: str) -> bool:
 	:param sql_file_path: path to the database dump file
 	:return: True if the database dump is a partial backup, False otherwise
 	"""
+	if frappe.conf.db_type == "sqlite":
+		return False
+
 	header = get_db_dump_header(sql_file_path)
 	return "Partial Backup" in header
 
