@@ -1700,7 +1700,7 @@ def get_link_to_report(
 						str(k) + "=" + '["' + str(value[0] + '"' + "," + '"' + str(value[1]) + '"]')
 					)
 			else:
-				conditions.append(str(k) + "=" + str(v))
+				conditions.append(str(k) + "=" + quote(str(v)))
 
 		filters = "&".join(conditions)
 
