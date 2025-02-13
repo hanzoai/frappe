@@ -22,6 +22,7 @@ class PrintFormat(Document):
 
 		absolute_value: DF.Check
 		align_labels_right: DF.Check
+		chrome_pdf_generator: DF.Check
 		css: DF.Code | None
 		custom_format: DF.Check
 		default_print_language: DF.Link | None
