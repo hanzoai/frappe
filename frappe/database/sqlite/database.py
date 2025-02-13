@@ -423,7 +423,7 @@ def modify_query(query):
 	# Replace ` with " for definitions
 	query = str(query)
 	query = query.replace("`", '"')
-	query = replace_locate_with_strpos(query)
+	query = replace_locate_with_instr(query)
 
 	# Select from requires ""
 	if re.search("from tab", query, flags=re.IGNORECASE):
@@ -432,8 +432,8 @@ def modify_query(query):
 	return query
 
 
-def replace_locate_with_strpos(query: str) -> str:
-	# strpos is the locate equivalent in SQLite
+def replace_locate_with_instr(query: str) -> str:
+	# instr is the locate equivalent in SQLite
 	if re.search(r"locate\(", query, flags=re.IGNORECASE):
-		query = re.sub(r"locate\(([^,]+),([^)]+)\)", r"strpos(\2, \1)", query, flags=re.IGNORECASE)
+		query = re.sub(r"locate\(([^,]+),([^)]+)\)", r"instr(\2, \1)", query, flags=re.IGNORECASE)
 	return query
