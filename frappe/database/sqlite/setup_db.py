@@ -1,4 +1,6 @@
 import os
+import shutil
+import sys
 from pathlib import Path
 
 import click
@@ -18,10 +20,10 @@ def setup_database(force, verbose):
 	root_conn.close()
 
 
-def bootstrap_database(verbose, source_sql=None):
+def bootstrap_database(verbose, source_db=None):
 	import sys
 
-	import_db_from_sql(source_sql, verbose)
+	copy_db(source_db, verbose)
 
 	frappe.connect()
 	if "tabDefaultValue" not in frappe.db.get_tables(cached=False):
@@ -36,15 +38,25 @@ def bootstrap_database(verbose, source_sql=None):
 		sys.exit(1)
 
 
-def import_db_from_sql(source_sql=None, verbose=False):
+def copy_db(db_file=None, verbose=False):
 	if verbose:
 		print("Starting database import...")
 	db_name = frappe.conf.db_name
-	if not source_sql:
-		source_sql = os.path.join(os.path.dirname(__file__), "framework_sqlite.sql")
-	DbManager().restore_database(verbose, db_name, source_sql, frappe.conf.db_user, frappe.conf.db_password)
+	if not db_file:
+		db_file = os.path.join(os.path.dirname(__file__), "framework_sqlite.db")
+	db_path = Path(db_file)
+	if not db_path.exists():
+		click.secho(f"Database {db_path.as_posix()} does not exist", fg="red")
+		sys.exit(1)
+
+	destination_db_folder = Path(frappe.get_site_path()) / "db"
+	if not destination_db_folder.exists():
+		destination_db_folder.mkdir()
+	destination_db_path = destination_db_folder / f"{db_name}.db"
+
+	shutil.copy(db_path, destination_db_path)
 	if verbose:
-		print("Imported from database {}".format(source_sql))
+		print("Imported from database {}".format(db_path))
 
 
 def drop_database(db_name: str):

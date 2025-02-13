@@ -78,11 +78,12 @@ class DbManager:
 		else:
 			command.extend(["cat", source, "|"])
 
-		# Newer versions of MariaDB add in a line that'll break on older versions, so remove it
-		command.extend(["sed", r"'/\/\*M\{0,1\}!999999\\- enable the sandbox mode \*\//d'", "|"])
+		if frappe.conf.db_type == "mariadb":
+			# Newer versions of MariaDB add in a line that'll break on older versions, so remove it
+			command.extend(["sed", r"'/\/\*M\{0,1\}!999999\\- enable the sandbox mode \*\//d'", "|"])
 
-		# Remove view security definers
-		command.extend(["sed", r"'/\/\*![0-9]* DEFINER=[^ ]* SQL SECURITY DEFINER \*\//d'", "|"])
+			# Remove view security definers
+			command.extend(["sed", r"'/\/\*![0-9]* DEFINER=[^ ]* SQL SECURITY DEFINER \*\//d'", "|"])
 
 		# Generate the restore command
 		bin, args, bin_name = get_command(
