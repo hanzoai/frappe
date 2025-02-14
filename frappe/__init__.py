@@ -2082,7 +2082,7 @@ def get_print(
 	password=None,
 	pdf_options=None,
 	letterhead=None,
-	chrome_pdf_generator=None,
+	pdf_generator: Literal["wkhtmltopdf", "chrome"] | None = None,
 ):
 	"""Get Print Format for given document.
 
@@ -2091,21 +2091,23 @@ def get_print(
 	:param print_format: Print Format name. Default 'Standard',
 	:param style: Print Format style.
 	:param as_pdf: Return as PDF. Default False.
-	:param password: Password to encrypt the pdf with. Default None"""
+	:param password: Password to encrypt the pdf with. Default None
+	:param pdf_generator: PDF generator to use. Default 'wkhtmltopdf'
+	"""
 	from frappe.utils.pdf import get_pdf
 	from frappe.website.serve import get_response_without_exception_handling
 
 	"""
-	local.form_dict.chrome_pdf_generator is set from before_request hook (print designer app) for download_pdf endpoint
+	local.form_dict.pdf_generator is set from before_request hook (print designer app) for download_pdf endpoint
 	if it is not set (internal function call) then set it
 	"""
-	if "chrome_pdf_generator" not in local.form_dict:
+	if "pdf_generator" not in local.form_dict:
 		# if arg is passed, use that, else get setting from print format
-		if chrome_pdf_generator is None:
-			chrome_pdf_generator = frappe.get_cached_value(
-				"Print Format", print_format, "chrome_pdf_generator"
+		if pdf_generator is None:
+			pdf_generator = (
+				frappe.get_cached_value("Print Format", print_format, "pdf_generator") or "wkhtmltopdf"
 			)
-		local.form_dict.chrome_pdf_generator = bool(cint(chrome_pdf_generator))
+		local.form_dict.pdf_generator = pdf_generator
 
 	original_form_dict = copy.deepcopy(local.form_dict)
 	try:
@@ -2129,16 +2131,24 @@ def get_print(
 	if not as_pdf:
 		return html
 
-	if local.form_dict.chrome_pdf_generator:
-		hook_func = frappe.get_hooks("chrome_pdf_generator")
-		if hook_func:
-			return frappe.call(
-				hook_func[-1],
+	if local.form_dict.pdf_generator != "wkhtmltopdf":
+		hook_func = frappe.get_hooks("pdf_generator")
+		for hook in hook_func:
+			"""
+			check pdf_generator value in your hook function.
+			if it matches run and return pdf else return None
+			"""
+			pdf = frappe.call(
+				hook,
 				print_format=print_format,
 				html=html,
 				options=pdf_options,
 				output=output,
+				pdf_generator=local.form_dict.pdf_generator,
 			)
+			# if hook returns a value, assume it was the correct pdf_generator and return it
+			if pdf:
+				return pdf
 
 	return get_pdf(html, options=pdf_options, output=output)
 

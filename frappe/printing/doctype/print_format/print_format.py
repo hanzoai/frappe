@@ -22,7 +22,6 @@ class PrintFormat(Document):
 
 		absolute_value: DF.Check
 		align_labels_right: DF.Check
-		chrome_pdf_generator: DF.Check
 		css: DF.Code | None
 		custom_format: DF.Check
 		default_print_language: DF.Link | None
@@ -41,6 +40,7 @@ class PrintFormat(Document):
 		page_number: DF.Literal[
 			"Hide", "Top Left", "Top Center", "Top Right", "Bottom Left", "Bottom Center", "Bottom Right"
 		]
+		pdf_generator: DF.Literal["wkhtmltopdf"]
 		print_format_builder: DF.Check
 		print_format_builder_beta: DF.Check
 		print_format_type: DF.Literal["Jinja", "JS"]

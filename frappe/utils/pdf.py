@@ -33,10 +33,9 @@ PDF_CONTENT_ERRORS = [
 ]
 
 
-def pdf_header_html(soup, head, content, styles, html_id, css):
-	path = "templates/print_formats/pdf_header_footer.html"
-	if frappe.local.form_dict.get("chrome_pdf_generator", False):
-		path = "templates/print_formats/pdf_header_footer_chrome.html"
+def pdf_header_html(soup, head, content, styles, html_id, css, path=None):
+	if not path:
+		path = "templates/print_formats/pdf_header_footer.html"
 	return frappe.render_template(
 		path,
 		{
@@ -78,14 +77,9 @@ def _guess_template_error_line_number(template) -> int | None:
 				return frame.lineno
 
 
-def pdf_footer_html(soup, head, content, styles, html_id, css):
+def pdf_footer_html(soup, head, content, styles, html_id, css, path=None):
 	return pdf_header_html(
-		soup=soup,
-		head=head,
-		content=content,
-		styles=styles,
-		html_id=html_id,
-		css=css,
+		soup=soup, head=head, content=content, styles=styles, html_id=html_id, css=css, path=path
 	)
 
 
