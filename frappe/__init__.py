@@ -2095,10 +2095,18 @@ def get_print(
 	from frappe.utils.pdf import get_pdf
 	from frappe.website.serve import get_response_without_exception_handling
 
-	# if arg is passed, use that, else get setting from print format
-	if chrome_pdf_generator is None:
-		chrome_pdf_generator = frappe.get_cached_value("Print Format", print_format, "chrome_pdf_generator")
-	local.form_dict.chrome_pdf_generator = chrome_pdf_generator = bool(cint(chrome_pdf_generator))
+	"""
+	local.form_dict.chrome_pdf_generator is set from before_request hook (print designer app) for download_pdf endpoint
+	if it is not set (internal function call) then set it
+	"""
+	if "chrome_pdf_generator" not in local.form_dict:
+		# if arg is passed, use that, else get setting from print format
+		if chrome_pdf_generator is None:
+			chrome_pdf_generator = frappe.get_cached_value(
+				"Print Format", print_format, "chrome_pdf_generator"
+			)
+		local.form_dict.chrome_pdf_generator = bool(cint(chrome_pdf_generator))
+
 	original_form_dict = copy.deepcopy(local.form_dict)
 	try:
 		local.form_dict.doctype = doctype
@@ -2121,7 +2129,7 @@ def get_print(
 	if not as_pdf:
 		return html
 
-	if chrome_pdf_generator:
+	if local.form_dict.chrome_pdf_generator:
 		hook_func = frappe.get_hooks("chrome_pdf_generator")
 		if hook_func:
 			return frappe.call(
