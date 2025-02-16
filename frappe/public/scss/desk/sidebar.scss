@@ -318,10 +318,10 @@ body {
 		.overlay {
 			display: block;
 			position: absolute;
-			width: 100vw;
+			width: calc(100vw - 240px);
 			height: 100%;
 			z-index: 1021;
-			left: 220px;
+			left: 240px;
 			overflow: auto;
 			background-color: rgba(128, 128, 128, 0.5);
 		}
