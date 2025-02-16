@@ -86,10 +86,11 @@ frappe.ui.Sidebar = class Sidebar {
 		let doctype = frappe.get_route()[1];
 		let current_item = doctype;
 		if (current_route[0] != "Workspaces") {
-			if (frappe.get_meta("Doctype")) {
-				let active_workspace = frappe.get_meta(doctype).module;
-				if (frappe.get_meta(doctype).__workspaces) {
-					active_workspace = frappe.get_meta(doctype).__workspaces[0];
+			let meta_info = frappe.get_meta(doctype);
+			if (meta_info) {
+				let active_workspace = meta_info.module;
+				if (meta_info.__workspaces) {
+					active_workspace = meta_info.__workspaces[0];
 				}
 				current_item = active_workspace;
 			}
