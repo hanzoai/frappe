@@ -1,4 +1,5 @@
 import os
+import signal
 import socket
 import time
 from collections import defaultdict
@@ -371,13 +372,15 @@ class FrappeWorker(Worker):
 
 
 class FrappeWorkerNoFork(FrappeWorker):
-	def kill_horse(self, sig):
-		# TODO: need to handle separately
-		pass
-
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.push_exc_handler(self.no_fork_exception_handler)
+
+	def execute_job(self, job: "Job", queue: "Queue"):
+		"""Execute job in same thread/process, do not fork()"""
+		self.prepare_execution(job)
+		self.perform_job(job, queue)
+		self.set_state(WorkerStatus.IDLE)
 
 	def no_fork_exception_handler(self, job, exc_type, exc_value, traceback):
 		if isinstance(exc_value, JobTimeoutException):
@@ -391,11 +394,9 @@ class FrappeWorkerNoFork(FrappeWorker):
 		else:
 			return int(job.timeout or DEFAULT_WORKER_TTL) + 60
 
-	def execute_job(self, job: "Job", queue: "Queue"):
-		"""Execute job in same thread/process, do not fork()"""
-		self.prepare_execution(job)
-		self.perform_job(job, queue)
-		self.set_state(WorkerStatus.IDLE)
+	def kill_horse(self, sig=signal.SIGKILL):
+		# Horse = self when we are not forking
+		os.kill(os.getpid(), sig)
 
 
 def start_worker_pool(
@@ -437,10 +438,10 @@ def start_worker_pool(
 		logging_level = "WARNING"
 
 	worker_klass = (
-		FrappeWorker
+		FrappeWorkerNoFork
 		# TODO: Make this true by default eventually. It's limited to RQ WorkerPool
 		if sbool(os.environ.get("FRAPPE_BACKGROUND_WORKERS_NOFORK", False))
-		else FrappeWorkerNoFork
+		else FrappeWorker
 	)
 
 	pool = WorkerPool(
