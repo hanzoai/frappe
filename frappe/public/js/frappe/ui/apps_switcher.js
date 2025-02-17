@@ -3,7 +3,7 @@ frappe.ui.AppsSwitcher = class AppsSwitcher {
 		this.drop_down_state = false;
 		this.sidebar_wrapper = sidebar.wrapper;
 		this.sidebar = sidebar;
-		this.app_switcher = sidebar.app_switcher_dropdown;
+		this.app_switcher = $(sidebar.app_switcher_dropdown[0]);
 		this.setup_app_switcher();
 		this.set_hover();
 	}
@@ -151,10 +151,13 @@ frappe.ui.AppsSwitcher = class AppsSwitcher {
 		this.app_switcher.on("mouseover", function (event) {
 			if ($(this).hasClass("active-sidebar")) return;
 			$(this).addClass("hover");
+			if (!this.sidebar.sidebar_expanded) {
+				$(this).removeClass("hover");
+			}
 		});
 
-		$(".standard-sidebar-item > .item-anchor").on("mouseleave", function () {
-			$(this).parent().removeClass("hover");
+		this.app_switcher.on("mouseleave", function () {
+			$(this).removeClass("hover");
 		});
 	}
 	set_active() {

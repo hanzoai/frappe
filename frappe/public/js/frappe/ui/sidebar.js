@@ -177,7 +177,6 @@ frappe.ui.Sidebar = class Sidebar {
 		}
 		this.set_hover();
 		this.set_sidebar_state();
-		this.set_active_workspace_item();
 		if (!this.sidebar_expanded) this.close_children_item();
 	}
 	set_sidebar_state() {
@@ -212,6 +211,7 @@ frappe.ui.Sidebar = class Sidebar {
 			this.wrapper.find(".selected")[0].scrollIntoView();
 
 		this.setup_sorting();
+		this.set_active_workspace_item();
 		this.set_hover();
 	}
 
