@@ -176,17 +176,20 @@ frappe.ui.Sidebar = class Sidebar {
 			this.make_sidebar();
 		}
 		this.set_hover();
-		if (localStorage.getItem("sidebar-expanded") !== null) {
-			this.sidebar_expanded = JSON.parse(localStorage.getItem("sidebar-expanded"));
-			this.expand_sidebar();
-		} else {
-			this.sidebar_expanded = true;
-			this.expand_sidebar();
-		}
+		this.set_sidebar_state();
 		this.set_active_workspace_item();
 		if (!this.sidebar_expanded) this.close_children_item();
 	}
-
+	set_sidebar_state() {
+		this.sidebar_expanded = true;
+		if (localStorage.getItem("sidebar-expanded") !== null) {
+			this.sidebar_expanded = JSON.parse(localStorage.getItem("sidebar-expanded"));
+		}
+		if (frappe.is_mobile()) {
+			this.sidebar_expanded = false;
+		}
+		this.expand_sidebar();
+	}
 	make_sidebar() {
 		if (this.wrapper.find(".standard-sidebar-section")[0]) {
 			this.wrapper.find(".standard-sidebar-section").remove();
