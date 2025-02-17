@@ -27,6 +27,7 @@ import frappe.monitor
 from frappe import _
 from frappe.utils import CallbackManager, cint, get_bench_id
 from frappe.utils.commands import log
+from frappe.utils.data import sbool
 from frappe.utils.redis_queue import RedisQueue
 
 # TTL to keep RQ job logs in redis for.
@@ -333,11 +334,9 @@ def start_worker(
 
 
 class FrappeWorker(Worker):
-	def work(self, *args, disable_forking=True, **kwargs):
-		self.disable_forking = disable_forking
+	def work(self, *args, **kwargs):
 		self.start_frappe_scheduler()
 		kwargs["with_scheduler"] = False  # Always disable RQ scheduler
-		self.push_exc_handler(self.no_fork_exception_handler)
 		return super().work(*args, **kwargs)
 
 	def run_maintenance_tasks(self, *args, **kwargs):
@@ -370,29 +369,33 @@ class FrappeWorker(Worker):
 		self.pubsub.subscribe(**{self.pubsub_channel_name: self.handle_payload})
 		self.pubsub_thread = self.pubsub.run_in_thread(sleep_time=2, daemon=True)
 
-	def execute_job(self, job: "Job", queue: "Queue"):
-		"""Execute job in same thread/process, do not fork()"""
-		if not self.disable_forking:
-			return super().execute_job(job, queue)
 
-		self.prepare_execution(job)
-		self.perform_job(job, queue)
-		self.set_state(WorkerStatus.IDLE)
+class FrappeWorkerNoFork(FrappeWorker):
+	def kill_horse(self, sig):
+		# TODO: need to handle separately
+		pass
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.push_exc_handler(self.no_fork_exception_handler)
+
+	def no_fork_exception_handler(self, job, exc_type, exc_value, traceback):
+		if isinstance(exc_value, JobTimeoutException):
+			# This is done to avoid polluting global state from partial executions.
+			# More such cases MIGHT surface and this is where they should be handled.
+			raise StopRequested
 
 	def get_heartbeat_ttl(self, job: "Job") -> int:
-		if not self.disable_forking:
-			return super().get_heartbeat_ttl(job)
-
 		if job.timeout == -1:
 			return DEFAULT_WORKER_TTL
 		else:
 			return int(job.timeout or DEFAULT_WORKER_TTL) + 60
 
-	def no_fork_exception_handler(self, job, exc_type, exc_value, traceback):
-		if self.disable_forking and isinstance(exc_value, JobTimeoutException):
-			# This is done to avoid polluting global state from partial executions.
-			# More such cases MIGHT surface and this is where they should be handled.
-			raise StopRequested
+	def execute_job(self, job: "Job", queue: "Queue"):
+		"""Execute job in same thread/process, do not fork()"""
+		self.prepare_execution(job)
+		self.perform_job(job, queue)
+		self.set_state(WorkerStatus.IDLE)
 
 
 def start_worker_pool(
@@ -433,11 +436,18 @@ def start_worker_pool(
 	if quiet:
 		logging_level = "WARNING"
 
+	worker_klass = (
+		FrappeWorker
+		# TODO: Make this true by default eventually. It's limited to RQ WorkerPool
+		if sbool(os.environ.get("FRAPPE_BACKGROUND_WORKERS_NOFORK", False))
+		else FrappeWorkerNoFork
+	)
+
 	pool = WorkerPool(
 		queues=queues,
 		connection=redis_connection,
 		num_workers=num_workers,
-		worker_class=FrappeWorker,  # Auto starts scheduler with workerpool
+		worker_class=worker_klass,
 	)
 	pool.start(logging_level=logging_level, burst=burst)
 
