@@ -472,4 +472,9 @@ frappe.ui.Sidebar = class Sidebar {
 			this.setup_pages();
 		});
 	}
+	set_height() {
+		$(".body-sidebar").css("height", window.innerHeight + "px");
+		$(".overlay").css("height", window.innerHeight + "px");
+		document.body.style.overflow = "hidden";
+	}
 };
