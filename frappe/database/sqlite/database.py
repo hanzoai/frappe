@@ -185,10 +185,80 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 	def change_column_type(
 		self, doctype: str, column: str, type: str, nullable: bool = False
 	) -> list | tuple:
-		raise NotImplementedError("SQLite does not support altering column types directly.")
+		"""Change column type by recreating the table"""
+		table_name = get_table_name(doctype)
+		temp_table = f"{table_name}_new"
 
-	def rename_column(self, doctype: str, old_column_name, new_column_name):
-		raise NotImplementedError("SQLite does not support renaming columns directly.")
+		# Get current table column definitions
+		columns = []
+		column_exists = False
+		for col in self.sql(f"PRAGMA table_info(`{table_name}`)", as_dict=1):
+			if col["name"] == column:
+				column_exists = True
+				null_str = "" if nullable else " NOT NULL"
+				columns.append(f"`{col['name']}` {type}{null_str}")
+			else:
+				null_str = "" if col["notnull"] == 0 else " NOT NULL"
+				columns.append(f"`{col['name']}` {col['type']}{null_str}")
+
+		# Check that the column exists
+		if not column_exists:
+			raise frappe.InvalidColumnName(f"Column {column} does not exist in table {table_name}")
+
+		# Create new table
+		create_table = f"CREATE TABLE `{temp_table}` (\n{','.join(columns)}\n)"
+		self.sql_ddl(create_table)
+
+		# Copy data
+		column_names = [
+			f"`{col['name']}`" for col in self.sql(f"PRAGMA table_info(`{table_name}`)", as_dict=1)
+		]
+		column_list = ", ".join(column_names)
+		self.sql_ddl(f"INSERT INTO `{temp_table}` SELECT {column_list} FROM `{table_name}`")
+
+		# Drop old table and rename new table
+		self.sql_ddl(f"DROP TABLE `{table_name}`")
+		self.sql_ddl(f"ALTER TABLE `{temp_table}` RENAME TO `{table_name}`")
+
+	def rename_column(self, doctype: str, old_column_name: str, new_column_name: str):
+		"""Rename column by recreating the table"""
+		table_name = get_table_name(doctype)
+		temp_table = f"{table_name}_new"
+
+		# Get current table column definitions
+		columns = []
+		column_exists = False
+		for col in self.sql(f"PRAGMA table_info(`{table_name}`)", as_dict=1):
+			if col["name"] == old_column_name:
+				column_exists = True
+				null_str = "" if col["notnull"] == 0 else " NOT NULL"
+				columns.append(f"`{new_column_name}` {col['type']}{null_str}")
+			else:
+				null_str = "" if col["notnull"] == 0 else " NOT NULL"
+				columns.append(f"`{col['name']}` {col['type']}{null_str}")
+
+		if not column_exists:
+			raise frappe.InvalidColumnName(f"Column {old_column_name} does not exist in table {table_name}")
+
+		# Create new table
+		create_table = f"CREATE TABLE `{temp_table}` (\n{','.join(columns)}\n)"
+		self.sql_ddl(create_table)
+
+		# Get list of columns for SELECT, replacing old name with new
+		column_names = []
+		for col in self.sql(f"PRAGMA table_info(`{table_name}`)", as_dict=1):
+			if col["name"] == old_column_name:
+				column_names.append(f"`{old_column_name}` as `{new_column_name}`")
+			else:
+				column_names.append(f"`{col['name']}`")
+
+		# Copy data
+		column_list = ", ".join(column_names)
+		self.sql_ddl(f"INSERT INTO `{temp_table}` SELECT {column_list} FROM `{table_name}`")
+
+		# Drop old table and rename new table
+		self.sql_ddl(f"DROP TABLE `{table_name}`")
+		self.sql_ddl(f"ALTER TABLE `{temp_table}` RENAME TO `{table_name}`")
 
 	def create_auth_table(self):
 		self.sql_ddl(
@@ -332,6 +402,11 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 			kwargs["query"] = modify_query(kwargs.get("query"))
 
 		return super().sql(*args, **kwargs)
+
+	def sql_ddl(self, query, *args, **kwargs):
+		"""Execute DDL query."""
+		super().sql_ddl(query, *args, **kwargs)
+		self.commit()
 
 	def begin(self, *, read_only=False):
 		read_only = read_only or frappe.flags.read_only
