@@ -482,7 +482,7 @@ Action: TypeAlias = ServerAction | ClientAction
 def msgprint(
 	msg: str,
 	title: str | None = None,
-	raise_exception: bool | type[Exception] = False,
+	raise_exception: bool | type[Exception] | Exception = False,
 	as_table: bool = False,
 	as_list: bool = False,
 	indicator: Literal["blue", "green", "orange", "red", "yellow"] | None = None,
@@ -516,6 +516,9 @@ def msgprint(
 		if raise_exception:
 			if inspect.isclass(raise_exception) and issubclass(raise_exception, Exception):
 				exc = raise_exception(msg)
+			elif isinstance(raise_exception, Exception):
+				exc = raise_exception
+				exc.args = (msg,)
 			else:
 				exc = ValidationError(msg)
 			if out.__frappe_exc_id:
@@ -591,7 +594,7 @@ def clear_last_message():
 
 def throw(
 	msg: str,
-	exc: type[Exception] = ValidationError,
+	exc: type[Exception] | Exception = ValidationError,
 	title: str | None = None,
 	is_minimizable: bool = False,
 	wide: bool = False,
@@ -988,6 +991,7 @@ def has_permission(
 	*,
 	parent_doctype=None,
 	debug=False,
+	ignore_share_permissions=False,
 ):
 	"""
 	Return True if the user has permission `ptype` for given `doctype` or `doc`.
@@ -1013,6 +1017,7 @@ def has_permission(
 		print_logs=throw,
 		parent_doctype=parent_doctype,
 		debug=debug,
+		ignore_share_permissions=ignore_share_permissions,
 	)
 
 	if throw and not out:
@@ -1276,7 +1281,7 @@ def get_last_doc(
 	if d:
 		return get_doc(doctype, d[0], for_update=for_update)
 	else:
-		raise DoesNotExistError
+		raise DoesNotExistError(doctype=doctype)
 
 
 def get_single(doctype):
