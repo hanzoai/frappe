@@ -310,9 +310,8 @@ def make_form_dict(request: Request):
 		frappe.throw(_("Invalid request arguments"))
 
 
+@handle_does_not_exist_error
 def handle_exception(e):
-	e = handle_does_not_exist_error(e)
-
 	response = None
 	http_status_code = getattr(e, "http_status_code", 500)
 	return_as_message = False
