@@ -20,16 +20,11 @@ def get_response(path=None, http_status_code=200):
 	except Exception as e:
 		return handle_exception(e, endpoint, path, http_status_code)
 
-<<<<<<< HEAD
-		if isinstance(e, frappe.Redirect):
-			return RedirectPage(endpoint or path, http_status_code).render()
-=======
->>>>>>> 60b889c3b8 (fix: ensure correct context in `sys.exc_info`)
 
 @handle_does_not_exist_error
 def handle_exception(e, endpoint, path, http_status_code):
 	if isinstance(e, frappe.Redirect):
-		return RedirectPage(endpoint or path, e.http_status_code).render()
+		return RedirectPage(endpoint or path, http_status_code).render()
 
 	if isinstance(e, frappe.PermissionError):
 		return NotPermittedPage(endpoint, http_status_code, exception=e).render()
