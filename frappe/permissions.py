@@ -853,11 +853,12 @@ def check_doctype_permission(doctype: str, ptype: str = "read") -> None:
 	frappe.local.message_log = _message_log
 
 
-def handle_does_not_exist_error(e: Exception) -> None:
-	if not isinstance(e, frappe.DoesNotExistError) or not (doctype := getattr(e, "doctype", None)):
-		return e
+def handle_does_not_exist_error(e: Exception) -> Exception:
+	if isinstance(e, frappe.DoesNotExistError) and (doctype := getattr(e, "doctype", None)):
+		try:
+			check_doctype_permission(doctype)
 
-	try:
-		check_doctype_permission(doctype)
-	except frappe.PermissionError as _e:
-		return _e
+		except frappe.PermissionError as _e:
+			return _e
+
+	return e
