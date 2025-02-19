@@ -12,7 +12,7 @@ from frappe import _, _dict
 from frappe.desk.form.document_follow import is_document_followed
 from frappe.model.utils import is_virtual_doctype
 from frappe.model.utils.user_settings import get_user_settings
-from frappe.permissions import get_doc_permissions
+from frappe.permissions import check_doctype_permission, get_doc_permissions
 from frappe.utils.data import cstr
 
 
@@ -31,16 +31,19 @@ def getdoc(doctype, name, user=None):
 		name = doctype
 
 	if not is_virtual_doctype(doctype) and not frappe.db.exists(doctype, name):
+		check_doctype_permission(doctype)
 		return []
 
 	doc = frappe.get_doc(doctype, name)
-	run_onload(doc)
 
 	if not doc.has_permission("read"):
+		check_doctype_permission(doctype)
 		frappe.flags.error_message = _("Insufficient Permission for {0}").format(
-			frappe.bold(doctype + " " + name)
+			frappe.bold(_(doctype) + " " + name)
 		)
 		raise frappe.PermissionError(("read", doctype, name))
+
+	run_onload(doc)
 
 	# ignores system setting (apply_perm_level_on_api_calls) unconditionally to maintain backward compatibility
 	doc.apply_fieldlevel_read_permissions()
