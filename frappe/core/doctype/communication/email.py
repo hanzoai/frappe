@@ -9,6 +9,7 @@ import frappe
 import frappe.email.smtp
 from frappe import _
 from frappe.email.email_body import get_message_id
+from frappe.permissions import check_doctype_permission
 from frappe.utils import (
 	cint,
 	get_datetime,
@@ -78,8 +79,9 @@ def make(
 			category=DeprecationWarning,
 		)
 
-	if doctype and name and not frappe.has_permission(doctype=doctype, ptype="email", doc=name):
-		raise frappe.PermissionError(f"You are not allowed to send emails related to: {doctype} {name}")
+	if doctype and name:
+		doc = frappe.get_doc(doctype, name)
+		doc.check_permission("email")
 
 	return _make(
 		doctype=doctype,
