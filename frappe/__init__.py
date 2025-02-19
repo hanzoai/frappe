@@ -418,7 +418,7 @@ def _strip_html_tags(message):
 def msgprint(
 	msg: str,
 	title: str | None = None,
-	raise_exception: bool | type[Exception] = False,
+	raise_exception: bool | type[Exception] | Exception = False,
 	as_table: bool = False,
 	as_list: bool = False,
 	indicator: Literal["blue", "green", "orange", "red", "yellow"] | None = None,
@@ -452,7 +452,14 @@ def msgprint(
 	def _raise_exception():
 		if raise_exception:
 			if inspect.isclass(raise_exception) and issubclass(raise_exception, Exception):
+<<<<<<< HEAD
 				raise raise_exception(msg)
+=======
+				exc = raise_exception(msg)
+			elif isinstance(raise_exception, Exception):
+				exc = raise_exception
+				exc.args = (msg,)
+>>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 			else:
 				raise ValidationError(msg)
 
@@ -528,7 +535,7 @@ def clear_last_message():
 
 def throw(
 	msg: str,
-	exc: type[Exception] = ValidationError,
+	exc: type[Exception] | Exception = ValidationError,
 	title: str | None = None,
 	is_minimizable: bool = False,
 	wide: bool = False,
@@ -953,6 +960,11 @@ def has_permission(
 	throw=False,
 	*,
 	parent_doctype=None,
+<<<<<<< HEAD
+=======
+	debug=False,
+	ignore_share_permissions=False,
+>>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 ):
 	"""
 	Returns True if the user has permission `ptype` for given `doctype` or `doc`
@@ -977,6 +989,11 @@ def has_permission(
 		user=user,
 		raise_exception=throw,
 		parent_doctype=parent_doctype,
+<<<<<<< HEAD
+=======
+		debug=debug,
+		ignore_share_permissions=ignore_share_permissions,
+>>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 	)
 
 	if throw and not out:
@@ -1212,7 +1229,7 @@ def get_last_doc(doctype, filters=None, order_by="creation desc", *, for_update=
 	if d:
 		return get_doc(doctype, d[0], for_update=for_update)
 	else:
-		raise DoesNotExistError
+		raise DoesNotExistError(doctype=doctype)
 
 
 def get_single(doctype):

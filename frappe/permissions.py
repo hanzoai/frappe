@@ -86,9 +86,18 @@ def has_permission(
 	raise_exception=True,
 	*,
 	parent_doctype=None,
+<<<<<<< HEAD
 ):
 	"""Returns True if user has permission `ptype` for given `doctype`.
 	If `doc` is passed, it also checks user, share and owner permissions.
+=======
+	print_logs=True,
+	debug=False,
+	ignore_share_permissions=False,
+) -> bool:
+	"""Return True if user has permission `ptype` for given `doctype`.
+	If `doc` is passed, also check user, share and owner permissions.
+>>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 
 	:param doctype: DocType to check permission for
 	:param ptype: Permission Type to check
@@ -173,7 +182,12 @@ def has_permission(
 
 		return False
 
+<<<<<<< HEAD
 	if not perm:
+=======
+	if not perm and not ignore_share_permissions:
+		debug and _debug_log("Checking if document/doctype is explicitly shared with user")
+>>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 		perm = false_if_not_shared()
 
 	return bool(perm)
@@ -793,3 +807,30 @@ def has_child_permission(
 
 def is_system_user(user: str | None = None) -> bool:
 	return frappe.get_cached_value("User", user or frappe.session.user, "user_type") == "System User"
+
+
+def check_doctype_permission(doctype: str, ptype: str = "read") -> None:
+	"""
+	Designed specfically to override DoesNotExistError in some scenarios.
+	Ignores share permissions.
+	"""
+
+	_message_log = frappe.local.message_log
+	frappe.local.message_log = []
+	try:
+		frappe.has_permission(doctype, ptype, throw=True, ignore_share_permissions=True)
+	except frappe.PermissionError:
+		frappe.flags.disable_traceback = True
+		raise
+
+	frappe.local.message_log = _message_log
+
+
+def handle_does_not_exist_error(e: Exception) -> None:
+	if not isinstance(e, frappe.DoesNotExistError) or not (doctype := getattr(e, "doctype", None)):
+		return e
+
+	try:
+		check_doctype_permission(doctype)
+	except frappe.PermissionError as _e:
+		return _e

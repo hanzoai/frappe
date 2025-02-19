@@ -22,7 +22,12 @@ import frappe.utils.response
 from frappe import _
 from frappe.core.doctype.comment.comment import update_comments_in_parent_after_request
 from frappe.middlewares import StaticDataMiddleware
+<<<<<<< HEAD
 from frappe.utils import cint, get_site_name, sanitize_html
+=======
+from frappe.permissions import handle_does_not_exist_error
+from frappe.utils import CallbackManager, cint, get_site_name
+>>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 from frappe.utils.data import escape_html
 from frappe.utils.error import make_error_snapshot
 from frappe.website.serve import get_response
@@ -286,6 +291,8 @@ def make_form_dict(request: Request):
 
 
 def handle_exception(e):
+	e = handle_does_not_exist_error(e)
+
 	response = None
 	http_status_code = getattr(e, "http_status_code", 500)
 	return_as_message = False
