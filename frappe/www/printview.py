@@ -91,7 +91,6 @@ def get_print_format_doc(print_format_name, meta):
 
 
 def get_rendered_template(
-<<<<<<< HEAD
 	doc,
 	name=None,
 	print_format=None,
@@ -101,19 +100,9 @@ def get_rendered_template(
 	trigger_print=False,
 	settings=None,
 ):
-=======
-	doc: "Document",
-	print_format: Optional["PrintFormat"] = None,
-	meta: "Meta" = None,
-	no_letterhead: bool | None = None,
-	letterhead: str | None = None,
-	trigger_print: bool = False,
-	settings: dict | None = None,
-) -> str:
 	if not frappe.flags.ignore_print_permissions:
 		validate_print_permission(doc)
 
->>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 	print_settings = frappe.get_single("Print Settings").as_dict()
 	print_settings.update(settings or {})
 

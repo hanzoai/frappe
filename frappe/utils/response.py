@@ -29,46 +29,19 @@ if TYPE_CHECKING:
 
 def report_error(status_code):
 	"""Build error. Show traceback in developer mode"""
-<<<<<<< HEAD
-	allow_traceback = cint(frappe.db.get_system_setting("allow_error_traceback")) if frappe.db else True
-	if (
-		allow_traceback
-		and (status_code != 404 or frappe.conf.logging)
-		and not frappe.local.flags.disable_traceback
-	):
+	allow_traceback = is_traceback_allowed() and (status_code != 404 or frappe.conf.logging)
+
+	if allow_traceback:
 		traceback = frappe.utils.get_traceback()
 		if traceback:
 			frappe.errprint(traceback)
 			frappe.local.response.exception = traceback.splitlines()[-1]
-=======
-	from frappe.api import ApiVersion, get_api_version
-
-	allow_traceback = is_traceback_allowed() and (status_code != 404 or frappe.conf.logging)
-
-	traceback = frappe.utils.get_traceback()
-	exc_type, exc_value, _ = sys.exc_info()
-
-	match get_api_version():
-		case ApiVersion.V1:
-			if allow_traceback:
-				frappe.errprint(traceback)
-				frappe.response.exception = traceback.splitlines()[-1]
-			frappe.response["exc_type"] = exc_type.__name__
-		case ApiVersion.V2:
-			error_log = {"type": exc_type.__name__}
-			if allow_traceback:
-				error_log["exception"] = traceback
-			_link_error_with_message_log(error_log, exc_value, frappe.message_log)
-			frappe.local.response.errors = [error_log]
->>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 
 	response = build_response("json")
 	response.status_code = status_code
 	return response
 
 
-<<<<<<< HEAD
-=======
 def is_traceback_allowed():
 	return (
 		frappe.db
@@ -77,17 +50,6 @@ def is_traceback_allowed():
 	)
 
 
-def _link_error_with_message_log(error_log, exception, message_logs):
-	for message in list(message_logs):
-		if message.get("__frappe_exc_id") == getattr(exception, "__frappe_exc_id", None):
-			error_log.update(message)
-			message_logs.remove(message)
-			error_log.pop("raise_exception", None)
-			error_log.pop("__frappe_exc_id", None)
-			return
-
-
->>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 def build_response(response_type=None):
 	if "docs" in frappe.local.response and not frappe.local.response.docs:
 		del frappe.local.response["docs"]
@@ -179,29 +141,7 @@ def make_logs(response=None):
 	if not response:
 		response = frappe.local.response
 
-<<<<<<< HEAD
-	allow_traceback = frappe.get_system_settings("allow_error_traceback") if frappe.db else False
-
-	if frappe.error_log and allow_traceback:
-=======
-	from frappe.api import ApiVersion, get_api_version
-
-	match get_api_version():
-		case ApiVersion.V1:
-			_make_logs_v1()
-		case ApiVersion.V2:
-			_make_logs_v2()
-
-
-def _make_logs_v1():
-	from frappe.utils.error import guess_exception_source
-
-	response = frappe.local.response
-
 	if frappe.error_log and is_traceback_allowed():
-		if source := guess_exception_source(frappe.local.error_log and frappe.local.error_log[0]["exc"]):
-			response["_exc_source"] = source
->>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 		response["exc"] = json.dumps([frappe.utils.cstr(d["exc"]) for d in frappe.local.error_log])
 
 	if frappe.local.message_log:

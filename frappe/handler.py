@@ -248,19 +248,8 @@ def upload_file():
 
 
 def check_write_permission(doctype: str | None = None, name: str | None = None):
-<<<<<<< HEAD
-	check_doctype = doctype and not name
-	if doctype and name:
-		try:
-			doc = frappe.get_doc(doctype, name)
-			doc.check_permission("write")
-		except frappe.DoesNotExistError:
-			# doc has not been inserted yet, name is set to "new-some-doctype"
-			check_doctype = True
-=======
 	if not doctype:
 		return
->>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 
 	if not name:
 		frappe.has_permission(doctype, "write", throw=True)

@@ -452,14 +452,10 @@ def msgprint(
 	def _raise_exception():
 		if raise_exception:
 			if inspect.isclass(raise_exception) and issubclass(raise_exception, Exception):
-<<<<<<< HEAD
 				raise raise_exception(msg)
-=======
-				exc = raise_exception(msg)
 			elif isinstance(raise_exception, Exception):
-				exc = raise_exception
-				exc.args = (msg,)
->>>>>>> f4062b4d7a (fix: ensure consistent error in response)
+				raise_exception.args = (msg,)
+				raise raise_exception
 			else:
 				raise ValidationError(msg)
 
@@ -960,11 +956,7 @@ def has_permission(
 	throw=False,
 	*,
 	parent_doctype=None,
-<<<<<<< HEAD
-=======
-	debug=False,
 	ignore_share_permissions=False,
->>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 ):
 	"""
 	Returns True if the user has permission `ptype` for given `doctype` or `doc`
@@ -989,11 +981,7 @@ def has_permission(
 		user=user,
 		raise_exception=throw,
 		parent_doctype=parent_doctype,
-<<<<<<< HEAD
-=======
-		debug=debug,
 		ignore_share_permissions=ignore_share_permissions,
->>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 	)
 
 	if throw and not out:

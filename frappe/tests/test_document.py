@@ -477,13 +477,8 @@ class TestDocumentWebView(FrappeTestCase):
 		url = f"/ToDo/{todo.name}?key={old_document_key}"
 		self.assertEqual(self.get(url).status, "200 OK")
 
-<<<<<<< HEAD
 		update_system_settings({"allow_older_web_view_links": False}, True)
-		self.assertEqual(self.get(url).status, "401 UNAUTHORIZED")
-=======
-		with self.change_settings("System Settings", {"allow_older_web_view_links": False}):
-			self.assertEqual(self.get(url).status, "403 FORBIDDEN")
->>>>>>> fa252691b6 (test: update status codes)
+		self.assertEqual(self.get(url).status, "403 FORBIDDEN")
 
 		# with valid key
 		url = f"/ToDo/{todo.name}?key={document_key}"

@@ -103,16 +103,12 @@ def get_redis_server():
 
 
 @frappe.whitelist(allow_guest=True)
-<<<<<<< HEAD
 def can_subscribe_doc(doctype, docname):
 	if os.environ.get("CI"):
 		return True
 
-	from frappe.exceptions import PermissionError
-
-	if not frappe.has_permission(doctype=doctype, doc=docname, ptype="read"):
-		raise PermissionError()
-
+	doc = frappe.get_doc(doctype, docname)
+	doc.check_permission("read")
 	return True
 
 
@@ -123,11 +119,6 @@ def can_subscribe_doctype(doctype: str) -> bool:
 	if not frappe.has_permission(doctype=doctype, ptype="read"):
 		raise PermissionError()
 
-=======
-def has_permission(doctype: str, name: str) -> bool:
-	doc = frappe.get_doc(doctype, name)
-	doc.check_permission("read")
->>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 	return True
 
 

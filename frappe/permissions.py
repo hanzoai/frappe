@@ -86,18 +86,10 @@ def has_permission(
 	raise_exception=True,
 	*,
 	parent_doctype=None,
-<<<<<<< HEAD
+	ignore_share_permissions=False,
 ):
 	"""Returns True if user has permission `ptype` for given `doctype`.
 	If `doc` is passed, it also checks user, share and owner permissions.
-=======
-	print_logs=True,
-	debug=False,
-	ignore_share_permissions=False,
-) -> bool:
-	"""Return True if user has permission `ptype` for given `doctype`.
-	If `doc` is passed, also check user, share and owner permissions.
->>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 
 	:param doctype: DocType to check permission for
 	:param ptype: Permission Type to check
@@ -182,12 +174,7 @@ def has_permission(
 
 		return False
 
-<<<<<<< HEAD
-	if not perm:
-=======
 	if not perm and not ignore_share_permissions:
-		debug and _debug_log("Checking if document/doctype is explicitly shared with user")
->>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 		perm = false_if_not_shared()
 
 	return bool(perm)
