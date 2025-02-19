@@ -9,7 +9,6 @@ import frappe
 import frappe.email.smtp
 from frappe import _
 from frappe.email.email_body import get_message_id
-from frappe.permissions import check_doctype_permission
 from frappe.utils import (
 	cint,
 	get_datetime,
