@@ -128,6 +128,7 @@ frappe.views.Calendar = class Calendar {
 			success: "green",
 			warning: "orange",
 			default: "blue",
+			notice: "yellow",
 		};
 		this.get_default_options();
 	}
