@@ -23,8 +23,8 @@ def get_context(context):
 		context.message = _("There was an error building this page")
 >>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 
-	allow_traceback = is_traceback_allowed() and not frappe.local.dev_server
-
 	return {
-		"error": frappe.get_traceback().replace("<", "&lt;").replace(">", "&gt;") if allow_traceback else ""
+		"error": frappe.get_traceback().replace("<", "&lt;").replace(">", "&gt;")
+		if is_traceback_allowed()
+		else ""
 	}
