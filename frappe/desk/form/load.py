@@ -12,7 +12,11 @@ import frappe.utils
 from frappe import _, _dict
 from frappe.desk.form.document_follow import is_document_followed
 from frappe.model.utils.user_settings import get_user_settings
+<<<<<<< HEAD
 from frappe.permissions import get_doc_permissions
+=======
+from frappe.permissions import check_doctype_permission, get_doc_permissions, has_permission
+>>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 from frappe.utils.data import cstr
 
 if typing.TYPE_CHECKING:
@@ -33,6 +37,7 @@ def getdoc(doctype, name, user=None):
 	try:
 		doc = frappe.get_doc(doctype, name)
 	except frappe.DoesNotExistError:
+		check_doctype_permission(doctype)
 		frappe.clear_last_message()
 		return []
 

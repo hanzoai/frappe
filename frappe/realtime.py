@@ -114,6 +114,7 @@ def emit_via_redis(event, message, room):
 
 
 @frappe.whitelist(allow_guest=True)
+<<<<<<< HEAD
 def can_subscribe_doc(doctype: str, docname: str) -> bool:
 	from frappe.exceptions import PermissionError
 
@@ -130,6 +131,11 @@ def can_subscribe_doctype(doctype: str) -> bool:
 	if not frappe.has_permission(doctype=doctype, ptype="read"):
 		raise PermissionError()
 
+=======
+def has_permission(doctype: str, name: str) -> bool:
+	doc = frappe.get_doc(doctype, name)
+	doc.check_permission("read")
+>>>>>>> f4062b4d7a (fix: ensure consistent error in response)
 	return True
 
 
