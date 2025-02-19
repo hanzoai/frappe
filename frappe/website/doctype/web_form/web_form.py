@@ -158,7 +158,7 @@ def get_context(context):
 
 		# check permissions
 		if frappe.form_dict.name:
-			assert isinstance(frappe.form_dict.name, str)
+			assert isinstance(frappe.form_dict.name, str | int)
 
 			if frappe.session.user == "Guest":
 				frappe.throw(
@@ -615,7 +615,7 @@ def accept(web_form, data):
 
 
 @frappe.whitelist()
-def delete(web_form_name: str, docname: str):
+def delete(web_form_name: str, docname: str | int):
 	web_form = frappe.get_doc("Web Form", web_form_name)
 
 	owner = frappe.db.get_value(web_form.doc_type, docname, "owner")
@@ -626,7 +626,7 @@ def delete(web_form_name: str, docname: str):
 
 
 @frappe.whitelist()
-def delete_multiple(web_form_name: str, docnames: list[str]):
+def delete_multiple(web_form_name: str, docnames: list[str | int]):
 	web_form = frappe.get_doc("Web Form", web_form_name)
 
 	docnames = json.loads(docnames)
