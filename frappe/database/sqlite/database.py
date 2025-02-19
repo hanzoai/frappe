@@ -490,6 +490,12 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 				raise
 		return 0
 
+	def truncate(self, doctype: str):
+		"""Truncate a table."""
+		table = get_table_name(doctype)
+		self.sql_ddl(f"DELETE FROM `{table}`")
+		self.sql_ddl(f"DELETE FROM sqlite_sequence WHERE name='{table}'")
+
 
 def modify_query(query):
 	"""
