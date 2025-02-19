@@ -62,7 +62,7 @@ def is_traceback_allowed():
 	return (
 		frappe.db
 		and frappe.get_system_settings("allow_error_traceback")
-		and not frappe.local.flags.disable_traceback
+		and (not frappe.local.flags.disable_traceback or frappe._dev_server)
 	)
 
 
