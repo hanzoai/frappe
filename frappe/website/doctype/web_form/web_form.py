@@ -158,6 +158,8 @@ def get_context(context):
 
 		# check permissions
 		if frappe.form_dict.name:
+			assert isinstance(frappe.form_dict.name, str)
+
 			if frappe.session.user == "Guest":
 				frappe.throw(
 					_("You need to be logged in to access this {0}.").format(self.doc_type),
