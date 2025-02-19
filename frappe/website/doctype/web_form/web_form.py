@@ -10,6 +10,7 @@ from frappe.core.api.file import get_max_file_size
 from frappe.core.doctype.file.utils import remove_file_by_url
 from frappe.desk.form.meta import get_code_files_via_hooks
 from frappe.modules.utils import export_module_json, get_doc_module
+from frappe.permissions import check_doctype_permission
 from frappe.rate_limiter import rate_limit
 from frappe.utils import dict_with_keys, strip_html
 from frappe.utils.caching import redis_cache
@@ -164,9 +165,11 @@ def get_context(context):
 				)
 
 			if not frappe.db.exists(self.doc_type, frappe.form_dict.name):
+				check_doctype_permission(self.doc_type)
 				raise frappe.PageDoesNotExistError()
 
 			if not self.has_web_form_permission(self.doc_type, frappe.form_dict.name):
+				check_doctype_permission(self.doc_type)
 				frappe.throw(
 					_("You don't have the permissions to access this document"), frappe.PermissionError
 				)
@@ -610,7 +613,7 @@ def accept(web_form, data):
 
 
 @frappe.whitelist()
-def delete(web_form_name, docname):
+def delete(web_form_name: str, docname: str):
 	web_form = frappe.get_doc("Web Form", web_form_name)
 
 	owner = frappe.db.get_value(web_form.doc_type, docname, "owner")
@@ -621,7 +624,7 @@ def delete(web_form_name, docname):
 
 
 @frappe.whitelist()
-def delete_multiple(web_form_name, docnames):
+def delete_multiple(web_form_name: str, docnames: list[str]):
 	web_form = frappe.get_doc("Web Form", web_form_name)
 
 	docnames = json.loads(docnames)
