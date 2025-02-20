@@ -114,9 +114,14 @@ def emit_via_redis(event, message, room):
 
 
 @frappe.whitelist(allow_guest=True)
+<<<<<<< HEAD
 def can_subscribe_doc(doctype: str, docname: str) -> bool:
 	doc = frappe.get_doc(doctype, docname)
 	doc.check_permission("read")
+=======
+def has_permission(doctype: str, name: str) -> bool:
+	frappe.has_permission(doctype, doc=name, throw=True)
+>>>>>>> 6e20eed640 (fix: redo some fixes to ensure cypress passes)
 	return True
 
 
