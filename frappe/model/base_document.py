@@ -64,9 +64,6 @@ def get_controller(doctype):
 	:param doctype: DocType name as string.
 	"""
 
-	if frappe.local.dev_server or frappe.flags.in_migrate:
-		return import_controller(doctype)
-
 	site_controllers = frappe.controllers.setdefault(frappe.local.site, {})
 	if doctype not in site_controllers:
 		site_controllers[doctype] = import_controller(doctype)
