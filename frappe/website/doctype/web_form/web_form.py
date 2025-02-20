@@ -503,7 +503,7 @@ def delete(web_form_name: str, docname: str | int):
 
 
 @frappe.whitelist()
-def delete_multiple(web_form_name: str, docnames: list[str | int]):
+def delete_multiple(web_form_name: str, docnames):
 	assert isinstance(web_form_name, str)
 
 	web_form = frappe.get_doc("Web Form", web_form_name)
