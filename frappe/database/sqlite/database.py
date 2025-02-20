@@ -386,7 +386,12 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 		query = query.replace("%s", "?")
 		try:
 			if isinstance(values, dict):
-				query = query % {x: f"'{y}'" for x, y in values.items()}
+				for k, v in values.items():
+					if isinstance(v, str) and "'" in v:
+						values[k] = self.escape(v)
+					else:
+						values[k] = f"'{v}'"
+				query = query % values
 		except TypeError:
 			pass
 
