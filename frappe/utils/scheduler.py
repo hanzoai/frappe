@@ -219,6 +219,7 @@ def schedule_jobs_based_on_activity(check_time=None):
 		return True
 
 
+@redis_cache(ttl=60 * 60)
 def is_dormant(check_time=None):
 	from frappe.utils.frappecloud import on_frappecloud
 
@@ -228,7 +229,9 @@ def is_dormant(check_time=None):
 	if not threshold:
 		return False
 
-	last_activity = frappe.db.get_value("User", filters={}, fieldname="max(last_active)")
+	last_activity = frappe.db.get_value(
+		"User", filters={}, fieldname="last_active", order_by="last_active desc"
+	)
 
 	if not last_activity:
 		return True
