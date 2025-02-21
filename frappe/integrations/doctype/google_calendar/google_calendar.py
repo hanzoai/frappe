@@ -79,6 +79,7 @@ class GoogleCalendar(Document):
 		google_calendar_id: DF.Data | None
 		next_sync_token: DF.Password | None
 		pull_from_google_calendar: DF.Check
+		sync_as_public: DF.Check
 		push_to_google_calendar: DF.Check
 		refresh_token: DF.Password | None
 		user: DF.Link
@@ -320,7 +321,7 @@ def sync_events_from_google_calendar(g_calendar, method=None):
 					pass
 
 			if not frappe.db.exists("Event", {"google_calendar_event_id": event.get("id")}):
-				insert_event_to_calendar(account, event, recurrence)
+				insert_event_to_calendar(account.owner, account.sync_as_public, account, event, recurrence)
 			else:
 				update_event_in_calendar(account, event, recurrence)
 		elif event.get("status") == "cancelled":
@@ -361,7 +362,7 @@ def sync_events_from_google_calendar(g_calendar, method=None):
 		return _("{0} Google Calendar Events synced.").format(len(results))
 
 
-def insert_event_to_calendar(account, event, recurrence=None):
+def insert_event_to_calendar(owner, public, account, event, recurrence=None):
 	"""
 	Inserts event in Frappe Calendar during Sync
 	"""
@@ -375,6 +376,8 @@ def insert_event_to_calendar(account, event, recurrence=None):
 		"google_calendar_event_id": event.get("id"),
 		"google_meet_link": event.get("hangoutLink"),
 		"pulled_from_google_calendar": 1,
+		"owner": owner,
+		"event_type": "Public" if public else "Private",
 	}
 	calendar_event.update(
 		google_calendar_to_repeat_on(recurrence=recurrence, start=event.get("start"), end=event.get("end"))
