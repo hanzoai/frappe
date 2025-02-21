@@ -222,13 +222,15 @@ def schedule_jobs_based_on_activity(check_time=None):
 def is_dormant(check_time=None):
 	if frappe.conf.developer_mode:
 		return False  # Assume never dormant if developer_mode is enabled
-	if not frappe.conf.check_dormant_days:
-		return False  # Opt-in to dormant sites
+	threshold = cint(frappe.get_system_settings("dormant_days")) * 86400
+	if not threshold:
+		return False
+
 	last_activity_log_timestamp = _get_last_creation_timestamp("Activity Log")
-	since = (frappe.get_system_settings("dormant_days") or 4) * 86400
+
 	if not last_activity_log_timestamp:
 		return True
-	if ((check_time or now_datetime()) - last_activity_log_timestamp).total_seconds() >= since:
+	if ((check_time or now_datetime()) - last_activity_log_timestamp).total_seconds() >= threshold:
 		return True
 	return False
 
