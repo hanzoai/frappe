@@ -662,7 +662,8 @@ class File(Document):
 			file_doc: File = frappe.get_cached_doc("File", duplicate_file.name)
 			if file_doc.exists_on_disk():
 				if self.exists_on_disk():
-					self.file_url = self.save_file_on_filesystem(make_file_url=True)
+					if not self.file_url:
+						self.file_url = duplicate_file.file_url
 				else:
 					self.file_url = duplicate_file.file_url
 				file_exists = True
