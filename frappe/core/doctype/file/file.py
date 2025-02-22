@@ -678,9 +678,13 @@ class File(Document):
 			return self.save_file_on_filesystem()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	def save_file_on_filesystem(self):
 =======
 	def save_file_on_filesystem(self, make_file_url=None):
+=======
+	def save_file_on_filesystem(self):
+>>>>>>> 0c945af0fb (fix: cleanup save_file_on_filesystem method)
 		safe_file_name = re.sub(r"[/\\%?#]", "_", self.file_name)
 >>>>>>> 620c8bfef2 (fix: cleanup copied methods and simpler fix)
 		if self.is_private:
@@ -688,8 +692,6 @@ class File(Document):
 		else:
 			self.file_url = f"/files/{self.file_name}"
 
-		if make_file_url:
-			return
 		fpath = self.write_file()
 
 		return {"file_name": os.path.basename(fpath), "file_url": self.file_url}
