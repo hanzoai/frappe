@@ -506,7 +506,10 @@ def get_linked_docs(doctype: str, name: str, linkinfo: dict | None = None) -> di
 				filters.append([linked_doctype, doctype_fieldname, "=", doctype])
 			# check for child table that no one links to
 			if linked_doctype_meta.istable:
-				if not frappe.db.exists("DocField", {"options": linked_doctype}):
+				if not (
+					frappe.db.exists("DocField", {"options": linked_doctype})
+					or frappe.db.exists(linked_doctype, {"parenttype": doctype, "parent": name})
+				):
 					continue
 			ret = frappe.get_list(
 				doctype=linked_doctype, fields=fields, filters=filters, or_filters=or_filters, order_by=None
