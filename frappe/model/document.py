@@ -5,7 +5,7 @@ import json
 import time
 from collections.abc import Generator, Iterable
 from contextlib import contextmanager
-from functools import singledispatchmethod, wraps
+from functools import wraps
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Any, Literal, Optional, TypeAlias, Union, overload
 
@@ -174,7 +174,6 @@ class Document(BaseDocument, DocRef):
 			self._init_dispatch(args[0], *args[1:], **kwargs)
 		elif kwargs:
 			self._init_from_kwargs(kwargs)
-
 		else:
 			raise ValueError("Illegal arguments")
 
@@ -193,24 +192,18 @@ class Document(BaseDocument, DocRef):
 		if kwargs:  # ad-hoc overrides
 			self._init_from_kwargs(kwargs)
 
-	@singledispatchmethod
 	def _init_dispatch(self, arg, *args, **kwargs):
+		if isinstance(arg, str):
+			name = args[0] if args else arg
+			return self._init_known_doc(arg, name, **kwargs)
+
+		if isinstance(arg, dict):
+			return self._init_from_kwargs(arg)
+
+		if isinstance(arg, DocRef):
+			return self._init_known_doc(arg.doctype, arg.name, **kwargs)
+
 		raise ValueError(f"Unsupported argument type: {type(arg)}")
-
-	@_init_dispatch.register(str)
-	def _init_str(self, doctype, *args, **kwargs):
-		# use doctype as name for single
-		name = doctype if not args else args[0]
-		self._init_known_doc(doctype, name, **kwargs)
-
-	@_init_dispatch.register(DocRef)
-	def _init_docref(self, doc_ref, **kwargs):
-		self._init_known_doc(doc_ref.doctype, doc_ref.name, **kwargs)
-
-	@_init_dispatch.register(dict)
-	def _init_dict(self, arg_dict, **kwargs):
-		# discard any further keyword args
-		self._init_from_kwargs(arg_dict)
 
 	@property
 	def is_locked(self):
