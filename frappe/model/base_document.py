@@ -55,6 +55,8 @@ DOCTYPE_TABLE_FIELDS = [
 TABLE_DOCTYPES_FOR_DOCTYPE = {df["fieldname"]: df["options"] for df in DOCTYPE_TABLE_FIELDS}
 DOCTYPES_FOR_DOCTYPE = {"DocType", *TABLE_DOCTYPES_FOR_DOCTYPE.values()}
 
+UNPICKLABLE_KEYS = ("meta", "permitted_fieldnames", "_parent_doc", "_weakref")
+
 
 def get_controller(doctype):
 	"""Return the locally cached **class** object of the given DocType.
@@ -155,6 +157,10 @@ class BaseDocument:
 	def permitted_fieldnames(self):
 		return get_permitted_fields(doctype=self.doctype, parenttype=getattr(self, "parenttype", None))
 
+	@cached_property
+	def _weakref(self):
+		return weakref.ref(self)
+
 	def __getstate__(self):
 		"""Return a copy of `__dict__` excluding unpicklable values like `meta`.
 
@@ -171,9 +177,9 @@ class BaseDocument:
 	def remove_unpicklable_values(self, state):
 		"""Remove unpicklable values before pickling"""
 
-		state.pop("meta", None)
-		state.pop("permitted_fieldnames", None)
-		state.pop("_parent_doc", None)
+		for key in UNPICKLABLE_KEYS:
+			if key in state:
+				del state[key]
 
 	def update(self, d):
 		"""Update multiple fields of a doctype using a dictionary of key-value pairs.
@@ -282,7 +288,7 @@ class BaseDocument:
 				_d.idx = i + 1
 
 		# reference parent document but with weak reference, parent_doc will be deleted if self is garbage collected.
-		d.parent_doc = weakref.ref(self)
+		d.parent_doc = self._weakref
 
 		return d
 
@@ -290,10 +296,10 @@ class BaseDocument:
 	def parent_doc(self):
 		parent_doc_ref = getattr(self, "_parent_doc", None)
 
-		if isinstance(parent_doc_ref, BaseDocument):
-			return parent_doc_ref
-		elif isinstance(parent_doc_ref, weakref.ReferenceType):
+		if isinstance(parent_doc_ref, weakref.ReferenceType):
 			return parent_doc_ref()
+		elif isinstance(parent_doc_ref, BaseDocument):
+			return parent_doc_ref
 
 	@parent_doc.setter
 	def parent_doc(self, value):
