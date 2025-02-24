@@ -703,11 +703,11 @@ class Document(BaseDocument, DocRef):
 		frappe.flags.currently_saving.append((self.doctype, self.name))
 
 	def set_docstatus(self):
-		if self.docstatus is None:
-			self.docstatus = DocStatus.draft()
+		# docstatus property automatically sets a docstatus if not set
+		docstatus = self.docstatus
 
 		for d in self.get_all_children():
-			d.docstatus = self.docstatus
+			d.set("docstatus", docstatus)
 
 	def _validate(self):
 		self._validate_mandatory()
@@ -972,10 +972,7 @@ class Document(BaseDocument, DocRef):
 		- Submit (1) > Cancel (2)
 
 		"""
-		if not self.docstatus:
-			self.docstatus = DocStatus.draft()
-
-		if to_docstatus == DocStatus.draft():
+		if to_docstatus == DocStatus.DRAFT:
 			if self.docstatus.is_draft():
 				self._action = "save"
 			elif self.docstatus.is_submitted():
@@ -988,7 +985,7 @@ class Document(BaseDocument, DocRef):
 			else:
 				raise frappe.ValidationError(_("Invalid docstatus"), self.docstatus)
 
-		elif to_docstatus == DocStatus.submitted():
+		elif to_docstatus == DocStatus.SUMBITTED:
 			if self.docstatus.is_submitted():
 				self._action = "update_after_submit"
 				self.check_permission("submit")
@@ -1002,7 +999,7 @@ class Document(BaseDocument, DocRef):
 			else:
 				raise frappe.ValidationError(_("Invalid docstatus"), self.docstatus)
 
-		elif to_docstatus == DocStatus.cancelled():
+		elif to_docstatus == DocStatus.CANCELLED:
 			raise frappe.ValidationError(_("Cannot edit cancelled document"))
 
 	def set_parent_in_children(self):
@@ -1168,12 +1165,12 @@ class Document(BaseDocument, DocRef):
 
 	def _submit(self):
 		"""Submit the document. Sets `docstatus` = 1, then saves."""
-		self.docstatus = DocStatus.submitted()
+		self.docstatus = DocStatus.SUMBITTED
 		return self.save()
 
 	def _cancel(self):
 		"""Cancel the document. Sets `docstatus` = 2, then saves."""
-		self.docstatus = DocStatus.cancelled()
+		self.docstatus = DocStatus.CANCELLED
 		return self.save()
 
 	def _rename(self, name: str, merge: bool = False, force: bool = False, validate_rename: bool = True):
@@ -1204,13 +1201,13 @@ class Document(BaseDocument, DocRef):
 		self.set_user_and_timestamp()
 		self.check_if_latest()
 
-		if not self.docstatus == DocStatus.draft():
+		if not self.docstatus.is_draft():
 			raise frappe.ValidationError(_("Only draft documents can be discarded"), self.docstatus)
 
 		self.check_permission("write")
 
 		self.run_method("before_discard")
-		self.db_set("docstatus", DocStatus.cancelled())
+		self.db_set("docstatus", DocStatus.CANCELLED)
 		delattr(self, "_action")
 		self.run_method("on_discard")
 
