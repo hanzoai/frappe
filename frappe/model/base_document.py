@@ -53,9 +53,13 @@ DOCTYPE_TABLE_FIELDS = [
 ]
 
 TABLE_DOCTYPES_FOR_DOCTYPE = {df["fieldname"]: df["options"] for df in DOCTYPE_TABLE_FIELDS}
+
+# child tables cannot have child tables
+TABLE_DOCTYPES_FOR_DOCTYPE_TABLES = {}
+
 DOCTYPES_FOR_DOCTYPE = {"DocType", *TABLE_DOCTYPES_FOR_DOCTYPE.values()}
 
-UNPICKLABLE_KEYS = ("meta", "permitted_fieldnames", "_parent_doc", "_weakref")
+UNPICKLABLE_KEYS = ("meta", "permitted_fieldnames", "_parent_doc", "_weakref", "_table_fieldnames")
 
 
 def get_controller(doctype):
@@ -139,7 +143,6 @@ class BaseDocument:
 		if d.get("doctype"):
 			self.doctype = d["doctype"]
 
-		self._table_fieldnames = {df.fieldname for df in self._get_table_fields()}
 		self.update(d)
 		self.dont_update_if_missing = []
 
@@ -355,6 +358,16 @@ class BaseDocument:
 
 		return value
 
+	@cached_property
+	def _table_fieldnames(self) -> dict:
+		if self.doctype == "DocType":
+			return TABLE_DOCTYPES_FOR_DOCTYPE
+
+		if self.doctype in DOCTYPES_FOR_DOCTYPE:
+			return TABLE_DOCTYPES_FOR_DOCTYPE_TABLES
+
+		return self.meta._table_doctypes
+
 	def _get_table_fields(self):
 		"""
 		To get table fields during Document init
@@ -556,17 +569,17 @@ class BaseDocument:
 		return frappe.as_json(self.as_dict())
 
 	def get_table_field_doctype(self, fieldname):
-		try:
-			return self.meta.get_field(fieldname).options
-		except AttributeError:
-			if self.doctype == "DocType" and (table_doctype := TABLE_DOCTYPES_FOR_DOCTYPE.get(fieldname)):
-				return table_doctype
-
-			raise
+		return self._table_fieldnames.get(fieldname)
 
 	def get_parentfield_of_doctype(self, doctype):
-		fieldname = [df.fieldname for df in self.meta.get_table_fields() if df.options == doctype]
-		return fieldname[0] if fieldname else None
+		return next(
+			(
+				fieldname
+				for fieldname, child_doctype in self._table_fieldnames.items()
+				if child_doctype == doctype
+			),
+			None,
+		)
 
 	def db_insert(self, ignore_if_duplicate=False):
 		"""INSERT the document (with valid columns) in the database.

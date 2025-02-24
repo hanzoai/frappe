@@ -307,9 +307,6 @@ class Meta(Document):
 
 		return valid_fields
 
-	def get_table_field_doctype(self, fieldname):
-		return TABLE_DOCTYPES_FOR_DOCTYPE.get(fieldname)
-
 	def get_field(self, fieldname):
 		"""Return docfield from meta."""
 
@@ -534,6 +531,9 @@ class Meta(Document):
 			self._table_fields = DOCTYPE_TABLE_FIELDS
 		else:
 			self._table_fields = self.get("fields", {"fieldtype": ["in", table_fields]})
+
+		# table fieldname: doctype map
+		self._table_doctypes = {field.fieldname: field.options for field in self._table_fields}
 
 	def sort_fields(self):
 		"""
