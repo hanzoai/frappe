@@ -66,7 +66,6 @@ user_cache_keys = (
 )
 
 doctype_cache_keys = (
-	"doctype_form_meta",
 	"last_modified",
 	"linked_doctypes",
 	"workflow",
