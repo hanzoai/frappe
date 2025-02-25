@@ -270,20 +270,20 @@ class Document(BaseDocument, DocRef):
 		return self
 
 	def load_children_from_db(self):
-		for df in self._get_table_fields():
+		for fieldname, child_doctype in self._table_fieldnames.items():
 			# Make sure not to query the DB for a child table, if it is a virtual one.
 			# During frappe is installed, the property "is_virtual" is not available in tabDocType, so
 			# we need to filter those cases for the access to frappe.db.get_value() as it would crash otherwise.
-			if hasattr(self, "doctype") and not hasattr(self, "module") and is_virtual_doctype(df.options):
-				self.set(df.fieldname, [])
+			if hasattr(self, "doctype") and not hasattr(self, "module") and is_virtual_doctype(child_doctype):
+				self.set(fieldname, [])
 				continue
 
 			if self.doctype == "DocType":
 				# This special handling is required because of bootstrapping code that doesn't
 				# handle failures correctly.
 				children = frappe.db.get_values(
-					df.options,
-					{"parent": self.name, "parenttype": self.doctype, "parentfield": df.fieldname},
+					child_doctype,
+					{"parent": self.name, "parenttype": self.doctype, "parentfield": fieldname},
 					"*",
 					as_dict=True,
 					order_by="idx asc",
@@ -297,14 +297,14 @@ class Document(BaseDocument, DocRef):
 						AND `parenttype`= %(parenttype)s
 						AND `parentfield`= %(parentfield)s
 					ORDER BY `idx` ASC {for_update}""".format(
-						table_name=get_table_name(df.options, wrap_in_backticks=True),
+						table_name=get_table_name(child_doctype, wrap_in_backticks=True),
 						for_update="FOR UPDATE" if self.flags.for_update else "",
 					),
-					{"parent": self.name, "parenttype": self.doctype, "parentfield": df.fieldname},
+					{"parent": self.name, "parenttype": self.doctype, "parentfield": fieldname},
 					as_dict=True,
 				)
 
-			self.set(df.fieldname, children or [])
+			self.set(fieldname, children or [])
 
 		return self
 
@@ -568,6 +568,7 @@ class Document(BaseDocument, DocRef):
 		if getattr(self.meta, "is_virtual", False):
 			# Virtual doctypes manage their own children
 			return
+
 		for df in self.meta.get_table_fields():
 			self.update_child_table(df.fieldname, df)
 
@@ -1097,11 +1098,11 @@ class Document(BaseDocument, DocRef):
 
 		children = []
 
-		for df in self.meta.get_table_fields():
-			if parenttype and df.options != parenttype:
+		for fieldname, child_doctype in self._table_fieldnames.items():
+			if parenttype and child_doctype != parenttype:
 				continue
 
-			if value := self.get(df.fieldname):
+			if value := self.get(fieldname):
 				children.extend(value)
 
 		return children
