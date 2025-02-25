@@ -59,7 +59,14 @@ TABLE_DOCTYPES_FOR_DOCTYPE_TABLES = {}
 
 DOCTYPES_FOR_DOCTYPE = {"DocType", *TABLE_DOCTYPES_FOR_DOCTYPE.values()}
 
-UNPICKLABLE_KEYS = ("meta", "permitted_fieldnames", "_parent_doc", "_weakref", "_table_fieldnames")
+UNPICKLABLE_KEYS = (
+	"meta",
+	"permitted_fieldnames",
+	"_parent_doc",
+	"_weakref",
+	"_table_fieldnames",
+	"_valid_columns",
+)
 
 
 def get_controller(doctype):
@@ -466,27 +473,36 @@ class BaseDocument:
 		without worrying about whether or not they have values
 		"""
 
+		if not self._table_fieldnames:
+			return
+
+		__dict = self.__dict__
+
 		for fieldname in self._table_fieldnames:
-			if self.__dict__.get(fieldname) is None:
-				self.__dict__[fieldname] = []
+			if __dict.get(fieldname) is None:
+				__dict[fieldname] = []
 
 	def init_valid_columns(self):
-		for key in default_fields:
-			if key not in self.__dict__:
-				self.__dict__[key] = None
+		__dict = self.__dict__
 
-			if self.__dict__[key] is None:
-				if key == "docstatus":
-					self.__dict__[key] = DocStatus.DRAFT
-				elif key == "idx":
-					self.__dict__[key] = 0
+		if __dict.get("docstatus") is None:
+			__dict["docstatus"] = DocStatus.DRAFT
 
-		for key in self.get_valid_columns():
-			if key not in self.__dict__:
-				self.__dict__[key] = None
+		if __dict.get("idx") is None:
+			__dict["idx"] = 0
+
+		for key in self._valid_columns:
+			if key not in __dict:
+				__dict[key] = None
 
 	def get_valid_columns(self) -> list[str]:
-		if self.doctype not in frappe.local.valid_columns:
+		return self._valid_columns
+
+	@cached_property
+	def _valid_columns(self) -> list[str]:
+		valid_columns_cache = frappe.local.valid_columns
+
+		if self.doctype not in valid_columns_cache:
 			if self.doctype in DOCTYPES_FOR_DOCTYPE:
 				from frappe.model.meta import get_table_columns
 
@@ -494,9 +510,9 @@ class BaseDocument:
 			else:
 				valid = self.meta.get_valid_columns()
 
-			frappe.local.valid_columns[self.doctype] = valid
+			valid_columns_cache[self.doctype] = valid
 
-		return frappe.local.valid_columns[self.doctype]
+		return valid_columns_cache[self.doctype]
 
 	def is_new(self) -> bool:
 		return self.get("__islocal")
