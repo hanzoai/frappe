@@ -380,15 +380,11 @@ class File(Document):
 			filters = {
 				"content_hash": self.content_hash,
 				"is_private": self.is_private,
-				"name": ("!=", self.name),
 			}
-<<<<<<< HEAD
-=======
 
 			if self.name:
 				filters.update({"name": ("!=", self.name)})
 
->>>>>>> 4ba8ec637d (fix: check if duplicate_file url matches incoming file url)
 			if self.attached_to_doctype and self.attached_to_name:
 				filters.update(
 					{
