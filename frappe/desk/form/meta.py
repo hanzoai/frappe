@@ -44,7 +44,9 @@ def get_meta(doctype, cached=True) -> "FormMeta":
 			meta = FormMeta(doctype, cached=False)
 			frappe.client_cache.set_value(key, meta)
 	else:
-		meta = FormMeta(doctype)
+		# NOTE: In developer mode use cached `Meta` for better DX
+		#       In prod don't use cached meta when explicitly requesting from DB.
+		meta = FormMeta(doctype, cached=frappe.conf.developer_mode)
 
 	return meta
 
