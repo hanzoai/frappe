@@ -290,16 +290,19 @@ class BaseDocument:
 
 		if position == -1:
 			table.append(d)
+
+			if not getattr(d, "idx", False):
+				d.idx = len(table)
 		else:
 			# insert at specific position
 			table.insert(position, d)
 
 			# re number idx
-			for i, _d in enumerate(table):
-				_d.idx = i + 1
+			for i, _d in enumerate(table, 1):
+				_d.idx = i
 
 		# reference parent document but with weak reference, parent_doc will be deleted if self is garbage collected.
-		d.parent_doc = self._weakref
+		d._parent_doc = self._weakref
 
 		return d
 
@@ -347,22 +350,17 @@ class BaseDocument:
 			value["doctype"] = doctype
 			value = get_controller(doctype)(value)
 
-		value.parent = self.name
-		value.parenttype = self.doctype
-		value.parentfield = key
+		__dict = value.__dict__
+		__dict["parent"] = self.name
+		__dict["parenttype"] = self.doctype
+		__dict["parentfield"] = key
 
-		if value.__dict__.get("docstatus") is None:
-			value.__dict__["docstatus"] = DocStatus.DRAFT
+		if __dict.get("docstatus") is None:
+			__dict["docstatus"] = DocStatus.DRAFT
 
-		if not getattr(value, "idx", None):
-			if table := getattr(self, key, None):
-				value.idx = len(table) + 1
-			else:
-				value.idx = 1
-
-		if not getattr(value, "name", None):
-			value.__dict__["__islocal"] = 1
-			value.__dict__["__temporary_name"] = frappe.generate_hash(length=10)
+		if not __dict.get("name"):
+			__dict["__islocal"] = 1
+			__dict["__temporary_name"] = frappe.generate_hash(length=10)
 
 		return value
 
