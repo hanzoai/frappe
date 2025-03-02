@@ -111,7 +111,8 @@ def generate_report_result(
 	if cint(report.add_total_row) and result and not skip_total_row:
 		result = add_total_row(result, columns, is_tree=is_tree, parent_field=parent_field)
 
-	translate_data = filters.get("translate_data")
+	if isinstance(filters, dict):
+		translate_data = filters.get("translate_data")
 	if translate_data:
 		result = translate_report_data(result)
 
