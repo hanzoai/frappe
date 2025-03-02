@@ -173,6 +173,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		frappe.run_serially([
 			() => this.get_report_doc(),
 			() => this.get_report_settings(),
+			() => this.add_standard_checkbox(),
 			() => this.setup_progress_bar(),
 			() => this.setup_page_head(),
 			() => this.refresh_report(route_options),
@@ -529,7 +530,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		const { filters = [] } = this.report_settings;
 
 		let filter_area = this.page.page_form;
-
 		this.filters = filters
 			.map((df) => {
 				if (df.fieldtype === "Break") return;
@@ -2112,5 +2112,15 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 	// backward compatibility
 	get get_values() {
 		return this.get_filter_values;
+	}
+
+	add_standard_checkbox() {
+		if (frappe.boot.lang == "en") return;
+		let filter_config = {
+			fieldname: "translate_data",
+			fieldtype: "Check",
+			label: __("Translate Data"),
+		};
+		this.report_settings.filters.push(filter_config);
 	}
 };

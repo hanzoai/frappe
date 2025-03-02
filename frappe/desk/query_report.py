@@ -111,6 +111,10 @@ def generate_report_result(
 	if cint(report.add_total_row) and result and not skip_total_row:
 		result = add_total_row(result, columns, is_tree=is_tree, parent_field=parent_field)
 
+	translate_data = filters.get("translate_data")
+	if translate_data:
+		result = translate_report_data(result)
+
 	return {
 		"result": result,
 		"columns": columns,
@@ -809,3 +813,12 @@ def validate_filters_permissions(report_name, filters=None, user=None):
 						linked_doctype, filters[field.fieldname]
 					)
 				)
+
+
+def translate_report_data(data):
+	# remove total row
+	data = data[:-1]
+	for d in data:
+		for field, value in d.items():
+			d[field] = _(value)
+	return data
