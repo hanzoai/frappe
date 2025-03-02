@@ -80,20 +80,19 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	set_active_workspace_item() {
+		console.log(frappe.get_route());
 		if (!frappe.get_route()) return;
-		if (frappe.get_route()[0] == "") return;
 		let current_route = frappe.get_route();
-		let doctype = frappe.get_route()[1];
-		let current_item = doctype;
-		if (current_route[0] != "Workspaces") {
-			let meta_info = frappe.get_meta(doctype);
-			if (meta_info) {
-				let active_workspace = meta_info.module;
-				if (meta_info.__workspaces) {
-					active_workspace = meta_info.__workspaces[0];
-				}
-				current_item = active_workspace;
-			}
+		let current_route_str = frappe.get_route_str();
+		let current_item;
+		if (current_route[0] == "Workspaces") {
+			current_item = current_route[1];
+		} else if (frappe.breadcrumbs) {
+			if (Object.keys(frappe.breadcrumbs.all).length == 0) return;
+			current_item = frappe.breadcrumbs.all[frappe.get_route_str()];
+			current_item =
+				frappe.breadcrumbs.all[current_route_str].workspace ||
+				frappe.breadcrumbs.all[current_route_str].module;
 		}
 		if (this.is_route_in_sidebar(current_item)) {
 			this.active_item.addClass("active-sidebar");
