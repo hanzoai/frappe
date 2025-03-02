@@ -113,8 +113,8 @@ def generate_report_result(
 
 	if isinstance(filters, dict):
 		translate_data = filters.get("translate_data")
-	if translate_data:
-		result = translate_report_data(result)
+		if translate_data:
+			result = translate_report_data(result)
 
 	return {
 		"result": result,
