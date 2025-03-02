@@ -229,6 +229,9 @@ frappe.ui.Sidebar = class Sidebar {
 			$(".list-sidebar.hidden-xs.hidden-sm").removeClass("opened");
 			// $(".close-sidebar").css("display", "none");
 			$("body").css("overflow", "auto");
+			if (frappe.is_mobile()) {
+				this.close_sidebar();
+			}
 		});
 
 		if (
