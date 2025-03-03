@@ -173,7 +173,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		frappe.run_serially([
 			() => this.get_report_doc(),
 			() => this.get_report_settings(),
-			() => this.add_standard_checkbox(),
+			() => this.add_translate_data_checkbox(),
 			() => this.setup_progress_bar(),
 			() => this.setup_page_head(),
 			() => this.refresh_report(route_options),
@@ -2114,7 +2114,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		return this.get_filter_values;
 	}
 
-	add_standard_checkbox() {
+	add_translate_data_checkbox() {
 		if (frappe.boot.lang == "en") return;
 		let filter_config = {
 			fieldname: "translate_data",
