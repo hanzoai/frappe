@@ -112,7 +112,8 @@ frappe.ui.form.Layout = class Layout {
 
 		// Prepare Block
 		let $html;
-		if (html.substring(0, 1) !== "<") {
+		const contains_html_tag = /<[a-z][\s\S]*>/i.test(html);
+		if (!contains_html_tag) {
 			// wrap in a block if `html` does not contain html tags
 			$html = $("<div class='form-message border-bottom'></div>").text(html);
 		} else {
