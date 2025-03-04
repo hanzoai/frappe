@@ -99,26 +99,6 @@ frappe.ui.form.Layout = class Layout {
 		return fields;
 	}
 
-<<<<<<< HEAD
-	show_message(html, color) {
-		if (this.message_color) {
-			// remove previous color
-			this.message.removeClass(this.message_color);
-		}
-		let close_message = $(`<div class="close-message">${frappe.utils.icon("close")}</div>`);
-		this.message_color =
-			color && ["yellow", "blue", "red", "green", "orange"].includes(color) ? color : "blue";
-		if (html) {
-			if (html.substr(0, 1) !== "<") {
-				// wrap in a block
-				html = "<div>" + html + "</div>";
-			}
-			this.message.removeClass("hidden").addClass(this.message_color);
-			$(html).appendTo(this.message);
-			close_message.appendTo(this.message);
-			close_message.on("click", () => this.message.empty().addClass("hidden"));
-		} else {
-=======
 	/**Render a message block with its own color and close button
 	 * @param {String} html - message or HTML to be displayed
 	 * @param {String} color - color of the block. One of "yellow", "blue", "red", "green" or "orange". Defaults to "blue".
@@ -126,19 +106,19 @@ frappe.ui.form.Layout = class Layout {
 	 */
 	show_message(html, color, permanent = false) {
 		if (!html) {
->>>>>>> 2022ddf407 (refactor: Allow isolated headlines/intros in the form (#31459))
 			this.message.empty().addClass("hidden");
 			return;
 		}
 
 		// Prepare Block
 		let $html;
-		if (html.substring(0, 1) !== "<") {
+		const contains_html_tag = /<[a-z][\s\S]*>/i.test(html);
+		if (!contains_html_tag) {
 			// wrap in a block if `html` does not contain html tags
-			$html = $("<div class='form-message border-bottom'></div>").text(html);
+			$html = $("<div class='form-message'></div>").text(html);
 		} else {
 			$html = $(html);
-			$html.addClass("form-message border-bottom");
+			$html.addClass("form-message");
 		}
 
 		// Add close button to block if not permanent
