@@ -107,11 +107,7 @@ def can_subscribe_doc(doctype, docname):
 	if os.environ.get("CI"):
 		return True
 
-	from frappe.exceptions import PermissionError
-
-	if not frappe.has_permission(doctype=doctype, doc=docname, ptype="read"):
-		raise PermissionError()
-
+	frappe.has_permission(doctype, doc=docname, throw=True)
 	return True
 
 

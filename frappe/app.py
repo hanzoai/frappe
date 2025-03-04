@@ -22,6 +22,7 @@ import frappe.utils.response
 from frappe import _
 from frappe.core.doctype.comment.comment import update_comments_in_parent_after_request
 from frappe.middlewares import StaticDataMiddleware
+from frappe.permissions import handle_does_not_exist_error
 from frappe.utils import cint, get_site_name, sanitize_html
 from frappe.utils.data import escape_html
 from frappe.utils.error import make_error_snapshot
@@ -285,6 +286,7 @@ def make_form_dict(request: Request):
 	frappe.local.form_dict.pop("_", None)
 
 
+@handle_does_not_exist_error
 def handle_exception(e):
 	response = None
 	http_status_code = getattr(e, "http_status_code", 500)
