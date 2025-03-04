@@ -477,7 +477,7 @@ def _strip_html_tags(message):
 def msgprint(
 	msg: str,
 	title: str | None = None,
-	raise_exception: bool | type[Exception] = False,
+	raise_exception: bool | type[Exception] | Exception = False,
 	as_table: bool = False,
 	as_list: bool = False,
 	indicator: Literal["blue", "green", "orange", "red", "yellow"] | None = None,
@@ -512,6 +512,9 @@ def msgprint(
 		if raise_exception:
 			if inspect.isclass(raise_exception) and issubclass(raise_exception, Exception):
 				exc = raise_exception(msg)
+			elif isinstance(raise_exception, Exception):
+				exc = raise_exception
+				exc.args = (msg,)
 			else:
 				exc = ValidationError(msg)
 			if out.__frappe_exc_id:
@@ -583,7 +586,7 @@ def clear_last_message():
 
 def throw(
 	msg: str,
-	exc: type[Exception] = ValidationError,
+	exc: type[Exception] | Exception = ValidationError,
 	title: str | None = None,
 	is_minimizable: bool = False,
 	wide: bool = False,
@@ -1016,6 +1019,7 @@ def has_permission(
 	*,
 	parent_doctype=None,
 	debug=False,
+	ignore_share_permissions=False,
 ):
 	"""
 	Returns True if the user has permission `ptype` for given `doctype` or `doc`
@@ -1040,9 +1044,13 @@ def has_permission(
 		raise_exception=throw,
 		parent_doctype=parent_doctype,
 		debug=debug,
+		ignore_share_permissions=ignore_share_permissions,
 	)
 
 	if throw and not out:
+		if doc:
+			frappe.permissions.check_doctype_permission(doctype, ptype)
+
 		document_label = f"{_(doctype)} {doc if isinstance(doc, str) else doc.name}" if doc else _(doctype)
 		frappe.flags.error_message = _("No permission for {0}").format(document_label)
 		raise frappe.PermissionError
@@ -1303,7 +1311,7 @@ def get_last_doc(doctype, filters=None, order_by="creation desc", *, for_update=
 	if d:
 		return get_doc(doctype, d[0], for_update=for_update)
 	else:
-		raise DoesNotExistError
+		raise DoesNotExistError(doctype=doctype)
 
 
 def get_single(doctype):

@@ -12,7 +12,7 @@ import frappe.utils
 from frappe import _, _dict
 from frappe.desk.form.document_follow import is_document_followed
 from frappe.model.utils.user_settings import get_user_settings
-from frappe.permissions import get_doc_permissions
+from frappe.permissions import check_doctype_permission, get_doc_permissions
 from frappe.utils.data import cstr
 
 if typing.TYPE_CHECKING:
@@ -33,10 +33,12 @@ def getdoc(doctype, name, user=None):
 	try:
 		doc = frappe.get_doc(doctype, name)
 	except frappe.DoesNotExistError:
+		check_doctype_permission(doctype)
 		frappe.clear_last_message()
 		return []
 
 	if not doc.has_permission("read"):
+		check_doctype_permission(doctype)
 		frappe.flags.error_message = _("Insufficient Permission for {0}").format(
 			frappe.bold(_(doctype) + " " + name)
 		)
