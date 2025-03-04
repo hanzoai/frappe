@@ -818,5 +818,6 @@ def translate_report_data(data):
 	for d in data:
 		if isinstance(d, dict):
 			for field, value in d.items():
-				d[field] = _(value)
+				if isinstance(value, str):
+					d[field] = _(value)
 	return data
