@@ -112,7 +112,8 @@ def generate_report_result(
 		result = add_total_row(result, columns, is_tree=is_tree, parent_field=parent_field)
 
 	if isinstance(filters, dict) and filters.get("translate_data"):
-		result = translate_report_data(result)
+		total_row = cint(report.add_total_row) and result and not skip_total_row
+		result = translate_report_data(result, total_row)
 
 	return {
 		"result": result,
@@ -814,8 +815,8 @@ def validate_filters_permissions(report_name, filters=None, user=None):
 				)
 
 
-def translate_report_data(data):
-	for d in data[:-1] if isinstance(data[-1], list) else data:
+def translate_report_data(data, total_row):
+	for d in data[:-1] if total_row else data:
 		for field, value in d.items():
 			if isinstance(value, str):
 				d[field] = _(value)
