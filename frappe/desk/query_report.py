@@ -815,9 +815,8 @@ def validate_filters_permissions(report_name, filters=None, user=None):
 
 
 def translate_report_data(data):
-	for d in data:
-		if isinstance(d, dict):
-			for field, value in d.items():
-				if isinstance(value, str):
-					d[field] = _(value)
+	for d in data[:-1] if isinstance(data[-1], list) else data:
+		for field, value in d.items():
+			if isinstance(value, str):
+				d[field] = _(value)
 	return data
