@@ -7,8 +7,8 @@ class TestDocStatus(FrappeTestCase):
 		self.assertEqual(DocStatus(0), DocStatus.DRAFT)
 
 		self.assertTrue(DocStatus.DRAFT.is_draft())
-		self.assertFalse(DocStatus.DRAFT.is_cancelled())
 		self.assertFalse(DocStatus.DRAFT.is_submitted())
+		self.assertFalse(DocStatus.DRAFT.is_cancelled())
 
 	def test_submitted(self):
 		self.assertEqual(DocStatus(1), DocStatus.SUMBITTED)
