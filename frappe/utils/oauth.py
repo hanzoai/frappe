@@ -206,7 +206,6 @@ def login_oauth_user(
 		)
 
 	frappe.local.login_manager.login_as(user)
-	frappe.local.login_manager.run_trigger("on_session_creation")
 
 	# because of a GET request!
 	frappe.db.commit()
