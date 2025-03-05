@@ -91,6 +91,7 @@ def update_document_title(
 
 	if title_updated:
 		try:
+			doc.reload()
 			setattr(doc, title_field, updated_title)
 			doc.save()
 			frappe.msgprint(_("Saved"), alert=True, indicator="green")
