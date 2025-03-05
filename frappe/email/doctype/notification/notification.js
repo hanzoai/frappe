@@ -69,8 +69,13 @@ frappe.notification = {
 					}
 				});
 			} else if (["WhatsApp", "SMS"].includes(frm.doc.channel)) {
+<<<<<<< HEAD
 				receiver_fields = $.map(fields, function (d) {
 					return d.options == "Phone" ? get_select_options(d) : null;
+=======
+				receiver_fields = get_receiver_fields(fields, function (df) {
+					return df.options == "Phone" || df.options == "Mobile";
+>>>>>>> 2da95eebcb (fix: Notification get_receiver_fields phone field function)
 				});
 			}
 
