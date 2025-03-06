@@ -107,18 +107,20 @@ frappe.ui.form.ControlAttach = class ControlAttach extends frappe.ui.form.Contro
 				this.$value
 					.toggle(true)
 					.find(".attached-file-link")
-					.html(frappe.utils.xss_sanitise(filename || this.value))
+					.text(filename || this.value)
 					.attr("href", dataurl || this.value);
 			} else {
 				this.$wrapper.html(`
-					  <div class="attached-file flex justify-between align-center">
+					<div class="attached-file flex justify-between align-center">
 						<div class="ellipsis">
-						  <a href="${dataurl || this.value}" target="_blank">${frappe.utils.xss_sanitise(
-					filename || this.value
-				)}</a>
+							<a target="_blank"></a>
 						</div>
-					  </div>
+					</div>
 				`);
+				this.$wrapper
+					.find("a")
+					.text(filename || this.value)
+					.attr("href", dataurl || this.value);
 			}
 		} else {
 			this.$input.toggle(true);
