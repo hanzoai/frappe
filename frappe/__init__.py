@@ -44,8 +44,10 @@ from frappe.query_builder.utils import (
 	patch_query_aggregation,
 	patch_query_execute,
 )
+from frappe.utils import strip_html_tags
+from frappe.utils.caching import deprecated_local_cache as local_cache
 from frappe.utils.caching import request_cache
-from frappe.utils.data import bold, cint, cstr, safe_decode, safe_encode, sbool
+from frappe.utils.data import as_unicode, bold, cint, cstr, safe_decode, safe_encode, sbool
 
 # Local application imports
 from .exceptions import *
@@ -161,18 +163,6 @@ def _lt(msg: str, lang: str | None = None, context: str | None = None) -> "_Lazy
 	from .types.lazytranslatedstring import _LazyTranslate
 
 	return _LazyTranslate(msg, lang, context)
-
-
-def as_unicode(text, encoding: str = "utf-8") -> str:
-	"""Convert to unicode if required."""
-	if isinstance(text, str):
-		return text
-	elif text is None:
-		return ""
-	elif isinstance(text, bytes):
-		return str(text, encoding)
-	else:
-		return str(text)
 
 
 def set_user_lang(user: str, user_language: str | None = None) -> None:
@@ -385,15 +375,6 @@ def connect_replica() -> bool:
 	return True
 
 
-def get_conf(site: str | None = None) -> _dict[str, Any]:
-	if hasattr(local, "conf"):
-		return local.conf
-
-	# if no site, get from common_site_config.json
-	with init_site(site):
-		return local.conf
-
-
 class init_site:
 	def __init__(self, site=None):
 		"""If site is None, initialize it for empty site ('') to load common_site_config.json"""
@@ -465,16 +446,7 @@ def log(msg: str) -> None:
 	debug_log.append(as_unicode(msg))
 
 
-@functools.lru_cache(maxsize=1024)
-def _strip_html_tags(message):
-	from frappe.utils import strip_html_tags
-
-	return strip_html_tags(message)
-
-
-ServerAction: TypeAlias = dict
-ClientAction: TypeAlias = dict
-Action: TypeAlias = ServerAction | ClientAction
+_strip_html_tags = functools.lru_cache(maxsize=1024)(strip_html_tags)
 
 
 def msgprint(
@@ -485,7 +457,7 @@ def msgprint(
 	as_list: bool = False,
 	indicator: Literal["blue", "green", "orange", "red", "yellow"] | None = None,
 	alert: bool = False,
-	primary_action: Action | None = None,
+	primary_action: dict | None = None,
 	is_minimizable: bool = False,
 	wide: bool = False,
 	*,
@@ -2136,57 +2108,6 @@ def attach_print(
 	return {"fname": file_name, "fcontent": content}
 
 
-def publish_progress(*args, **kwargs):
-	"""Show the user progress for a long request
-
-	:param percent: Percent progress
-	:param title: Title
-	:param doctype: Optional, for document type
-	:param docname: Optional, for document name
-	:param description: Optional description
-	"""
-	import frappe.realtime
-
-	return frappe.realtime.publish_progress(*args, **kwargs)
-
-
-def publish_realtime(*args, **kwargs):
-	"""Publish real-time updates
-
-	:param event: Event name, like `task_progress` etc.
-	:param message: JSON message object. For async must contain `task_id`
-	:param room: Room in which to publish update (default entire site)
-	:param user: Transmit to user
-	:param doctype: Transmit to doctype, docname
-	:param docname: Transmit to doctype, docname
-	:param after_commit: (default False) will emit after current transaction is committed
-	"""
-	import frappe.realtime
-
-	return frappe.realtime.publish_realtime(*args, **kwargs)
-
-
-def local_cache(namespace, key, generator, regenerate_if_none=False):
-	"""A key value store for caching within a request
-
-	:param namespace: frappe.local.cache[namespace]
-	:param key: frappe.local.cache[namespace][key] used to retrieve value
-	:param generator: method to generate a value if not found in store
-
-	"""
-	if namespace not in local.cache:
-		local.cache[namespace] = {}
-
-	if key not in local.cache[namespace]:
-		local.cache[namespace][key] = generator()
-
-	elif local.cache[namespace][key] is None and regenerate_if_none:
-		# if key exists but the previous result was None
-		local.cache[namespace][key] = generator()
-
-	return local.cache[namespace][key]
-
-
 def enqueue(*args, **kwargs):
 	"""
 	Enqueue method to be executed using a background worker
@@ -2264,14 +2185,6 @@ def get_desk_link(doctype, name):
 	return html.format(doctype=doctype, name=name, doctype_local=_(doctype), title_local=_(title))
 
 
-def safe_eval(code, eval_globals=None, eval_locals=None):
-	"""A safer `eval`"""
-
-	from frappe.utils.safe_exec import safe_eval
-
-	return safe_eval(code, eval_globals, eval_locals)
-
-
 def get_website_settings(key):
 	if not hasattr(local, "website_settings"):
 		try:
@@ -2292,23 +2205,6 @@ def get_active_domains():
 @whitelist(allow_guest=True)
 def ping():
 	return "pong"
-
-
-def mock(type, size=1, locale="en"):
-	import faker
-
-	results = []
-	fake = faker.Faker(locale)
-	if type not in dir(fake):
-		raise ValueError("Not a valid mock type.")
-	else:
-		for _ in range(size):
-			data = getattr(fake, type)()
-			results.append(data)
-
-	from frappe.utils import squashify
-
-	return squashify(results)
 
 
 def validate_and_sanitize_search_inputs(fn):
@@ -2333,9 +2229,10 @@ import frappe._optimizations
 from frappe.cache_manager import clear_cache, reset_metadata_version
 
 # Backward compatibility
-from frappe.config import get_common_site_config, get_site_config
+from frappe.config import get_common_site_config, get_conf, get_site_config
 from frappe.core.doctype.system_settings.system_settings import get_system_settings
-from frappe.utils import parse_json
+from frappe.realtime import publish_progress, publish_realtime
+from frappe.utils import mock, parse_json, safe_eval
 from frappe.utils.error import log_error
 from frappe.utils.print_utils import get_print
 
