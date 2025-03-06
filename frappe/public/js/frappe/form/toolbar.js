@@ -74,6 +74,14 @@ frappe.ui.form.Toolbar = class Toolbar {
 		let doc_field = this.frm.get_docfield(title_field);
 
 		if (
+			this.frm.meta.naming_rule === "By fieldname" &&
+			this.frm.meta.autoname === "field:" + title_field &&
+			!this.frm.meta.allow_rename
+		) {
+			return false;
+		}
+
+		if (
 			title_field &&
 			this.frm.perm[0].write &&
 			!this.frm.doc.__islocal &&
