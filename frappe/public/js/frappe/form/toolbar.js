@@ -210,23 +210,37 @@ frappe.ui.form.Toolbar = class Toolbar {
 				});
 			}
 
+			let is_title_field_same_as_autoname = false;
+
 			// check if docname is updatable
 			if (me.can_rename()) {
 				let label = __("New Name");
 				if (me.frm.meta.autoname && me.frm.meta.autoname.startsWith("field:")) {
 					let fieldname = me.frm.meta.autoname.split(":")[1];
+<<<<<<< HEAD
 					label = __("New {0}", [me.frm.get_docfield(fieldname).label]);
+=======
+					label = __("New {0}", [__(me.frm.get_docfield(fieldname).label)]);
+					is_title_field_same_as_autoname = fieldname === title_field;
+				}
+
+				if (!is_title_field_same_as_autoname) {
+					fields.push(
+						...[
+							{
+								label: label,
+								fieldname: "name",
+								fieldtype: "Data",
+								reqd: 1,
+								default: docname,
+							},
+						]
+					);
+>>>>>>> 7fac10a1c1 (fix: if autoname is same as title then show only one field in rename modal)
 				}
 
 				fields.push(
 					...[
-						{
-							label: label,
-							fieldname: "name",
-							fieldtype: "Data",
-							reqd: 1,
-							default: docname,
-						},
 						{
 							label: __("Merge with existing"),
 							fieldname: "merge",
@@ -247,6 +261,11 @@ frappe.ui.form.Toolbar = class Toolbar {
 				d.set_primary_action(__("Rename"), (values) => {
 					d.disable_primary_action();
 					d.hide();
+
+					if (is_title_field_same_as_autoname) {
+						values.name = values.title;
+					}
+
 					this.rename_document_title(values.name, values.title, values.merge)
 						.then(() => {
 							d.hide();
