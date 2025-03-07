@@ -10,6 +10,7 @@ be used to build database driven apps.
 
 Read the documentation: https://frappeframework.com/docs
 """
+
 import copy
 import faulthandler
 import functools
@@ -2349,15 +2350,16 @@ def get_website_settings(key):
 	return local.website_settings.get(key)
 
 
-def get_system_settings(key):
-	if not hasattr(local, "system_settings"):
+def get_system_settings(key: str):
+	"""Return the value associated with the given `key` from System Settings DocType."""
+	if not (system_settings := getattr(local, "system_settings", None)):
 		try:
-			local.system_settings = get_cached_doc("System Settings")
+			local.system_settings = system_settings = get_cached_doc("System Settings")
 		except DoesNotExistError:  # possible during new install
 			clear_last_message()
 			return
 
-	return local.system_settings.get(key)
+	return system_settings.get(key)
 
 
 def get_active_domains():
