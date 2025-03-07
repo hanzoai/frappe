@@ -326,6 +326,8 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 	def add_index(self, doctype: str, fields: list, index_name: str | None = None):
 		"""Creates an index with given fields if not already created."""
 
+		from frappe.custom.doctype.property_setter.property_setter import make_property_setter
+
 		# We can't specify the length of the index in SQLite
 		fields = [re.sub(r"\(.*?\)", "", field) for field in fields]
 
@@ -333,6 +335,18 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 		table_name = get_table_name(doctype)
 		self.commit()
 		self.sql(f"CREATE INDEX IF NOT EXISTS `{index_name}` ON `{table_name}` ({', '.join(fields)})")
+
+		# Ensure that DB migration doesn't clear this index, assuming this is manually added
+		# via code or console.
+		if len(fields) == 1 and not (frappe.flags.in_install or frappe.flags.in_migrate):
+			make_property_setter(
+				doctype,
+				fields[0],
+				property="search_index",
+				value="1",
+				property_type="Check",
+				for_doctype=False,  # Applied on docfield
+			)
 
 	def add_unique(self, doctype, fields, constraint_name=None):
 		"""Creates unique constraint on fields."""
