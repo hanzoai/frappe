@@ -217,10 +217,7 @@ frappe.ui.form.Toolbar = class Toolbar {
 				let label = __("New Name");
 				if (me.frm.meta.autoname && me.frm.meta.autoname.startsWith("field:")) {
 					let fieldname = me.frm.meta.autoname.split(":")[1];
-<<<<<<< HEAD
 					label = __("New {0}", [me.frm.get_docfield(fieldname).label]);
-=======
-					label = __("New {0}", [__(me.frm.get_docfield(fieldname).label)]);
 					is_title_field_same_as_autoname = fieldname === title_field;
 				}
 
@@ -236,7 +233,6 @@ frappe.ui.form.Toolbar = class Toolbar {
 							},
 						]
 					);
->>>>>>> 7fac10a1c1 (fix: if autoname is same as title then show only one field in rename modal)
 				}
 
 				fields.push(
