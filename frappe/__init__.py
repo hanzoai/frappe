@@ -11,8 +11,6 @@ be used to build database driven apps.
 Read the documentation: https://frappeframework.com/docs
 """
 
-import base64
-import copy
 import functools
 import importlib
 import inspect
@@ -1680,9 +1678,16 @@ def read_file(path, raise_not_found=False, as_base64=False):
 		path = path.encode("utf-8")
 
 	if os.path.exists(path):
-		with open(path, "rb" if as_base64 else "r") as f:
-			content = f.read()
-			return base64.b64encode(content).decode("utf-8") if as_base64 else as_unicode(content)
+		if as_base64:
+			import base64
+
+			with open(path, "rb") as f:
+				content = f.read()
+				return base64.b64encode(content).decode("utf-8")
+		else:
+			with open(path) as f:
+				content = f.read()
+				return as_unicode(content)
 	elif raise_not_found:
 		raise OSError(f"{path} Not Found")
 	else:
@@ -2078,89 +2083,6 @@ def format(*args, **kwargs):
 	return frappe.utils.formatters.format_value(*args, **kwargs)
 
 
-def get_print(
-	doctype=None,
-	name=None,
-	print_format=None,
-	style=None,
-	as_pdf=False,
-	doc=None,
-	output=None,
-	no_letterhead=0,
-	password=None,
-	pdf_options=None,
-	letterhead=None,
-	pdf_generator: Literal["wkhtmltopdf", "chrome"] | None = None,
-):
-	"""Get Print Format for given document.
-
-	:param doctype: DocType of document.
-	:param name: Name of document.
-	:param print_format: Print Format name. Default 'Standard',
-	:param style: Print Format style.
-	:param as_pdf: Return as PDF. Default False.
-	:param password: Password to encrypt the pdf with. Default None
-	:param pdf_generator: PDF generator to use. Default 'wkhtmltopdf'
-	"""
-	from frappe.utils.pdf import get_pdf
-	from frappe.website.serve import get_response_without_exception_handling
-
-	"""
-	local.form_dict.pdf_generator is set from before_request hook (print designer app) for download_pdf endpoint
-	if it is not set (internal function call) then set it
-	"""
-	if "pdf_generator" not in local.form_dict:
-		# if arg is passed, use that, else get setting from print format
-		if pdf_generator is None:
-			pdf_generator = (
-				frappe.get_cached_value("Print Format", print_format, "pdf_generator") or "wkhtmltopdf"
-			)
-		local.form_dict.pdf_generator = pdf_generator
-
-	original_form_dict = copy.deepcopy(local.form_dict)
-	try:
-		local.form_dict.doctype = doctype
-		local.form_dict.name = name
-		local.form_dict.format = print_format
-		local.form_dict.style = style
-		local.form_dict.doc = doc
-		local.form_dict.no_letterhead = no_letterhead
-		local.form_dict.letterhead = letterhead
-
-		pdf_options = pdf_options or {}
-		if password:
-			pdf_options["password"] = password
-
-		response = get_response_without_exception_handling("printview", 200)
-		html = str(response.data, "utf-8")
-	finally:
-		local.form_dict = original_form_dict
-
-	if not as_pdf:
-		return html
-
-	if local.form_dict.pdf_generator != "wkhtmltopdf":
-		hook_func = frappe.get_hooks("pdf_generator")
-		for hook in hook_func:
-			"""
-			check pdf_generator value in your hook function.
-			if it matches run and return pdf else return None
-			"""
-			pdf = frappe.call(
-				hook,
-				print_format=print_format,
-				html=html,
-				options=pdf_options,
-				output=output,
-				pdf_generator=local.form_dict.pdf_generator,
-			)
-			# if hook returns a value, assume it was the correct pdf_generator and return it
-			if pdf:
-				return pdf
-
-	return get_pdf(html, options=pdf_options, output=output)
-
-
 def attach_print(
 	doctype,
 	name,
@@ -2415,5 +2337,6 @@ from frappe.config import get_common_site_config, get_site_config
 from frappe.core.doctype.system_settings.system_settings import get_system_settings
 from frappe.utils import parse_json
 from frappe.utils.error import log_error
+from frappe.utils.print_utils import get_print
 
 frappe._optimizations.optimize_all()
