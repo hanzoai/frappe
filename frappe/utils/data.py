@@ -1781,7 +1781,11 @@ def filter_strip_join(some_list: list[str], sep: str) -> list[str]:
 	return (cstr(sep)).join(cstr(a).strip() for a in filter(None, some_list))
 
 
-def get_url(uri: str | None = None, full_address: bool = False) -> str:
+def get_url(
+	uri: str | None = None,
+	full_address: bool = False,
+	allow_header_override: bool = True,
+) -> str:
 	"""Get app url from request."""
 	host_name = frappe.local.conf.host_name or frappe.local.conf.hostname
 
@@ -1791,7 +1795,7 @@ def get_url(uri: str | None = None, full_address: bool = False) -> str:
 	if not host_name:
 		request_host_name = get_host_name_from_request()
 
-		if request_host_name:
+		if request_host_name and allow_header_override:
 			host_name = request_host_name
 
 		elif frappe.local.site:
