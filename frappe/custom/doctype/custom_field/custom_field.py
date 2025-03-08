@@ -333,7 +333,7 @@ def create_custom_fields(custom_fields: dict, ignore_validate=False, update=True
 				doctypes = (doctypes,)
 
 			for doctype in doctypes:
-				doctypes_to_update.add(doctype)
+				updated = False
 
 				for df in fields:
 					field = frappe.db.get_value("Custom Field", {"dt": doctype, "fieldname": df["fieldname"]})
@@ -342,15 +342,25 @@ def create_custom_fields(custom_fields: dict, ignore_validate=False, update=True
 							df = df.copy()
 							df["owner"] = "Administrator"
 							create_custom_field(doctype, df, ignore_validate=ignore_validate)
+							updated = True
 
 						except frappe.exceptions.DuplicateEntryError:
 							pass
 
 					elif update:
 						custom_field = frappe.get_doc("Custom Field", field)
-						custom_field.flags.ignore_validate = ignore_validate
+						original_values = custom_field.__dict__.copy()
 						custom_field.update(df)
-						custom_field.save()
+
+						if original_values != custom_field.__dict__:
+							if ignore_validate:
+								custom_field.flags.ignore_validate = True
+
+							custom_field.save()
+							updated = True
+
+				if updated:
+					doctypes_to_update.add(doctype)
 
 		for doctype in doctypes_to_update:
 			frappe.clear_cache(doctype=doctype)
