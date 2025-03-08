@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-02-24 14:51+0000\n"
-"PO-Revision-Date: 2025-03-05 17:25\n"
+"PO-Revision-Date: 2025-03-08 19:19\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Croatian\n"
 "MIME-Version: 1.0\n"
@@ -7471,7 +7471,7 @@ msgstr ""
 #: frappe/email/doctype/document_follow/document_follow.json
 #: frappe/public/js/frappe/widgets/widget_dialog.js:650
 msgid "Doctype"
-msgstr ""
+msgstr "DocType"
 
 #: frappe/core/doctype/doctype/doctype.py:998
 msgid "Doctype name is limited to {0} characters ({1})"
