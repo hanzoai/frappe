@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-02-24 14:51+0000\n"
-"PO-Revision-Date: 2025-03-05 17:25\n"
+"PO-Revision-Date: 2025-03-09 18:48\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -3547,11 +3547,11 @@ msgstr "Brute Force Security"
 #. Label of a Data field in DocType 'S3 Backup Settings'
 #: frappe/integrations/doctype/s3_backup_settings/s3_backup_settings.json
 msgid "Bucket Name"
-msgstr "نام سطل"
+msgstr "نام باکت"
 
 #: frappe/integrations/doctype/s3_backup_settings/s3_backup_settings.py:67
 msgid "Bucket {0} not found."
-msgstr "سطل {0} یافت نشد."
+msgstr "باکت {0} یافت نشد."
 
 #. Label of a Data field in DocType 'System Health Report'
 #: frappe/desk/doctype/system_health_report/system_health_report.json
@@ -7279,7 +7279,7 @@ msgstr "سرصفحه هایی را که در قالب از پیش تنظیم ش�
 
 #: frappe/integrations/doctype/s3_backup_settings/s3_backup_settings.py:65
 msgid "Do not have permission to access bucket {0}."
-msgstr "اجازه دسترسی به سطل {0} را ندارید."
+msgstr "اجازه دسترسی به باکت {0} را ندارید."
 
 #: frappe/core/doctype/system_settings/system_settings.js:71
 msgid "Do you still want to proceed?"
@@ -21597,7 +21597,7 @@ msgstr "پشتیبان گیری S3 کامل شد!"
 #. Label of a Section Break field in DocType 'S3 Backup Settings'
 #: frappe/integrations/doctype/s3_backup_settings/s3_backup_settings.json
 msgid "S3 Bucket Details"
-msgstr "جزئیات سطل S3"
+msgstr "جزئیات باکت S3"
 
 #. Option for the 'Type' (Select) field in DocType 'Communication'
 #. Option for the 'Two Factor Authentication method' (Select) field in DocType
