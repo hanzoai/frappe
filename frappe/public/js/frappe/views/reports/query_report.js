@@ -2075,7 +2075,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 	}
 
 	add_translate_data_checkbox() {
-		if (frappe.boot.lang == "en") return;
+		if (["en", "en-GB", "en-US"].includes(frappe.boot.lang)) return;
 		let filter_config = {
 			fieldname: "translate_data",
 			fieldtype: "Check",
