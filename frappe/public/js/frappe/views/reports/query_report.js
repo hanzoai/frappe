@@ -1784,7 +1784,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 									field: values.field,
 									doctype: values.doctype,
 									names: Array.from(
-										this.doctype_field_map[values.doctype][fieldname]
+										this.doctype_field_map[values.doctype].names
 									),
 								},
 								callback: (r) => {
@@ -1928,18 +1928,14 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				};
 			})
 		);
-		doctypes.forEach((doc) => {
-			if (!(doc.doctype in this.doctype_field_map))
-				this.doctype_field_map[doc.doctype] = { [doc.fieldname]: new Set() };
 
-			if (!(doc.fieldname in this.doctype_field_map[doc.doctype]))
-				this.doctype_field_map[doc.doctype][doc.fieldname] = new Set();
+		doctypes.forEach((doc) => {
+			this.doctype_field_map[doc.doctype] = { fieldname: doc.fieldname, names: new Set() };
 		});
 
 		this.data.forEach((row) => {
 			doctypes.forEach((doc) => {
-				row[doc.fieldname] &&
-					this.doctype_field_map[doc.doctype][doc.fieldname].add(row[doc.fieldname]);
+				this.doctype_field_map[doc.doctype].names.add(row[doc.fieldname]);
 			});
 		});
 
