@@ -345,7 +345,7 @@ def export_query():
 		)
 		return
 
-	format_duration_fields(data)
+	format_fields(data)
 	xlsx_data, column_widths = build_xlsx_data(
 		data, visible_idx, include_indentation, include_filters=include_filters
 	)
@@ -371,15 +371,18 @@ def export_query():
 	provide_binary_file(report_name, file_extension, content)
 
 
-def format_duration_fields(data: frappe._dict) -> None:
+def format_fields(data: frappe._dict) -> None:
 	for i, col in enumerate(data.columns):
-		if col.get("fieldtype") != "Duration":
-			continue
-
-		for row in data.result:
-			index = col.get("fieldname") if isinstance(row, dict) else i
-			if row[index]:
-				row[index] = format_duration(row[index])
+		if col.get("fieldtype") == "Duration":
+			for row in data.result:
+				index = col.get("fieldname") if isinstance(row, dict) else i
+				if row[index]:
+					row[index] = format_duration(row[index])
+		elif col.get("fieldtype") == "Currency" and col.get("precision"):
+			for row in data.result:
+				index = col.get("fieldname") if isinstance(row, dict) else i
+				if row[index]:
+					row[index] = round(row[index], col.get("precision"))
 
 
 def build_xlsx_data(data, visible_idx, include_indentation, include_filters=False, ignore_visible_idx=False):
