@@ -385,13 +385,11 @@ def format_duration_fields(data: frappe._dict) -> None:
 
 def format_currency_fields(data: frappe._dict) -> None:
 	for i, col in enumerate(data.columns):
-		if col.get("fieldtype") != "Currency" and col.get("precision"):
-			continue
-
-		for row in data.result:
-			index = col.get("fieldname") if isinstance(row, dict) else i
-			if row[index]:
-				row[index] = round(row[index], col.get("precision"))
+		if col.get("fieldtype") == "Currency" and col.get("precision"):
+			for row in data.result:
+				index = col.get("fieldname") if isinstance(row, dict) else i
+				if row[index]:
+					row[index] = round(row[index], col.get("precision"))
 
 
 def build_xlsx_data(data, visible_idx, include_indentation, include_filters=False, ignore_visible_idx=False):
