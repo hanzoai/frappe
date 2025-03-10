@@ -378,7 +378,7 @@ def format_fields(data: frappe._dict) -> None:
 				index = col.get("fieldname") if isinstance(row, dict) else i
 				if row[index]:
 					row[index] = format_duration(row[index])
-		if col.get("fieldtype") == "Currency" and col.get("precision"):
+		elif col.get("fieldtype") == "Currency" and col.get("precision"):
 			for row in data.result:
 				index = col.get("fieldname") if isinstance(row, dict) else i
 				if row[index]:
