@@ -7,10 +7,6 @@ from datetime import timedelta
 from email.utils import formataddr
 
 import frappe
-import frappe.email
-import frappe.email.doctype
-import frappe.email.doctype.auto_email_report
-import frappe.email.doctype.auto_email_report.auto_email_report
 from frappe import _
 from frappe.desk.query_report import build_xlsx_data
 from frappe.model.document import Document
