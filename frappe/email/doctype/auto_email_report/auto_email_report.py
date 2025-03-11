@@ -313,6 +313,7 @@ def send_daily():
 		frappe.enqueue(
 			"frappe.email.doctype.auto_email_report.auto_email_report.process_auto_email_report",
 			report=report,
+			queue="long",
 		)
 
 
