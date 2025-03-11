@@ -2114,12 +2114,13 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 	}
 
 	add_translate_data_checkbox() {
-		if (["en", "en-GB", "en-US"].includes(frappe.boot.lang)) return;
-		let filter_config = {
-			fieldname: "translate_data",
-			fieldtype: "Check",
-			label: __("Translate Data"),
-		};
-		this.report_settings.filters.push(filter_config);
+		if (this.report_doc.add_translate_data) {
+			let filter_config = {
+				fieldname: "translate_data",
+				fieldtype: "Check",
+				label: __("Translate Data"),
+			};
+			this.report_settings.filters.push(filter_config);
+		}
 	}
 };
