@@ -1779,7 +1779,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 									field: values.field,
 									doctype: values.doctype,
 									names: Array.from(
-										this.doctype_field_map[values.doctype][fieldname]
+										this.doctype_field_map[values.doctype].names
 									),
 								},
 								callback: (r) => {
@@ -1923,18 +1923,14 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				};
 			})
 		);
-		doctypes.forEach((doc) => {
-			if (!(doc.doctype in this.doctype_field_map))
-				this.doctype_field_map[doc.doctype] = { [doc.fieldname]: new Set() };
 
-			if (!(doc.fieldname in this.doctype_field_map[doc.doctype]))
-				this.doctype_field_map[doc.doctype][doc.fieldname] = new Set();
+		doctypes.forEach((doc) => {
+			this.doctype_field_map[doc.doctype] = { fieldname: doc.fieldname, names: new Set() };
 		});
 
 		this.data.forEach((row) => {
 			doctypes.forEach((doc) => {
-				row[doc.fieldname] &&
-					this.doctype_field_map[doc.doctype][doc.fieldname].add(row[doc.fieldname]);
+				this.doctype_field_map[doc.doctype].names.add(row[doc.fieldname]);
 			});
 		});
 
@@ -2075,12 +2071,13 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 	}
 
 	add_translate_data_checkbox() {
-		if (frappe.boot.lang == "en") return;
-		let filter_config = {
-			fieldname: "translate_data",
-			fieldtype: "Check",
-			label: __("Translate Data"),
-		};
-		this.report_settings.filters.push(filter_config);
+		if (this.report_doc.add_translate_data) {
+			let filter_config = {
+				fieldname: "translate_data",
+				fieldtype: "Check",
+				label: __("Translate Data"),
+			};
+			this.report_settings.filters.push(filter_config);
+		}
 	}
 };
