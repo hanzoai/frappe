@@ -45,6 +45,7 @@ from frappe.query_builder.utils import (
 from frappe.utils.caching import deprecated_local_cache as local_cache
 from frappe.utils.caching import request_cache
 from frappe.utils.data import as_unicode, bold, cint, cstr, safe_decode, safe_encode, sbool
+from frappe.utils.local import FrappeLocal
 
 # Local application imports
 from .exceptions import *
@@ -75,7 +76,7 @@ if TYPE_CHECKING:  # pragma: no cover
 	from frappe.utils.redis_wrapper import ClientCache, RedisWrapper
 
 controllers: dict[str, "Document"] = {}
-local = Local()
+local = FrappeLocal()
 cache: Optional["RedisWrapper"] = None
 client_cache: Optional["ClientCache"] = None
 STANDARD_USERS = ("Guest", "Administrator")
@@ -85,27 +86,6 @@ _dev_server = int(sbool(os.environ.get("DEV_SERVER", False)))
 if _dev_server:
 	warnings.simplefilter("always", DeprecationWarning)
 	warnings.simplefilter("always", PendingDeprecationWarning)
-
-
-def _get_local_proxy(self: Local, name: str) -> LocalProxy:
-	"""Get local proxy object by name."""
-
-	_local_contextvar = self._Local__storage
-
-	def _get_current_object() -> Any:
-		obj = _local_contextvar.get(None)
-
-		if obj is not None and name in obj:
-			return obj[name]
-
-		raise RuntimeError("object is not bound") from None
-
-	lp = LocalProxy(_get_current_object)
-	object.__setattr__(lp, "_get_current_object", _get_current_object)
-	return lp
-
-
-Local.__call__ = _get_local_proxy
 
 
 def _(msg: str, lang: str | None = None, context: str | None = None) -> str:
