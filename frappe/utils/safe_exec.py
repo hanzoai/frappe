@@ -48,7 +48,6 @@ SERVER_SCRIPT_FILE_PREFIX = "<serverscript>"
 class NamespaceDict(frappe._dict):
 	"""Raise AttributeError if function not found in namespace"""
 
-	__slots__ = ()
 	__getattribute__ = dict.__getattribute__
 
 	def __getattr__(self, key):
