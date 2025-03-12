@@ -25,6 +25,14 @@ class _dict(dict[_KT, _VT]):
 	__setstate__ = dict.update
 
 	@override
+	def __getattribute__(self, name):
+		if name in _dict_attributes:
+			return object.__getattribute__(self, name)
+
+		if name in self:
+			return self[name]
+
+	@override
 	def __getstate__(self) -> Self:
 		return self
 
@@ -51,3 +59,6 @@ class _dict(dict[_KT, _VT]):
 	@override
 	def copy(self) -> "_dict[_KT, _VT]":
 		return _dict(self)
+
+
+_dict_attributes = frozenset(dir(_dict))
