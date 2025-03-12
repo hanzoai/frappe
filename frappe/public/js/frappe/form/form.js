@@ -408,7 +408,11 @@ frappe.ui.form.Form = class FrappeForm {
 			// read only (workflow)
 			this.read_only = frappe.workflow.is_read_only(this.doctype, this.docname);
 			if (this.read_only) {
+<<<<<<< HEAD
 				this.set_read_only(true);
+=======
+				this.set_read_only();
+>>>>>>> 48d3a86144 (revert: "fix(UX): Show reason for read only form in headline (#31511)")
 				frappe.show_alert(__("This form is not editable due to a Workflow."));
 			}
 
