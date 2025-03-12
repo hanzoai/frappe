@@ -72,8 +72,6 @@ class RateLimiter:
 		}
 		if self.rejected:
 			headers["Retry-After"] = self.reset
-		else:
-			headers["X-RateLimit-Used"] = self.duration
 
 		return headers
 
