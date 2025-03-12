@@ -11,7 +11,7 @@ frappe.ui.AppsSwitcher = class AppsSwitcher {
 	setup_app_switcher() {
 		this.app_switcher_menu = $(".app-switcher-menu");
 		$(".app-switcher-dropdown").on("click", () => {
-			this.set_active();
+			this.toggle_active();
 			this.app_switcher_menu.toggleClass("hidden");
 		});
 	}
@@ -83,6 +83,7 @@ frappe.ui.AppsSwitcher = class AppsSwitcher {
 			let item = $(e.delegateTarget);
 			let route = item.attr("data-app-route");
 			this.app_switcher_menu.toggleClass("hidden");
+			this.toggle_active();
 
 			if (item.attr("data-app-name") == "settings") {
 				frappe.quick_edit("Workspace Settings");
@@ -166,7 +167,7 @@ frappe.ui.AppsSwitcher = class AppsSwitcher {
 		});
 	}
 
-	set_active() {
+	toggle_active() {
 		this.app_switcher.toggleClass("active-sidebar");
 
 		if (!this.sidebar.sidebar_expanded) {
