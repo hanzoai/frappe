@@ -116,8 +116,14 @@ frappe.ui.form.Layout = class Layout {
 			// wrap in a block if `html` does not contain html tags
 			$html = $("<div class='form-message'></div>").text(html);
 		} else {
+<<<<<<< HEAD
 			$html = $(html);
 			$html.addClass("form-message");
+=======
+			// Wrap in a block just in case the string does not begin with a tag
+			// as Jquery assumes it to be a CSS selector and breaks.
+			$html = $("<div class='form-message border-bottom'>").html(html);
+>>>>>>> bec966ab7d (fix: Use DOMParser in `is_html` + Handle unparsable html string with jquery)
 		}
 
 		// Add close button to block if not permanent
