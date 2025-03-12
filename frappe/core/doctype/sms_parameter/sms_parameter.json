@@ -42,6 +42,7 @@
    "width": "150px"
   }, 
   {
+<<<<<<< HEAD
    "allow_bulk_edit": 0, 
    "allow_on_submit": 0, 
    "bold": 0, 
@@ -70,6 +71,15 @@
    "search_index": 0, 
    "set_only_once": 0, 
    "unique": 0, 
+=======
+   "fieldname": "value",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Value",
+   "print_width": "150px",
+   "length": 255,
+   "reqd": 1,
+>>>>>>> adc54286d9 (fix: increase length for value field in sms parameter)
    "width": "150px"
   }, 
   {
@@ -102,6 +112,7 @@
    "set_only_once": 0, 
    "unique": 0
   }
+<<<<<<< HEAD
  ], 
  "has_web_view": 0, 
  "hide_heading": 0, 
@@ -125,4 +136,19 @@
  "show_name_in_global_search": 0, 
  "track_changes": 0, 
  "track_seen": 0
+=======
+ ],
+ "idx": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-03-12 19:40:34.519601",
+ "modified_by": "Administrator",
+ "module": "Core",
+ "name": "SMS Parameter",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+>>>>>>> adc54286d9 (fix: increase length for value field in sms parameter)
 }
