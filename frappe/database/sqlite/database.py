@@ -92,6 +92,7 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 	def get_connection(self):
 		conn = self.create_connection()
 		conn.isolation_level = None
+		conn.create_function("regexp", 2, regexp)
 		return conn
 
 	def create_connection(self):
@@ -537,3 +538,12 @@ def replace_locate_with_instr(query: str) -> str:
 	if re.search(r"locate\(", query, flags=re.IGNORECASE):
 		query = re.sub(r"locate\(([^,]+),([^)]+)\)", r"instr(\2, \1)", query, flags=re.IGNORECASE)
 	return query
+
+
+def regexp(expr: str, item: str) -> bool:
+	"""
+	Define regexp implementation for SQLite manually
+
+	Although it works in the CLI - doesn't work through python
+	"""
+	return re.search(expr, item) is not None
