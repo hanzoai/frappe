@@ -1906,7 +1906,7 @@ def get_link_to_report(
 					for value in v
 				)
 			else:
-				conditions.append(str(k) + "=" + str(v))
+				conditions.append(str(k) + "=" + quote(str(v)))
 
 		filters = "&".join(conditions)
 
