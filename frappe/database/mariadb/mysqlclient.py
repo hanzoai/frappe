@@ -245,10 +245,10 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 
 		return db_size[0].get("database_size")
 
-	def log_query(self, query, values, debug):
+	def log_query(self, query, query_type, values, debug):
 		mogrified_query = self._cursor._executed.decode()
 		self.last_query = mogrified_query
-		self._log_query(mogrified_query, debug, query)
+		self._log_query(mogrified_query, query_type, debug, query)
 		return mogrified_query
 
 	def _clean_up(self):

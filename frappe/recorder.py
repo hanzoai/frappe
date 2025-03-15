@@ -16,7 +16,7 @@ import sqlparse
 
 import frappe
 from frappe import _
-from frappe.database.database import is_query_type
+from frappe.database.utils import is_query_type
 from frappe.utils import now_datetime
 
 RECORDER_INTERCEPT_FLAG = "recorder-intercept"

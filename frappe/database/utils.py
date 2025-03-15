@@ -1,6 +1,8 @@
 # Copyright (c) 2022, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+import re
+import string
 from functools import cached_property, wraps
 
 import frappe
@@ -22,6 +24,8 @@ NestedSetHierarchy = (
 	"not descendants of",
 	"descendants of (inclusive)",
 )
+# split when whitespace or backtick is found
+QUERY_TYPE_DELIMITER_PATTERN = re.compile(rf"[{string.whitespace}`]")
 
 
 def convert_to_value(o: FilterValue):
@@ -32,8 +36,12 @@ def convert_to_value(o: FilterValue):
 	return o
 
 
+def get_query_type(query: str) -> str:
+	return QUERY_TYPE_DELIMITER_PATTERN.split(query.lstrip(), maxsplit=1)[0].lower()
+
+
 def is_query_type(query: str, query_type: str | tuple[str, ...]) -> bool:
-	return query.lstrip().split(maxsplit=1)[0].lower().startswith(query_type)
+	return get_query_type(query).startswith(query_type)
 
 
 def is_pypika_function_object(field: str) -> bool:
