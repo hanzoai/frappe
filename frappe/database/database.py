@@ -1424,9 +1424,13 @@ class Database:
 		for regex in (SINGLE_WORD_PATTERN, MULTI_WORD_PATTERN):
 			tables += [groups[1] for groups in regex.findall(query)]
 
-		if frappe.flags.touched_tables is None:
-			frappe.flags.touched_tables = set()
-		frappe.flags.touched_tables.update(tables)
+		touched_tables = frappe.local.flags.touched_tables
+
+		if touched_tables is None:
+			touched_tables = set()
+			frappe.local.flags.touched_tables = touched_tables
+
+		touched_tables.update(tables)
 
 	def bulk_insert(
 		self,
