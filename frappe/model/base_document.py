@@ -4,6 +4,7 @@ import datetime
 import json
 import weakref
 from functools import cached_property
+from types import MappingProxyType
 from typing import TYPE_CHECKING, TypeVar
 
 import frappe
@@ -52,10 +53,10 @@ DOCTYPE_TABLE_FIELDS = [
 	_dict(fieldname="states", options="DocType State"),
 ]
 
-TABLE_DOCTYPES_FOR_DOCTYPE = {df["fieldname"]: df["options"] for df in DOCTYPE_TABLE_FIELDS}
+TABLE_DOCTYPES_FOR_DOCTYPE = MappingProxyType({df["fieldname"]: df["options"] for df in DOCTYPE_TABLE_FIELDS})
 
 # child tables cannot have child tables
-TABLE_DOCTYPES_FOR_DOCTYPE_TABLES = {}
+TABLE_DOCTYPES_FOR_CHILD_TABLES = MappingProxyType({})
 
 DOCTYPES_FOR_DOCTYPE = {"DocType", *TABLE_DOCTYPES_FOR_DOCTYPE.values()}
 
@@ -344,14 +345,19 @@ class BaseDocument:
 				_d.idx = i + 1
 
 	def _init_child(self, value, key):
-		if not isinstance(value, BaseDocument):
-			if not (doctype := self.get_table_field_doctype(key)):
+		if isinstance(value, BaseDocument):
+			child = value
+		else:
+			doctype = self._table_fieldnames.get(key)
+			if not doctype:
 				raise AttributeError(key)
 
 			value["doctype"] = doctype
-			value = get_controller(doctype)(value)
+			child = object.__new__(get_controller(doctype))
+			child._table_fieldnames = TABLE_DOCTYPES_FOR_CHILD_TABLES
+			child.__init__(value)
 
-		__dict = value.__dict__
+		__dict = child.__dict__
 		__dict["parent"] = self.name
 		__dict["parenttype"] = self.doctype
 		__dict["parentfield"] = key
@@ -363,7 +369,7 @@ class BaseDocument:
 			__dict["__islocal"] = 1
 			__dict["__temporary_name"] = frappe.generate_hash(length=10)
 
-		return value
+		return child
 
 	@cached_property
 	def _table_fieldnames(self) -> dict:
@@ -371,7 +377,7 @@ class BaseDocument:
 			return TABLE_DOCTYPES_FOR_DOCTYPE
 
 		if self.doctype in DOCTYPES_FOR_DOCTYPE:
-			return TABLE_DOCTYPES_FOR_DOCTYPE_TABLES
+			return TABLE_DOCTYPES_FOR_CHILD_TABLES
 
 		return self.meta._table_doctypes
 
