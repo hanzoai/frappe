@@ -557,7 +557,8 @@ def build_response(path, data, http_status_code, headers: dict | None = None):
 	response.headers["X-Page-Name"] = cstr(cstr(path).encode("ascii", errors="xmlcharrefreplace"))
 	response.headers["X-From-Cache"] = frappe.local.response.from_cache or False
 
-	add_preload_for_bundled_assets(response)
+	if http_status_code != 404:
+		add_preload_for_bundled_assets(response)
 
 	if headers:
 		for key, val in headers.items():
