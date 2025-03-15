@@ -27,6 +27,7 @@ from frappe.database.utils import (
 	Query,
 	QueryValues,
 	convert_to_value,
+	get_query_type,
 	is_query_type,
 )
 from frappe.exceptions import DoesNotExistError, ImplicitCommitError
@@ -48,6 +49,14 @@ IFNULL_PATTERN = re.compile(r"ifnull\(", flags=re.IGNORECASE)
 INDEX_PATTERN = re.compile(r"\s*\([^)]+\)\s*")
 SINGLE_WORD_PATTERN = re.compile(r'([`"]?)(tab([A-Z]\w+))\1')
 MULTI_WORD_PATTERN = re.compile(r'([`"])(tab([A-Z]\w+)( [A-Z]\w+)+)\1')
+
+# Query Types
+DDL_QUERY_TYPES = frozenset(("alter", "drop", "create", "truncate", "rename"))
+IMPLICIT_COMMIT_QUERY_TYPES = frozenset(("start", "alter", "drop", "create", "begin", "truncate"))
+CREATE_OR_DROP = frozenset(("create", "drop"))
+COMMIT_OR_ROLLBACK = frozenset(("commit", "rollback"))
+WRITE_QUERY_TYPES = frozenset(("update", "insert", "delete"))
+QUERY_TYPES_FOR_LOG_TOUCHED_TABLES = frozenset(("insert", "delete", "update", "alter", "drop", "rename"))
 
 SQL_ITERATOR_BATCH_SIZE = 1000
 
@@ -208,23 +217,23 @@ class Database:
 		if not run:
 			return query
 
+		query_type = get_query_type(query)
+
 		if explain:
-			if debug and is_query_type(query, "select"):
+			if debug and query_type == "select":
 				self.explain_query(query, values)
 			return
 
 		# remove whitespace / indentation from start and end of query
-		query = query.strip()
-
-		# replaces ifnull in query with coalesce
-		query = IFNULL_PATTERN.sub("coalesce(", query)
+		# and replace ifnull in query with coalesce
+		query = IFNULL_PATTERN.sub("coalesce(", query.strip())
 
 		if not self._conn:
 			self.connect()
 
 		# in transaction validations
-		self.check_transaction_status(query)
-		self.clear_db_table_cache(query)
+		self.check_transaction_status(query, query_type)
+		self.clear_db_table_cache(query_type)
 
 		if auto_commit:
 			self.commit()
@@ -285,7 +294,7 @@ class Database:
 			time_end = time()
 			frappe.log(f"Execution time: {time_end - time_start:.2f} sec")
 
-		self.log_query(query, values, debug)
+		self.log_query(query, query_type, values, debug)
 
 		if auto_commit:
 			self.commit()
@@ -340,6 +349,7 @@ class Database:
 	def _log_query(
 		self,
 		mogrified_query: str,
+		query_type: str,
 		debug: bool = False,
 		unmogrified_query: str = "",
 	) -> None:
@@ -359,19 +369,17 @@ class Database:
 			_query = _query or str(mogrified_query)
 			frappe.log(f"#### query\n{_query}\n####")
 
-		if unmogrified_query and is_query_type(
-			unmogrified_query, ("alter", "drop", "create", "truncate", "rename")
-		):
+		if query_type in DDL_QUERY_TYPES:
 			_query = _query or str(mogrified_query)
 			self.logger.warning("DDL Query made to DB:\n" + _query)
 
 		if frappe.local.flags.in_migrate:
 			_query = _query or str(mogrified_query)
-			self.log_touched_tables(_query)
+			self.log_touched_tables(_query, query_type)
 
-	def log_query(self, query: str, values: QueryValues = None, debug: bool = False) -> str:
+	def log_query(self, query: str, query_type: str, values: QueryValues = None, debug: bool = False) -> str:
 		mogrified_query = self.lazy_mogrify(query, values)
-		self._log_query(mogrified_query, debug, query)
+		self._log_query(mogrified_query, query_type, debug, query)
 		return mogrified_query
 
 	def mogrify(self, query: Query, values: QueryValues):
@@ -424,16 +432,21 @@ class Database:
 		self.sql(query, debug=debug)
 		self._disable_transaction_control = transaction_control
 
-	def check_transaction_status(self, query: str):
+	def check_transaction_status(self, query: str, query_type: str | None = None):
 		"""Raises exception if more than 200,000 `INSERT`, `UPDATE` queries are
 		executed in one transaction. This is to ensure that writes are always flushed otherwise this
 		could cause the system to hang."""
-		self.check_implicit_commit(query)
 
-		if query and is_query_type(query, ("commit", "rollback")):
+		if not query_type:
+			query_type = get_query_type(query)
+
+		self.check_implicit_commit(query, query_type)
+
+		if query_type in COMMIT_OR_ROLLBACK:
 			self.transaction_writes = 0
+			return
 
-		if query.lstrip()[:6].lower() in ("update", "insert", "delete"):
+		if query_type in WRITE_QUERY_TYPES:
 			self.transaction_writes += 1
 			if self.transaction_writes > self.MAX_WRITES_PER_TRANSACTION:
 				if self.auto_commit_on_many_writes:
@@ -443,12 +456,8 @@ class Database:
 					msg += _("The changes have been reverted.") + "<br>"
 					raise frappe.TooManyWritesError(msg)
 
-	def check_implicit_commit(self, query: str):
-		if (
-			self.transaction_writes
-			and query
-			and is_query_type(query, ("start", "alter", "drop", "create", "begin", "truncate"))
-		):
+	def check_implicit_commit(self, query: str, query_type: str):
+		if query_type in IMPLICIT_COMMIT_QUERY_TYPES and self.transaction_writes:
 			raise ImplicitCommitError("This statement can cause implicit commit", query)
 
 	def fetch_as_dict(self, result) -> list[frappe._dict]:
@@ -460,8 +469,8 @@ class Database:
 		return [frappe._dict(zip(keys, row, strict=False)) for row in result]
 
 	@staticmethod
-	def clear_db_table_cache(query):
-		if query and is_query_type(query, ("drop", "create")):
+	def clear_db_table_cache(query_type: str):
+		if query_type in CREATE_OR_DROP:
 			frappe.client_cache.delete_value("db_tables")
 
 	def get_description(self):
@@ -1393,29 +1402,31 @@ class Database:
 		else:
 			return None
 
-	def log_touched_tables(self, query):
-		if is_query_type(query, ("insert", "delete", "update", "alter", "drop", "rename")):
-			# single_word_regex is designed to match following patterns
-			# `tabXxx`, tabXxx and "tabXxx"
+	def log_touched_tables(self, query, query_type):
+		if query_type not in QUERY_TYPES_FOR_LOG_TOUCHED_TABLES:
+			return
 
-			# multi_word_regex is designed to match following patterns
-			# `tabXxx Xxx` and "tabXxx Xxx"
+		# single_word_regex is designed to match following patterns
+		# `tabXxx`, tabXxx and "tabXxx"
 
-			# ([`"]?) Captures " or ` at the beginning of the table name (if provided)
-			# \1 matches the first captured group (quote character) at the end of the table name
-			# multi word table name must have surrounding quotes.
+		# multi_word_regex is designed to match following patterns
+		# `tabXxx Xxx` and "tabXxx Xxx"
 
-			# (tab([A-Z]\w+)( [A-Z]\w+)*) Captures table names that start with "tab"
-			# and are continued with multiple words that start with a captital letter
-			# e.g. 'tabXxx' or 'tabXxx Xxx' or 'tabXxx Xxx Xxx' and so on
+		# ([`"]?) Captures " or ` at the beginning of the table name (if provided)
+		# \1 matches the first captured group (quote character) at the end of the table name
+		# multi word table name must have surrounding quotes.
 
-			tables = []
-			for regex in (SINGLE_WORD_PATTERN, MULTI_WORD_PATTERN):
-				tables += [groups[1] for groups in regex.findall(query)]
+		# (tab([A-Z]\w+)( [A-Z]\w+)*) Captures table names that start with "tab"
+		# and are continued with multiple words that start with a captital letter
+		# e.g. 'tabXxx' or 'tabXxx Xxx' or 'tabXxx Xxx Xxx' and so on
 
-			if frappe.flags.touched_tables is None:
-				frappe.flags.touched_tables = set()
-			frappe.flags.touched_tables.update(tables)
+		tables = []
+		for regex in (SINGLE_WORD_PATTERN, MULTI_WORD_PATTERN):
+			tables += [groups[1] for groups in regex.findall(query)]
+
+		if frappe.flags.touched_tables is None:
+			frappe.flags.touched_tables = set()
+		frappe.flags.touched_tables.update(tables)
 
 	def bulk_insert(
 		self,
