@@ -66,7 +66,6 @@ UNPICKLABLE_KEYS = (
 	"_parent_doc",
 	"_weakref",
 	"_table_fieldnames",
-	"_valid_columns",
 )
 
 
@@ -139,7 +138,6 @@ class BaseDocument:
 			"_weakref",
 			"_parent_doc",
 			"_table_fields",
-			"_valid_columns",
 			"_doc_before_save",
 			"_table_fieldnames",
 			"_reserved_keywords",
@@ -496,15 +494,11 @@ class BaseDocument:
 		if __dict.get("idx") is None:
 			__dict["idx"] = 0
 
-		for key in self._valid_columns:
+		for key in self.get_valid_columns():
 			if key not in __dict:
 				__dict[key] = None
 
 	def get_valid_columns(self) -> list[str]:
-		return self._valid_columns
-
-	@cached_property
-	def _valid_columns(self) -> list[str]:
 		valid_columns_cache = frappe.local.valid_columns
 
 		if self.doctype not in valid_columns_cache:

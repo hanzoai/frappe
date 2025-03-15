@@ -273,10 +273,10 @@ class Meta(Document):
 		return fields
 
 	def get_valid_columns(self) -> list[str]:
-		return self._valid_columns_
+		return self._valid_columns
 
 	@cached_property
-	def _valid_columns_(self):
+	def _valid_columns(self):
 		table_exists = frappe.db.table_exists(self.name)
 		if self.name in self.special_doctypes and table_exists:
 			valid_columns = get_table_columns(self.name)
