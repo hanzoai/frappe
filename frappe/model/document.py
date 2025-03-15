@@ -219,8 +219,11 @@ class Document(BaseDocument, DocRef):
 	def load_from_db(self) -> "Self":
 		"""Load document and children from database and create properties
 		from fields"""
+
+		is_doctype = self.doctype == "DocType"
+
 		self.flags.ignore_children = True
-		if not getattr(self, "_metaclass", False) and self.meta.issingle:
+		if not is_doctype and self.meta.issingle:
 			single_doc = frappe.db.get_singles_dict(self.doctype, for_update=self.flags.for_update)
 			if not single_doc:
 				single_doc = frappe.new_doc(self.doctype, as_dict=True)
@@ -232,7 +235,7 @@ class Document(BaseDocument, DocRef):
 			self._fix_numeric_types()
 
 		else:
-			if isinstance(self.name, str) and self.doctype != "DocType":
+			if not is_doctype and isinstance(self.name, str):
 				# Fast path - use raw SQL to avoid QB/ORM overheads.
 				d = frappe.db.sql(
 					"SELECT * FROM {table_name} WHERE `name` = %s {for_update}".format(
@@ -270,15 +273,15 @@ class Document(BaseDocument, DocRef):
 		return self
 
 	def load_children_from_db(self):
+		is_doctype = self.doctype == "DocType"
+
 		for fieldname, child_doctype in self._table_fieldnames.items():
 			# Make sure not to query the DB for a child table, if it is a virtual one.
-			# During frappe is installed, the property "is_virtual" is not available in tabDocType, so
-			# we need to filter those cases for the access to frappe.db.get_value() as it would crash otherwise.
-			if hasattr(self, "doctype") and not hasattr(self, "module") and is_virtual_doctype(child_doctype):
+			if not is_doctype and is_virtual_doctype(child_doctype):
 				self.set(fieldname, [])
 				continue
 
-			if self.doctype == "DocType":
+			if is_doctype:
 				# This special handling is required because of bootstrapping code that doesn't
 				# handle failures correctly.
 				children = frappe.db.get_values(
@@ -304,7 +307,10 @@ class Document(BaseDocument, DocRef):
 					as_dict=True,
 				)
 
-			self.set(fieldname, children or [])
+			if children is None:
+				children = []
+
+			self.set(fieldname, children)
 
 		return self
 
