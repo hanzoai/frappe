@@ -1,3 +1,4 @@
+import inspect
 from collections.abc import Callable
 from enum import Enum
 from importlib import import_module
@@ -98,11 +99,9 @@ def execute_child_queries(queries, result):
 
 
 def prepare_query(query):
-	import inspect
-
 	param_collector = NamedParameterWrapper()
 	query = query.get_sql(param_wrapper=param_collector)
-	if frappe.flags.in_safe_exec:
+	if frappe.local.flags.get("in_safe_exec", False):
 		from frappe.utils.safe_exec import SERVER_SCRIPT_FILE_PREFIX, check_safe_sql_query
 
 		if not check_safe_sql_query(query, throw=False):

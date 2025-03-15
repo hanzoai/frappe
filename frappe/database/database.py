@@ -453,9 +453,10 @@ class Database:
 
 	def fetch_as_dict(self, result) -> list[frappe._dict]:
 		"""Internal. Convert results to dict."""
-		if result:
-			keys = [column[0] for column in self._cursor.description]
+		if not result:
+			return []
 
+		keys = [column[0] for column in self._cursor.description]
 		return [frappe._dict(zip(keys, row, strict=False)) for row in result]
 
 	@staticmethod
