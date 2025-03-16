@@ -25,7 +25,7 @@ NestedSetHierarchy = (
 	"descendants of (inclusive)",
 )
 # split when whitespace or backtick is found
-QUERY_TYPE_DELIMITER_PATTERN = re.compile(rf"[{string.whitespace}`]")
+QUERY_TYPE_PATTERN = re.compile(r"\s*([^\s`]*)")
 
 
 def convert_to_value(o: FilterValue):
@@ -37,7 +37,7 @@ def convert_to_value(o: FilterValue):
 
 
 def get_query_type(query: str) -> str:
-	return QUERY_TYPE_DELIMITER_PATTERN.split(query.lstrip(), maxsplit=1)[0].lower()
+	return QUERY_TYPE_PATTERN.match(query)[1].lower()
 
 
 def is_query_type(query: str, query_type: str | tuple[str, ...]) -> bool:
