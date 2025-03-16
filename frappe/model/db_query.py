@@ -15,7 +15,7 @@ import frappe.share
 from frappe import _
 from frappe.core.doctype.server_script.server_script_utils import get_server_script_map
 from frappe.database.utils import DefaultOrderBy, FallBackDateTimeStr, NestedSetHierarchy
-from frappe.model import get_permitted_fields, optional_fields
+from frappe.model import OPTIONAL_FIELDS, get_permitted_fields
 from frappe.model.meta import get_table_columns
 from frappe.model.utils import is_virtual_doctype
 from frappe.model.utils.user_settings import get_user_settings, update_user_settings
@@ -559,6 +559,7 @@ class DatabaseQuery:
 		for fld in to_remove:
 			del self.fields[self.fields.index(fld)]
 
+<<<<<<< HEAD
 		# remove from filters
 		to_remove = []
 		for each in self.filters:
@@ -573,6 +574,12 @@ class DatabaseQuery:
 				del self.filters[each]
 			else:
 				self.filters.remove(each)
+=======
+		self.fields[:] = [f for f in self.fields if f not in OPTIONAL_FIELDS or f in self.columns]
+		self.filters[:] = [
+			f for f in self.filters if f.fieldname not in OPTIONAL_FIELDS or f.fieldname in self.columns
+		]
+>>>>>>> 628ddfd494 (perf: remove repeated calls to `get_permitted_fieldnames`)
 
 	def build_conditions(self):
 		self.conditions = []
@@ -622,12 +629,15 @@ class DatabaseQuery:
 			return
 
 		asterisk_fields = []
-		permitted_fields = get_permitted_fields(
-			doctype=self.doctype,
-			parenttype=self.parent_doctype,
-			permission_type=self.permission_map.get(self.doctype),
-			ignore_virtual=True,
+		permitted_fields = set(
+			get_permitted_fields(
+				doctype=self.doctype,
+				parenttype=self.parent_doctype,
+				permission_type=self.permission_map.get(self.doctype),
+				ignore_virtual=True,
+			)
 		)
+		permitted_child_table_fields = {}
 
 		for i, field in enumerate(self.fields):
 			# field: 'count(distinct `tabPhoto`.name) as total_count'
@@ -645,35 +655,41 @@ class DatabaseQuery:
 				continue
 
 			# handle pseudo columns
-			elif not column or column.isnumeric():
+			if not column or column.isnumeric():
 				continue
 
 			# labels / pseudo columns or frappe internals
-			elif column[0] in {"'", '"'} or column in optional_fields:
+			if column[0] in {"'", '"'}:
 				continue
 
-			# handle child / joined table fields
-			elif "." in field:
+			if "." in column:
 				table, column = column.split(".", 1)
-				ch_doctype = table
+				doctype = self.linked_table_aliases[table] if table in self.linked_table_aliases else table
+				doctype = doctype.replace("`", "").replace("tab", "", 1)
+			else:
+				doctype = self.doctype
 
-				if ch_doctype in self.linked_table_aliases:
-					ch_doctype = self.linked_table_aliases[ch_doctype]
+			# handle child / joined table fields
+			if doctype != self.doctype:
+				if wrap_grave_quotes(table) not in self.query_tables:
+					raise frappe.PermissionError(doctype)
 
-				ch_doctype = ch_doctype.replace("`", "").replace("tab", "", 1)
-
-				if wrap_grave_quotes(table) in self.query_tables:
-					permitted_child_table_fields = get_permitted_fields(
-						doctype=ch_doctype, parenttype=self.doctype, ignore_virtual=True
+				if doctype not in permitted_child_table_fields:
+					permitted_child_table_fields[doctype] = set(
+						get_permitted_fields(
+							doctype=doctype,
+							parenttype=self.doctype,
+							ignore_virtual=True,
+						)
 					)
-					if column in permitted_child_table_fields or column in optional_fields:
-						continue
-					else:
-						self.remove_field(i)
-				else:
-					raise frappe.PermissionError(ch_doctype)
 
-			elif column in permitted_fields:
+				if column in permitted_child_table_fields[doctype] or column in OPTIONAL_FIELDS:
+					continue
+
+				self.remove_field(i)
+				continue
+
+			if column in OPTIONAL_FIELDS or column in permitted_fields:
 				continue
 
 			# field inside function calls / * handles things like count(*)
