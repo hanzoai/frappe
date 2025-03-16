@@ -17,7 +17,7 @@ from pypika.dialects import MySQLQueryBuilder, PostgreSQLQueryBuilder
 
 import frappe
 import frappe.defaults
-from frappe import _
+from frappe import _, _dict
 from frappe.database.utils import (
 	DefaultOrderBy,
 	EmptyQueryValues,
@@ -333,7 +333,7 @@ class Database:
 			elif as_dict:
 				keys = [column[0] for column in self._cursor.description]
 				for row in result:
-					row = frappe._dict(zip(keys, row, strict=False))
+					row = _dict(zip(keys, row, strict=False))
 					if update:
 						row.update(update)
 					yield row
@@ -460,13 +460,13 @@ class Database:
 		if query_type in IMPLICIT_COMMIT_QUERY_TYPES and self.transaction_writes:
 			raise ImplicitCommitError("This statement can cause implicit commit", query)
 
-	def fetch_as_dict(self, result) -> list[frappe._dict]:
+	def fetch_as_dict(self, result) -> list[_dict]:
 		"""Internal. Convert results to dict."""
 		if not result:
 			return []
 
 		keys = [column[0] for column in self._cursor.description]
-		return [frappe._dict(zip(keys, row, strict=False)) for row in result]
+		return [_dict(zip(keys, row, strict=False)) for row in result]
 
 	@staticmethod
 	def clear_db_table_cache(query_type: str):
@@ -743,7 +743,7 @@ class Database:
 			if not r:
 				return []
 
-			r = frappe._dict(r)
+			r = _dict(r)
 			if update:
 				r.update(update)
 
@@ -773,14 +773,14 @@ class Database:
 		).run(debug=debug)
 
 		if not cast:
-			return frappe._dict(queried_result)
+			return _dict(queried_result)
 
 		try:
 			meta = frappe.get_meta(doctype)
 		except DoesNotExistError:
-			return frappe._dict(queried_result)
+			return _dict(queried_result)
 
-		return_value = frappe._dict()
+		return_value = _dict()
 
 		for fieldname, value in queried_result:
 			if df := meta.get_field(fieldname):
