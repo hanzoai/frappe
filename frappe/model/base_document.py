@@ -129,23 +129,23 @@ def import_controller(doctype):
 	return class_
 
 
-class BaseDocument:
-	_reserved_keywords = frozenset(
-		(
-			"doctype",
-			"meta",
-			"flags",
-			"_weakref",
-			"_parent_doc",
-			"_table_fields",
-			"_doc_before_save",
-			"_table_fieldnames",
-			"_reserved_keywords",
-			"permitted_fieldnames",
-			"dont_update_if_missing",
-		)
+RESERVED_KEYWORDS = frozenset(
+	(
+		"doctype",
+		"meta",
+		"flags",
+		"_weakref",
+		"_parent_doc",
+		"_table_fields",
+		"_doc_before_save",
+		"_table_fieldnames",
+		"permitted_fieldnames",
+		"dont_update_if_missing",
 	)
+)
 
+
+class BaseDocument:
 	def __init__(self, d):
 		if d.get("doctype"):
 			self.doctype = d["doctype"]
@@ -199,15 +199,24 @@ class BaseDocument:
 		                "user": "admin",
 		                "balance": 42000
 		        })
+
+		Developer Note: Logic in the set method is re-implemented here for perf
 		"""
 
-		# set name first, as it is used a reference in child document
-		if "name" in d:
-			self.name = d["name"]
+		self.__dict__.update(key_val for key_val in d.items() if key_val[0] not in RESERVED_KEYWORDS)
+		if not self._table_fieldnames or self.flags.get("ignore_children", False):
+			return self
 
-		as_value = not self._table_fieldnames or self.flags.get("ignore_children", False)
-		for key, value in d.items():
-			self.set(key, value, as_value=as_value)
+		__dict = self.__dict__
+		for key in self._table_fieldnames:
+			if key not in __dict:
+				continue
+
+			value = __dict[key]
+			__dict[key] = []
+
+			if value:
+				self.extend(key, value)
 
 		return self
 
@@ -251,7 +260,7 @@ class BaseDocument:
 		return self.get(key, filters=filters, limit=1)[0]
 
 	def set(self, key, value, as_value=False):
-		if key in self._reserved_keywords:
+		if key in RESERVED_KEYWORDS:
 			return
 
 		if not as_value and key in self._table_fieldnames:
