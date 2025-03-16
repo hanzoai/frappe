@@ -351,7 +351,8 @@ class BaseDocument:
 				raise AttributeError(key)
 
 			value["doctype"] = doctype
-			child = object.__new__(get_controller(doctype))
+			controller = get_controller(doctype)
+			child = controller.__new__(controller)
 			child._table_fieldnames = TABLE_DOCTYPES_FOR_CHILD_TABLES
 			child.__init__(value)
 
