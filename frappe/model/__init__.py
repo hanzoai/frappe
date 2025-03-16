@@ -62,6 +62,7 @@ no_value_fields = (
 	"Fold",
 	"Heading",
 )
+NO_VALUE_FIELDS = frozenset(no_value_fields)
 
 display_fieldtypes = (
 	"Section Break",
@@ -88,10 +89,12 @@ default_fields = (
 	"docstatus",
 	"idx",
 )
+DEFAULT_FIELDS = frozenset(default_fields)
 
 child_table_fields = ("parent", "parentfield", "parenttype")
 
 optional_fields = ("_user_tags", "_comments", "_assign", "_liked_by", "_seen")
+OPTIONAL_FIELDS = frozenset(optional_fields)
 
 table_fields = ("Table", "Table MultiSelect")
 
@@ -224,7 +227,7 @@ def get_permitted_fields(
 		return valid_columns
 
 	# DocType has only fields of type Table (Table, Table MultiSelect)
-	if set(valid_columns).issubset(default_fields):
+	if DEFAULT_FIELDS.issuperset(valid_columns):
 		return valid_columns
 
 	if permission_type is None:
