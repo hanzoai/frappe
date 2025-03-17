@@ -214,13 +214,8 @@ class Meta(Document):
 		return self._table_fields
 
 	def get_global_search_fields(self):
-<<<<<<< HEAD
-		"""Returns list of fields with `in_global_search` set and `name` if set"""
-		fields = self.get("fields", {"in_global_search": 1, "fieldtype": ["not in", no_value_fields]})
-=======
-		"""Return list of fields with `in_global_search` set and `name` if set."""
+		"""Return list of fields with `in_global_search` set and `name` if set"""
 		fields = self.get("fields", {"in_global_search": 1, "fieldtype": ["not in", NO_VALUE_FIELDS]})
->>>>>>> 628ddfd494 (perf: remove repeated calls to `get_permitted_fieldnames`)
 		if getattr(self, "show_name_in_global_search", None):
 			fields.append(frappe._dict(fieldtype="Data", fieldname="name", label="Name"))
 
@@ -240,42 +235,8 @@ class Meta(Document):
 
 		return self._valid_columns
 
-<<<<<<< HEAD
 	def get_table_field_doctype(self, fieldname):
 		return TABLE_DOCTYPES_FOR_DOCTYPE.get(fieldname)
-=======
-	@cached_property
-	def _valid_columns(self):
-		table_exists = frappe.db.table_exists(self.name)
-		if self.name in self.special_doctypes and table_exists:
-			valid_columns = get_table_columns(self.name)
-		else:
-			valid_columns = self.default_fields + [
-				df.fieldname
-				for df in self.get("fields")
-				if not getattr(df, "is_virtual", False) and df.fieldtype in data_fieldtypes
-			]
-			if self.istable:
-				valid_columns += list(child_table_fields)
-
-		return valid_columns
-
-	def get_valid_fields(self) -> list[str]:
-		return self._valid_fields
-
-	@cached_property
-	def _valid_fields(self):
-		if (frappe.flags.in_install or frappe.flags.in_migrate) and self.name in self.special_doctypes:
-			valid_fields = get_table_columns(self.name)
-		else:
-			valid_fields = self.default_fields + [
-				df.fieldname for df in self.get("fields") if df.fieldtype in data_fieldtypes
-			]
-			if self.istable:
-				valid_fields += list(child_table_fields)
-
-		return valid_fields
->>>>>>> 628ddfd494 (perf: remove repeated calls to `get_permitted_fieldnames`)
 
 	def get_field(self, fieldname):
 		"""Return docfield from meta"""
@@ -592,17 +553,9 @@ class Meta(Document):
 				self.permissions = [Document(d) for d in custom_perms]
 
 	def get_fieldnames_with_value(self, with_field_meta=False, with_virtual_fields=False):
-<<<<<<< HEAD
-		def is_value_field(docfield):
-			return not (
-				not with_virtual_fields
-				and docfield.get("is_virtual")
-				or docfield.fieldtype in no_value_fields
-=======
 		def is_value_field(df):
 			return (df.fieldtype not in NO_VALUE_FIELDS) and (
 				with_virtual_fields or not getattr(df, "is_virtual", False)
->>>>>>> 628ddfd494 (perf: remove repeated calls to `get_permitted_fieldnames`)
 			)
 
 		if with_field_meta:

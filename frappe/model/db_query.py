@@ -15,7 +15,7 @@ import frappe.share
 from frappe import _
 from frappe.core.doctype.server_script.server_script_utils import get_server_script_map
 from frappe.database.utils import DefaultOrderBy, FallBackDateTimeStr, NestedSetHierarchy
-from frappe.model import OPTIONAL_FIELDS, get_permitted_fields
+from frappe.model import OPTIONAL_FIELDS, get_permitted_fields, optional_fields
 from frappe.model.meta import get_table_columns
 from frappe.model.utils import is_virtual_doctype
 from frappe.model.utils.user_settings import get_user_settings, update_user_settings
@@ -559,7 +559,6 @@ class DatabaseQuery:
 		for fld in to_remove:
 			del self.fields[self.fields.index(fld)]
 
-<<<<<<< HEAD
 		# remove from filters
 		to_remove = []
 		for each in self.filters:
@@ -574,12 +573,6 @@ class DatabaseQuery:
 				del self.filters[each]
 			else:
 				self.filters.remove(each)
-=======
-		self.fields[:] = [f for f in self.fields if f not in OPTIONAL_FIELDS or f in self.columns]
-		self.filters[:] = [
-			f for f in self.filters if f.fieldname not in OPTIONAL_FIELDS or f.fieldname in self.columns
-		]
->>>>>>> 628ddfd494 (perf: remove repeated calls to `get_permitted_fieldnames`)
 
 	def build_conditions(self):
 		self.conditions = []
