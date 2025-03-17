@@ -1632,31 +1632,33 @@ class Document(BaseDocument, DocRef):
 				frappe.local.flags.commit = True
 
 	def add_viewed(self, user=None, force=False, unique_views=False):
-		"""add log to communication when a user views a document"""
-		if not user:
-			user = frappe.session.user
+		"""Add a view log for the current document"""
+
+		if not (getattr(self.meta, "track_views", False) or force):
+			return
+
+		user = user or frappe.session.user
 
 		if unique_views and frappe.db.exists(
 			"View Log", {"reference_doctype": self.doctype, "reference_name": self.name, "viewed_by": user}
 		):
 			return
 
-		if (hasattr(self.meta, "track_views") and self.meta.track_views) or force:
-			view_log = frappe.get_doc(
-				{
-					"doctype": "View Log",
-					"viewed_by": user,
-					"reference_doctype": self.doctype,
-					"reference_name": self.name,
-				}
-			)
-			if frappe.flags.read_only:
-				view_log.deferred_insert()
-			else:
-				view_log.insert(ignore_permissions=True)
-				frappe.local.flags.commit = True
+		view_log = frappe.get_doc(
+			{
+				"doctype": "View Log",
+				"viewed_by": user,
+				"reference_doctype": self.doctype,
+				"reference_name": self.name,
+			}
+		)
+		if frappe.flags.read_only:
+			view_log.deferred_insert()
+		else:
+			view_log.insert(ignore_permissions=True)
+			frappe.local.flags.commit = True
 
-			return view_log
+		return view_log
 
 	def log_error(self, title=None, message=None):
 		"""Helper function to create an Error Log"""
