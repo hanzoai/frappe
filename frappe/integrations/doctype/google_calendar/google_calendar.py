@@ -201,16 +201,17 @@ def google_callback(code=None):
 
 
 @frappe.whitelist()
-def sync(g_calendar=None):
-	filters = {"enable": 1}
+def sync(g_calendar: str | None = None):
+	filters = {"enable": 1, "pull_from_google_calendar": 1}
+	user_messages = []
 
 	if g_calendar:
 		filters.update({"name": g_calendar})
 
-	google_calendars = frappe.get_list("Google Calendar", filters=filters)
+	for g in frappe.get_list("Google Calendar", filters=filters, pluck="name"):
+		user_messages.append(sync_events_from_google_calendar(g))
 
-	for g in google_calendars:
-		return sync_events_from_google_calendar(g.name)
+	return user_messages
 
 
 def get_google_calendar_object(g_calendar):
