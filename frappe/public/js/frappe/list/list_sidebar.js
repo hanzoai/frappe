@@ -325,10 +325,10 @@ frappe.views.ListSidebar = class ListSidebar {
 			return;
 		}
 
-		const message = __("Upgrade your support experience with ");
+		const message = __("Upgrade your support experience with");
 		const link =
 			"https://frappe.io/helpdesk?utm_source=support-sidebar&utm_medium=sidebar&utm_campaign=frappe-ad";
-		const cta = "Frappe Helpdesk";
+		const cta = " Frappe Helpdesk";
 		this.add_banner(message, link, cta);
 	}
 };
