@@ -409,6 +409,7 @@ class BaseDocument:
 	) -> _dict:
 		d = _dict()
 		field_values = self.__dict__
+		field_map = self.meta._fields
 
 		for fieldname in self.meta.get_valid_fields():
 			value = field_values.get(fieldname)
@@ -418,7 +419,7 @@ class BaseDocument:
 				d[fieldname] = None
 				continue
 
-			df = self.meta.get_field(fieldname)
+			df = field_map.get(fieldname)
 			is_virtual_field = getattr(df, "is_virtual", False)
 
 			if df:
@@ -438,22 +439,23 @@ class BaseDocument:
 							eval_locals={"doc": self},
 						)
 
-				if isinstance(value, list) and df.fieldtype not in table_fields:
+				fieldtype = df.fieldtype
+				if isinstance(value, list) and fieldtype not in table_fields:
 					frappe.throw(_("Value for {0} cannot be a list").format(_(df.label, context=df.parent)))
 
-				if df.fieldtype == "Check":
+				if fieldtype == "Check":
 					value = 1 if cint(value) else 0
 
-				elif df.fieldtype == "Int" and not isinstance(value, int):
+				elif fieldtype == "Int" and not isinstance(value, int):
 					value = cint(value)
 
-				elif df.fieldtype == "JSON" and isinstance(value, dict):
+				elif fieldtype == "JSON" and isinstance(value, dict):
 					value = json.dumps(value, separators=(",", ":"))
 
-				elif df.fieldtype in float_like_fields and not isinstance(value, float):
+				elif fieldtype in float_like_fields and not isinstance(value, float):
 					value = flt(value)
 
-				elif (df.fieldtype in datetime_fields and value == "") or (
+				elif (fieldtype in datetime_fields and value == "") or (
 					getattr(df, "unique", False) and cstr(value).strip() == ""
 				):
 					value = None
