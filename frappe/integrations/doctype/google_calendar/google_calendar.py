@@ -382,7 +382,7 @@ def insert_event_to_calendar(account, event, recurrence=None):
 		"google_calendar_event_id": event.get("id"),
 		"google_meet_link": event.get("hangoutLink"),
 		"pulled_from_google_calendar": 1,
-		"owner": account.owner,
+		"owner": account.user,
 		"event_type": "Public" if account.sync_as_public else "Private",
 	}
 	calendar_event.update(
