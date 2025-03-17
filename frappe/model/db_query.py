@@ -644,15 +644,15 @@ class DatabaseQuery:
 			if column[0] in {"'", '"'}:
 				continue
 
+			doctype = None
+
 			if "." in column:
 				table, column = column.split(".", 1)
 				doctype = self.linked_table_aliases[table] if table in self.linked_table_aliases else table
-				doctype = doctype.replace("`", "").replace("tab", "", 1)
-			else:
-				doctype = self.doctype
+				doctype = doctype.replace("`", "").removeprefix("tab")
 
 			# handle child / joined table fields
-			if doctype != self.doctype:
+			if doctype and doctype != self.doctype:
 				if wrap_grave_quotes(table) not in self.query_tables:
 					raise frappe.PermissionError(doctype)
 

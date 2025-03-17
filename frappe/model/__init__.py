@@ -118,6 +118,7 @@ core_doctypes_list = (
 	"Custom Field",
 	"Client Script",
 )
+CORE_DOCTYPES = frozenset(core_doctypes_list)
 
 log_types = (
 	"Version",
@@ -223,7 +224,7 @@ def get_permitted_fields(
 	meta = frappe.get_meta(doctype)
 	valid_columns = meta.get_valid_columns()
 
-	if doctype in core_doctypes_list:
+	if doctype in CORE_DOCTYPES:
 		return valid_columns
 
 	# DocType has only fields of type Table (Table, Table MultiSelect)
@@ -233,24 +234,31 @@ def get_permitted_fields(
 	if permission_type is None:
 		permission_type = "select" if frappe.only_has_select_perm(doctype, user=user) else "read"
 
-	meta_fields = meta.default_fields.copy()
-	optional_meta_fields = [x for x in optional_fields if x in valid_columns]
-
-	if permitted_fields := meta.get_permitted_fieldnames(
+	permitted_fields = meta.get_permitted_fieldnames(
 		parenttype=parenttype,
 		user=user,
 		permission_type=permission_type,
 		with_virtual_fields=not ignore_virtual,
-	):
-		if permission_type == "select":
-			return permitted_fields
+	)
 
-		if meta.istable:
-			meta_fields.extend(child_table_fields)
+	if permission_type == "select":
+		return permitted_fields
 
-		return meta_fields + permitted_fields + optional_meta_fields
+	valid_columns = set(valid_columns)
+	result = [
+		*meta.default_fields,
+		*(fieldname for fieldname in optional_fields if fieldname in valid_columns),
+	]
 
-	return meta_fields + optional_meta_fields
+	if not permitted_fields:
+		return result
+
+	if meta.istable:
+		result.extend(child_table_fields)
+
+	result.extend(permitted_fields)
+
+	return result
 
 
 def is_default_field(fieldname: str) -> bool:
