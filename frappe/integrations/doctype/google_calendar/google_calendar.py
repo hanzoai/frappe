@@ -5,7 +5,7 @@
 from contextlib import suppress
 from datetime import date, datetime, timedelta
 from math import ceil
-from typing import TypedDict
+from typing import TYPE_CHECKING, TypedDict
 from zoneinfo import ZoneInfo
 
 import google.oauth2.credentials
@@ -28,6 +28,9 @@ from frappe.utils import (
 	now_datetime,
 )
 from frappe.utils.password import set_encrypted_password
+
+if TYPE_CHECKING:
+	from frappe.desk.doctype.event.event import Event
 
 
 class RecurrenceParameters(TypedDict):
@@ -382,13 +385,36 @@ def insert_event_to_calendar(account, event, recurrence=None):
 		"google_calendar_event_id": event.get("id"),
 		"google_meet_link": event.get("hangoutLink"),
 		"pulled_from_google_calendar": 1,
-		"owner": account.user,
 		"event_type": "Public" if account.sync_as_public else "Private",
-	}
-	calendar_event.update(
-		google_calendar_to_repeat_on(recurrence=recurrence, start=event.get("start"), end=event.get("end"))
+	} | google_calendar_to_repeat_on(recurrence=recurrence, start=event.get("start"), end=event.get("end"))
+
+	e: Event = frappe.get_doc(calendar_event)
+	update_participants_in_event(calendar_event=e, google_event=event)
+	e.insert(ignore_permissions=True)
+	e.db_set("owner", account.user, update_modified=False)
+
+
+def update_participants_in_event(calendar_event: "Event", google_event: dict):
+	google_event_participants = [
+		attendee["email"] for attendee in google_event.get("attendees", []) if not attendee.get("self")
+	]
+	in_system_participants = frappe.get_all(
+		"User", filters={"email": ("in", google_event_participants)}, pluck="email"
 	)
-	frappe.get_doc(calendar_event).insert(ignore_permissions=True)
+
+	existing_calendar_participants = [
+		participant.reference_docname
+		for participant in calendar_event.event_participants
+		if participant.reference_doctype == "User"
+	]
+
+	for participant in in_system_participants:
+		if participant not in existing_calendar_participants:
+			calendar_event.add_participant("User", participant)
+
+	# Add a Guest user to indicate participants not in the system
+	if len(in_system_participants) < len(google_event_participants):
+		calendar_event.add_participant("User", "Guest")
 
 
 def update_event_in_calendar(account, event, recurrence=None):
@@ -402,6 +428,7 @@ def update_event_in_calendar(account, event, recurrence=None):
 	calendar_event.update(
 		google_calendar_to_repeat_on(recurrence=recurrence, start=event.get("start"), end=event.get("end"))
 	)
+	update_participants_in_event(calendar_event, event)
 	calendar_event.save(ignore_permissions=True)
 
 
