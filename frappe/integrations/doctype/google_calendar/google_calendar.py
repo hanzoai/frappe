@@ -94,7 +94,7 @@ class GoogleCalendar(Document):
 	# end: auto-generated types
 
 	def validate(self):
-		google_settings = frappe.get_single("Google Settings")
+		google_settings = frappe.get_cached_doc("Google Settings")
 		if not google_settings.enable:
 			frappe.throw(_("Enable Google API in Google Settings."))
 
@@ -140,6 +140,8 @@ def authorize_access(g_calendar, reauthorize=None):
 	google_settings = frappe.get_doc("Google Settings")
 	google_calendar = frappe.get_doc("Google Calendar", g_calendar)
 	google_calendar.check_permission("write")
+
+	google_settings = frappe.get_cached_doc("Google Settings")
 
 	redirect_uri = (
 		get_request_site_address(True)
@@ -213,8 +215,8 @@ def sync(g_calendar=None):
 
 def get_google_calendar_object(g_calendar):
 	"""Return an object of Google Calendar along with Google Calendar doc."""
-	google_settings = frappe.get_doc("Google Settings")
-	account = frappe.get_doc("Google Calendar", g_calendar)
+	google_settings = frappe.get_cached_doc("Google Settings")
+	account: GoogleCalendar = frappe.get_doc("Google Calendar", g_calendar)
 
 	credentials_dict = {
 		"token": account.get_access_token(),
@@ -332,14 +334,19 @@ def sync_events_from_google_calendar(g_calendar, method=None):
 				insert_event_to_calendar(account, event, recurrence)
 			else:
 				update_event_in_calendar(account, event, recurrence)
+
+		# If any synced Google Calendar Event is cancelled, then close the Event
 		elif event.get("status") == "cancelled":
-			# If any synced Google Calendar Event is cancelled, then close the Event
-			frappe.db.set_value(
+			event_name = frappe.db.get_value(
 				"Event",
 				{
 					"google_calendar_id": account.google_calendar_id,
 					"google_calendar_event_id": event.get("id"),
 				},
+			)
+			frappe.db.set_value(
+				"Event",
+				event_name,
 				"status",
 				"Closed",
 			)
@@ -348,14 +355,7 @@ def sync_events_from_google_calendar(g_calendar, method=None):
 					"doctype": "Comment",
 					"comment_type": "Info",
 					"reference_doctype": "Event",
-					"reference_name": frappe.db.get_value(
-						"Event",
-						{
-							"google_calendar_id": account.google_calendar_id,
-							"google_calendar_event_id": event.get("id"),
-						},
-						"name",
-					),
+					"reference_name": event_name,
 					"content": " - Event deleted from Google Calendar.",
 				}
 			).insert(ignore_permissions=True)
@@ -558,13 +558,10 @@ def delete_event_from_google_calendar(doc, method=None):
 	Delete Events from Google Calendar if Frappe Event is deleted.
 	"""
 
-	if not frappe.db.exists("Google Calendar", {"name": doc.google_calendar}):
+	if not frappe.db.exists("Google Calendar", {"name": doc.google_calendar, "push_to_google_calendar": 1}):
 		return
 
-	google_calendar, account = get_google_calendar_object(doc.google_calendar)
-
-	if not account.push_to_google_calendar:
-		return
+	google_calendar, _ = get_google_calendar_object(doc.google_calendar)
 
 	try:
 		event = (
