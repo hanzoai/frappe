@@ -960,7 +960,11 @@ class TestCommandUtils(IntegrationTestCase):
 class TestDBCli(BaseTestCommands):
 	@timeout(10)
 	def test_db_cli(self):
-		self.execute("bench --site {site} db-console", kwargs={"cmd_input": rb"\q"})
+		if frappe.conf.db_type == "sqlite":
+			cmd_input = b".quit"
+		else:
+			cmd_input = rb"\q"
+		self.execute("bench --site {site} db-console", kwargs={"cmd_input": cmd_input})
 		self.assertEqual(self.returncode, 0)
 
 	@run_only_if(db_type_is.MARIADB)
