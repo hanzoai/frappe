@@ -73,7 +73,7 @@ framework_days = {
 }
 
 
-allow_google_calendar_label = frappe.bold(_lt("Allow Google Calendar Access"))
+allow_google_calendar_label = _lt("Allow Google Calendar Access")
 
 
 class GoogleCalendar(Document):
@@ -112,7 +112,7 @@ class GoogleCalendar(Document):
 
 		if not self.refresh_token:
 			raise frappe.ValidationError(
-				_("Click on {0} to generate Refresh Token.").format(allow_google_calendar_label)
+				_("Click on {0} to generate Refresh Token.").format(frappe.bold(allow_google_calendar_label))
 			)
 
 		data = {
@@ -129,7 +129,7 @@ class GoogleCalendar(Document):
 			frappe.throw(
 				_(
 					"Something went wrong during the token generation. Click on {0} to generate a new one."
-				).format(allow_google_calendar_label)
+				).format(frappe.bold(allow_google_calendar_label))
 			)
 
 		return r.get("access_token")
