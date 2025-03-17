@@ -260,45 +260,9 @@ frappe.views.ListSidebar = class ListSidebar {
 
 	add_banner(message, link, cta) {
 		try {
-<<<<<<< HEAD
-<<<<<<< HEAD
-			if (this.list_view.view != "Report") {
-				return;
-			}
-
-			if (localStorage.getItem("show_insights_banner") == "false") {
-				return;
-			}
-
-			if (this.insights_banner) {
-				this.insights_banner.remove();
-			}
-
-			const message = __("Get more insights with");
-			const link = "https://frappe.io/s/insights";
-			const cta = __("Frappe Insights");
-
-			this.insights_banner = $(`
-				<div style="position: relative;">
-					<div class="pr-3">
-						${message} <a href="${link}" target="_blank" style="color: var(--primary-color)">${cta} &rarr; </a>
-					</div>
-					<div style="position: absolute; top: -1px; right: -4px; cursor: pointer;" title="Dismiss"
-						onclick="localStorage.setItem('show_insights_banner', 'false') || this.parentElement.remove()">
-						<svg class="icon  icon-sm" style="">
-							<use class="" href="#icon-close"></use>
-						</svg>
-					</div>
-=======
-			// if (this.banner) {
-			// 	this.banner.remove();
-			// }
-=======
->>>>>>> 4760529446 (refactor: remove not used condition)
 			this.banner = $(`
 				<div class="sidebar-section">
 					${message} <a href="${link}" target="_blank" style="color: var(--text-color)">${cta} &rarr; </a>
->>>>>>> b133c7e34d (feat: show helpdesk and crm banner on sidebar)
 				</div>
 			`).appendTo(this.sidebar);
 		} catch (error) {
