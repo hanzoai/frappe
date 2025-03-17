@@ -1,12 +1,19 @@
 import re
 import sqlite3
 import warnings
+from datetime import date, datetime, time
 from pathlib import Path
 
 import frappe
-from frappe.database.database import TRANSACTION_DISABLED_MSG, Database, ImplicitCommitError, is_query_type
+from frappe.database.database import (
+	IMPLICIT_COMMIT_QUERY_TYPES,
+	TRANSACTION_DISABLED_MSG,
+	Database,
+	ImplicitCommitError,
+	is_query_type,
+)
 from frappe.database.sqlite.schema import SQLiteTable
-from frappe.utils import get_table_name
+from frappe.utils import get_datetime, get_table_name
 
 _PARAM_COMP = re.compile(r"%\([\w]*\)s")
 
@@ -97,7 +104,10 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 
 	def create_connection(self):
 		db_path = self.get_db_path()
-		return sqlite3.connect(db_path)
+		sqlite3.register_converter("timestamp", lambda x: datetime.fromisoformat(x.decode()))
+		sqlite3.register_converter("date", lambda x: date.fromisoformat(x.decode()))
+		sqlite3.register_converter("time", lambda x: time.fromisoformat(x.decode()))
+		return sqlite3.connect(db_path, detect_types=sqlite3.PARSE_DECLTYPES)
 
 	def get_db_path(self):
 		return Path(frappe.get_site_path()) / "db" / f"{self.cur_db_name}.db"
@@ -120,9 +130,9 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 			"Text Editor": ("TEXT", None),
 			"Markdown Editor": ("TEXT", None),
 			"HTML Editor": ("TEXT", None),
-			"Date": ("TEXT", None),
-			"Datetime": ("TEXT", None),
-			"Time": ("TEXT", None),
+			"Date": ("DATE", None),
+			"Datetime": ("TIMESTAMP", None),
+			"Time": ("TIME", None),
 			"Text": ("TEXT", None),
 			"Data": ("TEXT", None),
 			"Link": ("TEXT", None),
