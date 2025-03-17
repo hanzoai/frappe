@@ -113,12 +113,12 @@ class SQLiteTable(DBTable):
 		index_queries = []
 		if self.add_unique:
 			index_queries.extend(
-				f"CREATE UNIQUE INDEX `{col.fieldname}` ON `{self.table_name}` (`{col.fieldname}`)"
+				f"CREATE UNIQUE INDEX IF NOT EXISTS `{col.fieldname}` ON `{self.table_name}` (`{col.fieldname}`)"
 				for col in self.add_unique
 			)
 		if self.add_index:
 			index_queries.extend(
-				f"CREATE INDEX `{col.fieldname}_index` ON `{self.table_name}` (`{col.fieldname}`)"
+				f"CREATE INDEX IF NOT EXISTS `{col.fieldname}_index` ON `{self.table_name}` (`{col.fieldname}`)"
 				for col in self.add_index
 				if not frappe.db.get_column_index(self.table_name, col.fieldname, unique=False)
 			)
