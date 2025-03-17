@@ -2442,6 +2442,15 @@ def _register_fault_handler():
 		faulthandler.register(signal.SIGUSR1, file=sys.__stderr__)
 
 
+def override_whitelisted_method(original_method: str) -> str:
+	"""Return the first override or the original whitelisted method.
+
+	NOTE: in v15, this will change from using the first override to using the last override.
+	"""
+	overrides = get_hooks("override_whitelisted_methods", {}).get(original_method, [])
+	return overrides[0] if overrides else original_method
+
+
 if _tune_gc:
 	# generational GC gets triggered after certain allocs (g0) which is 700 by default.
 	# This number is quite small for frappe where a single query can potentially create 700+
