@@ -261,6 +261,7 @@ frappe.views.ListSidebar = class ListSidebar {
 	add_banner(message, link, cta) {
 		try {
 <<<<<<< HEAD
+<<<<<<< HEAD
 			if (this.list_view.view != "Report") {
 				return;
 			}
@@ -292,6 +293,8 @@ frappe.views.ListSidebar = class ListSidebar {
 			// if (this.banner) {
 			// 	this.banner.remove();
 			// }
+=======
+>>>>>>> 4760529446 (refactor: remove not used condition)
 			this.banner = $(`
 				<div class="sidebar-section">
 					${message} <a href="${link}" target="_blank" style="color: var(--text-color)">${cta} &rarr; </a>
@@ -335,7 +338,7 @@ frappe.views.ListSidebar = class ListSidebar {
 			return;
 		}
 
-		const message = __("Upgrade your support experience with Frappe Helpdesk");
+		const message = __("Upgrade your support experience with ");
 		const link =
 			"https://frappe.io/helpdesk?utm_source=support-sidebar&utm_medium=sidebar&utm_campaign=frappe-ad";
 		const cta = "Frappe Helpdesk";
