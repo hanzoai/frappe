@@ -2,8 +2,9 @@
 # License: MIT. See LICENSE
 
 
-from datetime import datetime, timedelta
 from urllib.parse import quote
+from datetime import date, datetime, timedelta
+from typing import TypedDict
 from zoneinfo import ZoneInfo
 
 import google.oauth2.credentials
@@ -26,6 +27,13 @@ from frappe.utils import (
 	now_datetime,
 )
 from frappe.utils.password import set_encrypted_password
+
+
+class RecurrenceParameters(TypedDict):
+	frequency: str | None
+	until: datetime | None
+	byday: list[str]
+
 
 SCOPES = "https://www.googleapis.com/auth/calendar"
 
@@ -740,19 +748,21 @@ def get_week_number(dt):
 	return int(ceil(adjusted_dom / 7.0))
 
 
-def get_recurrence_parameters(recurrence):
+def get_recurrence_parameters(recurrence: str) -> RecurrenceParameters:
 	recurrence = recurrence.split(";")
-	frequency, until, byday = None, None, None
+	frequency, until, byday = None, None, []
 
-	for r in recurrence:
-		if "RRULE:FREQ" in r:
-			frequency = r
-		elif "UNTIL" in r:
-			until = r
-		elif "BYDAY" in r:
-			byday = r
-		else:
-			pass
+	for token in recurrence:
+		if "RRULE:FREQ" in token:
+			frequency = token
+
+		elif "UNTIL" in token:
+			_until = token.replace("UNTIL=", "").rstrip("Z")
+			fmt = "%Y%m%dT%H%M%S" if "T" in _until else "%Y%m%d"
+			until = datetime.strptime(_until, fmt)
+
+		elif "BYDAY" in token:
+			byday = token.split("=", 1)[1].split(",")
 
 	return frequency, until, byday
 
