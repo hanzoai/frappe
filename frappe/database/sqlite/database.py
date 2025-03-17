@@ -6,16 +6,15 @@ from pathlib import Path
 
 import frappe
 from frappe.database.database import (
-	IMPLICIT_COMMIT_QUERY_TYPES,
 	TRANSACTION_DISABLED_MSG,
 	Database,
 	ImplicitCommitError,
-	is_query_type,
 )
 from frappe.database.sqlite.schema import SQLiteTable
 from frappe.utils import get_datetime, get_table_name
 
 _PARAM_COMP = re.compile(r"%\([\w]*\)s")
+IMPLICIT_COMMIT_QUERY_TYPES = frozenset(("start", "alter", "drop", "create", "truncate"))
 
 
 class SQLiteExceptionUtil:
@@ -509,6 +508,10 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 		table = get_table_name(doctype)
 		self.sql_ddl(f"DELETE FROM `{table}`")
 		self.sql_ddl(f"DELETE FROM sqlite_sequence WHERE name='{table}'")
+
+	def check_implicit_commit(self, query: str, query_type: str):
+		if query_type in IMPLICIT_COMMIT_QUERY_TYPES and self.transaction_writes:
+			raise ImplicitCommitError("This statement can cause implicit commit", query)
 
 
 def modify_query(query):
