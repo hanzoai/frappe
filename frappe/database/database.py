@@ -38,14 +38,15 @@ from frappe.utils import CallbackManager, cint, get_datetime, get_table_name, ge
 from frappe.utils import cast as cast_fieldtype
 
 if TYPE_CHECKING:
+	from sqlite3 import Connection as SQLiteConnection
+	from sqlite3 import Cursor as SQLiteCursor
+
 	from MySQLdb.connections import Connection as MySQLdbConnection
 	from MySQLdb.cursors import Cursor as MySQLdbCursor
 	from psycopg2 import connection as PostgresConnection
 	from psycopg2 import cursor as PostgresCursor
 	from pymysql.connections import Connection as MariadbConnection
 	from pymysql.cursors import Cursor as MariadbCursor
-	from sqlite3 import Connection as SQLiteConnection
-	from sqlite3 import Cursor as SQLiteCursor
 
 IFNULL_PATTERN = re.compile(r"ifnull\(", flags=re.IGNORECASE)
 INDEX_PATTERN = re.compile(r"\s*\([^)]+\)\s*")
@@ -130,7 +131,9 @@ class Database:
 
 	def connect(self):
 		"""Connects to a database as set in `site_config.json`."""
-		self._conn: MySQLdbConnection | MariadbConnection | PostgresConnection | SQLiteConnection = self.get_connection()
+		self._conn: MySQLdbConnection | MariadbConnection | PostgresConnection | SQLiteConnection = (
+			self.get_connection()
+		)
 		self._cursor: MySQLdbCursor | MariadbCursor | PostgresCursor | SQLiteCursor = self._conn.cursor()
 
 		try:
