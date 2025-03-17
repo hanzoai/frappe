@@ -309,26 +309,26 @@ frappe.views.ListSidebar = class ListSidebar {
 	}
 
 	add_crm_banner() {
-		if (this.list_view.meta.module != "CRM") {
+		if (this.list_view.meta.module != "CRM" || this.list_view.view != "List") {
 			return;
 		}
 
-		const message = __("Switch to Frappe CRM for smarter sales");
+		const message = "";
 		const link =
 			"https://frappe.io/crm?utm_source=crm-sidebar&utm_medium=sidebar&utm_campaign=frappe-ad";
-		const cta = "Frappe CRM";
+		const cta = __("Switch to Frappe CRM for smarter sales");
 		this.add_banner(message, link, cta);
 	}
 
 	add_helpdesk_banner() {
-		if (this.list_view.meta.module != "Support") {
+		if (this.list_view.meta.module != "Support" || this.list_view.view != "List") {
 			return;
 		}
 
-		const message = __("Upgrade your support experience with");
+		const message = "";
 		const link =
 			"https://frappe.io/helpdesk?utm_source=support-sidebar&utm_medium=sidebar&utm_campaign=frappe-ad";
-		const cta = " Frappe Helpdesk";
+		const cta = __("Upgrade your support experience with Frappe Helpdesk");
 		this.add_banner(message, link, cta);
 	}
 };
