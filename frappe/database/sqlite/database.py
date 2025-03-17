@@ -150,11 +150,6 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 
 		return os.path.getsize(self.db_name) / (1024 * 1024)
 
-	def log_query(self, query, values, debug, explain):
-		self.last_query = query
-		self._log_query(self.last_query, debug, explain, query)
-		return self.last_query
-
 	def _clean_up(self):
 		pass
 
@@ -485,17 +480,6 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 				frappe.cache.set_value(key, columns)
 
 		return columns
-
-	def check_implicit_commit(self, query: str):
-		if (
-			self.transaction_writes
-			and query
-			and is_query_type(
-				query,
-				("start", "alter", "drop", "create", "truncate", "vacuum", "attach", "detach"),
-			)
-		):
-			raise ImplicitCommitError("This statement can cause implicit commit", query)
 
 	def estimate_count(self, doctype: str):
 		"""Get estimated count of total rows in a table."""
