@@ -405,6 +405,11 @@ def insert_event_to_calendar(account, event, recurrence=None):
 		"google_calendar_event_id": event.get("id"),
 		"google_meet_link": event.get("hangoutLink"),
 		"pulled_from_google_calendar": 1,
+<<<<<<< HEAD
+=======
+		"owner": account.user,
+		"event_type": "Public" if account.sync_as_public else "Private",
+>>>>>>> addf682acb (fix: Sync events based on calendar user not who created it)
 	}
 	calendar_event.update(
 		google_calendar_to_repeat_on(recurrence=recurrence, start=event.get("start"), end=event.get("end"))
