@@ -660,6 +660,13 @@ body {
 	}
 }
 
+@include media-breakpoint-down(sm) {
+	// dont show in mobile
+	.layout-side-section {
+		min-width: 0px;
+	}
+}
+
 .overlay-sidebar {
 	ul.dropdown-menu {
 		li {
