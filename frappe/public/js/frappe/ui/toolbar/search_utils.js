@@ -570,11 +570,55 @@ frappe.search.utils = {
 		];
 	},
 
+<<<<<<< HEAD
 	fuzzy_search: function (keywords, _item) {
 		keywords = keywords || "";
 		var item = __(_item || "");
 		var match = fuzzy_match(keywords, item);
 		return match[1];
+=======
+	fuzzy_search: function (keywords = "", _item = "", return_marked_string = false) {
+		const item = __(_item);
+
+		const [, score, matches] = fuzzy_match(keywords, item, return_marked_string);
+
+		if (!return_marked_string) {
+			return score;
+		}
+		if (score == 0) {
+			return {
+				score: score,
+				marked_string: item,
+			};
+		}
+
+		// Create Boolean mask to mark matching indices in the item string
+		const matchArray = Array(item.length).fill(0);
+		matches.forEach((index) => (matchArray[index] = 1));
+
+		let marked_string = "";
+		let buffer = "";
+
+		// Clear the buffer and return marked matches.
+		const flushBuffer = () => {
+			if (!buffer) return "";
+			const temp = `<mark>${buffer}</mark>`;
+			buffer = "";
+			return temp;
+		};
+
+		matchArray.forEach((isMatch, index) => {
+			if (isMatch) {
+				buffer += item[index];
+			} else {
+				marked_string += flushBuffer();
+				marked_string += item[index];
+			}
+		});
+		marked_string += flushBuffer();
+
+		return { score, marked_string };
+>>>>>>> ecf727ed69 (fix: "Undefined" shown in global search results)
 	},
 
 	bolden_match_part: function (str, subseq) {
