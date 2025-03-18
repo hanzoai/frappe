@@ -157,7 +157,7 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 		"""Return database size in MB."""
 		import os
 
-		return os.path.getsize(self.db_name) / (1024 * 1024)
+		return os.path.getsize(self.get_db_path()) / (1024 * 1024)
 
 	def _clean_up(self):
 		pass
