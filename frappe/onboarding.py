@@ -4,6 +4,12 @@ import frappe
 
 
 @frappe.whitelist()
+def get_onboarding_status():
+	onboarding_status = frappe.db.get_value("User", frappe.session.user, "onboarding_status")
+	return frappe.parse_json(onboarding_status) if onboarding_status else {}
+
+
+@frappe.whitelist()
 def update_user_onboarding_status(steps: str, appName: str):
 	steps = json.loads(steps)
 
