@@ -115,14 +115,8 @@ class Event(Document):
 			filters={"reference_doctype": self.doctype, "reference_name": self.name},
 			pluck="name",
 		)
-<<<<<<< HEAD
-		if communications:
-			for communication in communications:
-				frappe.delete_doc_if_exists("Communication", communication.name)
-=======
 		for communication in communications:
 			frappe.delete_doc("Communication", communication, force=True)
->>>>>>> abe04cc6bd (refactor(minor): API usages in Event controller)
 
 	def sync_communication(self):
 		if not self.event_participants:
