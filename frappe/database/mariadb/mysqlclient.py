@@ -21,6 +21,7 @@ class MariaDBExceptionUtil:
 	InternalError = MySQLdb.InternalError
 	SQLError = MySQLdb.ProgrammingError
 	DataError = MySQLdb.DataError
+	InterfaceError = MySQLdb.InterfaceError
 
 	# match SEQUENCE_RUN_OUT - https://mariadb.com/kb/en/mariadb-error-codes/
 	SequenceGeneratorLimitExceeded = MySQLdb.OperationalError

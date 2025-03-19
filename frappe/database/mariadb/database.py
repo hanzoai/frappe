@@ -17,6 +17,7 @@ class MariaDBExceptionUtil:
 	InternalError = pymysql.InternalError
 	SQLError = pymysql.ProgrammingError
 	DataError = pymysql.DataError
+	InterfaceError = pymysql.InterfaceError
 
 	# match ER_SEQUENCE_RUN_OUT - https://mariadb.com/kb/en/mariadb-error-codes/
 	SequenceGeneratorLimitExceeded = pymysql.OperationalError
