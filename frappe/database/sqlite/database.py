@@ -78,12 +78,12 @@ class SQLiteExceptionUtil:
 		return "too many columns" in str(e)
 
 	@staticmethod
-	def is_primary_key_violation(e: sqlite3.Error) -> bool:
-		return "UNIQUE constraint failed" in str(e)
+	def is_primary_key_violation(e: sqlite3.IntegrityError) -> bool:
+		return e.sqlite_errorcode == 1555
 
 	@staticmethod
-	def is_unique_key_violation(e: sqlite3.Error) -> bool:
-		return "UNIQUE constraint failed" in str(e)
+	def is_unique_key_violation(e: sqlite3.IntegrityError) -> bool:
+		return e.sqlite_errorcode == 2067
 
 	@staticmethod
 	def is_interface_error(e: sqlite3.Error):
