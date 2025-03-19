@@ -1512,7 +1512,22 @@ def call(fn: str | Callable, *args, **kwargs):
 	return fn(*args, **newargs)
 
 
-_cached_inspect_signature = functools.lru_cache(inspect.signature)
+@functools.lru_cache
+def _get_cached_signature_params(fn: Callable) -> tuple[dict[str, Any], bool]:
+	"""
+	Get cached parameters for a function.
+	Returns a dictionary of parameters and a boolean indicating if the function has **kwargs.
+	"""
+
+	signature = inspect.signature(fn)
+
+	# if function has any **kwargs parameter that capture arbitrary keyword arguments
+	# Ref: https://docs.python.org/3/library/inspect.html#inspect.Parameter.kind
+	variable_kwargs_exist = any(
+		parameter.kind == inspect.Parameter.VAR_KEYWORD for parameter in signature.parameters.values()
+	)
+
+	return dict(signature.parameters), variable_kwargs_exist
 
 
 def get_newargs(fn: Callable, kwargs: dict[str, Any]) -> dict[str, Any]:
@@ -1526,23 +1541,12 @@ def get_newargs(fn: Callable, kwargs: dict[str, Any]) -> dict[str, Any]:
 	                {"a": 2}
 	"""
 
-	# if function has any **kwargs parameter that capture arbitrary keyword arguments
-	# Ref: https://docs.python.org/3/library/inspect.html#inspect.Parameter.kind
-	varkw_exist = False
-
-	signature = _cached_inspect_signature(fn)
-	fnargs = list(signature.parameters)
-
-	for param_name, parameter in signature.parameters.items():
-		if parameter.kind == inspect.Parameter.VAR_KEYWORD:
-			varkw_exist = True
-			fnargs.remove(param_name)
-			break
-
-	newargs = {}
-	for a in kwargs:
-		if (a in fnargs) or varkw_exist:
-			newargs[a] = kwargs.get(a)
+	parameters, variable_kwargs_exist = _get_cached_signature_params(fn)
+	newargs = (
+		kwargs.copy()
+		if variable_kwargs_exist
+		else {key: value for key, value in kwargs.items() if key in parameters}
+	)
 
 	# WARNING: This behaviour is now  part of business logic in places, never remove.
 	newargs.pop("ignore_permissions", None)
