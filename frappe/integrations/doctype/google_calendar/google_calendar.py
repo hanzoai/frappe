@@ -217,17 +217,9 @@ def sync(g_calendar: str | None = None):
 
 
 def get_google_calendar_object(g_calendar):
-<<<<<<< HEAD
-	"""
-	Returns an object of Google Calendar along with Google Calendar doc.
-	"""
-	google_settings = frappe.get_doc("Google Settings")
-	account = frappe.get_doc("Google Calendar", g_calendar)
-=======
 	"""Return an object of Google Calendar along with Google Calendar doc."""
 	google_settings = frappe.get_cached_doc("Google Settings")
 	account: GoogleCalendar = frappe.get_doc("Google Calendar", g_calendar)
->>>>>>> e9691a1b08 (perf: Google Calendar)
 
 	credentials = google.oauth2.credentials.Credentials(
 		token=account.get_access_token(),
@@ -251,21 +243,6 @@ def check_google_calendar(account: GoogleCalendar, google_calendar):
 	Checks if Google Calendar is present with the specified name.
 	If not, creates one.
 	"""
-<<<<<<< HEAD
-	account.load_from_db()
-	try:
-		if account.google_calendar_id:
-			google_calendar.calendars().get(calendarId=account.google_calendar_id).execute()
-		else:
-			# If no Calendar ID create a new Calendar
-			calendar = {
-				"summary": account.calendar_name,
-				"timeZone": frappe.db.get_single_value("System Settings", "time_zone"),
-			}
-			created_calendar = google_calendar.calendars().insert(body=calendar).execute()
-			frappe.db.set_value(
-				"Google Calendar", account.name, "google_calendar_id", created_calendar.get("id")
-=======
 	if account.google_calendar_id:
 		try:
 			return google_calendar.calendars().get(calendarId=account.google_calendar_id).execute()
@@ -274,7 +251,6 @@ def check_google_calendar(account: GoogleCalendar, google_calendar):
 				_("Google Calendar - Could not find Calendar for {0}, error code {1}.").format(
 					account.name, err.resp.status
 				)
->>>>>>> ead0cb5870 (refactor: Google Calendar)
 			)
 
 	# If no Calendar ID create a new Calendar
@@ -408,16 +384,7 @@ def insert_event_to_calendar(account, event, recurrence=None):
 		"google_calendar_event_id": event.get("id"),
 		"google_meet_link": event.get("hangoutLink"),
 		"pulled_from_google_calendar": 1,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 		"owner": account.user,
-		"event_type": "Public" if account.sync_as_public else "Private",
->>>>>>> addf682acb (fix: Sync events based on calendar user not who created it)
-	}
-	calendar_event.update(
-		google_calendar_to_repeat_on(recurrence=recurrence, start=event.get("start"), end=event.get("end"))
-=======
 		"event_type": "Public" if account.sync_as_public else "Private",
 	} | google_calendar_to_repeat_on(recurrence=recurrence, start=event.get("start"), end=event.get("end"))
 
@@ -433,7 +400,6 @@ def update_participants_in_event(calendar_event: "Event", google_event: dict):
 	]
 	in_system_participants = frappe.get_all(
 		"User", filters={"email": ("in", google_event_participants)}, pluck="email"
->>>>>>> a73ecf5456 (feat(Event): Sync Participants if they are in-system users)
 	)
 
 	existing_calendar_participants = [
@@ -789,15 +755,9 @@ def repeat_on_to_google_calendar_recurrence_rule(doc):
 	return [recurrence]
 
 
-<<<<<<< HEAD
-def get_week_number(dt):
-	"""
-	Returns the week number of the month for the specified date.
-=======
 def get_week_number(dt: date):
 	"""Return the week number of the month for the specified date.
 
->>>>>>> ead0cb5870 (refactor: Google Calendar)
 	https://stackoverflow.com/questions/3806473/python-week-number-of-the-month/16804556
 	"""
 	first_day = dt.replace(day=1)
