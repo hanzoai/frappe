@@ -94,6 +94,7 @@ class GoogleCalendar(Document):
 		google_calendar_id: DF.Data | None
 		next_sync_token: DF.Password | None
 		pull_from_google_calendar: DF.Check
+		sync_as_public: DF.Check
 		push_to_google_calendar: DF.Check
 		refresh_token: DF.Password | None
 		user: DF.Link
