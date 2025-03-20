@@ -14,7 +14,6 @@ from urllib.parse import quote
 
 import werkzeug.utils
 from werkzeug.exceptions import Forbidden, NotFound
-from werkzeug.local import LocalProxy
 from werkzeug.wrappers import Response
 from werkzeug.wsgi import wrap_file
 
@@ -25,9 +24,12 @@ import frappe.utils
 from frappe import _
 from frappe.core.doctype.access_log.access_log import make_access_log
 from frappe.utils import format_timedelta
+from frappe.utils.local import LocalProxy, WerkzeugLocalProxy
 
 if TYPE_CHECKING:
 	from frappe.core.doctype.file.file import File
+
+LocalProxyType = LocalProxy | WerkzeugLocalProxy
 
 
 def report_error(status_code):
@@ -222,7 +224,7 @@ def json_handler(obj):
 	elif isinstance(obj, decimal.Decimal):
 		return float(obj)
 
-	elif isinstance(obj, LocalProxy):
+	elif isinstance(obj, LocalProxyType):
 		return str(obj)
 
 	elif hasattr(obj, "__json__"):
