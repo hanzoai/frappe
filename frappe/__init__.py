@@ -224,7 +224,7 @@ def init(site: str, sites_path: str = ".", new_site: bool = False, force: bool =
 			"read_only": False,
 		}
 	)
-	local.locked_documents: list[Document] = []
+	local.locked_documents = []
 	local.test_objects = defaultdict(list)
 
 	local.site = site
