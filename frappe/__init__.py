@@ -42,7 +42,7 @@ from frappe.query_builder.utils import (
 	get_query_builder,
 )
 from frappe.utils.caching import deprecated_local_cache as local_cache
-from frappe.utils.caching import request_cache
+from frappe.utils.caching import request_cache, site_cache
 from frappe.utils.data import as_unicode, bold, cint, cstr, safe_decode, safe_encode, sbool
 from frappe.utils.local import Local, LocalProxy, release_local
 
@@ -1332,7 +1332,6 @@ def get_doc_hooks():
 	return local.doc_events_hooks
 
 
-@request_cache
 def _load_app_hooks(app_name: str | None = None):
 	import types
 
@@ -1359,6 +1358,10 @@ def _load_app_hooks(app_name: str | None = None):
 	return hooks
 
 
+_request_cached_load_app_hooks = request_cache(_load_app_hooks)
+_site_cached_load_app_hooks = site_cache(_load_app_hooks)
+
+
 def get_hooks(
 	hook: str | None = None, default: Any | None = "_KEEP_DEFAULT_LIST", app_name: str | None = None
 ) -> _dict:
@@ -1369,17 +1372,18 @@ def get_hooks(
 	:param app_name: Filter by app."""
 
 	if app_name:
-		hooks = _load_app_hooks(app_name)
+		hooks = _request_cached_load_app_hooks(app_name)
+	elif local.conf.developer_mode:
+		hooks = _site_cached_load_app_hooks()
 	else:
-		if conf.developer_mode:
+		hooks = client_cache.get_value("app_hooks")
+		if hooks is None:
 			hooks = _load_app_hooks()
-		else:
-			hooks = client_cache.get_value("app_hooks")
-			if hooks is None:
-				hooks = _load_app_hooks()
-				client_cache.set_value("app_hooks", hooks)
+			client_cache.set_value("app_hooks", hooks)
+
 	if hook:
 		return hooks.get(hook, ([] if default == "_KEEP_DEFAULT_LIST" else default))
+
 	return _dict(hooks)
 
 
