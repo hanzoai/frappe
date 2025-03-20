@@ -1,9 +1,9 @@
 from contextvars import ContextVar
 from typing import Any, Generic, TypeVar
 
-from werkzeug.local import LocalProxy as _LocalProxy
+from werkzeug.local import LocalProxy as WerkzeugLocalProxy
 from werkzeug.local import _ProxyLookup
-from werkzeug.local import release_local as _release_local
+from werkzeug.local import release_local as release_werkzeug_local
 
 _contextvar = ContextVar("frappe_local")
 
@@ -61,10 +61,10 @@ class Local:
 
 
 class LocalProxy(Generic[T]):
-	__slots__ = _LocalProxy.__slots__
-	__init__ = _LocalProxy.__init__
+	__slots__ = WerkzeugLocalProxy.__slots__
+	__init__ = WerkzeugLocalProxy.__init__
 
-	for attr, val in vars(_LocalProxy).items():
+	for attr, val in vars(WerkzeugLocalProxy).items():
 		if attr == "__getattr__" or not isinstance(val, _ProxyLookup):
 			continue
 
@@ -113,7 +113,7 @@ def release_local(local):
 		_contextvar.set({})
 		return
 
-	_release_local(local)
+	release_werkzeug_local(local)
 
 
 # _local_attributes = frozenset(attr for attr in dir(Local))
