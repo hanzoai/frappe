@@ -35,6 +35,7 @@ export default class ListSettings {
 		me.dialog.set_values(me.settings);
 		me.dialog.set_primary_action(__("Save"), () => {
 			let values = me.dialog.get_values();
+			console.log(values, "values");
 
 			frappe.show_alert({
 				message: __("Saving"),
@@ -114,14 +115,22 @@ export default class ListSettings {
 			fields += `
 				<div class="control-input flex align-center form-control fields_order ${is_sortable}"
 					style="display: block; margin-bottom: 5px;" data-fieldname="${me.fields[idx].fieldname}"
-					data-label="${me.fields[idx].label}" data-type="${me.fields[idx].type}">
+					data-label="${me.fields[idx].label}" data-type="${me.fields[idx].type}" data-col-width="${
+				me.fields[idx].columns
+			}">
 
 					<div class="row">
 						<div class="col-1">
 							${frappe.utils.icon("drag", "xs", "", "", "sortable-handle " + show_sortable_handle)}
 						</div>
-						<div class="col-10" style="padding-left:0px;">
+						<div class="col-8" style="padding-left:0px;">
 							${__(me.fields[idx].label, null, me.doctype)}
+						</div>
+						<div class='col-2' style='padding-top: 2px; margin-top:-2px;' title='${__("Columns")}'>
+							<input type='text' class='form-control column-width input-xs text-right'
+								style='height: 24px; max-width: 80px; background: var(--bg-color);'
+								value='${me.fields[idx].columns || 2}' title="Column Width"
+								data-fieldname='${me.fields[idx].fieldname}'>
 						</div>
 						<div class="col-1 ${can_remove}">
 							<a class="text-muted remove-field" data-fieldname="${me.fields[idx].fieldname}">
@@ -210,9 +219,12 @@ export default class ListSettings {
 		me.fields = [];
 
 		for (let idx = 0; idx < fields_order.length; idx++) {
+			// console.log(fields_order.item(idx));
+
 			me.fields.push({
 				fieldname: fields_order.item(idx).getAttribute("data-fieldname"),
 				label: __(fields_order.item(idx).getAttribute("data-label")),
+				// col_width: __(fields_order.item(idx).getAttribute("data-col-width")),
 			});
 		}
 
@@ -301,6 +313,8 @@ export default class ListSettings {
 	get_listview_fields(meta) {
 		let me = this;
 
+		// console.log(me, "list");
+
 		if (!me.settings.fields) {
 			me.set_list_view_fields(meta);
 		} else {
@@ -317,6 +331,8 @@ export default class ListSettings {
 		me.set_status_field();
 
 		meta.fields.forEach((field) => {
+			console.log(field, "field");
+
 			if (
 				field.in_list_view &&
 				!frappe.model.no_value_type.includes(field.fieldtype) &&
