@@ -50,7 +50,11 @@ def start_scheduler() -> NoReturn:
 		return
 
 	while True:
+<<<<<<< HEAD
 		time.sleep(tick)
+=======
+		time.sleep(sleep_duration(tick))
+>>>>>>> 5a5ad3032c (fix: procline crash (#31845))
 		enqueue_events_for_all_sites()
 
 
@@ -94,7 +98,11 @@ def enqueue_events_for_site(site: str) -> None:
 		frappe.logger("scheduler").error(f"Exception in Enqueue Events for Site {site}", exc_info=True)
 
 	try:
+<<<<<<< HEAD
 		frappe.init(site=site)
+=======
+		frappe.init(site)
+>>>>>>> 5a5ad3032c (fix: procline crash (#31845))
 		frappe.connect()
 		if is_scheduler_inactive():
 			return
