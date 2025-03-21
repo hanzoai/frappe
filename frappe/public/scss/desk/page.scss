@@ -186,6 +186,10 @@
 			.result {
 				width: fit-content;
 				min-width: 100%;
+				width: auto;
+				.list-row-container {
+					width: fit-content;
+				}
 				.list-row-container:first-child {
 					position: sticky;
 					top: 0;

@@ -101,9 +101,13 @@
 		min-width: 80%;
 	}
 	.level-right {
-		flex: 1;
-		overflow: visible;
-		align-items: center;
+		// flex: 1;
+		// overflow: visible;
+		// align-items: center;
+		position: sticky;
+		right: 0;
+		background-color: #fff;
+		padding-right: 10px;
 	}
 
 	.tag-col {
