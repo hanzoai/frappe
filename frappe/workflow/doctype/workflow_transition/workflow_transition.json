@@ -101,7 +101,7 @@
   },
   {
    "default": "1",
-   "depends_on": "eval: doc.allow_self_approval === \"1\"",
+   "depends_on": "eval: doc.allow_self_approval == 1",
    "fieldname": "send_email_to_creator",
    "fieldtype": "Check",
    "label": "Send Email To Creator"
@@ -112,10 +112,14 @@
  "istable": 1,
  "links": [],
 <<<<<<< HEAD
+<<<<<<< HEAD
  "modified": "2023-05-02 19:57:42.370841",
 =======
  "modified": "2025-03-24 02:03:23.926703",
 >>>>>>> 0bc2e197b2 (fix: configure if email is sent to creator)
+=======
+ "modified": "2025-03-24 02:47:44.188152",
+>>>>>>> 216223abc8 (fix: typo)
  "modified_by": "Administrator",
  "module": "Workflow",
  "name": "Workflow Transition",
