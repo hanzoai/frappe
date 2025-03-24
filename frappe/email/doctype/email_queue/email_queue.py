@@ -158,9 +158,13 @@ class EmailQueue(Document):
 
 		return True
 
+<<<<<<< HEAD
 	def send(self, smtp_server_instance: SMTPServer = None):
+=======
+	def send(self, smtp_server_instance: SMTPServer = None, frappe_mail_client: FrappeMail = None, force_send = False):
+>>>>>>> 4848fbda0b (fix: Allow to manually send an email even if queue is disabled)
 		"""Send emails to recipients."""
-		if not self.can_send_now():
+		if not self.can_send_now() and not force_send:
 			return
 
 		with SendMailContext(self, smtp_server_instance) as ctx:
@@ -423,7 +427,6 @@ class SendMailContext:
 		file.content = content
 		file.insert()
 
-
 @frappe.whitelist()
 def bulk_retry(queues):
 	frappe.only_for("System Manager")
@@ -446,11 +449,11 @@ def bulk_retry(queues):
 
 
 @frappe.whitelist()
-def send_now(name):
+def send_now(name, force_send=False):
 	record = EmailQueue.find(name)
 	if record:
 		record.check_permission()
-		record.send()
+		record.send(force_send = force_send)
 
 
 @frappe.whitelist()
