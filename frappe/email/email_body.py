@@ -127,7 +127,7 @@ class EMail:
 			recipients = split_emails(recipients)
 
 		# remove null
-		recipients = list(filter(None, (strip(r) for r in recipients)))
+		recipients = [r for r in (strip(r) for r in recipients) if r]
 
 		self.sender = sender
 		self.reply_to = reply_to or sender
