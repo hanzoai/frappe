@@ -94,7 +94,7 @@
    "label": "Workflow Builder ID"
   },
   {
-   "default": "1",
+   "default": "0",
    "depends_on": "eval: doc.allow_self_approval == 1",
    "fieldname": "send_email_to_creator",
    "fieldtype": "Check",
@@ -110,7 +110,6 @@
  "name": "Workflow Transition",
  "owner": "Administrator",
  "permissions": [],
- "row_format": "Dynamic",
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": []
