@@ -1503,8 +1503,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				this.make_access_log("Export", file_format);
 
 				let filters = this.get_filter_values(true);
-<<<<<<< HEAD
-=======
 				let boolean_labels = { 1: __("Yes"), 0: __("No") };
 				let applied_filters = {};
 
@@ -1516,7 +1514,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 					}
 				}
 
->>>>>>> bbaed45d46 (fix: do not show hidden filters in export or print)
 				if (this.prepared_report_name) {
 					filters.prepared_report_name = this.prepared_report_name;
 				}
