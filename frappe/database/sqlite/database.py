@@ -99,17 +99,19 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 	default_port = None
 	MAX_ROW_SIZE_LIMIT = None
 
-	def get_connection(self):
-		conn = self.create_connection()
+	def get_connection(self, read_only: bool = False):
+		conn = self.create_connection(read_only)
 		conn.isolation_level = None
 		conn.create_function("regexp", 2, regexp)
 		return conn
 
-	def create_connection(self):
+	def create_connection(self, read_only: bool = False):
 		db_path = self.get_db_path()
 		sqlite3.register_converter("timestamp", lambda x: datetime.fromisoformat(x.decode()))
 		sqlite3.register_converter("date", lambda x: date.fromisoformat(x.decode()))
 		sqlite3.register_converter("time", lambda x: time.fromisoformat(x.decode()))
+		if read_only:
+			return sqlite3.connect(f"file:{db_path}?mode=ro", uri=True, detect_types=sqlite3.PARSE_DECLTYPES)
 		return sqlite3.connect(db_path, detect_types=sqlite3.PARSE_DECLTYPES)
 
 	def get_db_path(self):
@@ -437,9 +439,19 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 		self.commit()
 
 	def begin(self, *, read_only=False):
-		read_only = read_only or frappe.flags.read_only
-		# mode = "READ ONLY" if read_only else ""
-		# TODO: support read_only
+		if read_only or frappe.flags.read_only:
+			if self._conn:
+				self._conn.close()
+			self._conn = self.get_connection(read_only=True)
+			self._cursor = self._conn.cursor()
+			self.read_only = True
+
+		elif hasattr(self, "read_only") and self.read_only:
+			self._conn.close()
+			self._conn = self.get_connection()
+			self._cursor = self._conn.cursor()
+			self.read_only = False
+
 		self.sql("BEGIN")
 
 	def commit(self):
