@@ -79,11 +79,15 @@ class SQLiteExceptionUtil:
 
 	@staticmethod
 	def is_primary_key_violation(e: sqlite3.IntegrityError) -> bool:
-		return e.sqlite_errorcode == 1555
+		if hasattr(e, "sqlite_errorcode"):
+			return e.sqlite_errorcode == 1555
+		return "UNIQUE constraint failed" in str(e)
 
 	@staticmethod
 	def is_unique_key_violation(e: sqlite3.IntegrityError) -> bool:
-		return e.sqlite_errorcode == 2067
+		if hasattr(e, "sqlite_errorcode"):
+			return e.sqlite_errorcode == 2067
+		return "UNIQUE constraint failed" in str(e)
 
 	@staticmethod
 	def is_interface_error(e: sqlite3.Error):
