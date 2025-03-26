@@ -316,6 +316,7 @@ def export_query():
 
 	form_params = frappe._dict(frappe.local.form_dict)
 	csv_params = pop_csv_params(form_params)
+	print(form_params)
 	clean_params(form_params)
 	parse_json(form_params)
 
@@ -360,15 +361,22 @@ def export_query():
 		content = make_xlsx(xlsx_data, "Query Report", column_widths=column_widths).getvalue()
 
 	for value in (data.filters or {}).values():
-		if len(report_name) > 200:
-			break
-
-		if isinstance(value, list) and value:
+		if isinstance(value, list) and valid_report_name(report_name, "_" + ",".join(value)):
 			report_name += "_" + ",".join(value)
-		elif isinstance(value, str) and value not in {"Yes", "No"}:
+		elif (
+			isinstance(value, str)
+			and value not in {"Yes", "No"}
+			and valid_report_name(report_name, f"_{value}")
+		):
 			report_name += f"_{value}"
 
 	provide_binary_file(report_name, file_extension, content)
+
+
+def valid_report_name(report_name, suffix):
+	if len(report_name) + len(suffix) < 200:
+		return True
+	return False
 
 
 def format_fields(data: frappe._dict) -> None:
