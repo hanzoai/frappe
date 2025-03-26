@@ -1485,10 +1485,10 @@ fraction.js@^4.3.6:
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.3.7.tgz#06ca0085157e42fda7f9e726e79fefc4068840f7"
   integrity sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==
 
-frappe-charts@2.0.0-rc24:
-  version "2.0.0-rc24"
-  resolved "https://registry.yarnpkg.com/frappe-charts/-/frappe-charts-2.0.0-rc24.tgz#cdb5eaed91ff3c88f76afbd18b7c4f1eabf7bdc7"
-  integrity sha512-RYgLWDSah3Kjsl70cZwt5xaqcaktTE+VcAfSWmfOGWaIpltFaQTsadh4G7tAhMZirEjlT5iEQ3ikz680/+1vOw==
+frappe-charts@2.0.0-rc25:
+  version "2.0.0-rc25"
+  resolved "https://registry.yarnpkg.com/frappe-charts/-/frappe-charts-2.0.0-rc25.tgz#0af540df67d07cef244e18ddad1637df09227c8b"
+  integrity sha512-3sghNGh6DQ5VaEuNtY7tyrvK7erIEBPYmyxhUPkqbkiEIIAA9HJczF90c4wr4hREfsWaTAntkaQ/Fpi2reS+Hg==
 
 frappe-datatable@1.18.1:
   version "1.18.1"
