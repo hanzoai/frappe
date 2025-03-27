@@ -131,7 +131,7 @@
  "owner": "Administrator",
  "permissions": [],
  "quick_entry": 1,
- "sort_field": "creation",
+ "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
