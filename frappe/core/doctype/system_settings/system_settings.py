@@ -220,8 +220,6 @@ def load():
 			defaults[df.fieldname] = all_defaults.get(df.fieldname)
 
 	return {"timezones": get_all_timezones(), "defaults": defaults}
-<<<<<<< HEAD
-=======
 
 
 cache_key = frappe.get_document_cache_key("System Settings", "System Settings")
@@ -249,4 +247,3 @@ def clear_system_settings_cache():
 def sync_system_settings():
 	if frappe.db.get_single_value("System Settings", "currency") is None:
 		frappe.db.set_single_value("System Settings", "currency", frappe.defaults.get_defaults()["currency"])
->>>>>>> b3ab8c736d (fix: sync currency field on migrate)
