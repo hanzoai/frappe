@@ -221,6 +221,7 @@ def load():
 
 	return {"timezones": get_all_timezones(), "defaults": defaults}
 
+
 def sync_system_settings():
 	if frappe.db.get_single_value("System Settings", "currency") is None:
 		frappe.db.set_single_value("System Settings", "currency", frappe.defaults.get_defaults()["currency"])
