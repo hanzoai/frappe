@@ -48,6 +48,7 @@
     "fast-glob": "^3.2.5",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     "frappe-charts": "2.0.0-rc22",
     "frappe-datatable": "1.17.16",
 =======
@@ -55,6 +56,9 @@
 =======
     "frappe-charts": "2.0.0-rc25",
 >>>>>>> 4f705afb51 (chore: update frappe-charts)
+=======
+    "frappe-charts": "^2.0.0-rc26",
+>>>>>>> d6470dc9bd (chore: update frappe-charts to 2.0.0rc26)
     "frappe-datatable": "1.18.1",
 >>>>>>> 3301de67c4 (fix: based on number of labels change space in charts)
     "frappe-gantt": "^0.6.0",
