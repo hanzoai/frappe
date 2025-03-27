@@ -221,29 +221,6 @@ def load():
 
 	return {"timezones": get_all_timezones(), "defaults": defaults}
 
-
-cache_key = frappe.get_document_cache_key("System Settings", "System Settings")
-
-
-def get_system_settings(key: str):
-	"""Return the value associated with the given `key` from System Settings DocType."""
-	if not (system_settings := getattr(frappe.local, "system_settings", None)):
-		try:
-			system_settings = frappe.client_cache.get_doc("System Settings")
-			frappe.local.system_settings = system_settings
-		except frappe.DoesNotExistError:  # possible during new install
-			frappe.clear_last_message()
-			return
-
-	return system_settings.get(key)
-
-
-def clear_system_settings_cache():
-	frappe.client_cache.delete_value(cache_key)
-	frappe.cache.delete_value("system_settings")
-	frappe.cache.delete_value("time_zone")
-
-
 def sync_system_settings():
 	if frappe.db.get_single_value("System Settings", "currency") is None:
 		frappe.db.set_single_value("System Settings", "currency", frappe.defaults.get_defaults()["currency"])
