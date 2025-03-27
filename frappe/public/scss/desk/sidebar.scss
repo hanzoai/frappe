@@ -719,6 +719,7 @@ body {
 		max-width: var(--sidebar-width);
 		z-index: 100;
 		font-size: var(--text-sm);
+		left: -10px !important;
 
 		.dropdown-item {
 			display: flex;
