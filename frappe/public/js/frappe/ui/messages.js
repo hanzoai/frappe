@@ -108,7 +108,7 @@ frappe.prompt = function (fields, callback, title, primary_label) {
 	return d;
 };
 
-frappe.msgprint = function (msg, title, is_minimizable, take_back) {
+frappe.msgprint = function (msg, title, is_minimizable, re_route) {
 	if (!msg) return;
 	let data;
 	if ($.isPlainObject(msg)) {
@@ -118,7 +118,7 @@ frappe.msgprint = function (msg, title, is_minimizable, take_back) {
 		if (typeof msg === "string" && msg.substr(0, 1) === "{") {
 			data = JSON.parse(msg);
 		} else {
-			data = { message: msg, title: title, take_back: take_back };
+			data = { message: msg, title: title, re_route: re_route };
 		}
 	}
 
@@ -169,7 +169,7 @@ frappe.msgprint = function (msg, title, is_minimizable, take_back) {
 		return;
 	}
 
-	if (frappe.msg_dialog && data.take_back) {
+	if (frappe.msg_dialog && data.re_route) {
 		frappe.msg_dialog.custom_onhide = function () {
 			frappe.route_flags.replace_route = true;
 			let prev_route = frappe.get_prev_route();
