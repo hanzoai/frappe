@@ -93,6 +93,10 @@ class SQLiteExceptionUtil:
 	def is_interface_error(e: sqlite3.Error):
 		return isinstance(e, sqlite3.InterfaceError)
 
+	@staticmethod
+	def is_nested_transaction_error(e: sqlite3.Error):
+		return "cannot start a transaction within a transaction" in str(e)
+
 
 class SQLiteDatabase(SQLiteExceptionUtil, Database):
 	REGEX_CHARACTER = "regexp"
@@ -452,7 +456,11 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 			self._cursor = self._conn.cursor()
 			self.read_only = False
 
-		self.sql("BEGIN")
+		try:
+			self.sql("BEGIN")
+		except sqlite3.OperationalError as e:
+			if not self.is_nested_transaction_error(e):
+				raise e
 
 	def commit(self):
 		"""Commit current transaction. Calls SQL `COMMIT`."""
