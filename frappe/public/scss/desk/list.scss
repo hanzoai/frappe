@@ -60,7 +60,6 @@
 .list-row-container {
 	display: flex;
 	flex-direction: column;
-	padding: var(--padding-xs) var(--padding-md);
 	border-bottom: 1px solid $border-color;
 
 	&:focus {
@@ -73,15 +72,9 @@
 		padding-top: 0;
 		border-bottom: none;
 	}
-
-	&:last-child {
-		border-bottom: none;
-	}
 }
 
 .list-row {
-	// padding-right: 15px;
-	height: var(--list-row-height);
 	border-radius: var(--border-radius);
 	cursor: pointer;
 	transition: color 0.2s;
@@ -103,6 +96,7 @@
 	.level-left {
 		flex: 4;
 		min-width: 80%;
+		padding: var(--padding-xs) var(--padding-md);
 	}
 	.level-right {
 		position: sticky;
@@ -111,6 +105,8 @@
 		padding-right: 10px;
 		flex: 0 0 180px;
 		width: 180px;
+		box-shadow: -5px 0px 5px rgb(255, 255, 255);
+		padding: 8px 10px;
 	}
 
 	.tag-col {
@@ -320,7 +316,6 @@ input.list-header-checkbox {
 	align-items: center;
 	cursor: pointer;
 
-	height: var(--list-row-height);
 	padding-left: 15px;
 
 	@include get_textstyle("base", "regular");
