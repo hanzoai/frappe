@@ -925,6 +925,10 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			}[col.type];
 		}
 
+		/**
+		 * Calculates the width of a text element based on its length.
+		 * If the length of the text is not available, it defaults to a length of 22.5.
+		 */
 		let textLength = $(column_html).text()?.trim()?.length || 22.5;
 		let calculatedWidth = (textLength * 10) / 1.3;
 
@@ -943,6 +947,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		`;
 	}
 
+	/**
+	 * Applies dynamically calculated widths to elements based on their respective class names.
+	 * Iterates through `column_max_widths` and sets the `width` and `flex` styles for each column.
+	 * The width for each column is applied as both a fixed `width` and a flexible `flex` property.
+	 */
 	apply_column_widths() {
 		Object.entries(this.column_max_widths).forEach(([fieldname, width]) => {
 			$(`.${fieldname}`).css({
