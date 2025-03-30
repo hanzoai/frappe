@@ -932,7 +932,10 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		let textLength = $(column_html).text()?.trim()?.length || 22.5;
 		let calculatedWidth = (textLength * 10) / 1.3;
 
-		// store the max width for this column
+		/**
+		 * Updates the `column_max_widths` object by setting the maximum width for a specific column (fieldname).
+		 * If no width is set for the column, or the newly calculated width exceeds the current width, the width is updated.
+		 */
 		if (
 			!this.column_max_widths[fieldname] ||
 			calculatedWidth > this.column_max_widths[fieldname]
