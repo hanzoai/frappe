@@ -634,15 +634,27 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		this.$result.find(".list-row-container").remove();
 		this.render_header();
 
+		let has_assignto = false;
+
 		if (this.data.length > 0) {
 			// append rows
 			let idx = 0;
 			for (let doc of this.data) {
 				doc._idx = idx++;
 				this.$result.append(this.get_list_row_html(doc));
+				if (!has_assignto && doc._assign) {
+					has_assignto = true;
+				}
 			}
 		}
 		this.apply_column_widths();
+
+		// add class to result to indetify that it has assignto
+		if (has_assignto) {
+			this.$result.addClass("has-assign-to");
+		} else {
+			this.$result.addClass("no-assign-to");
+		}
 	}
 
 	render_count() {
