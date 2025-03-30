@@ -350,6 +350,10 @@ frappe.views.BaseList = class BaseList {
 		this.refresh();
 	}
 
+	/**
+	 * Sets up a result container area by appending a new `<div>` element with the class `result-container`
+	 * to the `frappe_list` container. This container is used to create a scrollable area for the result content.
+	 */
 	setup_result_container_area() {
 		this.$frappe_list.append($(`<div class="result-container">`));
 	}
