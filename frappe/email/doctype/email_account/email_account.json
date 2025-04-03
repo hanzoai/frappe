@@ -62,6 +62,7 @@
   "send_unsubscribe_message",
   "track_email_status",
   "no_smtp_authentication",
+  "always_bcc",
   "signature_section",
   "add_signature",
   "signature",
@@ -628,6 +629,13 @@
    "fieldname": "sent_folder_name",
    "fieldtype": "Data",
    "label": "Sent Folder Name"
+  },
+  {
+   "description": "Use this, for example, if all sent emails should also be send to an archive.",
+   "fieldname": "always_bcc",
+   "fieldtype": "Data",
+   "label": "Always BCC Address",
+   "options": "Email"
   }
  ],
  "icon": "fa fa-inbox",
