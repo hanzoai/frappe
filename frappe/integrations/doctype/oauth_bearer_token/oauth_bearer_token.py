@@ -3,9 +3,9 @@
 
 import frappe
 from frappe.model.document import Document
-from frappe.utils.data import add_to_date
 from frappe.query_builder import Interval
 from frappe.query_builder.functions import Now
+from frappe.utils.data import add_to_date
 
 
 class OAuthBearerToken(Document):
@@ -36,7 +36,5 @@ class OAuthBearerToken(Document):
 		table = frappe.qb.DocType("OAuth Bearer Token")
 		frappe.db.delete(
 			table,
-			filters=(
-				(table.expiration_time < (Now() - Interval(days=days)))
-			),
+			filters=(table.expiration_time < (Now() - Interval(days=days))),
 		)
