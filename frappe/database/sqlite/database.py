@@ -11,7 +11,7 @@ from frappe.database.database import (
 	ImplicitCommitError,
 )
 from frappe.database.sqlite.schema import SQLiteTable
-from frappe.utils import get_datetime, get_table_name
+from frappe.utils import get_table_name
 
 _PARAM_COMP = re.compile(r"%\([\w]*\)s")
 IMPLICIT_COMMIT_QUERY_TYPES = frozenset(("start", "alter", "drop", "create", "truncate"))
@@ -107,6 +107,14 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 		conn = self.create_connection(read_only)
 		conn.isolation_level = None
 		conn.create_function("regexp", 2, regexp)
+		pragmas = {
+			"journal_mode": "WAL",
+			"synchronous": "NORMAL",
+		}
+		cursor = conn.cursor()
+		for pragma, value in pragmas.items():
+			cursor.execute(f"PRAGMA {pragma}={value}")
+		cursor.close()
 		return conn
 
 	def create_connection(self, read_only: bool = False):
@@ -115,8 +123,13 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 		sqlite3.register_converter("date", lambda x: date.fromisoformat(x.decode()))
 		sqlite3.register_converter("time", lambda x: time.fromisoformat(x.decode()))
 		if read_only:
-			return sqlite3.connect(f"file:{db_path}?mode=ro", uri=True, detect_types=sqlite3.PARSE_DECLTYPES)
-		return sqlite3.connect(db_path, detect_types=sqlite3.PARSE_DECLTYPES)
+			return sqlite3.connect(
+				f"file:{db_path}?mode=ro",
+				uri=True,
+				detect_types=sqlite3.PARSE_DECLTYPES,
+				timeout=15,
+			)
+		return sqlite3.connect(db_path, detect_types=sqlite3.PARSE_DECLTYPES, timeout=15)
 
 	def get_db_path(self):
 		return Path(frappe.get_site_path()) / "db" / f"{self.cur_db_name}.db"
@@ -341,7 +354,9 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 	def add_index(self, doctype: str, fields: list, index_name: str | None = None):
 		"""Creates an index with given fields if not already created."""
 
-		from frappe.custom.doctype.property_setter.property_setter import make_property_setter
+		from frappe.custom.doctype.property_setter.property_setter import (
+			make_property_setter,
+		)
 
 		# We can't specify the length of the index in SQLite
 		fields = [re.sub(r"\(.*?\)", "", field) for field in fields]
