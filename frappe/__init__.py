@@ -389,13 +389,6 @@ def setup_redis_cache_connection():
 			client_cache = ClientCache()
 
 
-def get_traceback(with_context: bool = False) -> str:
-	"""Return error traceback."""
-	from frappe.utils import get_traceback
-
-	return get_traceback(with_context=with_context)
-
-
 def errprint(msg: str) -> None:
 	"""Log error. This is sent back as `exc` in response.
 
@@ -1011,62 +1004,6 @@ def get_cached_value(
 	return values
 
 
-_SingleDocument: TypeAlias = "Document"
-_NewDocument: TypeAlias = "Document"
-
-
-@overload
-def get_doc(document: "Document", /) -> "Document":
-	pass
-
-
-@overload
-def get_doc(doctype: str, /) -> _SingleDocument:
-	"""Retrieve Single DocType from DB, doctype must be positional argument."""
-	pass
-
-
-@overload
-def get_doc(doctype: str, name: str, /, *, for_update: bool | None = None) -> "Document":
-	"""Retrieve DocType from DB, doctype and name must be positional argument."""
-	pass
-
-
-@overload
-def get_doc(**kwargs: dict) -> "_NewDocument":
-	"""Initialize document from kwargs.
-	Not recommended. Use `frappe.new_doc` instead."""
-	pass
-
-
-@overload
-def get_doc(documentdict: dict) -> "_NewDocument":
-	"""Create document from dict.
-	Not recommended. Use `frappe.new_doc` instead."""
-	pass
-
-
-def get_doc(*args: Any, **kwargs: Any) -> "Document":
-	"""Return a `frappe.model.document.Document` object of the given type and name.
-
-	:param arg1: DocType name as string **or** document JSON.
-	:param arg2: [optional] Document name as string.
-
-	Examples:
-
-	        # insert a new document
-	        todo = frappe.get_doc({"doctype":"ToDo", "description": "test"})
-	        todo.insert()
-
-	        # open an existing document
-	        todo = frappe.get_doc("ToDo", "TD0001")
-
-	"""
-	import frappe.model.document
-
-	return frappe.model.document.get_doc(*args, **kwargs)
-
-
 def get_last_doc(
 	doctype,
 	filters: FilterSignature | None = None,
@@ -1085,13 +1022,6 @@ def get_last_doc(
 def get_single(doctype):
 	"""Return a `frappe.model.document.Document` object of the given Single doctype."""
 	return get_doc(doctype, doctype)
-
-
-def get_meta(doctype, cached=True):
-	"""Get `frappe.model.meta.Meta` instance of given doctype name."""
-	import frappe.model.meta
-
-	return frappe.model.meta.get_meta(doctype, cached=cached)
 
 
 def get_meta_module(doctype):
@@ -1833,7 +1763,7 @@ def get_value(*args, **kwargs):
 	:param as_dict: Return values as dict.
 	:param debug: Print query in error log.
 	"""
-	return db.get_value(*args, **kwargs)
+	return local.db.get_value(*args, **kwargs)
 
 
 def as_json(obj: dict | list, indent=1, separators=None, ensure_ascii=True) -> str:
@@ -1870,26 +1800,6 @@ def are_emails_muted():
 
 
 from frappe.deprecation_dumpster import frappe_get_test_records as get_test_records
-
-
-def format_value(*args, **kwargs):
-	"""Format value with given field properties.
-
-	:param value: Value to be formatted.
-	:param df: (Optional) DocField object with properties `fieldtype`, `options` etc."""
-	import frappe.utils.formatters
-
-	return frappe.utils.formatters.format_value(*args, **kwargs)
-
-
-def format(*args, **kwargs):
-	"""Format value with given field properties.
-
-	:param value: Value to be formatted.
-	:param df: (Optional) DocField object with properties `fieldtype`, `options` etc."""
-	import frappe.utils.formatters
-
-	return frappe.utils.formatters.format_value(*args, **kwargs)
 
 
 def attach_print(
@@ -1945,45 +1855,12 @@ def attach_print(
 	return {"fname": file_name, "fcontent": content}
 
 
-def enqueue(*args, **kwargs):
-	"""
-	Enqueue method to be executed using a background worker
-
-	:param method: method string or method object
-	:param queue: (optional) should be either long, default or short
-	:param timeout: (optional) should be set according to the functions
-	:param event: this is passed to enable clearing of jobs from queues
-	:param is_async: (optional) if is_async=False, the method is executed immediately, else via a worker
-	:param job_name: (optional) can be used to name an enqueue call, which can be used to prevent duplicate calls
-	:param kwargs: keyword arguments to be passed to the method
-	"""
-	import frappe.utils.background_jobs
-
-	return frappe.utils.background_jobs.enqueue(*args, **kwargs)
-
-
 def task(**task_kwargs):
 	def decorator_task(f):
 		f.enqueue = lambda **fun_kwargs: enqueue(f, **task_kwargs, **fun_kwargs)
 		return f
 
 	return decorator_task
-
-
-def enqueue_doc(*args, **kwargs):
-	"""
-	Enqueue method to be executed using a background worker
-
-	:param doctype: DocType of the document on which you want to run the event
-	:param name: Name of the document on which you want to run the event
-	:param method: method string or method object
-	:param queue: (optional) should be either long, default or short
-	:param timeout: (optional) should be set according to the functions
-	:param kwargs: keyword arguments to be passed to the method
-	"""
-	import frappe.utils.background_jobs
-
-	return frappe.utils.background_jobs.enqueue_doc(*args, **kwargs)
 
 
 def get_doctype_app(doctype):
@@ -2075,10 +1952,17 @@ import frappe._optimizations
 from frappe.cache_manager import clear_cache, reset_metadata_version
 from frappe.config import get_common_site_config, get_conf, get_site_config
 from frappe.core.doctype.system_settings.system_settings import get_system_settings
+from frappe.model.document import get_doc
+from frappe.model.meta import get_meta
 from frappe.realtime import publish_progress, publish_realtime
-from frappe.utils import mock, parse_json, safe_eval
+from frappe.utils import get_traceback, mock, parse_json, safe_eval
+from frappe.utils.background_jobs import enqueue, enqueue_doc
 from frappe.utils.error import log_error
+from frappe.utils.formatters import format_value
 from frappe.utils.print_utils import get_print
+
+# for backwards compatibility
+format = format_value
 
 frappe._optimizations.optimize_all()
 frappe._optimizations.register_fault_handler()
