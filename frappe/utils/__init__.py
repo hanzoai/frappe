@@ -302,7 +302,7 @@ def get_gravatar(email: str) -> str:
 	return has_gravatar(email) or Identicon(email).base64()
 
 
-def get_traceback(with_context=False) -> str:
+def get_traceback(with_context: bool = False) -> str:
 	"""Return the traceback of the Exception."""
 	from traceback_with_variables import iter_exc_lines
 
