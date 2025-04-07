@@ -41,20 +41,20 @@ def execute(filters=None):
 					)
 				SELECT
 					m.name as 'table',
-					ROUND(CAST((SELECT SUM(pgsize) FROM dbstat WHERE name = m.name) * page_size.size / (1024.0 * 1024.0 * 1024.0) AS FLOAT), 2) as 'data_size_mb',
+					ROUND(CAST((SELECT SUM(pgsize) FROM dbstat WHERE name = m.name) * page_size.size / (1024.0 * 1024.0 * 1024.0) AS FLOAT), 2) as 'data_size',
 					ROUND(CAST((SELECT SUM(pgsize) FROM dbstat WHERE name IN (
 						SELECT name FROM sqlite_master
 						WHERE type = 'index' AND tbl_name = m.name
-					)) * page_size.size / (1024.0 * 1024.0 * 1024.0) AS FLOAT), 2) as 'index_size_mb',
+					)) * page_size.size / (1024.0 * 1024.0 * 1024.0) AS FLOAT), 2) as 'index_size',
 					ROUND(CAST((SELECT SUM(pgsize) FROM dbstat WHERE name = m.name OR name IN (
 						SELECT name FROM sqlite_master
 						WHERE type = 'index' AND tbl_name = m.name
-					)) * page_size.size / (1024.0 * 1024.0 * 1024.0) AS FLOAT), 2) as 'total_size_mb'
+					)) * page_size.size / (1024.0 * 1024.0 * 1024.0) AS FLOAT), 2) as 'size'
 				FROM sqlite_master m
 				CROSS JOIN page_size
 				WHERE m.type = 'table'
 				AND m.name NOT LIKE 'sqlite_%'
-				ORDER BY total_size_mb DESC;""",
+				ORDER BY size DESC;""",
 		},
 		as_dict=1,
 	)
