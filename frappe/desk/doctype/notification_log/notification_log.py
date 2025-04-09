@@ -115,9 +115,6 @@ def _get_user_ids(user_emails):
 
 
 def send_notification_email(doc: NotificationLog):
-	if doc.email_content is None:
-		return
-
 	from frappe.utils import get_url_to_form, strip_html
 
 	user = frappe.db.get_value("User", doc.for_user, fieldname=["email", "language"], as_dict=True)
