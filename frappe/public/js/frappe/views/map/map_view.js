@@ -15,22 +15,8 @@ frappe.views.MapView = class MapView extends frappe.views.ListView {
 		this.page_title = __("{0} Map", [this.page_title]);
 	}
 
-	setup_view() {}
-
-	on_filter_change() {
-		this.get_coords();
-	}
-
-	render() {
-		this.get_coords().then(() => {
-			this.render_map_view();
-		});
-		this.$paging_area.find(".level-left").append("<div></div>");
-	}
-
-	render_map_view() {
+	setup_view() {
 		this.map_id = frappe.dom.get_unique_id();
-
 		this.$result.html(`<div id="${this.map_id}" class="map-view-container"></div>`);
 
 		L.Icon.Default.imagePath = frappe.utils.map_defaults.image_path;
@@ -44,16 +30,35 @@ frappe.views.MapView = class MapView extends frappe.views.ListView {
 		);
 
 		L.control.scale().addTo(this.map);
+	}
+
+	render() {
+		this.get_coords().then(() => {
+			this.render_map_data();
+		});
+		this.$paging_area.find(".level-left").append("<div></div>");
+	}
+
+	render_map_data() {
+		// Clear existing markers
+		if (this.markerLayer) {
+			this.map.removeLayer(this.markerLayer);
+		}
+
 		if (this.coords.features && this.coords.features.length) {
-			this.coords.features.forEach((coords) =>
-				L.geoJSON(coords)
-					.bindPopup(
-						frappe.utils.get_form_link(this.doctype, coords.properties.name, true)
-					)
-					.addTo(this.map)
-			);
-			let lastCoords = this.coords.features[0].geometry.coordinates.reverse();
-			this.map.panTo(lastCoords, 8);
+			this.markerLayer = L.featureGroup();
+
+			this.coords.features.forEach((coords) => {
+				const marker = L.geoJSON(coords).bindPopup(
+					frappe.utils.get_form_link(this.doctype, coords.properties.name, true)
+				);
+				this.markerLayer.addLayer(marker);
+			});
+
+			this.markerLayer.addTo(this.map);
+
+			// Fit bounds to show all markers
+			this.map.fitBounds(this.markerLayer.getBounds());
 		}
 	}
 
