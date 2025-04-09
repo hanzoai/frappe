@@ -29,7 +29,7 @@ class NotificationLog(Document):
 		link: DF.Data | None
 		read: DF.Check
 		subject: DF.Text | None
-		type: DF.Literal["", "Mention", "Energy Point", "Assignment", "Share", "Alert"]
+		type: DF.Literal["", "Mention", "Assignment", "Share", "Alert"]
 	# end: auto-generated types
 
 	def after_insert(self):
@@ -103,11 +103,7 @@ def make_notification_logs(doc, users):
 		notification = frappe.new_doc("Notification Log")
 		notification.update(doc)
 		notification.for_user = user
-		if (
-			notification.for_user != notification.from_user
-			or doc.type == "Energy Point"
-			or doc.type == "Alert"
-		):
+		if notification.for_user != notification.from_user or doc.type == "Alert":
 			notification.insert(ignore_permissions=True)
 
 
@@ -119,7 +115,7 @@ def _get_user_ids(user_emails):
 
 
 def send_notification_email(doc: NotificationLog):
-	if doc.type == "Energy Point" and doc.email_content is None:
+	if doc.email_content is None:
 		return
 
 	from frappe.utils import get_url_to_form, strip_html
@@ -158,7 +154,6 @@ def get_email_header(doc, language: str | None = None):
 		"Mention": _("New Mention on {0}", lang=language).format(docname),
 		"Assignment": _("Assignment Update on {0}", lang=language).format(docname),
 		"Share": _("New Document Shared {0}", lang=language).format(docname),
-		"Energy Point": _("Energy Point Update on {0}", lang=language).format(docname),
 	}
 
 	return header_map[doc.type or "Default"]
