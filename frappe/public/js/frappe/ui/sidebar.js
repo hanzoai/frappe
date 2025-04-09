@@ -85,7 +85,6 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	set_active_workspace_item() {
-		if (!this.sidebar_expanded) this.close_children_item();
 		if (!frappe.get_route()) return;
 		let current_route = frappe.get_route();
 		let current_route_str = frappe.get_route_str();
@@ -109,6 +108,7 @@ frappe.ui.Sidebar = class Sidebar {
 				this.expand_parent_item(current_item);
 			}
 		}
+		if (!this.sidebar_expanded) this.close_children_item();
 	}
 	expand_parent_item(item) {
 		let parent_title = item.attr("item-parent");
