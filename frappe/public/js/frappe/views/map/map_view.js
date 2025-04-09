@@ -85,11 +85,4 @@ frappe.views.MapView = class MapView extends frappe.views.ListView {
 				this.coords = r.message;
 			});
 	}
-
-	get required_libs() {
-		return [
-			"assets/frappe/js/lib/leaflet/leaflet.css",
-			"assets/frappe/js/lib/leaflet/leaflet.js",
-		];
-	}
 };
