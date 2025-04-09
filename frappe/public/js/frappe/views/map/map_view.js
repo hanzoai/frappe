@@ -29,6 +29,7 @@ frappe.views.MapView = class MapView extends frappe.views.ListView {
 			this.map
 		);
 
+		this.bind_leaflet_locate_control();
 		L.control.scale().addTo(this.map);
 	}
 
@@ -90,5 +91,11 @@ frappe.views.MapView = class MapView extends frappe.views.ListView {
 			.then((r) => {
 				this.coords = r.message;
 			});
+	}
+
+	bind_leaflet_locate_control() {
+		// To request location update and set location, sets current geolocation on load
+		this.locate_control = L.control.locate({ position: "topright" });
+		this.locate_control.addTo(this.map);
 	}
 };
