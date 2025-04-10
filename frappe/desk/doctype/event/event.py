@@ -2,8 +2,8 @@
 # License: MIT. See LICENSE
 
 
-from datetime import date, datetime
 import json
+from datetime import date, datetime
 
 import frappe
 from frappe import _
@@ -37,7 +37,7 @@ communication_mapping = {
 	"Other": "Other",
 }
 
-from typing import TYPE_CHECKING, Optional, TypeAlias
+from typing import TYPE_CHECKING, TypeAlias
 
 if TYPE_CHECKING:
 	from frappe.core.doctype.communication.communication import Communication
@@ -278,7 +278,7 @@ def get_events(start, end, user=None, for_reminder=False, filters=None) -> list[
 		user = frappe.session.user
 =======
 def get_events(
-	start: date, end: date, user: Optional[str] = None, for_reminder: bool = False, filters=None
+	start: date, end: date, user: str | None = None, for_reminder: bool = False, filters=None
 ) -> list[frappe._dict]:
 	user = user or frappe.session.user
 	EventLikeDict: TypeAlias = Event | frappe._dict
