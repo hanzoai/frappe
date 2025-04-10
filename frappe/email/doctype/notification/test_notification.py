@@ -510,6 +510,7 @@ class TestNotification(IntegrationTestCase):
 		self.assertEqual(notification.enabled, 1)
 
 
+# ruff: noqa: RUF001
 """
 PROOF OF TEST for TestNotificationOffsetRange below.
 
