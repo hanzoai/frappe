@@ -620,7 +620,9 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	render_count() {
-		if (this.list_view_settings.disable_count) return;
+		if (this.list_view_settings?.disable_count) {
+			return;
+		}
 
 		let me = this;
 		let $count = this.get_count_element();
