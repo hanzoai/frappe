@@ -2,6 +2,7 @@
 # License: MIT. See LICENSE
 
 
+from datetime import date, datetime
 import json
 
 import frappe
@@ -15,11 +16,8 @@ from frappe.model.document import Document
 from frappe.utils import (
 	add_days,
 	add_months,
-	cint,
-	cstr,
 	date_diff,
 	format_datetime,
-	get_datetime_str,
 	get_fullname,
 	getdate,
 	month_diff,
@@ -39,7 +37,7 @@ communication_mapping = {
 	"Other": "Other",
 }
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional, TypeAlias
 
 if TYPE_CHECKING:
 	from frappe.core.doctype.communication.communication import Communication
@@ -273,10 +271,18 @@ def send_event_digest():
 
 
 @frappe.whitelist()
+<<<<<<< HEAD
 @http_cache(max_age=5 * 60, stale_while_revalidate=60 * 60)
 def get_events(start, end, user=None, for_reminder=False, filters=None) -> list[frappe._dict]:
 	if not user:
 		user = frappe.session.user
+=======
+def get_events(
+	start: date, end: date, user: Optional[str] = None, for_reminder: bool = False, filters=None
+) -> list[frappe._dict]:
+	user = user or frappe.session.user
+	EventLikeDict: TypeAlias = Event | frappe._dict
+>>>>>>> 1219af7228 (refactor: get_events)
 
 	if isinstance(filters, str):
 		filters = json.loads(filters)
@@ -287,7 +293,7 @@ def get_events(start, end, user=None, for_reminder=False, filters=None) -> list[
 	if "`tabEvent Participants`" in filter_condition:
 		tables.append("`tabEvent Participants`")
 
-	events = frappe.db.sql(
+	event_candidates: list[EventLikeDict] = frappe.db.sql(
 		"""
 		SELECT `tabEvent`.name,
 				`tabEvent`.subject,
@@ -348,57 +354,62 @@ def get_events(start, end, user=None, for_reminder=False, filters=None) -> list[
 			"end": end,
 			"user": user,
 		},
-		as_dict=1,
+		as_dict=True,
 	)
 
-	# process recurring events
-	start = start.split(" ", 1)[0]
-	end = end.split(" ", 1)[0]
 	add_events = []
 	remove_events = []
 
-	def add_event(e, date):
+	def add_event(e: EventLikeDict, d: "date"):
 		new_event = e.copy()
+		new_event.starts_on = datetime.combine(d, e.starts_on.time())
 
-		enddate = (
-			add_days(date, int(date_diff(e.ends_on.split(" ", 1)[0], e.starts_on.split(" ", 1)[0])))
-			if (e.starts_on and e.ends_on)
-			else date
-		)
-
-		new_event.starts_on = date + " " + e.starts_on.split(" ")[1]
-		new_event.ends_on = new_event.ends_on = enddate + " " + e.ends_on.split(" ")[1] if e.ends_on else None
+		if e.ends_on:
+			end_date = add_days(d, date_diff(e.ends_on, e.starts_on)) if (e.starts_on and e.ends_on) else d
+			new_event.ends_on = datetime.combine(end_date, e.ends_on.time())
 
 		add_events.append(new_event)
 
-	for e in events:
-		if e.repeat_this_event:
-			e.starts_on = get_datetime_str(e.starts_on)
-			e.ends_on = get_datetime_str(e.ends_on) if e.ends_on else None
+	for e in event_candidates:
+		if not e.repeat_this_event:
+			continue
 
-			event_start, time_str = get_datetime_str(e.starts_on).split(" ")
+		event_start = e.starts_on.date()
+		repeat_till = getdate(e.repeat_till or "3000-01-01")
 
-			repeat = "3000-01-01" if cstr(e.repeat_till) == "" else e.repeat_till
+		def within_range(d):
+			return d >= getdate(start) and d <= getdate(end) and d <= repeat_till
 
-			if e.repeat_on == "Yearly":
-				start_year = cint(start.split("-", 1)[0])
-				end_year = cint(end.split("-", 1)[0])
+		if e.repeat_on == "Yearly":
+			for year in range(start.year, end.year + 1):
+				d = date(year, event_start.month, event_start.day)
+				if within_range(d):
+					add_event(e, d)
+			remove_events.append(e)
 
-				# creates a string with date (27) and month (07) eg: 07-27
-				event_start = "-".join(event_start.split("-")[1:])
+		elif e.repeat_on == "Monthly":
+			start_date = date(start.year, start.month, event_start.day)
+			for i in range((date_diff(end, start) // 30) + 3):
+				d = add_months(start_date, i)
+				if within_range(d):
+					add_event(e, d)
+			remove_events.append(e)
 
-				# repeat for all years in period
-				for year in range(start_year, end_year + 1):
-					date = str(year) + "-" + event_start
-					if (
-						getdate(date) >= getdate(start)
-						and getdate(date) <= getdate(end)
-						and getdate(date) <= getdate(repeat)
-					):
-						add_event(e, date)
+		elif e.repeat_on == "Weekly":
+			for cnt in range(date_diff(end, start) + 1):
+				d = add_days(start, cnt)
+				if e[weekdays[d.weekday()]] and within_range(d):
+					add_event(e, d)
+			remove_events.append(e)
 
-				remove_events.append(e)
+		elif e.repeat_on == "Daily":
+			for cnt in range(date_diff(end, start) + 1):
+				d = add_days(start, cnt)
+				if within_range(d):
+					add_event(e, d)
+			remove_events.append(e)
 
+<<<<<<< HEAD
 			if e.repeat_on == "Half Yearly":
 				# creates a string with date (27) and month (07) and year (2019) eg: 2019-07-27
 				year, month = start.split("-", maxsplit=2)[:2]
@@ -526,6 +537,14 @@ def get_events(start, end, user=None, for_reminder=False, filters=None) -> list[
 			del e[w]
 
 	return events
+=======
+	# Remove events that are not in the range and boolean weekdays fields
+	return [
+		{fieldname: fieldvalue for fieldname, fieldvalue in event.items() if fieldname not in weekdays}
+		for event in event_candidates + add_events
+		if event not in remove_events
+	]
+>>>>>>> 1219af7228 (refactor: get_events)
 
 
 def delete_events(ref_type, ref_name, delete_event=False):
