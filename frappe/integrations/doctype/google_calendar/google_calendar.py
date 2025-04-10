@@ -656,7 +656,7 @@ def google_calendar_to_repeat_on(*, start, end, recurrence=None):
 			repeat_on[google_calendar_days[repeat_day]] = 1
 
 	if byday and repeat_on["repeat_on"] == "Monthly":
-		byday = byday.split("=")[1]
+		byday = byday[0]
 		repeat_day_week_number, repeat_day_name = None, None
 
 		for num in ["-2", "-1", "1", "2", "3", "4", "5"]:
