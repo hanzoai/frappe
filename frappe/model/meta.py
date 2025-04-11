@@ -19,7 +19,7 @@ import json
 import os
 import typing
 from datetime import datetime
-from functools import cached_property, singledispatchmethod
+from functools import singledispatchmethod
 from types import NoneType
 
 import click
@@ -43,7 +43,7 @@ from frappe.model.document import Document
 from frappe.model.workflow import get_workflow_name
 from frappe.modules import load_doctype_module
 from frappe.types import DocRef
-from frappe.utils import cast, cint, cstr
+from frappe.utils import cached_property, cast, cint, cstr
 from frappe.utils.data import add_to_date, get_datetime
 
 DEFAULT_FIELD_LABELS = {
