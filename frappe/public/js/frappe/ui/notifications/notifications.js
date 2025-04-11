@@ -386,6 +386,7 @@ class NotificationsView extends BaseNotificationsView {
 class EventsView extends BaseNotificationsView {
 	make() {
 		let today = frappe.datetime.get_today();
+<<<<<<< HEAD
 		frappe
 			.xcall(
 				"frappe.desk.doctype.event.event.get_events",
@@ -399,6 +400,19 @@ class EventsView extends BaseNotificationsView {
 			.then((event_list) => {
 				this.render_events_html(event_list);
 			});
+=======
+		frappe.call({
+			method: "frappe.desk.doctype.event.event.get_events",
+			args: {
+				start: today,
+				end: today,
+			},
+			type: "GET",
+			callback: ({ message }) => {
+				this.render_events_html(message);
+			},
+		});
+>>>>>>> 5215f91c0a (fix: Use GET for get_events for notification bar)
 	}
 
 	render_events_html(event_list) {
