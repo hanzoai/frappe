@@ -3,7 +3,6 @@
 import datetime
 import json
 import weakref
-from functools import cached_property
 from types import MappingProxyType
 from typing import TYPE_CHECKING, TypeVar
 
@@ -24,6 +23,7 @@ from frappe.model.naming import set_new_name
 from frappe.model.utils.link_count import notify_link_count
 from frappe.modules import load_doctype_module
 from frappe.utils import (
+	cached_property,
 	cast_fieldtype,
 	cint,
 	compare,
