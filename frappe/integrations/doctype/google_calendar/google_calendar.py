@@ -333,7 +333,12 @@ def sync_events_from_google_calendar(g_calendar, method=None):
 				with suppress(IndexError):
 					recurrence = event.get("recurrence")[0]
 
-			if not frappe.db.exists("Event", {"google_calendar_event_id": event.get("id")}):
+			# NOTE: Skip if event is already synced; Frappe doesn't track individual
+			# instances of recurring events, so we need to check if the event is already
+			# synced in Frappe Calendar
+			if event.get("recurringEventId"):
+				...
+			elif not frappe.db.exists("Event", {"google_calendar_event_id": event.get("id")}):
 				insert_event_to_calendar(account, event, recurrence)
 			else:
 				update_event_in_calendar(account, event, recurrence)
