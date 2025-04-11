@@ -766,7 +766,7 @@ def get_week_number(dt: date):
 	dom = dt.day
 	adjusted_dom = dom + first_day.weekday()
 
-	return int(ceil(adjusted_dom / 7.0))
+	return ceil(adjusted_dom / 7.0)
 
 
 def get_recurrence_parameters(recurrence: str) -> RecurrenceParameters:
