@@ -49,21 +49,6 @@ def get_context(context):
 
 	print_format = get_print_format_doc(None, meta=meta)
 
-<<<<<<< HEAD
-	body = get_rendered_template(
-		doc,
-		print_format=print_format,
-		meta=meta,
-		trigger_print=frappe.form_dict.trigger_print,
-		no_letterhead=frappe.form_dict.no_letterhead,
-		letterhead=letterhead,
-		settings=settings,
-	)
-=======
-	make_access_log(
-		doctype=frappe.form_dict.doctype, document=frappe.form_dict.name, file_type="PDF", method="Print"
-	)
-
 	if print_format and print_format.get("print_format_builder_beta"):
 		from frappe.utils.weasyprint import get_html
 
@@ -81,7 +66,6 @@ def get_context(context):
 			letterhead=letterhead,
 			settings=settings,
 		)
->>>>>>> ed6dd8cd5b (fix: print builder beta print option not working)
 
 	make_access_log(
 		doctype=frappe.form_dict.doctype, document=frappe.form_dict.name, file_type="PDF", method="Print"
