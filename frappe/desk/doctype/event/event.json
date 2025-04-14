@@ -297,11 +297,7 @@
  "icon": "fa fa-calendar",
  "idx": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2024-03-23 16:03:25.511756",
-=======
  "modified": "2025-04-10 13:08:32.540745",
->>>>>>> 08e7abaac3 (fix: Event google URL field not big enough for irl data)
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Event",
