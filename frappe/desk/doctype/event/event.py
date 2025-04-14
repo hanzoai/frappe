@@ -3,7 +3,7 @@
 
 
 import json
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 import frappe
 from frappe import _
@@ -390,7 +390,12 @@ def get_events(
 				resolve_event(e, target_date=event_start.replace(year=year))
 
 		elif e.repeat_on == "Monthly":
-			start_date = start.replace(day=event_start.day)
+			try:
+				start_date = start.replace(day=event_start.day)
+			except ValueError:
+				# Handle fallback for last day of the month, e.g., 30th, 31st, 29th, 28th
+				start_date = start.replace(month=start.month + 1, day=1) + timedelta(days=-1)
+
 			for i in range((days_range // 30) + 3):
 				resolve_event(e, target_date=add_months(start_date, i))
 
