@@ -385,23 +385,27 @@ def get_events(
 		event_start = e.starts_on.date()
 		repeat_till = getdate(e.repeat_till or "3000-01-01")
 
-		if e.repeat_on == "Yearly":
-			for year in range(start.year, end.year + 1):
-				resolve_event(e, target_date=event_start.replace(year=year))
+		try:
+			start_date = start.replace(day=event_start.day)
+		except ValueError:
+			# Handle fallback for last day of the month, e.g., 30th, 31st, 29th, 28th
+			start_date = start.replace(month=start.month + 1, day=1) + timedelta(days=-1)
+
+		if e.repeat_on == "Daily":
+			for i in range(days_range + 1):
+				resolve_event(e, target_date=add_days(start, i))
+
+		elif e.repeat_on == "Weekly":
+			for i in range(days_range + 1):
+				resolve_event(e, target_date=add_days(start, i))
 
 		elif e.repeat_on == "Monthly":
-			try:
-				start_date = start.replace(day=event_start.day)
-			except ValueError:
-				# Handle fallback for last day of the month, e.g., 30th, 31st, 29th, 28th
-				start_date = start.replace(month=start.month + 1, day=1) + timedelta(days=-1)
-
 			for i in range((days_range // 30) + 3):
 				resolve_event(e, target_date=add_months(start_date, i))
 
-		elif e.repeat_on in ("Weekly", "Daily"):
-			for i in range(days_range + 1):
-				resolve_event(e, target_date=add_days(start, i))
+		elif e.repeat_on == "Yearly":
+			for year in range(start.year, end.year + 1):
+				resolve_event(e, target_date=event_start.replace(year=year))
 
 	# Remove events that are not in the range and boolean weekdays fields
 	for event in resolved_events:
