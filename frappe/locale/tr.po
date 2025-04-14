@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-03-20 13:58+0000\n"
-"PO-Revision-Date: 2025-03-31 17:43\n"
+"PO-Revision-Date: 2025-04-11 16:17\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -1349,7 +1349,7 @@ msgstr "Tüm Satırları Ekle"
 #. Label of a Check field in DocType 'Report'
 #: frappe/core/doctype/report/report.json
 msgid "Add Translate Data"
-msgstr ""
+msgstr "Çeviri Verilerini Ekle"
 
 #. Label of a Check field in DocType 'Email Queue'
 #: frappe/email/doctype/email_queue/email_queue.json
@@ -3026,7 +3026,7 @@ msgstr "Oluşturduğunuz belgeleri otomatik takip edin"
 
 #: frappe/automation/doctype/auto_repeat/auto_repeat.py:227
 msgid "Auto repeat failed. Please enable auto repeat after fixing the issues."
-msgstr ""
+msgstr "Otomatik tekrarlama başarısız oldu. Lütfen sorunları giderdikten sonra otomatik tekrarı etkinleştirin."
 
 #. Option for the 'Type' (Select) field in DocType 'DocField'
 #. Option for the 'Field Type' (Select) field in DocType 'Custom Field'
@@ -3074,7 +3074,7 @@ msgstr "Belgeleri Kullanıcılara Otomatik Olarak Ata"
 
 #: frappe/public/js/frappe/list/list_view.js:131
 msgid "Automatically applied a filter for recent data. You can disable this behavior from the list view settings."
-msgstr ""
+msgstr "Son veriler için otomatik olarak bir filtre uyguladı. Bu davranışı liste görünümü ayarlarından devre dışı bırakabilirsiniz."
 
 #. Label of a Int field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
@@ -4877,7 +4877,7 @@ msgstr "İstemci Bağlantıları"
 #. Label of a Code field in DocType 'Web Form'
 #: frappe/website/doctype/web_form/web_form.json
 msgid "Client script"
-msgstr ""
+msgstr "Müşteri senaryosu"
 
 #: frappe/core/doctype/communication/communication.js:39
 #: frappe/desk/doctype/todo/todo.js:23

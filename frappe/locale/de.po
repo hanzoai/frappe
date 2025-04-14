@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-03-20 13:58+0000\n"
-"PO-Revision-Date: 2025-03-26 16:27\n"
+"PO-Revision-Date: 2025-04-09 16:02\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -11203,7 +11203,7 @@ msgstr "Gehe zu {0}"
 #: frappe/custom/doctype/doctype_layout/doctype_layout.js:42
 #: frappe/workflow/doctype/workflow/workflow.js:44
 msgid "Go to {0} List"
-msgstr "Gehen Sie zur Liste {0}"
+msgstr "Listenansicht für {0} öffnen"
 
 #: frappe/core/doctype/page/page.js:11
 msgid "Go to {0} Page"
@@ -11258,7 +11258,7 @@ msgstr "Google Kalender - Ereignis konnte nicht aus Google Kalender abgerufen we
 
 #: frappe/integrations/doctype/google_calendar/google_calendar.py:252
 msgid "Google Calendar - Could not find Calendar for {0}, error code {1}."
-msgstr ""
+msgstr "Google Calendar - Der Kalender für {0} konnte nicht gefunden werden, Fehlercode {1}."
 
 #: frappe/integrations/doctype/google_contacts/google_contacts.py:234
 msgid "Google Calendar - Could not insert contact in Google Contacts {0}, error code {1}."
@@ -19045,7 +19045,7 @@ msgstr "Bitte legen Sie das Standard-E-Mail-Konto unter Einstellungen > E-Mail-K
 
 #: frappe/email/doctype/email_account/email_account.py:402
 msgid "Please setup default outgoing Email Account from Tools > Email Account"
-msgstr ""
+msgstr "Bitte richten Sie das Standardkonto für ausgehende E-Mails unter Extras > E-Mail-Konto ein"
 
 #: frappe/public/js/frappe/model/model.js:803
 msgid "Please specify"
@@ -24920,7 +24920,7 @@ msgstr "Zum Desk wechseln"
 
 #: frappe/public/js/frappe/list/list_sidebar.js:296
 msgid "Switch to Frappe CRM for smarter sales"
-msgstr ""
+msgstr "Wechseln Sie zu Frappe CRM für intelligentere Verkäufe"
 
 #: frappe/public/js/frappe/ui/capture.js:273
 msgid "Switching Camera"
@@ -27434,7 +27434,7 @@ msgstr "Plan hochstufen"
 
 #: frappe/public/js/frappe/list/list_sidebar.js:308
 msgid "Upgrade your support experience with Frappe Helpdesk"
-msgstr ""
+msgstr "Verbessern Sie Ihr Support-Erlebnis mit Frappe Helpdesk"
 
 #: frappe/public/js/frappe/file_uploader/file_uploader.bundle.js:121
 #: frappe/public/js/frappe/file_uploader/file_uploader.bundle.js:122
