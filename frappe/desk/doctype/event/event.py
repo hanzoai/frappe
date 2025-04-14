@@ -271,23 +271,14 @@ def send_event_digest():
 
 
 @frappe.whitelist()
-<<<<<<< HEAD
 @http_cache(max_age=5 * 60, stale_while_revalidate=60 * 60)
-def get_events(start, end, user=None, for_reminder=False, filters=None) -> list[frappe._dict]:
-	if not user:
-		user = frappe.session.user
-=======
 def get_events(
 	start: date, end: date, user: str | None = None, for_reminder: bool = False, filters=None
 ) -> list[frappe._dict]:
 	user = user or frappe.session.user
 	EventLikeDict: TypeAlias = Event | frappe._dict
-<<<<<<< HEAD
->>>>>>> 1219af7228 (refactor: get_events)
-=======
 	resolved_events: list[EventLikeDict] = []
 	days_range = (end - start).days
->>>>>>> 4570758b5f (refactor(Event): get_events)
 
 	if isinstance(filters, str):
 		filters = json.loads(filters)
@@ -410,150 +401,22 @@ def get_events(
 			for i in range(days_range + 1):
 				resolve_event(e, target_date=add_days(start, i))
 
-<<<<<<< HEAD
-			if e.repeat_on == "Half Yearly":
-				# creates a string with date (27) and month (07) and year (2019) eg: 2019-07-27
-				year, month = start.split("-", maxsplit=2)[:2]
-				date = f"{year}-{month}-" + event_start.split("-", maxsplit=3)[2]
+		elif e.repeat_on == "Half Yearly":
+			start_date = start.replace(day=event_start.day)
+			for i in range((days_range // 30) + 3):
+				resolve_event(e, target_date=add_months(start_date, i * 6))
 
-				# last day of month issue, start from prev month!
-				try:
-					getdate(date)
-				except Exception:
-					# Don't show any message to the user
-					frappe.clear_last_message()
+		if e.repeat_on == "Quarterly":
+			start_date = start.replace(day=event_start.day)
+			for i in range((days_range // 30) + 3):
+				resolve_event(e, target_date=add_months(start_date, i * 3))
 
-					date = date.split("-")
-					date = date[0] + "-" + str(cint(date[1]) - 1) + "-" + date[2]
-
-				start_from = date
-				for i in range(int(date_diff(end, start) / 30) + 3):
-					diff = month_diff(date, event_start) - 1
-					if diff % 6 != 0:
-						continue
-					if (
-						getdate(date) >= getdate(start)
-						and getdate(date) <= getdate(end)
-						and getdate(date) <= getdate(repeat)
-						and getdate(date) >= getdate(event_start)
-					):
-						add_event(e, date)
-
-					date = add_months(start_from, i + 1)
-				remove_events.append(e)
-
-			if e.repeat_on == "Quarterly":
-				# creates a string with date (27) and month (07) and year (2019) eg: 2019-07-27
-				year, month = start.split("-", maxsplit=2)[:2]
-				date = f"{year}-{month}-" + event_start.split("-", maxsplit=3)[2]
-
-				# last day of month issue, start from prev month!
-				try:
-					getdate(date)
-				except Exception:
-					# Don't show any message to the user
-					frappe.clear_last_message()
-
-					date = date.split("-")
-					date = date[0] + "-" + str(cint(date[1]) - 1) + "-" + date[2]
-
-				start_from = date
-				for i in range(int(date_diff(end, start) / 30) + 3):
-					diff = month_diff(date, event_start) - 1
-					if diff % 3 != 0:
-						continue
-					if (
-						getdate(date) >= getdate(start)
-						and getdate(date) <= getdate(end)
-						and getdate(date) <= getdate(repeat)
-						and getdate(date) >= getdate(event_start)
-					):
-						add_event(e, date)
-
-					date = add_months(start_from, i + 1)
-				remove_events.append(e)
-
-			if e.repeat_on == "Monthly":
-				# creates a string with date (27) and month (07) and year (2019) eg: 2019-07-27
-				year, month = start.split("-", maxsplit=2)[:2]
-				date = f"{year}-{month}-" + event_start.split("-", maxsplit=3)[2]
-
-				# last day of month issue, start from prev month!
-				try:
-					getdate(date)
-				except Exception:
-					# Don't show any message to the user
-					frappe.clear_last_message()
-
-					date = date.split("-")
-					date = date[0] + "-" + str(cint(date[1]) - 1) + "-" + date[2]
-
-				start_from = date
-				for i in range(int(date_diff(end, start) / 30) + 3):
-					if (
-						getdate(date) >= getdate(start)
-						and getdate(date) <= getdate(end)
-						and getdate(date) <= getdate(repeat)
-						and getdate(date) >= getdate(event_start)
-					):
-						add_event(e, date)
-
-					date = add_months(start_from, i + 1)
-				remove_events.append(e)
-
-			if e.repeat_on == "Weekly":
-				for cnt in range(date_diff(end, start) + 1):
-					date = add_days(start, cnt)
-					if (
-						getdate(date) >= getdate(start)
-						and getdate(date) <= getdate(end)
-						and getdate(date) <= getdate(repeat)
-						and getdate(date) >= getdate(event_start)
-						and e[weekdays[getdate(date).weekday()]]
-					):
-						add_event(e, date)
-
-				remove_events.append(e)
-
-			if e.repeat_on == "Daily":
-				for cnt in range(date_diff(end, start) + 1):
-					date = add_days(start, cnt)
-					if (
-						getdate(date) >= getdate(event_start)
-						and getdate(date) <= getdate(end)
-						and getdate(date) <= getdate(repeat)
-					):
-						add_event(e, date)
-
-				remove_events.append(e)
-
-	for e in remove_events:
-		events.remove(e)
-
-	events = events + add_events
-
-	for e in events:
-		# remove weekday properties (to reduce message size)
-		for w in weekdays:
-			del e[w]
-
-	return events
-=======
 	# Remove events that are not in the range and boolean weekdays fields
-<<<<<<< HEAD
-	return [
-		{fieldname: fieldvalue for fieldname, fieldvalue in event.items() if fieldname not in weekdays}
-		for event in event_candidates + add_events
-		if event not in remove_events
-	]
->>>>>>> 1219af7228 (refactor: get_events)
-=======
 	for event in resolved_events:
 		for fieldname in weekdays:
 			event.pop(fieldname, None)
 
 	return resolved_events
->>>>>>> 4570758b5f (refactor(Event): get_events)
 
 
 def delete_events(ref_type, ref_name, delete_event=False):
