@@ -3,9 +3,9 @@
 """Use blog post test to test user permissions logic"""
 
 import json
+from datetime import date
 
 import frappe
-import frappe.defaults
 from frappe.desk.doctype.event.event import get_events
 from frappe.test_runner import make_test_objects
 from frappe.tests.utils import FrappeTestCase
@@ -125,14 +125,14 @@ class TestEvent(FrappeTestCase):
 		)
 		ev.insert()
 
-		ev_list = get_events("2014-02-01", "2014-02-01", "Administrator", for_reminder=True)
+		ev_list = get_events(date(2014, 2, 1), date(2014, 2, 1), "Administrator", for_reminder=True)
 		self.assertTrue(bool(list(filter(lambda e: e.name == ev.name, ev_list))))
 
-		ev_list1 = get_events("2015-01-20", "2015-01-20", "Administrator", for_reminder=True)
+		ev_list1 = get_events(date(2015, 1, 20), date(2015, 1, 20), "Administrator", for_reminder=True)
 		self.assertFalse(bool(list(filter(lambda e: e.name == ev.name, ev_list1))))
 
-		ev_list2 = get_events("2014-02-20", "2014-02-20", "Administrator", for_reminder=True)
+		ev_list2 = get_events(date(2014, 2, 20), date(2014, 2, 20), "Administrator", for_reminder=True)
 		self.assertFalse(bool(list(filter(lambda e: e.name == ev.name, ev_list2))))
 
-		ev_list3 = get_events("2015-02-01", "2015-02-01", "Administrator", for_reminder=True)
+		ev_list3 = get_events(date(2015, 2, 1), date(2015, 2, 1), "Administrator", for_reminder=True)
 		self.assertTrue(bool(list(filter(lambda e: e.name == ev.name, ev_list3))))
