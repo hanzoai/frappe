@@ -72,10 +72,6 @@ def get_context(context) -> PrintContext:
 
 	print_format = get_print_format_doc(None, meta=meta)
 
-	make_access_log(
-		doctype=frappe.form_dict.doctype, document=frappe.form_dict.name, file_type="PDF", method="Print"
-	)
-
 	if print_format and print_format.get("print_format_builder_beta"):
 		from frappe.utils.weasyprint import get_html
 
