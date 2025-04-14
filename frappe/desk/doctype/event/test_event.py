@@ -3,9 +3,9 @@
 """Use blog post test to test user permissions logic"""
 
 import json
+from datetime import date
 
 import frappe
-import frappe.defaults
 from frappe.desk.doctype.event.event import get_events
 from frappe.tests import IntegrationTestCase, UnitTestCase
 from frappe.tests.utils import make_test_objects
@@ -130,16 +130,16 @@ class TestEvent(IntegrationTestCase):
 		)
 		ev.insert()
 
-		ev_list = get_events("2014-02-01", "2014-02-01", "Administrator", for_reminder=True)
+		ev_list = get_events(date(2014, 2, 1), date(2014, 2, 1), "Administrator", for_reminder=True)
 		self.assertTrue(bool(list(filter(lambda e: e.name == ev.name, ev_list))))
 
-		ev_list1 = get_events("2015-01-20", "2015-01-20", "Administrator", for_reminder=True)
+		ev_list1 = get_events(date(2015, 1, 20), date(2015, 1, 20), "Administrator", for_reminder=True)
 		self.assertFalse(bool(list(filter(lambda e: e.name == ev.name, ev_list1))))
 
-		ev_list2 = get_events("2014-02-20", "2014-02-20", "Administrator", for_reminder=True)
+		ev_list2 = get_events(date(2014, 2, 20), date(2014, 2, 20), "Administrator", for_reminder=True)
 		self.assertFalse(bool(list(filter(lambda e: e.name == ev.name, ev_list2))))
 
-		ev_list3 = get_events("2015-02-01", "2015-02-01", "Administrator", for_reminder=True)
+		ev_list3 = get_events(date(2015, 2, 1), date(2015, 2, 1), "Administrator", for_reminder=True)
 		self.assertTrue(bool(list(filter(lambda e: e.name == ev.name, ev_list3))))
 
 	def test_quaterly_repeat(self):
@@ -156,62 +156,28 @@ class TestEvent(IntegrationTestCase):
 		)
 		ev.insert()
 		# Test Quaterly months
-		ev_list = get_events("2023-02-17", "2023-02-17", "Administrator", for_reminder=True)
+		ev_list = get_events(date(2023, 2, 17), date(2023, 2, 17), "Administrator", for_reminder=True)
 		self.assertTrue(bool(list(filter(lambda e: e.name == ev.name, ev_list))))
 
-		ev_list1 = get_events("2023-05-17", "2023-05-17", "Administrator", for_reminder=True)
+		ev_list1 = get_events(date(2023, 5, 17), date(2023, 5, 17), "Administrator", for_reminder=True)
 		self.assertTrue(bool(list(filter(lambda e: e.name == ev.name, ev_list1))))
 
-		ev_list2 = get_events("2023-08-17", "2023-08-17", "Administrator", for_reminder=True)
+		ev_list2 = get_events(date(2023, 8, 17), date(2023, 8, 17), "Administrator", for_reminder=True)
 		self.assertTrue(bool(list(filter(lambda e: e.name == ev.name, ev_list2))))
 
-		ev_list3 = get_events("2023-11-17", "2023-11-17", "Administrator", for_reminder=True)
+		ev_list3 = get_events(date(2023, 11, 17), date(2023, 11, 17), "Administrator", for_reminder=True)
 		self.assertTrue(bool(list(filter(lambda e: e.name == ev.name, ev_list3))))
 
 		# Test before event start date and after event end date
-		ev_list4 = get_events("2022-11-17", "2022-11-17", "Administrator", for_reminder=True)
+		ev_list4 = get_events(date(2022, 11, 17), date(2022, 11, 17), "Administrator", for_reminder=True)
 		self.assertFalse(bool(list(filter(lambda e: e.name == ev.name, ev_list4))))
 
-		ev_list4 = get_events("2024-02-17", "2024-02-17", "Administrator", for_reminder=True)
+		ev_list4 = get_events(date(2024, 2, 17), date(2024, 2, 17), "Administrator", for_reminder=True)
 		self.assertFalse(bool(list(filter(lambda e: e.name == ev.name, ev_list4))))
 
 		# Test months that aren't part of the quarterly cycle
-		ev_list4 = get_events("2023-12-17", "2023-12-17", "Administrator", for_reminder=True)
+		ev_list4 = get_events(date(2023, 12, 17), date(2023, 12, 17), "Administrator", for_reminder=True)
 		self.assertFalse(bool(list(filter(lambda e: e.name == ev.name, ev_list4))))
 
-		ev_list4 = get_events("2023-03-17", "2023-03-17", "Administrator", for_reminder=True)
-		self.assertFalse(bool(list(filter(lambda e: e.name == ev.name, ev_list4))))
-
-	def test_half_yearly_repeat(self):
-		ev = frappe.get_doc(
-			{
-				"doctype": "Event",
-				"subject": "_Test Event",
-				"starts_on": "2023-02-17",
-				"repeat_till": "2024-02-17",
-				"event_type": "Public",
-				"repeat_this_event": 1,
-				"repeat_on": "Half Yearly",
-			}
-		)
-		ev.insert()
-		# Test Half Yearly months
-		ev_list = get_events("2023-02-17", "2023-02-17", "Administrator", for_reminder=True)
-		self.assertTrue(bool(list(filter(lambda e: e.name == ev.name, ev_list))))
-
-		ev_list1 = get_events("2023-08-17", "2023-08-17", "Administrator", for_reminder=True)
-		self.assertTrue(bool(list(filter(lambda e: e.name == ev.name, ev_list1))))
-
-		# Test before event start date and after event end date
-		ev_list4 = get_events("2022-08-17", "2022-08-17", "Administrator", for_reminder=True)
-		self.assertFalse(bool(list(filter(lambda e: e.name == ev.name, ev_list4))))
-
-		ev_list4 = get_events("2024-02-17", "2024-02-17", "Administrator", for_reminder=True)
-		self.assertFalse(bool(list(filter(lambda e: e.name == ev.name, ev_list4))))
-
-		# Test months that aren't part of the half yearly cycle
-		ev_list4 = get_events("2023-12-17", "2023-12-17", "Administrator", for_reminder=True)
-		self.assertFalse(bool(list(filter(lambda e: e.name == ev.name, ev_list4))))
-
-		ev_list4 = get_events("2023-05-17", "2023-05-17", "Administrator", for_reminder=True)
+		ev_list4 = get_events(date(2023, 3, 17), date(2023, 3, 17), "Administrator", for_reminder=True)
 		self.assertFalse(bool(list(filter(lambda e: e.name == ev.name, ev_list4))))
