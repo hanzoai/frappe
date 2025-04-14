@@ -76,7 +76,7 @@ def get_context(context) -> PrintContext:
 		doctype=frappe.form_dict.doctype, document=frappe.form_dict.name, file_type="PDF", method="Print"
 	)
 
-	if print_format.print_format_builder_beta:
+	if print_format.get("print_format_builder_beta"):
 		from frappe.utils.weasyprint import get_html
 
 		body = get_html(
