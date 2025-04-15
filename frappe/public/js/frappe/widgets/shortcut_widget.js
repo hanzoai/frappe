@@ -29,6 +29,11 @@ export default class ShortcutWidget extends Widget {
 		this.widget.click((e) => {
 			if (this.in_customize_mode) return;
 
+			if (this.type =="DocType" && this.doc_view == "New"){
+				frappe.new_doc(this.link_to);
+				return;
+			}
+
 			let route = frappe.utils.generate_route({
 				route: this.route,
 				name: this.link_to,
