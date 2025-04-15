@@ -16,6 +16,7 @@ from frappe.model.document import Document
 from frappe.utils import (
 	add_days,
 	add_months,
+	add_years,
 	date_diff,
 	format_datetime,
 	get_fullname,
@@ -278,7 +279,6 @@ def get_events(
 	user = user or frappe.session.user
 	EventLikeDict: TypeAlias = Event | frappe._dict
 	resolved_events: list[EventLikeDict] = []
-	days_range = (end - start).days
 
 	if isinstance(filters, str):
 		filters = json.loads(filters)
@@ -343,7 +343,7 @@ def get_events(
 		ORDER BY `tabEvent`.starts_on""".format(
 			tables=", ".join(tables),
 			filter_condition=filter_condition,
-			reminder_condition="AND coalesce(`tabEvent`.send_reminder, 0)=1" if for_reminder else "",
+			reminder_condition="AND `tabEvent`.send_reminder = 1" if for_reminder else "",
 		),
 		{
 			"start": start,
@@ -353,7 +353,7 @@ def get_events(
 		as_dict=True,
 	)
 
-	def resolve_event(e: EventLikeDict, target_date: "date"):
+	def resolve_event(e: EventLikeDict, target_date: "date", repeat_till: "date"):
 		"""Record the event if it falls within the date range and is not excluded by the weekday."""
 		if e.repeat_on == "Weekly" and not e[weekdays[target_date.weekday()]]:
 			return
@@ -372,6 +372,10 @@ def get_events(
 			return
 
 		new_event = e.copy()
+
+		new_event.original_starts_on = new_event.starts_on
+		new_event.original_ends_on = new_event.ends_on
+
 		new_event.starts_on = datetime.combine(target_date, e.starts_on.time())
 		new_event.ends_on = datetime.combine(ends_on_date, e.ends_on.time()) if ends_on_date else None
 
@@ -385,38 +389,58 @@ def get_events(
 		if e.repeat_till and e.repeat_till < start:
 			continue
 
-		event_start = e.starts_on.date()
 		repeat_till = getdate(e.repeat_till or "3000-01-01")
 
-		try:
-			start_date = start.replace(day=event_start.day)
-		except ValueError:
-			# Handle fallback for last day of the month, e.g., 30th, 31st, 29th, 28th
-			start_date = start.replace(month=start.month + 1, day=1) + timedelta(days=-1)
-
 		if e.repeat_on == "Daily":
-			for i in range(days_range + 1):
-				resolve_event(e, target_date=add_days(start, i))
+			target_date = start
+			while target_date <= end:
+				resolve_event(e, target_date=target_date, repeat_till=repeat_till)
+				target_date = add_days(target_date, 1)
 
 		elif e.repeat_on == "Weekly":
-			for i in range(days_range + 1):
-				resolve_event(e, target_date=add_days(start, i))
+			first_occurence_in_range = e.starts_on.date()
+			jump_ahead = abs((first_occurence_in_range - start).days // 7)
+			target_date = add_days(first_occurence_in_range, 7 * jump_ahead)
+
+			while target_date <= end:
+				resolve_event(e, target_date=target_date, repeat_till=repeat_till)
+				target_date = add_days(target_date, 7)
 
 		elif e.repeat_on == "Monthly":
-			for i in range((days_range // 30) + 3):
-				resolve_event(e, target_date=add_months(start_date, i))
+			first_occurence_in_range = e.starts_on.date()
+			jump_ahead = month_diff(start, first_occurence_in_range) - 1
+			target_date = add_months(first_occurence_in_range, jump_ahead)
+
+			while target_date <= end:
+				resolve_event(e, target_date=target_date, repeat_till=repeat_till)
+				target_date = add_months(target_date, 1)
 
 		elif e.repeat_on == "Quarterly":
-			for i in range((days_range // 30) + 3):
-				resolve_event(e, target_date=add_months(start_date, i * 3))
+			first_occurence_in_range = e.starts_on.date()
+			jump_ahead = month_diff(start, first_occurence_in_range) // 3
+			target_date = add_months(first_occurence_in_range, 3 * jump_ahead)
+
+			while target_date <= end:
+				resolve_event(e, target_date=target_date, repeat_till=repeat_till)
+				target_date = add_months(target_date, 3)
 
 		elif e.repeat_on == "Yearly":
-			for year in range(start.year, end.year + 1):
-				resolve_event(e, target_date=event_start.replace(year=year))
+			first_occurence_in_range = e.starts_on.date()
+			jump_ahead = month_diff(start, first_occurence_in_range) // 12
+			target_date = add_years(first_occurence_in_range, jump_ahead)
+
+			while target_date <= end:
+				resolve_event(e, target_date=target_date, repeat_till=repeat_till)
+				target_date = add_years(target_date, 1)
 
 		elif e.repeat_on == "Half Yearly":
-			for i in range((days_range // 30) + 3):
-				resolve_event(e, target_date=add_months(start_date, i * 6))
+			first_occurence_in_range = e.starts_on.date()
+			jump_ahead = month_diff(start, first_occurence_in_range) // 6
+			target_date = add_months(first_occurence_in_range, 6 * jump_ahead)
+
+			while target_date <= end:
+				resolve_event(e, target_date=target_date, repeat_till=repeat_till)
+				target_date = add_months(target_date, 6)
 
 	# Remove events that are not in the range and boolean weekdays fields
 	for event in resolved_events:
