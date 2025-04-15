@@ -1008,7 +1008,8 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	generate_dropdown_html(doc) {
-		let dropdown_button = "";
+		let dropdown_container = "";
+
 		if (this.settings.dropdown_button) {
 			let button_actions = "";
 			this.settings.dropdown_button.buttons.forEach((button, index) => {
@@ -1022,26 +1023,24 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 				}
 			});
 
+			let dropdown_buttons = "";
 			if (button_actions) {
-				dropdown_button = `
-				<div class="list-row-col hidden-xs inner-group-button" data-name="${doc.name}" data-label="${
-					this.settings.dropdown_button.get_label
-				}">
+				dropdown_buttons = `
 					<button type="button" class="btn btn-xs btn-default ellipsis" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						${this.settings.dropdown_button.get_label}
 						${frappe.utils.icon("select", "xs")}
 					</button>
 					<div role="menu" class="dropdown-menu">${button_actions}</div>
-				</div>
-				`;
-			} else {
-				dropdown_button = `
-					<div class="list-row-col hidden-xs inner-group-button" data-name="${doc.name}">
-					</div>
 				`;
 			}
+
+			dropdown_container = `
+				<div class="list-row-col hidden-xs inner-group-button" data-name="${doc.name}" data-label="${this.settings.dropdown_button.get_label}">
+					${dropdown_buttons}
+				</div>
+			`;
 		}
-		return dropdown_button;
+		return dropdown_container;
 	}
 
 	apply_styles_basedon_dropdown() {
