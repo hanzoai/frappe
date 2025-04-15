@@ -33,7 +33,7 @@ class GoogleAuthenticationError(Exception):
 class GoogleOAuth:
 	OAUTH_URL = "https://oauth2.googleapis.com/token"
 
-	def __init__(self, domain: str, validate: bool = True):
+	def __init__(self, domain: str, validate: bool = True, domain_callback_url=None):
 		self.google_settings = frappe.get_single("Google Settings")
 		self.domain = domain.lower()
 		self.scopes = (
@@ -44,6 +44,9 @@ class GoogleOAuth:
 
 		if validate:
 			self.validate_google_settings()
+
+		if domain_callback_url:
+			_DOMAIN_CALLBACK_METHODS[domain] = domain_callback_url
 
 	def validate_google_settings(self):
 		google_settings = "<a href='/app/google-settings'>Google Settings</a>"
