@@ -22,7 +22,6 @@ _SERVICES = {
 _DOMAIN_CALLBACK_METHODS = {
 	"mail": "frappe.email.oauth.authorize_google_access",
 	"contacts": "frappe.integrations.doctype.google_contacts.google_contacts.authorize_access",
-	"drive": "frappe.integrations.doctype.google_drive.google_drive.authorize_access",
 	"indexing": "frappe.website.doctype.website_settings.google_indexing.authorize_access",
 }
 
