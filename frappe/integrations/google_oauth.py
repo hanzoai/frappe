@@ -16,7 +16,6 @@ _SCOPES = {
 }
 _SERVICES = {
 	"contacts": ("people", "v1"),
-	"drive": ("drive", "v3"),
 	"indexing": ("indexing", "v3"),
 }
 _DOMAIN_CALLBACK_METHODS = {
@@ -33,7 +32,7 @@ class GoogleAuthenticationError(Exception):
 class GoogleOAuth:
 	OAUTH_URL = "https://oauth2.googleapis.com/token"
 
-	def __init__(self, domain: str, validate: bool = True, domain_callback_url=None):
+	def __init__(self, domain: str, validate: bool = True, config=None):
 		self.google_settings = frappe.get_single("Google Settings")
 		self.domain = domain.lower()
 		self.scopes = (
@@ -42,11 +41,12 @@ class GoogleOAuth:
 			else _SCOPES[self.domain]
 		)
 
+		if config:
+			_DOMAIN_CALLBACK_METHODS[self.domain] = config["domain_callback_url"]
+			_SERVICES[self.domain] = config["service_version"]
+
 		if validate:
 			self.validate_google_settings()
-
-		if domain_callback_url:
-			_DOMAIN_CALLBACK_METHODS[domain] = domain_callback_url
 
 	def validate_google_settings(self):
 		google_settings = "<a href='/app/google-settings'>Google Settings</a>"
