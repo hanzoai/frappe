@@ -37,13 +37,7 @@ export default class QuickListWidget extends Widget {
 
 		this.add_new_button.appendTo(this.action_area);
 		this.add_new_button.on("click", () => {
-			frappe.set_route(
-				frappe.utils.generate_route({
-					type: "doctype",
-					name: this.document_type,
-					doc_view: "New",
-				})
-			);
+			frappe.new_doc(this.document_type);
 		});
 	}
 
