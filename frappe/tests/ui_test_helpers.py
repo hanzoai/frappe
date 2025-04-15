@@ -47,7 +47,7 @@ def create_if_not_exists(doc):
 def create_todo_records():
 	frappe.db.truncate("ToDo")
 
-	frappe.get_doc(
+	todo_1 = frappe.get_doc(
 		{
 			"doctype": "ToDo",
 			"date": add_to_date(now(), days=7),
@@ -73,6 +73,8 @@ def create_todo_records():
 			"doctype": "ToDo",
 			"date": add_to_date(now(), months=-2),
 			"description": "this is fourth todo",
+			"reference_type": "ToDo",
+			"reference_name": todo_1.name,
 		}
 	).insert()
 
