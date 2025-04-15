@@ -765,21 +765,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	get_left_html(doc) {
 		let left_html = this.columns.map((col) => this.get_column_html(col, doc)).join("");
 
-		if (this.settings.button) {
-			const button_html = `
-				<button class="btn btn-action btn-default btn-xs"
-					data-name="${doc.name}" data-idx="${doc._idx}"
-					title="${this.settings.button.get_description(doc)}">
-						${this.settings.button.get_label(doc)}
-				</button>
-			`;
-			left_html += `
-				<div class="list-row-col ellipsis hidden-xs">
-					${this.settings.button.show(doc) ? button_html : "<span></span>"}
-				</div>
-			`;
-		}
-
+		left_html += this.generate_button_html(doc);
 		left_html += this.generate_dropdown_html(doc);
 
 		return left_html;
@@ -1005,6 +991,26 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		`;
 
 		return html;
+	}
+
+	generate_button_html(doc) {
+		let button_container = "";
+		if (this.settings.button) {
+			const button_html = `
+				<button class="btn btn-action btn-default btn-xs"
+					data-name="${doc.name}" data-idx="${doc._idx}"
+					title="${this.settings.button.get_description(doc)}">
+						${this.settings.button.get_label(doc)}
+				</button>
+			`;
+			button_container += `
+				<div class="list-row-col ellipsis hidden-xs">
+					${this.settings.button.show(doc) ? button_html : "<span></span>"}
+				</div>
+			`;
+		}
+
+		return button_container;
 	}
 
 	generate_dropdown_html(doc) {
