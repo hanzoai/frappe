@@ -232,11 +232,14 @@ class Document(BaseDocument, DocRef):
 
 		else:
 			if not is_doctype and isinstance(self.name, str):
+				for_update = ""
+				if self.flags.for_update and frappe.db.db_type != "sqlite":
+					for_update = "FOR UPDATE"
 				# Fast path - use raw SQL to avoid QB/ORM overheads.
 				d = frappe.db.sql(
 					"SELECT * FROM {table_name} WHERE `name` = %s {for_update}".format(
 						table_name=get_table_name(self.doctype, wrap_in_backticks=True),
-						for_update="FOR UPDATE" if self.flags.for_update else "",
+						for_update=for_update,
 					),
 					(self.name),
 					as_dict=True,
@@ -289,6 +292,9 @@ class Document(BaseDocument, DocRef):
 					for_update=self.flags.for_update,
 				)
 			else:
+				for_update = ""
+				if self.flags.for_update and frappe.db.db_type != "sqlite":
+					for_update = "FOR UPDATE"
 				# Fast pass for all other doctypes - using raw SQL
 				children = frappe.db.sql(
 					"""SELECT * FROM {table_name}
@@ -297,7 +303,7 @@ class Document(BaseDocument, DocRef):
 						AND `parentfield`= %(parentfield)s
 					ORDER BY `idx` ASC {for_update}""".format(
 						table_name=get_table_name(child_doctype, wrap_in_backticks=True),
-						for_update="FOR UPDATE" if self.flags.for_update else "",
+						for_update=for_update,
 					),
 					{"parent": self.name, "parenttype": self.doctype, "parentfield": fieldname},
 					as_dict=True,
