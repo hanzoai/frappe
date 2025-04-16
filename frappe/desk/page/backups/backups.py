@@ -29,17 +29,8 @@ def get_size(path: Path):
 
 
 def get_context(context):
-<<<<<<< HEAD
-	def get_time(path):
-		dt = os.path.getmtime(path)
-		return convert_utc_to_system_timezone(
-			datetime.datetime.fromtimestamp(dt, tz=datetime.timezone.utc)
-		).strftime("%a %b %d %H:%M %Y")
-=======
 	context.no_cache = True
 	backup_limit = frappe.get_system_settings("backup_limit")
->>>>>>> c3b5443896 (refactor(minor): Backups Page)
-
 	backups_path = Path(get_site_path("private", "backups"))
 	backup_files = [
 		(
