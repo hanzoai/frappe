@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-04-06 09:33+0000\n"
-"PO-Revision-Date: 2025-04-07 18:35\n"
+"PO-Revision-Date: 2025-04-11 18:43\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -2123,7 +2123,7 @@ msgstr "Sobrescribir la nomenclatura rectificada"
 
 #: frappe/model/document.py:585
 msgid "Amendment Not Allowed"
-msgstr ""
+msgstr "Enmienda no permitida"
 
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.py:207
 msgid "Amendment naming rules updated."
@@ -28476,7 +28476,7 @@ msgstr "Imagen de Usuario"
 
 #: frappe/public/js/frappe/ui/toolbar/navbar.html:115
 msgid "User Menu"
-msgstr "Menú del Usuario"
+msgstr "Menú de usuario"
 
 #. Label of the user_name (Data) field in DocType 'Personal Data Download
 #. Request'
