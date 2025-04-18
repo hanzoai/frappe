@@ -427,7 +427,7 @@ frappe.setup.slides_settings = [
 			};
 
 			if (frappe.setup.data.regional_data) {
-				this.setup_fields(slide);
+				setup_fields(slide);
 			} else {
 				frappe.setup.utils.load_regional_data(slide, setup_fields);
 			}
