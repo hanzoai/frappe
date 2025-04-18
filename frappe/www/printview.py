@@ -622,7 +622,7 @@ def get_font(
 	print_settings: "PrintSettings", print_format: Optional["PrintFormat"] = None, for_legacy=False
 ) -> str:
 	default = """
-	"InterVariable", "Inter", "saudiriyal", "-apple-system", "BlinkMacSystemFont",
+	"InterVariable", "Inter", -apple-system", "BlinkMacSystemFont",
 		"Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
 		"Helvetica Neue", sans-serif;
 	"""
