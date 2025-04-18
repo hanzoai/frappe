@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-03-20 13:58+0000\n"
-"PO-Revision-Date: 2025-04-16 17:16\n"
+"PO-Revision-Date: 2025-04-18 17:28\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -28876,7 +28876,7 @@ msgstr ""
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.json
 #: frappe/website/doctype/company_history/company_history.json
 msgid "Year"
-msgstr ""
+msgstr "Ano"
 
 #. Option for the 'Frequency' (Select) field in DocType 'Auto Repeat'
 #. Option for the 'Frequency' (Select) field in DocType 'Scheduled Job Type'
@@ -28919,17 +28919,17 @@ msgstr ""
 #: frappe/public/js/frappe/views/reports/query_report.js:1543
 #: frappe/website/doctype/help_article/templates/help_article.html:25
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #: frappe/public/js/frappe/ui/messages.js:32
 msgctxt "Approve confirmation dialog"
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:542
 msgctxt "Checkbox is checked"
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #: frappe/public/js/frappe/utils/user.js:33
 msgctxt "Name of the current user. For example: You edited this 5 hours ago."
@@ -30486,7 +30486,7 @@ msgstr ""
 
 #: frappe/model/rename_doc.py:215
 msgid "renamed from {0} to {1}"
-msgstr ""
+msgstr "renomeado de {0} para {1}"
 
 #. Option for the 'Icon' (Select) field in DocType 'Workflow State'
 #: frappe/workflow/doctype/workflow_state/workflow_state.json
@@ -30781,7 +30781,7 @@ msgstr ""
 
 #: frappe/public/js/frappe/ui/filters/filter.js:357
 msgid "values separated by commas"
-msgstr ""
+msgstr "valores separados por vírgulas"
 
 #. Label of a HTML field in DocType 'Audit Trail'
 #: frappe/core/doctype/audit_trail/audit_trail.json
@@ -30866,7 +30866,7 @@ msgstr ""
 
 #: frappe/public/js/frappe/utils/pretty_date.js:58
 msgid "yesterday"
-msgstr ""
+msgstr "ontem"
 
 #. Option for the 'Date Format' (Select) field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
@@ -31165,7 +31165,7 @@ msgstr ""
 
 #: frappe/public/js/frappe/utils/pretty_date.js:60
 msgid "{0} days ago"
-msgstr ""
+msgstr "há {0} dias"
 
 #: frappe/website/doctype/website_settings/website_settings.py:96
 #: frappe/website/doctype/website_settings/website_settings.py:116
@@ -31226,7 +31226,7 @@ msgstr ""
 
 #: frappe/public/js/frappe/utils/pretty_date.js:54
 msgid "{0} hours ago"
-msgstr ""
+msgstr "há {0} horas"
 
 #: frappe/website/doctype/web_form/templates/web_form.html:145
 msgid "{0} if you are not redirected within {1} seconds"
@@ -31239,7 +31239,7 @@ msgstr ""
 
 #: frappe/core/doctype/doctype/doctype.py:911
 msgid "{0} is a mandatory field"
-msgstr ""
+msgstr "{0} é um campo obrigatório"
 
 #: frappe/core/doctype/file/file.py:510
 msgid "{0} is a not a valid zip file"
@@ -31321,11 +31321,11 @@ msgstr ""
 
 #: frappe/utils/__init__.py:136
 msgid "{0} is not a valid Phone Number"
-msgstr ""
+msgstr "{0} não é um número de telefone válido"
 
 #: frappe/model/workflow.py:189
 msgid "{0} is not a valid Workflow State. Please update your Workflow and try again."
-msgstr ""
+msgstr "{0} não é um estado válido do fluxo de trabalho. Atualize o seu fluxo de trabalho e tente novamente."
 
 #: frappe/permissions.py:787
 msgid "{0} is not a valid parent DocType for {1}"
@@ -31337,7 +31337,7 @@ msgstr ""
 
 #: frappe/email/doctype/auto_email_report/auto_email_report.py:115
 msgid "{0} is not a valid report format. Report format should one of the following {1}"
-msgstr ""
+msgstr "{0} não é um formato de relatório válido. O formato do relatório deve ser um dos seguintes {1}"
 
 #: frappe/core/doctype/file/file.py:490
 msgid "{0} is not a zip file"
@@ -31384,7 +31384,7 @@ msgstr ""
 
 #: frappe/public/js/frappe/list/list_view.js:1624
 msgid "{0} items selected"
-msgstr ""
+msgstr "{0} itens selecionados"
 
 #: frappe/core/doctype/user/user.py:1330
 msgid "{0} just impersonated as you. They gave this reason: {1}"
@@ -31409,19 +31409,19 @@ msgstr ""
 
 #: frappe/desk/notifications.py:398
 msgid "{0} mentioned you in a comment in {1} {2}"
-msgstr ""
+msgstr "{0} mencionou-o num comentário em {1} {2}"
 
 #: frappe/public/js/frappe/utils/pretty_date.js:50
 msgid "{0} minutes ago"
-msgstr ""
+msgstr "há {0} minutos"
 
 #: frappe/public/js/frappe/utils/pretty_date.js:68
 msgid "{0} months ago"
-msgstr ""
+msgstr "há {0} meses"
 
 #: frappe/model/document.py:1636
 msgid "{0} must be after {1}"
-msgstr ""
+msgstr "{0} deve ser posterior a {1}"
 
 #: frappe/model/document.py:1401
 msgid "{0} must be beginning with '{1}'"
@@ -31437,15 +31437,15 @@ msgstr ""
 
 #: frappe/model/document.py:1397 frappe/utils/csvutils.py:136
 msgid "{0} must be one of {1}"
-msgstr ""
+msgstr "{0} deve ser um dos {1}"
 
 #: frappe/model/base_document.py:808
 msgid "{0} must be set first"
-msgstr ""
+msgstr "{0} deve ser definido primeiro"
 
 #: frappe/model/base_document.py:666
 msgid "{0} must be unique"
-msgstr ""
+msgstr "{0} deve ser único"
 
 #: frappe/model/document.py:1405
 msgid "{0} must be {1} {2}"
@@ -31458,15 +31458,15 @@ msgstr ""
 
 #: frappe/workflow/doctype/workflow/workflow.py:91
 msgid "{0} not a valid State"
-msgstr ""
+msgstr "{0} não é um estado válido"
 
 #: frappe/model/rename_doc.py:391
 msgid "{0} not allowed to be renamed"
-msgstr ""
+msgstr "Não é permitido alterar o nome de {0}"
 
 #: frappe/desk/doctype/desktop_icon/desktop_icon.py:365
 msgid "{0} not found"
-msgstr ""
+msgstr "{0} não foi encontrado"
 
 #: frappe/core/doctype/report/report.py:424
 #: frappe/public/js/frappe/list/list_view.js:1015
@@ -31483,11 +31483,11 @@ msgstr ""
 
 #: frappe/utils/data.py:1552
 msgid "{0} or {1}"
-msgstr ""
+msgstr "{0} ou {1}"
 
 #: frappe/core/doctype/user_permission/user_permission_list.js:177
 msgid "{0} record deleted"
-msgstr ""
+msgstr "{0} registo eliminado"
 
 #: frappe/public/js/frappe/logtypes.js:22
 msgid "{0} records are not automatically deleted."
@@ -31499,11 +31499,11 @@ msgstr ""
 
 #: frappe/core/doctype/user_permission/user_permission_list.js:179
 msgid "{0} records deleted"
-msgstr ""
+msgstr "{0} registos eliminados"
 
 #: frappe/public/js/frappe/data_import/data_exporter.js:229
 msgid "{0} records will be exported"
-msgstr ""
+msgstr "Vão ser exportados {0} registos"
 
 #: frappe/public/js/frappe/form/footer/form_timeline.js:421
 msgctxt "Form timeline"
@@ -31517,17 +31517,17 @@ msgstr ""
 #: frappe/social/doctype/energy_point_log/energy_point_log.py:139
 #: frappe/social/doctype/energy_point_log/energy_point_log.py:178
 msgid "{0} reverted your point on {1}"
-msgstr ""
+msgstr "{0} reverteu o seu ponto em {1}"
 
 #: frappe/social/doctype/energy_point_log/energy_point_log.py:141
 #: frappe/social/doctype/energy_point_log/energy_point_log.py:180
 msgid "{0} reverted your points on {1}"
-msgstr ""
+msgstr "{0} reverteu os seus pontos em {1}"
 
 #: frappe/public/js/frappe/utils/energy_point_utils.js:44
 #: frappe/public/js/frappe/utils/energy_point_utils.js:59
 msgid "{0} reverted {1}"
-msgstr ""
+msgstr "{0} reverteu {1}"
 
 #: frappe/public/js/frappe/roles_editor.js:61
 msgid "{0} role does not have permission on any doctype"
@@ -31539,7 +31539,7 @@ msgstr ""
 
 #: frappe/desk/query_report.py:605
 msgid "{0} saved successfully"
-msgstr ""
+msgstr "{0} guardado com sucesso"
 
 #: frappe/desk/doctype/todo/todo.py:43
 msgid "{0} self assigned this task: {1}"
@@ -31611,7 +31611,7 @@ msgstr ""
 
 #: frappe/public/js/frappe/utils/pretty_date.js:64
 msgid "{0} weeks ago"
-msgstr ""
+msgstr "há {0} semanas"
 
 #: frappe/public/js/frappe/utils/pretty_date.js:39
 msgid "{0} y"
@@ -31619,11 +31619,11 @@ msgstr ""
 
 #: frappe/public/js/frappe/utils/pretty_date.js:72
 msgid "{0} years ago"
-msgstr ""
+msgstr "há {0} anos"
 
 #: frappe/public/js/frappe/form/link_selector.js:219
 msgid "{0} {1} added"
-msgstr ""
+msgstr "{0} {1} adicionado"
 
 #: frappe/public/js/frappe/utils/dashboard_utils.js:270
 msgid "{0} {1} added to Dashboard {2}"
@@ -31631,7 +31631,7 @@ msgstr ""
 
 #: frappe/model/base_document.py:599 frappe/model/rename_doc.py:110
 msgid "{0} {1} already exists"
-msgstr ""
+msgstr "{0} {1} já existe"
 
 #: frappe/model/base_document.py:914
 msgid "{0} {1} cannot be \"{2}\". It should be one of \"{3}\""
@@ -31651,11 +31651,11 @@ msgstr ""
 
 #: frappe/model/document.py:180 frappe/permissions.py:554
 msgid "{0} {1} not found"
-msgstr ""
+msgstr "{0} {1} não foi encontrado"
 
 #: frappe/model/delete_doc.py:253
 msgid "{0} {1}: Submitted Record cannot be deleted. You must {2} Cancel {3} it first."
-msgstr ""
+msgstr "{0} {1}: O registo submetido não pode ser eliminado. Tem de {2} Cancelar {3} primeiro."
 
 #: frappe/model/base_document.py:1032
 msgid "{0}, Row {1}"
@@ -31671,7 +31671,7 @@ msgstr ""
 
 #: frappe/core/doctype/doctype/doctype.py:1763
 msgid "{0}: Cannot set Amend without Cancel"
-msgstr ""
+msgstr "{0}: Não é possível Corrigir sem Cancelar"
 
 #: frappe/core/doctype/doctype/doctype.py:1781
 msgid "{0}: Cannot set Assign Amend if not Submittable"
@@ -31683,7 +31683,7 @@ msgstr ""
 
 #: frappe/core/doctype/doctype/doctype.py:1758
 msgid "{0}: Cannot set Cancel without Submit"
-msgstr ""
+msgstr "{0}: Não é possível Cancelar sem Submeter"
 
 #: frappe/core/doctype/doctype/doctype.py:1765
 msgid "{0}: Cannot set Import without Create"
@@ -31703,7 +31703,7 @@ msgstr ""
 
 #: frappe/core/doctype/doctype/doctype.py:1389
 msgid "{0}: Field '{1}' cannot be set as Unique as it has non-unique values"
-msgstr ""
+msgstr "{0}: O campo '{1}' não pode ser definido como Único, uma vez que possui valores não exclusivos"
 
 #: frappe/core/doctype/doctype/doctype.py:1297
 msgid "{0}: Field {1} in row {2} cannot be hidden and mandatory without default"
