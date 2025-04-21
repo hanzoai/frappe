@@ -660,13 +660,13 @@ def check_webform_perm(doctype, name):
 
 
 @frappe.whitelist(allow_guest=True)
-def get_web_form_filters(web_form_name):
+def get_web_form_filters(web_form_name: str):
 	web_form = frappe.get_doc("Web Form", web_form_name)
 	return [field for field in web_form.web_form_fields if field.show_in_filter]
 
 
 @frappe.whitelist(allow_guest=True)
-def get_form_data(doctype, docname=None, web_form_name=None):
+def get_form_data(doctype: str, docname: str | None = None, web_form_name: str | None = None):
 	web_form = frappe.get_doc("Web Form", web_form_name)
 
 	if web_form.login_required and frappe.session.user == "Guest":
