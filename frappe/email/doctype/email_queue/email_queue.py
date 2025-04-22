@@ -158,20 +158,7 @@ class EmailQueue(Document):
 
 		return True
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	def send(self, smtp_server_instance: SMTPServer = None):
-=======
-	def send(self, smtp_server_instance: SMTPServer = None, frappe_mail_client: FrappeMail = None, force_send = False):
->>>>>>> 4848fbda0b (fix: Allow to manually send an email even if queue is disabled)
-=======
-	def send(
-		self,
-		smtp_server_instance: SMTPServer = None,
-		frappe_mail_client: FrappeMail = None,
-		force_send: bool = False,
-	):
->>>>>>> 81813548e9 (fix(email_queue): remove confirm step)
+	def send(self, smtp_server_instance: SMTPServer = None, force_send = False):
 		"""Send emails to recipients."""
 		if not self.can_send_now() and not force_send:
 			return
