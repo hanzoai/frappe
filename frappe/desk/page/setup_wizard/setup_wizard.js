@@ -427,7 +427,7 @@ frappe.setup.slides_settings = [
 			};
 
 			if (frappe.setup.data.regional_data) {
-				this.setup_fields(slide);
+				setup_fields(slide);
 			} else {
 				frappe.setup.utils.load_regional_data(slide, setup_fields);
 			}
@@ -525,7 +525,7 @@ frappe.setup.utils = {
 				if (r.message) {
 					frappe.wizard.values.currency = r.message.currency;
 					frappe.wizard.values.country = r.message.country;
-					frappe.wizard.values.timezone = r.message.timezone;
+					frappe.wizard.values.timezone = r.message.time_zone;
 					frappe.wizard.values.language = r.message.language;
 
 					frappe.db.get_value(
@@ -620,9 +620,12 @@ frappe.setup.utils = {
 			.get_input("language")
 			.unbind("change")
 			.on("change", function () {
+				const selected_language = $(this).val();
+				if (slide.get_field("language").value === selected_language) return;
+
 				clearTimeout(slide.language_call_timeout);
 				slide.language_call_timeout = setTimeout(() => {
-					let lang = $(this).val() || "English";
+					let lang = selected_language || "English";
 					frappe._messages = {};
 					frappe.call({
 						method: "frappe.desk.page.setup_wizard.setup_wizard.load_messages",
