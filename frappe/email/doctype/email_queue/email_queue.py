@@ -158,7 +158,7 @@ class EmailQueue(Document):
 
 		return True
 
-	def send(self, smtp_server_instance: SMTPServer = None, force_send = False):
+	def send(self, smtp_server_instance: SMTPServer = None, force_send: bool = False):
 		"""Send emails to recipients."""
 		if not self.can_send_now() and not force_send:
 			return
