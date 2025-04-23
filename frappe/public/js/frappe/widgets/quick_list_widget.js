@@ -37,7 +37,14 @@ export default class QuickListWidget extends Widget {
 
 		this.add_new_button.appendTo(this.action_area);
 		this.add_new_button.on("click", () => {
-			frappe.new_doc(this.document_type);
+			frappe.ui.form.make_quick_entry(
+				this.document_type,
+				// Callback to ensure no redirection after insert
+				() => {
+					this.body.empty();
+					this.set_body(); // Refresh the quicklist
+				}
+			);
 		});
 	}
 
