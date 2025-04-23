@@ -30,7 +30,11 @@ export default class ShortcutWidget extends Widget {
 			if (this.in_customize_mode) return;
 
 			if (this.type =="DocType" && this.doc_view == "New"){
-				frappe.new_doc(this.link_to);
+				frappe.ui.form.make_quick_entry(
+					this.link_to,
+					// Callback to ensure no redirection after insert
+					() => {}
+				);
 				return;
 			}
 
