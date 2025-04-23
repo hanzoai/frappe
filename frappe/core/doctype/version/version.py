@@ -7,6 +7,8 @@ import frappe
 from frappe.model import no_value_fields, table_fields
 from frappe.model.document import Document
 
+FIELDTYPES_TO_IGNORE = frozenset(fieldtype for fieldtype in no_value_fields if fieldtype not in table_fields)
+
 
 class Version(Document):
 	# begin: auto-generated types
@@ -110,7 +112,7 @@ def get_diff(old, new, for_child=False, compare_cancelled=False):
 		old_row_name_field = "_amended_from" if (amended_from and amended_from == old.name) else "name"
 
 	for df in new.meta.fields:
-		if df.fieldtype in no_value_fields and df.fieldtype not in table_fields:
+		if df.fieldtype in FIELDTYPES_TO_IGNORE or getattr(df, "is_virtual", False):
 			continue
 
 		old_value, new_value = old.get(df.fieldname), new.get(df.fieldname)
