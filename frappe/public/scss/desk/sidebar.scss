@@ -315,7 +315,7 @@ body {
 		.overlay {
 			display: block;
 			position: absolute;
-			width: calc(100vw - 240px);
+			width: calc(100vw - var(--sidebar-width));
 			height: 100%;
 			z-index: 1021;
 			left: var(--left-sidebar-width);

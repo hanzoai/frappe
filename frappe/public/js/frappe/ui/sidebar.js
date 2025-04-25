@@ -115,8 +115,8 @@ frappe.ui.Sidebar = class Sidebar {
 		if (!parent_title) return;
 
 		let parent = this.get_sidebar_item(parent_title);
-		$($(parent).children()[1]).removeClass("hidden");
 		if (parent) {
+			$(parent).find(".drop-icon")[0].click();
 			if (this.is_nested_item($(parent))) {
 				this.expand_parent_item($(parent));
 			}
