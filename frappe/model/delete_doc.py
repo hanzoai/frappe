@@ -256,7 +256,7 @@ def check_permission_and_not_submitted(doc):
 
 def check_if_doc_is_linked(doc, method="Delete"):
 	"""
-	Raises excption if the given doc(dt, dn) is linked in another record.
+	Raises exception if the given document is linked in another record.
 	"""
 	from frappe.model.rename_doc import get_link_fields
 
