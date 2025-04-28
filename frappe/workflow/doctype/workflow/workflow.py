@@ -35,11 +35,9 @@ class Workflow(Document):
 		self.set_active()
 		self.validate_docstatus()
 
-	def after_insert(self):
-		self.create_custom_field_for_workflow_state()
-
 	def on_update(self):
 		frappe.clear_cache(doctype=self.document_type)
+		self.create_custom_field_for_workflow_state()
 		self.update_default_workflow_status()
 
 	def create_custom_field_for_workflow_state(self):
