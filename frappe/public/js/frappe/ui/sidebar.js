@@ -1,7 +1,7 @@
 frappe.ui.Sidebar = class Sidebar {
 	constructor() {
 		this.items = {};
-		this.child_items = [];
+		this.parent_items = [];
 		this.sidebar_expanded = false;
 
 		if (!frappe.boot.setup_complete) {
@@ -116,10 +116,9 @@ frappe.ui.Sidebar = class Sidebar {
 
 		let parent = this.get_sidebar_item(parent_title);
 		if (parent) {
-			let drop_icon = $(parent).find(".drop-icon");
-			let opened = drop_icon.find("use").attr("href") === "#es-line-down";
+			let $drop_icon = $(parent).find(".drop-icon");
 			if ($($(parent).children()[1]).hasClass("hidden")) {
-				$(parent).find(".drop-icon")[0].click();
+				$drop_icon[0].click();
 				if (this.is_nested_item($(parent))) {
 					this.expand_parent_item($(parent));
 				}
@@ -186,7 +185,6 @@ frappe.ui.Sidebar = class Sidebar {
 		}
 		this.set_hover();
 		this.set_sidebar_state();
-		if (!this.sidebar_expanded) this.close_children_item();
 	}
 	set_sidebar_state() {
 		this.sidebar_expanded = true;
@@ -311,7 +309,7 @@ frappe.ui.Sidebar = class Sidebar {
 			let child_container = $item_container.find(".sidebar-child-item");
 			child_container.addClass("hidden");
 			this.prepare_sidebar(child_items, child_container, $item_container);
-			this.child_items.push(child_container);
+			this.parent_items.push($item_container);
 		}
 
 		$item_container.appendTo(container);
@@ -473,8 +471,8 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	close_children_item() {
-		this.child_items.forEach((i) => {
-			i.addClass("hidden");
+		this.parent_items.forEach((i) => {
+			if (!$($(i).children()[1]).hasClass("hidden")) $(i).find(".drop-icon").click();
 		});
 	}
 
