@@ -243,7 +243,13 @@ frappe.ui.GroupBy = class {
 	}
 
 	apply_group_by() {
-		if (this.group_by_doctype != this.aggregate_on_doctype) {
+		console.log(this.aggregate_on_doctype, this.group_by_doctype);
+
+		if (
+			this.group_by_doctype &&
+			this.aggregate_on_doctype &&
+			this.group_by_doctype != this.aggregate_on_doctype
+		) {
 			frappe.msgprint(__("Parent-to-child or child-to-parent grouping is not allowed."));
 			return false;
 		}
