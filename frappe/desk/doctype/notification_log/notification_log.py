@@ -152,8 +152,20 @@ def get_email_header(doc, language: str | None = None):
 		"Assignment": _("Assignment Update on {0}", lang=language).format(docname),
 		"Share": _("New Document Shared {0}", lang=language).format(docname),
 	}
-
+	header_map = {
+		**header_map,
+		**format_email_header(
+			frappe.get_hooks("notification_email_header"), language=language, docname=docname
+		),
+	}
 	return header_map[doc.type or "Default"]
+
+
+def format_email_header(header_map, language, docname):
+	messages = []
+	for v in list(header_map.values()):
+		messages.append(_(v[0], lang=language).format(docname))
+	return dict(zip(header_map.keys(), messages, strict=True))
 
 
 @frappe.whitelist()
