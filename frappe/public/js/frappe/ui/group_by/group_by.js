@@ -243,8 +243,6 @@ frappe.ui.GroupBy = class {
 	}
 
 	apply_group_by() {
-		console.log(this.aggregate_on_doctype, this.group_by_doctype);
-
 		if (
 			this.group_by_doctype &&
 			this.aggregate_on_doctype &&
