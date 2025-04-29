@@ -77,7 +77,11 @@ dependencies = [
     "urllib3~=1.26.4",
     "xlrd~=2.0.1",
     "zxcvbn~=4.4.28",
+<<<<<<< HEAD
     "markdownify~=0.11.2",
+=======
+    "markdownify~=0.14.1",
+>>>>>>> 1dba06e834 (chore: bump markdownify to 0.14.1 (#32348))
 
     # integration dependencies
     "boto3~=1.18.49",
