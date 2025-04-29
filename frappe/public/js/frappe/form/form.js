@@ -671,6 +671,9 @@ frappe.ui.form.Form = class FrappeForm {
 
 			route_callback(this);
 		}
+		if (frappe.route_hooks.post_after_load) {
+			frappe.route_hooks.post_after_load(this);
+		}
 	}
 
 	refresh_fields() {
