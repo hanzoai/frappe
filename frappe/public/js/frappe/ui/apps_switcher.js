@@ -1,5 +1,3 @@
-const { event } = require("jquery");
-
 frappe.ui.AppsSwitcher = class AppsSwitcher {
 	constructor(sidebar) {
 		this.sidebar = sidebar;
