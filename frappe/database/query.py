@@ -306,6 +306,13 @@ class Engine:
 			dynamic_field = DynamicTableField.parse(field, self.doctype, allow_tab_notation=False)
 			if dynamic_field:
 				# Parsed successfully as link/child field access
+				target_doctype = dynamic_field.doctype
+				target_fieldname = dynamic_field.fieldname
+				parent_doctype_for_perm = (
+					dynamic_field.parent_doctype if isinstance(dynamic_field, ChildTableField) else None
+				)
+				self._check_filter_field_permission(target_doctype, target_fieldname, parent_doctype_for_perm)
+
 				self.query = dynamic_field.apply_join(self.query)
 				# Return the pypika Field object associated with the dynamic field
 				return dynamic_field.field
@@ -330,9 +337,36 @@ class Engine:
 					title=_("Invalid Filter"),
 				)
 			# It's a simple, valid fieldname like 'name' or 'creation'
-			# Convert string field name to pypika Field object for the specified/current doctype
 			target_doctype = doctype or self.doctype
-			return frappe.qb.DocType(target_doctype)[field]
+			target_fieldname = field
+			parent_doctype_for_perm = self.parent_doctype if doctype else None
+			self._check_filter_field_permission(target_doctype, target_fieldname, parent_doctype_for_perm)
+
+			# Convert string field name to pypika Field object for the specified/current doctype
+			return frappe.qb.DocType(target_doctype)[target_fieldname]
+
+	def _check_filter_field_permission(self, doctype: str, fieldname: str, parent_doctype: str | None = None):
+		"""Check if the user has permission to access the given field for filtering."""
+		if not self.apply_permissions:
+			return
+
+		permission_type = self.get_permission_type(doctype)
+		permitted_fields = get_permitted_fields(
+			doctype=doctype,
+			parenttype=parent_doctype,
+			permission_type=permission_type,
+			ignore_virtual=True,
+			user=self.user,
+		)
+
+		if fieldname not in permitted_fields:
+			frappe.throw(
+				_("You do not have permission to filter on field: {0}").format(
+					frappe.bold(f"{doctype}.{fieldname}")
+				),
+				frappe.PermissionError,
+				title=_("Permission Error"),
+			)
 
 	def parse_string_field(self, field: str):
 		"""

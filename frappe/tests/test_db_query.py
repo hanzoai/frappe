@@ -33,6 +33,7 @@ def setup_test_user(set_user=False):
 
 	yield test_user
 
+	test_user.reload()
 	test_user.remove_roles("Blogger")
 	test_user.add_roles(*user_roles)
 

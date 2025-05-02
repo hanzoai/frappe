@@ -987,6 +987,139 @@ class TestQuery(IntegrationTestCase):
 		test_user_doc.remove_roles(test_role)
 		frappe.delete_doc("Role", test_role, force=True)
 
+	def test_filter_direct_field_permission(self):
+		"""Test that filtering is only allowed on permitted direct fields."""
+		with setup_patched_blog_post(), setup_test_user(set_user=True) as user:
+			# Create a test blog post
+			test_post = frappe.get_doc(
+				{
+					"doctype": "Blog Post",
+					"title": "Test Filter Permission Post",
+					"content": "Test Content",
+					"blog_category": "-test-blog-category",
+					"published": 1,  # permlevel 1
+				}
+			).insert(ignore_permissions=True, ignore_mandatory=True)
+
+			# User has read permlevel 0, but not 1 (published field)
+			# Try filtering on permitted field (title - permlevel 0)
+			try:
+				frappe.qb.get_query(
+					"Blog Post",
+					filters={"title": test_post.title},
+					ignore_permissions=False,
+					user=user.name,
+				).run()
+			except frappe.PermissionError as e:
+				self.fail(f"Filtering on permitted field 'title' failed: {e}")
+
+			# Try filtering on non-permitted field (published - permlevel 1)
+			with self.assertRaises(frappe.PermissionError) as cm:
+				frappe.qb.get_query(
+					"Blog Post",
+					filters={"published": 1},
+					ignore_permissions=False,
+					user=user.name,
+				).run()
+			self.assertIn("You do not have permission to filter on field", str(cm.exception))
+			self.assertIn("Blog Post.published", str(cm.exception))
+
+			# Cleanup
+			frappe.set_user("Administrator")
+			test_post.delete()
+
+	def test_filter_linked_field_permission(self):
+		"""Test that filtering is only allowed on permitted linked fields."""
+		with setup_test_user(set_user=True) as user:
+			target_dt_name = "TargetDocForFilterPerm"
+			source_dt_name = "SourceDocForFilterPerm"
+			test_role = "FilterPermTestRole"
+
+			# Cleanup previous runs
+			frappe.set_user("Administrator")
+			frappe.delete_doc("DocType", target_dt_name, ignore_missing=True, force=True)
+			frappe.delete_doc("DocType", source_dt_name, ignore_missing=True, force=True)
+			frappe.delete_doc("Role", test_role, ignore_missing=True, force=True)
+			test_user_doc = frappe.get_doc("User", user.name)
+			test_user_doc.remove_roles(test_role)
+
+			# Create Doctypes
+			target_dt = new_doctype(
+				target_dt_name,
+				fields=[
+					{
+						"fieldname": "target_field",
+						"fieldtype": "Data",
+						"permlevel": 1,
+						"label": "Target Field",
+					},
+					{"fieldname": "other_target_field", "fieldtype": "Data", "label": "Other Target Field"},
+				],
+			).insert(ignore_if_duplicate=True)
+
+			source_dt = new_doctype(
+				source_dt_name,
+				fields=[
+					{
+						"fieldname": "link_field",
+						"fieldtype": "Link",
+						"options": target_dt_name,
+						"label": "Link Field",
+					}
+				],
+			).insert(ignore_if_duplicate=True)
+
+			# Create Records
+			target_doc = frappe.get_doc(
+				doctype=target_dt_name, target_field="Secret Data", other_target_field="Public Data"
+			).insert(ignore_permissions=True)
+			source_doc = frappe.get_doc(doctype=source_dt_name, link_field=target_doc.name).insert(
+				ignore_permissions=True
+			)
+
+			# Setup Role and Permissions
+			frappe.get_doc({"doctype": "Role", "role_name": test_role}).insert(ignore_if_duplicate=True)
+			add_permission(source_dt_name, test_role, 0, ptype="read")
+			add_permission(target_dt_name, test_role, 0, ptype="read")
+			update_permission_property(
+				target_dt_name, test_role, 1, "read", 0, validate=False
+			)  # No permlevel 1 read
+			test_user_doc.add_roles(test_role)
+
+			# Test as the restricted user
+			frappe.set_user(user.name)
+
+			# Try filtering on permitted linked field (other_target_field - permlevel 0)
+			try:
+				frappe.qb.get_query(
+					source_dt_name,
+					filters={"link_field.other_target_field": "Public Data"},
+					ignore_permissions=False,
+					user=user.name,
+				).run()
+			except frappe.PermissionError as e:
+				self.fail(f"Filtering on permitted linked field 'link_field.other_target_field' failed: {e}")
+
+			# Try filtering on non-permitted linked field (target_field - permlevel 1)
+			with self.assertRaises(frappe.PermissionError) as cm_link:
+				frappe.qb.get_query(
+					source_dt_name,
+					filters={"link_field.target_field": "Secret Data"},
+					ignore_permissions=False,
+					user=user.name,
+				).run()
+			self.assertIn("You do not have permission to filter on field", str(cm_link.exception))
+			self.assertIn(f"{target_dt_name}.target_field", str(cm_link.exception))
+
+			# Cleanup
+			frappe.set_user("Administrator")
+			source_doc.delete(ignore_permissions=True)
+			target_doc.delete(ignore_permissions=True)
+			source_dt.delete()
+			target_dt.delete()
+			test_user_doc.remove_roles(test_role)
+			frappe.delete_doc("Role", test_role, force=True)
+
 
 # This function is used as a permission query condition hook
 def test_permission_hook_condition(user):
