@@ -546,14 +546,23 @@ class Engine:
 		"""Filter the list of fields based on permlevel."""
 		allowed_fields = []
 		parent_permission_type = self.get_permission_type(self.doctype)
+		permitted_fields_cache = {}
 
-		permitted_fields_set = set(
-			get_permitted_fields(
-				doctype=self.doctype,
-				parenttype=self.parent_doctype,
-				permission_type=parent_permission_type,
-				ignore_virtual=True,
-			)
+		def get_cached_permitted_fields(doctype, parenttype, permission_type):
+			cache_key = (doctype, parenttype, permission_type)
+			if cache_key not in permitted_fields_cache:
+				permitted_fields_cache[cache_key] = set(
+					get_permitted_fields(
+						doctype=doctype,
+						parenttype=parenttype,
+						permission_type=permission_type,
+						ignore_virtual=True,
+					)
+				)
+			return permitted_fields_cache[cache_key]
+
+		permitted_fields_set = get_cached_permitted_fields(
+			self.doctype, self.parent_doctype, parent_permission_type
 		)
 
 		for field in self.fields:
@@ -563,13 +572,8 @@ class Engine:
 					continue
 
 				# Cache permitted fields for child doctypes if accessed multiple times
-				permitted_child_fields_set = set(
-					get_permitted_fields(
-						doctype=field.doctype,
-						parenttype=field.parent_doctype,
-						permission_type=self.get_permission_type(field.doctype),
-						ignore_virtual=True,
-					)
+				permitted_child_fields_set = get_cached_permitted_fields(
+					field.doctype, field.parent_doctype, self.get_permission_type(field.doctype)
 				)
 				# Check permission for the specific field in the child table
 				if field.fieldname in permitted_child_fields_set:
@@ -577,20 +581,27 @@ class Engine:
 			elif isinstance(field, LinkTableField):
 				# Check permission for the link field *in the parent doctype*
 				if field.link_fieldname in permitted_fields_set:
-					allowed_fields.append(field)
+					# Also check if user has permission to read/select the target doctype
+					target_doctype = field.doctype
+					has_target_perm = frappe.has_permission(
+						target_doctype, "select", user=self.user
+					) or frappe.has_permission(target_doctype, "read", user=self.user)
+
+					if has_target_perm:
+						# Finally, check if the specific field *in the target doctype* is permitted
+						permitted_target_fields_set = get_cached_permitted_fields(
+							target_doctype, None, self.get_permission_type(target_doctype)
+						)
+						if field.fieldname in permitted_target_fields_set:
+							allowed_fields.append(field)
 			elif isinstance(field, ChildQuery):
 				if parent_permission_type == "select":
 					# Skip child queries if parent permission is only 'select'
 					continue
 
 				# Cache permitted fields for the child doctype of the query
-				permitted_child_fields_set = set(
-					get_permitted_fields(
-						doctype=field.doctype,
-						parenttype=field.parent_doctype,
-						permission_type=self.get_permission_type(field.doctype),
-						ignore_virtual=True,
-					)
+				permitted_child_fields_set = get_cached_permitted_fields(
+					field.doctype, field.parent_doctype, self.get_permission_type(field.doctype)
 				)
 				# Filter the fields *within* the ChildQuery object based on permissions
 				field.fields = [f for f in field.fields if f in permitted_child_fields_set]

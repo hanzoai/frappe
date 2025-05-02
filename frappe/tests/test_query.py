@@ -877,6 +877,116 @@ class TestQuery(IntegrationTestCase):
 		frappe.clear_cache()
 		frappe.hooks.permission_query_conditions = original_hooks
 
+	def test_link_field_target_permission(self):
+		"""Test that accessing link_field.target_field respects target field's permlevel."""
+		target_dt_name = "TargetDocForLinkPerm"
+		source_dt_name = "SourceDocForLinkPerm"
+		test_role = "LinkPermTestRole"
+		test_user = "test2@example.com"
+
+		# Cleanup previous runs
+		frappe.set_user("Administrator")
+		frappe.delete_doc("DocType", target_dt_name, ignore_missing=True, force=True)
+		frappe.delete_doc("DocType", source_dt_name, ignore_missing=True, force=True)
+		frappe.delete_doc("Role", test_role, ignore_missing=True, force=True)
+		test_user_doc = frappe.get_doc("User", test_user)
+		test_user_doc.remove_roles(test_role)
+
+		# Create Doctypes
+		target_dt = new_doctype(
+			target_dt_name,
+			fields=[
+				{"fieldname": "target_field", "fieldtype": "Data", "permlevel": 1, "label": "Target Field"},
+				{"fieldname": "other_target_field", "fieldtype": "Data", "label": "Other Target Field"},
+			],
+		).insert(ignore_if_duplicate=True)
+
+		source_dt = new_doctype(
+			source_dt_name,
+			fields=[
+				{
+					"fieldname": "link_field",
+					"fieldtype": "Link",
+					"options": target_dt_name,
+					"label": "Link Field",
+				}
+			],
+		).insert(ignore_if_duplicate=True)
+
+		# Create Records
+		target_doc = frappe.get_doc(
+			doctype=target_dt_name, target_field="Secret Data", other_target_field="Public Data"
+		).insert(ignore_permissions=True)
+		source_doc = frappe.get_doc(doctype=source_dt_name, link_field=target_doc.name).insert(
+			ignore_permissions=True
+		)
+
+		# Setup Role and Permissions
+		frappe.get_doc({"doctype": "Role", "role_name": test_role}).insert(ignore_if_duplicate=True)
+		add_permission(source_dt_name, test_role, 0, ptype="read")
+		add_permission(target_dt_name, test_role, 0, ptype="read")
+		# Ensure no permlevel 1 read for test_role
+		update_permission_property(target_dt_name, test_role, 1, "read", 0, validate=False)
+		# Ensure System Manager can read permlevel 1
+		add_permission(target_dt_name, "System Manager", 1, ptype="read")
+		test_user_doc.add_roles(test_role)
+
+		# Test as the restricted user
+		frappe.set_user(test_user)
+		result_restricted = frappe.qb.get_query(
+			source_dt_name,
+			filters={"name": source_doc.name},
+			fields=[
+				"name",
+				"link_field.target_field as linked_secret",
+				"link_field.other_target_field as linked_public",
+			],
+			ignore_permissions=False,
+		).run(as_dict=True)
+
+		self.assertEqual(len(result_restricted), 1)
+		self.assertIn(
+			"linked_public",
+			result_restricted[0],
+			"Permlevel 0 target field should be accessible via link.",
+		)
+		self.assertNotIn(
+			"linked_secret",
+			result_restricted[0],
+			"Permlevel 1 target field should NOT be accessible via link for restricted user.",
+		)
+
+		# Test as Administrator (who has System Manager role)
+		frappe.set_user("Administrator")
+		result_admin = frappe.qb.get_query(
+			source_dt_name,
+			filters={"name": source_doc.name},
+			fields=[
+				"name",
+				"link_field.target_field as linked_secret",
+				"link_field.other_target_field as linked_public",
+			],
+			ignore_permissions=False,  # Still check permissions, but Admin has them
+		).run(as_dict=True)
+
+		self.assertEqual(len(result_admin), 1)
+		self.assertIn(
+			"linked_public", result_admin[0], "Permlevel 0 target field should be accessible for Admin."
+		)
+		self.assertIn(
+			"linked_secret", result_admin[0], "Permlevel 1 target field should be accessible for Admin."
+		)
+		self.assertEqual(result_admin[0].linked_secret, "Secret Data")
+
+		# Cleanup
+		frappe.set_user("Administrator")
+		source_doc.delete(ignore_permissions=True)
+		target_doc.delete(ignore_permissions=True)
+		source_dt.delete()
+		target_dt.delete()
+		test_user_doc.remove_roles(test_role)
+		frappe.delete_doc("Role", test_role, force=True)
+
 
 # This function is used as a permission query condition hook
 def test_permission_hook_condition(user):
