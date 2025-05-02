@@ -200,6 +200,191 @@ class TestQuery(IntegrationTestCase):
 			frappe.qb.from_(user_doctype).select(user_doctype.email).get_sql(),
 		)
 
+	def test_field_validation_select(self):
+		"""Test validation for fields in SELECT clause."""
+
+		valid_fields = [
+			"name",
+			"`name`",
+			"tabUser.name",
+			"`tabUser`.`name`",
+			"name as alias",
+			"`name` as alias",
+			"tabUser.name as alias",
+			"`tabUser`.`name` as alias",
+			"COUNT(*)",
+			"COUNT(name)",
+			"COUNT(`name`)",
+			"COUNT(`tabUser`.`name`)",
+			"COUNT(*) as count_alias",
+			"SUM(amount) as total",
+			"*",
+		]
+		invalid_fields = [
+			"name; DROP TABLE users",
+			"`name` ; SELECT * FROM secrets",
+			"name--comment",
+			"name /* comment */",
+			"name AS alias; --",
+			"COUNT(name) as alias; SELECT 1",
+			"invalid-field-name",
+			"table.invalid-field",
+			"`table`.`invalid-field`",
+			"field with space",
+			"`field with space`",
+			"field as alias with space",
+			"field as `alias with space`",
+			"COUNT(name;)",
+		]
+
+		for field in valid_fields:
+			try:
+				frappe.qb.get_query("User", fields=field).get_sql()
+				# Test as list item too
+				frappe.qb.get_query("User", fields=[field]).get_sql()
+			except Exception as e:
+				self.fail(f"Valid SELECT field '{field}' failed validation: {e}")
+
+		for field in invalid_fields:
+			with self.assertRaises(
+				(frappe.PermissionError, frappe.ValidationError),
+				msg=f"Invalid SELECT field '[{field}]' passed validation",
+			):
+				frappe.qb.get_query("User", fields=[field]).get_sql()
+
+	def test_field_validation_filters(self):
+		"""Test validation for fields used in filters (WHERE clause)."""
+		valid_fields = ["name", "creation", "language.name"]
+		# Filters should not allow aliases or functions directly as field names
+		invalid_fields = [
+			"tabUser.name",
+			"`tabUser`.`name`",
+			"name as alias",
+			"`name` as alias",
+			"tabUser.name as alias",
+			"`tabUser`.`name` as alias",
+			"COUNT(*)",
+			"COUNT(name)",
+			"name; DROP TABLE users",
+			"`name` ; SELECT * FROM secrets",
+			"name--comment",
+			"name /* comment */",
+			"invalid-field-name",
+			"table.invalid-field",
+			"`table`.`invalid-field`",
+			"field with space",
+			"`field with space`",
+		]
+
+		for field in valid_fields:
+			try:
+				# Test in dict filter
+				frappe.qb.get_query("User", filters={field: "value"}).get_sql()
+				# Test in list filter
+				frappe.qb.get_query("User", filters=[[field, "=", "value"]]).get_sql()
+				# Test in list filter with doctype
+				frappe.qb.get_query("User", filters=[["User", field, "=", "value"]]).get_sql()
+			except Exception as e:
+				self.fail(f"Valid filter field '{field}' failed validation: {e}")
+
+		for field in invalid_fields:
+			with self.assertRaises(
+				frappe.ValidationError, msg=f"Invalid filter field '{{{field}: val}}' passed validation"
+			):
+				frappe.qb.get_query("User", filters={field: "value"}).get_sql()
+
+	def test_field_validation_group_by(self):
+		"""Test validation for fields in GROUP BY clause."""
+		valid_fields = [
+			"name",
+			"`name`",
+			"tabUser.name",
+			"`tabUser`.`name`",
+			"1",  # Allow numeric indices
+			"name, email",
+			"`name`, `tabUser`.`email`",
+			"1, 2",
+		]
+		# GROUP BY should not allow aliases or functions
+		invalid_fields = [
+			"name as alias",
+			"COUNT(*)",
+			"COUNT(name)",
+			"name; DROP TABLE users",
+			"`name` ; SELECT * FROM secrets",
+			"name--comment",
+			"name /* comment */",
+			"invalid-field-name",
+			"table.invalid-field",
+			"`table`.`invalid-field`",
+			"field with space",
+			"`field with space`",
+			"name, email; SELECT 1",
+		]
+
+		for group_by_str in valid_fields:
+			try:
+				frappe.qb.get_query("User", group_by=group_by_str).get_sql()
+			except Exception as e:
+				self.fail(f"Valid GROUP BY string '{group_by_str}' failed validation: {e}")
+
+		for group_by_str in invalid_fields:
+			with self.assertRaises(
+				frappe.PermissionError, msg=f"Invalid GROUP BY string '{group_by_str}' passed validation"
+			):
+				frappe.qb.get_query("User", group_by=group_by_str).get_sql()
+
+	def test_field_validation_order_by(self):
+		"""Test validation for fields in ORDER BY clause."""
+		valid_fields = [
+			"name",
+			"`name`",
+			"tabUser.name",
+			"`tabUser`.`name`",
+			"1",  # Allow numeric indices
+			"name asc",
+			"`name` DESC",
+			"tabUser.name Asc",
+			"`tabUser`.`name` desc",
+			"1 asc",
+			"2 DESC",
+			"name, email",
+			"`name` asc, `tabUser`.`email` DESC",
+			"1 asc, 2 desc",
+		]
+		# ORDER BY should not allow aliases or functions, or invalid directions
+		invalid_fields = [
+			"name as alias",
+			"COUNT(*)",
+			"COUNT(name)",
+			"name; DROP TABLE users",
+			"`name` ; SELECT * FROM secrets",
+			"name--comment",
+			"name /* comment */",
+			"invalid-field-name",
+			"table.invalid-field",
+			"`table`.`invalid-field`",
+			"field with space",
+			"`field with space`",
+			"name sideways",
+			"name ASC;",
+			"name, email; SELECT 1",
+			"name INVALID_DIRECTION",
+		]
+
+		for order_by_str in valid_fields:
+			try:
+				frappe.qb.get_query("User", order_by=order_by_str).get_sql()
+			except Exception as e:
+				self.fail(f"Valid ORDER BY string '{order_by_str}' failed validation: {e}")
+
+		for order_by_str in invalid_fields:
+			with self.assertRaises(
+				(frappe.PermissionError, ValueError),
+				msg=f"Invalid ORDER BY string '{order_by_str}' passed validation",
+			):
+				frappe.qb.get_query("User", order_by=order_by_str).get_sql()
+
 	def test_aliasing(self):
 		user_doctype = frappe.qb.DocType("User")
 		self.assertEqual(
@@ -260,16 +445,17 @@ class TestQuery(IntegrationTestCase):
 			),
 		)
 
-		self.assertRaisesRegex(
-			frappe.PermissionError,
-			"Invalid filter",
-			lambda: frappe.qb.get_query(
-				"DocType",
-				fields=["name"],
-				filters={"permissions.role": "System Manager"},
-				validate_filters=True,
-			),
-		)
+		# validate_filters is deprecated, test not needed
+		# self.assertRaisesRegex(
+		# 	frappe.PermissionError,
+		# 	"Invalid filter",
+		# 	lambda: frappe.qb.get_query(
+		# 		"DocType",
+		# 		fields=["name"],
+		# 		filters={"permissions.role": "System Manager"},
+		# 		validate_filters=True,
+		# 	),
+		# )
 
 		self.assertEqual(
 			frappe.qb.get_query(
@@ -366,11 +552,12 @@ class TestQuery(IntegrationTestCase):
 			),
 		)
 
-	@run_only_if(db_type_is.MARIADB)
-	def test_comment_stripping(self):
-		self.assertNotIn(
-			"email", frappe.qb.get_query("User", fields=["name", "#email"], filters={}).get_sql()
-		)
+	# fields now has strict validation, so this test is not valid anymore
+	# @run_only_if(db_type_is.MARIADB)
+	# def test_comment_stripping(self):
+	# 	self.assertNotIn(
+	# 		"email", frappe.qb.get_query("User", fields=["name", "#email"], filters={}).get_sql()
+	# 	)
 
 	def test_nestedset(self):
 		frappe.db.sql("delete from `tabDocType` where `name` = 'Test Tree DocType'")
