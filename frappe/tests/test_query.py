@@ -2,6 +2,7 @@ import itertools
 
 import frappe
 from frappe.core.doctype.doctype.test_doctype import new_doctype
+from frappe.permissions import add_permission, update_permission_property
 from frappe.query_builder import Field
 from frappe.query_builder.functions import Abs, Count, Ifnull, Max, Now, Timestamp
 from frappe.tests import IntegrationTestCase
@@ -733,6 +734,56 @@ class TestQuery(IntegrationTestCase):
 			self.assertIn("published", field_list)
 
 			test_post.delete()
+
+	def test_child_table_access_with_select_permission(self):
+		"""Test that child table fields are inaccessible if user only has select perm on parent."""
+
+		test_role = "Select Note Test Role"
+		test_user_email = "test2@example.com"  # Use existing test user
+		test_note_title = "Child Select Test Note"
+
+		# Cleanup
+		frappe.set_user("Administrator")
+		test_user = frappe.get_doc("User", test_user_email)
+		test_user.remove_roles(test_role)
+		frappe.delete_doc("Role", test_role, ignore_missing=True, force=True)
+		frappe.delete_doc("Note", {"title": test_note_title}, ignore_missing=True, force=True)
+
+		# Setup Role with 'select' on Note and 'read' on Note Seen By
+		frappe.get_doc({"doctype": "Role", "role_name": test_role}).insert(ignore_if_duplicate=True)
+		# Grant select on Note, read on Note Seen By
+		add_permission("Note", test_role, 0, ptype="select")
+		add_permission("Note Seen By", test_role, 0, ptype="read")
+		# Ensure no read permission on Note for this role by explicitly setting it to 0
+		update_permission_property("Note", test_role, 0, "read", 0, validate=False)
+		test_user.add_roles(test_role)
+
+		note = frappe.get_doc(
+			doctype="Note", title=test_note_title, public=1, seen_by=[{"user": "Administrator"}]
+		).insert(ignore_permissions=True)
+
+		frappe.set_user(test_user_email)
+		query = frappe.qb.get_query(
+			"Note",
+			filters={"name": note.name},
+			fields=["name", {"seen_by": ["user"]}],
+			ignore_permissions=False,
+		)
+		result = query.run(as_dict=True)
+
+		self.assertEqual(len(result), 1, "Should find the note record")
+		self.assertIn("name", result[0], "Parent field 'name' should be accessible")
+		self.assertNotIn(
+			"seen_by",
+			result[0],
+			"Child table field 'seen_by' should NOT be accessible with only 'select' on parent",
+		)
+
+		# Cleanup
+		frappe.set_user("Administrator")
+		note.delete(ignore_permissions=True)
+		test_user.remove_roles(test_role)
+		frappe.delete_doc("Role", test_role, force=True, ignore_permissions=True)
 
 	def test_nested_permission(self):
 		"""Test permission on nested doctypes"""

@@ -391,8 +391,8 @@ class Engine:
 		if not fields:
 			return []
 
-		# Handle direct pypika Field or Function objects
-		if isinstance(fields, Field | AggregateFunction):
+		# return if fields is already a pypika Term
+		if isinstance(fields, Term):
 			return [fields]
 
 		initial_field_list = []
@@ -545,17 +545,23 @@ class Engine:
 	def apply_field_permissions(self):
 		"""Filter the list of fields based on permlevel."""
 		allowed_fields = []
+		parent_permission_type = self.get_permission_type(self.doctype)
+
 		permitted_fields_set = set(
 			get_permitted_fields(
 				doctype=self.doctype,
 				parenttype=self.parent_doctype,
-				permission_type=self.get_permission_type(self.doctype),
+				permission_type=parent_permission_type,
 				ignore_virtual=True,
 			)
 		)
 
 		for field in self.fields:
 			if isinstance(field, ChildTableField):
+				if parent_permission_type == "select":
+					# Skip child table fields if parent permission is only 'select'
+					continue
+
 				# Cache permitted fields for child doctypes if accessed multiple times
 				permitted_child_fields_set = set(
 					get_permitted_fields(
@@ -573,6 +579,10 @@ class Engine:
 				if field.link_fieldname in permitted_fields_set:
 					allowed_fields.append(field)
 			elif isinstance(field, ChildQuery):
+				if parent_permission_type == "select":
+					# Skip child queries if parent permission is only 'select'
+					continue
+
 				# Cache permitted fields for the child doctype of the query
 				permitted_child_fields_set = set(
 					get_permitted_fields(
