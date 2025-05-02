@@ -32,30 +32,22 @@ frappe.ui.Sidebar = class Sidebar {
 
 		this.setup_pages();
 		this.apps_switcher.populate_apps_menu();
+		this.handle_outside_click();
 	}
 
 	make_dom() {
 		this.set_default_app();
 		this.wrapper = $(frappe.render_template("sidebar")).prependTo("body");
 
-		this.app_switcher_dropdown = $(
-			frappe.render_template("apps_switcher", {
-				app_logo_url: frappe.boot.app_data[0].app_logo_url,
-				app_title: __(frappe.boot.app_data[0].app_title),
-			})
-		).prependTo(this.wrapper.find(".body-sidebar"));
-
 		this.$sidebar = this.wrapper.find(".sidebar-items");
 
 		this.wrapper.find(".body-sidebar .collapse-sidebar-link").on("click", () => {
-			if (frappe.is_mobile()) this.apps_switcher.app_switcher_menu.toggleClass("hidden");
 			this.toggle_sidebar();
 		});
 
 		this.wrapper.find(".overlay").on("click", () => {
 			this.close_sidebar();
 		});
-
 		this.apps_switcher = new frappe.ui.AppsSwitcher(this);
 		this.apps_switcher.create_app_data_map();
 	}
@@ -486,5 +478,14 @@ frappe.ui.Sidebar = class Sidebar {
 		$(".body-sidebar").css("height", window.innerHeight + "px");
 		$(".overlay").css("height", window.innerHeight + "px");
 		document.body.style.overflow = "hidden";
+	}
+	handle_outside_click() {
+		document.addEventListener("click", (e) => {
+			if (this.apps_switcher.drop_down_expanded) {
+				if (!e.composedPath().includes(this.apps_switcher.app_switcher_dropdown)) {
+					this.apps_switcher.toggle_app_menu();
+				}
+			}
+		});
 	}
 };
