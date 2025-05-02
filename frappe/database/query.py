@@ -645,6 +645,13 @@ class Engine:
 						fallback_value = int(fallback_sql)
 					except (ValueError, TypeError):
 						fallback_value = fallback_sql
+
+				if fallback_value == _value:
+					if _operator == "=":
+						return _field.isnull() | _field.eq(_value)
+					elif _operator == "!=":
+						return operator_fn(_field, _value)
+
 				_field = functions.IfNull(_field, ValueWrapper(fallback_value))
 
 			return operator_fn(_field, _value)
