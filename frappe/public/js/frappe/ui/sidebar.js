@@ -455,6 +455,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.sidebar_expanded = false;
 		this.expand_sidebar();
 		this.close_children_item();
+		if (frappe.is_mobile()) frappe.app.sidebar.prevent_scroll();
 	}
 	open_sidebar() {
 		this.sidebar_expanded = true;
@@ -487,5 +488,13 @@ frappe.ui.Sidebar = class Sidebar {
 				}
 			}
 		});
+	}
+	prevent_scroll() {
+		let main_section = $(".main-section");
+		if (this.sidebar_expanded) {
+			main_section.css("overflow", "hidden");
+		} else {
+			main_section.css("overflow", "");
+		}
 	}
 };
