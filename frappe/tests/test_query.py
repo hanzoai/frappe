@@ -74,7 +74,7 @@ class TestQuery(IntegrationTestCase):
 					["DocType", "parent", "=", "something"],
 				],
 			).get_sql(),
-			"SELECT `tabDocType`.* FROM `tabDocType` LEFT JOIN `tabDocField` ON `tabDocField`.`parent`=`tabDocType`.`name` AND `tabDocField`.`parenttype`='DocType' WHERE `tabDocField`.`name` LIKE 'f%' AND `tabDocType`.`parent`='something'",
+			"SELECT `tabDocType`.* FROM `tabDocType` LEFT JOIN `tabDocField` ON `tabDocField`.`parent`=`tabDocType`.`name` AND `tabDocField`.`parenttype`='DocType' AND `tabDocField`.`parentfield`='fields' WHERE `tabDocField`.`name` LIKE 'f%' AND `tabDocType`.`parent`='something'",
 		)
 
 	@run_only_if(db_type_is.MARIADB)
@@ -441,22 +441,10 @@ class TestQuery(IntegrationTestCase):
 				fields=["name"],
 				filters={"permissions.role": "System Manager"},
 			).get_sql(),
-			"SELECT `tabDocType`.`name` FROM `tabDocType` LEFT JOIN `tabDocPerm` ON `tabDocPerm`.`parent`=`tabDocType`.`name` AND `tabDocPerm`.`parenttype`='DocType' WHERE `tabDocPerm`.`role`='System Manager'".replace(
+			"SELECT `tabDocType`.`name` FROM `tabDocType` LEFT JOIN `tabDocPerm` ON `tabDocPerm`.`parent`=`tabDocType`.`name` AND `tabDocPerm`.`parenttype`='DocType' AND `tabDocPerm`.`parentfield`='permissions' WHERE `tabDocPerm`.`role`='System Manager'".replace(
 				"`", '"' if frappe.db.db_type == "postgres" else "`"
 			),
 		)
-
-		# validate_filters is deprecated, test not needed
-		# self.assertRaisesRegex(
-		# 	frappe.PermissionError,
-		# 	"Invalid filter",
-		# 	lambda: frappe.qb.get_query(
-		# 		"DocType",
-		# 		fields=["name"],
-		# 		filters={"permissions.role": "System Manager"},
-		# 		validate_filters=True,
-		# 	),
-		# )
 
 		self.assertEqual(
 			frappe.qb.get_query(
@@ -507,6 +495,142 @@ class TestQuery(IntegrationTestCase):
 			"SELECT `name` FROM `tabDocType`".replace("`", '"' if frappe.db.db_type == "postgres" else "`"),
 		)
 
+	def test_nested_filters(self):
+		"""Test nested filter conditions with AND/OR logic."""
+		User = frappe.qb.DocType("User")
+
+		# Simple AND
+		filters_and = [
+			["email", "=", "admin@example.com"],
+			"and",
+			["first_name", "=", "Admin"],
+		]
+		expected_sql_and = (
+			frappe.qb.from_(User)
+			.select(User.name)
+			.where((User.email == "admin@example.com") & (User.first_name == "Admin"))
+			.get_sql()
+		)
+		self.assertEqual(frappe.qb.get_query("User", filters=filters_and).get_sql(), expected_sql_and)
+
+		# Simple OR
+		filters_or = [
+			["email", "=", "admin@example.com"],
+			"or",
+			["email", "=", "guest@example.com"],
+		]
+		expected_sql_or = (
+			frappe.qb.from_(User)
+			.select(User.name)
+			.where((User.email == "admin@example.com") | (User.email == "guest@example.com"))
+			.get_sql()
+		)
+		self.assertEqual(frappe.qb.get_query("User", filters=filters_or).get_sql(), expected_sql_or)
+
+		# Mixed AND/OR
+		filters_mixed = [
+			["first_name", "=", "Admin"],
+			"and",
+			[["email", "=", "admin@example.com"], "or", ["email", "=", "guest@example.com"]],
+		]
+		expected_sql_mixed = (
+			frappe.qb.from_(User)
+			.select(User.name)
+			.where(
+				(User.first_name == "Admin")
+				& ((User.email == "admin@example.com") | (User.email == "guest@example.com"))
+			)
+			.get_sql()
+		)
+		self.assertEqual(frappe.qb.get_query("User", filters=filters_mixed).get_sql(), expected_sql_mixed)
+
+		# Nested AND/OR
+		filters_nested = [
+			[["first_name", "=", "Admin"], "and", ["enabled", "=", 1]],
+			"or",
+			[["first_name", "=", "Guest"], "and", ["enabled", "=", 0]],
+		]
+		expected_sql_nested = (
+			frappe.qb.from_(User)
+			.select(User.name)
+			.where(
+				((User.first_name == "Admin") & (User.enabled == 1))
+				| ((User.first_name == "Guest") & (User.enabled == 0))
+			)
+			.get_sql()
+		)
+		self.assertEqual(frappe.qb.get_query("User", filters=filters_nested).get_sql(), expected_sql_nested)
+
+		# Single Grouped Condition (wrapped in extra list)
+		filters_single_group = [[["first_name", "=", "Admin"], "and", ["enabled", "=", 1]]]
+		expected_sql_single_group = (
+			frappe.qb.from_(User)
+			.select(User.name)
+			.where((User.first_name == "Admin") & (User.enabled == 1))
+			.get_sql()
+		)
+		self.assertEqual(
+			frappe.qb.get_query("User", filters=filters_single_group).get_sql(), expected_sql_single_group
+		)
+
+		# Test with different operators and values
+		filters_complex = [
+			["creation", ">", "2023-01-01"],
+			"and",
+			[
+				["email", "like", "%@example.com"],
+				"or",
+				[["first_name", "in", ["Admin", "Guest"]], "and", ["enabled", "!=", 1]],
+			],
+		]
+		expected_sql_complex = (
+			frappe.qb.from_(User)
+			.select(User.name)
+			.where(
+				(User.creation > "2023-01-01")
+				& (
+					(User.email.like("%@example.com"))
+					| ((User.first_name.isin(["Admin", "Guest"])) & (User.enabled != 1))
+				)
+			)
+			.get_sql()
+		)
+		self.assertEqual(frappe.qb.get_query("User", filters=filters_complex).get_sql(), expected_sql_complex)
+
+	def test_invalid_nested_filters(self):
+		"""Test invalid formats for nested filters."""
+		# Invalid operator
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", filters=[["email", "=", "a"], "xor", ["email", "=", "b"]]).get_sql()
+		self.assertIn("Expected 'and' or 'or' operator", str(cm.exception))
+
+		# Missing condition after operator
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", filters=[["email", "=", "a"], "and"]).get_sql()
+		self.assertIn("Filter condition missing after operator", str(cm.exception))
+
+		# Starting with operator
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", filters=["and", ["email", "=", "a"]]).get_sql()
+		self.assertIn("Invalid start for filter condition", str(cm.exception))
+
+		# Invalid condition type (string instead of list/tuple)
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", filters=[["email", "=", "a"], "and", "enabled = 1"]).get_sql()
+		self.assertIn("Invalid filter condition", str(cm.exception))
+
+		# Malformed simple filter inside nested
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query(
+				"User", filters=[["email", "=", "a", "extra"], "and", ["enabled", "=", 1]]
+			).get_sql()
+		self.assertIn("Invalid simple filter format", str(cm.exception))
+
+		# Nested list doesn't start with a condition list/tuple
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", filters=["email", "and", ["enabled", "=", 1]]).get_sql()
+		self.assertIn("Invalid start for filter condition", str(cm.exception))
+
 	def test_implicit_join_query(self):
 		self.maxDiff = None
 
@@ -521,6 +645,7 @@ class TestQuery(IntegrationTestCase):
 			),
 		)
 
+		# output doesn't contain parentfield condition because it can't be inferred
 		self.assertEqual(
 			frappe.qb.get_query(
 				"Note",
@@ -532,13 +657,14 @@ class TestQuery(IntegrationTestCase):
 			),
 		)
 
+		# output contains parentfield condition because it can be inferred by "seen_by.user"
 		self.assertEqual(
 			frappe.qb.get_query(
 				"Note",
 				filters={"name": "Test Note Title"},
 				fields=["name", "seen_by.user as seen_by", "`tabNote Seen By`.`idx` as idx"],
 			).get_sql(),
-			"SELECT `tabNote`.`name`,`tabNote Seen By`.`user` `seen_by`,`tabNote Seen By`.`idx` `idx` FROM `tabNote` LEFT JOIN `tabNote Seen By` ON `tabNote Seen By`.`parent`=`tabNote`.`name` AND `tabNote Seen By`.`parenttype`='Note' WHERE `tabNote`.`name`='Test Note Title'".replace(
+			"SELECT `tabNote`.`name`,`tabNote Seen By`.`user` `seen_by`,`tabNote Seen By`.`idx` `idx` FROM `tabNote` LEFT JOIN `tabNote Seen By` ON `tabNote Seen By`.`parent`=`tabNote`.`name` AND `tabNote Seen By`.`parenttype`='Note' AND `tabNote Seen By`.`parentfield`='seen_by' WHERE `tabNote`.`name`='Test Note Title'".replace(
 				"`", '"' if frappe.db.db_type == "postgres" else "`"
 			),
 		)

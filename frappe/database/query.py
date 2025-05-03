@@ -187,23 +187,80 @@ class Engine:
 
 		if isinstance(filters, Criterion):
 			self.query = self.query.where(filters)
+			return
 
-		elif isinstance(filters, dict):
+		if isinstance(filters, dict):
 			self.apply_dict_filters(filters)
+			return
 
-		elif isinstance(filters, list | tuple):
-			if all(isinstance(d, FilterValue) for d in filters) and len(filters) > 0:
+		if isinstance(filters, list | tuple):
+			if not filters:
+				return
+
+			# 1. Handle special case: list of names -> name IN (...)
+			if all(isinstance(d, FilterValue) for d in filters):
 				self.apply_dict_filters({"name": ("in", tuple(convert_to_value(f) for f in filters))})
-			else:
-				for filter in filters:
-					if isinstance(filter, FilterValue | Criterion | dict):
-						self.apply_filters(filter)
-					elif isinstance(filter, list | tuple):
-						self.apply_list_filters(filter)
+				return
+
+			# 2. Check for nested logic format [cond, op, cond, ...] or [[cond, op, cond]]
+			is_nested_structure = False
+			potential_nested_list = filters
+			is_single_group = False
+
+			# Check for single grouped condition [[cond_a, op, cond_b]]
+			if len(filters) == 1 and isinstance(filters[0], list | tuple):
+				inner_list = filters[0]
+				# Ensure inner list also looks like a nested structure
+				# Check if the operator is a string, validation happens inside _parse_nested_filters
+				if len(inner_list) >= 3 and isinstance(inner_list[1], str):
+					is_nested_structure = True
+					potential_nested_list = inner_list  # Use the inner list for validation and parsing
+					is_single_group = True  # Flag that the original filters was wrapped
+
+			# Check for standard nested structure [cond, op, cond, ...]
+			# Check if it looks like it *might* be nested (even if malformed).
+			# This allows lists starting with operators or containing invalid operators
+			# to be passed to _parse_nested_filters for detailed validation.
+			# Condition: Contains a string at an odd index OR starts with a string.
+			elif any(isinstance(item, str) for i, item in enumerate(filters) if i % 2 != 0) or (
+				len(filters) > 0 and isinstance(filters[0], str)
+			):
+				is_nested_structure = True
+				# potential_nested_list remains filters
+
+			if is_nested_structure:
+				# If validation passes, proceed with parsing the identified nested list
+				try:
+					# If it's a single group like [[cond]], parse the inner list as one condition.
+					# Otherwise, parse the list as a sequence [cond1, op, cond2, ...].
+					if is_single_group:
+						combined_criterion = self._condition_to_criterion(potential_nested_list)
 					else:
-						raise ValueError(f"Unknown filter type: {type(filters)}")
-		else:
-			raise ValueError(f"Unknown filter type: {type(filters)}")
+						# _parse_nested_filters MUST validate the structure, including the first element and operators.
+						combined_criterion = self._parse_nested_filters(potential_nested_list)
+					if combined_criterion:
+						self.query = self.query.where(combined_criterion)
+				except Exception as e:
+					# Log the original filters list for better debugging context
+					frappe.log_error(f"Filter parsing error: {filters}", "Query Engine Error")
+					frappe.throw(_("Error parsing nested filters: {0}").format(e), exc=e)
+
+			else:  # Not a nested structure, assume it's a list of simple filters (implicitly ANDed)
+				for filter_item in filters:
+					if isinstance(filter_item, list | tuple):
+						self.apply_list_filters(filter_item)  # Handles simple [field, op, value] lists
+					elif isinstance(filter_item, dict | Criterion):
+						self.apply_filters(filter_item)  # Recursive call for dict/criterion
+					else:
+						# Disallow single values (strings, numbers, etc.) directly in the list
+						# unless it's the name IN (...) case handled above.
+						raise ValueError(
+							f"Invalid item type in filter list: {type(filter_item).__name__}. Expected list, tuple, dict, or Criterion."
+						)
+			return
+
+		# If filters type is none of the above
+		raise ValueError(f"Unsupported filters type: {type(filters).__name__}")
 
 	def apply_list_filters(self, filter: list):
 		if len(filter) == 2:
@@ -233,25 +290,26 @@ class Engine:
 		operator: str = "=",
 		doctype: str | None = None,
 	):
+		"""Applies a simple filter condition to the query."""
+		criterion = self._build_criterion_for_simple_filter(field, value, operator, doctype)
+		if criterion:
+			self.query = self.query.where(criterion)
+
+	def _build_criterion_for_simple_filter(
+		self,
+		field: str | Field,
+		value: FilterValue | list | set | None,
+		operator: str = "=",
+		doctype: str | None = None,
+	) -> "Criterion | None":
+		"""Builds a pypika Criterion object for a simple filter condition."""
 		_field = self._validate_and_prepare_filter_field(field, doctype)
-		_value = value
+		_value = convert_to_value(value)
 		_operator = operator
-
-		# Apply implicit join if child table is referenced
-		if doctype and doctype != self.doctype:
-			meta = frappe.get_meta(doctype)
-			table = frappe.qb.DocType(doctype)
-			if meta.istable and not self.query.is_joined(table):
-				self.query = self.query.left_join(table).on(
-					(table.parent == self.table.name) & (table.parenttype == self.doctype)
-				)
-
-		_value = convert_to_value(_value)
 
 		if not _value and isinstance(_value, list | tuple | set):
 			_value = ("",)
 
-			# Handle nested set operators
 		if _operator in NESTED_SET_OPERATORS:
 			hierarchy = _operator
 			docname = _value
@@ -276,14 +334,98 @@ class Engine:
 				if hierarchy in ("not ancestors of", "not descendants of")
 				else OPERATOR_MAP["in"]
 			)
-			self.query = self.query.where(operator_fn(_field, nodes or ("",)))
-			return
+			return operator_fn(_field, nodes or ("",))
 
 		operator_fn = OPERATOR_MAP[_operator.casefold()]
 		if _value is None and isinstance(_field, Field):
-			self.query = self.query.where(_field.isnull())
+			return _field.isnull()
 		else:
-			self.query = self.query.where(operator_fn(_field, _value))
+			return operator_fn(_field, _value)
+
+	def _parse_nested_filters(self, nested_list: list | tuple) -> "Criterion | None":
+		"""Parses a nested filter list like [cond1, 'and', cond2, 'or', cond3, ...] into a pypika Criterion."""
+		if not isinstance(nested_list, list | tuple):
+			frappe.throw(_("Nested filters must be provided as a list or tuple."))
+
+		if not nested_list:
+			return None
+
+		# First item must be a condition (list/tuple)
+		if not isinstance(nested_list[0], list | tuple):
+			frappe.throw(
+				_("Invalid start for filter condition: {0}. Expected a list or tuple.").format(nested_list[0])
+			)
+
+		current_criterion = self._condition_to_criterion(nested_list[0])
+
+		idx = 1
+		while idx < len(nested_list):
+			# Expect an operator ('and' or 'or')
+			operator_str = nested_list[idx]
+			if not isinstance(operator_str, str) or operator_str.lower() not in ("and", "or"):
+				frappe.throw(
+					_("Expected 'and' or 'or' operator, found: {0}").format(operator_str),
+					frappe.ValidationError,
+				)
+
+			idx += 1
+			if idx >= len(nested_list):
+				frappe.throw(_("Filter condition missing after operator: {0}").format(operator_str))
+
+			# Expect a condition (list/tuple)
+			next_condition = nested_list[idx]
+			if not isinstance(next_condition, list | tuple):
+				frappe.throw(
+					_("Invalid filter condition: {0}. Expected a list or tuple.").format(next_condition)
+				)
+
+			next_criterion = self._condition_to_criterion(next_condition)
+
+			if operator_str.lower() == "and":
+				current_criterion = current_criterion & next_criterion
+			elif operator_str.lower() == "or":
+				current_criterion = current_criterion | next_criterion
+
+			idx += 1
+
+		return current_criterion
+
+	def _condition_to_criterion(self, condition: list | tuple) -> "Criterion":
+		"""Converts a single condition (simple filter list or nested list) into a pypika Criterion."""
+		if not isinstance(condition, list | tuple):
+			frappe.throw(_("Invalid condition type in nested filters: {0}").format(type(condition)))
+
+		# Check if it's a nested condition list [cond1, op, cond2, ...]
+		is_nested = False
+		# Broaden check here as well: length >= 3 and second element is string
+		if len(condition) >= 3 and isinstance(condition[1], str):
+			if isinstance(condition[0], list | tuple):  # First element must also be a condition
+				is_nested = True
+
+		if is_nested:
+			# It's a nested sub-expression like [["assignee", "=", "A"], "or", ["assignee", "=", "B"]]
+			# _parse_nested_filters will handle operator validation ('and'/'or')
+			return self._parse_nested_filters(condition)
+		else:
+			# Assume it's a simple filter [field, op, value] etc.
+			field, value, operator, doctype = None, None, None, None
+
+			# Determine structure based on length and types
+			if len(condition) == 3 and isinstance(condition[1], str) and condition[1] in OPERATOR_MAP:
+				# [field, operator, value]
+				field, operator, value = condition
+			elif len(condition) == 4 and isinstance(condition[2], str) and condition[2] in OPERATOR_MAP:
+				# [doctype, field, operator, value]
+				doctype, field, operator, value = condition
+			elif len(condition) == 2:
+				# [field, value] -> implies '=' operator
+				field, value = condition
+				operator = "="
+			else:
+				frappe.throw(_("Invalid simple filter format: {0}").format(condition))
+
+			# Use the helper method to build the criterion for the simple filter
+			return self._build_criterion_for_simple_filter(field, value, operator, doctype)
 
 	def _validate_and_prepare_filter_field(self, field: str | Field, doctype: str | None = None) -> Field:
 		"""Validate field name for filters and return a pypika Field object. Handles dynamic fields."""
@@ -340,10 +482,48 @@ class Engine:
 			target_doctype = doctype or self.doctype
 			target_fieldname = field
 			parent_doctype_for_perm = self.parent_doctype if doctype else None
-			self._check_filter_field_permission(target_doctype, target_fieldname, parent_doctype_for_perm)
 
-			# Convert string field name to pypika Field object for the specified/current doctype
-			return frappe.qb.DocType(target_doctype)[target_fieldname]
+			# If a specific doctype is provided and it's different from the main query doctype,
+			# assume it's a child table and add the join using ChildTableField logic.
+			if doctype and doctype != self.doctype:
+				# Check if doctype is a valid child table of self.doctype
+				parent_meta = frappe.get_meta(self.doctype)
+				# Find the parent fieldname for this child doctype
+				parent_fieldname = None
+				for df in parent_meta.get_table_fields():
+					if df.options == doctype:
+						parent_fieldname = df.fieldname
+						break
+
+				if not parent_fieldname:
+					frappe.throw(
+						_("{0} is not a child table of {1}").format(doctype, self.doctype),
+						frappe.ValidationError,
+						title=_("Invalid Filter"),
+					)
+
+				# Create a ChildTableField instance to handle join and field access
+				# Pass the identified parent_fieldname
+				child_field_handler = ChildTableField(
+					doctype=doctype,
+					fieldname=target_fieldname,
+					parent_doctype=self.doctype,
+					parent_fieldname=parent_fieldname,
+				)
+
+				# For permission check, the parent is the main doctype
+				parent_doctype_for_perm = self.doctype
+				self._check_filter_field_permission(target_doctype, target_fieldname, parent_doctype_for_perm)
+
+				# Delegate join logic
+				self.query = child_field_handler.apply_join(self.query)
+				# Return the pypika Field object from the handler
+				return child_field_handler.field
+			else:
+				# Field belongs to the main doctype or doctype wasn't specified differently
+				self._check_filter_field_permission(target_doctype, target_fieldname, parent_doctype_for_perm)
+				# Convert string field name to pypika Field object for the specified/current doctype
+				return frappe.qb.DocType(target_doctype)[target_fieldname]
 
 	def _check_filter_field_permission(self, doctype: str, fieldname: str, parent_doctype: str | None = None):
 		"""Check if the user has permission to access the given field for filtering."""
@@ -956,12 +1136,14 @@ class ChildTableField(DynamicTableField):
 		return query.select(getattr(table, self.fieldname).as_(self.alias or None))
 
 	def apply_join(self, query: QueryBuilder) -> QueryBuilder:
-		table = frappe.qb.DocType(self.doctype)
 		main_table = frappe.qb.DocType(self.parent_doctype)
-		if not query.is_joined(table):
-			query = query.left_join(table).on(
-				(table.parent == main_table.name) & (table.parenttype == self.parent_doctype)
+		if not query.is_joined(self.table):
+			join_conditions = (self.table.parent == main_table.name) & (
+				self.table.parenttype == self.parent_doctype
 			)
+			if self.parent_fieldname:
+				join_conditions &= self.table.parentfield == self.parent_fieldname
+			query = query.left_join(self.table).on(join_conditions)
 		return query
 
 
@@ -1248,6 +1430,9 @@ class CombinedRawCriterion(RawCriterion):
 		super(RawCriterion, self).__init__()
 
 	def get_sql(self, **kwargs: Any) -> str:
+		left_sql = self.left.get_sql(**kwargs) if hasattr(self.left, "get_sql") else str(self.left)
+		right_sql = self.right.get_sql(**kwargs) if hasattr(self.right, "get_sql") else str(self.right)
+		return f"({left_sql}) {self.operator} ({right_sql})"
 		left_sql = self.left.get_sql(**kwargs) if hasattr(self.left, "get_sql") else str(self.left)
 		right_sql = self.right.get_sql(**kwargs) if hasattr(self.right, "get_sql") else str(self.right)
 		return f"({left_sql}) {self.operator} ({right_sql})"
