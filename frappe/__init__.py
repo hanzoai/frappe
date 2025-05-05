@@ -860,8 +860,13 @@ def is_whitelisted(method):
 	from frappe.utils import sanitize_html
 
 	is_guest = session["user"] == "Guest"
+<<<<<<< HEAD
 	if method not in whitelisted or is_guest and method not in guest_methods:
 		summary = _("You are not permitted to access this resource.")
+=======
+	if method not in whitelisted or (is_guest and method not in guest_methods):
+		summary = _("You are not permitted to access this resource. Login to access")
+>>>>>>> 28947b33dd (fix: add informative guest message)
 		detail = _("Function {0} is not whitelisted.").format(bold(f"{method.__module__}.{method.__name__}"))
 		msg = f"<details><summary>{summary}</summary>{detail}</details>"
 		throw(msg, PermissionError, title=_("Method Not Allowed"))
