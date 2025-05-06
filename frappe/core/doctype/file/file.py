@@ -199,11 +199,17 @@ class File(Document):
 		return frappe.get_all("File", filters={"folder": self.name}, pluck="name")
 
 	def validate_file_path(self):
+		full_path = self.get_full_path()
 		if self.is_remote_file:
+			# Validate whether the file URL is valid by attempting to open it.
+			try:
+				open(full_path, mode="rb")
+			except FileNotFoundError:
+				frappe.throw("No such file or directory: {}".format(full_path), FileNotFoundError)
 			return
 
 		base_path = os.path.realpath(get_files_path(is_private=self.is_private))
-		if not os.path.realpath(self.get_full_path()).startswith(base_path):
+		if not os.path.realpath(full_path).startswith(base_path):
 			frappe.throw(
 				_("The File URL you've entered is incorrect"),
 				title=_("Invalid File URL"),
