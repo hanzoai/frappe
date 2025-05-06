@@ -886,7 +886,7 @@ class DatabaseQuery:
 					# because "like" uses backslash (\) for escaping
 					value = value.replace("\\", "\\\\").replace("%", "%%")
 
-			elif f.operator == "=" and df and df.fieldtype in ["Link", "Data"]:  # TODO: Refactor if possible
+			elif f.operator == "=" and df and df.fieldtype in ("Link", "Data", "Dynamic Link"):
 				value = cstr(f.value) or "''"
 				fallback = "''"
 
@@ -1157,6 +1157,10 @@ class DatabaseQuery:
 
 	def update_user_settings(self):
 		# update user settings if new search
+		if not self.save_user_settings_fields and not getattr(self, "user_settings", None):
+			# Nothing has changed or needs to be changed
+			return
+
 		user_settings = json.loads(get_user_settings(self.doctype))
 
 		if hasattr(self, "user_settings"):
