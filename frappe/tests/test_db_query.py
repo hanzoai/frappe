@@ -1153,6 +1153,11 @@ class TestReportview(FrappeTestCase):
 		data = get()
 		self.assertEqual(len(data["values"]), 1)
 
+	def test_ifnull_none(self):
+		query = frappe.get_all("DocField", {"fieldname": None}, run=0)
+		self.assertIn("''", query)
+		self.assertNotIn("\\'", query)
+
 
 class TestReportView(FrappeTestCase):
 	def setUp(self) -> None:
