@@ -624,6 +624,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			for (let i = this.filter_row_length; i < this.filters.length; i++) {
 				$(this.filters[i].wrapper).removeClass("hidden");
 			}
+			this.check_filter_area.css("display", "flex");
 			this.filters_hidden = true;
 			icon_name = "chevron-up";
 		}
