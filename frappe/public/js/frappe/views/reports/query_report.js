@@ -531,12 +531,12 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 		let filter_area = this.page.page_form;
 		this.filters = [];
-		this.setup_check_filter_area();
+		if (this.report_settings.seperate_check_filters) this.setup_check_filter_area();
 		this.filters = filters
 			.map((df, index) => {
 				if (df.fieldtype === "Break") return;
 				let f;
-				if (df.fieldtype === "Check") {
+				if (df.fieldtype === "Check" && this.check_filter_area) {
 					f = this.page.add_field(df, this.check_filter_area);
 				} else {
 					f = this.page.add_field(df, filter_area);
@@ -579,11 +579,10 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				return f;
 			})
 			.filter(Boolean);
-		this.move_check_filter_area();
-		this.filter_row_length = this.get_filter_row_length();
-		if (this.report_settings.collapse_button) {
+		if (this.report_settings.seperate_check_filters) this.move_check_filter_area();
+		if (this.report_settings.collapsible_filters) {
 			this.filters_hidden = true;
-
+			this.filter_row_length = this.get_filter_row_length();
 			this.add_collapse_button();
 			this.toggle_filter_visiblity();
 		}
@@ -595,14 +594,17 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			this.page.show_form();
 		}
 	}
+
 	move_check_filter_area() {
 		this.page.page_form.append(this.check_filter_area);
 	}
+
 	setup_check_filter_area() {
 		let check_filter_area = "<div class='check-filter-area'> </div>";
 		this.page.page_form.append(check_filter_area);
 		this.check_filter_area = this.page.page_form.find(".check-filter-area");
 	}
+
 	get_filter_row_length() {
 		let max_width = document.documentElement.clientWidth;
 		let all_filters_position = this.filters.map((f) => f.wrapper.getBoundingClientRect().x);
@@ -611,6 +613,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		});
 		return all_filters_position.indexOf(closest_width) + 1;
 	}
+
 	toggle_filter_visiblity() {
 		let icon_name;
 		if (this.filters_hidden) {
@@ -630,25 +633,22 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		}
 		this.$collapse_button.find("use").attr("href", `#icon-${icon_name}`);
 	}
+
 	add_collapse_button() {
 		const me = this;
-		if (this.filters[this.filter_row_length - 1]) {
-			this.$collapse_button = $(this.get_button());
-			$(this.filters[5].wrapper).append(this.$collapse_button);
-			$(this.filters[5].wrapper).css("display", "flex");
-			$(this.filters[5].wrapper).css("align-items", "center");
-			$(this.filters[5].wrapper).css("gap", "5px");
+		let filter_no = this.filter_row_length - 1;
+		if (this.filters[filter_no]) {
+			this.$collapse_button = $(`<div>${frappe.utils.icon("chevron-down")}</div>`);
+			$(this.filters[filter_no].wrapper).append(this.$collapse_button);
+			$(this.filters[filter_no].wrapper).css("display", "flex");
+			$(this.filters[filter_no].wrapper).css("align-items", "center");
+			$(this.filters[filter_no].wrapper).css("gap", "5px");
 			this.$collapse_button.on("click", function () {
 				me.toggle_filter_visiblity();
 			});
 		}
 	}
-	get_button(icon_name) {
-		return `<div>
-		${frappe.utils.icon("chevron-down")}
-		</div>
-		`;
-	}
+
 	set_filters(filters) {
 		this.filters.map((f) => {
 			if (f.fieldtype == "MultiSelectList") {
