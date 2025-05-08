@@ -531,14 +531,15 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 		let filter_area = this.page.page_form;
 		this.filters = [];
-		this.create_more_filter_button(filters);
+		this.setup_check_filter_area();
 		this.filters = filters
 			.map((df, index) => {
 				if (df.fieldtype === "Break") return;
-
-				let f = this.page.add_field(df, filter_area);
-				if (index == 11) {
-					this.b = f;
+				let f;
+				if (df.fieldtype === "Check") {
+					f = this.page.add_field(df, this.check_filter_area);
+				} else {
+					f = this.page.add_field(df, filter_area);
 				}
 				if (df.default) {
 					f.set_input(df.default);
@@ -578,9 +579,14 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				return f;
 			})
 			.filter(Boolean);
-		this.hide_row();
-		this.filters_hidden = true;
-		this.toggle_filter_visiblity();
+		this.move_check_filter_area();
+		this.filter_row_length = this.get_filter_row_length();
+		if (this.report_settings.collapse_button) {
+			this.filters_hidden = true;
+
+			this.add_collapse_button();
+			this.toggle_filter_visiblity();
+		}
 		this.refresh_filters_dependency();
 		if (this.filters.length === 0) {
 			// hide page form if no filters
@@ -589,48 +595,58 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			this.page.show_form();
 		}
 	}
-
-	hide_row() {
-		for (let i = 6; i < 11; i++) {
-			$(this.filters[i].wrapper).css("visibility", "hidden");
-		}
+	move_check_filter_area() {
+		this.page.page_form.append(this.check_filter_area);
 	}
-	create_more_filter_button(filters) {
-		const me = this;
-		this.hidden_buttons = [];
-		for (let i = 6; i < 12; i++) {
-			let button = {
-				fieldtype: "Button",
-				label: __("More Filters"),
-			};
-			if (i == 11) {
-				button.click = function () {
-					if (me.filters_hidden) {
-						me.filters_hidden = false;
-						me.b.df.label = "Less Filters";
-						me.b.refresh();
-					} else {
-						me.filters_hidden = true;
-						me.b.df.label = "More Filters";
-						me.b.refresh();
-					}
-					me.toggle_filter_visiblity();
-				};
-			}
-			filters.splice(i, 0, button);
-		}
+	setup_check_filter_area() {
+		let check_filter_area = "<div class='check-filter-area'> </div>";
+		this.page.page_form.append(check_filter_area);
+		this.check_filter_area = this.page.page_form.find(".check-filter-area");
 	}
-
+	get_filter_row_length() {
+		let max_width = document.documentElement.clientWidth;
+		let all_filters_position = this.filters.map((f) => f.wrapper.getBoundingClientRect().x);
+		let closest_width = all_filters_position.reduce(function (prev, curr) {
+			return Math.abs(curr - max_width) < Math.abs(prev - max_width) ? curr : prev;
+		});
+		return all_filters_position.indexOf(closest_width) + 1;
+	}
 	toggle_filter_visiblity() {
+		let icon_name;
 		if (this.filters_hidden) {
-			for (let i = 12; i < this.filters.length; i++) {
+			for (let i = this.filter_row_length; i < this.filters.length; i++) {
 				$(this.filters[i].wrapper).addClass("hidden");
 			}
+			this.check_filter_area.css("display", "none");
+			this.filters_hidden = false;
+			icon_name = "chevron-down";
 		} else {
-			for (let i = 6; i < this.filters.length; i++) {
+			for (let i = this.filter_row_length; i < this.filters.length; i++) {
 				$(this.filters[i].wrapper).removeClass("hidden");
 			}
+			this.filters_hidden = true;
+			icon_name = "chevron-up";
 		}
+		this.$collapse_button.find("use").attr("href", `#icon-${icon_name}`);
+	}
+	add_collapse_button() {
+		const me = this;
+		if (this.filters[this.filter_row_length - 1]) {
+			this.$collapse_button = $(this.get_button());
+			$(this.filters[5].wrapper).append(this.$collapse_button);
+			$(this.filters[5].wrapper).css("display", "flex");
+			$(this.filters[5].wrapper).css("align-items", "center");
+			$(this.filters[5].wrapper).css("gap", "5px");
+			this.$collapse_button.on("click", function () {
+				me.toggle_filter_visiblity();
+			});
+		}
+	}
+	get_button(icon_name) {
+		return `<div>
+		${frappe.utils.icon("chevron-down")}
+		</div>
+		`;
 	}
 	set_filters(filters) {
 		this.filters.map((f) => {
