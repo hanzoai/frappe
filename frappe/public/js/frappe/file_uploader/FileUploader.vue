@@ -13,7 +13,7 @@
 				<div class="text-center">
 					{{ __("Drag and drop files here or upload from") }}
 				</div>
-				<div class="mt-2 text-center">
+				<div class="mt-3 text-center">
 					<button class="btn btn-file-upload" @click="browse_files">
 						<svg
 							width="30"
@@ -164,7 +164,7 @@
 						<div class="mt-1">{{ __("Google Drive") }}</div>
 					</button>
 				</div>
-				<div class="text-muted text-medium text-center">
+				<div class="mt-3 text-center" v-if="upload_notes">
 					{{ upload_notes }}
 				</div>
 			</div>
@@ -505,14 +505,37 @@ function upload_via_file_browser() {
 		library_file_name: selected_file.value,
 	});
 }
-function upload_via_web_link() {
+
+async function validate_html_url(url) {
+	try {
+		let response = await fetch(url, { method: "HEAD" });
+		let contentType = response.headers.get("Content-Type");
+
+		if (contentType && contentType.includes("text/html")) {
+			return false;
+		}
+	} catch (error) {
+		console.log("Error fetching URL:", error);
+	}
+	return true;
+}
+
+async function upload_via_web_link() {
 	let file_url = web_link.value.url;
 	if (!file_url) {
 		frappe.msgprint(__("Invalid URL"));
 		close_dialog.value = true;
 		return Promise.reject();
 	}
+
 	file_url = decodeURI(file_url);
+	const is_valid = await validate_html_url(file_url);
+
+	if (!is_valid) {
+		frappe.msgprint(__("Invalid or unsupported URL"));
+		return Promise.reject();
+	}
+
 	close_dialog.value = true;
 	return upload_file({
 		file_url,
