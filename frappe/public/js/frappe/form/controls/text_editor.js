@@ -89,7 +89,7 @@ Quill.register(MyLink, true);
 
 // image uploader
 const Uploader = Quill.import("modules/uploader");
-Uploader.DEFAULTS.mimetypes.push("image/gif");
+Uploader.DEFAULTS.mimetypes.push("image/gif", "image/webp");
 
 // inline style
 const BackgroundStyle = Quill.import("attributors/style/background");
