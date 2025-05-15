@@ -1190,7 +1190,7 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 			format: (value, row, column, data) => {
 				let doc = null;
 				if (Array.isArray(row)) {
-					doc = row.reduce(async (acc, curr) => {
+					doc = row.reduce((acc, curr) => {
 						if (!curr.column.docfield) return acc;
 
 						if (
