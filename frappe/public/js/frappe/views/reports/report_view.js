@@ -150,6 +150,24 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 		if (!this.group_by) {
 			this.init_chart();
 		}
+		this.set_link_title_field_value();
+	}
+
+	set_link_title_field_value() {
+		Object.keys(this.link_title_doctype_fields).forEach(async (key) => {
+			let link_title = await this.get_link_title_field_value(
+				this.link_title_doctype_fields[key],
+				key
+			);
+			document.querySelector(`a[data-name="${key}"]`).innerHTML = link_title;
+		});
+	}
+
+	async get_link_title_field_value(doctype, value) {
+		return (
+			frappe.utils.get_link_title(doctype, value) ||
+			(await frappe.utils.fetch_link_title(doctype, value))
+		);
 	}
 
 	set_dirty_state_for_custom_report() {
@@ -299,6 +317,7 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 	}
 
 	setup_datatable(values) {
+		this.link_title_doctype_fields = [];
 		this.$datatable_wrapper.empty();
 		this.datatable = new DataTable(this.$datatable_wrapper[0], {
 			columns: this.columns,
@@ -1073,6 +1092,128 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 		}
 	}
 
+	// build_column(c) {
+	// 	let [fieldname, doctype] = c;
+	// 	let docfield = frappe.meta.docfield_map[doctype || this.doctype][fieldname];
+
+	// 	// group by column
+	// 	if (fieldname === "_aggregate_column") {
+	// 		docfield = this.group_by_control.get_group_by_docfield();
+	// 	}
+
+	// 	// child table index column
+	// 	if (fieldname === "idx" && doctype !== this.doctype) {
+	// 		docfield = {
+	// 			label: "Index",
+	// 			fieldtype: "Int",
+	// 			parent: doctype,
+	// 		};
+	// 	}
+
+	// 	if (!docfield) {
+	// 		docfield = frappe.model.get_std_field(fieldname, true);
+
+	// 		if (docfield) {
+	// 			if (!docfield.label) {
+	// 				docfield.label = toTitle(fieldname);
+	// 				if (docfield.label.includes("_")) {
+	// 					docfield.label = docfield.label.replace("_", " ");
+	// 				}
+	// 			}
+	// 			docfield.parent = this.doctype;
+	// 			if (fieldname == "name") {
+	// 				docfield.options = this.doctype;
+	// 			}
+	// 			if (fieldname == "docstatus" && !frappe.meta.has_field(this.doctype, "status")) {
+	// 				docfield.label = "Status";
+	// 				docfield.fieldtype = "Data";
+	// 				docfield.name = "status";
+	// 			}
+	// 		}
+	// 	}
+	// 	if (!docfield || docfield.report_hide) return;
+
+	// 	let title = __(docfield.label, null, docfield.parent);
+	// 	if (doctype !== this.doctype) {
+	// 		title += ` (${__(doctype)})`;
+	// 	}
+
+	// 	const editable =
+	// 		frappe.model.is_non_std_field(fieldname) &&
+	// 		!docfield.read_only &&
+	// 		!docfield.is_virtual;
+
+	// 	const align = (() => {
+	// 		const is_numeric = frappe.model.is_numeric_field(docfield);
+	// 		if (is_numeric) {
+	// 			return "right";
+	// 		}
+	// 		return docfield.fieldtype === "Date" ? "right" : "left";
+	// 	})();
+
+	// 	let id = fieldname;
+
+	// 	// child table column
+	// 	if (doctype !== this.doctype && fieldname !== "_aggregate_column") {
+	// 		id = `${doctype}:${fieldname}`;
+	// 	}
+
+	// 	let width = (docfield ? cint(docfield.width) : null) || null;
+	// 	if (this.report_doc) {
+	// 		// load the user saved column width
+	// 		let saved_column_widths = this.report_doc.json.column_widths || {};
+	// 		width = saved_column_widths[id] || width;
+	// 	}
+
+	// 	let compareFn = null;
+	// 	if (docfield.fieldtype === "Date") {
+	// 		compareFn = (cell, keyword) => {
+	// 			if (!cell.content) return null;
+	// 			if (keyword.length !== "YYYY-MM-DD".length) return null;
+
+	// 			const keywordValue = frappe.datetime.user_to_obj(keyword);
+	// 			const cellValue = frappe.datetime.str_to_obj(cell.content);
+	// 			return [+cellValue, +keywordValue];
+	// 		};
+	// 	}
+
+	// 	return {
+	// 		id: id,
+	// 		field: fieldname,
+	// 		name: title,
+	// 		content: title,
+	// 		docfield,
+	// 		width,
+	// 		editable,
+	// 		align,
+	// 		compareValue: compareFn,
+	// 		format: (value, row, column, data) => {
+	// 			let doc = null;
+	// 			if (Array.isArray(row)) {
+	// 				doc = row.reduce((acc, curr) => {
+	// 					if (!curr.column.docfield) return acc;
+	// 					if (curr.column.docfield.fieldtype == "Link" && frappe.boot.link_title_doctypes.includes(curr.column.docfield.options) && curr.html) {
+	// 						let link_title = this.get_link_title_field_value(curr.column.docfield.options, curr.content)
+
+	// 						console.log(link_title, "link_title");
+	// 					}
+	// 					acc[curr.column.docfield.fieldname] = curr.content;
+
+	// 					return acc;
+	// 				}, {});
+	// 			} else {
+	// 				doc = row;
+	// 			}
+
+	// 			return frappe.format(value, column.docfield, { always_show_decimals: true }, doc);
+	// 		},
+	// 	};
+	// }
+
+	// async get_link_title_field_value(doctype, value) {
+	// 	return frappe.utils.get_link_title(doctype, value) || (await frappe.utils.fetch_link_title(doctype, value));
+	// }
+
 	build_column(c) {
 		let [fieldname, doctype] = c;
 		let docfield = frappe.meta.docfield_map[doctype || this.doctype][fieldname];
@@ -1139,7 +1280,7 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 			id = `${doctype}:${fieldname}`;
 		}
 
-		let width = (docfield ? cint(docfield.width) : null) || null;
+		let width = (docfield ? cint(docfield.width) : null) || null; // Assuming cint is defined elsewhere
 		if (this.report_doc) {
 			// load the user saved column width
 			let saved_column_widths = this.report_doc.json.column_widths || {};
@@ -1169,21 +1310,128 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 			align,
 			compareValue: compareFn,
 			format: (value, row, column, data) => {
-				let doc = null;
+				let doc = {};
 				if (Array.isArray(row)) {
-					doc = row.reduce((acc, curr) => {
+					doc = row.reduce(async (acc, curr) => {
 						if (!curr.column.docfield) return acc;
+
+						// Check if it's a Link field and should fetch title
+						if (
+							curr.column.docfield.fieldtype == "Link" &&
+							frappe.boot.link_title_doctypes.includes(
+								curr.column.docfield.options
+							) &&
+							curr.html
+						) {
+							this.link_title_doctype_fields[curr.content] =
+								curr.column.docfield.options;
+
+							// this.get_link_title_field_value(curr.column.docfield.options, curr.content)
+							// 	.then(resolved_link_title => {
+							// 		if (resolved_link_title) {
+
+							// 			const oldLinkText = `>${curr.content}<`; // Pattern to find: >original content<
+							// 			const newLinkText = `>${resolved_link_title}<`; // Pattern to replace with: >new title<
+
+							// 			// Only replace if the old text pattern is found
+							// 			if (curr.html.includes(oldLinkText)) {
+							// 				this.link_title_doctype_fields[resolved_link_title] = curr.content;
+							// 				// console.log("inside if");
+							// 				curr.html = curr.html.replace(oldLinkText, newLinkText);
+							// 			}
+							// 		}
+							// 	});
+						}
+						// The 'doc' object is built using the original 'curr.content'
 						acc[curr.column.docfield.fieldname] = curr.content;
 						return acc;
 					}, {});
 				} else {
-					doc = row;
+					doc = row; // Assuming 'row' is the document object if not an array of cells
 				}
 
 				return frappe.format(value, column.docfield, { always_show_decimals: true }, doc);
 			},
 		};
 	}
+
+	// Mockups for dependencies to make the snippet runnable for demonstration (if needed)
+	// const frappe = {
+	//     meta: {
+	//         docfield_map: { YourDoctype: { yourField: { label: "Your Field", fieldtype: "Data" } } },
+	//         has_field: () => false,
+	//     },
+	//     model: {
+	//         get_std_field: (fieldname) => ({ label: fieldname, fieldtype: "Data", name: fieldname }),
+	//         is_non_std_field: () => true,
+	//         is_numeric_field: () => false,
+	//     },
+	//     datetime: {
+	//         user_to_obj: (val) => new Date(val),
+	//         str_to_obj: (val) => new Date(val),
+	//     },
+	//     format: (value, docfield, opts, doc) => {
+	//       // Simplified mock: if docfield is Link and doc has html, use it.
+	//       if (docfield && docfield.fieldtype === 'Link' && doc && doc[docfield.fieldname] && doc.html) {
+	//         // This is a very rough mock. In reality, frappe.format is more complex.
+	//         // If curr.html was updated, and if frappe.format somehow uses a reference
+	//         // to the cell object that contains curr.html, it *might* see the change.
+	//         // More likely, `value` (which is curr.content) is used to generate the link.
+	//         return doc.html; // Highly dependent on how `doc` and `value` are structured and used by actual frappe.format
+	//       }
+	//       return `${value} (formatted)`;
+	//     },
+	//     boot: {
+	//         link_title_doctypes: ["SomeDoctype", "AnotherDoctype"], // Example
+	//     },
+	//     utils: {
+	//         get_link_title: async (doctype, value) => {
+	//             // Mock implementation
+	//             return new Promise(resolve => setTimeout(() => resolve(`${value} Title (from cache)`), 50));
+	//         },
+	//         fetch_link_title: async (doctype, value) => {
+	//             // Mock implementation
+	//             return new Promise(resolve => setTimeout(() => resolve(`${value} Title (fetched)`), 100));
+	//         }
+	//     }
+	// };
+	// const __ = (label) => label; // Mock translation function
+	// const toTitle = (str) => str.charAt(0).toUpperCase() + str.slice(1); // Mock toTitle
+	// const cint = (val) => parseInt(val, 10); // Mock cint
+
+	// Mockups for dependencies to make the snippet runnable for demonstration (if needed)
+	// const frappe = {
+	//     meta: {
+	//         docfield_map: { YourDoctype: { yourField: { label: "Your Field", fieldtype: "Data" } } },
+	//         has_field: () => false,
+	//     },
+	//     model: {
+	//         get_std_field: (fieldname) => ({ label: fieldname, fieldtype: "Data", name: fieldname }),
+	//         is_non_std_field: () => true,
+	//         is_numeric_field: () => false,
+	//     },
+	//     datetime: {
+	//         user_to_obj: (val) => new Date(val),
+	//         str_to_obj: (val) => new Date(val),
+	//     },
+	//     format: (value, docfield, opts, doc) => `${value} (formatted)`,
+	//     boot: {
+	//         link_title_doctypes: ["SomeDoctype", "AnotherDoctype"], // Example
+	//     },
+	//     utils: {
+	//         get_link_title: async (doctype, value) => {
+	//             // Mock implementation
+	//             return new Promise(resolve => setTimeout(() => resolve(`${value} Title (from cache)`), 50));
+	//         },
+	//         fetch_link_title: async (doctype, value) => {
+	//             // Mock implementation
+	//             return new Promise(resolve => setTimeout(() => resolve(`${value} Title (fetched)`), 100));
+	//         }
+	//     }
+	// };
+	// const __ = (label) => label; // Mock translation function
+	// const toTitle = (str) => str.charAt(0).toUpperCase() + str.slice(1); // Mock toTitle
+	// const cint = (val) => parseInt(val, 10); // Mock cint
 
 	build_rows(data) {
 		const out = data.map((d) => this.build_row(d));
