@@ -121,11 +121,7 @@
  "idx": 1,
  "issingle": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2021-03-02 17:42:32.947404",
-=======
  "modified": "2025-05-15 07:19:31.401053",
->>>>>>> 6e0f9b743c (fix: state_translatability (#32533))
  "modified_by": "Administrator",
  "module": "Website",
  "name": "Contact Us Settings",
