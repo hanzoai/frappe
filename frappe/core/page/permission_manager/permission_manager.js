@@ -52,8 +52,8 @@ frappe.PermissionEngine = class PermissionEngine {
 			get_query: function () {
 				return {
 					filters: {
-						istable: 0
-					}
+						istable: 0,
+					},
 				};
 			},
 			change: function () {
