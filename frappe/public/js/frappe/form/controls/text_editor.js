@@ -310,7 +310,6 @@ frappe.ui.form.ControlTextEditor = class ControlTextEditor extends frappe.ui.for
 	}
 
 	set_formatted_input(value) {
-		console.log(value);
 		if (!this.quill) return;
 		if (value === this.get_input_value()) return;
 		if (!value) {
@@ -320,14 +319,12 @@ frappe.ui.form.ControlTextEditor = class ControlTextEditor extends frappe.ui.for
 		}
 
 		// set html without triggering a focus
-		console.log(value);
 		const delta = this.quill.clipboard.convert(
 			{ html: value, text: "" },
 			{
 				image: MyImage,
 			}
 		);
-		console.log(delta);
 		this.quill.setContents(delta);
 	}
 
