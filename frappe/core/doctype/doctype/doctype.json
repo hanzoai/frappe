@@ -33,6 +33,7 @@
   "editable_grid",
   "quick_entry",
   "grid_page_length",
+  "grid_search_field_length",
   "cb01",
   "track_changes",
   "track_seen",
@@ -697,9 +698,18 @@
    "fieldname": "protect_attached_files",
    "fieldtype": "Check",
    "label": "Protect Attached Files"
+  },
+  {
+   "default": "0",
+   "depends_on": "istable",
+   "fieldname": "grid_search_field_length",
+   "fieldtype": "Int",
+   "label": "Grid Search Field Length",
+   "non_negative": 1
   }
  ],
  "grid_page_length": 50,
+ "grid_search_field_length": 50,
  "icon": "fa fa-bolt",
  "idx": 6,
  "index_web_pages_for_search": 1,
@@ -775,7 +785,7 @@
    "link_fieldname": "document_type"
   }
  ],
- "modified": "2025-03-27 18:16:53.286909",
+ "modified": "2025-05-18 06:10:30.044174",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "DocType",
