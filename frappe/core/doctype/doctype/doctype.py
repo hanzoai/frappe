@@ -122,6 +122,7 @@ class DocType(Document):
 		fields: DF.Table[DocField]
 		force_re_route_to_default_view: DF.Check
 		grid_page_length: DF.Int
+		grid_search_field_length: DF.Int
 		has_web_view: DF.Check
 		hide_toolbar: DF.Check
 		icon: DF.Data | None

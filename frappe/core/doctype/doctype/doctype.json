@@ -21,6 +21,7 @@
   "editable_grid",
   "quick_entry",
   "grid_page_length",
+  "grid_search_field_length",
   "cb01",
   "track_changes",
   "track_seen",
@@ -699,6 +700,7 @@
   {
    "default": "0",
    "depends_on": "istable",
+<<<<<<< HEAD
    "fieldname": "rows_threshold_for_grid_search",
    "fieldtype": "Int",
    "label": "Rows Threshold for Grid Search",
@@ -711,6 +713,16 @@
    "label": "Recipient Account Field"
   }
  ],
+=======
+   "fieldname": "grid_search_field_length",
+   "fieldtype": "Int",
+   "label": "Grid Search Field Length",
+   "non_negative": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "grid_search_field_length": 50,
+>>>>>>> ddf2587cc7 (feat: Dynamic and configurable child table search bar)
  "icon": "fa fa-bolt",
  "idx": 6,
  "index_web_pages_for_search": 1,
@@ -791,7 +803,11 @@
    "link_fieldname": "reference_doctype"
   }
  ],
+<<<<<<< HEAD
  "modified": "2025-07-19 12:23:16.296416",
+=======
+ "modified": "2025-05-18 06:10:30.044174",
+>>>>>>> ddf2587cc7 (feat: Dynamic and configurable child table search bar)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "DocType",
