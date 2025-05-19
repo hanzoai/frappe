@@ -942,7 +942,11 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		let data = this.data;
 		let columns = this.columns.filter((col) => !col.hidden);
 
+<<<<<<< HEAD
 		if (data.length > 100000) {
+=======
+		if (data.length > (cint(frappe.boot.sysdefaults.max_report_rows) || 100000)) {
+>>>>>>> ea3050a751 (fix: make max report rows configurable (#32582))
 			let msg = __(
 				"This report contains {0} rows and is too big to display in browser, you can {1} this report instead.",
 				[cstr(format_number(data.length, null, 0)).bold(), __("export").bold()]
