@@ -1,9 +1,7 @@
-import operator
 import re
 from ast import literal_eval
 from functools import lru_cache
-from types import BuiltinFunctionType
-from typing import TYPE_CHECKING, Any, ClassVar, Optional, TypeAlias, Union
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 import sqlparse
 from pypika.queries import QueryBuilder, Table
@@ -12,11 +10,9 @@ from pypika.terms import AggregateFunction, Term
 import frappe
 from frappe import _
 from frappe.database.operator_map import NESTED_SET_OPERATORS, OPERATOR_MAP
-from frappe.database.schema import SPECIAL_CHAR_PATTERN
 from frappe.database.utils import DefaultOrderBy, FilterValue, convert_to_value, get_doctype_name
 from frappe.model import get_permitted_fields
 from frappe.query_builder import Criterion, Field, Order, functions
-from frappe.query_builder.functions import Function, SqlFunctions
 from frappe.query_builder.utils import PseudoColumnMapper
 from frappe.utils.data import MARIADB_SPECIFIC_COMMENT
 
@@ -25,7 +21,6 @@ if TYPE_CHECKING:
 
 TAB_PATTERN = re.compile("^tab")
 WORDS_PATTERN = re.compile(r"\w+")
-BRACKETS_PATTERN = re.compile(r"\(.*?\)|$")
 COMMA_PATTERN = re.compile(r",\s*(?![^()]*\))")
 
 # less restrictive version of frappe.core.doctype.doctype.doctype.START_WITH_LETTERS_PATTERN
@@ -36,20 +31,10 @@ TABLE_NAME_PATTERN = re.compile(r"^[\w -]*$", flags=re.ASCII)
 # Allows: name, `name`, name as alias, `name` as alias, `table name`.`name`, `table name`.`name` as alias, table.name, table.name as alias
 ALLOWED_FIELD_PATTERN = re.compile(r"^(?:`?[\w\s-]+`?\.)?(`?\w+`?|\w+)(?:\s+as\s+\w+)?$", flags=re.ASCII)
 
-# Pattern to validate basic SQL function call syntax: word(...) [as alias]
-FUNCTION_CALL_PATTERN = re.compile(r"^\w+\(.*\)(?:\s+as\s+\w+)?$", flags=re.IGNORECASE | re.ASCII)
-
 # Pattern to validate field names used in various SQL clauses (WHERE, GROUP BY, ORDER BY):
 # Allows simple field names, backticked names, and table-qualified names (e.g., name, `name`, `table`.`name`, table.name)
 # Does NOT allow aliases ('as alias') or functions.
 ALLOWED_SQL_FIELD_PATTERN = re.compile(r"^(?:`?\w+`?\.)?(`?\w+`?|\w+)$", flags=re.ASCII)
-
-# Pattern to validate characters allowed within function arguments that are not simple fields/literals.
-# Allows alphanumeric, underscore, whitespace, +, -, *, /, ., (, ), quotes, and the keyword 'distinct'.
-# Disallows characters like ; = < > etc. to prevent injection.
-ALLOWED_ARGUMENT_CHARS_PATTERN = re.compile(
-	r"^(?:[\w\s\+\-\*\/\.\(\)\`\'\"]+|\bDISTINCT\b)+$", flags=re.IGNORECASE | re.ASCII
-)
 
 # Regex to parse field names:
 # Group 1: Optional quote for table name
@@ -57,17 +42,6 @@ ALLOWED_ARGUMENT_CHARS_PATTERN = re.compile(
 # Group 3: Optional quote for field name
 # Group 4: Field name (e.g., `field` or field)
 FIELD_PARSE_REGEX = re.compile(r"^(?:([`\"]?)(tab[\w\s-]+)\1\.)?([`\"]?)(\w+)\3$")
-
-# Regex to capture: FunctionName(Arguments) [AS Alias]
-# Group 1: Function Name (e.g., COUNT, SUM)
-# Group 2: Arguments string (e.g., *, field1, 'literal', field2)
-# Group 3: Optional Alias (e.g., average_price or `average_price`) - allows backticks
-SQL_FUNCTION_PATTERN = re.compile(
-	r"^([a-zA-Z_]\w*)\s*\((.*?)\)(?:\s+as\s+(`?[\w\s-]+`?|\w+))?$", flags=re.IGNORECASE | re.ASCII
-)
-
-# Regex to split arguments, respecting potential quotes or nested parentheses
-ARGS_SPLIT_PATTERN = re.compile(r",\s*(?![^()]*\))")
 
 
 class Engine:
@@ -648,10 +622,10 @@ class Engine:
 		return _fields
 
 	def _parse_single_field_item(
-		self, field: str | Criterion | dict | Field | Function
-	) -> "list | Criterion | Field | Function | DynamicTableField | ChildQuery | None":
+		self, field: str | Criterion | dict | Field
+	) -> "list | Criterion | Field | DynamicTableField | ChildQuery | None":
 		"""Parses a single item from the fields list/tuple. Assumes comma-separated strings have already been split."""
-		if isinstance(field, Criterion | Field | Function):
+		if isinstance(field, Criterion | Field):
 			return field
 		elif isinstance(field, dict):
 			# Handle child queries defined as dicts {fieldname: [child_fields]}
@@ -670,11 +644,8 @@ class Engine:
 		if not isinstance(field, str):
 			frappe.throw(_("Invalid field type: {0}").format(type(field)))
 
-		# Try parsing as SQL function first
-		if parsed_function := SqlFunctionParser.parse(field):
-			return parsed_function
-		# Then try parsing as dynamic field (link/child table access)
-		elif parsed := DynamicTableField.parse(field, self.doctype):
+		# Try parsing as dynamic field (link/child table access)
+		if parsed := DynamicTableField.parse(field, self.doctype):
 			return parsed
 		# Otherwise, parse as a standard field (simple, quoted, table-qualified, with/without alias)
 		else:
@@ -834,7 +805,7 @@ class Engine:
 				elif hasattr(field, "alias") and field.alias and field.name in permitted_fields_set:
 					allowed_fields.append(field)
 
-			elif isinstance(field, PseudoColumnMapper | Function):
+			elif isinstance(field, PseudoColumnMapper):
 				# Typically functions or complex terms
 				allowed_fields.append(field)
 
@@ -1203,136 +1174,6 @@ class ChildQuery:
 		)
 
 
-class SqlFunctionParser:
-	_supported_functions: ClassVar[dict[str, BuiltinFunctionType]] = {
-		f.value.lower(): getattr(functions, f.name) for f in SqlFunctions if hasattr(functions, f.name)
-	}
-
-	@staticmethod
-	def _parse_argument_expression(arg_str: str) -> Term | None:
-		"""Attempts to parse simple arithmetic expressions between fields."""
-		# Map symbols to pypika's expected operation methods if needed, or rely on overloading
-		# For +, -, *, / pypika Field overloading works directly
-		supported_operators = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.truediv}
-
-		for op_symbol, _op_func in supported_operators.items():
-			# Split only on the first occurrence of the operator
-			parts = arg_str.split(op_symbol, 1)
-			if len(parts) == 2:
-				left_str, right_str = parts[0].strip(), parts[1].strip()
-
-				# Validate both parts are valid field names (simple or quoted)
-				if ALLOWED_SQL_FIELD_PATTERN.match(left_str.strip('`"')) and ALLOWED_SQL_FIELD_PATTERN.match(
-					right_str.strip('`"')
-				):
-					# Create Field or PseudoColumnMapper objects
-					left_field = (
-						PseudoColumnMapper(left_str)
-						if "`" in left_str or '"' in left_str
-						else Field(left_str)
-					)
-					right_field = (
-						PseudoColumnMapper(right_str)
-						if "`" in right_str or '"' in right_str
-						else Field(right_str)
-					)
-
-					# Use pypika's operator overloading for Field objects
-					if op_symbol == "+":
-						return left_field + right_field
-					elif op_symbol == "-":
-						return left_field - right_field
-					elif op_symbol == "*":
-						return left_field * right_field
-					elif op_symbol == "/":
-						return left_field / right_field
-		# If no simple binary arithmetic expression is found
-		return None
-
-	@staticmethod
-	def parse(field_str: str) -> Function | None:
-		"""
-		Parses a string to see if it represents a *supported* SQL function call.
-		Returns a pypika Function object if valid and supported, otherwise None.
-		Handles simple arguments (field names, *), aliases, and simple expressions.
-		"""
-		match = SQL_FUNCTION_PATTERN.match(field_str.strip())
-		if not match:
-			return None
-
-		func_name, args_str, alias = match.groups()
-		func_name_lower = func_name.lower()
-
-		# Strip backticks from alias if present
-		if alias:
-			alias = alias.strip("`")
-
-		# Check if the function is in our supported list
-		pypika_func = SqlFunctionParser._supported_functions.get(func_name_lower)
-		if not pypika_func:
-			# Function name not found in SqlFunctions enum values
-			return None
-
-		# Handle NOW() specifically (often takes no arguments)
-		if func_name_lower == "now" and not args_str.strip():
-			return pypika_func(alias=alias or None)
-
-		# Parse arguments
-		parsed_args = []
-		if args_str.strip():
-			raw_args = ARGS_SPLIT_PATTERN.split(args_str.strip())
-			for arg in raw_args:
-				arg = arg.strip()
-				if not arg:
-					continue
-
-				if arg == "*":
-					# Only allow '*' for specific functions like COUNT
-					if func_name_lower != "count":
-						frappe.throw(_("Wildcard '*' argument is only supported for COUNT function."))
-					parsed_args.append(Term.wrap_constant("*"))
-					continue
-
-				evaluated_arg = literal_eval_(arg)
-				if evaluated_arg != arg:  # Successfully evaluated to a literal
-					parsed_args.append(Term.wrap_constant(evaluated_arg))
-				else:
-					# Not '*' or a simple literal. Could be a field, quoted field, keyword, or expression.
-					# Check if it's a simple or quoted field name first.
-					if ALLOWED_SQL_FIELD_PATTERN.match(arg.strip('`"')):
-						# Pass the original arg (with quotes if present) to the mapper/field
-						if "`" in arg or '"' in arg:
-							parsed_args.append(PseudoColumnMapper(arg))
-						else:
-							parsed_args.append(Field(arg))
-					# Check if it's a valid expression/keyword based on allowed characters
-					elif ALLOWED_ARGUMENT_CHARS_PATTERN.match(arg):
-						# Attempt to parse as a simple arithmetic expression first
-						parsed_expr = SqlFunctionParser._parse_argument_expression(arg)
-						if parsed_expr:
-							parsed_args.append(parsed_expr)
-						else:
-							# Fallback: Pass the raw string argument for non-expression cases like 'distinct name'
-							parsed_args.append(arg)
-					else:
-						# Argument contains disallowed characters.
-						frappe.throw(
-							_("Invalid characters or format in function argument expression: {0}").format(
-								arg
-							),
-							frappe.ValidationError,
-						)
-
-		return pypika_func(*parsed_args, alias=alias or None)
-
-
-def literal_eval_(literal):
-	try:
-		return literal_eval(literal)
-	except (ValueError, SyntaxError):
-		return literal
-
-
 def get_nested_set_hierarchy_result(doctype: str, name: str, hierarchy: str) -> list[str]:
 	"""Get matching nodes based on operator."""
 	table = frappe.qb.DocType(doctype)
@@ -1374,12 +1215,12 @@ def _validate_select_field(field: str):
 	if field.isdigit():
 		return
 
-	if ALLOWED_FIELD_PATTERN.match(field) or SqlFunctionParser.parse(field):
+	if ALLOWED_FIELD_PATTERN.match(field):
 		return
 
 	frappe.throw(
 		_(
-			"Invalid field format for SELECT: {0}. Field names must be simple, backticked, table-qualified, aliased, a valid function call, or '*'."
+			"Invalid field format for SELECT: {0}. Field names must be simple, backticked, table-qualified, aliased, or '*'."
 		).format(field),
 		frappe.PermissionError,
 	)

@@ -119,72 +119,8 @@ class TestQuery(IntegrationTestCase):
 		)
 
 		self.assertEqual(
-			frappe.qb.get_query(
-				"User", fields=["`tabUser`.`name`, Count(`name`) as count"], filters={"name": "Administrator"}
-			).run(),
-			frappe.qb.from_("User")
-			.select(Field("name"), Count("name").as_("count"))
-			.where(Field("name") == "Administrator")
-			.run(),
-		)
-
-		self.assertEqual(
-			frappe.qb.get_query(
-				"User",
-				fields=["`tabUser`.`name`, Count(`name`) as `count`"],
-				filters={"name": "Administrator"},
-			).run(),
-			frappe.qb.from_("User")
-			.select(Field("name"), Count("name").as_("count"))
-			.where(Field("name") == "Administrator")
-			.run(),
-		)
-
-		self.assertEqual(
-			frappe.qb.get_query(
-				"User", fields="`tabUser`.`name`, Count(`name`) as `count`", filters={"name": "Administrator"}
-			).run(),
-			frappe.qb.from_("User")
-			.select(Field("name"), Count("name").as_("count"))
-			.where(Field("name") == "Administrator")
-			.run(),
-		)
-
-	def test_functions_fields(self):
-		self.assertEqual(
-			frappe.qb.get_query("User", fields="Count(name)", filters={}).get_sql(),
-			frappe.qb.from_("User").select(Count(Field("name"))).get_sql(),
-		)
-
-		self.assertEqual(
-			frappe.qb.get_query("User", fields=["Count(name)", "Max(name)"], filters={}).get_sql(),
-			frappe.qb.from_("User").select(Count(Field("name")), Max(Field("name"))).get_sql(),
-		)
-
-		self.assertEqual(
-			frappe.qb.get_query("User", fields=["abs(name-email)", "Count(name)"], filters={}).get_sql(),
-			frappe.qb.from_("User")
-			.select(Abs(Field("name") - Field("email")), Count(Field("name")))
-			.get_sql(),
-		)
-
-		self.assertEqual(
-			frappe.qb.get_query("User", fields=[Count("*")], filters={}).get_sql(),
+			frappe.qb.get_query("User", fields=[Count("*")]).get_sql(),
 			frappe.qb.from_("User").select(Count("*")).get_sql(),
-		)
-
-		self.assertEqual(
-			frappe.qb.get_query("User", fields="timestamp(creation, modified)", filters={}).get_sql(),
-			frappe.qb.from_("User").select(Timestamp(Field("creation"), Field("modified"))).get_sql(),
-		)
-
-		self.assertEqual(
-			frappe.qb.get_query(
-				"User", fields="Count(name) as count, Max(email) as max_email", filters={}
-			).get_sql(),
-			frappe.qb.from_("User")
-			.select(Count(Field("name")).as_("count"), Max(Field("email")).as_("max_email"))
-			.get_sql(),
 		)
 
 	def test_qb_fields(self):
@@ -213,12 +149,6 @@ class TestQuery(IntegrationTestCase):
 			"`name` as alias",
 			"tabUser.name as alias",
 			"`tabUser`.`name` as alias",
-			"COUNT(*)",
-			"COUNT(name)",
-			"COUNT(`name`)",
-			"COUNT(`tabUser`.`name`)",
-			"COUNT(*) as count_alias",
-			"SUM(amount) as total",
 			"*",
 		]
 		invalid_fields = [
@@ -227,7 +157,6 @@ class TestQuery(IntegrationTestCase):
 			"name--comment",
 			"name /* comment */",
 			"name AS alias; --",
-			"COUNT(name) as alias; SELECT 1",
 			"invalid-field-name",
 			"table.invalid-field",
 			"`table`.`invalid-field`",
@@ -235,6 +164,10 @@ class TestQuery(IntegrationTestCase):
 			"`field with space`",
 			"field as alias with space",
 			"field as `alias with space`",
+			"COUNT(*)",
+			"COUNT(name)",
+			"SUM(amount) as total",
+			"COUNT(name) as alias; SELECT 1",
 			"COUNT(name;)",
 		]
 
@@ -399,15 +332,6 @@ class TestQuery(IntegrationTestCase):
 			frappe.qb.get_query(user_doctype, fields="name as owner, email as id", filters={}).get_sql(),
 			frappe.qb.from_(user_doctype)
 			.select(user_doctype.name.as_("owner"), user_doctype.email.as_("id"))
-			.get_sql(),
-		)
-
-		self.assertEqual(
-			frappe.qb.get_query(
-				user_doctype, fields=["Count(name) as count", "email as id"], filters={}
-			).get_sql(),
-			frappe.qb.from_(user_doctype)
-			.select(Count(Field("name")).as_("count"), user_doctype.email.as_("id"))
 			.get_sql(),
 		)
 
