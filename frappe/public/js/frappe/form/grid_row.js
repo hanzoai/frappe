@@ -852,9 +852,10 @@ export default class GridRow {
 
 	show_search_row() {
 		// show or remove search columns based on grid rows
-		let show_length = this.grid?.meta?.grid_search_field_length
-			? this.grid.meta.grid_search_field_length > 0
-			: 20;
+		let show_length =
+			this.grid?.meta?.grid_search_field_length > 0
+				? this.grid.meta.grid_search_field_length
+				: 20;
 		this.show_search =
 			this.show_search &&
 			(this.grid?.data?.length >= show_length || this.grid.filter_applied);
