@@ -70,12 +70,8 @@ class SystemSettings(Document):
 		logout_on_password_reset: DF.Check
 		max_auto_email_report_per_user: DF.Int
 		max_file_size: DF.Int
-<<<<<<< HEAD
 		minimum_password_score: DF.Literal["2", "3", "4"]
-=======
 		max_report_rows: DF.Int
-		minimum_password_score: DF.Literal["1", "2", "3", "4"]
->>>>>>> ea3050a751 (fix: make max report rows configurable (#32582))
 		number_format: DF.Literal[
 			"#,###.##",
 			"#.###,##",

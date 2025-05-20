@@ -693,14 +693,6 @@
    "fieldtype": "Link",
    "label": "Currency",
    "options": "Currency"
-<<<<<<< HEAD
-=======
-  },
-  {
-   "default": "1",
-   "fieldname": "hide_empty_read_only_fields",
-   "fieldtype": "Check",
-   "label": "Hide Empty Read-Only Fields"
   },
   {
    "default": "100000",
@@ -708,17 +700,12 @@
    "fieldname": "max_report_rows",
    "fieldtype": "Int",
    "label": "Max Report Rows"
->>>>>>> ea3050a751 (fix: make max report rows configurable (#32582))
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2025-02-21 20:06:55.499937",
-=======
  "modified": "2025-05-19 14:17:40.748786",
->>>>>>> ea3050a751 (fix: make max report rows configurable (#32582))
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
