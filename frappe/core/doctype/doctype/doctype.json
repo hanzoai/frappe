@@ -704,7 +704,7 @@
    "depends_on": "istable",
    "fieldname": "grid_search_field_length",
    "fieldtype": "Int",
-   "label": "Grid Search Field Length",
+   "label": "Rows Threshold for Grid Search",
    "non_negative": 1
   }
  ],
