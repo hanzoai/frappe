@@ -61,7 +61,7 @@
   "form_sidebar",
   "timeline",
   "dashboard",
-  "show_absolute_datetime_foramt",
+  "show_absolute_datetime_format",
   "change_password",
   "new_password",
   "logout_all_sessions",
@@ -831,7 +831,7 @@
   },
   {
    "default": "0",
-   "fieldname": "show_absolute_datetime_foramt",
+   "fieldname": "show_absolute_datetime_format",
    "fieldtype": "Check",
    "label": "Show absolute datetime values"
   }
@@ -892,7 +892,7 @@
   }
  ],
  "make_attachments_public": 1,
- "modified": "2025-05-20 20:20:56.377578",
+ "modified": "2025-05-20 20:53:57.335776",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",

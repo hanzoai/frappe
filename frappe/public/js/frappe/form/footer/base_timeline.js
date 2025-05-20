@@ -140,7 +140,7 @@ class BaseTimeline {
 		if (!item.hide_timestamp && !item.is_card) {
 			timeline_content.append(
 				`<span> · ${
-					frappe.boot.user.show_absolute_datetime_foramt === 1
+					frappe.boot.user.show_absolute_datetime_format === 1
 						? frappe.datetime.str_to_user(item.creation)
 						: comment_when(item.creation)
 				}</span>`
