@@ -95,8 +95,9 @@ frappe.ui.form.Sidebar = class {
 				__("{0} created this", [get_user_link(this.frm.doc.owner)])
 			) +
 			" · " +
-			comment_when(this.frm.doc.creation);
-
+			(frappe.boot.user.show_absolute_datetime_foramt === 1
+				? frappe.datetime.str_to_user(this.frm.doc.creation)
+				: comment_when(this.frm.doc.creation));
 		let modified_message =
 			get_user_message(
 				this.frm.doc.modified_by,
@@ -104,7 +105,9 @@ frappe.ui.form.Sidebar = class {
 				__("{0} last edited this", [get_user_link(this.frm.doc.modified_by)])
 			) +
 			" · " +
-			comment_when(this.frm.doc.modified);
+			(frappe.boot.user.show_absolute_datetime_foramt === 1
+				? frappe.datetime.str_to_user(this.frm.doc.modified)
+				: comment_when(this.frm.doc.modified));
 
 		if (user_list.length === 1) {
 			// same user created and edited
