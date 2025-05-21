@@ -61,10 +61,7 @@ def get_permission_query_conditions(user):
 
 
 def has_permission(doc, user):
-<<<<<<< HEAD
 	return doc.public or doc.owner == user
-=======
-	return bool(doc.public or doc.owner == user)
 
 
 def get_unseen_notes():
@@ -102,4 +99,3 @@ def _get_unseen_notes():
 		)
 	).run(as_dict=1)
 	frappe.cache.set_value(f"{UNSEEN_NOTES_KEY}{frappe.session.user}", results)
->>>>>>> 67c1d13f91 (fix(Note): make note show up only on login)
