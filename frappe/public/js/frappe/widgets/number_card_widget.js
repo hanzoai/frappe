@@ -157,6 +157,7 @@ export default class NumberCardWidget extends Widget {
 	async render_card() {
 		this.prepare_actions();
 		this.set_title();
+		this.card_doc?.background_color && this.widget.css("background-color", this.card_doc.background_color);
 		this.set_loading_state();
 
 		if (!this.card_doc.type) {
