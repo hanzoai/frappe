@@ -336,7 +336,7 @@ frappe.ui.form.on("User", {
 			},
 			callback: function (r) {
 				if (r.message) {
-					frappe.msgprint(__("Save API Secret: {0}", [r.message.api_secret]));
+					show_api_key_dialog(r.message.api_key, r.message.api_secret);
 					frm.reload_doc();
 				}
 			},
@@ -436,4 +436,40 @@ function get_roles_for_editing_user() {
 			.permissions.filter((perm) => perm.permlevel >= 1 && perm.write)
 			.map((perm) => perm.role) || ["System Manager"]
 	);
+}
+
+function show_api_key_dialog(api_key, api_secret) {
+	const dialog = new frappe.ui.Dialog({
+		title: __("API Token"),
+		fields: [
+			{
+				label: __("API Key"),
+				fieldname: "api_key",
+				fieldtype: "Data",
+				read_only: 1,
+				default: api_key,
+			},
+			{
+				label: __("API Secret"),
+				fieldname: "api_secret",
+				fieldtype: "Data",
+				read_only: 1,
+				default: api_secret,
+			},
+		],
+		primary_action_label: __("{0} Download", [frappe.utils.icon("down-arrow")]),
+		primary_action: function () {
+			frappe.tools.downloadify(
+				[
+					["api_key", "api_secret"],
+					[api_key, api_secret],
+				],
+				"System Manager",
+				"api_token"
+			);
+		},
+		size: "small",
+	});
+
+	dialog.show();
 }
