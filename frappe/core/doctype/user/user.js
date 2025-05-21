@@ -454,7 +454,7 @@ function show_api_key_dialog(api_key, api_secret) {
 				fieldname: "api_secret",
 				fieldtype: "Data",
 				read_only: 1,
-				default: api_secret,
+				default: "******************",
 			},
 		],
 		primary_action_label: __("{0} Download", [frappe.utils.icon("down-arrow")]),
