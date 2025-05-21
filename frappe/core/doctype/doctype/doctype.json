@@ -21,7 +21,7 @@
   "editable_grid",
   "quick_entry",
   "grid_page_length",
-  "grid_search_field_length",
+  "rows_threshold_for_grid_search",
   "cb01",
   "track_changes",
   "track_seen",
@@ -701,6 +701,7 @@
    "default": "0",
    "depends_on": "istable",
 <<<<<<< HEAD
+<<<<<<< HEAD
    "fieldname": "rows_threshold_for_grid_search",
    "fieldtype": "Int",
    "label": "Rows Threshold for Grid Search",
@@ -715,14 +716,20 @@
  ],
 =======
    "fieldname": "grid_search_field_length",
+=======
+   "fieldname": "rows_threshold_for_grid_search",
+>>>>>>> 00e0b14208 (fix: field name changed in doctype json)
    "fieldtype": "Int",
    "label": "Rows Threshold for Grid Search",
    "non_negative": 1
   }
  ],
  "grid_page_length": 50,
+<<<<<<< HEAD
  "grid_search_field_length": 50,
 >>>>>>> ddf2587cc7 (feat: Dynamic and configurable child table search bar)
+=======
+>>>>>>> 00e0b14208 (fix: field name changed in doctype json)
  "icon": "fa fa-bolt",
  "idx": 6,
  "index_web_pages_for_search": 1,
@@ -804,10 +811,14 @@
   }
  ],
 <<<<<<< HEAD
+<<<<<<< HEAD
  "modified": "2025-07-19 12:23:16.296416",
 =======
  "modified": "2025-05-18 06:10:30.044174",
 >>>>>>> ddf2587cc7 (feat: Dynamic and configurable child table search bar)
+=======
+ "modified": "2025-05-21 21:58:59.947374",
+>>>>>>> 00e0b14208 (fix: field name changed in doctype json)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "DocType",
