@@ -242,8 +242,8 @@ export default class Grid {
 		let selected_children = this.get_selected_children();
 		selected_children.forEach((doc) => {
 			this.add_new_row(null, null, true, doc, true);
-			this.refresh();
 		});
+		this.refresh();
 	}
 
 	delete_rows() {
