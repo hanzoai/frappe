@@ -1,8 +1,7 @@
 import frappe
 from frappe.boot import get_unseen_notes, get_user_pages_or_reports
-from frappe.desk.doctype.note.note import mark_as_seen
+from frappe.desk.doctype.note.note import _get_unseen_notes, mark_as_seen
 from frappe.tests.utils import FrappeTestCase
-from frappe.desk.doctype.note.note import _get_unseen_notes, get_unseen_notes, mark_as_seen
 
 
 class TestBootData(FrappeTestCase):

@@ -4,6 +4,8 @@
 import frappe
 from frappe.model.document import Document
 
+UNSEEN_NOTES_KEY = "unseen_notes::"
+
 
 class Note(Document):
 	# begin: auto-generated types
