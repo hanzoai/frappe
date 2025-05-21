@@ -122,7 +122,6 @@ class DocType(Document):
 		fields: DF.Table[DocField]
 		force_re_route_to_default_view: DF.Check
 		grid_page_length: DF.Int
-		grid_search_field_length: DF.Int
 		has_web_view: DF.Check
 		hide_toolbar: DF.Check
 		icon: DF.Data | None
@@ -162,6 +161,7 @@ class DocType(Document):
 		restrict_to_domain: DF.Link | None
 		route: DF.Data | None
 		row_format: DF.Literal["Dynamic", "Compressed"]
+		rows_threshold_for_grid_search: DF.Int
 		search_fields: DF.Data | None
 		sender_field: DF.Data | None
 		sender_name_field: DF.Data | None
