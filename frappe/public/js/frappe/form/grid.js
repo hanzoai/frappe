@@ -243,7 +243,6 @@ export default class Grid {
 		selected_children.forEach((doc) => {
 			this.add_new_row(null, null, true, doc, true);
 		});
-		this.refresh();
 	}
 
 	delete_rows() {
