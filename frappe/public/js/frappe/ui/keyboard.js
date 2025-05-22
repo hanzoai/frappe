@@ -1,4 +1,5 @@
 import "./alt_keyboard_shortcuts";
+import { DropdownConsole } from "./dropdown_console";
 
 frappe.provide("frappe.ui.keys.handlers");
 
@@ -347,3 +348,13 @@ function close_grid_and_dialog() {
 		return false;
 	}
 }
+
+frappe.ui.keys.add_shortcut({
+	shortcut: "shift+t",
+	action: function (e) {
+		let dropdown_console = new DropdownConsole();
+		dropdown_console.show();
+		return false;
+	},
+	description: __("Open console"),
+});
