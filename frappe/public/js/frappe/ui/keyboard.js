@@ -352,6 +352,9 @@ function close_grid_and_dialog() {
 frappe.ui.keys.add_shortcut({
 	shortcut: "shift+t",
 	action: function (e) {
+		if (!frappe.user.has_role("System Manager")) {
+			return;
+		}
 		if (cur_dialog?.is_minimized) {
 			cur_dialog.toggle_minimize();
 			cur_dialog.focus_on_first_input();
