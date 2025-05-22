@@ -571,11 +571,11 @@ class EmailAccount(Document):
 
 		users = get_system_managers(only_name=True)
 		notification = {
-			"type": "Alert",
 			"document_type": self.doctype,
 			"document_name": self.name,
 			"subject": description,
 			"from_user": "Administrator",
+			"email_header": _("Email Account {0} Disabled").format(self.email_id or self.name),
 		}
 		enqueue_create_notification(users, notification)
 
