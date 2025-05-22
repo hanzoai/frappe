@@ -26,5 +26,14 @@ export class DropdownConsole {
 
 	show() {
 		this.dialog.show();
+		if (cur_frm && !cur_frm.is_new()) {
+			let current_code = this.dialog.get_value("console");
+			if (!current_code) {
+				this.dialog.set_value(
+					"console",
+					`doc = frappe.get_doc("${cur_frm.doc.doctype}", "${cur_frm.doc.name}")\n`
+				);
+			}
+		}
 	}
 }
