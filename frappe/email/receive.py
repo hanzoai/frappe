@@ -177,7 +177,7 @@ class EmailServer:
 
 		for i, uid in enumerate(email_list[:100]):
 			try:
-				self.retrieve_message(uid, i + 1)
+				self.retrieve_message(uid, i + 1, folder)
 			except (_socket.timeout, LoginLimitExceeded):
 				# get whatever messages were retrieved
 				break
@@ -258,7 +258,7 @@ class EmailServer:
 
 		return match[0] if match else None
 
-	def retrieve_message(self, uid, msg_num):
+	def retrieve_message(self, uid, msg_num, folder):
 		try:
 			if cint(self.settings.use_imap):
 				status, message = self.imap.uid("fetch", uid, "(BODY.PEEK[] BODY.PEEK[HEADER] FLAGS)")
@@ -272,7 +272,9 @@ class EmailServer:
 		except _socket.timeout:
 			# propagate this error to break the loop
 			raise
-
+		except imaplib.IMAP4.abort:
+			self.connect()
+			self.get_messages(folder)
 		except Exception as e:
 			if self.has_login_limit_exceeded(e):
 				raise LoginLimitExceeded(e) from e
