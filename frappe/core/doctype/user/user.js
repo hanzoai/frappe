@@ -454,7 +454,7 @@ function show_api_key_dialog(api_key, api_secret) {
 				fieldname: "api_secret",
 				fieldtype: "Data",
 				read_only: 1,
-				default: "******************",
+				default: "***************",
 			},
 		],
 		primary_action_label: __("{0} Download", [frappe.utils.icon("down-arrow")]),
@@ -472,4 +472,6 @@ function show_api_key_dialog(api_key, api_secret) {
 	});
 
 	dialog.show();
+
+	dialog.show_message(__("Download details for future reference."), "yellow", 1);
 }
