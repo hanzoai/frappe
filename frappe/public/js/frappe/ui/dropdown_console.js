@@ -36,7 +36,43 @@ export class DropdownConsole {
 			}
 		}
 
+		this.bind_executer();
 		this.load_completion();
+	}
+
+	bind_executer() {
+		let me = this;
+		setTimeout(() => {
+			const field = this.dialog.get_field("console");
+			let editor = field.editor;
+			editor.setKeyboardHandler(null); // sorry emacs/vim users
+			editor.commands.addCommand({
+				name: "execute_code",
+				bindKey: {
+					// Shortcut keys
+					win: "Ctrl-Enter",
+					mac: "Command-Enter",
+				},
+				exec: function (editor) {
+					me.execute_code();
+				},
+			});
+		}, 200); // XXX: figure out a way to chain with readiness of ace?
+	}
+
+	async execute_code() {
+		this.dialog.set_value("output", "");
+		frappe
+			.xcall("frappe.desk.doctype.system_console.system_console.execute_code", {
+				doc: {
+					console: this.dialog.get_value("console"),
+					doctype: "System Console",
+					type: "Python",
+				},
+			})
+			.then(({ output }) => {
+				this.dialog.set_value("output", output);
+			});
 	}
 
 	async load_completion() {
