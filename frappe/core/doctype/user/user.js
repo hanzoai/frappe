@@ -477,4 +477,18 @@ function show_api_key_dialog(api_key, api_secret) {
 
 	dialog.show_message(__("Download details for future reference."), "yellow", 1);
 	dialog.get_close_btn().show(); // static: true, so close button is hidden by default
+
+	// ask for confirmation before closing API details dialog
+	dialog.get_close_btn().on("click", function () {
+		const confirm_dialog = frappe.confirm(
+			__(
+				"Are you sure you downloaded the key details? <br> <br> This is the last time we will show you the details."
+			),
+			() => dialog.hide(),
+			() => dialog.show()
+		);
+
+		confirm_dialog.set_primary_action("Yes, Close");
+		confirm_dialog.set_secondary_action_label("No, Go Back");
+	});
 }
