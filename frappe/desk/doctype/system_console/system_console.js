@@ -124,7 +124,9 @@ frappe.ui.form.on("System Console", {
 	},
 
 	load_completions(frm) {
-		if (frm.doc.type != "Python") return;
+		if (frm.doc.type != "Python") {
+			frm.set_df_property("console", "autocompletions", []);
+		}
 		setTimeout(() => {
 			frappe
 				.call({
