@@ -35,5 +35,25 @@ export class DropdownConsole {
 				);
 			}
 		}
+
+		this.load_completion();
+	}
+
+	async load_completion() {
+		let me = this;
+		setTimeout(() => {
+			// TODO: add contextual completions here, current docfields?
+			frappe
+				.xcall(
+					"frappe.core.doctype.server_script.server_script.get_autocompletion_items",
+					null,
+					"GET",
+					{ cache: true }
+				)
+				.then((items) => {
+					const field = me.dialog.get_field("console");
+					field.df.autocompletions = items;
+				});
+		}, 100);
 	}
 }
