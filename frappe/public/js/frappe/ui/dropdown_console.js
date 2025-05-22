@@ -7,7 +7,10 @@ export class DropdownConsole {
 			size: "large",
 			fields: [
 				{
-					description: "To execute press ctrl/cmd+enter.",
+					description: `To execute press ctrl/cmd+enter.
+					To minimize this window press Escape.
+					Press shift+t to bring it back.
+					`,
 					fieldname: "console",
 					fieldtype: "Code",
 					label: "Console",
