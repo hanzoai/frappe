@@ -32,7 +32,9 @@
   "dynamic_filters_section",
   "dynamic_filters_json",
   "section_break_16",
-  "color"
+  "color",
+  "column_break_xtre",
+  "background_color"
  ],
  "fields": [
   {
@@ -208,6 +210,15 @@
    "fieldtype": "Link",
    "label": "Currency",
    "options": "Currency"
+  },
+  {
+   "fieldname": "column_break_xtre",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "background_color",
+   "fieldtype": "Color",
+   "label": "Background Color"
   },
   {
    "default": "0",
