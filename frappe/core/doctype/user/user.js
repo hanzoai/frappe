@@ -457,6 +457,8 @@ function show_api_key_dialog(api_key, api_secret) {
 				default: "***************",
 			},
 		],
+		static: true,
+		size: "small",
 		primary_action_label: __("{0} Download", [frappe.utils.icon("down-arrow")]),
 		primary_action: function () {
 			frappe.tools.downloadify(
@@ -468,10 +470,10 @@ function show_api_key_dialog(api_key, api_secret) {
 				"api_token"
 			);
 		},
-		size: "small",
 	});
 
 	dialog.show();
 
 	dialog.show_message(__("Download details for future reference."), "yellow", 1);
+	dialog.get_close_btn().show(); // static: true, so close button is hidden by default
 }
