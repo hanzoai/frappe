@@ -42,7 +42,6 @@ export class DropdownConsole {
 	async load_completion() {
 		let me = this;
 		setTimeout(() => {
-			// TODO: add contextual completions here, current docfields?
 			frappe
 				.xcall(
 					"frappe.core.doctype.server_script.server_script.get_autocompletion_items",
@@ -52,7 +51,18 @@ export class DropdownConsole {
 				)
 				.then((items) => {
 					const field = me.dialog.get_field("console");
-					field.df.autocompletions = items;
+					const custom_completions = [];
+					if (cur_frm && !cur_frm.is_new()) {
+						frappe.meta
+							.get_fieldnames(cur_frm.doc.doctype, cur_frm.doc.parent, {
+								fieldtype: ["not in", frappe.model.no_value_type],
+							})
+							.forEach((fieldname) => {
+								custom_completions.push(`doc.${fieldname}`);
+							});
+					}
+
+					field.df.autocompletions = [...items, ...custom_completions];
 				});
 		}, 100);
 	}
