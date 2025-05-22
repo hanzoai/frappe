@@ -441,7 +441,7 @@ function get_roles_for_editing_user() {
 function show_api_key_dialog(api_key, api_secret) {
 	const download_icon = `<i class="fa fa-download fa-w"></i>`;
 	const dialog = new frappe.ui.Dialog({
-		title: __("API Token"),
+		title: __("Key Details"),
 		fields: [
 			{
 				label: __("API Key"),
@@ -468,18 +468,20 @@ function show_api_key_dialog(api_key, api_secret) {
 					[api_key, api_secret],
 				],
 				"System Manager",
-				"api_token"
+				"key_details"
 			);
 		},
 	});
 
 	dialog.show();
-
 	dialog.show_message(__("Download details for future reference."), "yellow", 1);
-	dialog.get_close_btn().show(); // static: true, so close button is hidden by default
+
+	const close_btn = dialog.get_close_btn();
+
+	close_btn.show(); // static: true, so close button is hidden by default
 
 	// ask for confirmation before closing API details dialog
-	dialog.get_close_btn().on("click", function () {
+	close_btn.on("click", function () {
 		const confirm_dialog = frappe.confirm(
 			__(
 				"Are you sure you downloaded the key details? <br> <br> This is the last time we will show you the details."
