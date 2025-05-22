@@ -3,6 +3,7 @@ export class DropdownConsole {
 		this.dialog = new frappe.ui.Dialog({
 			title: __("System Console"),
 			minimizable: true,
+			no_cancel_flag: true, // ugh
 			size: "large",
 			fields: [
 				{
@@ -21,6 +22,24 @@ export class DropdownConsole {
 					read_only: 1,
 				},
 			],
+		});
+
+		// Make it static and avoid closing on escape.
+		// Not using dialog.static here because then it's not dismissable at all.
+		this.dialog.$wrapper.modal({
+			backdrop: "static",
+			keyboard: false,
+		});
+
+		let me = this;
+		this.dialog.$wrapper.on("keydown", function (e) {
+			if (e.key === "Escape") {
+				e.preventDefault();
+				if (!me.dialog.is_minimized) {
+					me.dialog.toggle_minimize();
+				}
+				return false;
+			}
 		});
 	}
 
