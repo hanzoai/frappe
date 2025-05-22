@@ -67,6 +67,8 @@ class EmailServer:
 	"""Wrapper for POP server to pull emails."""
 
 	def __init__(self, args=None):
+		self.retry_limit = 3
+		self.retry_count = 0
 		self.settings = args or frappe._dict()
 
 	def connect(self):
@@ -273,8 +275,10 @@ class EmailServer:
 			# propagate this error to break the loop
 			raise
 		except imaplib.IMAP4.abort:
-			self.connect()
-			self.get_messages(folder)
+			if self.retry_count < self.retry_limit:
+				self.connect()
+				self.get_messages(folder)
+				self.retry_count += 1
 		except Exception as e:
 			if self.has_login_limit_exceeded(e):
 				raise LoginLimitExceeded(e) from e
