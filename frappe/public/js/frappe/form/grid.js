@@ -241,7 +241,8 @@ export default class Grid {
 	duplicate_rows() {
 		let selected_children = this.get_selected_children();
 		selected_children.forEach((doc) => {
-			this.add_new_row(null, null, true, doc, true);
+			this.add_new_row(null, null, false, doc, false);
+			this.check_range(doc.name, doc.name, false);
 		});
 	}
 
