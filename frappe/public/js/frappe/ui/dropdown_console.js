@@ -8,9 +8,12 @@ export class DropdownConsole {
 			size: "large",
 			fields: [
 				{
-					description: `To execute press ctrl/cmd+enter.
+					description: `
+					${frappe.utils.icon("solid-warning", "xs")}
+					WARNING: Executing random untested code here is dangerous, use with extreme caution. <br>
+					Usage: To execute press ctrl/cmd+enter.
 					To minimize this window press Escape.
-					Press shift+t to bring it back.
+					Press shift+t to bring the window back.
 					`,
 					fieldname: "console",
 					fieldtype: "Code",
@@ -115,12 +118,18 @@ export class DropdownConsole {
 					doctype: "System Console",
 					type: "Python",
 				},
+			},
+			"POST",
+			{
+				freeze: true,
+				freeze_message: __("Executing Code"),
 			}
 		);
 		const end = frappe.datetime.now_datetime(true);
 		this.dialog.set_value("output", output);
 		const time_taken = moment(end).diff(start, "milliseconds");
-		output_field.set_description(`Executed in ${time_taken} milliseconds`);
+		output_field.set_description(`Executed in ${time_taken} milliseconds.
+			<a target="_blank" href="/app/console-log?owner=${frappe.session.user}" >View Logs</a>`);
 	}
 
 	async load_completions() {
