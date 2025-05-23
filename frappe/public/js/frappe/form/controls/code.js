@@ -242,9 +242,7 @@ frappe.ui.form.ControlCode = class ControlCode extends frappe.ui.form.ControlTex
 	}
 
 	set_focus() {
-		if (!this.editor) return;
-		this.editor.focus();
-		this.editor.gotoLine(this.editor.session.getLength(), Infinity);
+		this.editor?.focus();
 	}
 
 	load_lib() {
