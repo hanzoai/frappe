@@ -3,7 +3,8 @@ export class DropdownConsole {
 		this.dialog = new frappe.ui.Dialog({
 			title: __("System Console"),
 			minimizable: true,
-			no_cancel_flag: true, // ugh
+			static: true,
+			no_cancel_flag: true, // hack: global escape handler kills the dialog
 			size: "large",
 			fields: [
 				{
@@ -17,6 +18,7 @@ export class DropdownConsole {
 					options: "Python",
 					min_lines: 20,
 					max_lines: 20,
+					wrap: true,
 				},
 				{
 					fieldname: "output",
@@ -26,13 +28,7 @@ export class DropdownConsole {
 				},
 			],
 		});
-
-		// Make it static and avoid closing on escape.
-		// Not using dialog.static here because then it's not dismissable at all.
-		this.dialog.$wrapper.modal({
-			backdrop: "static",
-			keyboard: false,
-		});
+		this.dialog.get_close_btn().show(); // framework hides it on static dialogs
 
 		let me = this;
 		this.dialog.$wrapper.on("keydown", function (e) {
@@ -52,20 +48,22 @@ export class DropdownConsole {
 		await new Promise((r) => setTimeout(r, duration));
 	}
 
-	show() {
+	async show() {
 		this.dialog.show();
+		this.bind_executer();
+		this.load_completions();
+
 		if (cur_frm && !cur_frm.is_new()) {
 			let current_code = this.dialog.get_value("console");
 			if (!current_code) {
-				this.dialog.set_value(
-					"console",
-					`doc = frappe.get_doc("${cur_frm.doc.doctype}", "${cur_frm.doc.name}")\n`
-				);
+				await this.sleep(100); // wait for ace
+				this.dialog
+					.get_field("console")
+					.editor?.insert(
+						`doc = frappe.get_doc("${cur_frm.doc.doctype}", "${cur_frm.doc.name}")\n`
+					);
 			}
 		}
-
-		this.bind_executer();
-		this.load_completions();
 	}
 
 	async bind_executer() {
