@@ -29,12 +29,12 @@ TABLE_NAME_PATTERN = re.compile(r"^[\w -]*$", flags=re.ASCII)
 
 # Pattern to validate field names in SELECT:
 # Allows: name, `name`, name as alias, `name` as alias, `table name`.`name`, `table name`.`name` as alias, table.name, table.name as alias
-ALLOWED_FIELD_PATTERN = re.compile(r"^(?:`?[\w\s-]+`?\.)?(`?\w+`?|\w+)(?:\s+as\s+\w+)?$", flags=re.ASCII)
+ALLOWED_FIELD_PATTERN = re.compile(r"^(?:(`[\w\s-]+`|\w+)\.)?(`\w+`|\w+)(?:\s+as\s+\w+)?$", flags=re.ASCII)
 
 # Pattern to validate field names used in various SQL clauses (WHERE, GROUP BY, ORDER BY):
 # Allows simple field names, backticked names, and table-qualified names (e.g., name, `name`, `table`.`name`, table.name)
 # Does NOT allow aliases ('as alias') or functions.
-ALLOWED_SQL_FIELD_PATTERN = re.compile(r"^(?:`?\w+`?\.)?(`?\w+`?|\w+)$", flags=re.ASCII)
+ALLOWED_SQL_FIELD_PATTERN = re.compile(r"^(?:(`\w+`|\w+)\.)?(`\w+`|\w+)$", flags=re.ASCII)
 
 # Regex to parse field names:
 # Group 1: Optional quote for table name
@@ -1328,9 +1328,6 @@ class CombinedRawCriterion(RawCriterion):
 		super(RawCriterion, self).__init__()
 
 	def get_sql(self, **kwargs: Any) -> str:
-		left_sql = self.left.get_sql(**kwargs) if hasattr(self.left, "get_sql") else str(self.left)
-		right_sql = self.right.get_sql(**kwargs) if hasattr(self.right, "get_sql") else str(self.right)
-		return f"({left_sql}) {self.operator} ({right_sql})"
 		left_sql = self.left.get_sql(**kwargs) if hasattr(self.left, "get_sql") else str(self.left)
 		right_sql = self.right.get_sql(**kwargs) if hasattr(self.right, "get_sql") else str(self.right)
 		return f"({left_sql}) {self.operator} ({right_sql})"

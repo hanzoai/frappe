@@ -150,6 +150,7 @@ class TestQuery(IntegrationTestCase):
 			"tabUser.name as alias",
 			"`tabUser`.`name` as alias",
 			"*",
+			"`tabHas Role`.`name`",
 		]
 		invalid_fields = [
 			"name; DROP TABLE users",
@@ -169,6 +170,12 @@ class TestQuery(IntegrationTestCase):
 			"SUM(amount) as total",
 			"COUNT(name) as alias; SELECT 1",
 			"COUNT(name;)",
+			"`name",
+			"name`",
+			"`tabUser.name`",
+			"tabUser.`name",
+			"tabUser`.`name`",
+			"tab`User.name",
 		]
 
 		for field in valid_fields:
@@ -208,6 +215,11 @@ class TestQuery(IntegrationTestCase):
 			"`table`.`invalid-field`",
 			"field with space",
 			"`field with space`",
+			"`name`",
+			"`name",
+			"name`",
+			"tabUser.`name`",
+			"`tabUser.name`",
 		]
 
 		for field in valid_fields:
