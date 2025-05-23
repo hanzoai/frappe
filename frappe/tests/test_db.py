@@ -71,11 +71,11 @@ class TestDB(IntegrationTestCase):
 		self.assertEqual(frappe.db.get_value("User", {"name": ["<", "Adn"]}), "Administrator")
 		self.assertEqual(frappe.db.get_value("User", {"name": ["<=", "Administrator"]}), "Administrator")
 		self.assertEqual(
-			frappe.db.get_value("User", {}, ["Max(name)"], order_by=None),
+			frappe.db.get_value("User", {}, [{"MAX": "name"}], order_by=None),
 			frappe.db.sql("SELECT Max(name) FROM tabUser")[0][0],
 		)
 		self.assertEqual(
-			frappe.db.get_value("User", {}, "Min(name)", order_by=None),
+			frappe.db.get_value("User", {}, {"MIN": "name"}, order_by=None),
 			frappe.db.sql("SELECT Min(name) FROM tabUser")[0][0],
 		)
 		self.assertIn(
@@ -374,7 +374,7 @@ class TestDB(IntegrationTestCase):
 			random_field,
 		)
 		self.assertEqual(
-			next(iter(frappe.get_all("ToDo", fields=[f"count(`{random_field}`)"], limit=1)[0])),
+			next(iter(frappe.get_all("ToDo", fields=[{"count": random_field}], limit=1)[0])),
 			"count" if frappe.conf.db_type == "postgres" else f"count(`{random_field}`)",
 		)
 
