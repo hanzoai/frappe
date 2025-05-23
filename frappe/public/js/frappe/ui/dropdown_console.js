@@ -104,6 +104,9 @@ export class DropdownConsole {
 	async execute_code() {
 		await this.sleep(50); // ace often takes time to push changes
 		this.dialog.set_value("output", "");
+		const output_field = this.dialog.get_field("output");
+		output_field.set_description("");
+		const start = frappe.datetime.now_datetime(true);
 		let { output } = await frappe.xcall(
 			"frappe.desk.doctype.system_console.system_console.execute_code",
 			{
@@ -114,7 +117,10 @@ export class DropdownConsole {
 				},
 			}
 		);
+		const end = frappe.datetime.now_datetime(true);
 		this.dialog.set_value("output", output);
+		const time_taken = moment(end).diff(start, "milliseconds");
+		output_field.set_description(`Executed in ${time_taken} milliseconds`);
 	}
 
 	async load_completions() {
