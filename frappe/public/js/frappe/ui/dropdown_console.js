@@ -29,6 +29,7 @@ export class DropdownConsole {
 			],
 		});
 		this.dialog.get_close_btn().show(); // framework hides it on static dialogs
+		this.editor = null;
 
 		let me = this;
 		this.dialog.$wrapper.on("keydown", function (e) {
@@ -42,21 +43,37 @@ export class DropdownConsole {
 		});
 	}
 
-	async sleep(duration) {
-		// because ace will be ace, this is needed to keep interaction between ace and rest of the
-		// code feel saner.
-		await new Promise((r) => setTimeout(r, duration));
+	sleep(duration) {
+		return new Promise((r) => setTimeout(r, duration));
+	}
+
+	async wait_for_ace() {
+		// I can't find any other way to ensure that ace is loaded and ready
+		// This small delay shouldn't be noticable.
+		let retry_count = 0;
+
+		while (retry_count++ < 10 && !this.editor) {
+			await this.sleep(25);
+			this.editor = this.dialog.get_field("console").editor;
+		}
+
+		if (!this.editor) {
+			throw Error("Code editor not found");
+		}
 	}
 
 	async show() {
 		this.dialog.show();
+		await this.wait_for_ace();
 		this.bind_executer();
 		this.load_completions();
+		this.load_contextual_boilerplate();
+	}
 
+	async load_contextual_boilerplate() {
 		if (cur_frm && !cur_frm.is_new()) {
 			let current_code = this.dialog.get_value("console");
 			if (!current_code) {
-				await this.sleep(100); // wait for ace
 				this.dialog
 					.get_field("console")
 					.editor?.insert(
@@ -68,7 +85,6 @@ export class DropdownConsole {
 
 	async bind_executer() {
 		let me = this;
-		await this.sleep(200);
 		const field = this.dialog.get_field("console");
 		let editor = field.editor;
 		editor.setKeyboardHandler(null); // sorry emacs/vim users
@@ -86,6 +102,7 @@ export class DropdownConsole {
 	}
 
 	async execute_code() {
+		await this.sleep(50); // ace often takes time to push changes
 		this.dialog.set_value("output", "");
 		let { output } = await frappe.xcall(
 			"frappe.desk.doctype.system_console.system_console.execute_code",
@@ -102,7 +119,6 @@ export class DropdownConsole {
 
 	async load_completions() {
 		let me = this;
-		await this.sleep(100);
 		let items = await frappe.xcall(
 			"frappe.core.doctype.server_script.server_script.get_autocompletion_items",
 			null,
