@@ -1157,6 +1157,7 @@ class TestReportview(FrappeTestCase):
 		query = frappe.get_all("DocField", {"fieldname": None}, run=0)
 		self.assertIn("''", query)
 		self.assertNotIn("\\'", query)
+		self.assertFalse(frappe.get_all("DocField", {"name": None}))
 
 
 class TestReportView(FrappeTestCase):
