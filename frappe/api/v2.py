@@ -15,7 +15,7 @@ from werkzeug.routing import Rule
 
 import frappe
 import frappe.client
-from frappe import _, cint, get_newargs, is_whitelisted
+from frappe import _, cint, cstr, get_newargs, is_whitelisted
 from frappe.core.doctype.server_script.server_script_utils import get_server_script_map
 from frappe.handler import is_valid_http_method, run_server_script, upload_file
 
@@ -65,7 +65,14 @@ def read_doc(doctype: str, name: str):
 	doc = frappe.get_doc(doctype, name)
 	doc.check_permission("read")
 	doc.apply_fieldlevel_read_permissions()
-	return doc.as_dict()
+	_doc = doc.as_dict()
+
+	for key in _doc:
+		df = doc.meta.get_field(key)
+		if df and df.fieldtype == "Link" and isinstance(_doc.get(key), int):
+			_doc[key] = cstr(_doc.get(key))
+
+	return _doc
 
 
 def document_list(doctype: str):
