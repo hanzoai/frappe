@@ -43,6 +43,22 @@ ALLOWED_SQL_FIELD_PATTERN = re.compile(r"^(?:(`\w+`|\w+)\.)?(`\w+`|\w+)$", flags
 # Group 4: Field name (e.g., `field` or field)
 FIELD_PARSE_REGEX = re.compile(r"^(?:([`\"]?)(tab[\w\s-]+)\1\.)?([`\"]?)(\w+)\3$")
 
+# Direct mapping from uppercase function names to pypika function classes
+FUNCTION_MAPPING = {
+	"COUNT": functions.Count,
+	"SUM": functions.Sum,
+	"AVG": functions.Avg,
+	"MAX": functions.Max,
+	"MIN": functions.Min,
+	"ABS": functions.Abs,
+	"EXTRACT": functions.Extract,
+	"LOCATE": functions.Locate,
+	"TIMESTAMP": functions.Timestamp,
+	"IFNULL": functions.IfNull,
+	"CONCAT": functions.Concat,
+	"NOW": functions.Now,
+}
+
 
 class Engine:
 	def get_query(
@@ -629,17 +645,29 @@ class Engine:
 		if isinstance(field, Criterion | Field):
 			return field
 		elif isinstance(field, dict):
-			# Handle child queries defined as dicts {fieldname: [child_fields]}
-			_parsed_fields = []
-			for child_field, child_fields_list in field.items():
-				# Ensure child_fields_list is a list or tuple
-				if not isinstance(child_fields_list, list | tuple):
-					frappe.throw(
-						_("Child query fields for '{0}' must be a list or tuple.").format(child_field)
-					)
-				_parsed_fields.append(ChildQuery(child_field, list(child_fields_list), self.doctype))
-			# Return list as a dict entry might represent multiple child queries (though unlikely)
-			return _parsed_fields
+			# Check if it's a SQL function dictionary
+			function_parser = SQLFunctionParser(engine=self)
+			if function_parser.is_function_dict(field):
+				return function_parser.parse_function(field)
+			else:
+				# Handle child queries defined as dicts {fieldname: [child_fields]}
+				_parsed_fields = []
+				for child_field, child_fields_list in field.items():
+					# Skip uppercase keys as they might be unsupported SQL functions
+					if child_field.isupper():
+						frappe.throw(
+							_("Unsupported function or invalid field name: {0}").format(child_field),
+							frappe.ValidationError,
+						)
+
+					# Ensure child_fields_list is a list or tuple
+					if not isinstance(child_fields_list, list | tuple):
+						frappe.throw(
+							_("Child query fields for '{0}' must be a list or tuple.").format(child_field)
+						)
+					_parsed_fields.append(ChildQuery(child_field, list(child_fields_list), self.doctype))
+				# Return list as a dict entry might represent multiple child queries (though unlikely)
+				return _parsed_fields
 
 		# At this point, field must be a string (already validated and sanitized)
 		if not isinstance(field, str):
@@ -1331,3 +1359,276 @@ class CombinedRawCriterion(RawCriterion):
 		left_sql = self.left.get_sql(**kwargs) if hasattr(self.left, "get_sql") else str(self.left)
 		right_sql = self.right.get_sql(**kwargs) if hasattr(self.right, "get_sql") else str(self.right)
 		return f"({left_sql}) {self.operator} ({right_sql})"
+
+
+class SQLFunctionParser:
+	"""Parser for SQL function dictionaries in query builder fields."""
+
+	def __init__(self, engine):
+		self.engine = engine
+
+	def is_function_dict(self, field_dict: dict) -> bool:
+		"""Check if a dictionary represents a SQL function definition."""
+		function_keys = [k for k in field_dict.keys() if k != "as"]
+		return len(function_keys) == 1 and function_keys[0] in FUNCTION_MAPPING
+
+	def parse_function(self, function_dict: dict) -> Field:
+		"""Parse a SQL function dictionary into a pypika function call."""
+		function_name = None
+		alias = None
+		function_args = None
+
+		for key, value in function_dict.items():
+			if key == "as":
+				alias = value
+			else:
+				function_name = key
+				function_args = value
+
+		if not function_name:
+			frappe.throw(_("Invalid function dictionary format"), frappe.ValidationError)
+
+		if function_name not in FUNCTION_MAPPING:
+			frappe.throw(
+				_("Unsupported function or invalid field name: {0}").format(function_name),
+				frappe.ValidationError,
+			)
+
+		if alias:
+			self._validate_alias(alias)
+
+		func_class = FUNCTION_MAPPING.get(function_name)
+		if not func_class:
+			frappe.throw(
+				_("Unsupported function or invalid field name: {0}").format(function_name),
+				frappe.ValidationError,
+			)
+
+		if isinstance(function_args, str):
+			parsed_arg = self._parse_and_validate_argument(function_args)
+			function_call = func_class(parsed_arg)
+		elif isinstance(function_args, list):
+			parsed_args = []
+			for arg in function_args:
+				parsed_arg = self._parse_and_validate_argument(arg)
+				parsed_args.append(parsed_arg)
+			function_call = func_class(*parsed_args)
+		elif isinstance(function_args, (int | float)):
+			function_call = func_class(function_args)
+		elif function_args is None:
+			try:
+				function_call = func_class()
+			except TypeError:
+				frappe.throw(
+					_("Function {0} requires arguments but none were provided").format(function_name),
+					frappe.ValidationError,
+				)
+		else:
+			frappe.throw(
+				_(
+					"Invalid function argument type: {0}. Only strings, numbers, lists, and None are allowed."
+				).format(type(function_args).__name__),
+				frappe.ValidationError,
+			)
+
+		if alias:
+			return function_call.as_(alias)
+		else:
+			return function_call
+
+	def _parse_and_validate_argument(self, arg):
+		"""Parse and validate a single function argument against SQL injection."""
+		if isinstance(arg, (int | float)):
+			return arg
+		elif isinstance(arg, str):
+			return self._validate_string_argument(arg)
+		elif arg is None:
+			# None is allowed for some functions
+			return arg
+		else:
+			frappe.throw(
+				_("Invalid argument type: {0}. Only strings, numbers, and None are allowed.").format(
+					type(arg).__name__
+				),
+				frappe.ValidationError,
+			)
+
+	def _validate_string_argument(self, arg: str):
+		"""Validate string arguments to prevent SQL injection."""
+		arg = arg.strip()
+
+		if not arg:
+			frappe.throw(_("Empty string arguments are not allowed"), frappe.ValidationError)
+
+		# Check for string literals (quoted strings)
+		if self._is_string_literal(arg):
+			return self._validate_string_literal(arg)
+
+		elif self._is_valid_field_name(arg):
+			# Validate field name and check permissions
+			self._validate_function_field_arg(arg)
+			return self.engine.table[arg]
+
+		else:
+			frappe.throw(
+				_(
+					"Invalid argument format: {0}. Only quoted string literals or simple field names are allowed."
+				).format(arg),
+				frappe.ValidationError,
+			)
+
+	def _is_string_literal(self, arg: str) -> bool:
+		"""Check if argument is a properly quoted string literal."""
+		return (arg.startswith("'") and arg.endswith("'") and len(arg) >= 2) or (
+			arg.startswith('"') and arg.endswith('"') and len(arg) >= 2
+		)
+
+	def _validate_string_literal(self, literal: str):
+		"""Validate a string literal for SQL injection attacks."""
+		if literal.startswith("'") and literal.endswith("'"):
+			quote_char = "'"
+			content = literal[1:-1]
+		elif literal.startswith('"') and literal.endswith('"'):
+			quote_char = '"'
+			content = literal[1:-1]
+		else:
+			frappe.throw(_("Invalid string literal format: {0}").format(literal), frappe.ValidationError)
+
+		if quote_char in content:
+			escaped_content = content.replace(quote_char + quote_char, "")
+			if quote_char in escaped_content:
+				frappe.throw(
+					_("Unescaped quotes in string literal: {0}").format(literal),
+					frappe.ValidationError,
+				)
+
+		# Reject dangerous SQL keywords and patterns
+		dangerous_patterns = [
+			# SQL injection keywords
+			r"\b(?:union|select|insert|update|delete|drop|create|alter|exec|execute)\b",
+			# Comment patterns
+			r"--",
+			r"/\*",
+			r"\*/",
+			# Semicolon (statement terminator)
+			r";",
+			# Backslash escape sequences that could be dangerous
+			r"\\x[0-9a-fA-F]{2}",  # Hex escape sequences
+			r"\\[0-7]{1,3}",  # Octal escape sequences
+		]
+
+		content_lower = content.lower()
+		for pattern in dangerous_patterns:
+			if re.search(pattern, content_lower, re.IGNORECASE):
+				frappe.throw(
+					_("Potentially dangerous content in string literal: {0}").format(literal),
+					frappe.ValidationError,
+				)
+
+		# Return just the content without quotes - pypika will handle proper escaping
+		return content
+
+	def _is_valid_field_name(self, name: str) -> bool:
+		"""Check if a string is a valid field name."""
+		# Field names should only contain alphanumeric characters and underscores
+		return re.fullmatch(r"[a-zA-Z_][a-zA-Z0-9_]*", name) is not None
+
+	def _validate_alias(self, alias: str):
+		"""Validate alias name for SQL injection."""
+		if not isinstance(alias, str):
+			frappe.throw(_("Alias must be a string"), frappe.ValidationError)
+
+		alias = alias.strip()
+		if not alias:
+			frappe.throw(_("Empty alias is not allowed"), frappe.ValidationError)
+
+		# Alias should be a simple identifier
+		if not re.fullmatch(r"[a-zA-Z_][a-zA-Z0-9_]*", alias):
+			frappe.throw(
+				_("Invalid alias format: {0}. Alias must be a simple identifier.").format(alias),
+				frappe.ValidationError,
+			)
+
+		# Check for SQL keywords that shouldn't be used as aliases
+		sql_keywords = {
+			"select",
+			"from",
+			"where",
+			"join",
+			"inner",
+			"left",
+			"right",
+			"outer",
+			"union",
+			"group",
+			"order",
+			"by",
+			"having",
+			"limit",
+			"offset",
+			"insert",
+			"update",
+			"delete",
+			"create",
+			"drop",
+			"alter",
+			"table",
+			"index",
+			"view",
+			"database",
+			"schema",
+			"grant",
+			"revoke",
+			"commit",
+			"rollback",
+			"transaction",
+			"begin",
+			"end",
+			"if",
+			"else",
+			"case",
+			"when",
+			"then",
+			"null",
+			"not",
+			"and",
+			"or",
+			"in",
+			"exists",
+			"between",
+			"like",
+			"is",
+			"as",
+			"on",
+			"using",
+			"distinct",
+			"all",
+			"any",
+			"some",
+			"true",
+			"false",
+		}
+
+		if alias.lower() in sql_keywords:
+			frappe.throw(
+				_("Alias cannot be a SQL keyword: {0}").format(alias),
+				frappe.ValidationError,
+			)
+
+	def _validate_function_field_arg(self, field_name: str):
+		"""Validate a field name used as a function argument."""
+		if not isinstance(field_name, str):
+			return  # Non-string arguments are allowed (literals)
+
+		# Basic validation - should be a simple field name
+		if not self._is_valid_field_name(field_name):
+			frappe.throw(
+				_("Invalid field name in function: {0}. Only simple field names are allowed.").format(
+					field_name
+				),
+				frappe.ValidationError,
+			)
+
+		# Check field permission if permissions are being applied
+		if self.engine.apply_permissions and self.engine.doctype:
+			self.engine._check_field_permission(self.engine.doctype, field_name)

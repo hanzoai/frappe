@@ -1505,6 +1505,109 @@ class TestQuery(IntegrationTestCase):
 			frappe.qb.get_query("User", group_by="`name`, `email`").get_sql()
 		self.assertIn("cannot contain backticks", str(cm.exception))
 
+	def test_sql_functions_in_fields(self):
+		"""Test SQL function support in fields with various syntaxes."""
+
+		# Test simple function without alias
+		query = frappe.qb.get_query("User", fields=["user_type", {"COUNT": "name"}], group_by="user_type")
+		sql = query.get_sql()
+		self.assertIn("COUNT(`name`)", sql)
+		self.assertIn("GROUP BY", sql)
+
+		# Test function with alias
+		query = frappe.qb.get_query(
+			"User", fields=[{"COUNT": "name", "as": "total_users"}], group_by="user_type"
+		)
+		sql = query.get_sql()
+		self.assertIn("COUNT(`name`) `total_users`", sql)
+
+		# Test SUM function with alias
+		query = frappe.qb.get_query(
+			"User", fields=[{"SUM": "enabled", "as": "total_enabled"}], group_by="user_type"
+		)
+		sql = query.get_sql()
+		self.assertIn("SUM(`enabled`) `total_enabled`", sql)
+
+		# Test MAX function
+		query = frappe.qb.get_query(
+			"User", fields=[{"MAX": "creation", "as": "latest_user"}], group_by="user_type"
+		)
+		sql = query.get_sql()
+		self.assertIn("MAX(`creation`) `latest_user`", sql)
+
+		# Test MIN function
+		query = frappe.qb.get_query(
+			"User", fields=[{"MIN": "creation", "as": "earliest_user"}], group_by="user_type"
+		)
+		sql = query.get_sql()
+		self.assertIn("MIN(`creation`) `earliest_user`", sql)
+
+		# Test AVG function
+		query = frappe.qb.get_query(
+			"User", fields=[{"AVG": "enabled", "as": "avg_enabled"}], group_by="user_type"
+		)
+		sql = query.get_sql()
+		self.assertIn("AVG(`enabled`) `avg_enabled`", sql)
+
+		# Test ABS function
+		query = frappe.qb.get_query("User", fields=[{"ABS": "enabled", "as": "abs_enabled"}])
+		sql = query.get_sql()
+		self.assertIn("ABS(`enabled`) `abs_enabled`", sql)
+
+		# Test IFNULL function with two parameters
+		query = frappe.qb.get_query(
+			"User", fields=[{"IFNULL": ["first_name", "'Unknown'"], "as": "safe_name"}]
+		)
+		sql = query.get_sql()
+		self.assertIn("IFNULL(`first_name`,'Unknown') `safe_name`", sql)
+
+		# Test TIMESTAMP function
+		query = frappe.qb.get_query("User", fields=[{"TIMESTAMP": "creation", "as": "ts"}])
+		sql = query.get_sql()
+		self.assertIn("TIMESTAMP(`creation`) `ts`", sql)
+
+		# Test mixed regular fields and function fields
+		query = frappe.qb.get_query(
+			"User",
+			fields=[
+				"user_type",
+				{"COUNT": "name", "as": "total_users"},
+				{"MAX": "creation", "as": "latest_creation"},
+			],
+			group_by="user_type",
+		)
+		sql = query.get_sql()
+		self.assertIn("`user_type`", sql)
+		self.assertIn("COUNT(`name`) `total_users`", sql)
+		self.assertIn("MAX(`creation`) `latest_creation`", sql)
+
+		# Test NOW function with no arguments
+		query = frappe.qb.get_query("User", fields=[{"NOW": None, "as": "current_time"}])
+		sql = query.get_sql()
+		self.assertIn("NOW() `current_time`", sql)
+
+		# Test CONCAT function (which is supported)
+		query = frappe.qb.get_query(
+			"User", fields=[{"CONCAT": ["first_name", "last_name"], "as": "full_name"}]
+		)
+		sql = query.get_sql()
+		self.assertIn("CONCAT(`first_name`,`last_name`) `full_name`", sql)
+
+		# Test unsupported function validation
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", fields=[{"UNSUPPORTED_FUNC": "name"}]).get_sql()
+		self.assertIn("Unsupported function or invalid field name: UNSUPPORTED_FUNC", str(cm.exception))
+
+		# Test unsupported function that might be confused with child field
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", fields=[{"UPPER": ["first_name"]}]).get_sql()
+		self.assertIn("Unsupported function or invalid field name: UPPER", str(cm.exception))
+
+		# Test SQL injection attempt
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", fields=[{"DROP": "TABLE users"}]).get_sql()
+		self.assertIn("Unsupported function or invalid field name: DROP", str(cm.exception))
+
 
 # This function is used as a permission query condition hook
 def test_permission_hook_condition(user):
