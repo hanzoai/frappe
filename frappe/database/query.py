@@ -100,7 +100,6 @@ class Engine:
 			self.apply_fields(fields)
 
 		self.apply_filters(filters)
-		self.apply_order_by(order_by)
 
 		if limit:
 			if not isinstance(limit, int) or limit < 0:
@@ -119,8 +118,10 @@ class Engine:
 			self.query = self.query.for_update(skip_locked=skip_locked, nowait=not wait)
 
 		if group_by:
-			self._validate_group_by(group_by)
-			self.query = self.query.groupby(group_by)
+			self.apply_group_by(group_by)
+
+		if order_by:
+			self.apply_order_by(order_by)
 
 		if self.apply_permissions:
 			self.add_permission_conditions()
@@ -427,7 +428,7 @@ class Engine:
 				parent_doctype_for_perm = (
 					dynamic_field.parent_doctype if isinstance(dynamic_field, ChildTableField) else None
 				)
-				self._check_filter_field_permission(target_doctype, target_fieldname, parent_doctype_for_perm)
+				self._check_field_permission(target_doctype, target_fieldname, parent_doctype_for_perm)
 
 				self.query = dynamic_field.apply_join(self.query)
 				# Return the pypika Field object associated with the dynamic field
@@ -487,7 +488,7 @@ class Engine:
 
 				# For permission check, the parent is the main doctype
 				parent_doctype_for_perm = self.doctype
-				self._check_filter_field_permission(target_doctype, target_fieldname, parent_doctype_for_perm)
+				self._check_field_permission(target_doctype, target_fieldname, parent_doctype_for_perm)
 
 				# Delegate join logic
 				self.query = child_field_handler.apply_join(self.query)
@@ -495,12 +496,12 @@ class Engine:
 				return child_field_handler.field
 			else:
 				# Field belongs to the main doctype or doctype wasn't specified differently
-				self._check_filter_field_permission(target_doctype, target_fieldname, parent_doctype_for_perm)
+				self._check_field_permission(target_doctype, target_fieldname, parent_doctype_for_perm)
 				# Convert string field name to pypika Field object for the specified/current doctype
 				return frappe.qb.DocType(target_doctype)[target_fieldname]
 
-	def _check_filter_field_permission(self, doctype: str, fieldname: str, parent_doctype: str | None = None):
-		"""Check if the user has permission to access the given field for filtering."""
+	def _check_field_permission(self, doctype: str, fieldname: str, parent_doctype: str | None = None):
+		"""Check if the user has permission to access the given field"""
 		if not self.apply_permissions:
 			return
 
@@ -515,7 +516,7 @@ class Engine:
 
 		if fieldname not in permitted_fields:
 			frappe.throw(
-				_("You do not have permission to filter on field: {0}").format(
+				_("You do not have permission to access field: {0}").format(
 					frappe.bold(f"{doctype}.{fieldname}")
 				),
 				frappe.PermissionError,
@@ -652,42 +653,99 @@ class Engine:
 			# Note: Comma handling is done in parse_fields before this method is called
 			return self.parse_string_field(field)
 
-	def _validate_group_by(self, group_by: str):
-		"""Validate the group_by string argument."""
-		if not isinstance(group_by, str):
-			frappe.throw(_("Group By must be a string"), TypeError)
-		parts = COMMA_PATTERN.split(group_by)
-		for part in parts:
-			field_name = part.strip()
-			if not field_name:
-				continue
-			if field_name.isdigit():
-				continue
-			if not ALLOWED_SQL_FIELD_PATTERN.match(field_name):
-				frappe.throw(
-					_("Invalid field format in Group By: {0}").format(field_name),
-					frappe.PermissionError,
-				)
+	def apply_group_by(self, group_by: str | None = None):
+		parsed_group_by_fields = self._validate_group_by(group_by)
+		self.query = self.query.groupby(*parsed_group_by_fields)
 
 	def apply_order_by(self, order_by: str | None):
 		if not order_by or order_by == DefaultOrderBy:
 			return
 
-		self._validate_order_by(order_by)
+		parsed_order_fields = self._validate_order_by(order_by)
+		for order_field, order_direction in parsed_order_fields:
+			self.query = self.query.orderby(order_field, order=order_direction)
 
-		for declaration in order_by.split(","):
-			if _order_by := declaration.strip():
-				parts = _order_by.split(" ")
-				order_field = parts[0]
-				order_direction = Order.asc if (len(parts) > 1 and parts[1].lower() == "asc") else Order.desc
-				self.query = self.query.orderby(order_field, order=order_direction)
+	def _validate_and_parse_field_for_clause(self, field_name: str, clause_name: str) -> Field:
+		"""
+		Common helper to validate and parse field names for GROUP BY and ORDER BY clauses.
 
-	def _validate_order_by(self, order_by: str):
-		"""Validate the order_by string argument."""
+		Args:
+			field_name: The field name to validate and parse
+			clause_name: Name of the SQL clause (for error messages) - 'Group By' or 'Order By'
+
+		Returns:
+			Parsed Field object ready for use in pypika query
+		"""
+		if field_name.isdigit():
+			# For numeric field references, return as-is (will be handled by caller)
+			return field_name
+
+		# Reject backticks
+		if "`" in field_name:
+			frappe.throw(
+				_("{0} fields cannot contain backticks (`): {1}").format(clause_name, field_name),
+				frappe.ValidationError,
+			)
+
+		# Try parsing as dynamic field (link_field.field or child_table.field)
+		dynamic_field = DynamicTableField.parse(field_name, self.doctype, allow_tab_notation=False)
+		if dynamic_field:
+			# Check permissions for dynamic field
+			if self.apply_permissions:
+				if isinstance(dynamic_field, ChildTableField):
+					self._check_field_permission(
+						dynamic_field.doctype, dynamic_field.fieldname, dynamic_field.parent_doctype
+					)
+				elif isinstance(dynamic_field, LinkTableField):
+					# Check permission for the link field in parent doctype
+					self._check_field_permission(self.doctype, dynamic_field.link_fieldname)
+					# Check permission for the target field in linked doctype
+					self._check_field_permission(dynamic_field.doctype, dynamic_field.fieldname)
+
+			# Apply join for the dynamic field
+			self.query = dynamic_field.apply_join(self.query)
+			return dynamic_field.field
+		else:
+			# Validate as simple field name (alphanumeric + underscore only)
+			if not re.fullmatch(r"\w+", field_name):
+				frappe.throw(
+					_(
+						"Invalid field format in {0}: {1}. Use 'field', 'link_field.field', or 'child_table.field'."
+					).format(clause_name, field_name),
+					frappe.ValidationError,
+				)
+
+			# Check permissions for simple field
+			if self.apply_permissions:
+				self._check_field_permission(self.doctype, field_name)
+
+			# Create Field object for simple field
+			return self.table[field_name]
+
+	def _validate_group_by(self, group_by: str) -> list[Field]:
+		"""Validate the group_by string argument, apply joins for dynamic fields, and return parsed Field objects."""
+		if not isinstance(group_by, str):
+			frappe.throw(_("Group By must be a string"), TypeError)
+
+		parsed_fields = []
+		parts = COMMA_PATTERN.split(group_by)
+		for part in parts:
+			field_name = part.strip()
+			if not field_name:
+				continue
+
+			parsed_field = self._validate_and_parse_field_for_clause(field_name, "Group By")
+			parsed_fields.append(parsed_field)
+
+		return parsed_fields
+
+	def _validate_order_by(self, order_by: str) -> list[tuple[Field | str, Order]]:
+		"""Validate the order_by string argument, apply joins for dynamic fields, and return parsed Field objects with directions."""
 		if not isinstance(order_by, str):
 			frappe.throw(_("Order By must be a string"), TypeError)
 
 		valid_directions = {"asc", "desc"}
+		parsed_order_fields = []
 
 		for declaration in order_by.split(","):
 			if _order_by := declaration.strip():
@@ -697,19 +755,18 @@ class Engine:
 				if len(parts) > 1:
 					direction = parts[1].lower()
 
-				if field_name.isdigit():
-					pass
-				elif not ALLOWED_SQL_FIELD_PATTERN.match(field_name):
-					frappe.throw(
-						_("Invalid field format in Order By: {0}").format(field_name),
-						frappe.PermissionError,
-					)
+				order_direction = Order.asc if direction == "asc" else Order.desc
+
+				parsed_field = self._validate_and_parse_field_for_clause(field_name, "Order By")
+				parsed_order_fields.append((parsed_field, order_direction))
 
 				if direction and direction not in valid_directions:
 					frappe.throw(
 						_("Invalid direction in Order By: {0}. Must be 'ASC' or 'DESC'.").format(parts[1]),
 						ValueError,
 					)
+
+		return parsed_order_fields
 
 	def check_read_permission(self):
 		"""Check if user has read permission on the doctype"""

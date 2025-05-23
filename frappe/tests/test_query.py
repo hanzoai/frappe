@@ -231,12 +231,8 @@ class TestQuery(IntegrationTestCase):
 		"""Test validation for fields in GROUP BY clause."""
 		valid_fields = [
 			"name",
-			"`name`",
-			"tabUser.name",
-			"`tabUser`.`name`",
 			"1",  # Allow numeric indices
 			"name, email",
-			"`name`, `tabUser`.`email`",
 			"1, 2",
 		]
 		# GROUP BY should not allow aliases or functions
@@ -250,6 +246,10 @@ class TestQuery(IntegrationTestCase):
 			"name /* comment */",
 			"invalid-field-name",
 			"table.invalid-field",
+			"tabUser.name",
+			"`name`",
+			"`tabUser`.`name`",
+			"`name`, `tabUser`.`email`",
 			"`table`.`invalid-field`",
 			"field with space",
 			"`field with space`",
@@ -264,7 +264,8 @@ class TestQuery(IntegrationTestCase):
 
 		for group_by_str in invalid_fields:
 			with self.assertRaises(
-				frappe.PermissionError, msg=f"Invalid GROUP BY string '{group_by_str}' passed validation"
+				(frappe.PermissionError, frappe.ValidationError),
+				msg=f"Invalid GROUP BY string '{group_by_str}' passed validation",
 			):
 				frappe.qb.get_query("User", group_by=group_by_str).get_sql()
 
@@ -272,18 +273,11 @@ class TestQuery(IntegrationTestCase):
 		"""Test validation for fields in ORDER BY clause."""
 		valid_fields = [
 			"name",
-			"`name`",
-			"tabUser.name",
-			"`tabUser`.`name`",
 			"1",  # Allow numeric indices
 			"name asc",
-			"`name` DESC",
-			"tabUser.name Asc",
-			"`tabUser`.`name` desc",
 			"1 asc",
 			"2 DESC",
 			"name, email",
-			"`name` asc, `tabUser`.`email` DESC",
 			"1 asc, 2 desc",
 		]
 		# ORDER BY should not allow aliases or functions, or invalid directions
@@ -295,6 +289,13 @@ class TestQuery(IntegrationTestCase):
 			"`name` ; SELECT * FROM secrets",
 			"name--comment",
 			"name /* comment */",
+			"`name`",
+			"tabUser.name",
+			"`tabUser`.`name`",
+			"`name` DESC",
+			"tabUser.name Asc",
+			"`tabUser`.`name` desc",
+			"`name` asc, `tabUser`.`email` DESC",
 			"invalid-field-name",
 			"table.invalid-field",
 			"`table`.`invalid-field`",
@@ -314,7 +315,7 @@ class TestQuery(IntegrationTestCase):
 
 		for order_by_str in invalid_fields:
 			with self.assertRaises(
-				(frappe.PermissionError, ValueError),
+				(frappe.PermissionError, ValueError, frappe.ValidationError),
 				msg=f"Invalid ORDER BY string '{order_by_str}' passed validation",
 			):
 				frappe.qb.get_query("User", order_by=order_by_str).get_sql()
@@ -833,7 +834,7 @@ class TestQuery(IntegrationTestCase):
 		frappe.set_user("Administrator")
 		note.delete(ignore_permissions=True)
 		test_user.remove_roles(test_role)
-		frappe.delete_doc("Role", test_role, force=True, ignore_permissions=True)
+		frappe.delete_doc("Role", test_role, force=True)
 
 	def test_nested_permission(self):
 		"""Test permission on nested doctypes"""
@@ -1049,7 +1050,7 @@ class TestQuery(IntegrationTestCase):
 					"blog_category": "-test-blog-category",
 					"published": 1,  # permlevel 1
 				}
-			).insert(ignore_permissions=True, ignore_mandatory=True)
+			).insert(ignore_permissions=True, ignore_mandatory=True, ignore_if_duplicate=True)
 
 			# User has read permlevel 0, but not 1 (published field)
 			# Try filtering on permitted field (title - permlevel 0)
@@ -1071,7 +1072,7 @@ class TestQuery(IntegrationTestCase):
 					ignore_permissions=False,
 					user=user.name,
 				).run()
-			self.assertIn("You do not have permission to filter on field", str(cm.exception))
+			self.assertIn("You do not have permission to access field", str(cm.exception))
 			self.assertIn("Blog Post.published", str(cm.exception))
 
 			# Cleanup
@@ -1158,7 +1159,7 @@ class TestQuery(IntegrationTestCase):
 					ignore_permissions=False,
 					user=user.name,
 				).run()
-			self.assertIn("You do not have permission to filter on field", str(cm_link.exception))
+			self.assertIn("You do not have permission to access field", str(cm_link.exception))
 			self.assertIn(f"{target_dt_name}.target_field", str(cm_link.exception))
 
 			# Cleanup
@@ -1169,6 +1170,328 @@ class TestQuery(IntegrationTestCase):
 			target_dt.delete()
 			test_user_doc.remove_roles(test_role)
 			frappe.delete_doc("Role", test_role, force=True)
+
+	def test_dynamic_fields_in_group_by(self):
+		"""Test dynamic field support in GROUP BY clause."""
+		try:
+			query = frappe.qb.get_query(
+				"DocType",
+				fields=["module.app_name", "name"],
+				group_by="module.app_name",
+			)
+			result = query.run(as_dict=True)
+			self.assertTrue(len(result) > 0)
+			sql = query.get_sql()
+			self.assertIn("LEFT JOIN", sql)
+			self.assertIn("tabModule Def", sql)
+		except Exception as e:
+			self.fail(f"Dynamic link field in GROUP BY failed: {e}")
+
+		note = frappe.get_doc(
+			doctype="Note", title="Group By Test Note", seen_by=[{"user": "Administrator"}, {"user": "Guest"}]
+		).insert()
+
+		try:
+			query = frappe.qb.get_query(
+				"Note",
+				fields=["seen_by.user", "name"],
+				filters={"name": note.name},
+				group_by="seen_by.user",
+			)
+			result = query.run(as_dict=True)
+			self.assertTrue(len(result) >= 1)
+			sql = query.get_sql()
+			self.assertIn("LEFT JOIN", sql)
+			self.assertIn("tabNote Seen By", sql)
+		except Exception as e:
+			self.fail(f"Dynamic child field in GROUP BY failed: {e}")
+		finally:
+			note.delete()
+
+	def test_dynamic_fields_in_order_by(self):
+		"""Test dynamic field support in ORDER BY clause."""
+		try:
+			query = frappe.qb.get_query(
+				"DocType", fields=["name", "module.app_name"], order_by="module.app_name DESC", limit=5
+			)
+			result = query.run(as_dict=True)
+			self.assertTrue(len(result) > 0)
+			sql = query.get_sql()
+			self.assertIn("LEFT JOIN", sql)
+			self.assertIn("tabModule Def", sql)
+			self.assertIn("ORDER BY", sql)
+		except Exception as e:
+			self.fail(f"Dynamic link field in ORDER BY failed: {e}")
+
+		note1 = frappe.get_doc(
+			doctype="Note", title="Order Test Note 1", seen_by=[{"user": "Administrator"}]
+		).insert()
+		note2 = frappe.get_doc(
+			doctype="Note", title="Order Test Note 2", seen_by=[{"user": "Guest"}]
+		).insert()
+
+		try:
+			query = frappe.qb.get_query(
+				"Note",
+				fields=["name", "seen_by.user"],
+				filters={"name": ["in", [note1.name, note2.name]]},
+				order_by="seen_by.user ASC",
+			)
+			result = query.run(as_dict=True)
+			self.assertTrue(len(result) >= 2)
+			sql = query.get_sql()
+			self.assertIn("LEFT JOIN", sql)
+			self.assertIn("tabNote Seen By", sql)
+		except Exception as e:
+			self.fail(f"Dynamic child field in ORDER BY failed: {e}")
+		finally:
+			note1.delete()
+			note2.delete()
+
+	def test_multiple_dynamic_fields_group_order(self):
+		"""Test multiple dynamic fields in GROUP BY and ORDER BY."""
+		try:
+			query = frappe.qb.get_query(
+				"DocType",
+				fields=["module", "module.app_name", "name"],
+				group_by="module, module.app_name",
+				order_by="module.app_name",
+			)
+			result = query.run(as_dict=True)
+			self.assertTrue(len(result) > 0)
+		except Exception as e:
+			self.fail(f"Multiple dynamic fields in GROUP BY/ORDER BY failed: {e}")
+
+	def test_group_by_order_by_permission_checks(self):
+		"""Test permission checks for dynamic fields in GROUP BY and ORDER BY."""
+		target_dt_name = "TargetDocForGroupOrderPerm"
+		source_dt_name = "SourceDocForGroupOrderPerm"
+		test_role = "GroupOrderPermTestRole"
+		test_user = "test2@example.com"
+
+		frappe.set_user("Administrator")
+		frappe.delete_doc("DocType", target_dt_name, ignore_missing=True, force=True)
+		frappe.delete_doc("DocType", source_dt_name, ignore_missing=True, force=True)
+		frappe.delete_doc("Role", test_role, ignore_missing=True, force=True)
+		test_user_doc = frappe.get_doc("User", test_user)
+		test_user_doc.remove_roles(test_role)
+
+		target_dt = new_doctype(
+			target_dt_name,
+			fields=[
+				{
+					"fieldname": "restricted_field",
+					"fieldtype": "Data",
+					"permlevel": 1,
+					"label": "Restricted Field",
+				},
+				{"fieldname": "public_field", "fieldtype": "Data", "label": "Public Field"},
+			],
+		).insert(ignore_if_duplicate=True)
+
+		source_dt = new_doctype(
+			source_dt_name,
+			fields=[
+				{
+					"fieldname": "link_field",
+					"fieldtype": "Link",
+					"options": target_dt_name,
+					"label": "Link Field",
+				},
+			],
+		).insert(ignore_if_duplicate=True)
+
+		frappe.get_doc({"doctype": "Role", "role_name": test_role}).insert(ignore_if_duplicate=True)
+		add_permission(source_dt_name, test_role, 0, ptype="read")
+		add_permission(target_dt_name, test_role, 0, ptype="read")
+		update_permission_property(target_dt_name, test_role, 1, "read", 0, validate=False)
+		test_user_doc.add_roles(test_role)
+
+		frappe.set_user(test_user)
+
+		try:
+			frappe.qb.get_query(
+				source_dt_name,
+				fields=["link_field.public_field", "name"],
+				group_by="link_field.public_field",
+				ignore_permissions=False,
+				user=test_user,
+			).get_sql()
+		except frappe.PermissionError as e:
+			self.fail(f"GROUP BY with permitted field failed: {e}")
+
+		with self.assertRaises(frappe.PermissionError) as cm:
+			frappe.qb.get_query(
+				source_dt_name,
+				fields=["link_field.restricted_field", "name"],
+				group_by="link_field.restricted_field",
+				ignore_permissions=False,
+				user=test_user,
+			).get_sql()
+		self.assertIn("You do not have permission to access field", str(cm.exception))
+		self.assertIn("restricted_field", str(cm.exception))
+
+		try:
+			frappe.qb.get_query(
+				source_dt_name,
+				fields=["name", "link_field.public_field"],
+				order_by="link_field.public_field",
+				ignore_permissions=False,
+				user=test_user,
+			).get_sql()
+		except frappe.PermissionError as e:
+			self.fail(f"ORDER BY with permitted field failed: {e}")
+
+		with self.assertRaises(frappe.PermissionError) as cm:
+			frappe.qb.get_query(
+				source_dt_name,
+				fields=["name"],
+				order_by="link_field.restricted_field",
+				ignore_permissions=False,
+				user=test_user,
+			).get_sql()
+		self.assertIn("You do not have permission to access field", str(cm.exception))
+		self.assertIn("restricted_field", str(cm.exception))
+
+		frappe.set_user("Administrator")
+		source_dt.delete()
+		target_dt.delete()
+		test_user_doc.remove_roles(test_role)
+		frappe.delete_doc("Role", test_role, force=True)
+
+	def test_child_table_group_by_order_by_permissions(self):
+		"""Test permission checks for child table fields in GROUP BY and ORDER BY."""
+		child_dt_name = "ChildDocForGroupOrderPerm"
+		parent_dt_name = "ParentDocForGroupOrderPerm"
+		test_role = "ChildGroupOrderPermTestRole"
+		test_user_email = "test2@example.com"
+
+		frappe.set_user("Administrator")
+		frappe.delete_doc("DocType", child_dt_name, ignore_missing=True, force=True)
+		frappe.delete_doc("DocType", parent_dt_name, ignore_missing=True, force=True)
+		frappe.delete_doc("Role", test_role, ignore_missing=True, force=True)
+
+		test_user_doc = frappe.get_doc("User", test_user_email)
+		test_user_doc.remove_roles(test_role)
+
+		child_dt = new_doctype(
+			child_dt_name,
+			fields=[
+				{
+					"fieldname": "restricted_child_field",
+					"fieldtype": "Data",
+					"permlevel": 1,
+					"label": "Restricted Child Field",
+				},
+				{"fieldname": "public_child_field", "fieldtype": "Data", "label": "Public Child Field"},
+			],
+			istable=1,
+		).insert(ignore_if_duplicate=True)
+
+		parent_dt = new_doctype(
+			parent_dt_name,
+			fields=[
+				{
+					"fieldname": "child_table",
+					"fieldtype": "Table",
+					"options": child_dt_name,
+					"label": "Child Table",
+				},
+			],
+		).insert(ignore_if_duplicate=True)
+
+		frappe.get_doc({"doctype": "Role", "role_name": test_role}).insert(ignore_if_duplicate=True)
+		add_permission(parent_dt_name, test_role, 0, ptype="read")
+		add_permission(child_dt_name, test_role, 0, ptype="read")
+		update_permission_property(child_dt_name, test_role, 1, "read", 0, validate=False)
+		test_user_doc.add_roles(test_role)
+
+		frappe.set_user(test_user_email)
+
+		try:
+			frappe.qb.get_query(
+				parent_dt_name,
+				fields=["child_table.public_child_field", "name"],
+				group_by="child_table.public_child_field",
+				ignore_permissions=False,
+				user=test_user_email,
+			).get_sql()
+		except frappe.PermissionError as e:
+			self.fail(f"GROUP BY with permitted child field failed: {e}")
+
+		with self.assertRaises(frappe.PermissionError) as cm:
+			frappe.qb.get_query(
+				parent_dt_name,
+				fields=["child_table.restricted_child_field", "name"],
+				group_by="child_table.restricted_child_field",
+				ignore_permissions=False,
+				user=test_user_email,
+			).get_sql()
+		self.assertIn("You do not have permission to access field", str(cm.exception))
+		self.assertIn("restricted_child_field", str(cm.exception))
+
+		with self.assertRaises(frappe.PermissionError) as cm:
+			frappe.qb.get_query(
+				parent_dt_name,
+				fields=["name"],
+				order_by="child_table.restricted_child_field",
+				ignore_permissions=False,
+				user=test_user_email,
+			).get_sql()
+		self.assertIn("You do not have permission to access field", str(cm.exception))
+		self.assertIn("restricted_child_field", str(cm.exception))
+
+		frappe.set_user("Administrator")
+		parent_dt.delete()
+		child_dt.delete()
+		test_user_doc.remove_roles(test_role)
+		frappe.delete_doc("Role", test_role, force=True)
+
+	def test_group_by_order_by_validation_errors(self):
+		"""Test validation errors for invalid GROUP BY and ORDER BY fields."""
+		invalid_group_by_fields = [
+			"name; DROP TABLE users",
+			"name--comment",
+			"name /* comment */",
+			"invalid-field-name",
+			"field with space",
+			"`field with space`",
+			"name, email; SELECT 1",
+		]
+
+		for field in invalid_group_by_fields:
+			with self.assertRaises(
+				frappe.ValidationError, msg=f"Invalid GROUP BY field '{field}' passed validation"
+			):
+				frappe.qb.get_query("User", group_by=field).get_sql()
+
+		invalid_order_by_fields = [
+			"name sideways",
+			"name INVALID_DIRECTION",
+			"name ASC;",
+			"name, email; SELECT 1",
+		]
+
+		for field in invalid_order_by_fields:
+			with self.assertRaises(
+				(frappe.ValidationError, ValueError),
+				msg=f"Invalid ORDER BY field '{field}' passed validation",
+			):
+				frappe.qb.get_query("User", order_by=field).get_sql()
+
+	def test_backtick_rejection_group_order(self):
+		"""Test that backticks are properly rejected in GROUP BY and ORDER BY."""
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", group_by="`name`").get_sql()
+		self.assertIn("cannot contain backticks", str(cm.exception))
+
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", order_by="`name` ASC").get_sql()
+		self.assertIn("cannot contain backticks", str(cm.exception))
+
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", group_by="`name`, `email`").get_sql()
+		self.assertIn("cannot contain backticks", str(cm.exception))
 
 
 # This function is used as a permission query condition hook
