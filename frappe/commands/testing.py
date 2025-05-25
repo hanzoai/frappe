@@ -1,7 +1,11 @@
+import importlib
 import os
 import subprocess
 import sys
 import time
+import unittest
+from collections import deque
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import click
@@ -37,6 +41,7 @@ def main(
 	"""Main function to run tests"""
 	if light:
 		from frappe.testing import TestConfig
+		from frappe.testing.config import TestParameters
 		from frappe.testing.environment import _disable_scheduler_if_needed
 
 		test_config = TestConfig(
@@ -48,6 +53,23 @@ def main(
 			selected_categories=selected_categories or [],
 			skip_before_tests=skip_before_tests,
 		)
+
+		test_params = TestParameters(
+			site=site,
+			app=app,
+			module=module,
+			doctype=doctype,
+			module_def=module_def,
+			verbose=verbose,
+			tests=tests,
+			force=force,
+			profile=profile,
+			junit_xml_output=junit_xml_output,
+			doctype_list_path=doctype_list_path,
+			failfast=failfast,
+			case=case,
+		)
+
 		# init environment
 		frappe.init(site)
 		if not frappe.db:
@@ -56,6 +78,57 @@ def main(
 		# require db access
 		_disable_scheduler_if_needed()
 		frappe.clear_cache()
+
+		# class LightTestRunner(unittest.TextTestRunner):
+		# 	def run(test):
+		# 		print(f"calling super no {test}")
+		# 		super().run(test)
+		# lightrunner = LightTestRunner()
+
+		# Methods of this loader should be frappe specific
+		# it should respect parameters passed from command line
+		class FrappeTestLoader(unittest.TestLoader):
+			def __init__(self, params: TestParameters):
+				super(unittest.TestLoader, self).__init__()
+				self.params = params
+
+			def discover(
+				self,
+				start_dir: str | None = None,
+				pattern: str | None = None,
+				top_level_dir: str | None = None,
+			) -> unittest.TestSuite:
+				testsuite = unittest.TestSuite()
+				self.files = []
+				apps = self.params.app or frappe.get_installed_apps()
+				for app in apps:
+					app_path = Path(frappe.get_app_path(app))
+					for test_file in app_path.glob("**/test_*.py"):
+						module_name = f"{'.'.join(test_file.relative_to(app_path.parent).parent.parts)}.{test_file.stem}"
+						module = importlib.import_module(module_name)
+						self.files.append((test_file, module))
+
+				for file, module in self.files:
+					_s = unittest.defaultTestLoader.loadTestsFromModule(module)
+					suites_to_process = deque([_s])
+					while suites_to_process:
+						suite = suites_to_process.popleft()
+						for elem in suite:
+							if elem.countTestCases():
+								if isinstance(elem, unittest.TestSuite):
+									suites_to_process.append(elem)
+								elif isinstance(elem, unittest.TestCase):
+									if self.params.tests:
+										if elem._testMethodName in self.params.tests:
+											testsuite.addTest(elem)
+									else:
+										testsuite.addTest(elem)
+
+				return testsuite
+
+		suite = FrappeTestLoader(test_params).discover()
+		for x in suite:
+			print(x)
 
 	else:
 		import logging
