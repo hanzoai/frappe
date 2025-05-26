@@ -218,17 +218,29 @@ export default class NumberCardWidget extends Widget {
 
 	set_formatted_number(df, doc) {
 		const default_country = frappe.sys_defaults.country;
+<<<<<<< HEAD
 		const shortened_number = frappe.utils.shorten_number(this.number, default_country, 5);
 		let number_parts = shortened_number.split(" ");
+=======
+
+		let number_parts;
+
+		// Use full number if the checkbox is enabled
+		if (this.card_doc.show_full_number) {
+			number_parts = [this.number.toString(), ""];
+		} else {
+			const shortened_number = frappe.utils.shorten_number(this.number, default_country, 5);
+			number_parts = shortened_number.split(" ");
+		}
+		const symbol = number_parts[1] || "";
+>>>>>>> 0081f5bc91 (fix: undefined issue)
 		// done to add multicurrency support in number card
 		if (this.card_doc.currency) {
 			this.formatted_number =
-				format_currency(number_parts[0], this.card_doc.currency) +
-				" " +
-				__(number_parts[1]);
+				format_currency(number_parts[0], this.card_doc.currency) + " " + symbol;
 			return;
 		}
-		const symbol = number_parts[1] || "";
+
 		number_parts[0] = window.convert_old_to_new_number_format(number_parts[0]);
 		const formatted_number = frappe.format(number_parts[0], df, null, doc);
 		this.formatted_number =
