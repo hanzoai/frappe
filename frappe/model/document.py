@@ -1469,11 +1469,6 @@ class Document(BaseDocument, DocRef):
 		if version.update_version_info(doc_to_compare, self):
 			version.insert(ignore_permissions=True)
 
-			if not frappe.flags.in_migrate:
-				# follow since you made a change?
-				if frappe.get_cached_value("User", frappe.session.user, "follow_created_documents"):
-					follow_document(self.doctype, self.name, frappe.session.user)
-
 	@staticmethod
 	def hook(f):
 		"""Decorator: Make method `hookable` (i.e. extensible by another app).
