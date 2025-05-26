@@ -1,5 +1,5 @@
 import Quill from "quill";
-import ImageResize from "quill-image-resize";
+import ImageResize from "frappe-quill-image-resize";
 import MagicUrl from "quill-magic-url";
 
 Quill.register("modules/imageResize", ImageResize);
