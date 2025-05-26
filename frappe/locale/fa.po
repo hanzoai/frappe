@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-03-20 13:58+0000\n"
-"PO-Revision-Date: 2025-05-18 02:43\n"
+"PO-Revision-Date: 2025-05-26 04:27\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -3491,7 +3491,7 @@ msgstr "پرش کرد"
 #. Label of a Section Break field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Brand"
-msgstr "نام تجاری"
+msgstr "برند"
 
 #. Label of a Code field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
@@ -3501,7 +3501,7 @@ msgstr "HTML برند"
 #. Label of a Attach Image field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Brand Image"
-msgstr "تصویر نام تجاری"
+msgstr "تصویر برند"
 
 #. Label of a Attach Image field in DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
@@ -3512,7 +3512,7 @@ msgstr "لوگوی برند"
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Brand is what appears on the top-left of the toolbar. If it is an image, make sure it\n"
 "has a transparent background and use the &lt;img /&gt; tag. Keep size as 200px x 30px"
-msgstr "نام تجاری همان چیزی است که در سمت چپ بالای نوار ابزار ظاهر می‌شود. اگر تصویر است، مطمئن شوید که\n"
+msgstr "برند همان چیزی است که در سمت چپ بالای نوار ابزار ظاهر می‌شود. اگر تصویر است، مطمئن شوید که\n"
 "دارای پس‌زمینه شفاف است و از تگ &lt;img /&gt; استفاده کنید. اندازه را 200×30 پیکسل نگه دارید"
 
 #. Label of a Code field in DocType 'Web Form'
@@ -13671,7 +13671,7 @@ msgstr "LDAP فعال نیست."
 #. Label of a Data field in DocType 'LDAP Settings'
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
 msgid "LDAP search path for Groups"
-msgstr "مسیر جستجوی LDAP برای گروه ها"
+msgstr "مسیر جستجوی LDAP برای گروه‌ها"
 
 #. Label of a Data field in DocType 'LDAP Settings'
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
@@ -15997,7 +15997,7 @@ msgstr "نظر جدید در مورد {0}: {1}"
 
 #: frappe/public/js/frappe/form/templates/contact_list.html:90
 msgid "New Contact"
-msgstr "تماس جدید"
+msgstr "مخاطب جدید"
 
 #: frappe/printing/page/print/print.js:295
 #: frappe/printing/page/print/print.js:342
@@ -17069,7 +17069,7 @@ msgstr "تعداد بک آپ های DB نمی‌تواند کمتر از 1 با�
 #. Label of a Int field in DocType 'Dashboard Chart'
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.json
 msgid "Number of Groups"
-msgstr "تعداد گروه ها"
+msgstr "تعداد گروه‌ها"
 
 #. Label of a Int field in DocType 'Recorder'
 #: frappe/core/doctype/recorder/recorder.json
@@ -20038,11 +20038,11 @@ msgstr "دلیل"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:823
 msgid "Rebuild"
-msgstr "بازسازی کنید"
+msgstr "بازسازی"
 
 #: frappe/public/js/frappe/views/treeview.js:475
 msgid "Rebuild Tree"
-msgstr "درخت را بازسازی کنید"
+msgstr "بازسازی درخت"
 
 #: frappe/utils/nestedset.py:181
 msgid "Rebuilding of tree is not supported for {}"
@@ -20618,7 +20618,7 @@ msgstr ""
 #: frappe/core/doctype/communication/communication.js:43
 #: frappe/desk/doctype/todo/todo.js:36
 msgid "Reopen"
-msgstr "دوباره باز کنید"
+msgstr "باز کردن دوباره"
 
 #: frappe/public/js/frappe/form/toolbar.js:503
 msgid "Repeat"
@@ -20972,7 +20972,7 @@ msgstr "نیاز به گواهی مورد اعتماد"
 #. 'LDAP Settings'
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
 msgid "Requires any valid fdn path. i.e. ou=groups,dc=example,dc=com"
-msgstr "به هر مسیر fdn معتبر نیاز دارد. یعنی ou=گروه ها،dc=example,dc=com"
+msgstr "به هر مسیر fdn معتبر نیاز دارد. یعنی ou=گروه‌ها،dc=example,dc=com"
 
 #. Description of the 'LDAP search path for Users' (Data) field in DocType
 #. 'LDAP Settings'
@@ -27280,7 +27280,7 @@ msgstr "استفاده از POST"
 #. Label of a Check field in DocType 'Dashboard Chart'
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.json
 msgid "Use Report Chart"
-msgstr "از نمودار گزارش استفاده کنید"
+msgstr "استفاده از نمودار گزارش"
 
 #. Label of a Check field in DocType 'Email Account'
 #. Label of a Check field in DocType 'Email Domain'
