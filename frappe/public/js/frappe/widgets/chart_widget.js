@@ -311,6 +311,30 @@ export default class ChartWidget extends Widget {
 					this.make_chart();
 				},
 			},
+			{
+				label: __("Export {0}", [__(this.chart_doc.chart_name)]),
+				action: "action-export",
+				handler: () => {
+					let data = [];
+					const datasets = this.data?.datasets || [];
+					const labels = (this.data?.labels || []).map(label => label || "None");
+					if (datasets.length > 0) {
+						datasets.forEach((element) => {
+							const name = element.name;
+							const values = element.values || [];
+							if (values.length > 0) {
+								data.push([name || this.chart_doc.chart_name]);
+								data.push(labels);
+								data.push(values);
+							}
+						});
+					} else {
+						data.push([this.chart_doc.chart_name]);
+						data.push(labels);
+					}
+					frappe.tools.downloadify(data, null, this.chart_doc.chart_name);
+				},
+			}
 		];
 
 		if (this.chart_doc.document_type) {
