@@ -1320,7 +1320,8 @@ class Document(BaseDocument, DocRef):
 		elif self._action == "update_after_submit":
 			self.run_method("on_update_after_submit")
 
-		self.clear_cache()
+		if not (frappe.flags.in_import and self.is_new()):
+			self.clear_cache()
 
 		if self.flags.get("notify_update", True):
 			self.notify_update()
@@ -1350,7 +1351,12 @@ class Document(BaseDocument, DocRef):
 
 	def notify_update(self):
 		"""Publish realtime that the current document is modified"""
-		if frappe.flags.in_patch:
+		if (
+			frappe.flags.in_import
+			or frappe.flags.in_patch
+			or frappe.flags.in_migrate
+			or frappe.flags.in_install
+		):
 			return
 
 		frappe.publish_realtime(
@@ -1456,13 +1462,12 @@ class Document(BaseDocument, DocRef):
 			doc_to_compare = frappe.get_doc(self.doctype, amended_from)
 
 		version = frappe.new_doc("Version")
+
+		if not doc_to_compare and not self.flags.updater_reference:
+			return
+
 		if version.update_version_info(doc_to_compare, self):
 			version.insert(ignore_permissions=True)
-
-			if not frappe.flags.in_migrate:
-				# follow since you made a change?
-				if frappe.get_cached_value("User", frappe.session.user, "follow_created_documents"):
-					follow_document(self.doctype, self.name, frappe.session.user)
 
 	@staticmethod
 	def hook(f):
