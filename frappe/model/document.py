@@ -1320,7 +1320,8 @@ class Document(BaseDocument, DocRef):
 		elif self._action == "update_after_submit":
 			self.run_method("on_update_after_submit")
 
-		self.clear_cache()
+		if not (frappe.flags.in_import and self.is_new()):
+			self.clear_cache()
 
 		if self.flags.get("notify_update", True):
 			self.notify_update()
