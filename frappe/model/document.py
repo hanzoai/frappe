@@ -269,7 +269,54 @@ class Document(BaseDocument, DocRef):
 		if hasattr(self, "__setup__"):
 			self.__setup__()
 
+		if not is_doctype:
+			self.mask_fields()
+
+		print("inside document, \n\n\n\nn\n")
+
 		return self
+
+	def mask_fields(self):
+		mask_fields = frappe.get_meta(self.doctype).get_masked_fields()
+		if mask_fields:
+			# loop through masked fields and check it they have mask permissions on field level else mask value
+			for field in mask_fields:
+				if self.has_permlevel_access_to(fieldname=field.fieldname, permission_type="mask"):
+					# if user has access to mask field then skip masking
+					continue
+
+				already_masked = False
+				field.read_only = 1
+				field.mask_readonly = 1
+				field.old_fieldtype = field.fieldtype
+				field.fieldtype = "Data"
+
+				# if field type is Data and option is Phone the mask all value except last 3
+				if field.old_fieldtype == "Data" and field.options == "Phone":
+					already_masked = True
+					self.set(field.fieldname, self.get(field.fieldname)[0:3] + "********")
+
+				if field.old_fieldtype == "Data" and field.options == "Email":
+					already_masked = True
+					email = self.get(field.fieldname)
+					if email:
+						email = email.split("@")
+						self.set(field.fieldname, "********" + "@" + email[1])
+
+				if field.old_fieldtype == "Date":
+					already_masked = True
+					date = self.get(field.fieldname)
+					if date:
+						self.set(field.fieldname, "xx-xx-xxxx")
+
+				if field.old_fieldtype == "Time":
+					already_masked = True
+					date = self.get(field.fieldname)
+					if date:
+						self.set(field.fieldname, "xx-xx-xxxx")
+
+				if not already_masked:
+					self.set(field.fieldname, "********")
 
 	def load_children_from_db(self):
 		is_doctype = self.doctype == "DocType"

@@ -213,6 +213,9 @@ class Meta(Document):
 	def get_dynamic_link_fields(self):
 		return self._dynamic_link_fields
 
+	def get_masked_fields(self):
+		return [df for df in self.fields if df.get("mask")]
+
 	@cached_property
 	def _dynamic_link_fields(self):
 		return self.get("fields", {"fieldtype": "Dynamic Link"})

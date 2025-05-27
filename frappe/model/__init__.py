@@ -241,6 +241,8 @@ def get_permitted_fields(
 		with_virtual_fields=not ignore_virtual,
 	)
 
+	# print(doctype, " : In permitted fields, \n valid columns: ", permitted_fields,  "\n\n\n")
+
 	if permission_type == "select":
 		return permitted_fields
 

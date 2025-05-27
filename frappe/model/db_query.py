@@ -218,7 +218,56 @@ class DatabaseQuery:
 		if pluck:
 			return [d[pluck] for d in result]
 
+		if self.doctype and result:
+			result = self.mask_fields(result)
+
 		return result
+
+	def mask_fields(self, result):
+		"""Mask fields in the result based on the doctype's masked fields"""
+		masked_fields = self.get_masked_fields()
+		if not masked_fields:
+			return result
+
+		for row in result:
+			for field in masked_fields:
+				if field.fieldname in row:
+					fieldtype = field.fieldtype
+					val = row[field.fieldname]
+					if not val:
+						continue
+
+					if fieldtype == "Data" and field.options == "Phone":
+						row[field.fieldname] = val[:3] + "********"
+					elif fieldtype == "Data" and field.options == "Email":
+						email = val.split("@")
+						row[field.fieldname] = "********@" + email[1]
+					elif fieldtype == "Date":
+						row[field.fieldname] = "xx-xx-xxxx"
+					elif fieldtype == "Time":
+						row[field.fieldname] = "xx-xx-xxxx"
+					else:
+						row[field.fieldname] = "********"
+
+		return result
+
+	def get_masked_fields(self):
+		"""Get masked fields for the doctype"""
+		# TODO: store in session to avoid multiple calls
+		if not self.doctype:
+			return []
+
+		meta = self.get_meta(self.doctype)
+
+		if not meta:
+			return []
+
+		mask_fields = []
+		for field in meta.get_masked_fields():
+			if not meta.has_permlevel_access_to(fieldname=field.fieldname, df=field, permission_type="mask"):
+				mask_fields.append(field)
+
+		return mask_fields
 
 	def build_and_run(self):
 		args = self.prepare_args()
@@ -650,6 +699,7 @@ from {tables}
 
 			if "." in column:
 				table, column = column.split(".", 1)
+				print(i, "field", column, "permitted_fields")
 				doctype = self.linked_table_aliases[table] if table in self.linked_table_aliases else table
 				doctype = doctype.replace("`", "").removeprefix("tab")
 

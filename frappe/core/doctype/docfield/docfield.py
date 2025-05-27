@@ -90,6 +90,7 @@ class DocField(Document):
 		link_filters: DF.JSON | None
 		make_attachment_public: DF.Check
 		mandatory_depends_on: DF.Code | None
+		mask: DF.Check
 		max_height: DF.Data | None
 		no_copy: DF.Check
 		non_negative: DF.Check
@@ -158,3 +159,17 @@ class DocField(Document):
 		parent = f" parent={self.parent}" if getattr(self, "parent", None) else ""
 
 		return f"<{self.fieldtype}{doctype}: {self.fieldname}{docstatus}{parent}{unsaved}>"
+
+
+# TODO: remove this function when all usages are removed
+def get_masked_fields(doctype):
+	return frappe.db.get_values(
+		doctype="DocField",
+		filters={
+			"parent": doctype,
+			"parentfield": "fields",
+			"mask": 1,
+		},
+		fieldname="fieldname",
+		as_dict=True,
+	)

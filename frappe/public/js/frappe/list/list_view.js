@@ -395,6 +395,9 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		}
 
 		const fields_in_list_view = this.get_fields_in_list_view();
+
+		// console.log(fields_in_list_view, "fields_in_list_view");
+
 		// Add rest from in_list_view docfields
 		this.columns = this.columns.concat(
 			fields_in_list_view
@@ -849,6 +852,10 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			if (df.fieldtype === "Rating") {
 				let out_of_ratings = df.options || 5;
 				_value = _value * out_of_ratings;
+			}
+
+			if (df.fieldname == "company") {
+				console.log(df);
 			}
 
 			if (df.fieldtype === "Image") {

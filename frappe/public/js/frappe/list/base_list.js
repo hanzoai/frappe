@@ -526,6 +526,8 @@ frappe.views.BaseList = class BaseList {
 		this.freeze(true);
 		// fetch data from server
 		return frappe.call(args).then((r) => {
+			// console.log(r, "list view response");
+
 			// render
 			this.prepare_data(r);
 			this.toggle_result_area();

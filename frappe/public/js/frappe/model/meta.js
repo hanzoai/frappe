@@ -17,6 +17,11 @@ frappe.get_meta = function (doctype) {
 $.extend(frappe.meta, {
 	sync: function (doc) {
 		$.each(doc.fields, function (i, df) {
+			if (df.mask) {
+				// console.log("inside meta", frappe.meta.get_masked_fields());
+				// df.mask_readonly = 1;
+				console.log(df);
+			}
 			frappe.meta.add_field(df);
 		});
 
