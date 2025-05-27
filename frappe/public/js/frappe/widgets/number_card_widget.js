@@ -220,9 +220,8 @@ export default class NumberCardWidget extends Widget {
 		const default_country = frappe.sys_defaults.country;
 		const shortened_number = frappe.utils.shorten_number(this.number, default_country, 5);
 		let number_parts = shortened_number.split(" ");
-		
 		const symbol = number_parts[1] || "";
-		
+
 		// done to add multicurrency support in number card
 		if (this.card_doc.currency) {
 			this.formatted_number =
