@@ -61,7 +61,7 @@
   "form_sidebar",
   "timeline",
   "dashboard",
-  "show_absolute_datetime_format",
+  "show_absolute_datetime_in_timeline",
   "change_password",
   "new_password",
   "logout_all_sessions",
@@ -831,9 +831,9 @@
   },
   {
    "default": "0",
-   "fieldname": "show_absolute_datetime_format",
+   "fieldname": "show_absolute_datetime_in_timeline",
    "fieldtype": "Check",
-   "label": "Show absolute datetime values"
+   "label": "Show Absolute Datetime in Timeline"
   }
  ],
  "icon": "fa fa-user",
@@ -892,7 +892,7 @@
   }
  ],
  "make_attachments_public": 1,
- "modified": "2025-05-20 20:53:57.335776",
+ "modified": "2025-05-27 22:11:10.540463",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",
