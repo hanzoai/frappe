@@ -315,26 +315,42 @@ export default class ChartWidget extends Widget {
 				label: __("Export {0}", [__(this.chart_doc.chart_name)]),
 				action: "action-export",
 				handler: () => {
-					let data = [];
+					const data = [[this.chart_doc.chart_name]];
+					data.push([]);
+					data.push([]);
+
 					const datasets = this.data?.datasets || [];
-					const labels = (this.data?.labels || []).map(label => label || "None");
-					if (datasets.length > 0) {
+					const labels = (this.data?.labels || []).map((label) => label || "None");
+					if (datasets.length > 1) {
+						const csv_labels = [];
+						const csv_values = [];
+						labels.forEach((label, idx) => {
+							datasets.forEach((element) => {
+								csv_labels.push(`${element.name} (${label})`);
+								const values = element.values || [];
+								if(idx < values.length){
+									csv_values.push(values[idx]);
+								} else {
+									csv_values.push('');
+								}
+							});
+						});
+						data.push(["", ...csv_labels]);
+						data.push(["", ...csv_values]);
+					} else if (datasets.length === 1) {
 						datasets.forEach((element) => {
-							const name = element.name;
 							const values = element.values || [];
 							if (values.length > 0) {
-								data.push([name || this.chart_doc.chart_name]);
-								data.push(labels);
-								data.push(values);
+								data.push(["", ...labels]);
+								data.push(["", ...values]);
 							}
 						});
 					} else {
-						data.push([this.chart_doc.chart_name]);
-						data.push(labels);
+						data.push(["", ...labels]);
 					}
 					frappe.tools.downloadify(data, null, this.chart_doc.chart_name);
 				},
-			}
+			},
 		];
 
 		if (this.chart_doc.document_type) {
