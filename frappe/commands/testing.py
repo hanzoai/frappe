@@ -40,19 +40,9 @@ def main(
 ) -> None:
 	"""Main function to run tests"""
 	if light:
-		from frappe.testing import TestConfig
+		from frappe.modules.utils import get_module_name
 		from frappe.testing.config import TestParameters
 		from frappe.testing.environment import _disable_scheduler_if_needed
-
-		test_config = TestConfig(
-			profile=profile,
-			failfast=failfast,
-			tests=tests,
-			case=case,
-			pdb_on_exceptions=debug_exceptions,
-			selected_categories=selected_categories or [],
-			skip_before_tests=skip_before_tests,
-		)
 
 		test_params = TestParameters(
 			site=site,
@@ -79,56 +69,83 @@ def main(
 		_disable_scheduler_if_needed()
 		frappe.clear_cache()
 
-		# class LightTestRunner(unittest.TextTestRunner):
-		# 	def run(test):
-		# 		print(f"calling super no {test}")
-		# 		super().run(test)
-		# lightrunner = LightTestRunner()
-
-		# Methods of this loader should be frappe specific
-		# it should respect parameters passed from command line
 		class FrappeTestLoader(unittest.TestLoader):
-			def __init__(self, params: TestParameters):
-				super(unittest.TestLoader, self).__init__()
-				self.params = params
+			def recursive_load_suites_in_pymodule(self, suite):
+				suites_queue = deque([suite])
+				while suites_queue:
+					suite = suites_queue.popleft()
+					for elem in suite:
+						if elem.countTestCases():
+							if isinstance(elem, unittest.TestSuite):
+								suites_queue.append(elem)
+							elif isinstance(elem, unittest.TestCase):
+								if self.params.tests:
+									if elem._testMethodName in self.params.tests:
+										self.testsuite.addTest(elem)
+								else:
+									self.testsuite.addTest(elem)
 
-			def discover(
-				self,
-				start_dir: str | None = None,
-				pattern: str | None = None,
-				top_level_dir: str | None = None,
-			) -> unittest.TestSuite:
-				testsuite = unittest.TestSuite()
-				self.files = []
-				apps = self.params.app or frappe.get_installed_apps()
+			def load_testsuites_in_pymodule(self, file_modules):
+				for module in file_modules:
+					suite = unittest.defaultTestLoader.loadTestsFromModule(module)
+					self.recursive_load_suites_in_pymodule(suite)
+
+			def load_pymodule_for_files(self, files: list):
+				"""
+				files: list of tuple of (Path, str)
+				"""
+				_file_modules = []
+				for app_path, test_file in files:
+					module_name = (
+						f"{'.'.join(test_file.relative_to(app_path.parent).parent.parts)}.{test_file.stem}"
+					)
+					module = importlib.import_module(module_name)
+					_file_modules.append(module)
+				return _file_modules
+
+			def get_files(self, apps: list) -> list:
+				files = []
 				for app in apps:
 					app_path = Path(frappe.get_app_path(app))
 					for test_file in app_path.glob("**/test_*.py"):
-						module_name = f"{'.'.join(test_file.relative_to(app_path.parent).parent.parts)}.{test_file.stem}"
-						module = importlib.import_module(module_name)
-						self.files.append((test_file, module))
+						files.append((app_path, test_file))
+				return files
 
-				for file, module in self.files:
-					_s = unittest.defaultTestLoader.loadTestsFromModule(module)
-					suites_to_process = deque([_s])
-					while suites_to_process:
-						suite = suites_to_process.popleft()
-						for elem in suite:
-							if elem.countTestCases():
-								if isinstance(elem, unittest.TestSuite):
-									suites_to_process.append(elem)
-								elif isinstance(elem, unittest.TestCase):
-									if self.params.tests:
-										if elem._testMethodName in self.params.tests:
-											testsuite.addTest(elem)
-									else:
-										testsuite.addTest(elem)
+			def discover_tests(self, params: TestParameters) -> unittest.TestSuite:
+				self.params = params
+				self.testsuite = unittest.TestSuite()
 
-				return testsuite
+				if self.params.tests:
+					# handle --test; highest priority; will ignore --doctype and --app
+					files = self.get_files(frappe.get_installed_apps())
+					file_pymodules = self.load_pymodule_for_files(files)
+					self.load_testsuites_in_pymodule(file_pymodules)
 
-		suite = FrappeTestLoader(test_params).discover()
-		for x in suite:
-			print(x)
+				elif self.params.doctype:
+					# handle --doctype; will ignore --app
+					module = frappe.get_cached_value("DocType", self.params.doctype, "module")
+					app = frappe.get_cached_value("Module Def", module, "app_name")
+					pymodule_name = get_module_name(self.params.doctype, module, "test_", app=app)
+					pymodule = importlib.import_module(pymodule_name)
+					self.load_testsuites_in_pymodule([pymodule])
+
+				elif self.params.app:
+					# handle --app
+					files = self.get_files([self.params.app])
+					file_pymodules = self.load_pymodule_for_files(files)
+					self.load_testsuites_in_pymodule(file_pymodules)
+
+				elif self.params.module:
+					# handle --module; supports --test as well
+					pymodule = importlib.import_module(self.params.module)
+					self.load_testsuites_in_pymodule([pymodule])
+
+				return self.testsuite
+
+		suite = FrappeTestLoader().discover_tests(test_params)
+		print("Test Cases:", suite.countTestCases())
+		res = unittest.TextTestRunner().run(suite)
+		print("Result:", res)
 
 	else:
 		import logging
