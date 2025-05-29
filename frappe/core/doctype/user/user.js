@@ -469,10 +469,14 @@ function show_api_key_dialog(api_key, api_secret) {
 				"System Manager",
 				"key_details"
 			);
+
+			dialog.hide();
 		},
 		secondary_action_label: __("{0} Copy", [frappe.utils.icon("clipboard")]),
 		secondary_action: function () {
 			frappe.utils.copy_to_clipboard(JSON.stringify({ api_key, api_secret }, null, "\t"));
+
+			dialog.hide();
 		},
 	});
 
