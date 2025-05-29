@@ -439,8 +439,6 @@ function get_roles_for_editing_user() {
 }
 
 function show_api_key_dialog(api_key, api_secret) {
-	const download_icon = `<i class="fa fa-download fa-w"></i>`;
-
 	const dialog = new frappe.ui.Dialog({
 		title: __("Key Details"),
 		fields: [
@@ -461,7 +459,7 @@ function show_api_key_dialog(api_key, api_secret) {
 		],
 		static: true,
 		size: "small",
-		primary_action_label: __("{0} Download", [download_icon]),
+		primary_action_label: __("{0} Download", [`<i class="fa fa-download fa-w"></i>`]),
 		primary_action: function () {
 			frappe.tools.downloadify(
 				[
