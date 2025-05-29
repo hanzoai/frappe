@@ -26,7 +26,7 @@ class FrappeTestLoader(unittest.TestLoader):
 
 	def load_testsuites_in_pymodule(self, file_modules):
 		for module in file_modules:
-			suite = unittest.defaultTestLoader.loadTestsFromModule(module)
+			suite = self.loadTestsFromModule(module)
 			self.recursive_load_suites_in_pymodule(suite)
 
 	def load_pymodule_for_files(self, files: list):

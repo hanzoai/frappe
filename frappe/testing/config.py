@@ -16,8 +16,6 @@ class TestConfig:
 
 @dataclass
 class TestParameters:
-	"""Configuration class for test runner"""
-
 	site: str | None = None
 	app: str | None = None
 	module: str | None = None

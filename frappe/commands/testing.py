@@ -40,8 +40,6 @@ def main(
 ) -> None:
 	"""Main function to run tests"""
 	if lightmode:
-		from frappe.testing.environment import _disable_scheduler_if_needed
-
 		test_params = TestParameters(
 			site=site,
 			app=app,
@@ -197,7 +195,7 @@ def run_tests_in_light_mode(test_params: TestParameters):
 	frappe.clear_cache()
 
 	suite = FrappeTestLoader().discover_tests(test_params)
-	unittest.TextTestRunner(resultclass=FrappeTestResult).run(suite)
+	unittest.TextTestRunner(failfast=test_params.failfast, resultclass=FrappeTestResult).run(suite)
 
 
 def _setup_xml_output(junit_xml_output):
