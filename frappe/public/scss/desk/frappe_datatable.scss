@@ -48,6 +48,7 @@
 	}
 
 	.dt-header {
+		line-height: 1;
 		.dt-row[data-is-filter] {
 			display: flex !important;
 		}
@@ -156,7 +157,9 @@
 	.dt-cell__content--col-0 {
 		padding: 0.5rem;
 	}
-
+	.dt-cell__content {
+		padding: 0.5rem !important;
+	}
 	.dt-scrollable--highlight-all {
 		.dt-cell__content {
 			background: var(--dt-selection-highlight-color);
