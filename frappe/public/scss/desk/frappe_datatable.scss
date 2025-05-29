@@ -48,7 +48,6 @@
 	}
 
 	.dt-header {
-		line-height: 1;
 		.dt-row[data-is-filter] {
 			display: flex !important;
 		}
@@ -139,9 +138,6 @@
 		min-height: 100px;
 		scrollbar-width: thin;
 		border-top: 0 !important;
-		.dt-cell {
-			line-height: 1;
-		}
 	}
 
 	.dt-tree-node__toggle + a {
@@ -157,9 +153,7 @@
 	.dt-cell__content--col-0 {
 		padding: 0.5rem;
 	}
-	.dt-cell__content {
-		padding: 0.5rem !important;
-	}
+
 	.dt-scrollable--highlight-all {
 		.dt-cell__content {
 			background: var(--dt-selection-highlight-color);
