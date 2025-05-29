@@ -440,6 +440,7 @@ function get_roles_for_editing_user() {
 
 function show_api_key_dialog(api_key, api_secret) {
 	const download_icon = `<i class="fa fa-download fa-w"></i>`;
+
 	const dialog = new frappe.ui.Dialog({
 		title: __("Key Details"),
 		fields: [
@@ -471,10 +472,14 @@ function show_api_key_dialog(api_key, api_secret) {
 				"key_details"
 			);
 		},
+		secondary_action_label: __("{0} Copy", [frappe.utils.icon("clipboard")]),
+		secondary_action: function () {
+			frappe.utils.copy_to_clipboard(JSON.stringify({ api_key, api_secret }, null, "\t"));
+		},
 	});
 
 	dialog.show();
-	dialog.show_message(__("Download details for future reference."), "yellow", 1);
+	dialog.show_message(__("Download/Copy details for future reference."), "yellow", 1);
 
 	const close_btn = dialog.get_close_btn();
 
@@ -484,7 +489,7 @@ function show_api_key_dialog(api_key, api_secret) {
 	close_btn.on("click", function () {
 		const confirm_dialog = frappe.confirm(
 			__(
-				"Are you sure you downloaded the key details? <br> <br> This is the last time we will show you the details."
+				"Are you sure you downloaded/copied the key details? <br> <br> This is the last time we will show you the details."
 			),
 			() => dialog.hide(),
 			() => dialog.show()
