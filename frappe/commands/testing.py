@@ -36,10 +36,10 @@ def main(
 	debug: bool = False,
 	debug_exceptions: tuple[Exception] | None = None,
 	selected_categories: list[str] | None = None,
-	light: bool = False,
+	lightmode: bool = False,
 ) -> None:
 	"""Main function to run tests"""
-	if light:
+	if lightmode:
 		from frappe.testing.environment import _disable_scheduler_if_needed
 
 		test_params = TestParameters(
@@ -57,141 +57,147 @@ def main(
 			failfast=failfast,
 			case=case,
 		)
+		run_tests_in_light_mode(test_params)
+		return
 
-		# init environment
-		frappe.init(site)
-		if not frappe.db:
-			frappe.connect()
+	import logging
 
-		# require db access
-		_disable_scheduler_if_needed()
-		frappe.clear_cache()
+	from frappe.testing import (
+		TestConfig,
+		TestRunner,
+		discover_all_tests,
+		discover_doctype_tests,
+		discover_module_tests,
+	)
+	from frappe.testing.environment import _cleanup_after_tests, _initialize_test_environment
+	from frappe.tests.utils.generators import _clear_test_log
 
-		suite = FrappeTestLoader().discover_tests(test_params)
-		res = unittest.TextTestRunner(resultclass=FrappeTestResult).run(suite)
+	_clear_test_log()
 
+	if debug and not debug_exceptions:
+		debug_exceptions = (Exception,)
+
+	testing_module_logger = logging.getLogger("frappe.testing")
+	testing_module_logger.setLevel(logging.DEBUG if verbose else logging.INFO)
+	start_time = time.time()
+
+	# Check for mutually exclusive arguments
+	exclusive_args = [doctype, doctype_list_path, module_def, module]
+	if sum(arg is not None for arg in exclusive_args) > 1:
+		raise click.UsageError(
+			"Error: The following arguments are mutually exclusive: "
+			"doctype, doctype_list_path, module_def, and module. "
+			"Please specify only one of these."
+		)
+
+	# Prepare debug log message
+	debug_params = []
+	for param_name in [
+		"site",
+		"app",
+		"module",
+		"doctype",
+		"module_def",
+		"verbose",
+		"tests",
+		"force",
+		"profile",
+		"junit_xml_output",
+		"doctype_list_path",
+		"failfast",
+		"case",
+		"skip_before_tests",
+		"debug_exceptions",
+		"debug",
+		"selected_categories",
+	]:
+		param_value = locals()[param_name]
+		if param_value is not None:
+			debug_params.append(f"{param_name}={param_value}")
+
+	if debug_params:
+		click.secho(f"Starting test run with parameters: {', '.join(debug_params)}", fg="cyan", bold=True)
+		testing_module_logger.info(f"started with: {', '.join(debug_params)}")
 	else:
-		import logging
-
-		from frappe.testing import (
-			TestConfig,
-			TestRunner,
-			discover_all_tests,
-			discover_doctype_tests,
-			discover_module_tests,
-		)
-		from frappe.testing.environment import _cleanup_after_tests, _initialize_test_environment
-		from frappe.tests.utils.generators import _clear_test_log
-
-		_clear_test_log()
-
-		if debug and not debug_exceptions:
-			debug_exceptions = (Exception,)
-
-		testing_module_logger = logging.getLogger("frappe.testing")
-		testing_module_logger.setLevel(logging.DEBUG if verbose else logging.INFO)
-		start_time = time.time()
-
-		# Check for mutually exclusive arguments
-		exclusive_args = [doctype, doctype_list_path, module_def, module]
-		if sum(arg is not None for arg in exclusive_args) > 1:
-			raise click.UsageError(
-				"Error: The following arguments are mutually exclusive: "
-				"doctype, doctype_list_path, module_def, and module. "
-				"Please specify only one of these."
+		click.secho("Starting test run with no specific parameters", fg="cyan", bold=True)
+		testing_module_logger.info("started with no specific parameters")
+	for handler in testing_module_logger.handlers:
+		if file := getattr(handler, "baseFilename", None):
+			click.secho(
+				f"View detailed logs{' (using --verbose)' if not verbose else ''}: {click.style(file, bold=True)}"
 			)
 
-		# Prepare debug log message
-		debug_params = []
-		for param_name in [
-			"site",
-			"app",
-			"module",
-			"doctype",
-			"module_def",
-			"verbose",
-			"tests",
-			"force",
-			"profile",
-			"junit_xml_output",
-			"doctype_list_path",
-			"failfast",
-			"case",
-			"skip_before_tests",
-			"debug_exceptions",
-			"debug",
-			"selected_categories",
-		]:
-			param_value = locals()[param_name]
-			if param_value is not None:
-				debug_params.append(f"{param_name}={param_value}")
+	test_config = TestConfig(
+		profile=profile,
+		failfast=failfast,
+		tests=tests,
+		case=case,
+		pdb_on_exceptions=debug_exceptions,
+		selected_categories=selected_categories or [],
+		skip_before_tests=skip_before_tests,
+	)
 
-		if debug_params:
-			click.secho(f"Starting test run with parameters: {', '.join(debug_params)}", fg="cyan", bold=True)
-			testing_module_logger.info(f"started with: {', '.join(debug_params)}")
+	_initialize_test_environment(site, test_config)
+
+	xml_output_file = _setup_xml_output(junit_xml_output)
+
+	try:
+		# Create TestRunner instance
+		runner = TestRunner(
+			verbosity=2 if testing_module_logger.getEffectiveLevel() < logging.INFO else 1,
+			tb_locals=testing_module_logger.getEffectiveLevel() <= logging.INFO,
+			cfg=test_config,
+			buffer=not debug,  # unfortunate as it messes up stdout/stderr output order
+		)
+
+		if doctype or doctype_list_path:
+			doctype = _load_doctype_list(doctype_list_path) if doctype_list_path else doctype
+			discover_doctype_tests(doctype, runner, app, force)
+		elif module_def:
+			_run_module_def_tests(app, module_def, runner, force)
+		elif module:
+			discover_module_tests(module, runner, app)
 		else:
-			click.secho("Starting test run with no specific parameters", fg="cyan", bold=True)
-			testing_module_logger.info("started with no specific parameters")
-		for handler in testing_module_logger.handlers:
-			if file := getattr(handler, "baseFilename", None):
-				click.secho(
-					f"View detailed logs{' (using --verbose)' if not verbose else ''}: {click.style(file, bold=True)}"
-				)
+			apps = [app] if app else frappe.get_installed_apps()
+			discover_all_tests(apps, runner)
 
-		test_config = TestConfig(
-			profile=profile,
-			failfast=failfast,
-			tests=tests,
-			case=case,
-			pdb_on_exceptions=debug_exceptions,
-			selected_categories=selected_categories or [],
-			skip_before_tests=skip_before_tests,
-		)
-
-		_initialize_test_environment(site, test_config)
-
-		xml_output_file = _setup_xml_output(junit_xml_output)
-
-		try:
-			# Create TestRunner instance
-			runner = TestRunner(
-				verbosity=2 if testing_module_logger.getEffectiveLevel() < logging.INFO else 1,
-				tb_locals=testing_module_logger.getEffectiveLevel() <= logging.INFO,
-				cfg=test_config,
-				buffer=not debug,  # unfortunate as it messes up stdout/stderr output order
+		results = []
+		for app, category, suite in runner.iterRun():
+			click.secho(
+				f"\nRunning {suite.countTestCases()} {category} tests for {app}", fg="cyan", bold=True
 			)
+			results.append([app, category, runner.run(suite)])
 
-			if doctype or doctype_list_path:
-				doctype = _load_doctype_list(doctype_list_path) if doctype_list_path else doctype
-				discover_doctype_tests(doctype, runner, app, force)
-			elif module_def:
-				_run_module_def_tests(app, module_def, runner, force)
-			elif module:
-				discover_module_tests(module, runner, app)
-			else:
-				apps = [app] if app else frappe.get_installed_apps()
-				discover_all_tests(apps, runner)
+		success = all(r.wasSuccessful() for _, _, r in results)
+		if not success:
+			sys.exit(1)
 
-			results = []
-			for app, category, suite in runner.iterRun():
-				click.secho(
-					f"\nRunning {suite.countTestCases()} {category} tests for {app}", fg="cyan", bold=True
-				)
-				results.append([app, category, runner.run(suite)])
+		return results
 
-			success = all(r.wasSuccessful() for _, _, r in results)
-			if not success:
-				sys.exit(1)
+	finally:
+		_cleanup_after_tests()
+		if xml_output_file:
+			xml_output_file.close()
 
-			return results
+		end_time = time.time()
+		testing_module_logger.debug(f"Total test run time: {end_time - start_time:.3f} seconds")
 
-		finally:
-			_cleanup_after_tests()
-			if xml_output_file:
-				xml_output_file.close()
 
-			end_time = time.time()
-			testing_module_logger.debug(f"Total test run time: {end_time - start_time:.3f} seconds")
+def run_tests_in_light_mode(test_params: TestParameters):
+	# init environment
+	frappe.init(test_params.site)
+	if not frappe.db:
+		frappe.connect()
+
+	# disable scheduler
+	global scheduler_disabled_by_user
+	scheduler_disabled_by_user = frappe.utils.scheduler.is_scheduler_disabled(verbose=False)
+	if not scheduler_disabled_by_user:
+		frappe.utils.scheduler.disable_scheduler()
+	frappe.clear_cache()
+
+	suite = FrappeTestLoader().discover_tests(test_params)
+	unittest.TextTestRunner(resultclass=FrappeTestResult).run(suite)
 
 
 def _setup_xml_output(junit_xml_output):
@@ -283,7 +289,7 @@ def _get_doctypes_for_module_def(app, module_def):
 	default="all",
 	help="Select test category to run",
 )
-@click.option("--light", is_flag=True, default=False)
+@click.option("--lightmode", is_flag=True, default=False)
 @pass_context
 def run_tests(
 	context: CliCtxObj,
@@ -301,7 +307,7 @@ def run_tests(
 	failfast=False,
 	case=None,
 	test_category="all",
-	light=False,
+	lightmode=False,
 	debug=False,
 ):
 	"""Run python unit-tests"""
@@ -329,9 +335,6 @@ def run_tests(
 			click.secho("Simply remove the flag.", fg="green")
 			return
 
-		if light:
-			click.secho("Light test runner selected")
-
 		main(
 			site,
 			app,
@@ -349,7 +352,7 @@ def run_tests(
 			skip_before_tests=skip_before_tests,
 			debug=debug,
 			selected_categories=[] if test_category == "all" else test_category,
-			light=light,
+			lightmode=lightmode,
 		)
 
 
