@@ -29,9 +29,13 @@ class NotificationLog(Document):
 		link: DF.SmallText | None
 		read: DF.Check
 		subject: DF.Text | None
+<<<<<<< HEAD
 		type: DF.Literal["", "Mention", "Energy Point", "Assignment", "Share", "Alert"]
 <<<<<<< HEAD
 =======
+=======
+		type: DF.Literal["", "Mention", "Assignment", "Share", "Alert"]
+>>>>>>> 7d8c90dc41 (refactor: remove unnecessay try catch)
 	# end: auto-generated types
 >>>>>>> 5982741233 (refactor: send system notification instead of realtime)
 
