@@ -9,9 +9,6 @@ import click
 
 import frappe
 from frappe.commands import get_site, pass_context
-from frappe.testing.config import TestParameters
-from frappe.testing.loader import FrappeTestLoader
-from frappe.testing.result import FrappeTestResult
 from frappe.utils.bench_helper import CliCtxObj
 
 if TYPE_CHECKING:
@@ -40,6 +37,8 @@ def main(
 ) -> None:
 	"""Main function to run tests"""
 	if lightmode:
+		from frappe.testing.config import TestParameters
+
 		test_params = TestParameters(
 			site=site,
 			app=app,
@@ -181,7 +180,10 @@ def main(
 		testing_module_logger.debug(f"Total test run time: {end_time - start_time:.3f} seconds")
 
 
-def run_tests_in_light_mode(test_params: TestParameters):
+def run_tests_in_light_mode(test_params):
+	from frappe.testing.loader import FrappeTestLoader
+	from frappe.testing.result import FrappeTestResult
+
 	# init environment
 	frappe.init(test_params.site)
 	if not frappe.db:
