@@ -6,10 +6,13 @@
  "field_order": [
   "app_name",
   "app_version",
-  "git_branch"
+  "git_branch",
+  "has_setup_wizard",
+  "is_setup_complete"
  ],
  "fields": [
   {
+   "columns": 2,
    "fieldname": "git_branch",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -18,6 +21,7 @@
    "reqd": 1
   },
   {
+   "columns": 2,
    "fieldname": "app_name",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -26,24 +30,51 @@
    "reqd": 1
   },
   {
+   "columns": 2,
    "fieldname": "app_version",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Application Version",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "columns": 2,
+   "default": "0",
+   "fieldname": "has_setup_wizard",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Has Setup Wizard"
+  },
+  {
+   "columns": 2,
+   "default": "0",
+   "fieldname": "is_setup_complete",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Setup Complete?"
   }
  ],
+ "grid_page_length": 50,
  "istable": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2020-05-12 10:09:49.148087",
+=======
+ "modified": "2025-05-22 12:26:49.523690",
+>>>>>>> 5c6b2b5bec (refactor: track completed app setup wizards and re-run the setup wizard upon new app installation. (#32640))
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Installed Application",
  "owner": "Administrator",
  "permissions": [],
  "quick_entry": 1,
+<<<<<<< HEAD
  "sort_field": "modified",
+=======
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+>>>>>>> 5c6b2b5bec (refactor: track completed app setup wizards and re-run the setup wizard upon new app installation. (#32640))
  "sort_order": "DESC",
  "track_changes": 1
 }

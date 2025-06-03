@@ -2351,6 +2351,7 @@ def get_active_domains():
 	return get_active_domains()
 
 
+<<<<<<< HEAD
 def get_version(doctype, name, limit=None, head=False, raise_err=True):
 	"""
 	Returns a list of version information of a given DocType.
@@ -2399,6 +2400,18 @@ def get_version(doctype, name, limit=None, head=False, raise_err=True):
 	else:
 		if raise_err:
 			raise ValueError(_("{0} has no versions tracked.").format(doctype))
+=======
+@request_cache
+def is_setup_complete():
+	is_setup_complete = False
+	if not frappe.db.table_exists("Installed Application"):
+		return is_setup_complete
+
+	if all(frappe.get_all("Installed Application", {"has_setup_wizard": 1}, pluck="is_setup_complete")):
+		is_setup_complete = True
+
+	return is_setup_complete
+>>>>>>> 5c6b2b5bec (refactor: track completed app setup wizards and re-run the setup wizard upon new app installation. (#32640))
 
 
 @whitelist(allow_guest=True)

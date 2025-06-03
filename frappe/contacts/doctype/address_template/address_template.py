@@ -29,7 +29,11 @@ class AddressTemplate(Document):
 
 		if not self.is_default and not self._get_previous_default():
 			self.is_default = 1
+<<<<<<< HEAD
 			if frappe.db.get_single_value("System Settings", "setup_complete"):
+=======
+			if frappe.is_setup_complete():
+>>>>>>> 5c6b2b5bec (refactor: track completed app setup wizards and re-run the setup wizard upon new app installation. (#32640))
 				frappe.msgprint(_("Setting this Address Template as default as there is no other default"))
 
 	def on_update(self):

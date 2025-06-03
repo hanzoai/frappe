@@ -258,7 +258,11 @@ def set_desktop_icons(visible_list, ignore_duplicate=True):
 	an icon for the doctype"""
 
 	# clear all custom only if setup is not complete
+<<<<<<< HEAD
 	if not int(frappe.defaults.get_defaults().setup_complete or 0):
+=======
+	if not frappe.is_setup_complete():
+>>>>>>> 5c6b2b5bec (refactor: track completed app setup wizards and re-run the setup wizard upon new app installation. (#32640))
 		frappe.db.delete("Desktop Icon", {"standard": 0})
 
 	# set standard as blocked and hidden if setting first active domain
