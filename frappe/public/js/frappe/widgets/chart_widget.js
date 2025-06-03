@@ -328,10 +328,10 @@ export default class ChartWidget extends Widget {
 							datasets.forEach((element) => {
 								csv_labels.push(`${element.name} (${label})`);
 								const values = element.values || [];
-								if(idx < values.length){
+								if (idx < values.length) {
 									csv_values.push(values[idx]);
 								} else {
-									csv_values.push('');
+									csv_values.push("");
 								}
 							});
 						});
