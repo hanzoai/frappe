@@ -864,8 +864,6 @@ class Database:
 		frappe.qb.into("Singles").columns("doctype", "field", "value").insert(*singles_data).run(debug=debug)
 		frappe.clear_document_cache(doctype, doctype)
 
-		self.value_cache.pop(doctype, None)
-
 	def get_single_value(self, doctype: str, fieldname: str, cache: bool = True):
 		"""Get property of Single DocType. Cache locally by default
 
@@ -975,8 +973,6 @@ class Database:
 			query = query.set(column, value)
 
 		query.run(debug=debug)
-
-		self.value_cache.pop(dt, None)
 
 	def bulk_update(
 		self,
