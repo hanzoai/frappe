@@ -6,6 +6,9 @@ import frappe
 ignore_doctypes = ("DocType", "Print Format", "Role", "Module Def", "Communication", "ToDo")
 
 
+LINK_COUNT_BUFFER_SIZE = 256
+
+
 def notify_link_count(doctype, name):
 	"""updates link count for given document"""
 	if hasattr(frappe.local, "link_count"):
@@ -24,13 +27,20 @@ def flush_local_link_count():
 	if not link_count:
 		link_count = {}
 
-		for key, _value in frappe.local.link_count.items():
-			if key in link_count:
-				link_count[key] += frappe.local.link_count[key]
-			else:
-				link_count[key] = frappe.local.link_count[key]
+	new_links = frappe.local.link_count
+	flush = False
+	for key, value in new_links.items():
+		if key in link_count:
+			link_count[key] += value
+		elif len(link_count) < LINK_COUNT_BUFFER_SIZE:
+			link_count[key] = value
+		else:
+			continue
+		flush = True
 
-	frappe.cache().set_value("_link_count", link_count)
+	if flush:
+		frappe.cache().set_value("_link_count", link_count)
+	new_links.clear()
 
 
 def update_link_count():
