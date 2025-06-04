@@ -1027,7 +1027,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		let data = this.data;
 		let columns = this.columns.filter((col) => !col.hidden);
 
-		if (data.length > 100000) {
+		if (data.length > (cint(frappe.boot.sysdefaults.max_report_rows) || 100000)) {
 			let msg = __(
 				"This report contains {0} rows and is too big to display in browser, you can {1} this report instead.",
 				[cstr(format_number(data.length, null, 0)).bold(), __("export").bold()]
@@ -2050,7 +2050,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			this.$tree_footer = $(`<div class="tree-footer col-md-3">
 				<div class="input-group">
 				  <input id="tree-level" type="number" class="form-control" aria-label="Tree Level" value="2">
-					<button class="btn btn-xs btn-primary" data-action="set_tree_level">
+					<button class="btn btn-xs btn-secondary" data-action="set_tree_level">
 						${__("Set Level")}</button>
 					<button class="btn btn-xs btn-secondary" data-action="expand_all_rows">
 						${__("Expand All")}</button>
