@@ -1171,7 +1171,7 @@ if sys.version_info.minor < 12:
 		inside the decorated getter function or around the cached property access.
 		"""
 
-		def __init__(self, func: Callable[[Any], T]) -> T:
+		def __init__(self, func: Callable[[Any], T]):
 			self.func = func
 			self.attrname = None
 			self.__doc__ = func.__doc__
