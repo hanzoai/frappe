@@ -1158,6 +1158,8 @@ class TestReportview(FrappeTestCase):
 		self.assertIn("''", query)
 		self.assertNotIn("\\'", query)
 		self.assertFalse(frappe.get_all("DocField", {"name": None}))
+		self.assertFalse(frappe.get_all("DocField", {"parent": None}))
+		self.assertNotIn("0", frappe.get_all("DocField", {"parent": None}, run=0))
 
 
 class TestReportView(FrappeTestCase):
