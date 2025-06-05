@@ -706,7 +706,7 @@ class Document(BaseDocument, DocRef):
 				)
 
 		if self.doctype in frappe.db.value_cache:
-			del frappe.db.value_cache[self.doctype]
+			frappe.db.value_cache.pop(self.doctype, None)
 
 	def set_user_and_timestamp(self):
 		self._original_modified = self.modified
