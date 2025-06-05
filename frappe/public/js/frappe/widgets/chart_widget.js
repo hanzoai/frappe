@@ -312,7 +312,7 @@ export default class ChartWidget extends Widget {
 				},
 			},
 			{
-				label: __("Export {0}", [__(this.chart_doc.chart_name)]),
+				label: __("Export"),
 				action: "action-export",
 				handler: () => {
 					const data = [[this.chart_doc.chart_name]];
