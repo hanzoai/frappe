@@ -197,7 +197,9 @@ def run_tests_in_light_mode(test_params):
 	frappe.clear_cache()
 
 	suite = FrappeTestLoader().discover_tests(test_params)
-	unittest.TextTestRunner(failfast=test_params.failfast, resultclass=FrappeTestResult).run(suite)
+	result = unittest.TextTestRunner(failfast=test_params.failfast, resultclass=FrappeTestResult).run(suite)
+	if not result.wasSuccessful():
+		sys.exit(1)
 
 
 def _setup_xml_output(junit_xml_output):
