@@ -887,10 +887,13 @@ class BaseDocument:
 				if not meta.get("is_virtual"):
 					if not fields_to_fetch:
 						# cache a single value type
-						values = _dict(name=frappe.db.get_value(doctype, docname, "name", cache=True))
+						values = frappe.db.get_value(
+							doctype, docname, ("name", "docstatus"), cache=True, as_dict=True
+						)
 					else:
 						values_to_fetch = (
 							"name",
+							"docstatus",
 							*(_df.fetch_from.split(".")[-1] for _df in fields_to_fetch),
 						)
 
@@ -926,7 +929,7 @@ class BaseDocument:
 						df.fieldname != "amended_from"
 						and (is_submittable or self.meta.is_submittable)
 						and frappe.get_meta(doctype).is_submittable
-						and DocStatus(frappe.db.get_value(doctype, docname, "docstatus") or 0).is_cancelled()
+						and DocStatus(values.docstatus or 0).is_cancelled()
 					):
 						cancelled_links.append((df.fieldname, docname, get_msg(df, docname)))
 
