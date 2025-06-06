@@ -105,7 +105,9 @@
   "allow_error_traceback",
   "enable_telemetry",
   "search_section",
-  "link_field_results_limit"
+  "link_field_results_limit",
+  "api_logging_section",
+  "log_api_requests"
  ],
  "fields": [
   {
@@ -714,6 +716,17 @@
    "fieldname": "show_absolute_datetime_in_timeline",
    "fieldtype": "Check",
    "label": "Show Absolute Datetime in Timeline"
+  },
+  {
+   "fieldname": "api_logging_section",
+   "fieldtype": "Section Break",
+   "label": "API Logging"
+  },
+  {
+   "default": "0",
+   "fieldname": "log_api_requests",
+   "fieldtype": "Check",
+   "label": "Log API Requests"
   }
  ],
  "icon": "fa fa-cog",

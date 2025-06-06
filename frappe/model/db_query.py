@@ -878,14 +878,14 @@ from {tables}
 				fallback = "''"
 
 			elif f.fieldname == "name":
-				value = f.value
+				value = f.value if f.value is not None else ""
 				fallback = "''"
 
 			elif (
 				df
 				and (db_type := cstr(frappe.db.type_map.get(df.fieldtype, " ")[0]))
 				and db_type in ("varchar", "text", "longtext", "smalltext", "json")
-			):
+			) or f.fieldname in ("owner", "modified_by", "parent", "parentfield", "parenttype"):
 				value = cstr(f.value)
 				fallback = "''"
 

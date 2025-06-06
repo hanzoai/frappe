@@ -666,7 +666,7 @@ def is_whitelisted(method):
 
 	is_guest = session["user"] == "Guest"
 	if method not in whitelisted or (is_guest and method not in guest_methods):
-		summary = _("You are not permitted to access this resource.")
+		summary = _("You are not permitted to access this resource. Login to access")
 		detail = _("Function {0} is not whitelisted.").format(bold(f"{method.__module__}.{method.__name__}"))
 		msg = f"<details><summary>{summary}</summary>{detail}</details>"
 		throw(msg, PermissionError, title=_("Method Not Allowed"))
@@ -977,6 +977,8 @@ def get_document_cache_key(doctype: str, name: str):
 
 
 def clear_document_cache(doctype: str, name: str | None = None) -> None:
+	frappe.db.value_cache.pop(doctype, None)
+
 	def clear_in_redis():
 		if name is not None:
 			cache.delete_value(get_document_cache_key(doctype, name))
@@ -1013,6 +1015,19 @@ def get_cached_value(
 	if as_dict:
 		return _dict(zip(fieldname, values, strict=False))
 	return values
+
+
+def get_settings(setting: str, fieldname: str, /, *, as_dict: bool = False, cache=True):
+	"""Return the value associated with the given fieldname from settings DocType.
+
+	Usage:
+		telemetry_enabled = frappe.get_settings("System Settings", "telemetry_enabled")
+	"""
+
+	if cache:
+		return get_cached_value(setting, setting, fieldname=fieldname, as_dict=as_dict)
+	else:
+		return frappe.db.get_single_value(setting, fieldname=fieldname, cache=False)
 
 
 def get_last_doc(
@@ -1929,6 +1944,18 @@ def get_active_domains():
 	from frappe.core.doctype.domain_settings.domain_settings import get_active_domains
 
 	return get_active_domains()
+
+
+@request_cache
+def is_setup_complete():
+	is_setup_complete = False
+	if not frappe.db.table_exists("Installed Application"):
+		return is_setup_complete
+
+	if all(frappe.get_all("Installed Application", {"has_setup_wizard": 1}, pluck="is_setup_complete")):
+		is_setup_complete = True
+
+	return is_setup_complete
 
 
 @whitelist(allow_guest=True)
