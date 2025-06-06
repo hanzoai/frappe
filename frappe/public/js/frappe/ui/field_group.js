@@ -25,9 +25,9 @@ frappe.ui.FieldGroup = class FieldGroup extends frappe.ui.form.Layout {
 			this.refresh();
 			// set default
 			$.each(this.fields_list, function (i, field) {
-				if (field.df["default"]) {
-					let def_value = field.df["default"];
-
+				let def_value = field.df["default"];
+				// loose equality check matches undefined also
+				if (def_value != null) {
 					if (def_value == "Today" && field.df["fieldtype"] == "Date") {
 						def_value = frappe.datetime.get_today();
 					}
