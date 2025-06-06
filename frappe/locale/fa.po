@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-05-18 09:33+0000\n"
-"PO-Revision-Date: 2025-05-26 10:24\n"
+"PO-Revision-Date: 2025-06-01 11:25\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -10817,7 +10817,7 @@ msgstr "صفحه ساز Frappe با استفاده از کامپوننت ها"
 #: frappe/public/js/frappe/file_uploader/ImageCropper.vue:112
 msgctxt "Image Cropper"
 msgid "Free"
-msgstr "رایگان"
+msgstr "آزاد"
 
 #. Label of the frequency (Select) field in DocType 'Auto Repeat'
 #. Label of the frequency (Select) field in DocType 'Scheduled Job Type'
@@ -17901,7 +17901,7 @@ msgstr "اپراتور باید یکی از {0} باشد"
 #: frappe/core/report/database_storage_usage_by_tables/database_storage_usage_by_tables.js:8
 #: frappe/public/js/frappe/file_uploader/FilePreview.vue:28
 msgid "Optimize"
-msgstr "بهینه سازی کنید"
+msgstr "بهینه‌سازی"
 
 #: frappe/core/doctype/file/file.js:105
 msgid "Optimizing image..."
