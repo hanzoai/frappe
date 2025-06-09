@@ -638,6 +638,7 @@ class User(Document):
 	def add_roles(self, *roles):
 		"""Add roles to user and save"""
 		self.append_roles(*roles)
+		# test_user_permission.create_user depends on this
 		self.save()
 
 	def remove_roles(self, *roles):
