@@ -306,6 +306,7 @@ def create_user(email, *roles):
 	if not roles:
 		roles = ("System Manager",)
 
+	# this triggers doc.save, so explicit save is not needed
 	user.add_roles(*roles)
 	return user
 
