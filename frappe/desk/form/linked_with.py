@@ -38,7 +38,15 @@ def get_submitted_linked_docs(doctype: str, name: str) -> list[tuple]:
 	3. Searching for links is going to be a tree like structure where at every level,
 	        you will be finding documents using parent document and parent document links.
 	"""
+<<<<<<< HEAD
 	frappe.has_permission(doctype, doc=name)
+=======
+
+	if isinstance(ignore_doctypes_on_cancel_all, str):
+		ignore_doctypes_on_cancel_all = json.loads(ignore_doctypes_on_cancel_all)
+
+	frappe.has_permission(doctype, doc=name, throw=True)
+>>>>>>> ca5b4cea0b (fix: throw permission error (#32860))
 	tree = SubmittableDocumentTree(doctype, name)
 	visited_documents = tree.get_all_children()
 	docs = []
@@ -513,7 +521,7 @@ def get_linked_docs(doctype: str, name: str, linkinfo: dict | None = None) -> di
 
 @frappe.whitelist()
 def get(doctype, docname):
-	frappe.has_permission(doctype, doc=docname)
+	frappe.has_permission(doctype, doc=docname, throw=True)
 	linked_doctypes = get_linked_doctypes(doctype=doctype)
 	return get_linked_docs(doctype=doctype, name=docname, linkinfo=linked_doctypes)
 
