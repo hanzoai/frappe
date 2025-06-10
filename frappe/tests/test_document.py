@@ -207,6 +207,9 @@ class TestDocument(IntegrationTestCase):
 
 		self.assertEqual(frappe.db.get_value("User", d.name), d.name)
 
+		d.append("roles", {"role": ("Guest", "Administrator")})
+		self.assertRaises(AssertionError, d._validate_links)
+
 	def test_validate(self):
 		d = self.test_insert()
 		d.starts_on = "2014-01-01"
