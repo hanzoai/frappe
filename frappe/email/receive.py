@@ -634,6 +634,9 @@ class InboundMail(Email):
 		communication = self.is_exist_in_system()
 		if communication:
 			communication.update_db(uid=self.uid)
+			data = self.as_dict()
+			if data.get("bcc") and not communication.bcc:
+				communication.update_db(bcc=data.get("bcc"))
 			communication.reload()
 			return communication
 
@@ -900,8 +903,14 @@ class InboundMail(Email):
 			"sent_or_received": "Received",
 			"sender_full_name": self.from_real_name,
 			"sender": self.from_email,
+<<<<<<< HEAD
 			"recipients": self.mail.get("To"),
 			"cc": self.mail.get("CC"),
+=======
+			"recipients": self.decode_email(self.mail.get("To") or ""),
+			"cc": self.decode_email(self.mail.get("CC") or ""),
+			"bcc": self.decode_email(self.mail.get("BCC") or ""),
+>>>>>>> af490b4e12 (fix: set bcc in emails)
 			"email_account": self.email_account.name,
 			"communication_medium": "Email",
 			"uid": self.uid,
