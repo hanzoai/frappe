@@ -854,9 +854,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 				_value = _value * out_of_ratings;
 			}
 
-			if (df.fieldname == "company") {
-				console.log(df);
-			}
+			let filterable = df?.mask_readonly ? "no-underline" : " filterable";
 
 			if (df.fieldtype === "Image") {
 				html = df.options
@@ -866,14 +864,14 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 						${frappe.utils.icon("restriction")}
 					</div>`;
 			} else if (df.fieldtype === "Select") {
-				html = `<span class="filterable indicator-pill ${frappe.utils.guess_colour(
+				html = `<span class="${filterable} indicator-pill ${frappe.utils.guess_colour(
 					_value
 				)} ellipsis"
 					data-filter="${fieldname},=,${value}">
 					<span class="ellipsis"> ${__(_value)} </span>
 				</span>`;
 			} else if (df.fieldtype === "Link") {
-				html = `<a class="filterable ellipsis"
+				html = `<a class="${filterable} ellipsis "
 					data-filter="${fieldname},=,${value}">
 					${_value}
 				</a>`;
@@ -882,7 +880,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 					${_value}
 				</span>`;
 			} else {
-				html = `<a class="filterable ellipsis"
+				html = `<a class="${filterable} ellipsis"
 					data-filter="${fieldname},=,${frappe.utils.escape_html(value)}">
 					${format()}
 				</a>`;

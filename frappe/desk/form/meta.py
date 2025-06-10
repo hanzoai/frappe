@@ -5,7 +5,7 @@ import os
 import frappe
 from frappe import _
 from frappe.build import scrub_html_template
-from frappe.model.meta import Meta
+from frappe.model.meta import Meta, is_data_masking_enabled
 from frappe.model.utils import render_include
 from frappe.modules import get_module_path, load_doctype_module, scrub
 from frappe.utils import get_bench_path, get_html_format
@@ -48,6 +48,23 @@ def get_meta(doctype, cached=True) -> "FormMeta":
 		#       In prod don't use cached meta when explicitly requesting from DB.
 		meta = FormMeta(doctype, cached=frappe.conf.developer_mode)
 
+	if (meta.name not in meta.special_doctypes) and is_data_masking_enabled():
+		meta = mask_protected_fields(meta)
+
+	return meta
+
+
+def mask_protected_fields(meta):
+	for df in meta.fields:
+		if df.mask and not meta.has_permlevel_access_to(
+			fieldname=df.fieldname, df=df, permission_type="mask"
+		):
+			# store orignal fieldtype and change fieldtype to Data
+			df.read_only = 1
+			df.mask_readonly = 1
+			df.set("old_fieldtype", df.get("old_fieldtype") or df.fieldtype)
+			if df.fieldtype != "Data":
+				df.fieldtype = "Data"
 	return meta
 
 

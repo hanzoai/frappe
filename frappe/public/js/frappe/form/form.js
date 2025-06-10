@@ -465,7 +465,9 @@ frappe.ui.form.Form = class FrappeForm {
 			this.show_conflict_message();
 			this.show_submission_queue_banner();
 
-			this.mark_mask_fields_readonly();
+			if (!this.is_new()) {
+				this.mark_mask_fields_readonly();
+			}
 
 			if (frappe.boot.read_only) {
 				this.disable_form();
@@ -1176,11 +1178,12 @@ frappe.ui.form.Form = class FrappeForm {
 	mark_mask_fields_readonly() {
 		this.fields.forEach((field) => {
 			if (field.df.mask && field.df.mask_readonly) {
-				// console.log(field.df);
-				this.set_df_property(field.df.fieldname, "disabled", "1");
-				this.set_df_property(field.df.fieldname, "fieldtype", "Data");
+				console.log(field.df);
+				// this.set_df_property(field.df.fieldname, "disabled", "1");
+				this.set_df_property(field.df.fieldname, "fieldtype", "Date");
 			}
 		});
+		// this.refresh();
 	}
 
 	handle_save_fail(btn, on_error) {

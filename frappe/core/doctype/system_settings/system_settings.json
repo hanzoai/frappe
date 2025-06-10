@@ -27,6 +27,7 @@
   "rounding_method",
   "permissions",
   "apply_strict_user_permissions",
+  "enable_data_masking",
   "column_break_21",
   "allow_older_web_view_links",
   "security_tab",
@@ -707,12 +708,18 @@
    "fieldname": "max_report_rows",
    "fieldtype": "Int",
    "label": "Max Report Rows"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_data_masking",
+   "fieldtype": "Check",
+   "label": "Enable Data Masking"
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2025-05-19 14:17:40.748786",
+ "modified": "2025-06-10 14:54:41.151334",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",

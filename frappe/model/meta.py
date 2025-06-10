@@ -42,6 +42,7 @@ from frappe.model.workflow import get_workflow_name
 from frappe.modules import load_doctype_module
 from frappe.types import DocRef
 from frappe.utils import cached_property, cast, cint, cstr
+from frappe.utils.caching import request_cache
 from frappe.utils.data import add_to_date, get_datetime
 
 DEFAULT_FIELD_LABELS = {
@@ -83,8 +84,16 @@ def get_meta(doctype: "str | DocType", cached: bool = True) -> "_Meta":
 		return meta
 
 	meta = Meta(doctype)
+
 	key = f"doctype_meta::{meta.name}"
 	frappe.client_cache.set_value(key, meta)
+
+	if meta.name not in meta.special_doctypes:
+		if is_data_masking_enabled():
+			from frappe.desk.form.meta import mask_protected_fields
+
+			meta = mask_protected_fields(meta)
+
 	return meta
 
 
@@ -94,6 +103,10 @@ def clear_meta_cache(doctype: str = "*"):
 		frappe.client_cache.delete_keys(key)
 	else:
 		frappe.client_cache.delete_value(key)
+
+
+def is_data_masking_enabled():
+	return frappe.db.get_single_value("System Settings", "enable_data_masking")
 
 
 def load_meta(doctype):
@@ -214,7 +227,22 @@ class Meta(Document):
 		return self._dynamic_link_fields
 
 	def get_masked_fields(self):
-		return [df for df in self.fields if df.get("mask")]
+		# print(self.fields, "Indise the meta yes \n\n\n")
+		# return [df for df in self.fields if df.get("mask")]
+		# print("inside mask fields: ", self.get("fields", {"mask": 1}), "\n\n\n")
+		# return self.get("fields", {"mask": 1})
+		return self.get("fields", {"mask_readonly": 1})
+		# fields = self.get("fields", {"mask_readonly": 1})
+		# change fieldtype to Data for masked fields
+		# print("fields: ", fields, "\n\n\n")
+		# for df in fields:
+		# 	print("df: ", df, "\n\n\n")
+		# 	if df.get("fieldtype") != "Data":
+		# 		df.old_fieldtype = df.fieldtype
+		# 		df.fieldtype = "Data"
+		# return fields
+
+		# return [df for df in self.get("fields", {"mask": 1}) if df.get("fieldtype") != "Data"]
 
 	@cached_property
 	def _dynamic_link_fields(self):

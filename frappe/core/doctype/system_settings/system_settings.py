@@ -49,6 +49,7 @@ class SystemSettings(Document):
 		dormant_days: DF.Int
 		email_footer_address: DF.SmallText | None
 		email_retry_limit: DF.Int
+		enable_data_masking: DF.Check
 		enable_onboarding: DF.Check
 		enable_password_policy: DF.Check
 		enable_scheduler: DF.Check
