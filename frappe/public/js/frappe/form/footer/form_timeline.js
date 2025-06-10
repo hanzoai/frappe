@@ -663,7 +663,8 @@ class FormTimeline extends BaseTimeline {
 
 		let edit_button = $();
 		let current_user = frappe.session.user;
-		if (["Administrator", doc.owner].includes(current_user)) {
+		let can_edit = ["Administrator", doc.owner].includes(current_user);
+		if (can_edit) {
 			edit_button = $(
 				`<button class="btn edit btn-link action-btn">${__("Edit")}</a>`
 			).click(() => {
@@ -681,7 +682,9 @@ class FormTimeline extends BaseTimeline {
 		};
 		let actions_wrapper = comment_wrapper.find(".custom-actions");
 		if (frappe.is_mobile()) {
-			this.add_dropdown_item(comment_wrapper, [edit_button]);
+			if (can_edit) {
+				this.add_dropdown_item(comment_wrapper, [edit_button]);
+			}
 		} else {
 			actions_wrapper.append(edit_button);
 			actions_wrapper.append(dismiss_button);
