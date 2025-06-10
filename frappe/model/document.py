@@ -9,7 +9,7 @@ from collections.abc import Generator, Iterable
 from contextlib import contextmanager
 from functools import wraps
 from types import MappingProxyType
-from typing import TYPE_CHECKING, Any, Literal, Optional, TypeAlias, Union, cast, overload
+from typing import TYPE_CHECKING, Any, Literal, Optional, TypeAlias, Union, overload
 
 from typing_extensions import Self, override
 from werkzeug.exceptions import NotFound
@@ -1983,11 +1983,10 @@ class LazyDocument:
 
 	@override
 	def get(self: Document, key, filters=None, limit=None, default=None):
-		if isinstance(key, str):
+		if isinstance(key, str) and key in self._table_fieldnames:
 			# Trigger populating of __dict__
 			getattr(self, key, None)
-		parent = cast(Document, super())
-		return parent.get(key, filters, limit, default)
+		return super().get(key, filters, limit, default)
 
 	@override
 	def db_update_all(self):
