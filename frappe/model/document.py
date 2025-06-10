@@ -9,7 +9,7 @@ from collections.abc import Generator, Iterable
 from contextlib import contextmanager
 from functools import wraps
 from types import MappingProxyType
-from typing import TYPE_CHECKING, Any, Literal, Optional, TypeAlias, Union, overload
+from typing import TYPE_CHECKING, Any, Literal, Optional, TypeAlias, Union, cast, overload
 
 from typing_extensions import Self, override
 from werkzeug.exceptions import NotFound
@@ -1982,11 +1982,12 @@ class LazyDocument:
 			self.__dict__.pop(fieldname, None)
 
 	@override
-	def get(self: Document, key, *args, **kwags):
+	def get(self: Document, key, filters=None, limit=None, default=None):
 		if isinstance(key, str):
 			# Trigger populating of __dict__
-			_ = getattr(self, key, None)
-		return super().get(key, *args, **kwags)
+			getattr(self, key, None)
+		parent = cast(Document, super())
+		return parent.get(key, filters, limit, default)
 
 	@override
 	def db_update_all(self):
@@ -2008,9 +2009,11 @@ class LazyChildTable:
 
 	def __get__(self, doc: Document, objtype=None):
 		# Note: avoid any high level access here, can cause recursion
-		children = doc._load_child_table_from_db(self.fieldname, self.doctype) or []
-		assert self.fieldname not in doc.__dict__, "Descriptor should not override existing values"
-		doc.__dict__[self.fieldname] = []
+		fieldname = self.fieldname
+		__dict = doc.__dict__
+		assert fieldname not in __dict, "Descriptor should not override existing values"
+		children = doc._load_child_table_from_db(fieldname, self.doctype) or []
+		__dict[fieldname] = []
 		# Update __dict__ and convert to Document objects
-		doc.extend(self.fieldname, children)
-		return doc.__dict__[self.fieldname]
+		doc.extend(fieldname, children)
+		return __dict[fieldname]
