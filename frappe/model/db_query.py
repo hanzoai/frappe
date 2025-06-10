@@ -694,7 +694,6 @@ from {tables}
 
 			if "." in column:
 				table, column = column.split(".", 1)
-				# print(i, "field", column, "permitted_fields")
 				doctype = self.linked_table_aliases[table] if table in self.linked_table_aliases else table
 				doctype = doctype.replace("`", "").removeprefix("tab")
 

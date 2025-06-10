@@ -159,17 +159,3 @@ class DocField(Document):
 		parent = f" parent={self.parent}" if getattr(self, "parent", None) else ""
 
 		return f"<{self.fieldtype}{doctype}: {self.fieldname}{docstatus}{parent}{unsaved}>"
-
-
-# TODO: remove this function when all usages are removed
-def get_masked_fields(doctype):
-	return frappe.db.get_values(
-		doctype="DocField",
-		filters={
-			"parent": doctype,
-			"parentfield": "fields",
-			"mask": 1,
-		},
-		fieldname="fieldname",
-		as_dict=True,
-	)

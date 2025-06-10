@@ -227,22 +227,7 @@ class Meta(Document):
 		return self._dynamic_link_fields
 
 	def get_masked_fields(self):
-		# print(self.fields, "Indise the meta yes \n\n\n")
-		# return [df for df in self.fields if df.get("mask")]
-		# print("inside mask fields: ", self.get("fields", {"mask": 1}), "\n\n\n")
-		# return self.get("fields", {"mask": 1})
 		return self.get("fields", {"mask_readonly": 1})
-		# fields = self.get("fields", {"mask_readonly": 1})
-		# change fieldtype to Data for masked fields
-		# print("fields: ", fields, "\n\n\n")
-		# for df in fields:
-		# 	print("df: ", df, "\n\n\n")
-		# 	if df.get("fieldtype") != "Data":
-		# 		df.old_fieldtype = df.fieldtype
-		# 		df.fieldtype = "Data"
-		# return fields
-
-		# return [df for df in self.get("fields", {"mask": 1}) if df.get("fieldtype") != "Data"]
 
 	@cached_property
 	def _dynamic_link_fields(self):

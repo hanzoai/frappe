@@ -395,9 +395,6 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		}
 
 		const fields_in_list_view = this.get_fields_in_list_view();
-
-		// console.log(fields_in_list_view, "fields_in_list_view");
-
 		// Add rest from in_list_view docfields
 		this.columns = this.columns.concat(
 			fields_in_list_view
