@@ -585,12 +585,25 @@ class ClientCache:
 
 	def run_invalidator_thread(self):
 		self._watcher = self.invalidator.pubsub()
-		self._watcher.subscribe(**{"__redis__:invalidate": self._handle_invalidation})
+		self._watcher.subscribe(
+			**{
+				"__redis__:invalidate": self._handle_invalidation,
+				"clear_persistent_cache": self._handle_persistent_cache_invalidation,
+			}
+		)
 		return self._watcher.run_in_thread(
 			sleep_time=60,
 			daemon=True,
 			exception_handler=self._exception_handler,
 		)
+
+	def erase_persistent_caches(self, doctype=None):
+		"""Send signal to clear all worker-specific caches
+
+		This can include cached controller resolution, @site_cache and any other similar persistent
+		cache.
+		"""
+		pass
 
 	def _handle_invalidation(self, message):
 		if message["data"] is None:
@@ -600,6 +613,9 @@ class ClientCache:
 		with self.lock:
 			for key in message["data"]:
 				self.cache.pop(key, None)
+
+	def _handle_persistent_cache_invalidation(self, message):
+		print(message)
 
 	def _exception_handler(self, exc, pubsub, pubsub_thread):
 		if isinstance(exc, (redis.exceptions.ConnectionError)):
