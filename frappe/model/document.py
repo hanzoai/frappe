@@ -2017,3 +2017,5 @@ class LazyChildTable:
 		# Update __dict__ and convert to Document objects
 		doc.extend(fieldname, children)
 		return __dict[fieldname]
+
+	# Note: Don't implement __set__ method! https://docs.python.org/3/howto/descriptor.html#descriptor-protocol
