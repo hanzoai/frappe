@@ -1,5 +1,6 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+import json
 import pickle
 import re
 import threading
@@ -14,7 +15,6 @@ from redis.exceptions import ResponseError
 
 import frappe
 from frappe.utils import cstr
-from frappe.utils.data import cint
 
 # 5 is faster than default which is 4.
 # Python uses old protocol for backward compatibility, we don't support anything <3.10.
@@ -597,13 +597,16 @@ class ClientCache:
 			exception_handler=self._exception_handler,
 		)
 
-	def erase_persistent_caches(self, doctype=None):
+	def erase_persistent_caches(self, *, doctype=None):
 		"""Send signal to clear all worker-specific caches
 
 		This can include cached controller resolution, @site_cache and any other similar persistent
 		cache.
 		"""
-		pass
+		self.redis.publish(
+			"clear_persistent_cache",
+			json.dumps({"doctype": doctype, "site": frappe.local.site}),
+		)
 
 	def _handle_invalidation(self, message):
 		if message["data"] is None:
@@ -615,7 +618,17 @@ class ClientCache:
 				self.cache.pop(key, None)
 
 	def _handle_persistent_cache_invalidation(self, message):
-		print(message)
+		import frappe.utils.caching
+		from frappe.cache_manager import clear_controller_cache
+
+		if message["type"] != "message":
+			return
+
+		payload = frappe._dict(json.loads(message["data"]))
+		clear_controller_cache(payload.doctype, site=payload.site)
+
+		if not payload.doctype:
+			frappe.utils.caching._SITE_CACHE.clear()
 
 	def _exception_handler(self, exc, pubsub, pubsub_thread):
 		if isinstance(exc, (redis.exceptions.ConnectionError)):
