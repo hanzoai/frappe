@@ -903,14 +903,9 @@ class InboundMail(Email):
 			"sent_or_received": "Received",
 			"sender_full_name": self.from_real_name,
 			"sender": self.from_email,
-<<<<<<< HEAD
 			"recipients": self.mail.get("To"),
 			"cc": self.mail.get("CC"),
-=======
-			"recipients": self.decode_email(self.mail.get("To") or ""),
-			"cc": self.decode_email(self.mail.get("CC") or ""),
-			"bcc": self.decode_email(self.mail.get("BCC") or ""),
->>>>>>> af490b4e12 (fix: set bcc in emails)
+			"bcc": self.mail.get("BCC"),
 			"email_account": self.email_account.name,
 			"communication_medium": "Email",
 			"uid": self.uid,
