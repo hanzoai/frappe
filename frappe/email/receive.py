@@ -634,6 +634,9 @@ class InboundMail(Email):
 		communication = self.is_exist_in_system()
 		if communication:
 			communication.update_db(uid=self.uid)
+			data = self.as_dict()
+			if data.get("bcc") and not communication.bcc:
+				communication.update_db(bcc=data.get("bcc"))
 			communication.reload()
 			return communication
 
@@ -902,6 +905,7 @@ class InboundMail(Email):
 			"sender": self.from_email,
 			"recipients": self.mail.get("To"),
 			"cc": self.mail.get("CC"),
+			"bcc": self.mail.get("BCC"),
 			"email_account": self.email_account.name,
 			"communication_medium": "Email",
 			"uid": self.uid,
