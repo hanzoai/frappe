@@ -55,6 +55,14 @@ def get_meta(doctype, cached=True) -> "FormMeta":
 
 
 def mask_protected_fields(meta):
+	if (
+		frappe.flags.in_patch
+		or frappe.flags.in_install
+		or frappe.flags.in_migrate
+		or frappe.flags.in_setup_wizard
+	):
+		return meta
+
 	for df in meta.fields:
 		if df.mask and not meta.has_permlevel_access_to(
 			fieldname=df.fieldname, df=df, permission_type="mask"
