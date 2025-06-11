@@ -25,6 +25,7 @@
   "float_precision",
   "currency_precision",
   "rounding_method",
+  "show_absolute_datetime_in_timeline",
   "permissions",
   "apply_strict_user_permissions",
   "enable_data_masking",
@@ -710,6 +711,12 @@
    "fieldname": "max_report_rows",
    "fieldtype": "Int",
    "label": "Max Report Rows"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_absolute_datetime_in_timeline",
+   "fieldtype": "Check",
+   "label": "Show Absolute Datetime in Timeline"
   },
   {
    "default": "0",
