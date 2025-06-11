@@ -691,7 +691,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 	refresh(have_filters_changed) {
 		this.toggle_message(true);
 		this.toggle_report(false);
-		let filters = this.get_filter_values(true);
+		let filters = this.get_filter_values(!this.prepared_report_name);
 
 		// for custom reports,
 		// are_default_filters is true if the filters haven't been modified and for all filters,
