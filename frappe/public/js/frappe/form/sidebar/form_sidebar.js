@@ -95,10 +95,10 @@ frappe.ui.form.Sidebar = class {
 				__("{0} created this", [get_user_link(this.frm.doc.owner)])
 			) +
 			" · " +
-			(frappe.boot.user.show_absolute_datetime_in_timeline == 1 ||
-			frappe.boot.sysdefaults.show_absolute_datetime_in_timeline == "1"
+			cint(frappe.boot.user.show_absolute_datetime_in_timeline) ||
+			cint(frappe.boot.sysdefaults.show_absolute_datetime_in_timeline)
 				? frappe.datetime.str_to_user(this.frm.doc.creation)
-				: comment_when(this.frm.doc.creation));
+				: comment_when(this.frm.doc.creation);
 		let modified_message =
 			get_user_message(
 				this.frm.doc.modified_by,
@@ -106,8 +106,8 @@ frappe.ui.form.Sidebar = class {
 				__("{0} last edited this", [get_user_link(this.frm.doc.modified_by)])
 			) +
 			" · " +
-			(frappe.boot.user.show_absolute_datetime_in_timeline == 1 ||
-			frappe.boot.sysdefaults.show_absolute_datetime_in_timeline == "1"
+			cint(frappe.boot.user.show_absolute_datetime_in_timeline) ||
+			cint(frappe.boot.sysdefaults.show_absolute_datetime_in_timeline)
 				? frappe.datetime.str_to_user(this.frm.doc.modified)
 				: comment_when(this.frm.doc.modified));
 
