@@ -21,7 +21,7 @@ from frappe.core.doctype.server_script.server_script_utils import run_server_scr
 from frappe.desk.form.document_follow import follow_document
 from frappe.integrations.doctype.webhook import run_webhooks
 from frappe.model import optional_fields, table_fields
-from frappe.model.base_document import BaseDocument, get_controller
+from frappe.model.base_document import BaseDocument, D, get_controller
 from frappe.model.docstatus import DocStatus
 from frappe.model.naming import set_new_name, validate_name
 from frappe.model.utils import is_virtual_doctype, simple_singledispatch
@@ -1983,10 +1983,23 @@ class LazyDocument:
 
 	@override
 	def get(self: Document, key, filters=None, limit=None, default=None):
+		# Ensure that table descriptor is triggered at least once
 		if isinstance(key, str) and key in self._table_fieldnames:
-			# Trigger populating of __dict__
 			getattr(self, key, None)
 		return super().get(key, filters, limit, default)
+
+	@override
+	def extend(self: Document, key, value):
+		# Ensure that table descriptor is triggered at least once
+		if isinstance(key, str) and key in self._table_fieldnames:
+			getattr(self, key, None)
+		return super().extend(key, value)
+
+	@override
+	def append(self, key: str, value: D | dict | None = None, position: int = -1) -> D:
+		if isinstance(key, str) and key in self._table_fieldnames:
+			getattr(self, key, None)
+		return super().append(key, value, position)
 
 	@override
 	def db_update_all(self):

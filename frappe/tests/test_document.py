@@ -527,76 +527,6 @@ class TestDocument(IntegrationTestCase):
 		changed_val = frappe.db.get_single_value(c.doctype, key)
 		self.assertEqual(val, changed_val)
 
-	def test_lazy_documents(self):
-		# Warmup meta etc
-		_ = frappe.get_lazy_doc("User", "Guest")
-		eager_guest: User = frappe.get_doc("User", "Guest")
-
-		# Only one query for parent document
-		with self.assertQueryCount(1):
-			guest: User = frappe.get_lazy_doc("User", "Guest")
-			self.assertEqual(guest.user_type, "Website User")
-
-		# Only one query for one table access
-		with self.assertQueryCount(1):
-			guest_role = guest.roles[0]
-			self.assertEqual(guest_role.role, "Guest")
-			self.assertIsInstance(guest_role, type(eager_guest.roles[0]))
-
-		# Only one query for one table access
-		with self.assertQueryCount(1):
-			_ = guest.role_profiles
-
-		# No queries for repeat access, same object
-		with self.assertQueryCount(0):
-			guest_role_repeat_access = guest.roles[0]
-		self.assertIs(guest_role, guest_role_repeat_access)
-
-		# Same object after first access
-		with self.assertQueryCount(0):
-			self.assertIs(guest.roles, guest.get("roles"))
-
-		# things accessing __dict__ by default should be updated too
-		self.assertTrue(frappe.get_lazy_doc("User", "Guest").get("roles"))
-
-	def test_lazy_doc_efficient_saves(self):
-		# Only touched tables and self should be updated
-		guest = frappe.get_lazy_doc("User", "Guest")
-		with self.assertQueryCount(1):
-			guest.db_update_all()
-
-		guest = frappe.get_lazy_doc("User", "Guest")
-		_ = guest.roles
-		with self.assertQueryCount(1 + len(guest.roles)):
-			guest.db_update_all()
-
-		# Save should works, it won't be efficient because internal code will just trigger fetching
-		# of child tables to resave them.
-		guest.save()
-
-	def test_lazy_magic(self):
-		self.assertIsNone(getattr(LazyChildTable, "__set__", None))
-
-		guest = frappe.get_lazy_doc("User", "Guest")
-		# table fields will be populated on first access
-		self.assertIsNone(guest.__dict__.get("roles"))
-		roles = guest.roles
-		self.assertIs(guest.__dict__.get("roles"), roles)
-
-		# Allow overriding from user code
-		roles_copy = deepcopy(roles)
-		guest.roles = roles_copy
-		self.assertIs(guest.__dict__.get("roles"), roles_copy)
-
-		with patch(f"{LazyChildTable.__module__}.{LazyChildTable.__name__}.__get__") as getter:
-			_ = guest.roles
-			self.assertFalse(getter.called)
-
-		guest = frappe.get_lazy_doc("User", "Guest")
-		with patch(f"{LazyChildTable.__module__}.{LazyChildTable.__name__}.__get__") as getter:
-			_ = guest.roles
-			self.assertTrue(getter.called)
-
 
 class TestDocumentWebView(IntegrationTestCase):
 	def get(self, path, user="Guest"):
@@ -734,3 +664,84 @@ class TestDocumentWebView(IntegrationTestCase):
 		)
 		self.assertEqual(sent_docs - all_docs, set(), "All docs should be inserted")
 		self.assertEqual(sent_child_docs - all_child_docs, set(), "All child docs should be inserted")
+
+
+class TestLazyDocument(IntegrationTestCase):
+	def test_lazy_documents(self):
+		# Warmup meta etc
+		_ = frappe.get_lazy_doc("User", "Guest")
+		eager_guest: User = frappe.get_doc("User", "Guest")
+
+		# Only one query for parent document
+		with self.assertQueryCount(1):
+			guest: User = frappe.get_lazy_doc("User", "Guest")
+			self.assertEqual(guest.user_type, "Website User")
+
+		# Only one query for one table access
+		with self.assertQueryCount(1):
+			guest_role = guest.roles[0]
+			self.assertEqual(guest_role.role, "Guest")
+			self.assertIsInstance(guest_role, type(eager_guest.roles[0]))
+
+		# Only one query for one table access
+		with self.assertQueryCount(1):
+			_ = guest.role_profiles
+
+		# No queries for repeat access, same object
+		with self.assertQueryCount(0):
+			guest_role_repeat_access = guest.roles[0]
+		self.assertIs(guest_role, guest_role_repeat_access)
+
+		# Same object after first access
+		with self.assertQueryCount(0):
+			self.assertIs(guest.roles, guest.get("roles"))
+
+		# things accessing __dict__ by default should be updated too
+		self.assertTrue(frappe.get_lazy_doc("User", "Guest").get("roles"))
+
+	def test_lazy_doc_efficient_saves(self):
+		# Only touched tables and self should be updated
+		guest = frappe.get_lazy_doc("User", "Guest")
+		with self.assertQueryCount(1):
+			guest.db_update_all()
+
+		guest = frappe.get_lazy_doc("User", "Guest")
+		_ = guest.roles
+		with self.assertQueryCount(1 + len(guest.roles)):
+			guest.db_update_all()
+
+		# Save should works, it won't be efficient because internal code will just trigger fetching
+		# of child tables to resave them.
+		guest.save()
+
+	def test_lazy_magic(self):
+		self.assertIsNone(getattr(LazyChildTable, "__set__", None))
+
+		guest = frappe.get_lazy_doc("User", "Guest")
+		# table fields will be populated on first access
+		self.assertIsNone(guest.__dict__.get("roles"))
+		roles = guest.roles
+		self.assertIs(guest.__dict__.get("roles"), roles)
+
+		# Allow overriding from user code
+		roles_copy = deepcopy(roles)
+		guest.roles = roles_copy
+		self.assertIs(guest.__dict__.get("roles"), roles_copy)
+
+		with patch(f"{LazyChildTable.__module__}.{LazyChildTable.__name__}.__get__") as getter:
+			_ = guest.roles
+			self.assertFalse(getter.called)
+
+		guest = frappe.get_lazy_doc("User", "Guest")
+		with patch(f"{LazyChildTable.__module__}.{LazyChildTable.__name__}.__get__") as getter:
+			_ = guest.roles
+			self.assertTrue(getter.called)
+
+	def test_append_extend(self):
+		guest = frappe.get_lazy_doc("User", "Guest")
+		_ = guest.append("roles")
+		self.assertEqual(len(guest.roles), 2)
+
+		guest = frappe.get_lazy_doc("User", "Guest")
+		_ = guest.extend("roles", [{}])
+		self.assertEqual(len(guest.roles), 2)
