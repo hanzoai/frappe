@@ -402,9 +402,11 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 		return frappe.run_serially([
 			() => this.setup_filters(),
+			() => (this._no_refresh = true),
 			() => this.set_route_filters(route_options),
 			() => this.page.clear_custom_actions(),
 			() => this.report_settings.onload && this.report_settings.onload(this),
+			() => (this._no_refresh = false),
 			() => this.refresh(),
 		]);
 	}
@@ -565,12 +567,8 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 					if (f.on_change) {
 						f.on_change(this);
-					} else {
-						if (this.prepared_report) {
-							this.reset_report_view();
-						} else if (!this._no_refresh) {
-							this.refresh(true);
-						}
+					} else if (!this._no_refresh) {
+						this.refresh(true);
 					}
 				};
 
@@ -669,13 +667,13 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			this.prepared_report_name = route_options.prepared_report_name;
 
 			const promises = filters_to_set.map((f) => {
-				return () => {
+				return async () => {
 					let value = route_options[f.df.fieldname];
 					if (typeof value === "string" && value[0] === "[") {
 						// multiselect array
 						value = JSON.parse(value);
 					}
-					f.set_value(value);
+					await f.set_value(value);
 				};
 			});
 			promises.push(() => {
@@ -2118,12 +2116,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		return `<div class='flex justify-center align-center text-muted' style='height: calc(100vh - 280px);'>
 			<div>${message}</div>
 		</div>`;
-	}
-
-	reset_report_view() {
-		this.hide_status();
-		this.toggle_nothing_to_show(true);
-		this.refresh();
 	}
 
 	toggle_nothing_to_show(flag) {
