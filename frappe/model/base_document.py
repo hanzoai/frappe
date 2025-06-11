@@ -474,9 +474,6 @@ class BaseDocument:
 				else:
 					value = get_not_null_defaults(df.fieldtype)
 
-			if hasattr(value, "__value__"):
-				value = value.__value__()
-
 			d[fieldname] = value
 
 		return d
@@ -864,6 +861,10 @@ class BaseDocument:
 			if not docname:
 				continue
 
+			assert isinstance(docname, str | int) or (
+				isinstance(docname, list | tuple | set) and len(docname) == 1
+			), f"Unexpected value for field {df.fieldname}: {docname}"
+
 			if df.fieldtype == "Link":
 				doctype = df.options
 				if not doctype:
@@ -898,9 +899,13 @@ class BaseDocument:
 				values_to_fetch += ("docstatus",)
 
 			if not meta.get("is_virtual"):
-				values = frappe.db.get_value(doctype, docname, values_to_fetch, as_dict=True, cache=True)
+				values = frappe.db.get_value(
+					doctype, docname, values_to_fetch, as_dict=True, cache=True, order_by=None
+				)
 				if not values:  # NOTE: DB Value cache does negative caching, which is hard to remove now.
-					values = frappe.db.get_value(doctype, docname, values_to_fetch, as_dict=True)
+					values = frappe.db.get_value(
+						doctype, docname, values_to_fetch, as_dict=True, order_by=None
+					)
 			else:
 				values = frappe.get_doc(doctype, docname).as_dict()
 

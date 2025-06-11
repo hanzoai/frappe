@@ -27,15 +27,19 @@ frappe.ui.FieldGroup = class FieldGroup extends frappe.ui.form.Layout {
 			$.each(this.fields_list, function (i, field) {
 				let def_value = field.df["default"];
 				// loose equality check matches undefined also
-				if (def_value != null) {
-					if (def_value == "Today" && field.df["fieldtype"] == "Date") {
-						def_value = frappe.datetime.get_today();
-					}
+				if (
+					def_value == null ||
+					(!def_value && !frappe.model.is_numeric_field(field.df.fieldtype))
+				)
+					return;
 
-					field.set_input(def_value);
-					// if default and has depends_on, render its fields.
-					me.refresh_dependency();
+				if (def_value == "Today" && field.df["fieldtype"] == "Date") {
+					def_value = frappe.datetime.get_today();
 				}
+
+				field.set_input(def_value);
+				// if default and has depends_on, render its fields.
+				me.refresh_dependency();
 			});
 
 			if (!this.no_submit_on_enter) {

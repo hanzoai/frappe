@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-05-18 09:33+0000\n"
-"PO-Revision-Date: 2025-05-26 10:24\n"
+"PO-Revision-Date: 2025-06-05 11:49\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -5178,7 +5178,7 @@ msgstr "Kommentarer"
 #. Description of the 'Timeline Field' (Data) field in DocType 'DocType'
 #: frappe/core/doctype/doctype/doctype.json
 msgid "Comments and Communications will be associated with this linked document"
-msgstr "Kommentarer och E-post kommer att kopplas till detta länkade dokument"
+msgstr "Kommentarer och Kommunikation kommer att kopplas till detta länkade dokument"
 
 #: frappe/templates/includes/comments/comments.py:38
 msgid "Comments cannot have links or email addresses"
@@ -5213,22 +5213,22 @@ msgstr "Vanliga förnamn och efternamn är lätta att gissa."
 #: frappe/email/doctype/email_queue/email_queue.json
 #: frappe/tests/test_translate.py:35 frappe/tests/test_translate.py:119
 msgid "Communication"
-msgstr "Konversation"
+msgstr "Kommunikation"
 
 #. Name of a DocType
 #: frappe/core/doctype/communication_link/communication_link.json
 msgid "Communication Link"
-msgstr "Konversation Länk"
+msgstr "Kommunikation Länk"
 
 #. Label of a Link in the Build Workspace
 #: frappe/core/workspace/build/build.json
 msgid "Communication Logs"
-msgstr "Konversation Logg"
+msgstr "Kommunikation Logg"
 
 #. Label of the communication_type (Select) field in DocType 'Communication'
 #: frappe/core/doctype/communication/communication.json
 msgid "Communication Type"
-msgstr "Konversation Typ"
+msgstr "Kommunikation Typ"
 
 #: frappe/integrations/frappe_providers/frappecloud_billing.py:32
 msgid "Communication secret not set"
@@ -12115,7 +12115,7 @@ msgstr "Regel med högre prioritet tillämpas först"
 #. Label of the highlight (Text) field in DocType 'Company History'
 #: frappe/website/doctype/company_history/company_history.json
 msgid "Highlight"
-msgstr "Markera"
+msgstr "Höjdpunkt"
 
 #: frappe/www/update-password.html:276
 msgid "Hint: Include symbols, numbers and capital letters in the password"
@@ -13170,7 +13170,7 @@ msgstr "Integration Begäran"
 #: frappe/integrations/workspace/integrations/integrations.json
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Integrations"
-msgstr "Integrationer"
+msgstr "System Integrationer"
 
 #. Description of the 'Delivery Status' (Select) field in DocType
 #. 'Communication'
@@ -30014,7 +30014,7 @@ msgstr "Du har inte lagt till några Översiktpanel Diagram eller Nummerkort än
 
 #: frappe/public/js/frappe/list/list_view.js:498
 msgid "You haven't created a {0} yet"
-msgstr "Du har inte skapat {0} än"
+msgstr "Ingen {0} skapad än"
 
 #: frappe/rate_limiter.py:166
 msgid "You hit the rate limit because of too many requests. Please try after sometime."
