@@ -1,5 +1,6 @@
 # Copyright (c) 2022, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+import inspect
 from contextlib import contextmanager
 from copy import deepcopy
 from datetime import timedelta
@@ -736,6 +737,22 @@ class TestLazyDocument(IntegrationTestCase):
 		with patch(f"{LazyChildTable.__module__}.{LazyChildTable.__name__}.__get__") as getter:
 			_ = guest.roles
 			self.assertTrue(getter.called)
+
+		# Ensure same method signature
+		eager_guest: User = frappe.get_doc("User", "Guest")
+		original_class = eager_guest.__class__
+		lazy_class = guest.__class__
+
+		def compare_signatures(a, b, attr):
+			a_sig = inspect.signature(getattr(a, attr)).parameters
+			b_sig = inspect.signature(getattr(b, attr)).parameters
+
+			for (param_a, value_a), (param_b, value_b) in zip(a_sig.items(), b_sig.items(), strict=True):
+				self.assertEqual(param_a, param_b)
+				self.assertEqual(value_a.default, value_b.default)
+
+		for method in ("append", "extend", "db_update_all", "get"):
+			compare_signatures(original_class, lazy_class, method)
 
 	def test_append_extend(self):
 		guest = frappe.get_lazy_doc("User", "Guest")
