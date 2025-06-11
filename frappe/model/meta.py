@@ -89,10 +89,9 @@ def get_meta(doctype: "str | DocType", cached: bool = True) -> "_Meta":
 	frappe.client_cache.set_value(key, meta)
 
 	if meta.name not in meta.special_doctypes:
-		if is_data_masking_enabled():
-			from frappe.desk.form.meta import mask_protected_fields
+		from frappe.desk.form.meta import mask_protected_fields
 
-			meta = mask_protected_fields(meta)
+		meta = mask_protected_fields(meta)
 
 	return meta
 
@@ -103,10 +102,6 @@ def clear_meta_cache(doctype: str = "*"):
 		frappe.client_cache.delete_keys(key)
 	else:
 		frappe.client_cache.delete_value(key)
-
-
-def is_data_masking_enabled():
-	return frappe.db.get_single_value("System Settings", "enable_data_masking")
 
 
 def load_meta(doctype):
