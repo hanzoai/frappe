@@ -109,7 +109,7 @@ frappe.ui.form.Sidebar = class {
 			cint(frappe.boot.user.show_absolute_datetime_in_timeline) ||
 			cint(frappe.boot.sysdefaults.show_absolute_datetime_in_timeline)
 				? frappe.datetime.str_to_user(this.frm.doc.modified)
-				: comment_when(this.frm.doc.modified));
+				: comment_when(this.frm.doc.modified);
 
 		if (user_list.length === 1) {
 			// same user created and edited
