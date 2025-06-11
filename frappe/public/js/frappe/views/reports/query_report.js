@@ -106,7 +106,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		frappe.realtime.on("report_generated", (data) => {
 			this.toggle_primary_button_disabled(false);
 			if (data.report_name) {
-				this.prepared_report_action = "Rebuild";
 				// If generated report and currently active Prepared Report has same fiters
 				// then refresh the Prepared Report
 				// Otherwise show alert with the link to the Prepared Report
@@ -160,7 +159,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		this.show_save = false;
 		this.menu_items = this.get_menu_items();
 		this.datatable = null;
-		this.prepared_report_action = "New";
 
 		frappe.run_serially([
 			() => this.get_report_doc(),
@@ -669,7 +667,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 					// If query_string contains prepared_report_name then set filters
 					// to match the mentioned prepared report doc and disable editing
 					if (this.prepared_report_name) {
-						this.prepared_report_action = "Edit";
 						const filters_from_report = JSON.parse(data.doc.filters);
 						Object.values(this.filters).forEach(function (field) {
 							if (filters_from_report[field.fieldname]) {
@@ -806,7 +803,14 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			},
 		};
 
-		let primary_action = this.primary_action_map[this.prepared_report_action];
+		let prepared_report_action = "New";
+		if (this.prepared_report_name) {
+			prepared_report_action = "Edit";
+		} else if (doc) {
+			prepared_report_action = "Rebuild";
+		}
+
+		let primary_action = this.primary_action_map[prepared_report_action];
 
 		if (!this.primary_button || this.primary_button.text() !== primary_action.label) {
 			this.primary_button = this.page.set_primary_action(
@@ -1988,7 +1992,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		this.toggle_message(flag, message);
 
 		if (flag && this.prepared_report) {
-			this.prepared_report_action = "New";
 			if (!this.primary_button.is(":visible")) {
 				this.add_prepared_report_buttons();
 			}
