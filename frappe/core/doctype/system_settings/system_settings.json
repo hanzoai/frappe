@@ -25,6 +25,7 @@
   "float_precision",
   "currency_precision",
   "rounding_method",
+  "show_absolute_datetime_in_timeline",
   "permissions",
   "apply_strict_user_permissions",
   "column_break_21",
@@ -711,6 +712,12 @@
    "label": "Max Report Rows"
   },
   {
+   "default": "0",
+   "fieldname": "show_absolute_datetime_in_timeline",
+   "fieldtype": "Check",
+   "label": "Show Absolute Datetime in Timeline"
+  },
+  {
    "fieldname": "api_logging_section",
    "fieldtype": "Section Break",
    "label": "API Logging"
@@ -725,7 +732,7 @@
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2025-05-21 17:03:23.310169",
+ "modified": "2025-06-05 20:54:53.538436",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
