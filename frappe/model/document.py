@@ -140,14 +140,14 @@ def get_doc_from_dict(data: dict[str, Any], **kwargs) -> "Document":
 	raise ImportError(data["doctype"])
 
 
-def get_lazy_doc(doctype: str, name: str) -> "Document":
+def get_lazy_doc(doctype: str, name: str, *, for_update=None) -> "Document":
 	if doctype == "DocType":
 		warnings.warn("DocType doesn't support lazy loading", stacklevel=1)
 		return get_doc(doctype, name)
 
 	controller = get_lazy_controller(doctype)
 	if controller:
-		return controller(doctype, name)
+		return controller(doctype, name, for_update=for_update)
 	raise ImportError(doctype)
 
 
@@ -192,7 +192,7 @@ class Document(BaseDocument):
 		self.name = name
 		# for_update is set in flags to avoid changing load_from_db signature
 		# since it is used in virtual doctypes and inherited in child classes
-		self.flags.for_update = kwargs.get("for_update")
+		self.flags.for_update = kwargs.pop("for_update", None)
 		self.load_from_db()
 		if kwargs:  # ad-hoc overrides
 			self._init_from_kwargs(kwargs)
@@ -2004,6 +2004,11 @@ class LazyDocument:
 				continue
 			for doc in self.get(fieldname):
 				doc.db_update()
+
+	@override
+	def init_child_tables(self):
+		# Avoid initializing anything, descriptor handles it.
+		return
 
 
 class LazyChildTable:
