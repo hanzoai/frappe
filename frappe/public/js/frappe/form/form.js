@@ -1179,7 +1179,7 @@ frappe.ui.form.Form = class FrappeForm {
 		this.fields.forEach((field) => {
 			if (field.df.mask && field.df.mask_readonly) {
 				this.set_df_property(field.df.fieldname, "disabled", "1");
-				this.set_df_property(field.df.fieldname, "fieldtype", "Date");
+				this.set_df_property(field.df.fieldname, "fieldtype", "Data");
 			}
 		});
 	}
