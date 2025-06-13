@@ -176,34 +176,27 @@ class Document(BaseDocument):
 		self.name = None
 		self.flags = frappe._dict()
 		if args:
-			self._init_dispatch(args[0], *args[1:], **kwargs)
-		elif kwargs:
-			self._init_from_kwargs(kwargs)
-		else:
-			raise ValueError("Illegal arguments")
+			first_arg = args[0]
+			if isinstance(first_arg, str):
+				self.doctype = first_arg
+				self.name = first_arg if len(args) == 1 else args[1]
 
-	def _init_from_kwargs(self, kwargs):
-		super().__init__(kwargs)
-		self.init_child_tables()
-		self.init_valid_columns()
+				# for_update is set in flags to avoid changing load_from_db signature
+				# since it is used in virtual doctypes and inherited in child classes
+				self.flags.for_update = kwargs.get("for_update", False)
+				self.load_from_db()
+				return
 
-	def _init_known_doc(self, doctype, name, **kwargs):
-		self.doctype = doctype
-		self.name = name
-		# for_update is set in flags to avoid changing load_from_db signature
-		# since it is used in virtual doctypes and inherited in child classes
-		self.flags.for_update = kwargs.pop("for_update", None)
-		self.load_from_db()
+			if isinstance(first_arg, dict):
+				kwargs = first_arg
 
-	def _init_dispatch(self, arg, *args, **kwargs):
-		if isinstance(arg, str):
-			name = args[0] if args else arg
-			return self._init_known_doc(arg, name, **kwargs)
+		if kwargs:
+			super().__init__(kwargs)
+			self.init_child_tables()
+			self.init_valid_columns()
+			return
 
-		if isinstance(arg, dict):
-			return self._init_from_kwargs(arg)
-
-		raise ValueError(f"Unsupported argument type: {type(arg)}")
+		raise ValueError("Illegal arguments")
 
 	@property
 	def is_locked(self):
