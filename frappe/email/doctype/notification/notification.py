@@ -261,7 +261,7 @@ def get_context(context):
 		filters = json.loads(self.filters) if self.condition_type == "Filters" and self.filters else None
 
 		for d in doc_list:
-			doc = frappe.get_doc(self.document_type, d.name)
+			doc = frappe.get_lazy_doc(self.document_type, d.name)
 
 			if (
 				self.condition_type == "Python"
@@ -318,7 +318,7 @@ def get_context(context):
 		filters = json.loads(self.filters) if self.condition_type == "Filters" and self.filters else None
 
 		for d in doc_list:
-			doc = frappe.get_doc(self.document_type, d.name)
+			doc = frappe.get_lazy_doc(self.document_type, d.name)
 
 			if (
 				self.condition_type == "Python"
@@ -485,7 +485,7 @@ def get_context(context):
 				communication_type="Automated Message",
 			).get("name")
 			# set the outgoing email account because we did in fact send it via sendmail above
-			comm = frappe.get_doc("Communication", communication)
+			comm = frappe.get_lazy_doc("Communication", communication)
 			comm.get_outgoing_email_account()
 
 		frappe.sendmail(

@@ -19,7 +19,7 @@ from collections.abc import (
 )
 from email.header import decode_header, make_header
 from email.utils import formataddr, parseaddr
-from typing import TypeAlias, TypedDict
+from typing import Any, Generic, TypeAlias, TypedDict
 
 from werkzeug.test import Client
 
@@ -308,18 +308,16 @@ def get_traceback(with_context: bool = False) -> str:
 	"""Return the traceback of the Exception."""
 	from traceback_with_variables import iter_exc_lines
 
-	exc = sys.exception()
-	if not exc:
+	exc_type, exc_value, exc_tb = sys.exc_info()
+
+	if not any([exc_type, exc_value, exc_tb]):
 		return ""
 
-	if exc.__cause__:
-		exc = exc.__cause__
-
 	if with_context:
-		trace_list = iter_exc_lines(exc, fmt=_get_traceback_sanitizer())
+		trace_list = iter_exc_lines(fmt=_get_traceback_sanitizer())
 		tb = "\n".join(trace_list)
 	else:
-		trace_list = traceback.format_exception(exc)
+		trace_list = traceback.format_exception(exc_type, exc_value, exc_tb)
 		tb = "".join(cstr(t) for t in trace_list)
 
 	bench_path = get_bench_path() + "/"
@@ -816,7 +814,7 @@ def get_site_info():
 		"country": system_settings.country,
 		"language": system_settings.language or "english",
 		"time_zone": system_settings.time_zone,
-		"setup_complete": cint(system_settings.setup_complete),
+		"setup_complete": frappe.is_setup_complete(),
 		"scheduler_enabled": system_settings.enable_scheduler,
 		# usage
 		"emails_sent": get_emails_sent_this_month(),
@@ -1155,46 +1153,45 @@ def safe_eval(code, eval_globals=None, eval_locals=None):
 	return safe_eval(code, eval_globals, eval_locals)
 
 
-class cached_property(functools.cached_property):
-	"""
-	A simpler `functools.cached_property` implementation without locks.
-	This isn't needed in Python 3.12+, since lock was removed in newer versions.
-	Hence, in those versions, it returns the `functools.cached_property` object.
+cached_property = functools.cached_property
+if sys.version_info.minor < 12:
+	T = TypeVar("T")
 
-	This does not prevent a possible race condition in multi-threaded usage.
-	The getter function could run more than once on the same instance,
-	with the latest run setting the cached value. If the cached property is
-	idempotent or otherwise not harmful to run more than once on an instance,
-	this is fine. If synchronization is needed, implement the necessary locking
-	inside the decorated getter function or around the cached property access.
-	"""
+	class cached_property(functools.cached_property, Generic[T]):
+		"""
+		A simpler `functools.cached_property` implementation without locks.
+		This isn't needed in Python 3.12+, since lock was removed in newer versions.
+		Hence, in those versions, it returns the `functools.cached_property` object.
 
-	def __new__(cls, func):
-		if sys.version_info.minor >= 12:
-			return functools.cached_property(func)
+		This does not prevent a possible race condition in multi-threaded usage.
+		The getter function could run more than once on the same instance,
+		with the latest run setting the cached value. If the cached property is
+		idempotent or otherwise not harmful to run more than once on an instance,
+		this is fine. If synchronization is needed, implement the necessary locking
+		inside the decorated getter function or around the cached property access.
+		"""
 
-		return super().__new__(cls)
+		def __init__(self, func: Callable[[Any], T]):
+			self.func = func
+			self.attrname = None
+			self.__doc__ = func.__doc__
+			self.__module__ = func.__module__
 
-	def __init__(self, func):
-		self.func = func
-		self.attrname = None
-		self.__doc__ = func.__doc__
-		self.__module__ = func.__module__
+		def __set_name__(self, owner, name):
+			if self.attrname is None:
+				self.attrname = name
 
-	def __set_name__(self, owner, name):
-		if self.attrname is None:
-			self.attrname = name
+			elif name != self.attrname:
+				raise TypeError(
+					"Cannot assign the same cached_property to two different names "
+					f"({self.attrname!r} and {name!r})."
+				)
 
-		elif name != self.attrname:
-			raise TypeError(
-				"Cannot assign the same cached_property to two different names "
-				f"({self.attrname!r} and {name!r})."
-			)
+		def __get__(self, instance, owner=None) -> T:
+			if instance is None:
+				return self
 
-	def __get__(self, instance, owner=None):
-		if instance is None:
-			return self
-
-		value = self.func(instance)
-		instance.__dict__[self.attrname] = value
-		return value
+			value = self.func(instance)
+			instance.__dict__[self.attrname] = value
+			return value
+# end: custom cached_property implementation

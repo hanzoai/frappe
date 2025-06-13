@@ -49,7 +49,7 @@ def print_has_permission_check_logs(func):
 		result = func(*args, **kwargs)
 
 		# print only if access denied
-		# and if user is checking his own permission
+		# and if user is checking their own permission
 		if not result and self_perm_check and print_logs:
 			msgprint(("<br>").join(frappe.flags.get("has_permission_check_logs", [])))
 
@@ -129,7 +129,8 @@ def has_permission(
 
 	if doc:
 		if isinstance(doc, str | int):
-			doc = frappe.get_doc(meta.name, doc)
+			# perf: Avoid loading child tables for perm checks
+			doc = frappe.get_lazy_doc(meta.name, doc)
 		perm = get_doc_permissions(doc, user=user, ptype=ptype, debug=debug).get(ptype)
 		if not perm:
 			debug and _debug_log(
@@ -351,7 +352,7 @@ def has_user_permission(doc, user=None, debug=False):
 		# if allowed_docs is empty it states that there is no applicable permission under the current doctype
 
 		# only check if allowed_docs is not empty
-		if allowed_docs and str(docname) not in allowed_docs:
+		if allowed_docs and docname and str(docname) not in allowed_docs:
 			# no user permissions for this doc specified
 			debug and _debug_log(
 				"User doesn't have access to this document because of User Permissions, allowed documents: "

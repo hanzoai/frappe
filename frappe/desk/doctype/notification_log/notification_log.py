@@ -24,9 +24,10 @@ class NotificationLog(Document):
 		document_name: DF.Data | None
 		document_type: DF.Link | None
 		email_content: DF.TextEditor | None
+		email_header: DF.Data | None
 		for_user: DF.Link | None
 		from_user: DF.Link | None
-		link: DF.Data | None
+		link: DF.SmallText | None
 		read: DF.Check
 		subject: DF.Text | None
 		type: DF.Literal["", "Mention", "Assignment", "Share", "Alert"]
@@ -152,8 +153,16 @@ def get_email_header(doc, language: str | None = None):
 		"Assignment": _("Assignment Update on {0}", lang=language).format(docname),
 		"Share": _("New Document Shared {0}", lang=language).format(docname),
 	}
+	if not doc.email_header:
+		doc.email_header = header_map[doc.type or "Default"]
+	return doc.email_header
 
-	return header_map[doc.type or "Default"]
+
+def format_email_header(header_map, language, docname):
+	messages = []
+	for v in list(header_map.values()):
+		messages.append(_(v[0], lang=language).format(docname))
+	return dict(zip(header_map.keys(), messages, strict=True))
 
 
 @frappe.whitelist()
