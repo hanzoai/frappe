@@ -32,7 +32,7 @@ frappe.setup = {
 
 frappe.pages["setup-wizard"].on_page_load = function (wrapper) {
 	if (frappe.boot.setup_complete) {
-		window.location.href = "/app";
+		window.location.href = frappe.boot.apps_data.default_path || "/app";
 	}
 	let requires = frappe.boot.setup_wizard_requires || [];
 	frappe.require(requires, function () {
@@ -63,6 +63,13 @@ frappe.pages["setup-wizard"].on_page_show = function () {
 };
 
 frappe.setup.on("before_load", function () {
+	if (
+		frappe.boot.setup_wizard_completed_apps?.length &&
+		frappe.boot.setup_wizard_completed_apps.includes("frappe")
+	) {
+		return;
+	}
+
 	// load slides
 	frappe.setup.slides_settings.forEach((s) => {
 		if (!(s.name === "user" && frappe.boot.developer_mode)) {
@@ -207,7 +214,12 @@ frappe.setup.SetupWizard = class SetupWizard extends frappe.ui.Slides {
 		}
 		setTimeout(function () {
 			// Reload
-			window.location.href = "/app";
+			let current_route = localStorage.current_route;
+
+			localStorage.current_route = "";
+			localStorage.current_app = "";
+
+			window.location.href = current_route || frappe.boot.apps_data.default_path || "/app";
 		}, 2000);
 	}
 
@@ -219,9 +231,9 @@ frappe.setup.SetupWizard = class SetupWizard extends frappe.ui.Slides {
 			? frappe.last_response.setup_wizard_failure_message
 			: __("Failed to complete setup");
 
-		this.update_setup_message("Could not start up: " + fail_msg);
+		this.update_setup_message(__("Could not start up: ") + fail_msg);
 
-		this.$working_state.find(".title").html("Setup failed");
+		this.$working_state.find(".title").html(__("Setup failed"));
 
 		this.$abort_btn.show();
 	}
@@ -397,7 +409,6 @@ frappe.setup.slides_settings = [
 				fieldtype: "Select",
 				reqd: 1,
 			},
-			{ fieldtype: "Column Break" },
 			{
 				fieldname: "currency",
 				label: __("Currency"),
@@ -425,10 +436,19 @@ frappe.setup.slides_settings = [
 		],
 
 		onload: function (slide) {
+			frappe.setup.utils.load_prefilled_data(slide, this.initialize_fields);
+		},
+
+		initialize_fields: function (slide) {
+			const setup_fields = function (slide) {
+				frappe.setup.utils.setup_region_fields(slide);
+				frappe.setup.utils.setup_language_field(slide);
+			};
+
 			if (frappe.setup.data.regional_data) {
-				this.setup_fields(slide);
+				setup_fields(slide);
 			} else {
-				frappe.setup.utils.load_regional_data(slide, this.setup_fields);
+				frappe.setup.utils.load_regional_data(slide, setup_fields);
 			}
 			if (!slide.get_value("language")) {
 				let session_language =
@@ -446,11 +466,6 @@ frappe.setup.slides_settings = [
 			}
 			frappe.setup.utils.bind_region_events(slide);
 			frappe.setup.utils.bind_language_events(slide);
-		},
-
-		setup_fields: function (slide) {
-			frappe.setup.utils.setup_region_fields(slide);
-			frappe.setup.utils.setup_language_field(slide);
 		},
 	},
 	{
@@ -471,7 +486,16 @@ frappe.setup.slides_settings = [
 				fieldtype: "Data",
 				options: "Email",
 			},
-			{ fieldname: "password", label: __("Password"), fieldtype: "Password", length: 512 },
+			{
+				fieldname: "password",
+				label:
+					frappe.session.user === "Administrator"
+						? __("Password")
+						: __("Update Password"),
+				fieldtype: "Password",
+				length: 512,
+				depends_on: "eval:!frappe.boot.is_fc_site",
+			},
 		],
 
 		onload: function (slide) {
@@ -488,7 +512,7 @@ frappe.setup.slides_settings = [
 			} else {
 				slide.form.fields_dict.email.df.reqd = 1;
 				slide.form.fields_dict.email.refresh();
-				slide.form.fields_dict.password.df.reqd = 1;
+				if (!frappe.boot.is_fc_site) slide.form.fields_dict.password.df.reqd = 1;
 				slide.form.fields_dict.password.refresh();
 
 				frappe.setup.utils.load_user_details(slide, this.setup_fields);
@@ -508,6 +532,37 @@ frappe.setup.slides_settings = [
 ];
 
 frappe.setup.utils = {
+	load_prefilled_data: function (slide, callback) {
+		frappe.db
+			.get_value("System Settings", "System Settings", [
+				"country",
+				"timezone",
+				"currency",
+				"language",
+			])
+			.then((r) => {
+				if (r.message) {
+					frappe.wizard.values.currency = r.message.currency;
+					frappe.wizard.values.country = r.message.country;
+					frappe.wizard.values.timezone = r.message.time_zone;
+					frappe.wizard.values.language = r.message.language;
+
+					frappe.db.get_value(
+						"User",
+						{ name: ["not in", ["Administrator", "Guest"]] },
+						["full_name", "email"],
+						(r) => {
+							if (r) {
+								frappe.wizard.values.full_name = r.full_name;
+								frappe.wizard.values.email = r.email;
+							}
+						}
+					);
+				}
+				callback(slide);
+			});
+	},
+
 	load_regional_data: function (slide, callback) {
 		frappe.call({
 			method: "frappe.geo.country_info.get_country_timezone_info",
@@ -584,9 +639,12 @@ frappe.setup.utils = {
 			.get_input("language")
 			.unbind("change")
 			.on("change", function () {
+				const selected_language = $(this).val();
+				if (slide.get_field("language").value === selected_language) return;
+
 				clearTimeout(slide.language_call_timeout);
 				slide.language_call_timeout = setTimeout(() => {
-					let lang = $(this).val() || "English";
+					let lang = selected_language || "English";
 					frappe._messages = {};
 					frappe.call({
 						method: "frappe.desk.page.setup_wizard.setup_wizard.load_messages",
@@ -612,9 +670,11 @@ frappe.setup.utils = {
 			Bind a slide's country, timezone and currency fields
 		*/
 		slide.get_input("country").on("change", function () {
-			let country = slide.get_input("country").val();
-			let $timezone = slide.get_input("timezone");
 			let data = frappe.setup.data.regional_data;
+			let country = slide.get_input("country").val();
+			if (!(country in data.country_info)) return;
+
+			let $timezone = slide.get_input("timezone");
 
 			$timezone.empty();
 

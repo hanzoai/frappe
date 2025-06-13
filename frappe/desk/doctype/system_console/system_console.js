@@ -31,6 +31,15 @@ frappe.ui.form.on("System Console", {
 			window.localStorage.removeItem("system_console_code");
 			window.localStorage.removeItem("system_console_type");
 		}
+
+		if (!frm.doc.type) {
+			frm.set_value("type", "Python"); // defaults don't work on singles on old sites.
+		}
+		frm.trigger("load_completions");
+
+		frm.page.add_inner_message(
+			`${__("Tip: Try the new dropdown console using")} <kbd>⇧+T</kbd>`
+		);
 	},
 
 	type: function (frm) {
@@ -40,6 +49,7 @@ frappe.ui.form.on("System Console", {
 				frm.sql_output.destroy();
 				frm.get_field("sql_output").html("");
 			}
+			frm.trigger("load_completions");
 		}
 
 		const field = frm.get_field("console");
@@ -107,13 +117,31 @@ frappe.ui.form.on("System Console", {
 				<p class='text-muted'>Requested on: ${timestamp}</p>
 				<table class='table-bordered' style='width: 100%'>
 				<thead><tr>
-					<th width='5%'>Id</ht>
-					<th width='10%'>Time</ht>
-					<th width='10%'>State</ht>
-					<th width='60%'>Info</ht>
-					<th width='15%'>Progress / Wait Event</ht>
+					<th width='5%'>Id</th>
+					<th width='10%'>Time</th>
+					<th width='10%'>State</th>
+					<th width='60%'>Info</th>
+					<th width='15%'>Progress / Wait Event</th>
 				</tr></thead>
 				<tbody>${rows}</thead>`);
 			});
+	},
+
+	load_completions(frm) {
+		if (frm.doc.type != "Python") {
+			frm.set_df_property("console", "autocompletions", []);
+		}
+		setTimeout(() => {
+			frappe
+				.call({
+					method: "frappe.core.doctype.server_script.server_script.get_autocompletion_items",
+					type: "GET",
+					cache: true,
+				})
+				.then((r) => r.message)
+				.then((items) => {
+					frm.set_df_property("console", "autocompletions", items);
+				});
+		}, 100); // ace is just like this, can't do anything :shrug:
 	},
 });

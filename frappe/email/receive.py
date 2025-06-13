@@ -1,6 +1,7 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 
+import _socket
 import datetime
 import email
 import email.utils
@@ -10,9 +11,10 @@ import poplib
 import re
 import ssl
 from contextlib import suppress
+from email.errors import HeaderParseError
 from email.header import decode_header
+from urllib.parse import unquote
 
-import _socket
 import chardet
 from email_reply_parser import EmailReplyParser
 
@@ -65,6 +67,8 @@ class EmailServer:
 	"""Wrapper for POP server to pull emails."""
 
 	def __init__(self, args=None):
+		self.retry_limit = 3
+		self.retry_count = 0
 		self.settings = args or frappe._dict()
 
 	def connect(self):
@@ -175,7 +179,7 @@ class EmailServer:
 
 		for i, uid in enumerate(email_list[:100]):
 			try:
-				self.retrieve_message(uid, i + 1)
+				self.retrieve_message(uid, i + 1, folder)
 			except (_socket.timeout, LoginLimitExceeded):
 				# get whatever messages were retrieved
 				break
@@ -256,7 +260,7 @@ class EmailServer:
 
 		return match[0] if match else None
 
-	def retrieve_message(self, uid, msg_num):
+	def retrieve_message(self, uid, msg_num, folder):
 		try:
 			if cint(self.settings.use_imap):
 				status, message = self.imap.uid("fetch", uid, "(BODY.PEEK[] BODY.PEEK[HEADER] FLAGS)")
@@ -270,7 +274,11 @@ class EmailServer:
 		except _socket.timeout:
 			# propagate this error to break the loop
 			raise
-
+		except imaplib.IMAP4.abort:
+			if self.retry_count < self.retry_limit:
+				self.connect()
+				self.get_messages(folder)
+				self.retry_count += 1
 		except Exception as e:
 			if self.has_login_limit_exceeded(e):
 				raise LoginLimitExceeded(e) from e
@@ -281,7 +289,7 @@ class EmailServer:
 
 	def get_email_seen_status(self, uid, flag_string):
 		"""parse the email FLAGS response"""
-		if not flag_string:
+		if not flag_string or not isinstance(flag_string, str | bytes):
 			return None
 
 		flags = []
@@ -315,6 +323,7 @@ class EmailServer:
 		)
 
 	def make_error_msg(self, uid, msg_num):
+		partial_mail = None
 		traceback = frappe.get_traceback(with_context=True)
 		with suppress(Exception):
 			# retrieve headers
@@ -386,7 +395,7 @@ class Email:
 		if self.mail["Date"]:
 			try:
 				utc = email.utils.mktime_tz(email.utils.parsedate_tz(self.mail["Date"]))
-				utc_dt = datetime.datetime.utcfromtimestamp(utc)
+				utc_dt = datetime.datetime.fromtimestamp(utc, tz=datetime.timezone.utc)
 				self.date = convert_utc_to_system_timezone(utc_dt).strftime("%Y-%m-%d %H:%M:%S")
 			except Exception:
 				self.date = now()
@@ -429,7 +438,9 @@ class Email:
 		_from_email = self.decode_email(self.mail.get("X-Original-From") or self.mail["From"])
 		_reply_to = self.decode_email(self.mail.get("Reply-To"))
 
-		if _reply_to and not frappe.db.get_value("Email Account", {"email_id": _reply_to}, "email_id"):
+		if _reply_to and not frappe.db.get_value(
+			"Email Account", {"email_id": _reply_to, "enable_incoming": 1}, "email_id"
+		):
 			self.from_email = extract_email_id(_reply_to)
 		else:
 			self.from_email = extract_email_id(_from_email)
@@ -440,11 +451,19 @@ class Email:
 		self.from_real_name = parse_addr(_from_email)[0] if "@" in _from_email else _from_email
 
 	@staticmethod
-	def decode_email(email):
+	def decode_email(email: bytes | str | None) -> str | None:
 		if not email:
 			return
+		email = frappe.as_unicode(email)
+		try:
+			parts = decode_header(email)
+		except HeaderParseError:
+			# Fallback: grab just the email addresses
+			emails = re.findall(r"(<.*?>)", email)
+			return ", ".join(emails)
+
 		decoded = ""
-		for part, encoding in decode_header(frappe.as_unicode(email).replace('"', " ").replace("'", " ")):
+		for part, encoding in parts:
 			if encoding:
 				decoded += part.decode(encoding, "replace")
 			else:
@@ -556,7 +575,7 @@ class Email:
 				_file = frappe.get_doc(
 					{
 						"doctype": "File",
-						"file_name": attachment["fname"],
+						"file_name": unquote(attachment["fname"]),
 						"attached_to_doctype": doc.doctype,
 						"attached_to_name": doc.name,
 						"is_private": 1,
@@ -583,7 +602,7 @@ class Email:
 	def get_thread_id(self):
 		"""Extract thread ID from `[]`"""
 		l = THREAD_ID_PATTERN.findall(self.subject)
-		return l and l[0] or None
+		return (l and l[0]) or None
 
 	def is_reply(self):
 		return bool(self.in_reply_to)
@@ -620,6 +639,9 @@ class InboundMail(Email):
 		communication = self.is_exist_in_system()
 		if communication:
 			communication.update_db(uid=self.uid)
+			data = self.as_dict()
+			if data.get("bcc") and not communication.bcc:
+				communication.update_db(bcc=data.get("bcc"))
 			communication.reload()
 			return communication
 
@@ -886,8 +908,9 @@ class InboundMail(Email):
 			"sent_or_received": "Received",
 			"sender_full_name": self.from_real_name,
 			"sender": self.from_email,
-			"recipients": self.mail.get("To"),
-			"cc": self.mail.get("CC"),
+			"recipients": self.decode_email(self.mail.get("To") or ""),
+			"cc": self.decode_email(self.mail.get("CC") or ""),
+			"bcc": self.decode_email(self.mail.get("BCC") or ""),
 			"email_account": self.email_account.name,
 			"communication_medium": "Email",
 			"uid": self.uid,

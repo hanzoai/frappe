@@ -37,15 +37,60 @@ frappe.Application = class Application {
 		this.load_bootinfo();
 		this.load_user_permissions();
 		this.make_nav_bar();
+		this.make_sidebar();
 		this.set_favicon();
 		this.set_fullwidth_if_enabled();
 		this.add_browser_class();
-		this.setup_energy_point_listeners();
 		this.setup_copy_doc_listener();
 		this.setup_broadcast_listeners();
 
 		frappe.ui.keys.setup();
 
+		this.setup_theme();
+
+		// page container
+		this.make_page_container();
+		this.setup_tours();
+		this.set_route();
+
+		// trigger app startup
+		$(document).trigger("startup");
+		$(document).trigger("app_ready");
+
+		this.show_notices();
+		this.show_notes();
+
+		if (frappe.ui.startup_setup_dialog && !frappe.boot.setup_complete) {
+			frappe.ui.startup_setup_dialog.pre_show();
+			frappe.ui.startup_setup_dialog.show();
+		}
+
+		// listen to build errors
+		this.setup_build_events();
+
+		if (frappe.sys_defaults.email_user_password) {
+			var email_list = frappe.sys_defaults.email_user_password.split(",");
+			for (var u in email_list) {
+				if (email_list[u] === frappe.user.name) {
+					this.set_password(email_list[u]);
+				}
+			}
+		}
+
+		// REDESIGN-TODO: Fix preview popovers
+		this.link_preview = new frappe.ui.LinkPreview();
+
+		frappe.broadcast.emit("boot", {
+			csrf_token: frappe.csrf_token,
+			user: frappe.session.user,
+		});
+	}
+
+	make_sidebar() {
+		this.sidebar = new frappe.ui.Sidebar({});
+	}
+
+	setup_theme() {
 		frappe.ui.keys.add_shortcut({
 			shortcut: "shift+ctrl+g",
 			description: __("Switch Theme"),
@@ -71,9 +116,9 @@ frappe.Application = class Application {
 		});
 
 		frappe.ui.set_theme();
+	}
 
-		// page container
-		this.make_page_container();
+	setup_tours() {
 		if (
 			!window.Cypress &&
 			frappe.boot.onboarding_tours &&
@@ -90,13 +135,9 @@ frappe.Application = class Application {
 				});
 			}
 		}
-		this.set_route();
+	}
 
-		// trigger app startup
-		$(document).trigger("startup");
-
-		$(document).trigger("app_ready");
-
+	show_notices() {
 		if (frappe.boot.messages) {
 			frappe.msgprint(frappe.boot.messages);
 		}
@@ -116,13 +157,6 @@ frappe.Application = class Application {
 			console.log(`%c${console_security_message}`, "font-size: large");
 		}
 
-		this.show_notes();
-
-		if (frappe.ui.startup_setup_dialog && !frappe.boot.setup_complete) {
-			frappe.ui.startup_setup_dialog.pre_show();
-			frappe.ui.startup_setup_dialog.show();
-		}
-
 		frappe.realtime.on("version-update", function () {
 			var dialog = frappe.msgprint({
 				message: __(
@@ -136,26 +170,6 @@ frappe.Application = class Application {
 			});
 			dialog.get_close_btn().toggle(false);
 		});
-
-		// listen to build errors
-		this.setup_build_events();
-
-		if (frappe.sys_defaults.email_user_password) {
-			var email_list = frappe.sys_defaults.email_user_password.split(",");
-			for (var u in email_list) {
-				if (email_list[u] === frappe.user.name) {
-					this.set_password(email_list[u]);
-				}
-			}
-		}
-
-		// REDESIGN-TODO: Fix preview popovers
-		this.link_preview = new frappe.ui.LinkPreview();
-
-		frappe.broadcast.emit("boot", {
-			csrf_token: frappe.csrf_token,
-			user: frappe.session.user,
-		});
 	}
 
 	set_route() {
@@ -168,6 +182,7 @@ frappe.Application = class Application {
 		}
 		frappe.router.on("change", () => {
 			$(".tooltip").hide();
+			if (frappe.frappe_toolbar && frappe.is_mobile()) frappe.frappe_toolbar.show_app_logo();
 		});
 	}
 
@@ -265,6 +280,14 @@ frappe.Application = class Application {
 			if (frappe.boot.print_css) {
 				frappe.dom.set_style(frappe.boot.print_css, "print-style");
 			}
+
+			let current_app = localStorage.current_app;
+			if (current_app) {
+				frappe.boot.setup_complete =
+					frappe.boot.setup_wizard_not_required_apps?.includes(current_app) ||
+					frappe.boot.setup_wizard_completed_apps?.includes(current_app);
+			}
+
 			frappe.user.name = frappe.boot.user.name;
 			frappe.router.setup();
 		} else {
@@ -275,6 +298,8 @@ frappe.Application = class Application {
 	setup_workspaces() {
 		frappe.modules = {};
 		frappe.workspaces = {};
+		frappe.boot.allowed_workspaces = frappe.boot.sidebar_pages.pages;
+
 		for (let page of frappe.boot.allowed_workspaces || []) {
 			frappe.modules[page.module] = page;
 			frappe.workspaces[frappe.router.slug(page.name)] = page;
@@ -364,6 +389,7 @@ frappe.Application = class Application {
 				if (r.exc) {
 					return;
 				}
+
 				me.redirect_to_login();
 			},
 		});
@@ -386,7 +412,7 @@ frappe.Application = class Application {
 		$(document.activeElement).blur();
 		// wait for possible JS validations triggered after blur (it might change primary button)
 		setTimeout(() => {
-			if (window.cur_dialog && cur_dialog.display) {
+			if (window.cur_dialog && cur_dialog.display && !cur_dialog.is_minimized) {
 				// trigger primary
 				cur_dialog.get_primary_btn().trigger("click");
 			} else if (cur_frm && cur_frm.page.btn_primary.is(":visible")) {
@@ -453,11 +479,12 @@ frappe.Application = class Application {
 		if (frappe.boot.notes.length) {
 			frappe.boot.notes.forEach(function (note) {
 				if (!note.seen || note.notify_on_every_login) {
-					var d = frappe.msgprint({ message: note.content, title: note.title });
+					var d = new frappe.ui.Dialog({ content: note.content, title: note.title });
 					d.keep_open = true;
-					d.custom_onhide = function () {
+					d.msg_area = $('<div class="msgprint">').appendTo(d.body);
+					d.msg_area.append(note.content);
+					d.onhide = function () {
 						note.seen = true;
-
 						// Mark note as read if the Notify On Every Login flag is not set
 						if (!note.notify_on_every_login) {
 							frappe.call({
@@ -466,11 +493,13 @@ frappe.Application = class Application {
 									note: note.name,
 								},
 							});
+						} else {
+							frappe.call({
+								method: "frappe.desk.doctype.note.note.reset_notes",
+							});
 						}
-
-						// next note
-						me.show_notes();
 					};
+					d.show();
 				}
 			});
 		}
@@ -480,12 +509,6 @@ frappe.Application = class Application {
 		if (frappe.boot.developer_mode) {
 			frappe.require("build_events.bundle.js");
 		}
-	}
-
-	setup_energy_point_listeners() {
-		frappe.realtime.on("energy_point_alert", (message) => {
-			frappe.show_alert(message);
-		});
 	}
 
 	setup_copy_doc_listener() {

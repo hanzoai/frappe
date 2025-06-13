@@ -155,8 +155,11 @@ def prepare_filters(doctype, controller, kwargs):
 				filters[key] = val
 
 	# filter the filters to include valid fields only
+	from frappe.model.meta import DEFAULT_FIELD_LABELS
+
 	for fieldname in list(filters.keys()):
-		if not meta.has_field(fieldname):
+		# add a check for default fields, as they are not present in meta.fields
+		if not meta.has_field(fieldname) and fieldname not in DEFAULT_FIELD_LABELS.keys():
 			del filters[fieldname]
 
 	return filters
@@ -187,14 +190,14 @@ def get_list_context(context, doctype, web_form_name=None):
 	# get context for custom webform
 	if meta.custom and web_form_name:
 		webform_list_contexts = frappe.get_hooks("webform_list_context")
-		if webform_list_contexts:
+		if webform_list_contexts and not frappe.get_doc("Module Def", meta.module).custom:
 			out = frappe._dict(frappe.get_attr(webform_list_contexts[0])(meta.module) or {})
 			if out:
 				list_context = out
 
 	# get context from web form module
 	if web_form_name:
-		web_form = frappe.get_doc("Web Form", web_form_name)
+		web_form = frappe.get_lazy_doc("Web Form", web_form_name)
 		list_context = update_context_from_module(get_web_form_module(web_form), list_context)
 
 	# get path from '/templates/' folder of the doctype
@@ -216,6 +219,7 @@ def get_list(
 	ignore_permissions=False,
 	fields=None,
 	order_by=None,
+	or_filters=None,
 ):
 	meta = frappe.get_meta(doctype)
 	if not filters:
@@ -224,7 +228,8 @@ def get_list(
 	if not fields:
 		fields = "distinct *"
 
-	or_filters = []
+	if or_filters is None:
+		or_filters = []
 
 	if txt:
 		if meta.search_fields:

@@ -15,7 +15,7 @@ from werkzeug.test import TestResponse
 
 import frappe
 from frappe.installer import update_site_config
-from frappe.tests.utils import FrappeTestCase, patch_hooks
+from frappe.tests import IntegrationTestCase
 from frappe.utils import cint, get_test_client, get_url
 
 try:
@@ -84,7 +84,7 @@ resource_key = {
 }
 
 
-class FrappeAPITestCase(FrappeTestCase):
+class FrappeAPITestCase(IntegrationTestCase):
 	version = ""  # Empty implies v1
 	TEST_CLIENT = get_test_client()
 
@@ -130,6 +130,10 @@ class FrappeAPITestCase(FrappeTestCase):
 	def delete(self, path, **kwargs) -> TestResponse:
 		return make_request(target=self.TEST_CLIENT.delete, args=(path,), kwargs=kwargs)
 
+	def tearDown(self) -> None:
+		frappe.db.rollback()
+		return super().tearDown()
+
 
 class TestResourceAPI(FrappeAPITestCase):
 	DOCTYPE = "ToDo"
@@ -146,6 +150,7 @@ class TestResourceAPI(FrappeAPITestCase):
 
 	@classmethod
 	def tearDownClass(cls):
+		frappe.db.commit()
 		for name in cls.GENERATED_DOCUMENTS:
 			frappe.delete_doc_if_exists(cls.DOCTYPE, name)
 		frappe.db.commit()
@@ -362,7 +367,7 @@ class TestWSGIApp(FrappeAPITestCase):
 	def test_request_hooks(self):
 		self.addCleanup(lambda: _test_REQ_HOOK.clear())
 
-		with patch_hooks(
+		with self.patch_hooks(
 			{
 				"before_request": ["frappe.tests.test_api.before_request"],
 				"after_request": ["frappe.tests.test_api.after_request"],

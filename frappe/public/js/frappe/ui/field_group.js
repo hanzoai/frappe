@@ -6,6 +6,8 @@ frappe.ui.FieldGroup = class FieldGroup extends frappe.ui.form.Layout {
 	constructor(opts) {
 		super(opts);
 		this.dirty = false;
+		this.fetch_dict = {};
+
 		$.each(this.fields || [], function (i, f) {
 			if (!f.fieldname && f.label) {
 				f.fieldname = f.label.replace(/ /g, "_").toLowerCase();
@@ -23,17 +25,21 @@ frappe.ui.FieldGroup = class FieldGroup extends frappe.ui.form.Layout {
 			this.refresh();
 			// set default
 			$.each(this.fields_list, function (i, field) {
-				if (field.df["default"]) {
-					let def_value = field.df["default"];
+				let def_value = field.df["default"];
+				// loose equality check matches undefined also
+				if (
+					def_value == null ||
+					(!def_value && !frappe.model.is_numeric_field(field.df.fieldtype))
+				)
+					return;
 
-					if (def_value == "Today" && field.df["fieldtype"] == "Date") {
-						def_value = frappe.datetime.get_today();
-					}
-
-					field.set_input(def_value);
-					// if default and has depends_on, render its fields.
-					me.refresh_dependency();
+				if (def_value == "Today" && field.df["fieldtype"] == "Date") {
+					def_value = frappe.datetime.get_today();
 				}
+
+				field.set_input(def_value);
+				// if default and has depends_on, render its fields.
+				me.refresh_dependency();
 			});
 
 			if (!this.no_submit_on_enter) {
@@ -128,7 +134,7 @@ frappe.ui.FieldGroup = class FieldGroup extends frappe.ui.form.Layout {
 
 		if (invalid.length && check_invalid) {
 			frappe.msgprint({
-				title: __("Inavlid Values"),
+				title: __("Invalid Values"),
 				message:
 					__("Following fields have invalid values:") +
 					"<br><br><ul><li>" +
@@ -196,5 +202,44 @@ frappe.ui.FieldGroup = class FieldGroup extends frappe.ui.form.Layout {
 		const field = this.get_field(fieldname);
 		field.df[prop] = value;
 		field.refresh();
+	}
+
+	set_query(fieldname, opt1, opt2) {
+		if (opt2) {
+			// on child table
+			// set_query(fieldname, parent fieldname, query)
+			if (this.fields_dict[opt1])
+				this.fields_dict[opt1].grid.get_field(fieldname).get_query = opt2;
+		} else {
+			// on parent table
+			// set_query(fieldname, query)
+			if (this.fields_dict[fieldname]) {
+				this.fields_dict[fieldname].get_query = opt1;
+			}
+		}
+	}
+
+	// UTILITIES
+	add_fetch(link_field, source_field, target_field, target_doctype) {
+		/*
+		Example fetch dict to get sender_email from email_id field in sender:
+			{
+				"Notification": {
+					"sender": {
+						"sender_email": "email_id"
+					}
+				}
+			}
+		*/
+
+		if (!target_doctype) target_doctype = "*";
+
+		// Target field kept as key because source field could be non-unique
+		this.fetch_dict.setDefault(target_doctype, {}).setDefault(link_field, {})[target_field] =
+			source_field;
+	}
+
+	is_new() {
+		return this.doc.__islocal;
 	}
 };

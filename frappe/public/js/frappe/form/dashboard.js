@@ -52,9 +52,9 @@ frappe.ui.form.Dashboard = class FormDashboard {
 
 		this.links_area = this.make_section({
 			label: __("Connections"),
+			hide_label: true,
 			css_class: "form-links",
 			hidden: 1,
-			collapsible: 1,
 			is_dashboard_section: 1,
 			body_html: this.transactions_area,
 		});
@@ -457,18 +457,14 @@ frappe.ui.form.Dashboard = class FormDashboard {
 		$.each(count.internal_links_found, function (i, d) {
 			me.frm.dashboard.set_badge_count_for_internal_link(
 				d.doctype,
-				cint(d.open_count),
-				cint(d.count),
+				d.open_count,
+				d.count,
 				d.names
 			);
 		});
 
 		$.each(count.external_links_found, function (i, d) {
-			me.frm.dashboard.set_badge_count_for_external_link(
-				d.doctype,
-				cint(d.open_count),
-				cint(d.count)
-			);
+			me.frm.dashboard.set_badge_count_for_external_link(d.doctype, d.open_count, d.count);
 		});
 	}
 
@@ -499,14 +495,20 @@ frappe.ui.form.Dashboard = class FormDashboard {
 			$link
 				.find(".open-notification")
 				.removeClass("hidden")
-				.html(open_count > 99 ? "99+" : open_count);
+				.html(cint(open_count) > 99 ? "99+" : open_count);
 		}
 
 		if (count) {
 			$link
 				.find(".count")
 				.removeClass("hidden")
-				.text(count > 99 ? "99+" : count);
+				.text(cint(count) > 99 ? "99+" : count)
+				.attr(
+					"title",
+					count != "?"
+						? __("Count of linked documents")
+						: __("Accurate count can not be fetched, click here to view all documents")
+				);
 		}
 	}
 
@@ -633,8 +635,8 @@ frappe.ui.form.Dashboard = class FormDashboard {
 	}
 
 	// TODO: Review! code related to headline should be the part of layout/form
-	set_headline(html, color) {
-		this.frm.layout.show_message(html, color);
+	set_headline(html, color, permanent = false) {
+		this.frm.layout.show_message(html, color, permanent);
 	}
 
 	clear_headline() {
@@ -642,7 +644,7 @@ frappe.ui.form.Dashboard = class FormDashboard {
 	}
 
 	add_comment(text, alert_class, permanent) {
-		this.set_headline_alert(text, alert_class);
+		this.set_headline_alert(text, alert_class, permanent);
 		if (!permanent) {
 			setTimeout(() => {
 				this.clear_headline();
@@ -654,9 +656,9 @@ frappe.ui.form.Dashboard = class FormDashboard {
 		this.clear_headline();
 	}
 
-	set_headline_alert(text, color) {
+	set_headline_alert(text, color, permanent = false) {
 		if (text) {
-			this.set_headline(`<div>${text}</div>`, color);
+			this.set_headline(`<div>${text}</div>`, color, permanent);
 		} else {
 			this.clear_headline();
 		}

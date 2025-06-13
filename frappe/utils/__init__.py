@@ -19,13 +19,14 @@ from collections.abc import (
 )
 from email.header import decode_header, make_header
 from email.utils import formataddr, parseaddr
-from typing import TypedDict
+from typing import Any, Generic, TypeAlias, TypedDict
 
 from werkzeug.test import Client
 
+from frappe.deprecation_dumpster import gzip_compress, gzip_decompress, make_esc
+
 # utility functions like cint, int, flt, etc.
 from frappe.utils.data import *
-from frappe.utils.deprecations import deprecated
 from frappe.utils.html_utils import sanitize_html
 
 EMAIL_NAME_PATTERN = re.compile(r"[^A-Za-z0-9\u00C0-\u024F\/\_\' ]+")
@@ -43,6 +44,17 @@ EMAIL_MATCH_PATTERN = re.compile(
 )
 
 UNSET = object()
+
+PropertyType: TypeAlias = property | functools.cached_property
+
+
+if sys.version_info < (3, 11):
+
+	def exception():
+		_exc_type, exc_value, _exc_traceback = sys.exc_info()
+		return exc_value
+
+	sys.exception = exception
 
 
 def get_fullname(user=None):
@@ -231,7 +243,7 @@ def validate_url(
 	        valid_schemes: if provided checks the given URL's scheme against this
 	"""
 	url = urlparse(txt)
-	is_valid = bool(url.netloc) or (txt and txt.startswith("/"))
+	is_valid = bool(url.scheme and (url.netloc or url.path)) or bool(txt and txt.startswith("/"))
 
 	# Handle scheme validation
 	if isinstance(valid_schemes, str):
@@ -292,7 +304,7 @@ def get_gravatar(email: str) -> str:
 	return has_gravatar(email) or Identicon(email).base64()
 
 
-def get_traceback(with_context=False) -> str:
+def get_traceback(with_context: bool = False) -> str:
 	"""Return the traceback of the Exception."""
 	from traceback_with_variables import iter_exc_lines
 
@@ -394,7 +406,7 @@ def remove_blanks(d: dict) -> dict:
 	return d
 
 
-def strip_html_tags(text):
+def strip_html_tags(text: str) -> str:
 	"""Remove html tags from the given `text`."""
 	return HTML_TAGS_PATTERN.sub("", text)
 
@@ -410,14 +422,6 @@ def get_file_timestamp(fn):
 			raise
 		else:
 			return None
-
-
-# to be deprecated
-def make_esc(esc_chars):
-	"""
-	Function generator for Escaping special characters
-	"""
-	return lambda s: "".join("\\" + c if c in esc_chars else c for c in s)
 
 
 # esc / unescape characters -- used for command line
@@ -662,7 +666,7 @@ def is_markdown(text):
 
 def is_a_property(x) -> bool:
 	"""Get properties (@property, @cached_property) in a controller class"""
-	return isinstance(x, property | functools.cached_property)
+	return isinstance(x, PropertyType)
 
 
 def get_sites(sites_path=None):
@@ -810,7 +814,7 @@ def get_site_info():
 		"country": system_settings.country,
 		"language": system_settings.language or "english",
 		"time_zone": system_settings.time_zone,
-		"setup_complete": cint(system_settings.setup_complete),
+		"setup_complete": frappe.is_setup_complete(),
 		"scheduler_enabled": system_settings.enable_scheduler,
 		# usage
 		"emails_sent": get_emails_sent_this_month(),
@@ -829,7 +833,7 @@ def get_site_info():
 	return json.loads(frappe.as_json(site_info))
 
 
-def parse_json(val):
+def parse_json(val: str):
 	"""
 	Parses json if string else return
 	"""
@@ -875,34 +879,6 @@ def call(fn, *args, **kwargs):
 	                bench --site erpnext.local execute frappe.utils.call --args '''["frappe.get_all", "Activity Log"]''' --kwargs '''{"fields": ["user", "creation", "full_name"], "filters":{"Operation": "Login", "Status": "Success"}, "limit": "10"}'''
 	"""
 	return json.loads(frappe.as_json(frappe.call(fn, *args, **kwargs)))
-
-
-# Following methods are aken as-is from Python 3 codebase
-# since gzip.compress and gzip.decompress are not available in Python 2.7
-
-
-@deprecated
-def gzip_compress(data, compresslevel=9):
-	"""Compress data in one shot and return the compressed string.
-	Optional argument is the compression level, in range of 0-9.
-	"""
-	from gzip import GzipFile
-
-	buf = io.BytesIO()
-	with GzipFile(fileobj=buf, mode="wb", compresslevel=compresslevel) as f:
-		f.write(data)
-	return buf.getvalue()
-
-
-@deprecated
-def gzip_decompress(data):
-	"""Decompress a gzip compressed string in one shot.
-	Return the decompressed string.
-	"""
-	from gzip import GzipFile
-
-	with GzipFile(fileobj=io.BytesIO(data)) as f:
-		return f.read()
 
 
 def get_safe_filters(filters):
@@ -985,18 +961,15 @@ def get_assets_json():
 
 		return assets
 
-	if not hasattr(frappe.local, "assets_json"):
-		if not frappe.conf.developer_mode:
-			frappe.local.assets_json = frappe.cache.get_value(
-				"assets_json",
-				_get_assets,
-				shared=True,
-			)
+	if not frappe.conf.developer_mode:
+		return frappe.client_cache.get_value(
+			"assets_json",
+			shared=True,
+			generator=_get_assets,
+		)
 
-		else:
-			frappe.local.assets_json = _get_assets()
-
-	return frappe.local.assets_json
+	else:
+		return _get_assets()
 
 
 def get_bench_relative_path(file_path):
@@ -1170,3 +1143,55 @@ class CallbackManager:
 
 	def reset(self):
 		self._functions.clear()
+
+
+def safe_eval(code, eval_globals=None, eval_locals=None):
+	"""A safer `eval`"""
+
+	from frappe.utils.safe_exec import safe_eval
+
+	return safe_eval(code, eval_globals, eval_locals)
+
+
+cached_property = functools.cached_property
+if sys.version_info.minor < 12:
+	T = TypeVar("T")
+
+	class cached_property(functools.cached_property, Generic[T]):
+		"""
+		A simpler `functools.cached_property` implementation without locks.
+		This isn't needed in Python 3.12+, since lock was removed in newer versions.
+		Hence, in those versions, it returns the `functools.cached_property` object.
+
+		This does not prevent a possible race condition in multi-threaded usage.
+		The getter function could run more than once on the same instance,
+		with the latest run setting the cached value. If the cached property is
+		idempotent or otherwise not harmful to run more than once on an instance,
+		this is fine. If synchronization is needed, implement the necessary locking
+		inside the decorated getter function or around the cached property access.
+		"""
+
+		def __init__(self, func: Callable[[Any], T]):
+			self.func = func
+			self.attrname = None
+			self.__doc__ = func.__doc__
+			self.__module__ = func.__module__
+
+		def __set_name__(self, owner, name):
+			if self.attrname is None:
+				self.attrname = name
+
+			elif name != self.attrname:
+				raise TypeError(
+					"Cannot assign the same cached_property to two different names "
+					f"({self.attrname!r} and {name!r})."
+				)
+
+		def __get__(self, instance, owner=None) -> T:
+			if instance is None:
+				return self
+
+			value = self.func(instance)
+			instance.__dict__[self.attrname] = value
+			return value
+# end: custom cached_property implementation

@@ -22,14 +22,14 @@ from frappe.permissions import (
 	remove_user_permission,
 	update_permission_property,
 )
-from frappe.test_runner import make_test_records_for_doctype
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import make_test_records_for_doctype
 from frappe.utils.data import now_datetime
 
-test_dependencies = ["Blogger", "Blog Post", "User", "Contact", "Salutation"]
+EXTRA_TEST_RECORD_DEPENDENCIES = ["Blogger", "Blog Post", "User", "Contact", "Salutation"]
 
 
-class TestPermissions(FrappeTestCase):
+class TestPermissions(IntegrationTestCase):
 	@classmethod
 	def setUpClass(cls):
 		super().setUpClass()
@@ -416,6 +416,10 @@ class TestPermissions(FrappeTestCase):
 		self.assertTrue(allowed_contact.has_permission("read"))
 		self.assertFalse(other_contact.has_permission("read"))
 		self.assertTrue(len(frappe.get_list("Contact")), 1)
+
+		# This is a temporary WIP doc that user is using run_doc_method on
+		local_doc = frappe.copy_doc(other_contact)
+		self.assertTrue(local_doc.has_permission("read"))
 
 		frappe.set_user("Administrator")
 		self.set_strict_user_permissions(0)

@@ -50,6 +50,18 @@
   "desk_theme",
   "code_editor_type",
   "banner_image",
+  "navigation_settings_section",
+  "search_bar",
+  "notifications",
+  "list_settings_section",
+  "list_sidebar",
+  "bulk_actions",
+  "view_switcher",
+  "form_settings_section",
+  "form_sidebar",
+  "timeline",
+  "dashboard",
+  "show_absolute_datetime_in_timeline",
   "change_password",
   "new_password",
   "logout_all_sessions",
@@ -74,6 +86,8 @@
   "user_emails",
   "workspace_section",
   "default_workspace",
+  "app_section",
+  "default_app",
   "sb2",
   "defaults",
   "sb3",
@@ -398,7 +412,7 @@
   },
   {
    "fieldname": "email_signature",
-   "fieldtype": "Small Text",
+   "fieldtype": "Text Editor",
    "label": "Email Signature",
    "no_copy": 1
   },
@@ -545,7 +559,8 @@
    "fieldtype": "Datetime",
    "label": "Last Active",
    "no_copy": 1,
-   "read_only": 1
+   "read_only": 1,
+   "search_index": 1
   },
   {
    "description": "Stores the JSON of last known versions of various installed apps. It is used to show release notes.",
@@ -580,6 +595,7 @@
    "fieldname": "api_key",
    "fieldtype": "Data",
    "label": "API Key",
+   "no_copy": 1,
    "permlevel": 1,
    "read_only": 1,
    "unique": 1
@@ -734,6 +750,90 @@
    "fieldtype": "Select",
    "label": "Code Editor Type",
    "options": "vscode\nvim\nemacs"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "app_section",
+   "fieldtype": "Section Break",
+   "label": "App"
+  },
+  {
+   "description": "Redirect to the selected app after login",
+   "fieldname": "default_app",
+   "fieldtype": "Select",
+   "label": "Default App"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "navigation_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Navigation Settings"
+  },
+  {
+   "default": "1",
+   "fieldname": "search_bar",
+   "fieldtype": "Check",
+   "label": "Search Bar"
+  },
+  {
+   "default": "1",
+   "fieldname": "notifications",
+   "fieldtype": "Check",
+   "label": "Notifications"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "list_settings_section",
+   "fieldtype": "Section Break",
+   "label": "List Settings"
+  },
+  {
+   "default": "1",
+   "fieldname": "list_sidebar",
+   "fieldtype": "Check",
+   "label": "Sidebar"
+  },
+  {
+   "default": "1",
+   "fieldname": "bulk_actions",
+   "fieldtype": "Check",
+   "label": "Bulk Actions"
+  },
+  {
+   "default": "1",
+   "fieldname": "view_switcher",
+   "fieldtype": "Check",
+   "label": "View Switcher"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "form_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Form Settings"
+  },
+  {
+   "default": "1",
+   "fieldname": "form_sidebar",
+   "fieldtype": "Check",
+   "label": "Sidebar"
+  },
+  {
+   "default": "1",
+   "fieldname": "timeline",
+   "fieldtype": "Check",
+   "label": "Timeline"
+  },
+  {
+   "default": "1",
+   "fieldname": "dashboard",
+   "fieldtype": "Check",
+   "label": "Dashboard"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_absolute_datetime_in_timeline",
+   "fieldtype": "Check",
+   "label": "Show Absolute Datetime in Timeline"
   }
  ],
  "icon": "fa fa-user",
@@ -758,11 +858,6 @@
   {
    "group": "Logs",
    "link_doctype": "Activity Log",
-   "link_fieldname": "user"
-  },
-  {
-   "group": "Logs",
-   "link_doctype": "Energy Point Log",
    "link_fieldname": "user"
   },
   {
@@ -796,7 +891,8 @@
    "link_fieldname": "user"
   }
  ],
- "modified": "2024-04-12 23:25:04.628007",
+ "make_attachments_public": 1,
+ "modified": "2025-06-05 23:55:27.884061",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",
@@ -828,6 +924,7 @@
  ],
  "quick_entry": 1,
  "route": "user",
+ "row_format": "Dynamic",
  "search_fields": "full_name",
  "show_name_in_global_search": 1,
  "sort_field": "creation",

@@ -169,10 +169,9 @@ frappe.views.BaseList = class BaseList {
 	setup_page() {
 		this.page = this.parent.page;
 		this.$page = $(this.parent);
-		!this.hide_card_layout && this.page.main.addClass("frappe-card");
+		this.page.main.addClass("layout-main-list");
 		this.page.page_form.removeClass("row").addClass("flex");
 		this.hide_page_form && this.page.page_form.hide();
-		this.hide_sidebar && this.$page.addClass("no-list-sidebar");
 		this.setup_page_head();
 	}
 
@@ -187,26 +186,33 @@ frappe.views.BaseList = class BaseList {
 	}
 
 	setup_view_menu() {
-		// TODO: add all icons
-		const icon_map = {
-			Image: "image-view",
-			List: "list",
-			Report: "small-file",
-			Calendar: "calendar",
-			Gantt: "gantt",
-			Kanban: "kanban",
-			Dashboard: "dashboard",
-			Map: "map",
-		};
-
 		if (frappe.boot.desk_settings.view_switcher && !this.meta.force_re_route_to_default_view) {
-			/* @preserve
-			for translation, don't remove
-			__("List View") __("Report View") __("Dashboard View") __("Gantt View"),
-			__("Kanban View") __("Calendar View") __("Image View") __("Inbox View"),
-			__("Tree View") __("Map View") */
+			const icon_map = {
+				Image: "image-view",
+				List: "list",
+				Report: "small-file",
+				Calendar: "calendar",
+				Gantt: "gantt",
+				Kanban: "kanban",
+				Dashboard: "dashboard",
+				Map: "map",
+			};
+
+			const label_map = {
+				List: __("List View"),
+				Report: __("Report View"),
+				Dashboard: __("Dashboard View"),
+				Gantt: __("Gantt View"),
+				Kanban: __("Kanban View"),
+				Calendar: __("Calendar View"),
+				Image: __("Image View"),
+				Inbox: __("Inbox View"),
+				Tree: __("Tree View"),
+				Map: __("Map View"),
+			};
+
 			this.views_menu = this.page.add_custom_button_group(
-				__("{0} View", [this.view_name]),
+				label_map[this.view_name] || label_map["List"],
 				icon_map[this.view_name] || "list"
 			);
 			this.views_list = new frappe.views.ListViewSelect({
@@ -216,6 +222,7 @@ frappe.views.BaseList = class BaseList {
 				list_view: this,
 				sidebar: this.list_sidebar,
 				icon_map: icon_map,
+				label_map: label_map,
 			});
 		}
 	}
@@ -269,7 +276,10 @@ frappe.views.BaseList = class BaseList {
 	}
 
 	setup_side_bar() {
-		if (this.hide_sidebar || !frappe.boot.desk_settings.list_sidebar) return;
+		if (this.page.disable_sidebar_toggle) {
+			return;
+		}
+
 		this.list_sidebar = new frappe.views.ListSidebar({
 			doctype: this.doctype,
 			stats: this.stats,
@@ -427,6 +437,20 @@ frappe.views.BaseList = class BaseList {
 		});
 	}
 
+	set_result_height() {
+		// place it at the footer of the page
+		this.$result.css({
+			height:
+				window.innerHeight -
+				this.$result.get(0).offsetTop -
+				this.$paging_area.get(0).offsetHeight +
+				"px",
+		});
+		this.$no_result.css({
+			height: window.innerHeight - this.$no_result.get(0).offsetTop + "px",
+		});
+	}
+
 	get_fields() {
 		// convert [fieldname, Doctype] => tabDoctype.fieldname
 		return this.fields.map((f) => frappe.model.get_full_column_name(f[0], f[1]));
@@ -447,12 +471,9 @@ frappe.views.BaseList = class BaseList {
 	get_filter_value(fieldname) {
 		const filter = this.get_filters_for_args().filter((f) => f[1] == fieldname)[0];
 		if (!filter) return;
-		return (
-			{
-				like: filter[3]?.replace(/^%?|%$/g, ""),
-				"not set": null,
-			}[filter[2]] || filter[3]
-		);
+		if (filter[2] === "like") return filter[3]?.replace(/^%?|%$/g, "");
+		else if (filter[2] === "not set") return null;
+		else return filter[3];
 	}
 
 	get_filters_for_args() {
@@ -511,6 +532,7 @@ frappe.views.BaseList = class BaseList {
 			this.before_render();
 			this.render();
 			this.after_render();
+			this.set_result_height();
 			this.freeze(false);
 			this.reset_defaults();
 			if (this.settings.refresh) {
@@ -576,8 +598,10 @@ frappe.views.BaseList = class BaseList {
 		this.$paging_area.toggle(this.data.length > 0);
 		this.$no_result.toggle(this.data.length == 0);
 
-		const show_more = this.start + this.page_length <= this.data.length;
-		this.$paging_area.find(".btn-more").toggle(show_more);
+		if (this.data.length) {
+			const show_more = this.start + this.page_length <= this.data.length;
+			this.$paging_area.find(".btn-more").toggle(show_more);
+		}
 	}
 
 	call_for_selected_items(method, args = {}) {
@@ -617,6 +641,40 @@ class FilterArea {
 			300
 		);
 		this.setup();
+		if (frappe.is_mobile()) this.setup_mobile(list_view);
+	}
+	setup_mobile(list_view) {
+		const me = this;
+		this.standard_filters_visible = false;
+		this.standard_filters_wrapper.hide();
+		this.list_view.page.page_form.css("justify-content", "flex-end");
+		$(`<button class="filter-toggle btn btn-default btn-sm filter-button">
+					<span class="filter-icon button-icon">
+						${frappe.utils.icon("funnel-plus")}
+					</span>
+				</button>
+			</div>`)
+			.prependTo(this.$filter_list_wrapper.find(".filter-selector"))
+			.on("click", function () {
+				me.toggle_standard_filter();
+			});
+		let children = list_view.page.page_form.children();
+		list_view.page.page_form.append(children.get().reverse());
+	}
+
+	toggle_standard_filter() {
+		if (this.standard_filters_visible) {
+			this.standard_filters_visible = false;
+			this.standard_filters_wrapper.hide();
+		} else {
+			this.standard_filters_visible = true;
+			this.standard_filters_wrapper.show();
+		}
+		let icon_name = !this.standard_filters_visible ? "funnel-plus" : "funnel-x";
+		this.$filter_list_wrapper
+			.find(".filter-toggle")
+			.find("use")
+			.attr("href", `#icon-${icon_name}`);
 	}
 
 	setup() {
@@ -769,7 +827,7 @@ class FilterArea {
 		});
 	}
 
-	make_standard_filters() {
+	async make_standard_filters() {
 		this.standard_filters_wrapper = this.list_view.page.page_form.find(
 			".standard-filter-section"
 		);
@@ -785,12 +843,24 @@ class FilterArea {
 			});
 		}
 
-		if (this.list_view.custom_filter_configs) {
-			this.list_view.custom_filter_configs.forEach((config) => {
-				config.onchange = () => this.debounced_refresh_list_view();
-			});
+		if (
+			this.list_view.custom_filter_configs ||
+			this.list_view.settings.custom_filter_configs
+		) {
+			const custom_filter_configs =
+				this.list_view.custom_filter_configs ||
+				this.list_view.settings.custom_filter_configs;
+			await Promise.resolve(
+				typeof custom_filter_configs === "function"
+					? custom_filter_configs()
+					: custom_filter_configs
+			).then((configs) => {
+				configs.forEach((config) => {
+					config.onchange = () => this.debounced_refresh_list_view();
+				});
 
-			fields = fields.concat(this.list_view.custom_filter_configs);
+				fields = fields.concat(configs);
+			});
 		}
 
 		const doctype_fields = this.list_view.meta.fields;
@@ -800,8 +870,9 @@ class FilterArea {
 			doctype_fields
 				.filter(
 					(df) =>
-						df.fieldname === title_field ||
-						(df.in_standard_filter && frappe.model.is_value_type(df.fieldtype))
+						(df.fieldname === title_field ||
+							(df.in_standard_filter && frappe.model.is_value_type(df.fieldtype))) &&
+						frappe.perm.has_perm(this.list_view.doctype, df.permlevel)
 				)
 				.map((df) => {
 					let options = df.options;
@@ -882,7 +953,7 @@ class FilterArea {
 		$(`<div class="filter-selector">
 			<div class="btn-group">
 				<button class="btn btn-default btn-sm filter-button">
-					<span class="filter-icon">
+					<span class="filter-icon button-icon">
 						${frappe.utils.icon("es-line-filter")}
 					</span>
 					<span class="button-label hidden-xs">
@@ -890,7 +961,7 @@ class FilterArea {
 					<span>
 				</button>
 				<button class="btn btn-default btn-sm filter-x-button" title="${__("Clear all filters")}">
-					<span class="filter-icon">
+					<span class="filter-icon button-icon">
 						${frappe.utils.icon("es-small-close")}
 					</span>
 				</button>

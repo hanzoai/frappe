@@ -2,13 +2,13 @@
 # License: MIT. See LICENSE
 
 import frappe
-from frappe.test_runner import make_test_records
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import make_test_records
 
 TEST_DOCTYPE = "Assignment Test"
 
 
-class TestAutoAssign(FrappeTestCase):
+class TestAutoAssign(IntegrationTestCase):
 	@classmethod
 	def setUpClass(cls):
 		super().setUpClass()

@@ -106,8 +106,6 @@ export default class Onboarding extends Block {
 	}
 
 	render() {
-		if (frappe.is_mobile()) return;
-
 		this.wrapper = document.createElement("div");
 		this.new("onboarding");
 
@@ -121,7 +119,6 @@ export default class Onboarding extends Block {
 			this.add_settings_button();
 			this.add_new_block_button();
 		}
-		$(this.wrapper).css("padding-bottom", "20px");
 		return this.wrapper;
 	}
 

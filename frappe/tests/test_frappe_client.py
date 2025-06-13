@@ -9,11 +9,11 @@ import frappe
 from frappe.core.doctype.user.user import generate_keys
 from frappe.frappeclient import FrappeClient, FrappeException
 from frappe.model import default_fields
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
 from frappe.utils.data import get_url
 
 
-class TestFrappeClient(FrappeTestCase):
+class TestFrappeClient(IntegrationTestCase):
 	PASSWORD = frappe.conf.admin_password or "admin"
 
 	def test_insert_many(self):
@@ -105,7 +105,9 @@ class TestFrappeClient(FrappeTestCase):
 		self.assertEqual(
 			server.get_value("Website Settings", "title_prefix").get("title_prefix"), "test-prefix"
 		)
+		frappe.db.rollback()  # Clear snapshot isolation
 		frappe.db.set_single_value("Website Settings", "title_prefix", "")
+		frappe.db.commit()
 
 	def test_update_doc(self):
 		server = FrappeClient(get_url(), "Administrator", self.PASSWORD, verify=False)

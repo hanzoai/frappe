@@ -6,6 +6,9 @@ import json
 import frappe
 from frappe.model import no_value_fields, table_fields
 from frappe.model.document import Document
+from frappe.utils import cstr
+
+FIELDTYPES_TO_IGNORE = frozenset(fieldtype for fieldtype in no_value_fields if fieldtype not in table_fields)
 
 
 class Version(Document):
@@ -36,6 +39,9 @@ class Version(Document):
 			return
 		if impersonator := frappe.session.data.get("impersonated_by"):
 			data["impersonated_by"] = impersonator
+
+		if audit_user := frappe.session.data.get("audit_user"):
+			data["audit_user"] = audit_user
 
 	def set_diff(self, old: Document, new: Document) -> bool:
 		"""Set the data property with the diff of the docs if present"""
@@ -107,10 +113,12 @@ def get_diff(old, new, for_child=False, compare_cancelled=False):
 		old_row_name_field = "_amended_from" if (amended_from and amended_from == old.name) else "name"
 
 	for df in new.meta.fields:
-		if df.fieldtype in no_value_fields and df.fieldtype not in table_fields:
+		if df.fieldtype in FIELDTYPES_TO_IGNORE or getattr(df, "is_virtual", False):
 			continue
 
 		old_value, new_value = old.get(df.fieldname), new.get(df.fieldname)
+		if df.fieldtype in ("Link", "Dynamic Link"):
+			old_value, new_value = cstr(old_value), cstr(new_value)
 
 		if not for_child and df.fieldtype in table_fields:
 			old_rows_by_name = {}
@@ -147,6 +155,30 @@ def get_diff(old, new, for_child=False, compare_cancelled=False):
 				new_value = new.get_formatted(df.fieldname) if new_value else new_value
 
 			if old_value != new_value:
+				doctype = new.doctype or old.doctype
+				if doctype:
+					meta = frappe.get_meta(doctype)
+
+					if (field_meta := meta.get_field(df.fieldname)) and field_meta.fieldtype == "Link":
+						link_meta = frappe.get_meta(field_meta.options)
+
+						# Show title field value if field is Link and show_title_field_in_link is True
+						if link_meta.show_title_field_in_link and (
+							(title_field := link_meta.get_title_field()) != "name"
+						):
+							old_title_val, new_title_val = "", ""
+							result = frappe.db.get_values(
+								field_meta.options,
+								{"name": ("in", (old_value, new_value))},
+								["name", title_field],
+							)
+							for r in result:
+								if r[0] == old_value:
+									old_title_val = r[1]
+								elif r[0] == new_value:
+									new_title_val = r[1]
+							out.changed.append((df.fieldname, old_title_val, new_title_val))
+							continue
 				out.changed.append((df.fieldname, old_value, new_value))
 
 	# name & docstatus

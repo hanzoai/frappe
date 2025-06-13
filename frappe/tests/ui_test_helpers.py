@@ -130,6 +130,7 @@ def create_doctype(name, fields):
 			"doctype": "DocType",
 			"module": "Core",
 			"custom": 1,
+			"autoname": "autoincrement",
 			"fields": fields,
 			"permissions": [{"role": "System Manager", "read": 1}],
 			"name": name,
@@ -449,6 +450,8 @@ def create_test_user(username=None):
 
 	user.save()
 
+	frappe.db.set_single_value("Workspace Settings", "workspace_setup_completed", 1)
+
 
 @whitelist_for_tests
 def setup_tree_doctype():
@@ -496,6 +499,9 @@ def setup_image_doctype():
 @whitelist_for_tests
 def setup_inbox():
 	frappe.db.delete("User Email")
+	doc = frappe.new_doc("Email Account")
+	doc.email_id = "email_linking@example.com"
+	doc.insert(ignore_permissions=True, ignore_if_duplicate=True)
 
 	user = frappe.get_doc("User", frappe.session.user)
 	user.append("user_emails", {"email_account": "Email Linking"})

@@ -3,12 +3,10 @@
 import hashlib
 
 import frappe
-from frappe.tests.utils import FrappeTestCase
-
-test_records = []
+from frappe.tests import IntegrationTestCase
 
 
-class TestTransactionLog(FrappeTestCase):
+class TestTransactionLog(IntegrationTestCase):
 	def test_validate_chaining(self):
 		frappe.get_doc(
 			{

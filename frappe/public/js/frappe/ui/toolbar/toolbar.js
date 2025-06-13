@@ -28,6 +28,13 @@ frappe.ui.toolbar.Toolbar = class {
 	make() {
 		this.bind_events();
 		$(document).trigger("toolbar_setup");
+		$(".navbar-brand .app-logo").on("click", () => {
+			frappe.app.sidebar.set_height();
+			frappe.app.sidebar.toggle_sidebar();
+			frappe.app.sidebar.prevent_scroll();
+		});
+		this.navbar = $(".navbar-brand");
+		this.app_logo = this.navbar.find(".app-logo");
 	}
 
 	bind_events() {
@@ -42,9 +49,6 @@ frappe.ui.toolbar.Toolbar = class {
 			setTimeout(function () {
 				search_modal.find("#modal-search").focus();
 			}, 300);
-		});
-		$(".navbar-toggle-full-width").click(() => {
-			frappe.ui.toolbar.toggle_full_width();
 		});
 	}
 
@@ -184,6 +188,26 @@ frappe.ui.toolbar.Toolbar = class {
 		if (frappe.boot.desk_settings.notifications && frappe.session.user !== "Guest") {
 			this.notifications = new frappe.ui.Notifications();
 		}
+	}
+
+	add_back_button() {
+		if (!frappe.is_mobile() && frappe.get_prev_route().length == 0) return;
+		this.navbar = $(".navbar-brand");
+		this.app_logo = this.navbar.html();
+		this.navbar.attr("href", "#");
+		this.navbar.html("");
+		this.navbar.html(frappe.utils.icon("arrow-left", "md"));
+		this.navbar.on("click", function () {
+			let doctype = frappe.get_route()[1];
+			frappe.set_route("List", doctype);
+		});
+	}
+	show_app_logo() {
+		this.navbar.html("");
+		this.navbar.html(this.app_logo);
+	}
+	set_app_logo(logo_url) {
+		$(".navbar-brand .app-logo").attr("src", logo_url);
 	}
 };
 

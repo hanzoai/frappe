@@ -8,7 +8,7 @@ import frappe
 from frappe.integrations.doctype.social_login_key.test_social_login_key import (
 	create_or_update_social_login_key,
 )
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
 
 
 def get_user(usr, pwd):
@@ -48,7 +48,7 @@ def get_oauth_client():
 	return oauth_client
 
 
-class TestConnectedApp(FrappeTestCase):
+class TestConnectedApp(IntegrationTestCase):
 	def setUp(self):
 		"""Set up a Connected App that connects to our own oAuth provider.
 
@@ -127,6 +127,8 @@ class TestConnectedApp(FrappeTestCase):
 			doc = getattr(self, attribute, None)
 			if doc:
 				doc.delete(force=True)
+
+		frappe.db.commit()  # Avoid snapshot violation issues
 
 		delete_if_exists("token_cache")
 		delete_if_exists("connected_app")

@@ -74,9 +74,9 @@ frappe.ui.LinkPreview = class {
 				}
 
 				this.popover_timeout = setTimeout(() => {
-					if (this.popover && this.popover.options) {
+					if (this.popover && this.popover.config) {
 						let new_content = this.get_popover_html(preview_data);
-						this.popover.options.content = new_content;
+						this.popover.config.content = new_content;
 					} else {
 						this.init_preview_popover(preview_data);
 					}
@@ -131,10 +131,15 @@ frappe.ui.LinkPreview = class {
 	}
 
 	get_preview_data() {
-		return frappe.xcall("frappe.desk.link_preview.get_preview_data", {
-			doctype: this.doctype,
-			docname: this.name,
-		});
+		return frappe.xcall(
+			"frappe.desk.link_preview.get_preview_data",
+			{
+				doctype: this.doctype,
+				docname: this.name,
+			},
+			"GET",
+			{ cache: true }
+		);
 	}
 
 	init_preview_popover(preview_data) {

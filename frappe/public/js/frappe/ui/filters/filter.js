@@ -20,10 +20,10 @@ frappe.ui.Filter = class {
 			["in", __("In")],
 			["not in", __("Not In")],
 			["is", __("Is")],
-			[">", ">"],
-			["<", "<"],
-			[">=", ">="],
-			["<=", "<="],
+			[">", __("Greater Than")],
+			["<", __("Less Than")],
+			[">=", __("Greater Than Or Equal To")],
+			["<=", __("Less Than Or Equal To")],
 			["Between", __("Between")],
 			["Timespan", __("Timespan")],
 		];
@@ -42,6 +42,7 @@ frappe.ui.Filter = class {
 			Date: ["like", "not like"],
 			Datetime: ["like", "not like", "in", "not in", "=", "!="],
 			Data: ["Between", "Timespan"],
+			Time: ["Between", "Timespan"],
 			Select: ["like", "not like", "Between", "Timespan"],
 			Link: ["Between", "Timespan", ">", "<", ">=", "<="],
 			Currency: ["Between", "Timespan"],
@@ -55,6 +56,21 @@ frappe.ui.Filter = class {
 			Int: ["like", "not like", "Between", "in", "not in", "Timespan"],
 			Float: ["like", "not like", "Between", "in", "not in", "Timespan"],
 			Percent: ["like", "not like", "Between", "in", "not in", "Timespan"],
+		};
+
+		this.special_condition_labels = {
+			Date: {
+				"<": __("Before"),
+				">": __("After"),
+				"<=": __("On or Before"),
+				">=": __("On or After"),
+			},
+			Datetime: {
+				"<": __("Before"),
+				">": __("After"),
+				"<=": __("On or Before"),
+				">=": __("On or After"),
+			},
 		};
 	}
 
@@ -274,6 +290,7 @@ frappe.ui.Filter = class {
 	make_field(df, old_fieldtype) {
 		let old_text = this.field ? this.field.get_value() : null;
 		this.hide_invalid_conditions(df.fieldtype, df.original_type);
+		this.set_special_condition_labels(df.original_type);
 		this.toggle_nested_set_conditions(df);
 		let field_area = this.filter_edit_area.find(".filter-field").empty().get(0);
 		df.input_class = "input-xs";
@@ -287,6 +304,10 @@ frappe.ui.Filter = class {
 		this.field = f;
 		if (old_text && f.fieldtype === old_fieldtype) {
 			this.field.set_value(old_text);
+		}
+
+		if (Array.isArray(old_text) && df.fieldtype !== old_fieldtype) {
+			this.field.set_value(this.value);
 		}
 
 		this.bind_filter_field_events();
@@ -398,6 +419,22 @@ frappe.ui.Filter = class {
 		}
 	}
 
+	set_special_condition_labels(original_type) {
+		let special_conditions = this.special_condition_labels[original_type] || {};
+		for (let condition of this.conditions) {
+			let special_label = special_conditions[condition[0]];
+			if (special_label) {
+				this.filter_edit_area
+					.find(`.condition option[value="${condition[0]}"]`)
+					.text(special_label);
+			} else {
+				this.filter_edit_area
+					.find(`.condition option[value="${condition[0]}"]`)
+					.text(__(condition[1]));
+			}
+		}
+	}
+
 	toggle_nested_set_conditions(df) {
 		let show_condition =
 			df.fieldtype === "Link" && frappe.boot.nested_set_doctypes.includes(df.options);
@@ -468,7 +505,8 @@ frappe.ui.filter_utils = {
 	},
 
 	get_default_condition(df) {
-		if (df.fieldtype == "Data") {
+		const meta = frappe.get_meta(df.parent);
+		if (df.fieldtype == "Data" && !meta?.is_large_table) {
 			return "like";
 		} else if (df.fieldtype == "Date" || df.fieldtype == "Datetime") {
 			return "Between";
@@ -573,28 +611,144 @@ frappe.ui.filter_utils = {
 		return;
 	},
 
+	/**
+	 * Generates timespan options for filter dropdown based on provided periods
+	 * @param {Array<string>} periods - Array of period types to include
+	 *     (e.g., "Last", "This", "Next", "Yesterday", "Today", "Tomorrow").
+	 *     Additional custom values are allowed. The order of the periods is preserved.
+	 * @returns {Array<{label: string, value: string}>} Array of option objects with label and value properties for the filter dropdown
+	 */
 	get_timespan_options(periods) {
-		const period_map = {
-			Last: ["Week", "Month", "Quarter", "6 months", "Year"],
-			This: ["Week", "Month", "Quarter", "Year"],
-			Next: ["Week", "Month", "Quarter", "6 months", "Year"],
-		};
-		let options = [];
-		periods.forEach((period) => {
-			if (period_map[period]) {
-				period_map[period].forEach((p) => {
+		const last_options = [
+			{
+				label: __("Last 7 Days"),
+				value: "last 7 days",
+			},
+			{
+				label: __("Last 14 Days"),
+				value: "last 14 days",
+			},
+			{
+				label: __("Last 30 Days"),
+				value: "last 30 days",
+			},
+			{
+				label: __("Last 90 Days"),
+				value: "last 90 days",
+			},
+			{
+				label: __("Last Week"),
+				value: "last week",
+			},
+			{
+				label: __("Last Month"),
+				value: "last month",
+			},
+			{
+				label: __("Last Quarter"),
+				value: "last quarter",
+			},
+			{
+				label: __("Last 6 Months"),
+				value: "last 6 months",
+			},
+			{
+				label: __("Last Year"),
+				value: "last year",
+			},
+		];
+		const this_options = [
+			{
+				label: __("This Week"),
+				value: "this week",
+			},
+			{
+				label: __("This Month"),
+				value: "this month",
+			},
+			{
+				label: __("This Quarter"),
+				value: "this quarter",
+			},
+			{
+				label: __("This Year"),
+				value: "this year",
+			},
+		];
+		const next_options = [
+			{
+				label: __("Next 7 Days"),
+				value: "next 7 days",
+			},
+			{
+				label: __("Next 14 Days"),
+				value: "next 14 days",
+			},
+			{
+				label: __("Next 30 Days"),
+				value: "next 30 days",
+			},
+			{
+				label: __("Next Week"),
+				value: "next week",
+			},
+			{
+				label: __("Next Month"),
+				value: "next month",
+			},
+			{
+				label: __("Next Quarter"),
+				value: "next quarter",
+			},
+			{
+				label: __("Next 6 Months"),
+				value: "next 6 months",
+			},
+			{
+				label: __("Next Year"),
+				value: "next year",
+			},
+		];
+
+		const options = [];
+		for (const period of periods) {
+			switch (period) {
+				case "Last":
+					options.push(...last_options);
+					break;
+				case "This":
+					options.push(...this_options);
+					break;
+				case "Next":
+					options.push(...next_options);
+					break;
+				case "Yesterday":
 					options.push({
-						label: `${period} ${p}`,
-						value: `${period.toLowerCase()} ${p.toLowerCase()}`,
+						label: __("Yesterday"),
+						value: "yesterday",
 					});
-				});
-			} else {
-				options.push({
-					label: __(period),
-					value: `${period.toLowerCase()}`,
-				});
+					break;
+				case "Today":
+					options.push({
+						label: __("Today"),
+						value: "today",
+					});
+					break;
+				case "Tomorrow":
+					options.push({
+						label: __("Tomorrow"),
+						value: "tomorrow",
+					});
+					break;
+				default:
+					options.push({
+						label: __(period),
+						value: `${period.toLowerCase()}`,
+					});
+					break;
 			}
-		});
+		}
+
 		return options;
 	},
 };

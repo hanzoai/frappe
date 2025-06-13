@@ -2,6 +2,7 @@
 # License: MIT. See LICENSE
 
 import json
+from typing import Literal
 
 from bs4 import BeautifulSoup
 
@@ -25,7 +26,7 @@ def get_notifications():
 		"open_count_doctype": {},
 		"targets": {},
 	}
-	if frappe.flags.in_install or not frappe.get_system_settings("setup_complete"):
+	if frappe.flags.in_install or not frappe.is_setup_complete():
 		return out
 
 	config = get_notification_config()
@@ -251,7 +252,19 @@ def get_open_count(doctype: str, name: str, items=None):
 	if frappe.flags.in_migrate or frappe.flags.in_install:
 		return {"count": []}
 
-	doc = frappe.get_doc(doctype, name)
+	# None of the count queries should take more than 1s individually
+	frappe.db.set_execution_timeout(1)
+
+	try:
+		return _get_linked_document_counts(doctype, name, items)
+	except Exception as e:
+		if frappe.db.is_statement_timeout(e):
+			return {"count": []}
+		raise
+
+
+def _get_linked_document_counts(doctype: str, name: str, items=None):
+	doc = frappe.get_lazy_doc(doctype, name)
 	doc.check_permission()
 	meta = doc.meta
 	links = meta.get_dashboard_data()
@@ -325,31 +338,52 @@ def get_internal_links(doc, link, link_doctype):
 
 
 def get_external_links(doctype, name, links):
-	filters = get_filters_for(doctype)
 	fieldname = links.get("non_standard_fieldnames", {}).get(doctype, links.get("fieldname"))
-	data = {"doctype": doctype}
+	filters = {fieldname: name}
 
-	if filters:
-		# get the fieldname for the current document
-		# we only need open documents related to the current document
-		filters[fieldname] = name
-		total = len(
-			frappe.get_all(
-				doctype, fields="name", filters=filters, limit=100, distinct=True, ignore_ifnull=True
-			)
+	# updating filters based on dynamic_links
+	if dynamic_link_filters := get_dynamic_link_filters(doctype, links, fieldname):
+		filters.update(dynamic_link_filters)
+
+	total_count = get_doc_count(doctype, filters)
+
+	open_count = 0
+	if open_count_filters := get_filters_for(doctype):
+		filters.update(open_count_filters)
+		open_count = get_doc_count(doctype, filters)
+
+	return {"doctype": doctype, "count": total_count, "open_count": open_count}
+
+
+def get_doc_count(doctype, filters) -> int | Literal["?"]:
+	try:
+		docs = frappe.get_all(
+			doctype, filters=filters, limit=100, distinct=True, ignore_ifnull=True, order_by=None
 		)
-		data["open_count"] = total
-	else:
-		data["open_count"] = 0
+		return len(docs)
+	except Exception as e:
+		if frappe.db.is_statement_timeout(e):  # Skip fetching correct count if it's too slow
+			return "?"
+		raise
 
-	total = len(
-		frappe.get_all(
-			doctype, fields="name", filters={fieldname: name}, limit=100, distinct=True, ignore_ifnull=True
-		)
-	)
-	data["count"] = total
 
-	return data
+def get_dynamic_link_filters(doctype, links, fieldname):
+	"""
+	- Updating filters based on dynamic_links specified in the dashboard data.
+	- Eg: "dynamic_links": {"fieldname": ["dynamic_fieldvalue", "dynamic_fieldname"]},
+	"""
+	dynamic_link = links.get("dynamic_links", {}).get(fieldname)
+
+	if not dynamic_link:
+		return
+
+	doctype_value, doctype_fieldname = dynamic_link
+
+	meta = frappe.get_meta(doctype)
+	if not meta.has_field(doctype_fieldname):
+		return
+
+	return {doctype_fieldname: doctype_value}
 
 
 def notify_mentions(ref_doctype, ref_name, content):

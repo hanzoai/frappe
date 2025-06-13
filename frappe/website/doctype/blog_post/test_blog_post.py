@@ -6,17 +6,17 @@ from bs4 import BeautifulSoup
 
 import frappe
 from frappe.custom.doctype.customize_form.customize_form import reset_customization
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
 from frappe.utils import random_string, set_request
 from frappe.website.doctype.blog_post.blog_post import get_blog_list
 from frappe.website.serve import get_response
 from frappe.website.utils import clear_website_cache
 from frappe.website.website_generator import WebsiteGenerator
 
-test_dependencies = ["Blog Post"]
+EXTRA_TEST_RECORD_DEPENDENCIES = ["Blog Post"]
 
 
-class TestBlogPost(FrappeTestCase):
+class TestBlogPost(IntegrationTestCase):
 	def setUp(self):
 		reset_customization("Blog Post")
 
@@ -65,9 +65,6 @@ class TestBlogPost(FrappeTestCase):
 		category_page_link = next(iter(soup.find_all("a", href=re.compile(blog.blog_category))))
 		category_page_url = category_page_link["href"]
 
-		cached_value = frappe.db.value_cache.get(("DocType", "Blog Post", "name"))
-		frappe.db.value_cache[("DocType", "Blog Post", "name")] = (("Blog Post",),)
-
 		# Visit the category page (by following the link found in above stage)
 		set_request(path=category_page_url)
 		category_page_response = get_response()
@@ -76,7 +73,6 @@ class TestBlogPost(FrappeTestCase):
 		self.assertIn(blog.title, category_page_html)
 
 		# Cleanup
-		frappe.db.value_cache[("DocType", "Blog Post", "name")] = cached_value
 		frappe.delete_doc("Blog Post", blog.name)
 		frappe.delete_doc("Blog Category", blog.blog_category)
 
