@@ -1982,8 +1982,8 @@ class LazyDocument:
 	@override
 	def append(self, key: str, value: D | dict | None = None, position: int = -1) -> D:
 		# Ensure that table descriptor is triggered at least once
-		if isinstance(key, str) and key in self._table_fieldnames:
-			getattr(self, key, None)
+		# key is assumed to be a table fieldname (as expected by BaseDocument.append)
+		getattr(self, key, None)
 		return super().append(key, value, position)
 
 	@override
