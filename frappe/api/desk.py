@@ -1,6 +1,6 @@
 import frappe
-from frappe.config import get_modules_from_all_apps_for_user
 from frappe.query_builder import Order
+from frappe.utils.modules import get_modules_from_all_apps_for_user
 
 
 @frappe.whitelist()
