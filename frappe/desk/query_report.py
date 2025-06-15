@@ -14,7 +14,7 @@ from frappe.desk.reportview import clean_params, parse_json
 from frappe.model.utils import render_include
 from frappe.modules import get_module_path, scrub
 from frappe.monitor import add_data_to_monitor
-from frappe.permissions import get_role_permissions, has_permission
+from frappe.permissions import get_role_permissions, get_roles, has_permission
 from frappe.utils import cint, cstr, flt, format_duration, get_html_format, sbool
 
 
@@ -706,6 +706,9 @@ def has_match(
 						match = False
 						break
 
+					if match:
+						match = has_unrestricted_read_access(doctype=ref_doctype)
+
 				# each doctype could have multiple conflicting user permission doctypes, hence using OR
 				# so that even if one of the sets allows a match, it is true
 				matched_for_doctype = matched_for_doctype or match
@@ -720,6 +723,44 @@ def has_match(
 			break
 
 	return resultant_match
+
+
+def has_unrestricted_read_access(doctype, user=None):
+	if not hasattr(frappe.local, "unrestricted_read_perm_cache"):
+		frappe.local.unrestricted_read_perm_cache = {}
+
+	cache_key = f"{user or frappe.session.user}::{doctype}"
+
+	if cache_key in frappe.local.unrestricted_read_perm_cache:
+		return frappe.local.unrestricted_read_perm_cache[cache_key]
+
+	roles = get_roles(user)
+
+	standard_perm_exists = frappe.db.exists(
+		"DocPerm",
+		{
+			"parent": doctype,
+			"role": ["in", roles],
+			"permlevel": 0,
+			"read": 1,
+			"if_owner": 0,
+		},
+	)
+
+	custom_perm_exists = frappe.db.exists(
+		"Custom DocPerm",
+		{
+			"parent": doctype,
+			"role": ["in", roles],
+			"permlevel": 0,
+			"read": 1,
+			"if_owner": 0,
+		},
+	)
+
+	has_perm = bool(custom_perm_exists or standard_perm_exists)
+	frappe.local.unrestricted_read_perm_cache[cache_key] = has_perm
+	return has_perm
 
 
 def get_linked_doctypes(columns, data):
