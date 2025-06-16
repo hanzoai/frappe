@@ -38,35 +38,13 @@ class AccessLog(Document):
 
 
 @frappe.whitelist()
-def make_access_log(
-	doctype=None,
-	document=None,
-	method=None,
-	file_type=None,
-	report_name=None,
-	filters=None,
-	page=None,
-	columns=None,
-):
-	_make_access_log(
-		doctype,
-		document,
-		method,
-		file_type,
-		report_name,
-		filters,
-		page,
-		columns,
-	)
-
-
 @frappe.write_only()
 @retry(
 	stop=stop_after_attempt(3),
 	retry=retry_if_exception_type(frappe.DuplicateEntryError),
 	reraise=True,
 )
-def _make_access_log(
+def make_access_log(
 	doctype=None,
 	document=None,
 	method=None,
@@ -105,3 +83,7 @@ def _make_access_log(
 	# whitelisted method...yeah, don't do it. That part would be executed possibly on a read only DB conn
 	if not frappe.flags.in_test or in_request:
 		frappe.db.commit()
+
+
+# only for backward compatibility
+_make_access_log = make_access_log
