@@ -730,26 +730,22 @@ def has_match(
 def has_unrestricted_read_access(doctype, user):
 	roles = get_roles(user)
 
+	permission_filters = {
+		"parent": doctype,
+		"role": ["in", roles],
+		"permlevel": 0,
+		"read": 1,
+		"if_owner": 0,
+	}
+
 	standard_perm_exists = frappe.db.exists(
 		"DocPerm",
-		{
-			"parent": doctype,
-			"role": ["in", roles],
-			"permlevel": 0,
-			"read": 1,
-			"if_owner": 0,
-		},
+		permission_filters,
 	)
 
 	custom_perm_exists = frappe.db.exists(
 		"Custom DocPerm",
-		{
-			"parent": doctype,
-			"role": ["in", roles],
-			"permlevel": 0,
-			"read": 1,
-			"if_owner": 0,
-		},
+		permission_filters,
 	)
 
 	has_perm = bool(custom_perm_exists or standard_perm_exists)
