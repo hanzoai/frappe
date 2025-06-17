@@ -38,17 +38,17 @@ def get_report_doc(report_name):
 		# Follow whatever the custom report has set for prepared report field
 		doc.prepared_report = custom_report_doc.prepared_report
 
-	# if not doc.is_permitted():
-	# 	frappe.throw(
-	# 		_("You don't have access to Report: {0}").format(_(doc.name)),
-	# 		frappe.PermissionError,
-	# 	)
+	if not doc.is_permitted():
+		frappe.throw(
+			_("You don't have access to Report: {0}").format(_(doc.name)),
+			frappe.PermissionError,
+		)
 
-	# if not frappe.has_permission(doc.ref_doctype, "report"):
-	# 	frappe.throw(
-	# 		_("You don't have permission to get a report on: {0}").format(_(doc.ref_doctype)),
-	# 		frappe.PermissionError,
-	# 	)
+	if not frappe.has_permission(doc.ref_doctype, "report"):
+		frappe.throw(
+			_("You don't have permission to get a report on: {0}").format(_(doc.ref_doctype)),
+			frappe.PermissionError,
+		)
 
 	if doc.disabled:
 		frappe.throw(_("Report {0} is disabled").format(_(report_name)))
@@ -204,11 +204,11 @@ def run(
 		user = frappe.session.user
 	validate_filters_permissions(report_name, filters, user)
 	report = get_report_doc(report_name)
-	# if not frappe.has_permission(report.ref_doctype, "report"):
-	# 	frappe.msgprint(
-	# 		_("Must have report permission to access this report."),
-	# 		raise_exception=True,
-	# 	)
+	if not frappe.has_permission(report.ref_doctype, "report"):
+		frappe.msgprint(
+			_("Must have report permission to access this report."),
+			raise_exception=True,
+		)
 
 	result = None
 
