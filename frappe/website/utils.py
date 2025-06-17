@@ -127,7 +127,7 @@ def get_home_page():
 
 		return home_page
 
-	if frappe.local.dev_server:
+	if frappe._dev_server:
 		# dont return cached homepage in development
 		return _get_home_page()
 

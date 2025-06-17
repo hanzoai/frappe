@@ -263,7 +263,7 @@ def init(site: str, sites_path: str = ".", new_site: bool = False, force: bool =
 	local.form_dict = _dict()
 	local.preload_assets = {"style": [], "script": [], "icons": []}
 	local.session = _dict()
-	local.dev_server = _dev_server
+	local.dev_server = _dev_server  # only for backwards compatibility
 	local.qb = get_query_builder(local.conf.db_type)
 	if not cache or not client_cache:
 		setup_redis_cache_connection()
