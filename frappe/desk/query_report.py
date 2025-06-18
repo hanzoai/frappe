@@ -16,7 +16,7 @@ from frappe.modules import get_module_path, scrub
 from frappe.monitor import add_data_to_monitor
 from frappe.permissions import get_role_permissions, get_roles, has_permission
 from frappe.utils import cint, cstr, flt, format_duration, get_html_format, sbool
-from frappe.utils.caching import site_cache
+from frappe.utils.caching import request_cache
 
 
 def get_report_doc(report_name):
@@ -726,7 +726,7 @@ def has_match(
 	return resultant_match
 
 
-@site_cache
+@request_cache
 def has_unrestricted_read_access(doctype, user):
 	roles = get_roles(user)
 
