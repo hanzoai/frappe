@@ -183,6 +183,7 @@ def main(
 def run_tests_in_light_mode(test_params):
 	from frappe.testing.loader import FrappeTestLoader
 	from frappe.testing.result import FrappeTestResult
+	from frappe.tests.utils import toggle_test_mode
 
 	# init environment
 	frappe.init(test_params.site)
@@ -196,6 +197,7 @@ def run_tests_in_light_mode(test_params):
 		frappe.utils.scheduler.disable_scheduler()
 	frappe.clear_cache()
 
+	toggle_test_mode(True)
 	suite = FrappeTestLoader().discover_tests(test_params)
 	result = unittest.TextTestRunner(failfast=test_params.failfast, resultclass=FrappeTestResult).run(suite)
 	if not result.wasSuccessful():
