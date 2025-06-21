@@ -956,21 +956,34 @@ def _update_field_order_based_on_insert_after(field_order, insert_after_map):
 			field_order.extend(fields)
 
 
+CACHE_PROPERTIES = frozenset(
+	(
+		"_fields",
+		"_table_fields",
+		"_table_doctypes",
+		*(prop for prop, value in vars(Meta).items() if isinstance(value, cached_property)),
+	)
+)
+
+
 def _serialize(doc, no_nulls=False, *, is_child=False):
 	out = {}
 	for key, value in doc.__dict__.items():
-		if not is_child and isinstance(value, ListOrTuple):
-			if not value or not isinstance(value[0], BaseDocument):
-				# non standard list object, skip
+		if not is_child:
+			if key in CACHE_PROPERTIES:
 				continue
 
-			out[key] = [_serialize(d, no_nulls=no_nulls, is_child=True) for d in value]
+			if isinstance(value, ListOrTuple):
+				if value and isinstance(value[0], BaseDocument):
+					out[key] = [_serialize(d, no_nulls=no_nulls, is_child=True) for d in value]
 
-		elif (not no_nulls and value is None) or isinstance(value, SerializableTypes):
+				continue
+
+		if (not no_nulls and value is None) or isinstance(value, SerializableTypes):
 			out[key] = value
 
-	# set empty lists for unset table fields
 	if not is_child:
+		# set empty lists for unset table fields
 		for fieldname in TABLE_DOCTYPES_FOR_DOCTYPE:
 			if out.get(fieldname) is None:
 				out[fieldname] = []
