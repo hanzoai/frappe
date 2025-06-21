@@ -250,13 +250,7 @@ $.extend(frappe.model, {
 			// meta has sugar, like __js and other properties that doc won't have
 			frappe.meta.__doctype_meta = JSON.parse(JSON.stringify(meta));
 		}
-		for (const asset_key of [
-			"__list_js",
-			"__custom_list_js",
-			"__calendar_js",
-			"__map_js",
-			"__tree_js",
-		]) {
+		for (const asset_key of ["__list_js", "__custom_list_js", "__calendar_js", "__tree_js"]) {
 			if (meta[asset_key]) {
 				new Function(meta[asset_key])();
 			}
