@@ -611,17 +611,12 @@ def parse_email(email_strings):
 				doctype = unquote(document_parts[0])
 				docname = unquote(document_parts[1])
 
-<<<<<<< HEAD
-			if doctype and docname:
-				yield doctype, docname
-=======
 			if not document_parts or len(document_parts) != 2:
 				continue
 
 			doctype = unquote_plus(frappe.unscrub(document_parts[0]))
 			docname = unquote_plus(document_parts[1])
 			yield doctype, docname
->>>>>>> 73cf975a9a (fix(email): resolve case mismatch in auto-linking from email address)
 
 
 def get_email_without_link(email):
