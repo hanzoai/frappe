@@ -71,9 +71,10 @@ class FormMeta(Meta):
 
 	def as_dict(self, no_nulls=False):
 		d = super().as_dict(no_nulls=no_nulls)
+		__dict = self.__dict__
 
 		for k in ASSET_KEYS:
-			d[k] = self.get(k)
+			d[k] = __dict.get(k)
 
 		return d
 
