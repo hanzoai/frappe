@@ -512,7 +512,8 @@ def parse_email(email_strings):
 				doctype = unquote(frappe.unscrub(document_parts[0]))
 				docname = unquote(document_parts[1])
 
-			yield doctype, docname
+			if doctype and docname:
+				yield doctype, docname
 
 
 def get_email_without_link(email):
