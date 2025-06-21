@@ -1,4 +1,4 @@
-ffrappe.provide("frappe.ui.form");
+frappe.provide("frappe.ui.form");
 frappe.provide("frappe.model.docinfo");
 
 import "./quick_entry";
