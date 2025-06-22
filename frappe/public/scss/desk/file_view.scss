@@ -44,8 +44,7 @@
 
 				.file-header {
 					position: absolute;
-					left: var(--padding-sm);
-					top: var(--padding-sm);
+					padding: var(--padding-sm);
 					z-index: 1;
 
 					.list-row-checkbox {
