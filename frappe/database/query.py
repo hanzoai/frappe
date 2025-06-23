@@ -1,7 +1,6 @@
 import re
-from ast import literal_eval
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any
 
 import sqlparse
 from pypika.queries import QueryBuilder, Table
@@ -30,11 +29,6 @@ TABLE_NAME_PATTERN = re.compile(r"^[\w -]*$", flags=re.ASCII)
 # Pattern to validate field names in SELECT:
 # Allows: name, `name`, name as alias, `name` as alias, `table name`.`name`, `table name`.`name` as alias, table.name, table.name as alias
 ALLOWED_FIELD_PATTERN = re.compile(r"^(?:(`[\w\s-]+`|\w+)\.)?(`\w+`|\w+)(?:\s+as\s+\w+)?$", flags=re.ASCII)
-
-# Pattern to validate field names used in various SQL clauses (WHERE, GROUP BY, ORDER BY):
-# Allows simple field names, backticked names, and table-qualified names (e.g., name, `name`, `table`.`name`, table.name)
-# Does NOT allow aliases ('as alias') or functions.
-ALLOWED_SQL_FIELD_PATTERN = re.compile(r"^(?:(`\w+`|\w+)\.)?(`\w+`|\w+)$", flags=re.ASCII)
 
 # Regex to parse field names:
 # Group 1: Optional quote for table name
