@@ -280,8 +280,9 @@ class EmailServer:
 		except imaplib.IMAP4.abort:
 			if self.retry_count < self.retry_limit:
 				self.connect()
-				self.get_messages(folder)
 				self.retry_count += 1
+				self.get_messages(folder)
+
 		except Exception as e:
 			if self.has_login_limit_exceeded(e):
 				raise LoginLimitExceeded(e) from e
