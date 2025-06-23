@@ -75,19 +75,54 @@ def read_doc(doctype: str, name: str):
 	return _doc
 
 
-def document_list(doctype: str):
+def document_list(doctype: str) -> list[dict[str, Any]]:
+	"""
+	GET /api/v2/document/<doctype>?fields=[...],filters={...},...
+
+	REST API endpoint for fetching doctype records
+
+	Args:
+		doctype: DocType name
+
+	Query Parameters (accessible via frappe.form_dict):
+		fields: JSON string of field names to fetch
+		filters: JSON string of filters to apply
+		order_by: Order by field
+		start: Starting offset for pagination (default: 0)
+		limit: Maximum number of records to fetch (default: 20)
+		group_by: Group by field
+		as_dict: Return results as dictionary (default: True)
+
+	Response:
+		frappe.response["data"]: List of document records as dicts
+		frappe.response["has_next_page"]: Indicates if more pages are available
+
+	Controller Customization:
+		Doctype controllers can customize queries by implementing a static get_list(query) method
+		that receives a QueryBuilder object and returns a modified QueryBuilder.
+
+		Example:
+			class Project(Document):
+				@staticmethod
+				def get_list(query):
+					Project = frappe.qb.DocType("Project")
+					if user_has_role("Project Owner"):
+						query = query.where(Project.owner == frappe.session.user)
+					else:
+						query = query.where(Project.is_private == 0)
+					return query
+	"""
 	from frappe.model.base_document import get_controller
 
 	args = frappe.form_dict
-
-	fields = frappe.parse_json(args.get("fields", None))
-	filters = frappe.parse_json(args.get("filters", None))
-	order_by = args.get("order_by", None)
-	start = cint(args.get("start", 0))
-	limit = cint(args.get("limit", 20))
-	group_by = args.get("group_by", None)
-	debug = args.get("debug", False)
-	as_dict = args.get("as_dict", True)
+	fields: list | None = frappe.parse_json(args.get("fields", None))
+	filters: dict | None = frappe.parse_json(args.get("filters", None))
+	order_by: str | None = args.get("order_by", None)
+	start: int = cint(args.get("start", 0))
+	limit: int = cint(args.get("limit", 20))
+	group_by: str | None = args.get("group_by", None)
+	debug: bool = args.get("debug", False)
+	as_dict: bool = args.get("as_dict", True)
 
 	query = frappe.qb.get_query(
 		table=doctype,
@@ -95,15 +130,30 @@ def document_list(doctype: str):
 		filters=filters,
 		order_by=order_by,
 		offset=start,
-		limit=limit + 1,
+		limit=limit + 1,  # Fetch one extra to check if there's a next page
 		group_by=group_by,
 		ignore_permissions=False,
 	)
+
+	# Check if the doctype controller has a static get_list method
 	controller = get_controller(doctype)
 	if hasattr(controller, "get_list"):
-		return_value = controller.get_list(query)
-		if return_value is not None:
-			query = return_value
+		try:
+			return_value = controller.get_list(query)
+
+			if return_value is not None:
+				# Validate that the returned value has a run method (is a QueryBuilder-like object)
+				if not hasattr(return_value, "run"):
+					frappe.throw(
+						_(
+							"Custom get_list method for {0} must return a QueryBuilder object or None, got {1}"
+						).format(doctype, type(return_value).__name__)
+					)
+
+				query = return_value
+
+		except Exception as e:
+			frappe.throw(_("Error in {0}.get_list: {1}").format(doctype, str(e)))
 
 	data = query.run(as_dict=as_dict, debug=debug)
 	frappe.response["has_next_page"] = len(data) > limit
