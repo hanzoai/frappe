@@ -2351,7 +2351,6 @@ def get_active_domains():
 	return get_active_domains()
 
 
-<<<<<<< HEAD
 def get_version(doctype, name, limit=None, head=False, raise_err=True):
 	"""
 	Returns a list of version information of a given DocType.
