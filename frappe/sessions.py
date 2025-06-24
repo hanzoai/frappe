@@ -169,12 +169,8 @@ def get():
 	bootinfo["lang"] = frappe.translate.get_user_lang()
 	bootinfo["disable_async"] = frappe.conf.disable_async
 
-<<<<<<< HEAD
-	bootinfo["setup_complete"] = cint(frappe.get_system_settings("setup_complete"))
-	apps = get_apps() or []
-=======
 	bootinfo["setup_complete"] = frappe.is_setup_complete()
->>>>>>> 5c6b2b5bec (refactor: track completed app setup wizards and re-run the setup wizard upon new app installation. (#32640))
+	apps = get_apps() or []
 	bootinfo["apps_data"] = {
 		"apps": apps,
 		"is_desk_apps": 1 if bool(is_desk_apps(apps)) else 0,
