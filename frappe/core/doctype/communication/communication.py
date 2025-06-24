@@ -527,15 +527,10 @@ def get_permission_query_conditions_for_communication(user):
 		if not accounts:
 			return """`tabCommunication`.communication_medium!='Email'"""
 
-<<<<<<< HEAD
+
 		email_accounts = ['"%s"' % account.get("email_account") for account in accounts]
-		return """`tabCommunication`.email_account in ({email_accounts}) or `tabCommunication`.recipients LIKE '%{user}%' or `tabCommunication`.sender LIKE '%{user}%' or `tabCommunication`.cc LIKE '%{user}%' or `tabCommunication`.bcc LIKE '%{user}%'""".format(
-			email_accounts=",".join(email_accounts), user=user
-=======
-		email_accounts = ['"{}"'.format(account.get("email_account")) for account in accounts]
 		return """`tabCommunication`.email_account in ({email_accounts})""".format(
 			email_accounts=",".join(email_accounts)
->>>>>>> baf29c896c (fix: remove like logic from permission query)
 		)
 
 
