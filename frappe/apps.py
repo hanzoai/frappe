@@ -5,18 +5,12 @@ import re
 
 import frappe
 from frappe import _
-<<<<<<< HEAD
 from frappe.desk.utils import slug
-=======
 from frappe.core.doctype.installed_applications.installed_applications import (
 	get_apps_with_incomplete_dependencies,
 	get_setup_wizard_completed_apps,
 	get_setup_wizard_not_required_apps,
 )
-
-# check if route is /app or /app/* and not /app1 or /app1/*
-DESK_APP_PATTERN = re.compile(r"^/app(/.*)?$")
->>>>>>> 5c6b2b5bec (refactor: track completed app setup wizards and re-run the setup wizard upon new app installation. (#32640))
 
 
 @frappe.whitelist()
