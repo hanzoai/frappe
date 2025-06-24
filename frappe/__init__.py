@@ -2400,7 +2400,8 @@ def get_version(doctype, name, limit=None, head=False, raise_err=True):
 	else:
 		if raise_err:
 			raise ValueError(_("{0} has no versions tracked.").format(doctype))
-=======
+
+
 @request_cache
 def is_setup_complete():
 	is_setup_complete = False
@@ -2411,7 +2412,6 @@ def is_setup_complete():
 		is_setup_complete = True
 
 	return is_setup_complete
->>>>>>> 5c6b2b5bec (refactor: track completed app setup wizards and re-run the setup wizard upon new app installation. (#32640))
 
 
 @whitelist(allow_guest=True)
