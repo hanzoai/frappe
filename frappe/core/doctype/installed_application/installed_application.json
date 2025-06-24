@@ -58,23 +58,14 @@
  "grid_page_length": 50,
  "istable": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2020-05-12 10:09:49.148087",
-=======
- "modified": "2025-05-22 12:26:49.523690",
->>>>>>> 5c6b2b5bec (refactor: track completed app setup wizards and re-run the setup wizard upon new app installation. (#32640))
+ "modified": "2025-05-22 14:26:49.523690",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Installed Application",
  "owner": "Administrator",
  "permissions": [],
  "quick_entry": 1,
-<<<<<<< HEAD
  "sort_field": "modified",
-=======
- "row_format": "Dynamic",
- "sort_field": "creation",
->>>>>>> 5c6b2b5bec (refactor: track completed app setup wizards and re-run the setup wizard upon new app installation. (#32640))
  "sort_order": "DESC",
  "track_changes": 1
 }
