@@ -145,11 +145,7 @@ def before_tests():
 	frappe.clear_cache()
 
 	# complete setup if missing
-<<<<<<< HEAD
-	if not int(frappe.db.get_single_value("System Settings", "setup_complete") or 0):
-=======
 	if not frappe.is_setup_complete():
->>>>>>> 5c6b2b5bec (refactor: track completed app setup wizards and re-run the setup wizard upon new app installation. (#32640))
 		complete_setup_wizard()
 
 	frappe.db.set_single_value("Website Settings", "disable_signup", 0)
