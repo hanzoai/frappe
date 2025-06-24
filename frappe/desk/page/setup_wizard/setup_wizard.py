@@ -61,11 +61,7 @@ def setup_complete(args):
 	is_background_task = frappe.conf.get("trigger_site_setup_in_background")
 
 	if is_background_task:
-<<<<<<< HEAD
-		process_setup_stages.enqueue(stages=stages, user_input=args, is_background_task=True)
-=======
-		process_setup_stages.enqueue(stages=stages, user_input=kwargs, is_background_task=True, at_front=True)
->>>>>>> 5c6b2b5bec (refactor: track completed app setup wizards and re-run the setup wizard upon new app installation. (#32640))
+		process_setup_stages.enqueue(stages=stages, user_input=kwargs, is_background_task=True)
 		return {"status": "registered"}
 	else:
 		return process_setup_stages(stages, kwargs)
