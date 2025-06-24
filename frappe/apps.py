@@ -5,12 +5,12 @@ import re
 
 import frappe
 from frappe import _
-from frappe.desk.utils import slug
 from frappe.core.doctype.installed_applications.installed_applications import (
 	get_apps_with_incomplete_dependencies,
 	get_setup_wizard_completed_apps,
 	get_setup_wizard_not_required_apps,
 )
+from frappe.desk.utils import slug
 
 
 @frappe.whitelist()
