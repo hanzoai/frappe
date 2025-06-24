@@ -26,11 +26,7 @@ def get_notifications():
 		"open_count_doctype": {},
 		"targets": {},
 	}
-<<<<<<< HEAD
-	if frappe.flags.in_install or not frappe.db.get_single_value("System Settings", "setup_complete"):
-=======
 	if frappe.flags.in_install or not frappe.is_setup_complete():
->>>>>>> 5c6b2b5bec (refactor: track completed app setup wizards and re-run the setup wizard upon new app installation. (#32640))
 		return out
 
 	config = get_notification_config()
