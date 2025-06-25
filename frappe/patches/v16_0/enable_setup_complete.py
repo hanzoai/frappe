@@ -6,15 +6,11 @@ def execute():
 	frappe.reload_doc("core", "doctype", "installed_applications")
 
 	is_setup_complete = frappe.db.get_single_value("System Settings", "setup_complete")
-<<<<<<< HEAD
-	for app_name in frappe.get_all("Installed Application", pluck="app_name"):
-=======
 	installed_apps = frappe.get_installed_apps(_ensure_on_bench=True)
 	for app_name in frappe.get_all("Installed Application", pluck="app_name"):
 		if app_name not in installed_apps:
 			continue
 
->>>>>>> 178643b784 (fix: patch failure due to out of sync installed apps (#32767))
 		has_setup_wizard = 0
 		if app_name == "frappe":
 			has_setup_wizard = 1
