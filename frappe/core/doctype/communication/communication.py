@@ -528,8 +528,8 @@ def get_permission_query_conditions_for_communication(user):
 			return """`tabCommunication`.communication_medium!='Email'"""
 
 		email_accounts = ['"%s"' % account.get("email_account") for account in accounts]
-		return """`tabCommunication`.email_account in ({email_accounts}) or `tabCommunication`.recipients LIKE '%{user}%' or `tabCommunication`.sender LIKE '%{user}%' or `tabCommunication`.cc LIKE '%{user}%' or `tabCommunication`.bcc LIKE '%{user}%'""".format(
-			email_accounts=",".join(email_accounts), user=user
+		return """`tabCommunication`.email_account in ({email_accounts})""".format(
+			email_accounts=",".join(email_accounts)
 		)
 
 
@@ -608,7 +608,7 @@ def parse_email(email_strings):
 				if len(document_parts) != 2:
 					continue
 
-				doctype = unquote(document_parts[0])
+				doctype = frappe.unscrub(unquote(document_parts[0]))
 				docname = unquote(document_parts[1])
 
 			if doctype and docname:

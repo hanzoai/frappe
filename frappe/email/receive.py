@@ -218,6 +218,9 @@ class EmailServer:
 		uidnext = int(self.parse_imap_response("UIDNEXT", message[0]) or "1")
 		frappe.db.set_value("Email Account", self.settings.email_account, "uidnext", uidnext)
 
+		if uid_validity is None:
+			frappe.flags.initial_sync = True
+
 		if not uid_validity or uid_validity != current_uid_validity:
 			# uidvalidity changed & all email uids are reindexed by server
 			Communication = frappe.qb.DocType("Communication")
@@ -274,8 +277,9 @@ class EmailServer:
 		except imaplib.IMAP4.abort:
 			if self.retry_count < self.retry_limit:
 				self.connect()
-				self.get_messages(folder)
 				self.retry_count += 1
+				self.get_messages(folder)
+
 		except Exception as e:
 			if self.has_login_limit_exceeded(e):
 				raise LoginLimitExceeded(e)
