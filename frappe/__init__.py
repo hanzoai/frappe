@@ -1920,16 +1920,20 @@ def logger(
 	)
 
 
-def get_desk_link(doctype, name, show_title_with_name=False):
+def get_desk_link(doctype, name, show_title_with_name=False, open_in_new_tab=False):
 	meta = get_meta(doctype)
 	title = get_value(doctype, name, meta.get_title_field())
 
-	if show_title_with_name and name != title:
-		html = '<a href="/app/Form/{doctype}/{name}" style="font-weight: bold;">{doctype_local} {name}: {title_local}</a>'
-	else:
-		html = '<a href="/app/Form/{doctype}/{name}" style="font-weight: bold;">{doctype_local} {title_local}</a>'
+	target_attr = ' target="_blank"' if open_in_new_tab else ""
 
-	return html.format(doctype=doctype, name=name, doctype_local=_(doctype), title_local=_(title))
+	if show_title_with_name and name != title:
+		html = '<a href="/app/Form/{doctype}/{name}"{target} style="font-weight: bold;">{doctype_local} {name}: {title_local}</a>'
+	else:
+		html = '<a href="/app/Form/{doctype}/{name}"{target} style="font-weight: bold;">{doctype_local} {title_local}</a>'
+
+	return html.format(
+		doctype=doctype, name=name, doctype_local=_(doctype), title_local=_(title), target=target_attr
+	)
 
 
 def get_website_settings(key):
