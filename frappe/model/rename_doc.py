@@ -9,6 +9,7 @@ from frappe import _, bold
 from frappe.model.document import Document
 from frappe.model.dynamic_links import get_dynamic_link_map
 from frappe.model.naming import validate_name
+from frappe.model.utils import is_virtual_doctype
 from frappe.model.utils.user_settings import sync_user_settings, update_user_settings_data
 from frappe.query_builder import Field
 from frappe.utils.data import cint, cstr, sbool
@@ -416,6 +417,8 @@ def rename_doctype(doctype: str, old: str, new: str) -> None:
 def update_child_docs(old: str, new: str, meta: "Meta") -> None:
 	# update "parent"
 	for df in meta.get_table_fields():
+		if df.is_virtual or is_virtual_doctype(df.options):
+			continue
 		(
 			frappe.qb.update(df.options)
 			.set("parent", new)
