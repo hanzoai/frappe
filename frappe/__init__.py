@@ -2401,6 +2401,18 @@ def get_version(doctype, name, limit=None, head=False, raise_err=True):
 			raise ValueError(_("{0} has no versions tracked.").format(doctype))
 
 
+@request_cache
+def is_setup_complete():
+	is_setup_complete = False
+	if not frappe.db.table_exists("Installed Application"):
+		return is_setup_complete
+
+	if all(frappe.get_all("Installed Application", {"has_setup_wizard": 1}, pluck="is_setup_complete")):
+		is_setup_complete = True
+
+	return is_setup_complete
+
+
 @whitelist(allow_guest=True)
 def ping():
 	return "pong"
