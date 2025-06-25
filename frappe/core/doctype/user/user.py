@@ -148,6 +148,9 @@ class User(Document):
 	@cached_property
 	def active_sessions(self):
 		sessions = frappe.qb.DocType("Sessions")
+		if self.name != frappe.session.user:
+			# sec: only allow users to see their sessions.
+			return []
 
 		sessions_data = (
 			frappe.qb.from_(sessions)
@@ -156,14 +159,14 @@ class User(Document):
 		).run(as_dict=True)
 
 		def mask(sid: str):
-			return sid[:4] + "*" * (len(sid) - 4)
+			return sid[:4] + "*" * 10
 
 		session_docs = []
 		for session in sessions_data:
 			data = frappe.parse_json(session.sessiondata)
 			session_docs.append(
 				{
-					"name": mask(session.sid),
+					"name": sha256_hash(session.sid),
 					"id": mask(session.sid),
 					"owner": session.user,
 					"modified_by": session.user,
@@ -1414,3 +1417,20 @@ def impersonate(user: str, reason: str):
 	notification.set("type", "Alert")
 	notification.insert(ignore_permissions=True)
 	frappe.local.login_manager.impersonate(user)
+
+
+@frappe.whitelist()
+@rate_limit(limit=10, seconds=60 * 60, methods="POST")
+def clear_session(sid_hash: str):
+	from frappe.sessions import delete_session
+
+	sessions = frappe.qb.DocType("Sessions")
+	sessions_data = (
+		frappe.qb.from_(sessions).select(sessions.sid).where(sessions.user == frappe.session.user)
+	).run(pluck=True)
+
+	for session in sessions_data:
+		if sha256_hash(session) == sid_hash:
+			delete_session(sid=session, reason="Force Logged out by the user", user=frappe.session.user)
+			frappe.toast(_("Successfully signed out"))
+			return

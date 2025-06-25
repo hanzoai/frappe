@@ -437,3 +437,11 @@ function get_roles_for_editing_user() {
 			.map((perm) => perm.role) || ["System Manager"]
 	);
 }
+
+frappe.ui.form.on("User Session Display", {
+	sign_out(frm, doctype, name) {
+		frappe
+			.xcall("frappe.core.doctype.user.user.clear_session", { sid_hash: name })
+			.then(() => frm.reload_doc());
+	},
+});

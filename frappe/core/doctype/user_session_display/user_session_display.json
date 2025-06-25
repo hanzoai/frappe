@@ -7,8 +7,11 @@
  "field_order": [
   "id",
   "ip_address",
+  "column_break_cjgl",
   "session_created",
-  "last_updated"
+  "last_updated",
+  "actions_section",
+  "sign_out"
  ],
  "fields": [
   {
@@ -34,6 +37,20 @@
    "fieldtype": "Datetime",
    "in_list_view": 1,
    "label": "Last Updated"
+  },
+  {
+   "fieldname": "sign_out",
+   "fieldtype": "Button",
+   "label": "Sign Out"
+  },
+  {
+   "fieldname": "column_break_cjgl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "actions_section",
+   "fieldtype": "Section Break",
+   "label": "Actions"
   }
  ],
  "grid_page_length": 50,
@@ -41,7 +58,7 @@
  "is_virtual": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-23 14:25:15.690896",
+ "modified": "2025-06-25 14:09:28.616334",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User Session Display",
