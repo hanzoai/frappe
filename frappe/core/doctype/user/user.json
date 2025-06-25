@@ -111,7 +111,9 @@
   "column_break_65",
   "api_secret",
   "onboarding_status",
-  "connections_tab"
+  "connections_tab",
+  "sessions_tab",
+  "active_sessions"
  ],
  "fields": [
   {
@@ -834,6 +836,17 @@
    "fieldname": "show_absolute_datetime_in_timeline",
    "fieldtype": "Check",
    "label": "Show Absolute Datetime in Timeline"
+  },
+  {
+   "fieldname": "sessions_tab",
+   "fieldtype": "Tab Break",
+   "label": "Sessions"
+  },
+  {
+   "fieldname": "active_sessions",
+   "fieldtype": "Table",
+   "label": "Active Sessions",
+   "options": "User Session Display"
   }
  ],
  "icon": "fa fa-user",
@@ -892,7 +905,7 @@
   }
  ],
  "make_attachments_public": 1,
- "modified": "2025-06-05 23:55:27.884061",
+ "modified": "2025-06-23 14:24:20.505385",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",

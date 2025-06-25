@@ -3,6 +3,7 @@
 
 from collections.abc import Iterable
 from datetime import timedelta
+from functools import cached_property
 
 import frappe
 import frappe.defaults
@@ -62,9 +63,11 @@ class User(Document):
 		from frappe.core.doctype.has_role.has_role import HasRole
 		from frappe.core.doctype.user_email.user_email import UserEmail
 		from frappe.core.doctype.user_role_profile.user_role_profile import UserRoleProfile
+		from frappe.core.doctype.user_session_display.user_session_display import UserSessionDisplay
 		from frappe.core.doctype.user_social_login.user_social_login import UserSocialLogin
 		from frappe.types import DF
 
+		active_sessions: DF.Table[UserSessionDisplay]
 		allowed_in_mentions: DF.Check
 		api_key: DF.Data | None
 		api_secret: DF.Password | None
@@ -141,6 +144,35 @@ class User(Document):
 	# end: auto-generated types
 
 	__new_password = None
+
+	@cached_property
+	def active_sessions(self):
+		sessions = frappe.qb.DocType("Sessions")
+
+		sessions_data = (
+			frappe.qb.from_(sessions)
+			.select(sessions.user, sessions.sessiondata, sessions.sid)
+			.where(sessions.user == self.name)
+		).run(as_dict=True)
+
+		def mask(sid: str):
+			return sid[:4] + "*" * (len(sid) - 4)
+
+		session_docs = []
+		for session in sessions_data:
+			data = frappe.parse_json(session.sessiondata)
+			session_docs.append(
+				{
+					"name": mask(session.sid),
+					"id": mask(session.sid),
+					"owner": session.user,
+					"modified_by": session.user,
+					"ip_address": data.session_ip,
+					"last_updated": data.last_updated,
+					"session_created": data.creation,
+				}
+			)
+		return session_docs
 
 	def __setup__(self):
 		# because it is handled separately
