@@ -590,6 +590,8 @@ class Document(BaseDocument):
 	def update_child_table(self, fieldname: str, df: Optional["DocField"] = None):
 		"""sync child table for given fieldname"""
 		df: DocField = df or self.meta.get_field(fieldname)
+		if df.is_virtual:
+			return
 		all_rows = self.get(df.fieldname)
 
 		# delete rows that do not match the ones in the document
