@@ -6,7 +6,9 @@
  "engine": "InnoDB",
  "field_order": [
   "id",
+  "current",
   "ip_address",
+  "user_agent",
   "column_break_cjgl",
   "session_created",
   "last_updated",
@@ -51,6 +53,18 @@
    "fieldname": "actions_section",
    "fieldtype": "Section Break",
    "label": "Actions"
+  },
+  {
+   "default": "0",
+   "fieldname": "current",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Current?"
+  },
+  {
+   "fieldname": "user_agent",
+   "fieldtype": "Small Text",
+   "label": "User Agent"
   }
  ],
  "grid_page_length": 50,
@@ -58,7 +72,7 @@
  "is_virtual": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-25 14:09:28.616334",
+ "modified": "2025-06-25 14:34:28.765780",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User Session Display",

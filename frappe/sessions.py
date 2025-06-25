@@ -256,6 +256,9 @@ class Session:
 		self.data.data.user = self.user
 		self.data.data.session_ip = frappe.local.request_ip
 
+		if frappe.request:
+			self.data.data.user_agent = frappe.request.headers.get("User-Agent")
+
 		if session_end:
 			self.data.data.session_end = session_end
 

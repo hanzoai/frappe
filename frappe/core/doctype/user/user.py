@@ -164,15 +164,18 @@ class User(Document):
 		session_docs = []
 		for session in sessions_data:
 			data = frappe.parse_json(session.sessiondata)
+			sid_hash = sha256_hash(session.sid)
 			session_docs.append(
 				{
-					"name": sha256_hash(session.sid),
-					"id": mask(session.sid),
+					"name": sid_hash,
+					"id": mask(sid_hash),
 					"owner": session.user,
 					"modified_by": session.user,
 					"ip_address": data.session_ip,
 					"last_updated": data.last_updated,
+					"current": session.sid == frappe.session.sid,
 					"session_created": data.creation,
+					"user_agent": data.user_agent,
 				}
 			)
 		return session_docs

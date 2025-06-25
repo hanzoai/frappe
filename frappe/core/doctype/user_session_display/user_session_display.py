@@ -14,6 +14,7 @@ class UserSessionDisplay(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
+		current: DF.Check
 		id: DF.Data | None
 		ip_address: DF.Data | None
 		last_updated: DF.Datetime | None
@@ -21,6 +22,7 @@ class UserSessionDisplay(Document):
 		parentfield: DF.Data
 		parenttype: DF.Data
 		session_created: DF.Datetime | None
+		user_agent: DF.SmallText | None
 	# end: auto-generated types
 
 	def db_insert(self, *args, **kwargs):
