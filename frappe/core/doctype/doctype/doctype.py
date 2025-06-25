@@ -1643,10 +1643,18 @@ def validate_fields(meta: Meta):
 
 		if meta.is_virtual and not child_doctype_meta.is_virtual:
 			frappe.throw(
-				_("Cannot put a non-virtual Child Table {0} for field {1} on Virtual parent").format(
+				_("Child Table {0} for field {1} must be virtual").format(
 					frappe.bold(doctype), frappe.bold(docfield.fieldname)
 				),
 				title=_("Invalid Option"),
+			)
+
+		if not meta.is_virtual and child_doctype_meta.is_virtual and not docfield.is_virtual:
+			frappe.throw(
+				_("Field {0} must be a virtual field to support virtual doctype.").format(
+					frappe.bold(docfield.fieldname)
+				),
+				title=_("Virtual tabels must be virtual fields"),
 			)
 
 	def check_max_height(docfield):

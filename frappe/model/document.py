@@ -273,7 +273,11 @@ class Document(BaseDocument):
 
 		for fieldname, child_doctype in self._table_fieldnames.items():
 			# Make sure not to query the DB for a child table, if it is a virtual one.
-			if not is_doctype and is_virtual_doctype(child_doctype):
+			if (
+				not is_doctype
+				and is_virtual_doctype(child_doctype)
+				and self.meta.get_field(fieldname).is_virtual
+			):
 				# Users must specify non-data descriptor/cached_property for computed table
 				# Remove previous value if any, required for reload.
 				self.__dict__.pop(fieldname, None)
