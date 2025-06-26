@@ -253,14 +253,8 @@ class DatabaseQuery:
 
 	def get_masked_fields(self):
 		"""Get masked fields for the doctype"""
-		# TODO: store in session to avoid multiple calls
-		if not self.doctype:
-			return []
 
 		meta = self.get_meta(self.doctype)
-
-		if not meta:
-			return []
 
 		return meta.get_masked_fields()
 
