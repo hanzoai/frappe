@@ -834,17 +834,6 @@ def get_site_info():
 	return orjson.loads(frappe.as_json(site_info))
 
 
-def parse_json(val: str):
-	"""
-	Parses json if string else return
-	"""
-	if isinstance(val, str):
-		val = orjson.loads(val)
-	if isinstance(val, dict):
-		val = frappe._dict(val)
-	return val
-
-
 def get_db_count(*args):
 	"""
 	Pass a doctype or a series of doctypes to get the count of docs in them.

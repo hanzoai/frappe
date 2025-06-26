@@ -27,7 +27,7 @@ import frappe.sessions
 import frappe.utils
 from frappe import _
 from frappe.core.doctype.access_log.access_log import make_access_log
-from frappe.utils import format_timedelta
+from frappe.utils import format_timedelta, orjson_dumps
 
 if TYPE_CHECKING:
 	from frappe.core.doctype.file.file import File
@@ -150,7 +150,7 @@ def as_json():
 		del frappe.local.response["http_status_code"]
 
 	response.mimetype = "application/json"
-	response.data = dump_response(frappe.local.response)
+	response.data = orjson_dumps(frappe.local.response, default=json_handler)
 	return response
 
 
@@ -257,11 +257,6 @@ def json_handler(obj):
 
 	else:
 		raise TypeError(f"""Object of type {type(obj)} with value of {obj!r} is not JSON serializable""")
-
-
-dump_response = functools.partial(
-	orjson.dumps, default=json_handler, option=orjson.OPT_PASSTHROUGH_DATETIME | orjson.OPT_NON_STR_KEYS
-)
 
 
 def as_page():
