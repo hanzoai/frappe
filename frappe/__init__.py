@@ -34,6 +34,7 @@ from typing import (
 )
 
 import click
+import orjson
 from werkzeug.datastructures import Headers
 
 import frappe
@@ -1265,7 +1266,7 @@ def get_installed_apps(*, _ensure_on_bench: bool = False) -> list[str]:
 	if not db:
 		connect()
 
-	installed = json.loads(db.get_global("installed_apps") or "[]")
+	installed = orjson.loads(db.get_global("installed_apps") or "[]")
 
 	if _ensure_on_bench:
 		all_apps = cache.get_value("all_apps", get_all_apps)
