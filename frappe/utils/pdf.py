@@ -384,3 +384,30 @@ def get_wkhtmltopdf_version():
 			pass
 
 	return wkhtmltopdf_version or "0"
+
+
+def is_pdf_safe(pdf_path):
+	reader = PdfReader(pdf_path)
+
+	def has_javascript(obj):
+		if isinstance(obj, dict):
+			for key, value in obj.items():
+				if key in ("/JS", "/JavaScript"):
+					return True
+				if has_javascript(value):
+					return True
+		elif isinstance(obj, list):
+			for item in obj:
+				if has_javascript(item):
+					return True
+		return False
+
+	root = reader.trailer.get("/Root", {})
+	if has_javascript(root):
+		return False
+
+	for page in reader.pages:
+		if has_javascript(page):
+			return False
+
+	return True
