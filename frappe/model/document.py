@@ -979,6 +979,7 @@ class Document(BaseDocument):
 			return
 
 		# check for child tables
+		print(high_permlevel_fields, "high_permlevel_fields \n\n\n")
 		for df in self.meta.get_table_fields():
 			high_permlevel_fields = frappe.get_meta(df.options).get_high_permlevel_fields()
 			if high_permlevel_fields:

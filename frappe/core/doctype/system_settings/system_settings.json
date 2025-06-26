@@ -28,7 +28,6 @@
   "show_absolute_datetime_in_timeline",
   "permissions",
   "apply_strict_user_permissions",
-  "enable_data_masking",
   "column_break_21",
   "allow_older_web_view_links",
   "security_tab",
@@ -719,12 +718,6 @@
    "label": "Show Absolute Datetime in Timeline"
   },
   {
-   "default": "0",
-   "fieldname": "enable_data_masking",
-   "fieldtype": "Check",
-   "label": "Enable Data Masking"
-  },
-  {
    "fieldname": "api_logging_section",
    "fieldtype": "Section Break",
    "label": "API Logging"
@@ -739,7 +732,7 @@
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2025-06-10 14:54:41.151334",
+ "modified": "2025-06-26 13:03:49.011134",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",

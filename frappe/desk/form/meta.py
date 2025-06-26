@@ -60,22 +60,17 @@ def mask_protected_fields(meta):
 	):
 		return meta
 
-	if is_data_masking_enabled():
-		for df in meta.fields:
-			if df.mask and not meta.has_permlevel_access_to(
-				fieldname=df.fieldname, df=df, permission_type="mask"
-			):
-				# store orignal fieldtype and change fieldtype to Data
-				df.read_only = 1
-				df.mask_readonly = 1
-				df.set("old_fieldtype", df.get("old_fieldtype") or df.fieldtype)
-				if df.fieldtype != "Data":
-					df.fieldtype = "Data"
+	for df in meta.fields:
+		if df.mask and not meta.has_permlevel_access_to(
+			fieldname=df.fieldname, df=df, permission_type="mask"
+		):
+			# store orignal fieldtype and change fieldtype to Data
+			df.read_only = 1
+			df.mask_readonly = 1
+			df.set("old_fieldtype", df.get("old_fieldtype") or df.fieldtype)
+			if df.fieldtype != "Data":
+				df.fieldtype = "Data"
 	return meta
-
-
-def is_data_masking_enabled():
-	return frappe.db.get_single_value("System Settings", "enable_data_masking")
 
 
 class FormMeta(Meta):

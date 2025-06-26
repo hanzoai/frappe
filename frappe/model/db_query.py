@@ -659,6 +659,16 @@ from {tables}
 				ignore_virtual=True,
 			)
 		)
+
+		# get_permitted_field = get_permitted_fields(
+		# 	doctype=self.doctype,
+		# 	parenttype=self.parent_doctype,
+		# 	permission_type=self.permission_map.get(self.doctype),
+		# 	ignore_virtual=True,
+		# )
+
+		print(self.doctype, self.permission_map.get(self.doctype), "permitted_fields \n\n\n\n")
+		# print(get_permitted_field, "get_permitted_field \n\n\n\n")
 		permitted_child_table_fields = {}
 
 		for i, field in enumerate(self.fields):
