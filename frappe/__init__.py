@@ -744,7 +744,7 @@ def only_for(roles: list[str] | tuple[str] | str, message=False):
 	:param roles: Permitted role(s)
 	"""
 
-	if in_test or local.session.user == "Administrator":
+	if local.session.user == "Administrator":
 		return
 
 	if isinstance(roles, str):
