@@ -175,12 +175,11 @@ class TestReport(IntegrationTestCase):
 		)
 
 	def test_report_permissions(self):
-		frappe.set_user("test@example.com")
-		frappe.db.delete("Has Role", {"parent": frappe.session.user, "role": "Test Has Role"})
-		frappe.db.commit()
+		# create role "Test Has Role"
 		if not frappe.db.exists("Role", "Test Has Role"):
 			frappe.get_doc({"doctype": "Role", "role_name": "Test Has Role"}).insert(ignore_permissions=True)
 
+		# create report "Test Report"
 		if not frappe.db.exists("Report", "Test Report"):
 			report = frappe.get_doc(
 				{
@@ -195,8 +194,10 @@ class TestReport(IntegrationTestCase):
 		else:
 			report = frappe.get_doc("Report", "Test Report")
 
-		self.assertNotEqual(report.is_permitted(), True)
-		frappe.set_user("Administrator")
+		with self.set_user("test@example.com"):
+			# remove role "Test Has Role" from user if found
+			frappe.db.delete("Has Role", {"parent": frappe.session.user, "role": "Test Has Role"})
+			self.assertNotEqual(report.is_permitted(), True)
 
 	def test_report_custom_permissions(self):
 		frappe.set_user("test@example.com")
