@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Framework VERSION\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
-"POT-Creation-Date: 2025-06-27 08:47+0000\n"
-"PO-Revision-Date: 2025-06-27 08:47+0000\n"
+"POT-Creation-Date: 2025-06-29 09:35+0000\n"
+"PO-Revision-Date: 2025-06-29 09:35+0000\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: developers@frappe.io\n"
 "MIME-Version: 1.0\n"
@@ -13234,7 +13234,7 @@ msgstr ""
 msgid "Invalid redirect regex in row #{}: {}"
 msgstr ""
 
-#: frappe/app.py:316
+#: frappe/app.py:321
 msgid "Invalid request arguments"
 msgstr ""
 
@@ -16941,7 +16941,7 @@ msgstr ""
 msgid "Not Equals"
 msgstr ""
 
-#: frappe/app.py:366 frappe/www/404.html:3
+#: frappe/app.py:371 frappe/www/404.html:3
 msgid "Not Found"
 msgstr ""
 
@@ -16967,7 +16967,7 @@ msgstr ""
 msgid "Not Nullable"
 msgstr ""
 
-#: frappe/__init__.py:762 frappe/app.py:359 frappe/desk/calendar.py:26
+#: frappe/__init__.py:762 frappe/app.py:364 frappe/desk/calendar.py:26
 #: frappe/public/js/frappe/web_form/webform_script.js:15
 #: frappe/website/doctype/web_form/web_form.py:708
 #: frappe/website/page_renderers/not_permitted_page.py:22
@@ -23075,7 +23075,7 @@ msgstr ""
 msgid "Server Action"
 msgstr ""
 
-#: frappe/app.py:375 frappe/public/js/frappe/request.js:611
+#: frappe/app.py:380 frappe/public/js/frappe/request.js:611
 #: frappe/www/error.html:36 frappe/www/error.py:15
 msgid "Server Error"
 msgstr ""
@@ -23141,7 +23141,7 @@ msgstr ""
 msgid "Session Defaults Saved"
 msgstr ""
 
-#: frappe/app.py:352
+#: frappe/app.py:357
 msgid "Session Expired"
 msgstr ""
 
@@ -25693,7 +25693,7 @@ msgstr ""
 msgid "The reset password link has either been used before or is invalid"
 msgstr ""
 
-#: frappe/app.py:367 frappe/public/js/frappe/request.js:149
+#: frappe/app.py:372 frappe/public/js/frappe/request.js:149
 msgid "The resource you are looking for is not available"
 msgstr ""
 
@@ -27161,7 +27161,7 @@ msgstr ""
 msgid "Unassign Condition"
 msgstr ""
 
-#: frappe/app.py:375
+#: frappe/app.py:380
 msgid "Uncaught Exception"
 msgstr ""
 
@@ -29464,7 +29464,7 @@ msgstr ""
 msgid "You do not have enough permissions to access this resource. Please contact your manager to get access."
 msgstr ""
 
-#: frappe/app.py:360
+#: frappe/app.py:365
 msgid "You do not have enough permissions to complete the action"
 msgstr ""
 
@@ -29751,7 +29751,7 @@ msgstr ""
 msgid "Your query has been received. We will reply back shortly. If you have any additional information, please reply to this mail."
 msgstr ""
 
-#: frappe/app.py:353
+#: frappe/app.py:358
 msgid "Your session has expired, please login again to continue."
 msgstr ""
 
