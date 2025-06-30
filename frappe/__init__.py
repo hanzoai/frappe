@@ -1602,7 +1602,7 @@ def copy_doc(doc: "Document", ignore_no_copy: bool = True) -> "Document":
 	if not in_test:
 		fields_to_clear.append("docstatus")
 
-	if isinstance(doc, BaseDocument) or hasattr(doc, "as_dict"):
+	if isinstance(doc, BaseDocument):
 		d = doc.as_dict()
 	elif isinstance(doc, MappingProxyType):  # global test record
 		d = dict(doc)
