@@ -274,11 +274,16 @@ class TestAutoRepeat(IntegrationTestCase):
 
 		new_todo = frappe.get_doc("ToDo", new_todo)
 		self.assertEqual(todo.get("description"), new_todo.get("description"))
-		self.assertListEqual(list(new_todo.get_assigned_users()), ["Administrator", "Guest"])
+		self.assertListEqual(
+			sorted(list(new_todo.get_assigned_users())),
+			sorted(["Administrator", "Guest"]),
+		)
 
 	def test_auto_repeat_assignee_with_separate_documents(self):
 		todo = frappe.get_doc(
-			doctype="ToDo", description="test assignee todo with multiple doc", assigned_by="Administrator"
+			doctype="ToDo",
+			description="test assignee todo with multiple doc",
+			assigned_by="Administrator",
 		).insert()
 
 		doc = make_auto_repeat(reference_document=todo.name)
