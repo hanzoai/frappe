@@ -47,7 +47,7 @@ class PrintFormat(Document):
 		print_format_type: DF.Literal["Jinja", "JS"]
 		raw_commands: DF.Code | None
 		raw_printing: DF.Check
-		report: DF.Link
+		report: DF.Link | None
 		show_section_headings: DF.Check
 		standard: DF.Literal["No", "Yes"]
 	# end: auto-generated types
