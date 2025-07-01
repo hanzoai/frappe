@@ -285,14 +285,13 @@
    "in_standard_filter": 1,
    "label": "Report",
    "mandatory_depends_on": "eval:doc.print_format_for == \"Report\"",
-   "options": "Report",
-   "reqd": 1
+   "options": "Report"
   }
  ],
  "icon": "fa fa-print",
  "idx": 1,
  "links": [],
- "modified": "2025-07-01 16:25:00.431623",
+ "modified": "2025-07-01 18:02:07.194243",
  "modified_by": "Administrator",
  "module": "Printing",
  "name": "Print Format",
