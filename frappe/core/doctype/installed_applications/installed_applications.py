@@ -67,6 +67,8 @@ class InstalledApplications(Document):
 			return
 
 		frappe.reload_doc("core", "doctype", "installed_application")
+		frappe.reload_doc("core", "doctype", "installed_applications")
+		frappe.reload_doc("integrations", "doctype", "webhook")
 
 
 @frappe.whitelist()
