@@ -26,7 +26,7 @@ class PrintFormat(Document):
 		custom_format: DF.Check
 		default_print_language: DF.Link | None
 		disabled: DF.Check
-		doc_type: DF.Link
+		doc_type: DF.Link | None
 		font: DF.Data | None
 		font_size: DF.Int
 		format_data: DF.Code | None
@@ -43,9 +43,11 @@ class PrintFormat(Document):
 		pdf_generator: DF.Literal["wkhtmltopdf"]
 		print_format_builder: DF.Check
 		print_format_builder_beta: DF.Check
+		print_format_for: DF.Literal["Doctype", "Report"]
 		print_format_type: DF.Literal["Jinja", "JS"]
 		raw_commands: DF.Code | None
 		raw_printing: DF.Check
+		report: DF.Link
 		show_section_headings: DF.Check
 		standard: DF.Literal["No", "Yes"]
 	# end: auto-generated types
