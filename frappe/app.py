@@ -125,6 +125,11 @@ def application(request: Request):
 		elif request.path.startswith("/private/files/"):
 			response = frappe.utils.response.download_private_file(request.path)
 
+		elif request.path.startswith("/.well-known/oauth-authorization-server") and request.method == "GET":
+			from frappe.integrations.oauth2 import get_authorization_server_metadata
+
+			response = get_authorization_server_metadata()
+
 		elif request.method in ("GET", "HEAD", "POST"):
 			response = get_response()
 

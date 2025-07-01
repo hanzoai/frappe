@@ -1,5 +1,5 @@
 import json
-from urllib.parse import quote, urlencode
+from urllib.parse import quote, urlencode, urlparse
 
 from oauthlib.oauth2 import FatalClientError, OAuth2Error
 from oauthlib.openid.connect.core.endpoints.pre_configured import Server as WebApplicationServer
@@ -244,3 +244,49 @@ def introspect_token(token=None, token_type_hint=None):
 
 	except Exception:
 		frappe.local.response = frappe._dict({"active": False})
+
+
+def get_authorization_server_metadata():
+	"""
+	Creates response for the /.well-known/oauth-authorization-server endpoint.
+
+	Reference: https://datatracker.ietf.org/doc/html/rfc8414
+	"""
+	from werkzeug import Response
+
+	response = Response()
+	response.mimetype = "application/json"
+	response.data = frappe.as_json(_get_authorization_server_metadata())
+	return response
+
+
+def _get_authorization_server_metadata():
+	"""
+	Responds with the authorization server metadata.
+
+	Reference: https://datatracker.ietf.org/doc/html/rfc8414#section-2
+
+	Note:
+		Value for response_types_supported does not include token because, PKCE
+		token flow is not supported. Responding with token in the redirect URL
+		is an unsafe practice, so code is the only supported response type.
+	"""
+
+	request_url = urlparse(frappe.request.url)
+	issuer = f"{request_url.scheme}://{request_url.netloc}"
+	return dict(
+		issuer=issuer,
+		authorization_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.authorize",
+		token_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.get_token",
+		response_types_supported=["code"],
+		response_modes_supported=["query"],
+		grant_types_supported=["authorization_code", "refresh_token"],
+		token_endpoint_auth_methods_supported=["client_secret_basic"],
+		service_documentation="https://docs.frappe.io/framework/user/en/guides/integration/how_to_set_up_oauth#add-a-client-app",
+		revocation_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.revoke_token",
+		revocation_endpoint_auth_methods_supported=["client_secret_basic"],
+		introspection_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.introspect_token",
+		userinfo_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.openid_profile",
+		# registration_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.register_client", # TODO: RFC 7591
+		# scopes_supported=[],
+	)
