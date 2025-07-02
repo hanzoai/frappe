@@ -45,14 +45,14 @@
  ],
  "fields": [
   {
-   "depends_on": "eval:doc.print_format_for == \"Doctype\"",
+   "depends_on": "eval:doc.print_format_for == \"DocType\"",
    "fieldname": "doc_type",
    "fieldtype": "Link",
    "in_filter": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "DocType",
-   "mandatory_depends_on": "eval:doc.print_format_for == \"Doctype\"",
+   "mandatory_depends_on": "eval:doc.print_format_for == \"DocType\"",
    "options": "DocType"
   },
   {
@@ -270,11 +270,11 @@
    "options": "wkhtmltopdf"
   },
   {
-   "default": "Doctype",
+   "default": "DocType",
    "fieldname": "print_format_for",
    "fieldtype": "Select",
    "label": "Print Format For",
-   "options": "Doctype\nReport"
+   "options": "DocType\nReport"
   },
   {
    "depends_on": "eval:doc.print_format_for == \"Report\"",
@@ -291,7 +291,7 @@
  "icon": "fa fa-print",
  "idx": 1,
  "links": [],
- "modified": "2025-07-01 18:02:07.194243",
+ "modified": "2025-07-02 11:07:42.812225",
  "modified_by": "Administrator",
  "module": "Printing",
  "name": "Print Format",
