@@ -21,12 +21,19 @@ class OAuthClient(Document):
 		app_name: DF.Data
 		client_id: DF.Data | None
 		client_secret: DF.Data | None
+		client_uri: DF.Data | None
+		contacts: DF.SmallText | None
 		default_redirect_uri: DF.Data
 		grant_type: DF.Literal["Authorization Code", "Implicit"]
+		logo_uri: DF.Data | None
+		policy_uri: DF.Data | None
 		redirect_uris: DF.Text | None
 		response_type: DF.Literal["Code", "Token"]
 		scopes: DF.Text
 		skip_authorization: DF.Check
+		software_id: DF.Data | None
+		software_version: DF.Data | None
+		tos_uri: DF.Data | None
 		user: DF.Link | None
 	# end: auto-generated types
 

@@ -1,12 +1,21 @@
+import datetime
 import json
+from typing import cast
 from urllib.parse import quote, urlencode, urlparse
 
 from oauthlib.oauth2 import FatalClientError, OAuth2Error
 from oauthlib.openid.connect.core.endpoints.pre_configured import Server as WebApplicationServer
+from pydantic import ValidationError
+from werkzeug import Response
 
 import frappe
 from frappe.integrations.doctype.oauth_provider_settings.oauth_provider_settings import (
 	get_oauth_settings,
+)
+from frappe.integrations.utils import (
+	OAuth2DynamicClientMetadata,
+	create_new_oauth_client,
+	validate_dynamic_client_metadata,
 )
 from frappe.oauth import (
 	OAuthWebRequestValidator,
@@ -287,6 +296,73 @@ def _get_authorization_server_metadata():
 		revocation_endpoint_auth_methods_supported=["client_secret_basic"],
 		introspection_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.introspect_token",
 		userinfo_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.openid_profile",
-		# registration_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.register_client", # TODO: RFC 7591
-		# scopes_supported=[],
+		registration_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.register_client",
 	)
+
+
+@frappe.whitelist(allow_guest=True)
+def register_client():
+	"""
+	Registers an OAuth client.
+
+	Reference: https://datatracker.ietf.org/doc/html/rfc7591
+	"""
+
+	response = Response()
+	response.mimetype = "application/json"
+	data = frappe.request.json
+
+	if data is None:
+		response.status_code = 400
+		response.data = frappe.as_json(
+			{
+				"error": "invalid_client_metadata",
+				"error_description": "Request body is empty",
+			}
+		)
+		return response
+
+	try:
+		client = OAuth2DynamicClientMetadata.model_validate(data)
+	except ValidationError as e:
+		response.status_code = 400
+		response.data = frappe.as_json({"error": "invalid_client_metadata", "error_description": str(e)})
+		return response
+
+	if error := validate_dynamic_client_metadata(client):
+		response.status_code = 400
+		response.data = frappe.as_json({"error": "invalid_client_metadata", "error_description": error})
+		return response
+
+	doc = create_new_oauth_client(client)
+	if isinstance(doc.creation, datetime.datetime):
+		client_id_issued_at = doc.creation.isoformat()
+	else:
+		client_id_issued_at = doc.creation
+
+	response_data = {
+		"client_id": doc.client_id,
+		"client_secret": doc.client_secret,
+		"client_id_issued_at": client_id_issued_at,
+		"client_secret_expires_at": 0,
+		# Response should include registered metadata
+		"client_name": doc.app_name,
+		"client_uri": doc.client_uri,
+		"grant_types": ["authorization_code"],
+		"response_types": ["code"],
+		"logo_uri": doc.logo_uri,
+		"tos_uri": doc.tos_uri,
+		"policy_uri": doc.policy_uri,
+		"software_id": doc.software_id,
+		"software_version": doc.software_version,
+		"scope": doc.scopes,
+		"redirect_uris": doc.redirect_uris.split("\n") if doc.redirect_uris else None,
+		"contacts": doc.contacts.split("\n") if doc.contacts else None,
+	}
+
+	for k in list(response_data.keys()):
+		if k in response_data and response_data[k] is None:
+			del response_data[k]
+
+	response.data = frappe.as_json(response_data)
+	return response
