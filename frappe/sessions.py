@@ -268,6 +268,7 @@ class Session:
 				{
 					"last_updated": frappe.utils.now(),
 					"session_expiry": get_expiry_period(self.device),
+					"creation": frappe.utils.now(),
 					"full_name": self.full_name,
 					"user_type": self.user_type,
 					"device": self.device,
