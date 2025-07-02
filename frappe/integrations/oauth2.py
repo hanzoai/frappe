@@ -7,6 +7,7 @@ from oauthlib.oauth2 import FatalClientError, OAuth2Error
 from oauthlib.openid.connect.core.endpoints.pre_configured import Server as WebApplicationServer
 from pydantic import ValidationError
 from werkzeug import Response
+from werkzeug.exceptions import NotFound
 
 import frappe
 from frappe.integrations.doctype.oauth_provider_settings.oauth_provider_settings import (
@@ -188,10 +189,11 @@ def openid_profile(*args, **kwargs):
 		return generate_json_error_response(e)
 
 
-@frappe.whitelist(allow_guest=True)
-def openid_configuration():
+def get_openid_configuration():
+	response = Response()
+	response.mimetype = "application/json"
 	frappe_server_url = get_server_url()
-	frappe.local.response = frappe._dict(
+	response.data = frappe.as_json(
 		{
 			"issuer": frappe_server_url,
 			"authorization_endpoint": f"{frappe_server_url}/api/method/frappe.integrations.oauth2.authorize",
@@ -211,6 +213,7 @@ def openid_configuration():
 			"id_token_signing_alg_values_supported": ["HS256"],
 		}
 	)
+	return response
 
 
 @frappe.whitelist(allow_guest=True)
@@ -255,13 +258,27 @@ def introspect_token(token=None, token_type_hint=None):
 		frappe.local.response = frappe._dict({"active": False})
 
 
+def handle_wellknown(path: str):
+	"""Path handler for /.well-known/ endpoints. Invoked in app.py"""
+
+	if path.startswith("/.well-known/openid-configuration"):
+		return get_openid_configuration()
+
+	if path.startswith("/.well-known/oauth-authorization-server"):
+		return get_authorization_server_metadata()
+
+	if path.startswith("/.well-known/oauth-protected-resource"):
+		return get_protected_resource_metadata()
+
+	raise NotFound
+
+
 def get_authorization_server_metadata():
 	"""
 	Creates response for the /.well-known/oauth-authorization-server endpoint.
 
 	Reference: https://datatracker.ietf.org/doc/html/rfc8414
 	"""
-	from werkzeug import Response
 
 	response = Response()
 	response.mimetype = "application/json"
@@ -366,3 +383,6 @@ def register_client():
 
 	response.data = frappe.as_json(response_data)
 	return response
+
+
+def get_protected_resource_metadata(): ...
