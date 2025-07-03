@@ -1514,6 +1514,18 @@ class Database:
 		"""
 		raise NotImplementedError
 
+	def get_routines(self):
+		information_schema = frappe.qb.Schema("information_schema")
+		return (
+			frappe.qb.from_(information_schema.routines)
+			.select(information_schema.routines.routine_name)
+			.where(
+				(information_schema.routines.routine_type.isin(["FUNCTION", "PROCEDURE"]))
+				& (information_schema.routines.routine_schema.eq(frappe.conf.db_name))
+			)
+			.run(as_dict=1, pluck="routine_name")
+		)
+
 
 @contextmanager
 def savepoint(catch: type | tuple[type, ...] = Exception):
