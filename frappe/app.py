@@ -26,8 +26,12 @@ from frappe import _
 from frappe.auth import SAFE_HTTP_METHODS, UNSAFE_HTTP_METHODS, HTTPRequest, validate_auth
 =======
 from frappe.auth import SAFE_HTTP_METHODS, UNSAFE_HTTP_METHODS, HTTPRequest, check_request_ip, validate_auth
+<<<<<<< HEAD
 from frappe.integrations.oauth2 import handle_wellknown
 >>>>>>> 4cd8115c4c (refactor: unify how .well-known routes are handled)
+=======
+from frappe.integrations.oauth2 import get_resource_url, handle_wellknown, is_oauth_metadata_enabled
+>>>>>>> 1215afdf96 (feat(OAuth2): support RFC 9728)
 from frappe.middlewares import StaticDataMiddleware
 from frappe.permissions import handle_does_not_exist_error
 from frappe.utils import CallbackManager, cint, get_site_name
@@ -260,6 +264,23 @@ def process_response(response):
 	if hasattr(frappe.local, "conf"):
 		set_cors_headers(response)
 
+<<<<<<< HEAD
+=======
+	if response.status_code in (401, 403) and is_oauth_metadata_enabled("resource"):
+		set_authenticate_headers(response)
+
+	# Update custom headers added during request processing
+	response.headers.update(frappe.local.response_headers)
+
+	# Set cookies, only if response is non-cacheable to avoid proxy cache invalidation
+	public_cache = any("public" in h for h in response.headers.getlist("Cache-Control"))
+	if hasattr(frappe.local, "cookie_manager") and not public_cache:
+		frappe.local.cookie_manager.flush_cookies(response=response)
+
+	if frappe._dev_server:
+		response.headers.update(NO_CACHE_HEADERS)
+
+>>>>>>> 1215afdf96 (feat(OAuth2): support RFC 9728)
 
 def set_cors_headers(response):
 	if not (
@@ -294,6 +315,13 @@ def set_cors_headers(response):
 			cors_headers["Access-Control-Max-Age"] = "86400"
 
 	response.headers.extend(cors_headers)
+
+
+def set_authenticate_headers(response: Response):
+	headers = {
+		"WWW-Authenticate": f'Bearer resource_metadata="{get_resource_url()}/.well-known/oauth-protected-resource"'
+	}
+	response.headers.update(headers)
 
 
 def make_form_dict(request: Request):
