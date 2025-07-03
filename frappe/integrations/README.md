@@ -28,7 +28,7 @@ Additional features over `oauthlib` that have implemented in the Framework:
 
 - **Dynamic Client Registration**: allows a client to register itself without manual configuration by the resource owner. [RFC7591](https://datatracker.ietf.org/doc/html/rfc7591)
 - **Authorization Server Metadata Discovery**: allows a client to view the instance's auth server (itself) metadata such as auth end points. [RFC8414](https://datatracker.ietf.org/doc/html/rfc8414)
-- **Resource Server Metadata Discovery**: allows a client to view the instance's resource server metadata such as documentation, auth servers, etc. [RFC9278](https://datatracker.ietf.org/doc/html/rfc9728)
+- **Resource Server Metadata Discovery**: allows a client to view the instance's resource server metadata such as documentation, auth servers, etc. [RFC9728](https://datatracker.ietf.org/doc/html/rfc9728)
 
 ### Additional Docs
 
