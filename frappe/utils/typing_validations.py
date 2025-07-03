@@ -16,6 +16,7 @@ SLACK_DICT = {
 	bool: (int, bool, float),
 }
 T = TypeVar("T")
+ForwardRefOrStr = ForwardRef | str
 
 
 FrappePydanticConfig = ConfigDict(arbitrary_types_allowed=True)
@@ -105,19 +106,17 @@ def transform_parameter_types(func: Callable, args: tuple, kwargs: dict):
 
 	new_args, new_kwargs = list(args), kwargs
 
-	# generate kwargs dict from args
-	arg_names = func.__code__.co_varnames[: func.__code__.co_argcount]
+	if args:
+		# generate kwargs dict from args
+		arg_names = func.__code__.co_varnames[: func.__code__.co_argcount]
+		prepared_args = dict(zip(arg_names, args, strict=False))
 
-	if not args:
-		prepared_args = kwargs
-
-	elif kwargs:
-		arg_values = args or func.__defaults__ or []
-		prepared_args = dict(zip(arg_names, arg_values, strict=False))
-		prepared_args.update(kwargs)
+		if kwargs:
+			# update prepared_args with kwargs
+			prepared_args.update(kwargs)
 
 	else:
-		prepared_args = dict(zip(arg_names, args, strict=False))
+		prepared_args = kwargs
 
 	# check if type hints dont match the default values
 	func_params = frappe._get_cached_signature_params(func)[0]
@@ -130,9 +129,9 @@ def transform_parameter_types(func: Callable, args: tuple, kwargs: dict):
 		current_arg_value = prepared_args[current_arg]
 
 		# if the type is a ForwardRef or str, ignore it
-		if isinstance(current_arg_type, ForwardRef | str):
+		if isinstance(current_arg_type, ForwardRefOrStr):
 			continue
-		elif any(isinstance(x, ForwardRef | str) for x in getattr(current_arg_type, "__args__", [])):
+		elif any(isinstance(x, ForwardRefOrStr) for x in getattr(current_arg_type, "__args__", [])):
 			continue
 		# ignore unittest.mock objects
 		elif isinstance(current_arg_value, mock.Mock):
