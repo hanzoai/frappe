@@ -9,6 +9,7 @@
   "authorization_server_section",
   "show_auth_server_metadata",
   "enable_dynamic_client_registration",
+  "skip_authorization",
   "resource_server_section",
   "resource_name",
   "resource_policy_uri",
@@ -86,13 +87,20 @@
    "fieldname": "enable_dynamic_client_registration",
    "fieldtype": "Check",
    "label": "Enable Dynamic Client Registration"
+  },
+  {
+   "default": "0",
+   "description": "Allows skipping authorization if a user has active tokens.",
+   "fieldname": "skip_authorization",
+   "fieldtype": "Check",
+   "label": "Skip Authorization"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-03 12:49:31.650861",
+ "modified": "2025-07-03 14:07:31.542741",
  "modified_by": "Administrator",
  "module": "Integrations",
  "name": "OAuth Settings",

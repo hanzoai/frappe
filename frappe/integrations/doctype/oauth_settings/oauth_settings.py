@@ -22,6 +22,7 @@ class OAuthSettings(Document):
 		scopes_supported: DF.SmallText | None
 		show_auth_server_metadata: DF.Check
 		show_protected_resource_metadata: DF.Check
+		skip_authorization: DF.Check
 	# end: auto-generated types
 
 	pass

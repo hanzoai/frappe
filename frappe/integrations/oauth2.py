@@ -11,12 +11,10 @@ from werkzeug.exceptions import NotFound
 
 import frappe
 from frappe import oauth
-from frappe.integrations.doctype.oauth_provider_settings.oauth_provider_settings import (
-	get_oauth_settings,
-)
 from frappe.integrations.utils import (
 	OAuth2DynamicClientMetadata,
 	create_new_oauth_client,
+	get_oauth_settings,
 	validate_dynamic_client_metadata,
 )
 from frappe.oauth import (

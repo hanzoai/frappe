@@ -3,7 +3,7 @@
 
 import datetime
 import json
-from typing import cast
+from typing import Any, cast
 from urllib.parse import parse_qs
 
 from pydantic import BaseModel, HttpUrl
@@ -254,3 +254,17 @@ def create_new_oauth_client(client: OAuth2DynamicClientMetadata):
 
 	doc.save()
 	return doc
+
+
+def get_oauth_settings():
+	"""Return OAuth settings."""
+	settings: dict[str, Any] = frappe._dict({"skip_authorization": None})
+	if frappe.get_cached_value("OAuth Settings", "OAuth Settings", "skip_authorization"):
+		settings["skip_authorization"] = "Auto"  # based on legacy OAuth Provider Settings value
+
+	elif value := frappe.get_cached_value(
+		"OAuth Provider Settings", "OAuth Provider Settings", "skip_authorization"
+	):
+		settings["skip_authorization"] = value
+
+	return settings
