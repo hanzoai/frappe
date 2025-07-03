@@ -22,7 +22,7 @@ import frappe.recorder
 import frappe.utils.response
 from frappe import _
 from frappe.auth import SAFE_HTTP_METHODS, UNSAFE_HTTP_METHODS, HTTPRequest, check_request_ip, validate_auth
-from frappe.integrations.oauth2 import handle_wellknown
+from frappe.integrations.oauth2 import get_resource_url, handle_wellknown, is_oauth_metadata_enabled
 from frappe.middlewares import StaticDataMiddleware
 from frappe.permissions import handle_does_not_exist_error
 from frappe.utils import CallbackManager, cint, get_site_name
@@ -259,6 +259,9 @@ def process_response(response: Response):
 	if hasattr(frappe.local, "conf"):
 		set_cors_headers(response)
 
+	if response.status_code in (401, 403) and is_oauth_metadata_enabled("resource"):
+		set_authenticate_headers(response)
+
 	# Update custom headers added during request processing
 	response.headers.update(frappe.local.response_headers)
 
@@ -304,6 +307,13 @@ def set_cors_headers(response):
 			cors_headers["Access-Control-Max-Age"] = "86400"
 
 	response.headers.update(cors_headers)
+
+
+def set_authenticate_headers(response: Response):
+	headers = {
+		"WWW-Authenticate": f'Bearer resource_metadata="{get_resource_url()}/.well-known/oauth-protected-resource"'
+	}
+	response.headers.update(headers)
 
 
 def make_form_dict(request: Request):

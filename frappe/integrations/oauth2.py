@@ -1,6 +1,6 @@
 import datetime
 import json
-from typing import cast
+from typing import Literal, cast
 from urllib.parse import quote, urlencode, urlparse
 
 from oauthlib.oauth2 import FatalClientError, OAuth2Error
@@ -10,6 +10,7 @@ from werkzeug import Response
 from werkzeug.exceptions import NotFound
 
 import frappe
+from frappe import oauth
 from frappe.integrations.doctype.oauth_provider_settings.oauth_provider_settings import (
 	get_oauth_settings,
 )
@@ -264,10 +265,12 @@ def handle_wellknown(path: str):
 	if path.startswith("/.well-known/openid-configuration"):
 		return get_openid_configuration()
 
-	if path.startswith("/.well-known/oauth-authorization-server"):
+	if path.startswith("/.well-known/oauth-authorization-server") and is_oauth_metadata_enabled(
+		"auth_server"
+	):
 		return get_authorization_server_metadata()
 
-	if path.startswith("/.well-known/oauth-protected-resource"):
+	if path.startswith("/.well-known/oauth-protected-resource") and is_oauth_metadata_enabled("resource"):
 		return get_protected_resource_metadata()
 
 	raise NotFound
@@ -298,9 +301,8 @@ def _get_authorization_server_metadata():
 		is an unsafe practice, so code is the only supported response type.
 	"""
 
-	request_url = urlparse(frappe.request.url)
-	issuer = f"{request_url.scheme}://{request_url.netloc}"
-	return dict(
+	issuer = get_resource_url()
+	metadata = dict(
 		issuer=issuer,
 		authorization_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.authorize",
 		token_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.get_token",
@@ -313,8 +315,12 @@ def _get_authorization_server_metadata():
 		revocation_endpoint_auth_methods_supported=["client_secret_basic"],
 		introspection_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.introspect_token",
 		userinfo_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.openid_profile",
-		registration_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.register_client",
 	)
+
+	if frappe.get_cached_value("OAuth Settings", "OAuth Settings", "enable_dynamic_client_registration"):
+		metadata["registration_endpoint"] = f"{issuer}/api/method/frappe.integrations.oauth2.register_client"
+
+	return metadata
 
 
 @frappe.whitelist(allow_guest=True)
@@ -324,6 +330,9 @@ def register_client():
 
 	Reference: https://datatracker.ietf.org/doc/html/rfc7591
 	"""
+
+	if not frappe.get_cached_value("OAuth Settings", "OAuth Settings", "enable_dynamic_client_registration"):
+		raise NotFound
 
 	response = Response()
 	response.mimetype = "application/json"
@@ -377,12 +386,84 @@ def register_client():
 		"contacts": doc.contacts.split("\n") if doc.contacts else None,
 	}
 
-	for k in list(response_data.keys()):
-		if k in response_data and response_data[k] is None:
-			del response_data[k]
-
+	_del_none_values(response_data)
 	response.data = frappe.as_json(response_data)
 	return response
 
 
-def get_protected_resource_metadata(): ...
+def get_protected_resource_metadata():
+	"""
+	Creates response for the /.well-known/oauth-protected-resource endpoint.
+
+	Reference: https://datatracker.ietf.org/doc/html/rfc9728
+	"""
+
+	response = Response()
+	response.mimetype = "application/json"
+	response.data = frappe.as_json(_get_protected_resource_metadata())
+	return response
+
+
+def _get_protected_resource_metadata():
+	from frappe.integrations.doctype.oauth_settings.oauth_settings import OAuthSettings
+
+	# TODO:
+	# - header on 401
+	# - cache this response (5 minutes)
+	authorization_servers = frappe.get_list(
+		"Social Login Key",
+		filters={
+			"enable_social_login": True,
+			"show_in_resource_metadata": True,
+		},
+		pluck="base_url",
+	)
+	resource = get_resource_url()
+	oauth_settings = cast(OAuthSettings, frappe.get_cached_doc("OAuth Settings"))
+
+	metadata = dict(
+		resource=resource,
+		authorization_servers=[resource, *authorization_servers],
+		bearer_methods_supported=["header"],
+		resource_name=oauth_settings.resource_name,
+		resource_documentation=oauth_settings.resource_documentation,
+		resource_policy_uri=oauth_settings.resource_policy_uri,
+		resource_tos_uri=oauth_settings.resource_tos_uri,
+	)
+
+	if oauth_settings.scopes_supported is not None:
+		scopes = []
+		for _s in oauth_settings.scopes_supported.split("\n"):
+			s = _s.strip()
+			if s is None:
+				continue
+			scopes.append(s)
+
+		if scopes:
+			metadata["scopes_supported"] = scopes
+	_del_none_values(metadata)
+	return metadata
+
+
+def is_oauth_metadata_enabled(label: Literal["resource", "auth_server"]):
+	fieldname = (
+		"show_auth_server_metadata" if label == "authorization" else "show_protected_resource_metadata"
+	)
+
+	return frappe.get_cached_value(
+		"OAuth Settings",
+		"OAuth Settings",
+		fieldname,
+	)
+
+
+def get_resource_url():
+	"""Uses request URL to reflect the resource URL"""
+	request_url = urlparse(frappe.request.url)
+	return f"{request_url.scheme}://{request_url.netloc}"
+
+
+def _del_none_values(d: dict):
+	for k in list(d.keys()):
+		if k in d and d[k] is None:
+			del d[k]
