@@ -6,8 +6,10 @@ from typing import ForwardRef, TypeVar, Union
 from unittest import mock
 
 from pydantic import ConfigDict, PydanticUserError
-from pydantic import TypeAdapter as PyTypeAdapter
+from pydantic import TypeAdapter as PydanticTypeAdapter
+from pydantic import ValidationError as PydanticValidationError
 
+import frappe
 from frappe.exceptions import FrappeTypeError
 
 SLACK_DICT = {
@@ -76,11 +78,11 @@ def raise_type_error(
 @lru_cache(maxsize=2048)
 def TypeAdapter(type_):
 	try:
-		return PyTypeAdapter(type_, config=FrappePydanticConfig)
+		return PydanticTypeAdapter(type_, config=FrappePydanticConfig)
 	except PydanticUserError as e:
 		# Cannot set config for types BaseModel, TypedDict and dataclass
 		if e.code == "type-adapter-config-unused":
-			return PyTypeAdapter(type_)
+			return PydanticTypeAdapter(type_)
 
 		raise e
 
@@ -98,10 +100,6 @@ def transform_parameter_types(func: Callable, args: tuple, kwargs: dict):
 		or (len(func.__annotations__) == 1 and func.__annotations__.get("return"))
 	):
 		return args, kwargs
-
-	from pydantic import ValidationError as PyValidationError
-
-	import frappe
 
 	annotations = func.__annotations__
 	new_args, new_kwargs = list(args), kwargs
@@ -160,7 +158,7 @@ def transform_parameter_types(func: Callable, args: tuple, kwargs: dict):
 		# validate the type set using pydantic - raise a TypeError if Validation is raised or Ellipsis is returned
 		try:
 			current_arg_value_after = TypeAdapter(current_arg_type).validate_python(current_arg_value)
-		except (TypeError, PyValidationError) as e:
+		except (TypeError, PydanticValidationError) as e:
 			raise_type_error(func, current_arg, current_arg_type, current_arg_value, current_exception=e)
 
 		if isinstance(current_arg_value_after, EllipsisType):
