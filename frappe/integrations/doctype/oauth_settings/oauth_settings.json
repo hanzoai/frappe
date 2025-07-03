@@ -21,7 +21,7 @@
  ],
  "fields": [
   {
-   "description": "These settings are used when this Frappe instance functions as a resource server.",
+   "description": "These fields are used to provide resource server metadata to clients querying the \"/.well-known/oauth-protected-resource\" end point. For additional reference view: https://datatracker.ietf.org/doc/html/rfc9728",
    "fieldname": "resource_server_section",
    "fieldtype": "Section Break",
    "label": "Resource Server"
@@ -63,7 +63,7 @@
   },
   {
    "default": "1",
-   "description": "Allows clients to fetch metadata from the <code>/.well-known/oauth-authorization-server</code> endpoint.",
+   "description": "Allows clients to fetch metadata from the <code>/.well-known/oauth-authorization-server</code> endpoint. Reference: <a href=\"https://datatracker.ietf.org/doc/html/rfc8414\">RFC8414</a>",
    "fieldname": "show_auth_server_metadata",
    "fieldtype": "Check",
    "label": "Show Auth Server Metadata"
@@ -83,7 +83,7 @@
   },
   {
    "default": "1",
-   "description": "Allows clients to register themselves without manual intervention. Registration creates a <b>OAuth Client</b> entry.",
+   "description": "Allows clients to register themselves without manual intervention. Registration creates a <b>OAuth Client</b> entry. Reference: <a href=\"https://datatracker.ietf.org/doc/html/rfc7591\">RFC7591</a>",
    "fieldname": "enable_dynamic_client_registration",
    "fieldtype": "Check",
    "label": "Enable Dynamic Client Registration"
@@ -100,7 +100,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-03 14:07:31.542741",
+ "modified": "2025-07-03 14:29:35.314601",
  "modified_by": "Administrator",
  "module": "Integrations",
  "name": "OAuth Settings",
