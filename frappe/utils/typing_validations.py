@@ -93,15 +93,16 @@ def transform_parameter_types(func: Callable, args: tuple, kwargs: dict):
 	defined on the function.
 	"""
 
+	annotations = func.__annotations__
+
 	if (
 		not (args or kwargs)
-		or not func.__annotations__
+		or not annotations
 		# No input validations to perform
-		or (len(func.__annotations__) == 1 and func.__annotations__.get("return"))
+		or (len(annotations) == 1 and "return" in annotations)
 	):
 		return args, kwargs
 
-	annotations = func.__annotations__
 	new_args, new_kwargs = list(args), kwargs
 
 	# generate kwargs dict from args
