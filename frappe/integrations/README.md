@@ -2,7 +2,7 @@
 
 ## OAuth 2
 
-Frappe Framwork uses [`oauthlib`](https://github.com/oauthlib/oauthlib) to manage OAuth2 requirements. A Frappe instance can function as all of these:
+Frappe Framework uses [`oauthlib`](https://github.com/oauthlib/oauthlib) to manage OAuth2 requirements. A Frappe instance can function as all of these:
 
 1. **Resource Server**: contains resources, for example the data in your DocTypes.
 2. **Authorization Server**: server that issues tokens to access some resource.

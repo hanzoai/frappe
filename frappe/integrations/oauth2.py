@@ -444,14 +444,19 @@ def _get_protected_resource_metadata():
 
 
 def is_oauth_metadata_enabled(label: Literal["resource", "auth_server"]):
-	fieldname = (
-		"show_auth_server_metadata" if label == "authorization" else "show_protected_resource_metadata"
-	)
+	if label not in ["resource", "auth_server"]:
+		return False
 
-	return frappe.get_cached_value(
-		"OAuth Settings",
-		"OAuth Settings",
-		fieldname,
+	fieldname = "show_auth_server_metadata"
+	if label == "resource":
+		fieldname = "show_protected_resource_metadata"
+
+	return bool(
+		frappe.get_cached_value(
+			"OAuth Settings",
+			"OAuth Settings",
+			fieldname,
+		)
 	)
 
 

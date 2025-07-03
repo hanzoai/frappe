@@ -210,11 +210,11 @@ def validate_dynamic_client_metadata(client: OAuth2DynamicClientMetadata):
 	if client.token_endpoint_auth_method not in ["client_secret_basic"]:
 		invalidation_reasons.append("only client_secret_basic token_endpoint_auth_method is supported")
 
-	if client.grant_types not in ["authorization_code"]:
+	if client.grant_types and not set(client.grant_types).issubset({"authorization_code", "refresh_token"}):
 		invalidation_reasons.append("only authorization_code and refresh_token grant types are supported")
 
-	if client.response_types not in ["code"]:
-		invalidation_reasons.append("only code response_type is supported")
+	if client.response_types and not all(rt == "code" for rt in client.response_types):
+		invalidation_reasons.append("only 'code' response_type is supported")
 
 	if not frappe.conf.developer_mode and any(c.scheme != "https" for c in client.redirect_uris):
 		invalidation_reasons.append("redirect_uris must be https")
