@@ -21,7 +21,7 @@ T = TypeVar("T")
 FrappePydanticConfig = ConfigDict(arbitrary_types_allowed=True)
 
 
-def validate_argument_types(func: Callable, apply_condition: Callable = lambda: True):
+def validate_argument_types(func: Callable, apply_condition: Callable | None = None):
 	@wraps(func)
 	def wrapper(*args, **kwargs):
 		"""Validate argument types of whitelisted functions.
@@ -29,7 +29,7 @@ def validate_argument_types(func: Callable, apply_condition: Callable = lambda: 
 		:param args: Function arguments.
 		:param kwargs: Function keyword arguments."""
 
-		if apply_condition():
+		if apply_condition is None or apply_condition():
 			args, kwargs = transform_parameter_types(func, args, kwargs)
 
 		return func(*args, **kwargs)
