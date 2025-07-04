@@ -10,6 +10,7 @@ from werkzeug import Response
 from werkzeug.exceptions import NotFound
 
 import frappe
+import frappe.utils
 from frappe import oauth
 from frappe.integrations.utils import (
 	OAuth2DynamicClientMetadata,
@@ -23,6 +24,14 @@ from frappe.oauth import (
 	get_server_url,
 	get_userinfo,
 )
+
+ENDPOINTS = {
+	"token_endpoint": "/api/method/frappe.integrations.oauth2.get_token",
+	"userinfo_endpoint": "/api/method/frappe.integrations.oauth2.openid_profile",
+	"revocation_endpoint": "/api/method/frappe.integrations.oauth2.revoke_token",
+	"authorization_endpoint": "/api/method/frappe.integrations.oauth2.authorize",
+	"introspection_endpoint": "/api/method/frappe.integrations.oauth2.introspect_token",
+}
 
 
 def get_oauth_server():
@@ -195,11 +204,11 @@ def get_openid_configuration():
 	response.data = frappe.as_json(
 		{
 			"issuer": frappe_server_url,
-			"authorization_endpoint": f"{frappe_server_url}/api/method/frappe.integrations.oauth2.authorize",
-			"token_endpoint": f"{frappe_server_url}/api/method/frappe.integrations.oauth2.get_token",
-			"userinfo_endpoint": f"{frappe_server_url}/api/method/frappe.integrations.oauth2.openid_profile",
-			"revocation_endpoint": f"{frappe_server_url}/api/method/frappe.integrations.oauth2.revoke_token",
-			"introspection_endpoint": f"{frappe_server_url}/api/method/frappe.integrations.oauth2.introspect_token",
+			"authorization_endpoint": f"{frappe_server_url}{ENDPOINTS['authorization_endpoint']}",
+			"token_endpoint": f"{frappe_server_url}{ENDPOINTS['token_endpoint']}",
+			"userinfo_endpoint": f"{frappe_server_url}{ENDPOINTS['userinfo_endpoint']}",
+			"revocation_endpoint": f"{frappe_server_url}{ENDPOINTS['revocation_endpoint']}",
+			"introspection_endpoint": f"{frappe_server_url}{ENDPOINTS['introspection_endpoint']}",
 			"response_types_supported": [
 				"code",
 				"token",
@@ -303,17 +312,18 @@ def _get_authorization_server_metadata():
 	issuer = get_resource_url()
 	metadata = dict(
 		issuer=issuer,
-		authorization_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.authorize",
-		token_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.get_token",
+		authorization_endpoint=f"{issuer}{ENDPOINTS['authorization_endpoint']}",
+		token_endpoint=f"{issuer}{ENDPOINTS['token_endpoint']}",
 		response_types_supported=["code"],
 		response_modes_supported=["query"],
 		grant_types_supported=["authorization_code", "refresh_token"],
-		token_endpoint_auth_methods_supported=["client_secret_basic"],
+		token_endpoint_auth_methods_supported=["none", "client_secret_basic"],
 		service_documentation="https://docs.frappe.io/framework/user/en/guides/integration/how_to_set_up_oauth#add-a-client-app",
-		revocation_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.revoke_token",
+		revocation_endpoint=f"{issuer}{ENDPOINTS['revocation_endpoint']}",
 		revocation_endpoint_auth_methods_supported=["client_secret_basic"],
-		introspection_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.introspect_token",
-		userinfo_endpoint=f"{issuer}/api/method/frappe.integrations.oauth2.openid_profile",
+		introspection_endpoint=f"{issuer}{ENDPOINTS['introspection_endpoint']}",
+		userinfo_endpoint=f"{issuer}{ENDPOINTS['userinfo_endpoint']}",
+		code_challenge_methods_supported=["S256"],
 	)
 
 	if frappe.get_cached_value("OAuth Settings", "OAuth Settings", "enable_dynamic_client_registration"):
@@ -354,21 +364,27 @@ def register_client():
 		response.data = frappe.as_json({"error": "invalid_client_metadata", "error_description": str(e)})
 		return response
 
+	"""
+	Note:
+
+	A check for existing client cannot be done unless a software_statement (JWT)
+	is issued. Use of software_statement is not yet implemented.
+
+	Doing an exists check based on just client_name or other replicable
+	parameters risks leaking client_id and client_secret. So it's better to
+	issue a new client.
+	"""
+
 	if error := validate_dynamic_client_metadata(client):
 		response.status_code = 400
 		response.data = frappe.as_json({"error": "invalid_client_metadata", "error_description": error})
 		return response
 
 	doc = create_new_oauth_client(client)
-	if isinstance(doc.creation, datetime.datetime):
-		client_id_issued_at = doc.creation.isoformat()
-	else:
-		client_id_issued_at = doc.creation
-
 	response_data = {
 		"client_id": doc.client_id,
 		"client_secret": doc.client_secret,
-		"client_id_issued_at": client_id_issued_at,
+		"client_id_issued_at": doc.client_id_issued_at(),
 		"client_secret_expires_at": 0,
 		# Response should include registered metadata
 		"client_name": doc.app_name,
@@ -385,7 +401,11 @@ def register_client():
 		"contacts": doc.contacts.split("\n") if doc.contacts else None,
 	}
 
+	if doc.is_public_client():
+		del response_data["client_secret"]
+
 	_del_none_values(response_data)
+	response.status_code = 201  # Created
 	response.data = frappe.as_json(response_data)
 	return response
 
@@ -499,20 +519,32 @@ def set_cors_for_privileged_requests():
 		return
 
 	if (
-		not frappe.request.path.startswith("/api/method/frappe.integrations.oauth2.register_client")
-		or frappe.request.method not in ("POST", "OPTIONS")
-		or not frappe.get_cached_value(
+		frappe.request.path.startswith("/api/method/frappe.integrations.oauth2.register_client")
+		and frappe.request.method in ("POST", "OPTIONS")
+		and frappe.get_cached_value(
 			"OAuth Settings",
 			"OAuth Settings",
 			"enable_dynamic_client_registration",
 		)
 	):
+		_set_allowed_cors()
 		return
 
+	if (
+		frappe.request.path.startswith(ENDPOINTS["token_endpoint"])
+		or frappe.request.path.startswith(ENDPOINTS["revocation_endpoint"])
+		or frappe.request.path.startswith(ENDPOINTS["introspection_endpoint"])
+		or frappe.request.path.startswith(ENDPOINTS["userinfo_endpoint"])
+	) and frappe.request.method in ("POST", "OPTIONS"):
+		_set_allowed_cors()
+		return
+
+
+def _set_allowed_cors():
 	allowed = frappe.get_cached_value(
 		"OAuth Settings",
 		"OAuth Settings",
-		"allowed_origins_for_public_client_registration",
+		"allowed_public_client_origins",
 	)
 	if not allowed:
 		return

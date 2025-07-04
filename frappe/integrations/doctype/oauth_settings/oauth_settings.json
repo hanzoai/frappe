@@ -12,7 +12,7 @@
   "skip_authorization",
   "column_break_ogmd",
   "enable_dynamic_client_registration",
-  "allowed_origins_for_public_client_registration",
+  "allowed_public_client_origins",
   "resource_tab",
   "config_section",
   "show_protected_resource_metadata",
@@ -133,16 +133,16 @@
   },
   {
    "description": "New line separated list of allowed public client URLs (eg <code>https://frappe.io</code>), or <code>*</code> to accept all.\n<br>\nPublic clients are restricted by default.",
-   "fieldname": "allowed_origins_for_public_client_registration",
+   "fieldname": "allowed_public_client_origins",
    "fieldtype": "Small Text",
-   "label": "Allowed Origins for Public Client Registration"
+   "label": "Allowed Public Client Origins"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-04 12:05:50.723018",
+ "modified": "2025-07-04 15:01:45.453238",
  "modified_by": "Administrator",
  "module": "Integrations",
  "name": "OAuth Settings",

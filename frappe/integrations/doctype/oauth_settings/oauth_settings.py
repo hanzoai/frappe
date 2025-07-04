@@ -14,7 +14,7 @@ class OAuthSettings(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		allowed_origins_for_public_client_registration: DF.SmallText | None
+		allowed_public_client_origins: DF.SmallText | None
 		enable_dynamic_client_registration: DF.Check
 		resource_documentation: DF.Data | None
 		resource_name: DF.Data | None

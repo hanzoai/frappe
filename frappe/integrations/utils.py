@@ -29,7 +29,7 @@ class OAuth2DynamicClientMetadata(BaseModel):
 
 	#  Client identifiers shown to user
 	client_name: str
-	scope: str
+	scope: str | None = None
 	client_uri: HttpUrl | None = None
 	logo_uri: HttpUrl | None = None
 
@@ -207,11 +207,8 @@ def validate_dynamic_client_metadata(client: OAuth2DynamicClientMetadata):
 	if len(client.redirect_uris) == 0:
 		invalidation_reasons.append("redirect_uris is required")
 
-	if client.token_endpoint_auth_method not in ["client_secret_basic"]:
-		invalidation_reasons.append("only client_secret_basic token_endpoint_auth_method is supported")
-
 	if client.grant_types and not set(client.grant_types).issubset({"authorization_code", "refresh_token"}):
-		invalidation_reasons.append("only authorization_code and refresh_token grant types are supported")
+		invalidation_reasons.append("only 'authorization_code' and 'refresh_token' grant types are supported")
 
 	if client.response_types and not all(rt == "code" for rt in client.response_types):
 		invalidation_reasons.append("only 'code' response_type is supported")
@@ -230,7 +227,7 @@ def create_new_oauth_client(client: OAuth2DynamicClientMetadata):
 	redirect_uris = [str(uri) for uri in client.redirect_uris]
 
 	doc.app_name = client.client_name
-	doc.scopes = client.scope
+	doc.scopes = client.scope or "all"
 	doc.redirect_uris = "\n".join(redirect_uris)
 	doc.default_redirect_uri = redirect_uris[0]
 	doc.response_type = "Code"
@@ -251,6 +248,11 @@ def create_new_oauth_client(client: OAuth2DynamicClientMetadata):
 		doc.software_id = client.software_id
 	if client.software_version:
 		doc.software_version = client.software_version
+
+	if client.token_endpoint_auth_method == "none":
+		doc.token_endpoint_auth_method = "None"
+	if client.token_endpoint_auth_method == "client_secret_post":
+		doc.token_endpoint_auth_method = "Client Secret Post"
 
 	doc.save(ignore_permissions=True)
 	return doc
