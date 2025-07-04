@@ -29,6 +29,7 @@
   "policy_uri",
   "sb_advanced",
   "grant_type",
+  "token_endpoint_auth_method",
   "cb_2",
   "response_type"
  ],
@@ -188,11 +189,19 @@
    "fieldname": "contacts",
    "fieldtype": "Small Text",
    "label": "Contacts"
+  },
+  {
+   "default": "Client Secret Basic",
+   "description": "Value of \"None\" implies a public client. In such a case Client Secret is not given to the client and token exchange makes use of PKCE.",
+   "fieldname": "token_endpoint_auth_method",
+   "fieldtype": "Select",
+   "label": "Token Endpoint Auth Method",
+   "options": "Client Secret Basic\nClient Secret Post\nNone"
   }
  ],
  "grid_page_length": 50,
  "links": [],
- "modified": "2025-07-02 11:52:00.978956",
+ "modified": "2025-07-04 14:07:36.146393",
  "modified_by": "Administrator",
  "module": "Integrations",
  "name": "OAuth Client",
