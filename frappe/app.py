@@ -283,10 +283,12 @@ def process_response(response):
 >>>>>>> 1215afdf96 (feat(OAuth2): support RFC 9728)
 
 def set_cors_headers(response):
+	allowed_origins = frappe.conf.allow_cors
+	if hasattr(frappe.local, "allow_cors"):
+		allowed_origins = frappe.local.allow_cors
+
 	if not (
-		(allowed_origins := frappe.conf.allow_cors)
-		and (request := frappe.local.request)
-		and (origin := request.headers.get("Origin"))
+		allowed_origins and (request := frappe.local.request) and (origin := request.headers.get("Origin"))
 	):
 		return
 
