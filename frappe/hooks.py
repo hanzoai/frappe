@@ -413,6 +413,7 @@ before_request = [
 	"frappe.recorder.record",
 	"frappe.monitor.start",
 	"frappe.rate_limiter.apply",
+	"frappe.integrations.oauth2.set_cors_for_privileged_requests",
 ]
 
 after_request = [

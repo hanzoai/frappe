@@ -258,7 +258,7 @@ def introspect_token(token=None, token_type_hint=None):
 
 
 def handle_wellknown(path: str):
-	"""Path handler for /.well-known/ endpoints. Invoked in app.py"""
+	"""Path handler for GET requests to /.well-known/ endpoints. Invoked in app.py"""
 
 	if path.startswith("/.well-known/openid-configuration"):
 		return get_openid_configuration()
@@ -284,6 +284,7 @@ def get_authorization_server_metadata():
 	response = Response()
 	response.mimetype = "application/json"
 	response.data = frappe.as_json(_get_authorization_server_metadata())
+	frappe.local.allow_cors = "*"
 	return response
 
 
@@ -321,7 +322,7 @@ def _get_authorization_server_metadata():
 	return metadata
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True, methods=["POST"])
 def register_client():
 	"""
 	Registers an OAuth client.
@@ -473,3 +474,51 @@ def _del_none_values(d: dict):
 	for k in list(d.keys()):
 		if k in d and d[k] is None:
 			del d[k]
+
+
+def set_cors_for_privileged_requests():
+	"""
+	Called in before_request hook, prevents failure of privileged requests,
+	for OPTIONS and:
+	1. GET requests on /.well-known/
+	2. POST requests on /api/method/frappe.integrations.oauth2.register_client
+
+	Point 2. also depends on OAuth Settings for dynamic client registration.
+	Without these, registration requests from public clients will fail due to
+	preflight requests failing.
+	"""
+	if (
+		frappe.conf.allow_cors == "*"
+		or not frappe.local.request
+		or not frappe.local.request.headers.get("Origin")
+	):
+		return
+
+	if frappe.request.path.startswith("/.well-known/") and frappe.request.method in ("GET", "OPTIONS"):
+		frappe.local.allow_cors = "*"
+		return
+
+	if (
+		not frappe.request.path.startswith("/api/method/frappe.integrations.oauth2.register_client")
+		or frappe.request.method not in ("POST", "OPTIONS")
+		or not frappe.get_cached_value(
+			"OAuth Settings",
+			"OAuth Settings",
+			"enable_dynamic_client_registration",
+		)
+	):
+		return
+
+	allowed = frappe.get_cached_value(
+		"OAuth Settings",
+		"OAuth Settings",
+		"allowed_origins_for_public_client_registration",
+	)
+	if not allowed:
+		return
+
+	allowed = allowed.strip().splitlines()
+	if "*" in allowed:
+		frappe.local.allow_cors = "*"
+	else:
+		frappe.local.allow_cors = allowed

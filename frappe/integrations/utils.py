@@ -252,7 +252,7 @@ def create_new_oauth_client(client: OAuth2DynamicClientMetadata):
 	if client.software_version:
 		doc.software_version = client.software_version
 
-	doc.save()
+	doc.save(ignore_permissions=True)
 	return doc
 
 

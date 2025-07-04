@@ -6,15 +6,21 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "authorization_tab",
   "authorization_server_section",
   "show_auth_server_metadata",
-  "enable_dynamic_client_registration",
   "skip_authorization",
+  "column_break_ogmd",
+  "enable_dynamic_client_registration",
+  "allowed_origins_for_public_client_registration",
+  "resource_tab",
+  "config_section",
+  "show_protected_resource_metadata",
+  "column_break_wlfj",
+  "show_social_login_key_as_authorization_server",
   "resource_server_section",
   "resource_name",
   "resource_policy_uri",
-  "show_protected_resource_metadata",
-  "show_social_login_key_as_authorization_server",
   "column_break_zyte",
   "resource_documentation",
   "resource_tos_uri",
@@ -22,10 +28,10 @@
  ],
  "fields": [
   {
-   "description": "These fields are used to provide resource server metadata to clients querying the \"/.well-known/oauth-protected-resource\" end point. For additional reference view: https://datatracker.ietf.org/doc/html/rfc9728",
+   "description": "These fields are used to provide resource server metadata to clients querying the \"well known protected resource\" end point.",
    "fieldname": "resource_server_section",
    "fieldtype": "Section Break",
-   "label": "Resource Server"
+   "label": "Metadata"
   },
   {
    "default": "Frappe Framework Application",
@@ -59,8 +65,7 @@
   },
   {
    "fieldname": "authorization_server_section",
-   "fieldtype": "Section Break",
-   "label": "Authorization Server"
+   "fieldtype": "Section Break"
   },
   {
    "default": "1",
@@ -102,13 +107,42 @@
    "fieldname": "show_social_login_key_as_authorization_server",
    "fieldtype": "Check",
    "label": "Show Social Login Key as Authorization Server"
+  },
+  {
+   "fieldname": "column_break_ogmd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "authorization_tab",
+   "fieldtype": "Tab Break",
+   "label": "Authorization"
+  },
+  {
+   "fieldname": "resource_tab",
+   "fieldtype": "Tab Break",
+   "label": "Resource"
+  },
+  {
+   "fieldname": "config_section",
+   "fieldtype": "Section Break",
+   "label": "Config"
+  },
+  {
+   "fieldname": "column_break_wlfj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "New line separated list of allowed public client URLs (eg <code>https://frappe.io</code>), or <code>*</code> to accept all.\n<br>\nPublic clients are restricted by default.",
+   "fieldname": "allowed_origins_for_public_client_registration",
+   "fieldtype": "Small Text",
+   "label": "Allowed Origins for Public Client Registration"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-04 11:20:15.528611",
+ "modified": "2025-07-04 12:05:50.723018",
  "modified_by": "Administrator",
  "module": "Integrations",
  "name": "OAuth Settings",
