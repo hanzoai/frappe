@@ -59,4 +59,12 @@ The settings allow toggling the following features:
 - **Dynamic Client Registration**: by toggling the _Enable Dynamic Client Registration_ field.
 - **Resource Server Metadata Discovery**: by toggling the _Show Protected Resource Metadata_.
 
-The remaining fields (in the **Resource Server** section) are used only when responding to requests on `/.well-known/oauth-protected-resource`
+The remaining fields (in the **Resource** section) are used only when responding to requests on `/.well-known/oauth-protected-resource`
+
+> **Regarding Public Clients**
+>
+> Public clients, for example an SPA, have restricted access by default. This
+> restriction is applied by use of CORS.
+>
+> To side-step this restriction for certain trusted clients, you may add their
+> hostnames to the **Allowed Public Client Origins** field.
