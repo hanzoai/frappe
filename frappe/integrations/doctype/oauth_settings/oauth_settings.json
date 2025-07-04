@@ -14,6 +14,7 @@
   "resource_name",
   "resource_policy_uri",
   "show_protected_resource_metadata",
+  "show_social_login_key_as_authorization_server",
   "column_break_zyte",
   "resource_documentation",
   "resource_tos_uri",
@@ -70,7 +71,7 @@
   },
   {
    "default": "1",
-   "description": "Allows clients to fetch metadata from the <code>/.well-known/oauth-protected-resource</code> endpoint.",
+   "description": "Allows clients to fetch metadata from the <code>/.well-known/oauth-protected-resource</code> endpoint. Reference: <a href=\"https://datatracker.ietf.org/doc/html/rfc9728#name-protected-resource-metadata\">RFC9728</a>",
    "fieldname": "show_protected_resource_metadata",
    "fieldtype": "Check",
    "label": "Show Protected Resource Metadata"
@@ -94,13 +95,20 @@
    "fieldname": "skip_authorization",
    "fieldtype": "Check",
    "label": "Skip Authorization"
+  },
+  {
+   "default": "0",
+   "description": "Allows enabled Social Login Key Base URL to be shown as authorization server.",
+   "fieldname": "show_social_login_key_as_authorization_server",
+   "fieldtype": "Check",
+   "label": "Show Social Login Key as Authorization Server"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-03 14:29:35.314601",
+ "modified": "2025-07-04 11:20:15.528611",
  "modified_by": "Administrator",
  "module": "Integrations",
  "name": "OAuth Settings",

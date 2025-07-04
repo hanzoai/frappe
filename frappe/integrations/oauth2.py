@@ -405,23 +405,26 @@ def get_protected_resource_metadata():
 def _get_protected_resource_metadata():
 	from frappe.integrations.doctype.oauth_settings.oauth_settings import OAuthSettings
 
-	# TODO:
-	# - header on 401
-	# - cache this response (5 minutes)
-	authorization_servers = frappe.get_list(
-		"Social Login Key",
-		filters={
-			"enable_social_login": True,
-			"show_in_resource_metadata": True,
-		},
-		pluck="base_url",
-	)
+	oauth_settings = cast(OAuthSettings, frappe.get_cached_doc("OAuth Settings", ignore_permissions=True))
 	resource = get_resource_url()
-	oauth_settings = cast(OAuthSettings, frappe.get_cached_doc("OAuth Settings"))
+	authorization_servers = [resource]
+
+	if oauth_settings.show_social_login_key_as_authorization_server:
+		authorization_servers.extend(
+			frappe.get_list(
+				"Social Login Key",
+				filters={
+					"enable_social_login": True,
+					"show_in_resource_metadata": True,
+				},
+				pluck="base_url",
+				ignore_permissions=True,
+			)
+		)
 
 	metadata = dict(
 		resource=resource,
-		authorization_servers=[resource, *authorization_servers],
+		authorization_servers=authorization_servers,
 		bearer_methods_supported=["header"],
 		resource_name=oauth_settings.resource_name,
 		resource_documentation=oauth_settings.resource_documentation,

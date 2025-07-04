@@ -22,6 +22,7 @@ class OAuthSettings(Document):
 		scopes_supported: DF.SmallText | None
 		show_auth_server_metadata: DF.Check
 		show_protected_resource_metadata: DF.Check
+		show_social_login_key_as_authorization_server: DF.Check
 		skip_authorization: DF.Check
 	# end: auto-generated types
 
