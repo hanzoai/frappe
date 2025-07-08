@@ -279,11 +279,10 @@ class Database:
 			):
 				raise
 
+		self.log_query(query, values, debug, explain)
 		if debug:
 			time_end = time()
 			frappe.errprint(f"Execution time: {time_end - time_start:.2f} sec")
-
-		self.log_query(query, values, debug, explain)
 
 		if auto_commit:
 			self.commit()
@@ -1476,6 +1475,18 @@ def enqueue_jobs_after_commit():
 		                        continue # Do some processing.
 		"""
 		raise NotImplementedError
+
+	def get_routines(self):
+		information_schema = frappe.qb.Schema("information_schema")
+		return (
+			frappe.qb.from_(information_schema.routines)
+			.select(information_schema.routines.routine_name)
+			.where(
+				(information_schema.routines.routine_type.isin(["FUNCTION", "PROCEDURE"]))
+				& (information_schema.routines.routine_schema.eq(frappe.conf.db_name))
+			)
+			.run(as_dict=1, pluck="routine_name")
+		)
 
 
 @contextmanager
