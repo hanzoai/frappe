@@ -279,11 +279,10 @@ class Database:
 			):
 				raise
 
+		self.log_query(query, values, debug, explain)
 		if debug:
 			time_end = time()
 			frappe.errprint(f"Execution time: {time_end - time_start:.2f} sec")
-
-		self.log_query(query, values, debug, explain)
 
 		if auto_commit:
 			self.commit()
