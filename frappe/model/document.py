@@ -18,6 +18,7 @@ import frappe
 from frappe import _, is_whitelisted, msgprint
 from frappe.core.doctype.file.utils import relink_mismatched_files
 from frappe.core.doctype.server_script.server_script_utils import run_server_script_for_doc_event
+from frappe.database.utils import commit_after_response
 from frappe.desk.form.document_follow import follow_document
 from frappe.integrations.doctype.webhook import run_webhooks
 from frappe.model import optional_fields, table_fields
@@ -37,7 +38,7 @@ if TYPE_CHECKING:
 	from frappe.core.doctype.docfield.docfield import DocField
 
 
-DOCUMENT_LOCK_EXPIRTY = 3 * 60 * 60  # All locks expire in 3 hours automatically
+DOCUMENT_LOCK_EXPIRY = 3 * 60 * 60  # All locks expire in 3 hours automatically
 DOCUMENT_LOCK_SOFT_EXPIRY = 30 * 60  # Let users force-unlock after 30 minutes
 
 
@@ -204,7 +205,7 @@ class Document(BaseDocument):
 		if not file_lock.lock_exists(signature):
 			return False
 
-		if file_lock.lock_age(signature) > DOCUMENT_LOCK_EXPIRTY:
+		if file_lock.lock_age(signature) > DOCUMENT_LOCK_EXPIRY:
 			return False
 
 		return True
@@ -646,7 +647,7 @@ class Document(BaseDocument):
 	def set_new_name(self, force=False, set_name=None, set_child_names=True):
 		"""Calls `frappe.naming.set_new_name` for parent and child docs."""
 
-		if (frappe.flags.api_name_set or self.flags.name_set) and not force:
+		if self.flags.name_set and not force:
 			return
 
 		autoname = self.meta.autoname or ""
@@ -1201,7 +1202,9 @@ class Document(BaseDocument):
 		self.docstatus = DocStatus.CANCELLED
 		return self.save()
 
-	def _rename(self, name: str, merge: bool = False, force: bool = False, validate_rename: bool = True):
+	def _rename(
+		self, name: str | int, merge: bool = False, force: bool = False, validate_rename: bool = True
+	):
 		"""Rename the document. Triggers frappe.rename_doc, then reloads."""
 		from frappe.model.rename_doc import rename_doc
 
@@ -1238,7 +1241,7 @@ class Document(BaseDocument):
 		self.run_method("on_discard")
 
 	@frappe.whitelist()
-	def rename(self, name: str, merge=False, force=False, validate_rename=True):
+	def rename(self, name: str | int, merge=False, force=False, validate_rename=True):
 		"""Rename the document to `name`. This transforms the current object."""
 		return self._rename(name=name, merge=merge, force=force, validate_rename=validate_rename)
 
@@ -1626,10 +1629,11 @@ class Document(BaseDocument):
 
 			if user not in _seen:
 				_seen.append(user)
-				frappe.db.set_value(
-					self.doctype, self.name, "_seen", json.dumps(_seen), update_modified=False
+				commit_after_response(
+					lambda: frappe.db.set_value(
+						self.doctype, self.name, "_seen", json.dumps(_seen), update_modified=False
+					)
 				)
-				frappe.local.flags.commit = True
 
 	def add_viewed(self, user=None, force=False, unique_views=False):
 		"""Add a view log for the current document"""
@@ -1655,8 +1659,7 @@ class Document(BaseDocument):
 		if frappe.flags.read_only:
 			view_log.deferred_insert()
 		else:
-			view_log.insert(ignore_permissions=True)
-			frappe.local.flags.commit = True
+			commit_after_response(lambda: view_log.insert(ignore_permissions=True))
 
 		return view_log
 
@@ -1751,7 +1754,7 @@ class Document(BaseDocument):
 		signature = self.get_signature()
 		if file_lock.lock_exists(signature):
 			lock_exists = True
-			if file_lock.lock_age(signature) > DOCUMENT_LOCK_EXPIRTY:
+			if file_lock.lock_age(signature) > DOCUMENT_LOCK_EXPIRY:
 				file_lock.delete_lock(signature)
 				lock_exists = False
 			if timeout:

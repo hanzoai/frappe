@@ -34,6 +34,7 @@ from typing import (
 )
 
 import click
+import orjson
 from werkzeug.datastructures import Headers
 
 import frappe
@@ -619,6 +620,16 @@ xss_safe_methods: set[Callable] = set()
 allowed_http_methods_for_whitelisted_func: dict[Callable, list[str]] = {}
 
 
+def _in_request_or_test():
+	"""
+	Internal
+
+	Used by whitelist to determine whether type hints should be validated or not
+	"""
+
+	return getattr(local, "request", None) or in_test
+
+
 def whitelist(allow_guest=False, xss_safe=False, methods=None):
 	"""
 	Decorator for whitelisting a function and making it accessible via HTTP.
@@ -642,17 +653,8 @@ def whitelist(allow_guest=False, xss_safe=False, methods=None):
 
 		global whitelisted, guest_methods, xss_safe_methods, allowed_http_methods_for_whitelisted_func
 
-		# validate argument types only if request is present
-		in_request_or_test = lambda: getattr(local, "request", None) or in_test  # noqa: E731
-
-		# get function from the unbound / bound method
-		# this is needed because functions can be compared, but not methods
-		method = None
-		if hasattr(fn, "__func__"):
-			method = validate_argument_types(fn, apply_condition=in_request_or_test)
-			fn = method.__func__
-		else:
-			fn = validate_argument_types(fn, apply_condition=in_request_or_test)
+		# validate argument types if request is present or in test context
+		fn = validate_argument_types(fn, apply_condition=_in_request_or_test)
 
 		whitelisted.add(fn)
 		allowed_http_methods_for_whitelisted_func[fn] = methods
@@ -663,7 +665,7 @@ def whitelist(allow_guest=False, xss_safe=False, methods=None):
 			if xss_safe:
 				xss_safe_methods.add(fn)
 
-		return method or fn
+		return fn
 
 	return innerfn
 
@@ -743,7 +745,7 @@ def only_for(roles: list[str] | tuple[str] | str, message=False):
 	:param roles: Permitted role(s)
 	"""
 
-	if in_test or local.session.user == "Administrator":
+	if local.session.user == "Administrator":
 		return
 
 	if isinstance(roles, str):
@@ -1265,7 +1267,7 @@ def get_installed_apps(*, _ensure_on_bench: bool = False) -> list[str]:
 	if not db:
 		connect()
 
-	installed = json.loads(db.get_global("installed_apps") or "[]")
+	installed = orjson.loads(db.get_global("installed_apps") or "[]")
 
 	if _ensure_on_bench:
 		all_apps = cache.get_value("all_apps", get_all_apps)
@@ -1601,7 +1603,7 @@ def copy_doc(doc: "Document", ignore_no_copy: bool = True) -> "Document":
 	if not in_test:
 		fields_to_clear.append("docstatus")
 
-	if isinstance(doc, BaseDocument) or hasattr(doc, "as_dict"):
+	if isinstance(doc, BaseDocument):
 		d = doc.as_dict()
 	elif isinstance(doc, MappingProxyType):  # global test record
 		d = dict(doc)
