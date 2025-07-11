@@ -24,16 +24,11 @@ from collections.abc import Callable, Iterable
 from typing import (
 	TYPE_CHECKING,
 	Any,
-	Generic,
-	Literal,
 	Optional,
 	TypeAlias,
-	TypeVar,
 	Union,
-	overload,
 )
 
-import click
 import orjson
 from werkzeug.datastructures import Headers
 
@@ -46,10 +41,11 @@ from frappe.utils.caching import deprecated_local_cache as local_cache
 from frappe.utils.caching import request_cache, site_cache
 from frappe.utils.data import as_unicode, bold, cint, cstr, safe_decode, safe_encode, sbool
 from frappe.utils.local import Local, LocalProxy, release_local
+from frappe.utils.translations import _, _lt, set_user_lang
 
 # Local application imports
 from .exceptions import *
-from .types import Filters, FilterSignature, FilterTuple, _dict
+from .types import FilterSignature, _dict
 from .utils.jinja import (
 	get_email_from_template,
 	get_jenv,
@@ -63,7 +59,6 @@ __title__ = "Frappe Framework"
 
 if TYPE_CHECKING:  # pragma: no cover
 	from logging import Logger
-	from types import ModuleType
 
 	from werkzeug.wrappers import Request
 
@@ -71,10 +66,8 @@ if TYPE_CHECKING:  # pragma: no cover
 	from frappe.database.mariadb.mysqlclient import MariaDBDatabase
 	from frappe.database.postgres.database import PostgresDatabase
 	from frappe.database.sqlite.database import SQLiteDatabase
-	from frappe.email.doctype.email_queue.email_queue import EmailQueue
 	from frappe.model.document import Document
 	from frappe.query_builder.builder import MariaDB, Postgres, SQLite
-	from frappe.types.lazytranslatedstring import _LazyTranslate
 	from frappe.utils.redis_wrapper import ClientCache, RedisWrapper
 
 controllers: dict[str, type] = {}
@@ -92,66 +85,6 @@ _dev_server = int(sbool(os.environ.get("DEV_SERVER", False)))
 if _dev_server:
 	warnings.simplefilter("always", DeprecationWarning)
 	warnings.simplefilter("always", PendingDeprecationWarning)
-
-
-def _(msg: str, lang: str | None = None, context: str | None = None) -> str:
-	"""Return translated string in current lang, if exists.
-	Usage:
-	        _('Change')
-	        _('Change', context='Coins')
-	"""
-	from frappe.translate import get_all_translations
-	from frappe.utils import is_html, strip_html_tags
-
-	if not hasattr(local, "lang"):
-		local.lang = lang or "en"
-
-	if not lang:
-		lang = local.lang
-
-	non_translated_string = msg
-
-	if is_html(msg):
-		msg = strip_html_tags(msg)
-
-	# msg should always be unicode
-	msg = as_unicode(msg).strip()
-
-	translated_string = ""
-
-	all_translations = get_all_translations(lang)
-	if context:
-		string_key = f"{msg}:{context}"
-		translated_string = all_translations.get(string_key)
-
-	if not translated_string:
-		translated_string = all_translations.get(msg)
-
-	return translated_string or non_translated_string
-
-
-def _lt(msg: str, lang: str | None = None, context: str | None = None) -> "_LazyTranslate":
-	"""Lazily translate a string.
-
-
-	This function returns a "lazy string" which when casted to string via some operation applies
-	translation first before casting.
-
-	This is only useful for translating strings in global scope or anything that potentially runs
-	before `frappe.init()`
-
-	Note: Result is not guaranteed to equivalent to pure strings for all operations.
-	"""
-	from .types.lazytranslatedstring import _LazyTranslate
-
-	return _LazyTranslate(msg, lang, context)
-
-
-def set_user_lang(user: str, user_language: str | None = None) -> None:
-	"""Guess and set user language for the session. `frappe.local.lang`"""
-	from frappe.translate import get_user_lang
-
-	local.lang = get_user_lang(user) or user_language
 
 
 # local-globals
@@ -428,20 +361,6 @@ def log(msg: str) -> None:
 	debug_log.append(as_unicode(msg))
 
 
-def create_folder(path, with_init=False):
-	"""Create a folder in the given path and add an `__init__.py` file (optional).
-
-	:param path: Folder path.
-	:param with_init: Create `__init__.py` in the new folder."""
-	from frappe.utils import touch_file
-
-	if not os.path.exists(path):
-		os.makedirs(path)
-
-		if with_init:
-			touch_file(os.path.join(path, "__init__.py"))
-
-
 def set_user(username: str):
 	"""Set current user.
 
@@ -480,138 +399,6 @@ def get_request_header(key, default=None):
 	:param key: HTTP header key.
 	:param default: Default value."""
 	return request.headers.get(key, default)
-
-
-def sendmail(
-	recipients=None,
-	sender="",
-	subject="No Subject",
-	message="No Message",
-	as_markdown=False,
-	delayed=True,
-	reference_doctype=None,
-	reference_name=None,
-	unsubscribe_method=None,
-	unsubscribe_params=None,
-	unsubscribe_message=None,
-	add_unsubscribe_link=1,
-	attachments=None,
-	content=None,
-	doctype=None,
-	name=None,
-	reply_to=None,
-	queue_separately=False,
-	cc=None,
-	bcc=None,
-	message_id=None,
-	in_reply_to=None,
-	send_after=None,
-	expose_recipients=None,
-	send_priority=1,
-	communication=None,
-	retry=1,
-	now=None,
-	read_receipt=None,
-	is_notification=False,
-	inline_images=None,
-	template=None,
-	args=None,
-	header=None,
-	print_letterhead=False,
-	with_container=False,
-	email_read_tracker_url=None,
-	x_priority: Literal[1, 3, 5] = 3,
-	email_headers=None,
-) -> Optional["EmailQueue"]:
-	"""Send email using user's default **Email Account** or global default **Email Account**.
-
-
-	:param recipients: List of recipients.
-	:param sender: Email sender. Default is current user or default outgoing account.
-	:param subject: Email Subject.
-	:param message: (or `content`) Email Content.
-	:param as_markdown: Convert content markdown to HTML.
-	:param delayed: Send via scheduled email sender **Email Queue**. Don't send immediately. Default is true
-	:param send_priority: Priority for Email Queue, default 1.
-	:param reference_doctype: (or `doctype`) Append as communication to this DocType.
-	:param reference_name: (or `name`) Append as communication to this document name.
-	:param unsubscribe_method: Unsubscribe url with options email, doctype, name. e.g. `/api/method/unsubscribe`
-	:param unsubscribe_params: Unsubscribe paramaters to be loaded on the unsubscribe_method [optional] (dict).
-	:param attachments: List of attachments.
-	:param reply_to: Reply-To Email Address.
-	:param message_id: Used for threading. If a reply is received to this email, Message-Id is sent back as In-Reply-To in received email.
-	:param in_reply_to: Used to send the Message-Id of a received email back as In-Reply-To.
-	:param send_after: Send after the given datetime.
-	:param expose_recipients: Display all recipients in the footer message - "This email was sent to"
-	:param communication: Communication link to be set in Email Queue record
-	:param inline_images: List of inline images as {"filename", "filecontent"}. All src properties will be replaced with random Content-Id
-	:param template: Name of html template from templates/emails folder
-	:param args: Arguments for rendering the template
-	:param header: Append header in email
-	:param with_container: Wraps email inside a styled container
-	:param x_priority: 1 = HIGHEST, 3 = NORMAL, 5 = LOWEST
-	:param email_headers: Additional headers to be added in the email, e.g. {"X-Custom-Header": "value"} or {"Custom-Header": "value"}. Automatically prepends "X-" to the header name if not present.
-	"""
-
-	if recipients is None:
-		recipients = []
-	if cc is None:
-		cc = []
-	if bcc is None:
-		bcc = []
-
-	text_content = None
-	if template:
-		message, text_content = get_email_from_template(template, args)
-
-	message = content or message
-
-	if as_markdown:
-		from frappe.utils import md_to_html
-
-		message = md_to_html(message)
-
-	if not delayed:
-		now = True
-
-	from frappe.email.doctype.email_queue.email_queue import QueueBuilder
-
-	builder = QueueBuilder(
-		recipients=recipients,
-		sender=sender,
-		subject=subject,
-		message=message,
-		text_content=text_content,
-		reference_doctype=doctype or reference_doctype,
-		reference_name=name or reference_name,
-		add_unsubscribe_link=add_unsubscribe_link,
-		unsubscribe_method=unsubscribe_method,
-		unsubscribe_params=unsubscribe_params,
-		unsubscribe_message=unsubscribe_message,
-		attachments=attachments,
-		reply_to=reply_to,
-		cc=cc,
-		bcc=bcc,
-		message_id=message_id,
-		in_reply_to=in_reply_to,
-		send_after=send_after,
-		expose_recipients=expose_recipients,
-		send_priority=send_priority,
-		queue_separately=queue_separately,
-		communication=communication,
-		read_receipt=read_receipt,
-		is_notification=is_notification,
-		inline_images=inline_images,
-		header=header,
-		print_letterhead=print_letterhead,
-		with_container=with_container,
-		email_read_tracker_url=email_read_tracker_url,
-		x_priority=x_priority,
-		email_headers=email_headers,
-	)
-
-	# build email queue and send the email if send_now is True.
-	return builder.process(send_now=now)
 
 
 whitelisted: set[Callable] = set()
@@ -1166,7 +953,7 @@ def rename_doc(
 	)
 
 
-def get_module(modulename: str) -> "ModuleType":
+def get_module(modulename: str):
 	"""Return a module object for given Python module name using `importlib.import_module`."""
 	return importlib.import_module(modulename)
 
@@ -1833,59 +1620,6 @@ def are_emails_muted():
 from frappe.deprecation_dumpster import frappe_get_test_records as get_test_records
 
 
-def attach_print(
-	doctype,
-	name,
-	file_name=None,
-	print_format=None,
-	style=None,
-	html=None,
-	doc=None,
-	lang=None,
-	print_letterhead=True,
-	password=None,
-	letterhead=None,
-):
-	from frappe.translate import print_language
-	from frappe.utils import scrub_urls
-	from frappe.utils.pdf import get_pdf
-
-	print_settings = db.get_singles_dict("Print Settings")
-
-	kwargs = dict(
-		print_format=print_format,
-		style=style,
-		doc=doc,
-		no_letterhead=not print_letterhead,
-		letterhead=letterhead,
-		password=password,
-	)
-
-	local.flags.ignore_print_permissions = True
-
-	with print_language(lang or local.lang):
-		content = ""
-		if cint(print_settings.send_print_as_pdf):
-			ext = ".pdf"
-			kwargs["as_pdf"] = True
-			content = (
-				get_pdf(html, options={"password": password} if password else None)
-				if html
-				else get_print(doctype, name, **kwargs)
-			)
-		else:
-			ext = ".html"
-			content = html or scrub_urls(get_print(doctype, name, **kwargs)).encode("utf-8")
-
-	local.flags.ignore_print_permissions = False
-
-	if not file_name:
-		file_name = name
-	file_name = cstr(file_name).replace(" ", "").replace("/", "-") + ext
-
-	return {"fname": file_name, "fcontent": content}
-
-
 def task(**task_kwargs):
 	def decorator_task(f):
 		f.enqueue = lambda **fun_kwargs: enqueue(f, **task_kwargs, **fun_kwargs)
@@ -2002,11 +1736,12 @@ from frappe.core.doctype.system_settings.system_settings import get_system_setti
 from frappe.model.document import get_doc, get_lazy_doc
 from frappe.model.meta import get_meta
 from frappe.realtime import publish_progress, publish_realtime
-from frappe.utils import get_traceback, mock, parse_json, safe_eval
+from frappe.utils import get_traceback, mock, parse_json, safe_eval, create_folder
 from frappe.utils.background_jobs import enqueue, enqueue_doc
 from frappe.utils.error import log_error
 from frappe.utils.formatters import format_value
-from frappe.utils.print_utils import get_print
+from frappe.utils.print_utils import get_print, attach_print
+from frappe.email import sendmail
 
 # for backwards compatibility
 format = format_value
