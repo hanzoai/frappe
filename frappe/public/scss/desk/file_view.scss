@@ -56,6 +56,10 @@
 							display: block;
 						}
 					}
+
+					.copy-file-url {
+						display: none;
+					}
 				}
 
 				.file-footer {
@@ -106,6 +110,10 @@
 
 				img {
 					filter: opacity(15%);
+				}
+
+				.copy-file-url {
+					display: flex;
 				}
 			}
 
