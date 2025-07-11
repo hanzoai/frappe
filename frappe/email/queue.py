@@ -1,5 +1,6 @@
 # Copyright (c) 2022, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
+from datetime import timedelta
 
 import frappe
 from frappe import _, msgprint
@@ -188,6 +189,7 @@ def get_queue():
 	)
 
 
+<<<<<<< HEAD
 def set_expiry_for_email_queue():
 	"""Mark emails as expire that has not sent for 7 days.
 	Called daily via scheduler.
@@ -202,3 +204,27 @@ def set_expiry_for_email_queue():
 		AND (`send_after` IS NULL OR `send_after` < %(now)s)""",
 		{"now": now_datetime()},
 	)
+=======
+def mark_sending_emails_as_not_sent():
+	emails_in_sending = frappe.get_all(
+		"Email Queue", filters={"status": "Sending"}, fields=["name", "modified"]
+	)
+	for e in emails_in_sending:
+		if now_datetime() - e["modified"] > timedelta(minutes=15):
+			update_fields = {}
+			email_queue = frappe.get_doc("Email Queue", e["name"])
+			sent_to_atleast_one_recipient = any(
+				rec.recipient for rec in email_queue.recipients if rec.is_mail_sent()
+			)
+			if email_queue.retry < cint(frappe.db.get_system_setting("email_retry_limit")) or 3:
+				update_fields.update(
+					{
+						"status": "Partially Sent" if sent_to_atleast_one_recipient else "Not Sent",
+						"retry": email_queue.retry + 1,
+					}
+				)
+			else:
+				update_fields.update({"status": "Error"})
+				update_fields.update({"error": frappe.get_traceback()})
+			email_queue.update_status(**update_fields, commit=True)
+>>>>>>> 2bbf72061c (fix: dont let email queue stay in Sending status)
