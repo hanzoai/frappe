@@ -1303,7 +1303,13 @@ class Document(BaseDocument):
 			if raise_exception:
 				raise
 
-			frappe.clear_last_message()
+			return frappe.clear_last_message()
+
+		for fieldname in self._table_fieldnames:
+			for row in self.get(fieldname):
+				row._doc_before_save = next(
+					(d for d in (self._doc_before_save.get(fieldname) or []) if d.name == row.name), None
+				)
 
 	def run_post_save_methods(self):
 		"""Run standard methods after `INSERT` or `UPDATE`. Standard Methods are:
