@@ -180,7 +180,7 @@ def get_queue():
 	)
 
 
-def mark_sending_emails_as_not_sent():
+def retry_sending_emails():
 	emails_in_sending = frappe.get_all(
 		"Email Queue", filters={"status": "Sending"}, fields=["name", "modified"]
 	)

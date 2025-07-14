@@ -217,7 +217,7 @@ scheduler_events = {
 	},
 	"all": [
 		"frappe.email.queue.flush",
-		"frappe.email.queue.mark_sending_emails_as_not_sent",
+		"frappe.email.queue.retry_sending_emails",
 		"frappe.monitor.flush",
 		"frappe.integrations.doctype.google_calendar.google_calendar.sync",
 	],
