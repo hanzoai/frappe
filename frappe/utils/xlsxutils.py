@@ -14,7 +14,9 @@ import frappe
 from frappe import _
 from frappe.utils.html_utils import unescape_html
 
-ILLEGAL_CHARACTERS_RE = re.compile(r"[\000-\010]|[\013-\014]|[\016-\037]")
+ILLEGAL_CHARACTERS_RE = re.compile(
+	r"[\000-\010]|[\013-\014]|[\016-\037]|\uFEFF|\uFFFE|\uFFFF|[\uD800-\uDFFF]"
+)
 
 
 # return xlsx file object
