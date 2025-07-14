@@ -190,6 +190,7 @@ def get_queue():
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 def set_expiry_for_email_queue():
 	"""Mark emails as expire that has not sent for 7 days.
 	Called daily via scheduler.
@@ -206,6 +207,9 @@ def set_expiry_for_email_queue():
 	)
 =======
 def mark_sending_emails_as_not_sent():
+=======
+def retry_sending_emails():
+>>>>>>> 74b4acacd4 (fix: better name for the retry job)
 	emails_in_sending = frappe.get_all(
 		"Email Queue", filters={"status": "Sending"}, fields=["name", "modified"]
 	)

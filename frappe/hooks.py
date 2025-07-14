@@ -207,11 +207,15 @@ scheduler_events = {
 	"all": [
 		"frappe.email.queue.flush",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"frappe.email.doctype.email_account.email_account.notify_unreplied",
 		"frappe.utils.global_search.sync_global_search",
 =======
 		"frappe.email.queue.mark_sending_emails_as_not_sent",
 >>>>>>> 2bbf72061c (fix: dont let email queue stay in Sending status)
+=======
+		"frappe.email.queue.retry_sending_emails",
+>>>>>>> 74b4acacd4 (fix: better name for the retry job)
 		"frappe.monitor.flush",
 	],
 	"hourly": [
