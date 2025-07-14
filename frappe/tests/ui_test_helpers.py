@@ -394,7 +394,7 @@ def insert_translations():
 	]
 
 	for doc in translation:
-		if not frappe.db.exists("doc"):
+		if not frappe.db.exists(doc):
 			frappe.get_doc(doc).insert()
 
 
