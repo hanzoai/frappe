@@ -1794,7 +1794,7 @@ def get_newargs(fn: Callable, kwargs: dict[str, Any]) -> dict[str, Any]:
 
 
 def make_property_setter(
-	args, ignore_validate=False, validate_fields_for_doctype=True, is_system_generated=True
+	args, ignore_validate=False, validate_fields_for_doctype=True, is_system_generated=True, *, module=None
 ):
 	"""Create a new **Property Setter** (for overriding DocType and DocField properties).
 
@@ -1833,6 +1833,7 @@ def make_property_setter(
 				"doctype": "Property Setter",
 				"doctype_or_field": args.doctype_or_field,
 				"doc_type": doctype,
+				"module": module,
 				"field_name": args.fieldname,
 				"row_name": args.row_name,
 				"property": args.property,
