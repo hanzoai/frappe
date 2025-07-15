@@ -4,6 +4,7 @@ from datetime import timedelta
 
 import frappe
 from frappe import _, msgprint
+from frappe.email.doctype.email_queue.email_queue import get_email_retry_limit
 from frappe.utils import cint, cstr, get_url, now_datetime
 from frappe.utils.data import getdate
 from frappe.utils.verified_command import get_signed_params, verify_request
@@ -191,7 +192,7 @@ def retry_sending_emails():
 			sent_to_atleast_one_recipient = any(
 				rec.recipient for rec in email_queue.recipients if rec.is_mail_sent()
 			)
-			if email_queue.retry < cint(frappe.db.get_system_setting("email_retry_limit")) or 3:
+			if email_queue.retry < get_email_retry_limit():
 				update_fields.update(
 					{
 						"status": "Partially Sent" if sent_to_atleast_one_recipient else "Not Sent",
@@ -200,5 +201,5 @@ def retry_sending_emails():
 				)
 			else:
 				update_fields.update({"status": "Error"})
-				update_fields.update({"error": frappe.get_traceback()})
+				update_fields.update({"error": "Retry limit execedded"})
 			email_queue.update_status(**update_fields, commit=True)
