@@ -286,13 +286,22 @@ def get_context(context):
 			"Validation Error",
 			"No {0} found",
 			"Create a new {0}",
-			"Drag and drop files here or upload from",
-			"My Device",
-			"Link",
 			"Camera",
-			"Upload",
-			"Set all public",
+			"Delete",
+			"Drag and drop files here or upload from",
+			"Following fields have missing values::Error message in web form",
+			"Link",
+			"Load More",
+			"Message",
+			"Missing Values Required:Error message in web form",
+			"My Device",
+			"No comments yet.",
+			"No more items to display",
 			"Set all private",
+			"Set all public",
+			"Start a new discussion",
+			"Upload",
+			"Link",
 			"Public",
 			"Private",
 			"Optimize",
@@ -499,7 +508,7 @@ def get_context(context):
 			return False
 
 		if self.apply_document_permissions:
-			return frappe.get_last_doc(doctype, name).has_permission(permtype=ptype)
+			return frappe.get_lazy_doc(doctype, name).has_permission(permtype=ptype)
 
 		# owner matches
 		elif frappe.db.get_value(doctype, name, "owner") == frappe.session.user:
