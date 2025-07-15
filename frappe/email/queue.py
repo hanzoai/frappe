@@ -204,6 +204,7 @@ def set_expiry_for_email_queue():
 		{"now": now_datetime()},
 	)
 
+
 def retry_sending_emails():
 	emails_in_sending = frappe.get_all(
 		"Email Queue", filters={"status": "Sending"}, fields=["name", "modified"]
