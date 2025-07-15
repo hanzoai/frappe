@@ -208,6 +208,7 @@ scheduler_events = {
 		"frappe.email.queue.flush",
 		"frappe.email.doctype.email_account.email_account.notify_unreplied",
 		"frappe.utils.global_search.sync_global_search",
+		"frappe.email.queue.retry_sending_emails",
 		"frappe.monitor.flush",
 	],
 	"hourly": [
