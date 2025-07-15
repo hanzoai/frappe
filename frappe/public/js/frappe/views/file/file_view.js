@@ -263,10 +263,11 @@ frappe.views.FileView = class FileView extends frappe.views.ListView {
 	}
 
 	render_grid_view() {
+		const base_url = frappe.urllib.get_base_url();
 		let html = this.data
 			.map((d) => {
 				const icon_class = d.icon_class + "-large";
-				const file_url = frappe.utils.escape_html(d.file_url);
+				const file_url = base_url + frappe.utils.escape_html(d.file_url);
 				let file_body_html =
 					d._type == "image"
 						? `<div class="file-image"><img class="w-100" src="${file_url}" alt="${d.file_name}"></div>`
