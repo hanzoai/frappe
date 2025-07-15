@@ -267,7 +267,8 @@ frappe.views.FileView = class FileView extends frappe.views.ListView {
 		let html = this.data
 			.map((d) => {
 				const icon_class = d.icon_class + "-large";
-				const file_url = base_url + frappe.utils.escape_html(d.file_url);
+				const file_url = frappe.utils.escape_html(d.file_url);
+				const absolute_file_url = base_url + file_url;
 				let file_body_html =
 					d._type == "image"
 						? `<div class="file-image"><img class="w-100" src="${file_url}" alt="${d.file_name}"></div>`
@@ -280,8 +281,7 @@ frappe.views.FileView = class FileView extends frappe.views.ListView {
 					<button
 						class="btn icon-btn copy-file-url"
 						title="${__("Copy File URL")}"
-						data-file-url="${file_url}"
-						style="background-color: var(--card-bg);"
+						data-file-url="${absolute_file_url}"
 					>
 						<svg class="es-icon es-line  icon-sm" style="" aria-hidden="true">
 							<use class="" href="#es-line-copy-light"></use>
