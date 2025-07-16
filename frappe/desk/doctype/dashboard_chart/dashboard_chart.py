@@ -56,7 +56,7 @@ def get_permission_query_conditions(user):
 			or `tabDashboard Chart`.`module` is NULL""".format(allowed_modules=",".join(allowed_modules))
 
 	return f"""
-		((`tabDashboard Chart`.`chart_type` in ('Count', 'Sum', 'Average')
+		((`tabDashboard Chart`.`chart_type` in ('Count', 'Sum', 'Average', 'Group By')
 		and {doctype_condition})
 		or
 		(`tabDashboard Chart`.`chart_type` = 'Report'
