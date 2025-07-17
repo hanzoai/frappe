@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-07-13 09:36+0000\n"
-"PO-Revision-Date: 2025-07-15 20:16\n"
+"PO-Revision-Date: 2025-07-17 20:14\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -4779,7 +4779,7 @@ msgstr "تاشو بستگی دارد"
 #. Label of the collapsible_depends_on (Code) field in DocType 'DocField'
 #: frappe/core/doctype/docfield/docfield.json
 msgid "Collapsible Depends On (JS)"
-msgstr "بسته به تاشو (JS)"
+msgstr "تاشو بستگی دارد به (JS)"
 
 #. Option for the 'Type' (Select) field in DocType 'DocField'
 #. Label of the color (Data) field in DocType 'DocType'
@@ -7307,7 +7307,7 @@ msgstr "نمایش بستگی دارد"
 #. Label of the depends_on (Code) field in DocType 'DocField'
 #: frappe/core/doctype/docfield/docfield.json
 msgid "Display Depends On (JS)"
-msgstr "نمایش بستگی به (JS) دارد"
+msgstr "نمایش بستگی دارد به (JS)"
 
 #: frappe/public/js/print_format_builder/PrintFormatControls.vue:180
 msgid "Divider"
@@ -9776,7 +9776,7 @@ msgstr "واکشی تصاویر پیوست شده از سند"
 #: frappe/custom/doctype/custom_field/custom_field.json
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
 msgid "Fetch on Save if Empty"
-msgstr "Save if Empty را واکشی کنید"
+msgstr "در صورت خالی بودن، هنگام ذخیره واکشی کنید"
 
 #: frappe/desk/doctype/global_search_settings/global_search_settings.py:61
 msgid "Fetching default Global Search documents."
@@ -12296,7 +12296,7 @@ msgstr "نادیده گرفتن مجوزهای کاربر"
 #: frappe/custom/doctype/custom_field/custom_field.json
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
 msgid "Ignore XSS Filter"
-msgstr "فیلتر XSS را نادیده بگیرید"
+msgstr "نادیده گرفتن فیلتر XSS"
 
 #. Description of the 'Attachment Limit (MB)' (Int) field in DocType 'Email
 #. Account'
@@ -12305,7 +12305,7 @@ msgstr "فیلتر XSS را نادیده بگیرید"
 #: frappe/email/doctype/email_account/email_account.json
 #: frappe/email/doctype/email_domain/email_domain.json
 msgid "Ignore attachments over this size"
-msgstr "پیوست های بیش از این اندازه را نادیده بگیرید"
+msgstr "نادیده گرفتن پیوست های بیش از این اندازه"
 
 #. Label of the ignored_apps (Table) field in DocType 'Website Theme'
 #: frappe/website/doctype/website_theme/website_theme.json
@@ -12755,7 +12755,7 @@ msgstr "مقدار نادرست:"
 #: frappe/public/js/frappe/model/model.js:124
 #: frappe/public/js/frappe/views/reports/report_view.js:1005
 msgid "Index"
-msgstr "فهرست مطالب"
+msgstr "شاخص"
 
 #. Label of the index_web_pages_for_search (Check) field in DocType 'DocType'
 #: frappe/core/doctype/doctype/doctype.json
@@ -15159,7 +15159,7 @@ msgstr "اجباری بستگی دارد"
 #. Label of the mandatory_depends_on (Code) field in DocType 'DocField'
 #: frappe/core/doctype/docfield/docfield.json
 msgid "Mandatory Depends On (JS)"
-msgstr "اجباری وابسته به (JS)"
+msgstr "اجباری بستگی دارد به (JS)"
 
 #: frappe/website/doctype/web_form/web_form.py:498
 msgid "Mandatory Information missing:"
@@ -20393,12 +20393,12 @@ msgstr "فقط خواندنی"
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
 #: frappe/website/doctype/web_form_field/web_form_field.json
 msgid "Read Only Depends On"
-msgstr "خواندن فقط به آن بستگی دارد"
+msgstr "فقط خواندنی بستگی دارد به"
 
 #. Label of the read_only_depends_on (Code) field in DocType 'DocField'
 #: frappe/core/doctype/docfield/docfield.json
 msgid "Read Only Depends On (JS)"
-msgstr "فقط خواندن به آن بستگی دارد (JS)"
+msgstr "فقط خواندن بستگی دارد به (JS)"
 
 #: frappe/public/js/frappe/ui/toolbar/navbar.html:16
 #: frappe/templates/includes/navbar/navbar_items.html:97
@@ -20925,7 +20925,7 @@ msgstr "بارگذاری مجدد گزارش"
 #: frappe/core/doctype/docfield/docfield.json
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
 msgid "Remember Last Selected Value"
-msgstr "آخرین مقدار انتخاب شده را به خاطر بسپارید"
+msgstr "به خاطر سپردن آخرین مقدار انتخاب شده"
 
 #. Label of the remind_at (Datetime) field in DocType 'Reminder'
 #: frappe/automation/doctype/reminder/reminder.json
@@ -21208,7 +21208,7 @@ msgstr "گزارش فیلترها"
 #: frappe/custom/doctype/custom_field/custom_field.json
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
 msgid "Report Hide"
-msgstr "گزارش پنهان کردن"
+msgstr "پنهان کردن گزارش"
 
 #. Label of the report_information_section (Section Break) field in DocType
 #. 'Access Log'
@@ -22873,7 +22873,7 @@ msgstr "یک DocType را برای ایجاد یک قالب جدید انتخا�
 
 #: frappe/public/js/form_builder/components/Sidebar.vue:56
 msgid "Select a field to edit its properties."
-msgstr ""
+msgstr "یک فیلد را برای ویرایش ویژگی‌های آن انتخاب کنید."
 
 #: frappe/public/js/frappe/views/treeview.js:358
 msgid "Select a group node first."
@@ -27451,7 +27451,7 @@ msgstr ""
 #: frappe/custom/doctype/custom_field/custom_field.json
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
 msgid "Unique"
-msgstr "منحصر بفرد"
+msgstr "یکتا"
 
 #. Description of the 'Software ID' (Data) field in DocType 'OAuth Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
@@ -28236,7 +28236,7 @@ msgstr "کاربران"
 #: frappe/core/doctype/doctype/doctype.json
 #: frappe/custom/doctype/customize_form/customize_form.json
 msgid "Users are only able to delete attached files if the document is either in draft or if the document is canceled and they are also able to delete the document."
-msgstr ""
+msgstr "کاربران فقط در صورتی می‌توانند فایل‌های پیوست شده را حذف کنند که سند در حالت پیش‌نویس باشد یا لغو شده باشد و همچنین می‌توانند سند را حذف کنند."
 
 #: frappe/core/page/permission_manager/permission_manager.js:355
 msgid "Users with role {0}:"
