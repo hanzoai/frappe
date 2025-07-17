@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-07-13 09:36+0000\n"
-"PO-Revision-Date: 2025-07-15 20:16\n"
+"PO-Revision-Date: 2025-07-17 20:13\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -3304,7 +3304,7 @@ msgstr "Bakgrund Tjänster"
 
 #: frappe/desk/page/backups/backups.js:28
 msgid "Backup Encryption Key"
-msgstr "Säkerhetskopiering Kryptering Nyckel"
+msgstr "Kryptering Nyckel"
 
 #: frappe/desk/page/backups/backups.py:98
 msgid "Backup job is already queued. You will receive an email with the download link"
@@ -11197,7 +11197,7 @@ msgstr "Hämta Dagens Alerts"
 
 #: frappe/desk/page/backups/backups.js:21
 msgid "Get Backup Encryption Key"
-msgstr "Hämta Säkerhetskopiering Kryptering Nyckel"
+msgstr "Hämta Kryptering Nyckel"
 
 #. Label of the get_contacts (Button) field in DocType 'Auto Repeat'
 #: frappe/automation/doctype/auto_repeat/auto_repeat.json
@@ -18993,7 +18993,7 @@ msgstr "Tillåtna Roller"
 #. Option for the 'Address Type' (Select) field in DocType 'Address'
 #: frappe/contacts/doctype/address/address.json
 msgid "Personal"
-msgstr "Personligt"
+msgstr "Personal"
 
 #. Name of a DocType
 #: frappe/website/doctype/personal_data_deletion_request/personal_data_deletion_request.json
