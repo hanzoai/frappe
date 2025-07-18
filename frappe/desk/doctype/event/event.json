@@ -296,11 +296,7 @@
  "icon": "fa fa-calendar",
  "idx": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2022-08-12 19:24:34.794098",
-=======
  "modified": "2025-06-17 15:31:01.945146",
->>>>>>> aedd5c29c0 (fix: dont allow Website User to write to public events (#32966))
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Event",
