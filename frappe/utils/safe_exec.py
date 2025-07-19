@@ -31,6 +31,7 @@ from frappe.model.mapper import get_mapped_doc
 from frappe.model.rename_doc import rename_doc
 from frappe.modules import scrub
 from frappe.utils.background_jobs import enqueue, get_jobs
+from frappe.utils.caching import site_cache
 from frappe.utils.number_format import NumberFormat
 from frappe.utils.response import json_handler
 from frappe.website.utils import get_next_link, get_toc
@@ -115,13 +116,14 @@ def safe_exec(
 
 	with safe_exec_flags(), patched_qb():
 		# execute script compiled by RestrictedPython
-		exec(
-			compile_restricted(script, filename=filename, policy=FrappeTransformer),
-			exec_globals,
-			_locals,
-		)
+		exec(_compile_code(script, filename=filename), exec_globals, _locals)
 
 	return exec_globals, _locals
+
+
+@site_cache(maxsize=32, ttl=60 * 60)
+def _compile_code(script: str, filename: str, mode: str = "exec"):
+	return compile_restricted(script, filename=filename, policy=FrappeTransformer, mode=mode)
 
 
 def safe_eval(code, eval_globals=None, eval_locals=None):
@@ -137,11 +139,7 @@ def safe_eval(code, eval_globals=None, eval_locals=None):
 	eval_globals["__builtins__"] = {}
 	eval_globals.update(WHITELISTED_SAFE_EVAL_GLOBALS)
 
-	return eval(
-		compile_restricted(code, filename="<safe_eval>", policy=FrappeTransformer, mode="eval"),
-		eval_globals,
-		eval_locals,
-	)
+	return eval(_compile_code(code, filename="<safe_eval>", mode="eval"), eval_globals, eval_locals)
 
 
 def _validate_safe_eval_syntax(code):
@@ -567,7 +565,7 @@ def _validate_attribute_read(object, name):
 		raise SyntaxError(f"Reading {object} attributes is not allowed")
 
 	if name.startswith("_"):
-		raise AttributeError(f'"{name}" is an invalid attribute name because it ' 'starts with "_"')
+		raise AttributeError(f'"{name}" is an invalid attribute name because it starts with "_"')
 
 
 def _write(obj):
