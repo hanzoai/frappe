@@ -75,6 +75,7 @@ class CustomizeForm(Document):
 		queue_in_background: DF.Check
 		quick_entry: DF.Check
 		search_fields: DF.Data | None
+		sender_email_account_field: DF.Data | None
 		sender_field: DF.Data | None
 		sender_name_field: DF.Data | None
 		show_preview_popup: DF.Check

@@ -163,6 +163,7 @@ class DocType(Document):
 		row_format: DF.Literal["Dynamic", "Compressed"]
 		rows_threshold_for_grid_search: DF.Int
 		search_fields: DF.Data | None
+		sender_email_account_field: DF.Data | None
 		sender_field: DF.Data | None
 		sender_name_field: DF.Data | None
 		show_name_in_global_search: DF.Check
