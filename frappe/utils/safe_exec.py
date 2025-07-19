@@ -82,7 +82,7 @@ class FrappePrintCollector(PrintCollector):
 
 def is_safe_exec_enabled() -> bool:
 	# server scripts can only be enabled via common_site_config.json
-	return bool(frappe.get_common_site_config(cached=bool(frappe.request)).get(SAFE_EXEC_CONFIG_KEY))
+	return bool(frappe.get_common_site_config(cached=True).get(SAFE_EXEC_CONFIG_KEY))
 
 
 def safe_exec(
@@ -121,7 +121,7 @@ def safe_exec(
 	return exec_globals, _locals
 
 
-@site_cache(maxsize=32, ttl=60 * 60)
+@site_cache(maxsize=32)
 def _compile_code(script: str, filename: str, mode: str = "exec"):
 	return compile_restricted(script, filename=filename, policy=FrappeTransformer, mode=mode)
 
