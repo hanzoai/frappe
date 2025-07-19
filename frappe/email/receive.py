@@ -850,8 +850,8 @@ class InboundMail(Email):
 		if email_fields.sender_name_field:
 			parent.set(email_fields.sender_name_field, frappe.as_unicode(self.from_real_name))
 
-		if email_fields.sender_email_account_field:
-			parent.set(email_fields.sender_email_account_field, self.email_account.name)
+		if email_fields.recipient_account_field:
+			parent.set(email_fields.recipient_account_field, self.email_account.name)
 
 		parent.flags.ignore_mandatory = True
 
@@ -894,7 +894,7 @@ class InboundMail(Email):
 		"""Return Email related fields of a doctype."""
 		fields = frappe._dict()
 
-		email_fields = ["subject_field", "sender_field", "sender_name_field", "sender_email_account_field"]
+		email_fields = ["subject_field", "sender_field", "sender_name_field", "recipient_account_field"]
 		meta = frappe.get_meta(doctype)
 
 		for field in email_fields:
