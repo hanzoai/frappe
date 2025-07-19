@@ -158,11 +158,11 @@ class DocType(Document):
 		queue_in_background: DF.Check
 		quick_entry: DF.Check
 		read_only: DF.Check
+		recipient_account_field: DF.Data | None
 		restrict_to_domain: DF.Link | None
 		route: DF.Data | None
 		row_format: DF.Literal["Dynamic", "Compressed"]
 		search_fields: DF.Data | None
-		sender_email_account_field: DF.Data | None
 		sender_field: DF.Data | None
 		sender_name_field: DF.Data | None
 		show_name_in_global_search: DF.Check
