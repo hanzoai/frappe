@@ -177,7 +177,7 @@ def get_safe_globals():
 		time_format = "HH:mm:ss"
 		number_format = NumberFormat.from_string("#,###.##")
 
-	add_data_utils(datautils)
+	datautils.update(SAFE_DATA_UTILS)
 
 	form_dict = getattr(frappe.local, "form_dict", frappe._dict())
 
@@ -585,12 +585,6 @@ def _write(obj):
 	return obj
 
 
-def add_data_utils(data):
-	for key, obj in frappe.utils.data.__dict__.items():
-		if key in VALID_UTILS:
-			data[key] = obj
-
-
 def add_module_properties(module, data, filter_method):
 	for key, obj in module.__dict__.items():
 		if key.startswith("_"):
@@ -720,6 +714,9 @@ VALID_UTILS = (
 	"parse_json",
 	"orjson_dumps",
 )
+
+
+SAFE_DATA_UTILS = {key: frappe.utils.data.__dict__[key] for key in VALID_UTILS}
 
 
 WHITELISTED_SAFE_EVAL_GLOBALS = {
