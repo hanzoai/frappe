@@ -295,9 +295,7 @@ def get_safe_globals():
 		get_visible_columns=get_visible_columns,
 	)
 
-	add_module_properties(
-		frappe.exceptions, out.frappe, lambda obj: inspect.isclass(obj) and issubclass(obj, Exception)
-	)
+	out.frappe.update(SAFE_EXCEPTIONS)
 
 	if frappe.response:
 		out.frappe.response = frappe.response
@@ -585,7 +583,8 @@ def _write(obj):
 	return obj
 
 
-def add_module_properties(module, data, filter_method):
+def get_module_properties(module, filter_method):
+	data = {}
 	for key, obj in module.__dict__.items():
 		if key.startswith("_"):
 			# ignore
@@ -594,6 +593,7 @@ def add_module_properties(module, data, filter_method):
 		if filter_method(obj):
 			# only allow functions
 			data[key] = obj
+	return data
 
 
 VALID_UTILS = (
@@ -735,3 +735,7 @@ SAFE_ORJSON = NamespaceDict(loads=orjson.loads, dumps=orjson.dumps)
 for key, val in vars(orjson).items():
 	if key.startswith("OPT_"):
 		SAFE_ORJSON[key] = val
+
+SAFE_EXCEPTIONS = get_module_properties(
+	frappe.exceptions, lambda obj: inspect.isclass(obj) and issubclass(obj, Exception)
+)
