@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-07-13 09:36+0000\n"
-"PO-Revision-Date: 2025-07-17 20:14\n"
+"PO-Revision-Date: 2025-07-19 21:23\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -17341,12 +17341,12 @@ msgstr "از طریق ایمیل اطلاع دهید"
 #. Label of the notify_if_unreplied (Check) field in DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
 msgid "Notify if unreplied"
-msgstr "در صورت عدم پاسخگویی اطلاع دهید"
+msgstr "اطلاع دادن در صورت عدم پاسخگویی"
 
 #. Label of the unreplied_for_mins (Int) field in DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
 msgid "Notify if unreplied for (in mins)"
-msgstr "در صورت عدم پاسخگویی (بر حسب دقیقه) اطلاع دهید"
+msgstr "اطلاع دادن در صورت عدم پاسخگویی (بر حسب دقیقه)"
 
 #. Label of the notify_on_login (Check) field in DocType 'Note'
 #: frappe/desk/doctype/note/note.json
