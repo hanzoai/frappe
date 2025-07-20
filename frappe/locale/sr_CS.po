@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-07-13 09:36+0000\n"
-"PO-Revision-Date: 2025-07-16 20:14\n"
+"PO-Revision-Date: 2025-07-17 20:14\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Serbian (Latin)\n"
 "MIME-Version: 1.0\n"
@@ -743,7 +743,7 @@ msgstr "Naziv DocType-a treba da počne sa slovom i može sadržati isključivo 
 #. Description of a DocType
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "A Frappe Framework instance can function as an OAuth Client, Resource, or Authorization server. This DocType contains settings related to all three."
-msgstr ""
+msgstr "Jedna instanca Frappe Framework može funkcionisati i kao OAuth klijent, resurs ili autorizacioni server. Ovaj DocType sadrži podešavanja vezana za sva tri."
 
 #: frappe/website/doctype/blog_post/blog_post.py:92
 msgid "A featured post must have a cover image"
@@ -784,7 +784,9 @@ msgstr "Šablon već postoji za polje {0} vrste {1}"
 msgid "A version identifier string for the client software.\n"
 "<br>\n"
 "The value of the should change on any update of the client software with the same Software ID."
-msgstr ""
+msgstr "Tekst koji identifikuje verziju klijentskog softvera.\n"
+"<br>\n"
+"Ova vrednost mora da se promeni pri svakom ažuriranju softvera sa istim ID softvera."
 
 #: frappe/utils/password_strength.py:169
 msgid "A word by itself is easy to guess."
@@ -2068,7 +2070,7 @@ msgstr "Dozvoljeni moduli"
 #. 'OAuth Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Allowed Public Client Origins"
-msgstr ""
+msgstr "Dozvoljena porekla javnih klijenata"
 
 #. Label of the allowed_roles (Table MultiSelect) field in DocType 'OAuth
 #. Client'
@@ -2090,37 +2092,37 @@ msgstr "Dozvoljavanje DocType, DocType. Budite oprezni!"
 #. 'OAuth Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Allows clients to fetch metadata from the <code>/.well-known/oauth-authorization-server</code> endpoint. Reference: <a href=\"https://datatracker.ietf.org/doc/html/rfc8414\">RFC8414</a>"
-msgstr ""
+msgstr "Omogućava klijentima da preuzmu metapodatke sa <code>/.well-known/oauth-authorization-server</code> endpoint-a. Referenca<a href=\"https://datatracker.ietf.org/doc/html/rfc8414\">RFC8414</a>"
 
 #. Description of the 'Show Protected Resource Metadata' (Check) field in
 #. DocType 'OAuth Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Allows clients to fetch metadata from the <code>/.well-known/oauth-protected-resource</code> endpoint. Reference: <a href=\"https://datatracker.ietf.org/doc/html/rfc9728#name-protected-resource-metadata\">RFC9728</a>"
-msgstr ""
+msgstr "Omogućava klijentima da preuzmi metapodatke sa <code>/.well-known/oauth-protected-resource</code> endpoint-a. Referenca: <a href=\"https://datatracker.ietf.org/doc/html/rfc9728#name-protected-resource-metadata\">RFC9728</a>"
 
 #. Description of the 'Enable Dynamic Client Registration' (Check) field in
 #. DocType 'OAuth Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Allows clients to register themselves without manual intervention. Registration creates a <b>OAuth Client</b> entry. Reference: <a href=\"https://datatracker.ietf.org/doc/html/rfc7591\">RFC7591</a>"
-msgstr ""
+msgstr "Omogućava klijentima da se registruju samostalno, bez ručne intervencije. Registracija kreira <b>OAuth klijent</b> unos. Referenca: <a href=\"https://datatracker.ietf.org/doc/html/rfc7591\">RFC7591</a>"
 
 #. Description of the 'Show in Resource Metadata' (Check) field in DocType
 #. 'Social Login Key'
 #: frappe/integrations/doctype/social_login_key/social_login_key.json
 msgid "Allows clients to view this as an Authorization Server when querying the <code>/.well-known/oauth-protected-resource</code> end point."
-msgstr ""
+msgstr "Omogućava klijentima da ovo vide kao autorizacioni server prilikom upita ka <code>/.well-known/oauth-protected-resource</code> endpoint-u."
 
 #. Description of the 'Show Social Login Key as Authorization Server' (Check)
 #. field in DocType 'OAuth Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Allows enabled Social Login Key Base URL to be shown as authorization server."
-msgstr ""
+msgstr "Omogućava da se omogućeni osnovni URL ključa za prijavljivanje putem društvenih mreža prikaže kao autorizacioni server."
 
 #. Description of the 'Skip Authorization' (Check) field in DocType 'OAuth
 #. Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Allows skipping authorization if a user has active tokens."
-msgstr ""
+msgstr "Omogućava preskakanje autorizacije ukoliko korisnik već ima aktivne tokene."
 
 #: frappe/core/doctype/user/user.py:1023
 msgid "Already Registered"
@@ -9192,7 +9194,7 @@ msgstr "Završeno u"
 #. 'Connected App'
 #: frappe/integrations/doctype/connected_app/connected_app.json
 msgid "Endpoints"
-msgstr "Krajnje tačke"
+msgstr "Endpoints"
 
 #. Label of the ends_on (Datetime) field in DocType 'Event'
 #: frappe/desk/doctype/event/event.json
@@ -16616,18 +16618,20 @@ msgstr "Novi radni prostor"
 msgid "New line separated list of allowed public client URLs (eg <code>https://frappe.io</code>), or <code>*</code> to accept all.\n"
 "<br>\n"
 "Public clients are restricted by default."
-msgstr ""
+msgstr "Lista dozvoljenih URL adresa javnih klijenata, odvojenih novim redom (npr. <code>https://frappe.io</code>), ili <code>*</code> za prihvatanje svih.\n"
+"<br>\n"
+"Javni klijenti su podrazumevano ograničeni."
 
 #. Description of the 'Scopes Supported' (Small Text) field in DocType 'OAuth
 #. Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "New line separated list of scope values."
-msgstr ""
+msgstr "Lista vrednosti opsega odvojena novim redom."
 
 #. Description of the 'Contacts' (Small Text) field in DocType 'OAuth Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
 msgid "New lines separated list of strings representing ways to contact people responsible for this client, typically email addresses."
-msgstr ""
+msgstr "Lista tekstova, odvojenih novim redovima, koji predstavljaju načine za kontaktiranje osoba odgovornih za ovog klijenta, obično imejl adrese."
 
 #: frappe/www/update-password.html:92
 msgid "New password cannot be same as old password"
@@ -17197,7 +17201,7 @@ msgstr "Nepodudaran"
 #. Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
 msgid "None"
-msgstr "Nijednom"
+msgstr "None"
 
 #: frappe/public/js/frappe/form/workflow.js:36
 msgid "None: End of Workflow"
@@ -18615,7 +18619,7 @@ msgstr "Matični označava naziv dokumenta u koji će se podaci dodati."
 
 #: frappe/public/js/frappe/ui/group_by/group_by.js:253
 msgid "Parent-to-child or child-to-different-child grouping is not allowed."
-msgstr ""
+msgstr "Grupisanje matičnog sa zavisnim ili dva različita zavisna entiteta nije dozvoljeno."
 
 #: frappe/permissions.py:820
 msgid "Parentfield not specified in {0}: {1}"
@@ -26270,7 +26274,7 @@ msgstr "Ove najave će se pojaviti unutar obaveštenja koje se može zatvoriti, 
 #. Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "These fields are used to provide resource server metadata to clients querying the \"well known protected resource\" end point."
-msgstr ""
+msgstr "Ova polja se koriste za pružanje metapodataka resursnog servera klijentima koji šalju upite na \"well known protected resource\" endpoint."
 
 #. Description of the 'LDAP Custom Settings' (Section Break) field in DocType
 #. 'LDAP Settings'
@@ -27013,7 +27017,7 @@ msgstr "Keš tokena"
 #. Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
 msgid "Token Endpoint Auth Method"
-msgstr ""
+msgstr "Metod verifikacije za endpoint tokena"
 
 #. Label of the token_type (Data) field in DocType 'Token Cache'
 #: frappe/integrations/doctype/token_cache/token_cache.json
@@ -27543,24 +27547,24 @@ msgstr "URL mora početi sa http:// ili https://"
 #. Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "URL of a human-readable page with info that developers might need."
-msgstr ""
+msgstr "URL stranicе sa ljudski čitljivim informacijama koje mogu biti neophodne programerima."
 
 #. Description of the 'Client URI' (Data) field in DocType 'OAuth Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
 msgid "URL of a web page providing information about the client."
-msgstr ""
+msgstr "URL veb-stranice koja pruža informacije o klijentu."
 
 #. Description of the 'Resource TOS URI' (Data) field in DocType 'OAuth
 #. Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "URL of human-readable page with info about the protected resource's terms of service."
-msgstr ""
+msgstr "URL stranicе sa ljudski čitljivim informacijama o uslovima korišćenja zaštićenog resursa."
 
 #. Description of the 'Resource Policy URI' (Data) field in DocType 'OAuth
 #. Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "URL of human-readable page with info on requirements about how the client can use the data."
-msgstr ""
+msgstr "URL stranicе sa ljudski čitljivim informacijama o uslovima pod kojima klijent može da koristi podatke."
 
 #: frappe/website/doctype/web_page/web_page.js:84
 msgid "URL of the page"
@@ -27569,17 +27573,17 @@ msgstr "URL stranice"
 #. Description of the 'Policy URI' (Data) field in DocType 'OAuth Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
 msgid "URL that points to a human-readable policy document for the client. Should be shown to end-user before authorizing."
-msgstr ""
+msgstr "URL koji vodi ka ljudski čitljivim dokumentom o pravilima korišćenja za klijenta. Treba da bude prikazan krajnjem korisniku pre autorizacije."
 
 #. Description of the 'TOS URI' (Data) field in DocType 'OAuth Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
 msgid "URL that points to a human-readable terms of service document for the client. Should be shown to end-user before authorizing."
-msgstr ""
+msgstr "URL koji vodi ka ljudski čitljivim dokumentom o uslovima korišćenja za klijenta. Treba da bude prikazan krajnjem korisniku pre autorizacije."
 
 #. Description of the 'Logo URI' (Data) field in DocType 'OAuth Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
 msgid "URL that references a logo for the client."
-msgstr ""
+msgstr "URL logotipa klijenta."
 
 #. Description of the 'URL' (Data) field in DocType 'Website Slideshow Item'
 #: frappe/website/doctype/website_slideshow_item/website_slideshow_item.json
@@ -27696,7 +27700,8 @@ msgstr "Jedinstveno"
 msgid "Unique ID assigned by the client developer used to identify the client software to be dynamically registered.\n"
 "<br>\n"
 "<b>Should remain same</b> across multiple versions or updates of the software."
-msgstr ""
+msgstr "Jedinstveni ID koji dodeljuje programer klijenata, a koristi se za identifikaciju klijentskog softvera koji će se dinamički registrovati. <br>\n"
+"<b>Treba da ostane isti</b> kroz više verzija ili ažuriranja softvera."
 
 #: frappe/website/report/website_analytics/website_analytics.js:60
 msgid "Unknown"
@@ -28630,7 +28635,7 @@ msgstr "Vrednost mora biti jedna od {0}"
 #. 'OAuth Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
 msgid "Value of \"None\" implies a public client. In such a case Client Secret is not given to the client and token exchange makes use of PKCE."
-msgstr ""
+msgstr "Vrednost \"None\" ukazuje na javnog klijenta. U tom slučaju tajna klijenta nije pružena klijentu, dok se za razmenu tokena koristi PKCE mehanizam."
 
 #. Label of the value_to_validate (Data) field in DocType 'Onboarding Step'
 #: frappe/desk/doctype/onboarding_step/onboarding_step.json
