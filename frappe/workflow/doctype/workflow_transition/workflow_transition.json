@@ -12,6 +12,7 @@
   "allowed",
   "allow_self_approval",
   "send_email_to_creator",
+  "enable_action_confirmation",
   "conditions",
   "condition",
   "column_break_7",
@@ -99,7 +100,14 @@
    "fieldname": "send_email_to_creator",
    "fieldtype": "Check",
    "label": "Send Email To Creator"
-  }
+  },
+  {
+    "default": "0",
+    "description": "If checked, action confirmation will be required before performing workflow actions",
+    "fieldname": "enable_action_confirmation",
+    "fieldtype": "Check",
+    "label": "Enable Action Confirmation"
+   }
  ],
  "idx": 1,
  "istable": 1,
