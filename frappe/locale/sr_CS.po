@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-07-20 09:35+0000\n"
-"PO-Revision-Date: 2025-07-21 21:50\n"
+"PO-Revision-Date: 2025-07-23 21:53\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Serbian (Latin)\n"
 "MIME-Version: 1.0\n"
@@ -11911,7 +11911,7 @@ msgstr "Sakrivena polja"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:1641
 msgid "Hidden columns include: {0}"
-msgstr ""
+msgstr "Sakrivene kolone uključuju: {0}"
 
 #. Option for the 'Page Number' (Select) field in DocType 'Print Format'
 #: frappe/printing/doctype/print_format/print_format.json
@@ -12864,7 +12864,7 @@ msgstr "Uključi filtere"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:1639
 msgid "Include hidden columns"
-msgstr ""
+msgstr "Uključi sakrivene kolone"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:1611
 msgid "Include indentation"
@@ -27321,7 +27321,7 @@ msgstr "Prevodi"
 #. Name of a role
 #: frappe/core/doctype/translation/translation.json
 msgid "Translator"
-msgstr ""
+msgstr "Prevodilac"
 
 #. Option for the 'Email Status' (Select) field in DocType 'Communication'
 #: frappe/core/doctype/communication/communication.json
