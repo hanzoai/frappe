@@ -998,7 +998,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		let button_container = "";
 		if (this.settings.button) {
 			const button_html = `
-				<button class="btn btn-action btn-default btn-xs"
+				<button class="btn btn-action btn-default btn-xs ellipsis"
 					data-name="${doc.name}" data-idx="${doc._idx}"
 					title="${this.settings.button.get_description(doc)}">
 						${this.settings.button.get_label(doc)}
