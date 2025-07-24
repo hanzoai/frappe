@@ -295,7 +295,7 @@ def bulk_update(docs):
 
 
 @frappe.whitelist()
-def has_permission(doctype, docname, perm_type="read"):
+def has_permission(doctype: str, docname: str, perm_type: str = "read"):
 	"""Return a JSON with data whether the document has the requested permission.
 
 	:param doctype: DocType of the document to be checked
@@ -306,18 +306,18 @@ def has_permission(doctype, docname, perm_type="read"):
 
 
 @frappe.whitelist()
-def get_doc_permissions(doctype, docname):
+def get_doc_permissions(doctype: str, docname: str):
 	"""Return an evaluated document permissions dict like `{"read":1, "write":1}`.
 
 	:param doctype: DocType of the document to be evaluated
 	:param docname: `name` of the document to be evaluated
 	"""
-	doc = frappe.get_doc(doctype, docname)
+	doc = frappe.get_lazy_doc(doctype, docname)
 	return {"permissions": frappe.permissions.get_doc_permissions(doc)}
 
 
 @frappe.whitelist()
-def get_password(doctype, name, fieldname):
+def get_password(doctype: str, name: str, fieldname: str):
 	"""Return a password type property. Only applicable for System Managers
 
 	:param doctype: DocType of the document that holds the password
@@ -325,7 +325,7 @@ def get_password(doctype, name, fieldname):
 	:param fieldname: `fieldname` of the password property
 	"""
 	frappe.only_for("System Manager")
-	return frappe.get_doc(doctype, name).get_password(fieldname)
+	return frappe.get_lazy_doc(doctype, name).get_password(fieldname)
 
 
 from frappe.deprecation_dumpster import get_js as _get_js
@@ -361,7 +361,7 @@ def attach_file(
 	:param is_private: Attach file as private file (1 or 0)
 	:param docfield: file to attach to (optional)"""
 
-	doc = frappe.get_doc(doctype, docname)
+	doc = frappe.get_lazy_doc(doctype, docname)
 	doc.check_permission()
 
 	file = frappe.get_doc(
@@ -387,7 +387,7 @@ def attach_file(
 
 @frappe.whitelist()
 @http_cache(max_age=10 * 60)
-def is_document_amended(doctype, docname):
+def is_document_amended(doctype: str, docname: str):
 	if frappe.permissions.has_permission(doctype):
 		try:
 			return frappe.db.exists(doctype, {"amended_from": docname})

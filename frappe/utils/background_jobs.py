@@ -41,6 +41,9 @@ RQ_MAX_JOBS = 5000  # Restart NOFORK workers after every N number of jobs
 RQ_MAX_JOBS_JITTER = 50  # Random difference in max jobs to avoid restarting at same time
 
 MAX_QUEUED_JOBS = 500  # frappe.enqueue will start failing when these many jobs exist in queue.
+# When too many jobs are pending in queue, order can be selectively flipped to LIFO to give better
+# response latencies to interactive jobs.
+QUEUE_STARVATION_THRESHOLD = 16
 
 
 _redis_queue_conn = None
@@ -84,6 +87,7 @@ def enqueue(
 	at_front: bool = False,
 	job_id: str | None = None,
 	deduplicate=False,
+	at_front_when_starved=False,
 	**kwargs,
 ) -> Job | Any:
 	"""
@@ -105,6 +109,8 @@ def enqueue(
 	:param kwargs: keyword arguments to be passed to the method
 	:param deduplicate: do not re-queue job if it's already queued, requires job_id.
 	:param job_id: Assigning unique job id, which can be checked using `is_job_enqueued`
+	:param at_front_when_starved: If the queue appears to be starved then new jobs are
+	automatically inserted in LIFO fashion.
 	"""
 	# To handle older implementations
 	is_async = kwargs.pop("async", is_async)
@@ -133,7 +139,7 @@ def enqueue(
 			"unknown", "v17", "Using enqueue with `job_name` is deprecated, use `job_id` instead."
 		)
 
-	if not is_async and not frappe.flags.in_test:
+	if not is_async and not frappe.in_test:
 		from frappe.deprecation_dumpster import deprecation_warning
 
 		deprecation_warning(
@@ -142,7 +148,7 @@ def enqueue(
 			"Using enqueue with is_async=False outside of tests is not recommended, use now=True instead.",
 		)
 
-	call_directly = now or (not is_async and not frappe.flags.in_test)
+	call_directly = now or (not is_async and not frappe.in_test)
 	if call_directly:
 		return frappe.call(method, **kwargs)
 
@@ -178,6 +184,9 @@ def enqueue(
 	}
 
 	on_failure = on_failure or truncate_failed_registry
+
+	if at_front_when_starved and q.count > QUEUE_STARVATION_THRESHOLD:
+		at_front = True
 
 	def enqueue_call():
 		return q.enqueue_call(
@@ -234,7 +243,9 @@ def execute_job(site, method, event, job_name, kwargs, user=None, is_async=True,
 		frappe.init(site, force=True)
 		frappe.connect()
 		if os.environ.get("CI"):
-			frappe.flags.in_test = True
+			from frappe.tests.utils import toggle_test_mode
+
+			toggle_test_mode(True)
 
 		if user:
 			frappe.set_user(user)
@@ -261,7 +272,7 @@ def execute_job(site, method, event, job_name, kwargs, user=None, is_async=True,
 		retval = method(**kwargs)
 
 	except (frappe.db.InternalError, frappe.RetryBackgroundJobError) as e:
-		frappe.db.rollback()
+		frappe.db.rollback(chain=True)
 
 		if retry < 5 and (
 			isinstance(e, frappe.RetryBackgroundJobError)
@@ -282,15 +293,15 @@ def execute_job(site, method, event, job_name, kwargs, user=None, is_async=True,
 			raise
 
 	except Exception as e:
-		frappe.db.rollback()
+		frappe.db.rollback(chain=True)
 		frappe.log_error(title=method_name)
 		frappe.monitor.add_data_to_monitor(exception=e.__class__.__name__)
-		frappe.db.commit()
+		frappe.db.commit(chain=True)
 		print(frappe.get_traceback())
 		raise
 
 	else:
-		frappe.db.commit()
+		frappe.db.commit(chain=True)
 		return retval
 
 	finally:

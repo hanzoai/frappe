@@ -359,6 +359,8 @@ def parse_naming_series(
 			part = today.strftime("%d")
 		elif e == "YYYY":
 			part = today.strftime("%Y")
+		elif e == "JJJ":
+			part = today.strftime("%j")
 		elif e == "WW":
 			part = determine_consecutive_week_number(today)
 		elif e == "timestamp":
@@ -536,9 +538,7 @@ def _set_amended_name(doc):
 		"Amended Document Naming Settings", {"document_type": doc.doctype}, "action", cache=True
 	)
 	if not amend_naming_rule:
-		amend_naming_rule = frappe.db.get_single_value(
-			"Document Naming Settings", "default_amend_naming", cache=True
-		)
+		amend_naming_rule = frappe.get_single_value("Document Naming Settings", "default_amend_naming")
 
 	if amend_naming_rule == "Default Naming":
 		return

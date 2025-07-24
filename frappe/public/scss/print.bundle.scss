@@ -1,7 +1,6 @@
 @import "./desk/variables";
 @import "frappe/public/css/bootstrap.css";
 @import "./common/quill";
-@import "../css/fonts/custom/custom.scss";
 
 @import "~bootstrap/scss/utilities/spacing";
 @import "./desk/css_variables";
@@ -51,4 +50,8 @@
 /* prevent newline and right alignment of number fields in printed report filters */
 .filter-row div {
 	display: inline-block;
+}
+// prevent <ol> numbering conflicts
+.ql-editor {
+	counter-reset: none;
 }

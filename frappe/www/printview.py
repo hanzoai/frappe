@@ -60,7 +60,7 @@ def get_context(context) -> PrintContext:
 	if frappe.form_dict.doc:
 		doc = frappe.form_dict.doc
 	else:
-		doc = frappe.get_doc(frappe.form_dict.doctype, frappe.form_dict.name)
+		doc = frappe.get_lazy_doc(frappe.form_dict.doctype, frappe.form_dict.name)
 
 	set_link_titles(doc)
 
@@ -90,8 +90,15 @@ def get_context(context) -> PrintContext:
 			settings=settings,
 		)
 
+	# Include selected print format name in access log
+	print_format_name = getattr(print_format, "name", "Standard")
+
 	make_access_log(
-		doctype=frappe.form_dict.doctype, document=frappe.form_dict.name, file_type="PDF", method="Print"
+		doctype=frappe.form_dict.doctype,
+		document=frappe.form_dict.name,
+		file_type="PDF",
+		method="Print",
+		page=f"Print Format: {print_format_name}",
 	)
 
 	return {
@@ -104,7 +111,7 @@ def get_context(context) -> PrintContext:
 		"doctype": frappe.form_dict.doctype,
 		"name": frappe.form_dict.name,
 		"key": frappe.form_dict.get("key"),
-		"print_format": getattr(print_format, "name", None),
+		"print_format": print_format_name,
 		"letterhead": letterhead,
 		"no_letterhead": frappe.form_dict.no_letterhead,
 		"pdf_generator": frappe.form_dict.get("pdf_generator", "wkhtmltopdf"),
@@ -333,7 +340,7 @@ def get_html_and_style(
 	"""Return `html` and `style` of print format, used in PDF etc."""
 
 	if isinstance(name, str):
-		document = frappe.get_doc(doc, name)
+		document = frappe.get_lazy_doc(doc, name)
 	else:
 		document = frappe.get_doc(json.loads(doc))
 
@@ -364,7 +371,7 @@ def get_rendered_raw_commands(doc: str, name: str | None = None, print_format: s
 	"""Return Rendered Raw Commands of print format, used to send directly to printer."""
 
 	if isinstance(name, str):
-		document = frappe.get_doc(doc, name)
+		document = frappe.get_lazy_doc(doc, name)
 	else:
 		document = frappe.get_doc(json.loads(doc))
 
@@ -621,7 +628,11 @@ def get_print_style(
 def get_font(
 	print_settings: "PrintSettings", print_format: Optional["PrintFormat"] = None, for_legacy=False
 ) -> str:
-	default = "var(--font-stack)"
+	default = """
+	"InterVariable", "Inter", -apple-system", "BlinkMacSystemFont",
+		"Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+		"Helvetica Neue", sans-serif;
+	"""
 	if for_legacy:
 		return default
 

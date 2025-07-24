@@ -33,6 +33,7 @@
   "editable_grid",
   "quick_entry",
   "grid_page_length",
+  "rows_threshold_for_grid_search",
   "cb01",
   "track_changes",
   "track_seen",
@@ -287,6 +288,7 @@
   },
   {
    "default": "0",
+   "depends_on": "eval:!doc.issingle",
    "fieldname": "allow_import",
    "fieldtype": "Check",
    "label": "Allow Import (via Data Import Tool)"
@@ -697,6 +699,14 @@
    "fieldname": "protect_attached_files",
    "fieldtype": "Check",
    "label": "Protect Attached Files"
+  },
+  {
+   "default": "0",
+   "depends_on": "istable",
+   "fieldname": "rows_threshold_for_grid_search",
+   "fieldtype": "Int",
+   "label": "Rows Threshold for Grid Search",
+   "non_negative": 1
   }
  ],
  "grid_page_length": 50,
@@ -773,14 +783,9 @@
    "group": "Rules",
    "link_doctype": "Assignment Rule",
    "link_fieldname": "document_type"
-  },
-  {
-   "group": "Rules",
-   "link_doctype": "Energy Point Rule",
-   "link_fieldname": "reference_doctype"
   }
  ],
- "modified": "2025-03-27 18:16:53.286909",
+ "modified": "2025-06-24 07:46:34.380662",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "DocType",

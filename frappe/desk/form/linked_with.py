@@ -42,7 +42,7 @@ def get_submitted_linked_docs(doctype: str, name: str, ignore_doctypes_on_cancel
 	if isinstance(ignore_doctypes_on_cancel_all, str):
 		ignore_doctypes_on_cancel_all = json.loads(ignore_doctypes_on_cancel_all)
 
-	frappe.has_permission(doctype, doc=name)
+	frappe.has_permission(doctype, doc=name, throw=True)
 	tree = SubmittableDocumentTree(doctype, name)
 	visited_documents = tree.get_all_children(ignore_doctypes_on_cancel_all)
 	docs = []
@@ -523,7 +523,7 @@ def get_linked_docs(doctype: str, name: str, linkinfo: dict | None = None) -> di
 
 @frappe.whitelist()
 def get(doctype, docname):
-	frappe.has_permission(doctype, doc=docname)
+	frappe.has_permission(doctype, doc=docname, throw=True)
 	linked_doctypes = get_linked_doctypes(doctype=doctype)
 	return get_linked_docs(doctype=doctype, name=docname, linkinfo=linked_doctypes)
 
@@ -564,7 +564,16 @@ def _get_linked_doctypes(doctype, without_ignore_user_permissions_enabled=False)
 			continue
 		ret[dt] = {"get_parent": True}
 
+	custom_doctypes = frappe.get_all(
+		doctype="DocType", filters=[["custom", "=", 1], ["name", "in", list(ret.keys())]], as_list=True
+	)
+
+	custom_doctypes = [item[0] for item in custom_doctypes]
+
 	for dt in list(ret):
+		# if the custom checkbox is checked, then don't load the module of the DocType because it doesn't belong to any app.
+		if dt in custom_doctypes:
+			continue
 		try:
 			doctype_module = load_doctype_module(dt)
 		except (ImportError, KeyError):

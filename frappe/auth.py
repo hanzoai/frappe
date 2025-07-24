@@ -131,7 +131,7 @@ class LoginManager:
 				self.make_session(resume=True)
 				self.get_user_info()
 				self.set_user_info(resume=True)
-			except AttributeError:
+			except (AttributeError, frappe.DoesNotExistError):
 				self.user = "Guest"
 				self.get_user_info()
 				self.make_session()
@@ -487,7 +487,10 @@ def validate_ip_address(user):
 	if bypass_restrict_ip_check:
 		return
 
-	frappe.throw(_("Access not allowed from this IP Address"), frappe.AuthenticationError)
+	frappe.throw(
+		_("Access not allowed from this IP Address") + f": {frappe.local.request_ip}",
+		frappe.AuthenticationError,
+	)
 
 
 def get_login_attempt_tracker(key: str, raise_locked_exception: bool = True):
