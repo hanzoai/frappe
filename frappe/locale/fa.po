@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-07-20 09:35+0000\n"
-"PO-Revision-Date: 2025-07-22 21:46\n"
+"PO-Revision-Date: 2025-07-26 22:36\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -22765,7 +22765,7 @@ msgstr "فیلدها را انتخاب کنید"
 
 #: frappe/public/js/frappe/data_import/data_exporter.js:147
 msgid "Select Fields To Insert"
-msgstr "فیلدهایی را برای درج انتخاب کنید"
+msgstr "انتخاب فیلدها برای درج"
 
 #: frappe/public/js/frappe/data_import/data_exporter.js:148
 msgid "Select Fields To Update"
@@ -27753,25 +27753,25 @@ msgstr "از % برای هر مقدار غیر خالی استفاده کنید.
 #. Label of the ascii_encode_password (Check) field in DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
 msgid "Use ASCII encoding for password"
-msgstr "از رمزگذاری ASCII برای گذرواژه استفاده کنید"
+msgstr "استفاده از رمزگذاری ASCII برای گذرواژه"
 
 #. Label of the use_first_day_of_period (Check) field in DocType 'Auto Email
 #. Report'
 #: frappe/email/doctype/auto_email_report/auto_email_report.json
 msgid "Use First Day of Period"
-msgstr "از اولین روز دوره استفاده کنید"
+msgstr "استفاده از اولین روز دوره"
 
 #. Label of the use_html (Check) field in DocType 'Email Template'
 #: frappe/email/doctype/email_template/email_template.json
 msgid "Use HTML"
-msgstr "از HTML استفاده کنید"
+msgstr "استفاده از HTML"
 
 #. Label of the use_imap (Check) field in DocType 'Email Account'
 #. Label of the use_imap (Check) field in DocType 'Email Domain'
 #: frappe/email/doctype/email_account/email_account.json
 #: frappe/email/doctype/email_domain/email_domain.json
 msgid "Use IMAP"
-msgstr "از IMAP استفاده کنید"
+msgstr "استفاده از IMAP"
 
 #. Label of the use_number_format_from_currency (Check) field in DocType
 #. 'System Settings'
@@ -27796,21 +27796,21 @@ msgstr "استفاده از نمودار گزارش"
 #: frappe/email/doctype/email_account/email_account.json
 #: frappe/email/doctype/email_domain/email_domain.json
 msgid "Use SSL"
-msgstr "از SSL استفاده کنید"
+msgstr "استفاده از SSL"
 
 #. Label of the use_starttls (Check) field in DocType 'Email Account'
 #. Label of the use_starttls (Check) field in DocType 'Email Domain'
 #: frappe/email/doctype/email_account/email_account.json
 #: frappe/email/doctype/email_domain/email_domain.json
 msgid "Use STARTTLS"
-msgstr "از STARTTLS استفاده کنید"
+msgstr "استفاده از STARTTLS"
 
 #. Label of the use_tls (Check) field in DocType 'Email Account'
 #. Label of the use_tls (Check) field in DocType 'Email Domain'
 #: frappe/email/doctype/email_account/email_account.json
 #: frappe/email/doctype/email_domain/email_domain.json
 msgid "Use TLS"
-msgstr "از TLS استفاده کنید"
+msgstr "استفاده از TLS"
 
 #: frappe/utils/password_strength.py:44
 msgid "Use a few words, avoid common phrases."
@@ -29168,7 +29168,7 @@ msgstr "عمل گردش کار"
 #. Description of a DocType
 #: frappe/workflow/doctype/workflow_action_master/workflow_action_master.json
 msgid "Workflow Action Master"
-msgstr "استاد اکشن گردش کار"
+msgstr "مدیر اکشن گردش کار"
 
 #. Label of the workflow_action_name (Data) field in DocType 'Workflow Action
 #. Master'
@@ -29939,7 +29939,7 @@ msgstr ""
 
 #: frappe/core/doctype/prepared_report/prepared_report.js:57
 msgid "Your CSV file is being generated and will appear in the Attachments section once ready. Additionally, you will get notified when the file is available for download."
-msgstr ""
+msgstr "فایل CSV شما در حال تولید است و به محض آماده شدن در بخش پیوست‌ها نمایش داده خواهد شد. علاوه بر این، هنگامی که فایل برای دانلود در دسترس قرار گرفت، به شما اطلاع داده خواهد شد."
 
 #: frappe/desk/page/setup_wizard/setup_wizard.js:397
 msgid "Your Country"
@@ -30130,7 +30130,7 @@ msgstr "ایجاد كردن"
 #. Option for the 'Indicator Color' (Select) field in DocType 'Workspace'
 #: frappe/desk/doctype/workspace/workspace.json
 msgid "cyan"
-msgstr "فیروزه ای"
+msgstr "فیروزه‌ای"
 
 #: frappe/public/js/frappe/form/controls/duration.js:218
 #: frappe/public/js/frappe/utils/utils.js:1119
@@ -30318,7 +30318,7 @@ msgstr "آیکون"
 #. Inspector'
 #: frappe/core/doctype/permission_inspector/permission_inspector.json
 msgid "import"
-msgstr "درون‌ریزی"
+msgstr "درون‌بُرد"
 
 #. Description of the 'Read Time' (Int) field in DocType 'Blog Post'
 #: frappe/website/doctype/blog_post/blog_post.json
@@ -30693,7 +30693,7 @@ msgstr "از طریق قانون واگذاری"
 
 #: frappe/automation/doctype/auto_repeat/auto_repeat.py:242
 msgid "via Auto Repeat"
-msgstr ""
+msgstr "از طریق تکرار خودکار"
 
 #: frappe/core/doctype/data_import/importer.py:271
 #: frappe/core/doctype/data_import/importer.py:292
@@ -30985,7 +30985,7 @@ msgstr "{0} این را ایجاد کرد"
 #: frappe/public/js/frappe/form/footer/version_timeline_content_builder.js:250
 msgctxt "Form timeline"
 msgid "{0} created this document {1}"
-msgstr ""
+msgstr "{0} این سند را ایجاد کرد {1}"
 
 #: frappe/public/js/frappe/utils/pretty_date.js:33
 msgid "{0} d"
