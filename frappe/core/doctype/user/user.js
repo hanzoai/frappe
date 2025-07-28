@@ -336,7 +336,19 @@ frappe.ui.form.on("User", {
 			},
 			callback: function (r) {
 				if (r.message) {
-					frappe.msgprint(__("Save API Secret: {0}", [r.message.api_secret]));
+					const api_key = r.message.api_key;
+					const api_secret = r.message.api_secret;
+
+					let keys_summary = __("API Key: {0}", [`<code>${api_key}</code>`]);
+					keys_summary += `<br/>${__("API Secret: {0}", [`<code>${api_secret}</code>`])}`;
+					keys_summary += `<br/><br/>${__("Store the API Secret securely, it won't be displayed again.")}`;
+
+					const api_keys_dialog = frappe.msgprint(keys_summary, __("API Keys"));
+					api_keys_dialog.set_primary_action(__("Copy token to clipboard"), () => {
+						const token = `${api_key}:${api_secret}`;
+						frappe.utils.copy_to_clipboard(token);
+					});
+
 					frm.reload_doc();
 				}
 			},
