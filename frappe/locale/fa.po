@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-07-20 09:35+0000\n"
-"PO-Revision-Date: 2025-07-26 22:36\n"
+"PO-Revision-Date: 2025-07-28 23:16\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -6690,11 +6690,11 @@ msgstr "مقدار پیش‌فرض"
 #: frappe/core/doctype/docfield/docfield.json
 #: frappe/core/doctype/user/user.json
 msgid "Defaults"
-msgstr "پیش‌فرض ها"
+msgstr "پیش‌فرض‌ها"
 
 #: frappe/email/doctype/email_account/email_account.py:243
 msgid "Defaults Updated"
-msgstr "پیش‌فرض ها به روز شد"
+msgstr "پیش‌فرض‌ها به روز شد"
 
 #. Description of a DocType
 #: frappe/workflow/doctype/workflow_transition/workflow_transition.json
@@ -11968,7 +11968,7 @@ msgstr "ساعت ها"
 #. Description of the 'Number Format' (Select) field in DocType 'Currency'
 #: frappe/geo/doctype/currency/currency.json
 msgid "How should this currency be formatted? If not set, will use system defaults"
-msgstr "این ارز چگونه باید فرمت شود؟ اگر تنظیم نشود، از پیش‌فرض های سیستم استفاده می‌کند"
+msgstr "این ارز چگونه باید فرمت شود؟ اگر تنظیم نشود، از پیش‌فرض‌های سیستم استفاده می‌کند"
 
 #. Description of the 'Resource Name' (Data) field in DocType 'OAuth Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
@@ -27954,7 +27954,7 @@ msgstr ""
 #. Label of the defaults (Table) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "User Defaults"
-msgstr "پیش‌فرض های کاربر"
+msgstr "پیش‌فرض‌های کاربر"
 
 #. Label of the user_details_tab (Tab Break) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
