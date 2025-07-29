@@ -138,6 +138,11 @@ frappe.PermissionEngine = class PermissionEngine {
 					return __(toTitle(frappe.unscrub(r)));
 				});
 
+			this.options.custom_rights.forEach((r) => {
+				if (r.applicable_for !== doctype || !d[r.name]) return;
+				rights.push(__(toTitle(frappe.unscrub(r.name))));
+			});
+
 			d.rights = rights.join(", ");
 
 			$wrapper.append(`<div class="row">\
@@ -263,6 +268,11 @@ frappe.PermissionEngine = class PermissionEngine {
 				if (d.if_owner && r == "report") {
 					perm_container.find("div[data-fieldname='report']").toggle(false);
 				}
+			});
+
+			this.options.custom_rights.forEach((r) => {
+				if (r.applicable_for !== d.parent) return;
+				this.add_check(perm_container, d, r.name);
 			});
 
 			// buttons
