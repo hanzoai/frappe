@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-07-20 09:35+0000\n"
-"PO-Revision-Date: 2025-07-22 21:46\n"
+"PO-Revision-Date: 2025-07-25 22:40\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -14087,7 +14087,7 @@ msgstr ""
 
 #: frappe/public/js/frappe/ui/filters/filter.js:652
 msgid "Last 6 Months"
-msgstr ""
+msgstr "6 Bulan Terakhir"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:624
 msgid "Last 7 Days"
@@ -16521,7 +16521,7 @@ msgstr ""
 
 #: frappe/public/js/frappe/ui/filters/filter.js:704
 msgid "Next 6 Months"
-msgstr ""
+msgstr "6 Bulan ke Depan"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:680
 msgid "Next 7 Days"
@@ -16550,11 +16550,11 @@ msgstr ""
 
 #: frappe/public/js/frappe/ui/filters/filter.js:696
 msgid "Next Month"
-msgstr ""
+msgstr "Bulan Depan"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:700
 msgid "Next Quarter"
-msgstr ""
+msgstr "Kuartal Depan"
 
 #. Label of the next_schedule_date (Date) field in DocType 'Auto Repeat'
 #: frappe/automation/doctype/auto_repeat/auto_repeat.json
@@ -16584,11 +16584,11 @@ msgstr ""
 
 #: frappe/public/js/frappe/ui/filters/filter.js:692
 msgid "Next Week"
-msgstr ""
+msgstr "Minggu Depan"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:708
 msgid "Next Year"
-msgstr ""
+msgstr "Tahun Depan"
 
 #: frappe/public/js/frappe/form/workflow.js:45
 msgid "Next actions"
@@ -26071,19 +26071,19 @@ msgstr "Papan Kanban ini akan menjadi pribadi"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:666
 msgid "This Month"
-msgstr ""
+msgstr "Bulan Ini"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:670
 msgid "This Quarter"
-msgstr ""
+msgstr "Kuartal Ini"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:662
 msgid "This Week"
-msgstr ""
+msgstr "Minggu Ini"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:674
 msgid "This Year"
-msgstr ""
+msgstr "Tahun Ini"
 
 #: frappe/custom/doctype/customize_form/customize_form.js:220
 msgid "This action is irreversible. Do you wish to continue?"
@@ -26789,7 +26789,7 @@ msgstr "Token hilang"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:739
 msgid "Tomorrow"
-msgstr ""
+msgstr "Besok"
 
 #: frappe/desk/doctype/bulk_update/bulk_update.py:68
 #: frappe/model/workflow.py:254
@@ -29474,7 +29474,7 @@ msgstr "Ya"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:727
 msgid "Yesterday"
-msgstr ""
+msgstr "Kemarin"
 
 #: frappe/public/js/frappe/utils/user.js:33
 msgctxt "Name of the current user. For example: You edited this 5 hours ago."
@@ -31412,7 +31412,7 @@ msgstr "{0} minggu yang lalu"
 
 #: frappe/public/js/frappe/utils/pretty_date.js:39
 msgid "{0} y"
-msgstr "{0} t"
+msgstr ""
 
 #: frappe/public/js/frappe/utils/pretty_date.js:72
 msgid "{0} years ago"
