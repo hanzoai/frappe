@@ -436,6 +436,8 @@ def get_definition(fieldtype, precision=None, length=None, *, options=None):
 
 		if length:
 			if coltype == "varchar":
+				if length < 64:
+					length = 64
 				size = length
 			elif coltype == "int" and length < 11:
 				# allow setting custom length for int if length provided is less than 11
@@ -470,5 +472,9 @@ def add_column(doctype, column_name, fieldtype, precision=None, length=None, def
 		query += " not null"
 	if default:
 		query += f" default '{default}'"
-
-	frappe.db.sql(query)
+	try:
+		frappe.db.sql(query)
+	except Exception as err:
+		# 1118 is error code for the row size limit exceeded error
+		if hasattr(err, "args") and err.args[0] == 1118:
+			frappe.db.rollback()
