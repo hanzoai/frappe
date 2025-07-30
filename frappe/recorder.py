@@ -250,13 +250,7 @@ class Recorder:
 		if self.config.profile or self.profiler:
 			self.profiler.disable()
 			profiler_output = io.StringIO()
-<<<<<<< HEAD
-			pstats.Stats(self.profiler, stream=profiler_output).strip_dirs().sort_stats(
-				"cumulative"
-			).print_stats()
-=======
-			pstats.Stats(self.profiler, stream=profiler_output).sort_stats("cumulative").print_stats(200)
->>>>>>> 56b2dfeea1 (feat: remove strip_dirs in Recorder python cProcfile (#33300))
+			pstats.Stats(self.profiler, stream=profiler_output).sort_stats("cumulative").print_stats()
 			profile = profiler_output.getvalue()
 			profiler_output.close()
 			return profile
