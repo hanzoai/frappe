@@ -103,9 +103,8 @@ frappe.ui.form.States = class FormStates {
 					added = true;
 					me.frm.page.add_action_item(__(d.action), function () {
 						if (d.enable_action_confirmation) {
-							frappe.confirm(
-								__("Are you sure you want to {0}?", [d.action]),
-								() => me.handle_workflow_action(d)
+							frappe.confirm(__("Are you sure you want to {0}?", [d.action]), () =>
+								me.handle_workflow_action(d)
 							);
 						} else {
 							me.handle_workflow_action(d);
