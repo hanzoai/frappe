@@ -104,7 +104,7 @@
   },
   {
     "default": "0",
-    "description": "If checked, action confirmation will be required before performing workflow actions",
+    "description": "If checked, a confirmation will be required before performing workflow actions.",
     "fieldname": "enable_action_confirmation",
     "fieldtype": "Check",
     "label": "Enable Action Confirmation"
