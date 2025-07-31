@@ -427,7 +427,22 @@ class SQLiteSearch(ABC):
 				if not values:  # Skip empty filters
 					continue
 
-				if isinstance(values, list):
+				# Check if this is a LIKE filter (list with 'LIKE' operator)
+				if isinstance(values, list) and len(values) == 2 and values[0] == "LIKE":
+					# Handle LIKE filters in format ['LIKE', tag_filters]
+					like_values = values[1]
+					if isinstance(like_values, list):
+						# Multiple LIKE conditions (OR them together)
+						like_conditions = []
+						for like_val in like_values:
+							like_conditions.append(f"{field} LIKE ?")
+							filter_params.append(f"%{like_val}%")
+						filter_conditions.append(f"({' OR '.join(like_conditions)})")
+					else:
+						# Single LIKE condition
+						filter_conditions.append(f"{field} LIKE ?")
+						filter_params.append(f"%{like_values}%")
+				elif isinstance(values, list):
 					if len(values) == 1:
 						filter_conditions.append(f"{field} = ?")
 						filter_params.append(values[0])
@@ -507,6 +522,7 @@ class SQLiteSearch(ABC):
                 ORDER BY bm25_score
                 LIMIT ?
             """
+			print(sql)
 			return self.sql(sql, params, read_only=True)
 
 	def _process_search_results(self, raw_results, query):
