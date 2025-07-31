@@ -1384,8 +1384,13 @@ def update_doc_index(doc: Document, method=None):
 
 				any_field_changed = any(doc.has_value_changed(field) for field in fields)
 				if any_field_changed:
-					print(f"Enqueuing {search.__class__.__name__}.index_doc for {doc.doctype}:{doc.name}")
-					search.index_doc(doctype, doc.name)
+					try:
+						search.index_doc(doctype, doc.name)
+					except Exception:
+						frappe.log_error(
+							title="SQLite Search Index Update Error",
+							message=f"Failed to update index for {doctype}:{doc.name} in {search.__class__.__name__}",
+						)
 
 
 def delete_doc_index(doc: Document, method=None):
@@ -1403,8 +1408,14 @@ def delete_doc_index(doc: Document, method=None):
 				if not fields:
 					continue
 
-				print(f"Enqueuing {search.__class__.__name__}.remove_doc for {doc.doctype}:{doc.name}")
-				search.remove_doc(doctype, doc.name)
+				try:
+					# Remove the document from the index
+					search.remove_doc(doctype, doc.name)
+				except Exception:
+					frappe.log_error(
+						title="SQLite Search Index Delete Error",
+						message=f"Failed to remove index for {doctype}:{doc.name} in {search.__class__.__name__}",
+					)
 
 
 def get_search_classes() -> list[type[SQLiteSearch]]:
