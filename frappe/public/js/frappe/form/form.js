@@ -1766,7 +1766,7 @@ frappe.ui.form.Form = class FrappeForm {
 				}
 			} else {
 				frappe.msgprint(__("Field {0} not found.", [f]));
-				throw "frm.set_value";
+				throw `frm.set_value: '${f}' does not exist in the form`;
 			}
 		};
 
