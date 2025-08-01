@@ -440,64 +440,49 @@ function get_roles_for_editing_user() {
 
 function show_api_key_dialog(api_key, api_secret) {
 	const dialog = new frappe.ui.Dialog({
-		title: __("Key Details"),
+		title: __("API Keys"),
 		fields: [
 			{
 				label: __("API Key"),
 				fieldname: "api_key",
-				fieldtype: "Data",
+				fieldtype: "Code",
 				read_only: 1,
 				default: api_key,
 			},
 			{
 				label: __("API Secret"),
 				fieldname: "api_secret",
-				fieldtype: "Data",
+				fieldtype: "Code",
 				read_only: 1,
-				default: "***************",
+				default: api_secret,
 			},
 		],
-		static: true,
 		size: "small",
-		primary_action_label: __("{0} Download", [`<i class="fa fa-download fa-w"></i>`]),
-		primary_action: function () {
+		primary_action_label: __("Download"),
+		primary_action: () => {
 			frappe.tools.downloadify(
 				[
 					["api_key", "api_secret"],
 					[api_key, api_secret],
 				],
 				"System Manager",
-				"key_details"
+				"frappe_api_keys"
 			);
 
 			dialog.hide();
 		},
-		secondary_action_label: __("{0} Copy", [frappe.utils.icon("clipboard")]),
-		secondary_action: function () {
-			frappe.utils.copy_to_clipboard(JSON.stringify({ api_key, api_secret }, null, "\t"));
-
+		secondary_action_label: __("Copy token to clipboard"),
+		secondary_action: () => {
+			const token = `${api_key}:${api_secret}`;
+			frappe.utils.copy_to_clipboard(token);
 			dialog.hide();
 		},
 	});
 
 	dialog.show();
-	dialog.show_message(__("Download/Copy details for future reference."), "yellow", 1);
-
-	const close_btn = dialog.get_close_btn();
-
-	close_btn.show(); // static: true, so close button is hidden by default
-
-	// ask for confirmation before closing API details dialog
-	close_btn.on("click", function () {
-		const confirm_dialog = frappe.confirm(
-			__(
-				"Are you sure you downloaded/copied the key details? <br> <br> This is the last time we will show you the details."
-			),
-			() => dialog.hide(),
-			() => dialog.show()
-		);
-
-		confirm_dialog.set_primary_action("Yes, Close");
-		confirm_dialog.set_secondary_action_label("No, Go Back");
-	});
+	dialog.show_message(
+		__("Store the API Secret securely, it won't be displayed again."),
+		"yellow",
+		1
+	);
 }
