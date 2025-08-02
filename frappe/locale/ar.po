@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
-"POT-Creation-Date: 2025-07-20 09:35+0000\n"
-"PO-Revision-Date: 2025-07-21 21:49\n"
+"POT-Creation-Date: 2025-07-27 09:36+0000\n"
+"PO-Revision-Date: 2025-08-02 23:51\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -1033,8 +1033,8 @@ msgstr "إضافة الطفل"
 #: frappe/public/js/frappe/views/kanban/kanban_board.html:4
 #: frappe/public/js/frappe/views/reports/query_report.js:1821
 #: frappe/public/js/frappe/views/reports/query_report.js:1824
-#: frappe/public/js/frappe/views/reports/report_view.js:355
-#: frappe/public/js/frappe/views/reports/report_view.js:380
+#: frappe/public/js/frappe/views/reports/report_view.js:356
+#: frappe/public/js/frappe/views/reports/report_view.js:381
 #: frappe/public/js/print_format_builder/Field.vue:112
 msgid "Add Column"
 msgstr "إضافة عمود"
@@ -1948,11 +1948,11 @@ msgstr "مسجل بالفعل"
 msgid "Already in the following Users ToDo list:{0}"
 msgstr "بالفعل في قائمة &quot;المهام للمستخدمين&quot; التالية: {0}"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:902
+#: frappe/public/js/frappe/views/reports/report_view.js:903
 msgid "Also adding the dependent currency field {0}"
 msgstr "إضافة حقل العملة التابعة {0}"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:915
+#: frappe/public/js/frappe/views/reports/report_view.js:916
 msgid "Also adding the status dependency field {0}"
 msgstr "إضافة حقل تبعية الحالة أيضًا {0}"
 
@@ -4114,7 +4114,7 @@ msgstr "لا يمكن مطابقة العمود {0} بأي حقل"
 msgid "Cannot move row"
 msgstr "لا يمكن نقل الصف"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:927
+#: frappe/public/js/frappe/views/reports/report_view.js:928
 msgid "Cannot remove ID field"
 msgstr "لا يمكن إزالة معرف الحقل"
 
@@ -4139,11 +4139,11 @@ msgstr ""
 msgid "Cannot update {0}"
 msgstr "لا يمكن تحديث {0}"
 
-#: frappe/model/db_query.py:1126
-msgid "Cannot use sub-query in order by"
-msgstr "لا يمكن استخدام طلب البحث الفرعي بالترتيب"
+#: frappe/model/db_query.py:1132
+msgid "Cannot use sub-query here."
+msgstr ""
 
-#: frappe/model/db_query.py:1147
+#: frappe/model/db_query.py:1160
 msgid "Cannot use {0} in order/group by"
 msgstr ""
 
@@ -4327,7 +4327,7 @@ msgstr "مصدر الرسم البياني"
 
 #. Label of the chart_type (Select) field in DocType 'Dashboard Chart'
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.json
-#: frappe/public/js/frappe/views/reports/report_view.js:505
+#: frappe/public/js/frappe/views/reports/report_view.js:506
 msgid "Chart Type"
 msgstr "نوع الرسم البياني"
 
@@ -5163,7 +5163,7 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:487
+#: frappe/public/js/frappe/views/reports/report_view.js:488
 msgid "Configure Chart"
 msgstr "تكوين المخطط"
 
@@ -6728,7 +6728,7 @@ msgstr "مؤجل"
 #: frappe/public/js/frappe/form/footer/form_timeline.js:626
 #: frappe/public/js/frappe/form/grid.js:66
 #: frappe/public/js/frappe/form/toolbar.js:464
-#: frappe/public/js/frappe/views/reports/report_view.js:1740
+#: frappe/public/js/frappe/views/reports/report_view.js:1738
 #: frappe/public/js/frappe/views/treeview.js:329
 #: frappe/public/js/frappe/web_form/web_form_list.js:282
 #: frappe/templates/discussions/reply_card.html:35
@@ -8353,7 +8353,7 @@ msgstr ""
 msgid "Edit your workflow visually using the Workflow Builder."
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:678
+#: frappe/public/js/frappe/views/reports/report_view.js:679
 #: frappe/public/js/frappe/widgets/widget_dialog.js:52
 msgid "Edit {0}"
 msgstr "تحرير {0}"
@@ -9437,7 +9437,7 @@ msgstr "وقت انتهاء صلاحية رمز الاستجابة السريع�
 #: frappe/public/js/frappe/data_import/data_exporter.js:92
 #: frappe/public/js/frappe/data_import/data_exporter.js:243
 #: frappe/public/js/frappe/views/reports/query_report.js:1809
-#: frappe/public/js/frappe/views/reports/report_view.js:1627
+#: frappe/public/js/frappe/views/reports/report_view.js:1625
 #: frappe/public/js/frappe/widgets/chart_widget.js:315
 msgid "Export"
 msgstr "تصدير"
@@ -9488,11 +9488,11 @@ msgstr "تصدير التقرير: {0}"
 msgid "Export Type"
 msgstr "نوع التصدير"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1638
+#: frappe/public/js/frappe/views/reports/report_view.js:1636
 msgid "Export all matching rows?"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1648
+#: frappe/public/js/frappe/views/reports/report_view.js:1646
 msgid "Export all {0} rows?"
 msgstr ""
 
@@ -10240,7 +10240,7 @@ msgstr "يمكن الوصول إلى <code>filters</code> عبر <code>filters</
 msgid "Filters {0}"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1427
+#: frappe/public/js/frappe/views/reports/report_view.js:1425
 msgid "Filters:"
 msgstr ""
 
@@ -10564,7 +10564,7 @@ msgid "For Value"
 msgstr "للقيمة"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:2118
-#: frappe/public/js/frappe/views/reports/report_view.js:102
+#: frappe/public/js/frappe/views/reports/report_view.js:104
 msgid "For comparison, use >5, <10 or =324. For ranges, use 5:10 (for values between 5 & 10)."
 msgstr "للمقارنة ، استخدم&gt; 5 ، &lt;10 أو = 324. للنطاقات ، استخدم 5:10 (للقيم بين 5 و 10)."
 
@@ -12003,7 +12003,7 @@ msgid "ID"
 msgstr "هوية شخصية"
 
 #: frappe/desk/reportview.py:491
-#: frappe/public/js/frappe/views/reports/report_view.js:984
+#: frappe/public/js/frappe/views/reports/report_view.js:985
 msgctxt "Label of name column in report"
 msgid "ID"
 msgstr "هوية شخصية"
@@ -12322,7 +12322,7 @@ msgid "Illegal Document Status for {0}"
 msgstr "حالة المستند غير القانوني لـ {0}"
 
 #: frappe/model/db_query.py:452 frappe/model/db_query.py:455
-#: frappe/model/db_query.py:1129
+#: frappe/model/db_query.py:1123
 msgid "Illegal SQL Query"
 msgstr "استعلام SQL غير قانوني"
 
@@ -12762,7 +12762,7 @@ msgstr ""
 #: frappe/custom/doctype/custom_field/custom_field.json frappe/model/meta.py:55
 #: frappe/public/js/frappe/model/meta.js:203
 #: frappe/public/js/frappe/model/model.js:124
-#: frappe/public/js/frappe/views/reports/report_view.js:1005
+#: frappe/public/js/frappe/views/reports/report_view.js:1006
 msgid "Index"
 msgstr "مؤشر"
 
@@ -12853,7 +12853,7 @@ msgstr "إدراج بعد الحقل '{0}' المذكورة في الحقل ال
 msgid "Insert Below"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:390
+#: frappe/public/js/frappe/views/reports/report_view.js:391
 msgid "Insert Column Before {0}"
 msgstr "إدراج عمود قبل {0}"
 
@@ -13024,7 +13024,7 @@ msgstr "غير صالحة"
 #: frappe/public/js/form_builder/utils.js:221
 #: frappe/public/js/frappe/form/grid_row.js:833
 #: frappe/public/js/frappe/form/layout.js:811
-#: frappe/public/js/frappe/views/reports/report_view.js:716
+#: frappe/public/js/frappe/views/reports/report_view.js:717
 msgid "Invalid \"depends_on\" expression"
 msgstr "تعبير &quot;under_on&quot; غير صالح"
 
@@ -13209,7 +13209,7 @@ msgstr ""
 msgid "Invalid characters in table name: {0}"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:399
+#: frappe/public/js/frappe/views/reports/report_view.js:400
 msgid "Invalid column"
 msgstr "عمود غير صالح"
 
@@ -13245,13 +13245,9 @@ msgstr ""
 msgid "Invalid field name in function: {0}. Only simple field names are allowed."
 msgstr ""
 
-#: frappe/utils/data.py:2197
+#: frappe/utils/data.py:2199
 msgid "Invalid field name {0}"
 msgstr "اسم الحقل غير صالح {0}"
-
-#: frappe/model/db_query.py:1133
-msgid "Invalid field name: {0}"
-msgstr ""
 
 #: frappe/database/query.py:668
 msgid "Invalid field type: {0}"
@@ -16389,7 +16385,7 @@ msgstr "اسم تنسيق طباعة جديد"
 msgid "New Quick List"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1384
+#: frappe/public/js/frappe/views/reports/report_view.js:1382
 msgid "New Report name"
 msgstr "اسم التقرير الجديد"
 
@@ -17079,7 +17075,7 @@ msgstr ""
 msgid "Not Permitted"
 msgstr "لا يسمح"
 
-#: frappe/desk/query_report.py:555
+#: frappe/desk/query_report.py:560
 msgid "Not Permitted to read {0}"
 msgstr ""
 
@@ -17093,7 +17089,7 @@ msgstr "لم تنشر"
 #: frappe/public/js/frappe/form/toolbar.js:816
 #: frappe/public/js/frappe/model/indicator.js:28
 #: frappe/public/js/frappe/views/kanban/kanban_view.js:169
-#: frappe/public/js/frappe/views/reports/report_view.js:203
+#: frappe/public/js/frappe/views/reports/report_view.js:205
 #: frappe/public/js/print_format_builder/print_format_builder.bundle.js:39
 #: frappe/website/doctype/web_form/templates/web_form.html:78
 msgid "Not Saved"
@@ -17927,7 +17923,7 @@ msgstr "افتتح"
 msgid "Operation"
 msgstr "عملية"
 
-#: frappe/utils/data.py:2128
+#: frappe/utils/data.py:2130
 msgid "Operator must be one of {0}"
 msgstr "يجب أن يكون المشغل واحدا من {0}"
 
@@ -18851,8 +18847,8 @@ msgid "Phone Number {0} set in field {1} is not valid."
 msgstr ""
 
 #: frappe/public/js/frappe/form/print_utils.js:53
-#: frappe/public/js/frappe/views/reports/report_view.js:1579
-#: frappe/public/js/frappe/views/reports/report_view.js:1582
+#: frappe/public/js/frappe/views/reports/report_view.js:1577
+#: frappe/public/js/frappe/views/reports/report_view.js:1580
 msgid "Pick Columns"
 msgstr "اختيار الأعمدة"
 
@@ -19127,7 +19123,7 @@ msgstr "الرجاء حفظ المستند قبل التعيين"
 msgid "Please save the document before removing assignment"
 msgstr "الرجاء حفظ المستند قبل إزالة المهمة"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1709
+#: frappe/public/js/frappe/views/reports/report_view.js:1707
 msgid "Please save the report first"
 msgstr "يرجى حفظ التقرير الأول"
 
@@ -19175,7 +19171,7 @@ msgstr "الرجاء تحديد مرشح تاريخ صالح"
 msgid "Please select applicable Doctypes"
 msgstr "يرجى اختيار الأساليب المناسبة"
 
-#: frappe/model/db_query.py:1142
+#: frappe/model/db_query.py:1155
 msgid "Please select atleast 1 column from {0} to sort/group"
 msgstr "يرجى تحديد عمود واحد على الأقل من {0} إلى التصنيف / المجموعة"
 
@@ -19595,7 +19591,7 @@ msgstr ""
 #: frappe/public/js/frappe/form/toolbar.js:372
 #: frappe/public/js/frappe/list/bulk_operations.js:95
 #: frappe/public/js/frappe/views/reports/query_report.js:1780
-#: frappe/public/js/frappe/views/reports/report_view.js:1537
+#: frappe/public/js/frappe/views/reports/report_view.js:1535
 #: frappe/public/js/frappe/views/treeview.js:490 frappe/www/printview.html:18
 msgid "Print"
 msgstr "طباعة"
@@ -21302,11 +21298,11 @@ msgstr ""
 msgid "Report timed out."
 msgstr ""
 
-#: frappe/desk/query_report.py:610
+#: frappe/desk/query_report.py:615
 msgid "Report updated successfully"
 msgstr "تم تحديث التقرير بنجاح"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1357
+#: frappe/public/js/frappe/views/reports/report_view.js:1355
 msgid "Report was not saved (there were errors)"
 msgstr "لم يتم حفظ التقرير (كانت هناك أخطاء)"
 
@@ -22218,7 +22214,7 @@ msgstr "السبت"
 #: frappe/public/js/frappe/views/kanban/kanban_settings.js:189
 #: frappe/public/js/frappe/views/kanban/kanban_view.js:343
 #: frappe/public/js/frappe/views/reports/query_report.js:1946
-#: frappe/public/js/frappe/views/reports/report_view.js:1726
+#: frappe/public/js/frappe/views/reports/report_view.js:1724
 #: frappe/public/js/frappe/views/workspace/workspace.js:335
 #: frappe/public/js/frappe/widgets/base_widget.js:142
 #: frappe/public/js/frappe/widgets/quick_list_widget.js:120
@@ -22235,8 +22231,8 @@ msgstr ""
 msgid "Save Anyway"
 msgstr "حفظ على أي حال"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1388
-#: frappe/public/js/frappe/views/reports/report_view.js:1733
+#: frappe/public/js/frappe/views/reports/report_view.js:1386
+#: frappe/public/js/frappe/views/reports/report_view.js:1731
 msgid "Save As"
 msgstr "حفظ باسم"
 
@@ -22700,7 +22696,7 @@ msgstr "حدد المرفقات"
 msgid "Select Child Table"
 msgstr "حدد جدول الطفل"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:383
+#: frappe/public/js/frappe/views/reports/report_view.js:384
 msgid "Select Column"
 msgstr "حدد العمود"
 
@@ -23589,7 +23585,7 @@ msgid "Setup > User Permissions"
 msgstr ""
 
 #: frappe/public/js/frappe/views/reports/query_report.js:1815
-#: frappe/public/js/frappe/views/reports/report_view.js:1704
+#: frappe/public/js/frappe/views/reports/report_view.js:1702
 msgid "Setup Auto Email"
 msgstr "الإعداد التلقائي البريد الإلكتروني"
 
@@ -23884,7 +23880,7 @@ msgstr "اظهار العنوان"
 msgid "Show Title in Link Fields"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1527
+#: frappe/public/js/frappe/views/reports/report_view.js:1525
 msgid "Show Totals"
 msgstr "مشاهدة المجاميع"
 
@@ -24006,7 +24002,7 @@ msgstr "اظهار العنوان في نافذة المتصفح كما \"باد
 msgid "Show {0} List"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:501
+#: frappe/public/js/frappe/views/reports/report_view.js:502
 msgid "Showing only Numeric fields from Report"
 msgstr "عرض حقول رقمية فقط من التقرير"
 
@@ -24696,7 +24692,7 @@ msgstr "الفاصل الزمني للإحصائيات"
 #: frappe/integrations/doctype/integration_request/integration_request.json
 #: frappe/integrations/doctype/oauth_bearer_token/oauth_bearer_token.json
 #: frappe/public/js/frappe/list/list_settings.js:359
-#: frappe/public/js/frappe/views/reports/report_view.js:975
+#: frappe/public/js/frappe/views/reports/report_view.js:976
 #: frappe/website/doctype/personal_data_deletion_request/personal_data_deletion_request.json
 #: frappe/website/doctype/personal_data_deletion_step/personal_data_deletion_step.json
 #: frappe/workflow/doctype/workflow_action/workflow_action.json
@@ -25211,7 +25207,7 @@ msgstr "المزامنة"
 msgid "Syncing {0} of {1}"
 msgstr "مزامنة {0} من {1}"
 
-#: frappe/utils/data.py:2529
+#: frappe/utils/data.py:2531
 msgid "Syntax Error"
 msgstr ""
 
@@ -26736,7 +26732,7 @@ msgstr "قائمة المهام"
 msgid "Today"
 msgstr "اليوم"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1570
+#: frappe/public/js/frappe/views/reports/report_view.js:1568
 msgid "Toggle Chart"
 msgstr "تبديل الرسم البياني"
 
@@ -26752,7 +26748,7 @@ msgstr "تبديل عرض الشبكة"
 
 #: frappe/public/js/frappe/ui/page.js:201
 #: frappe/public/js/frappe/ui/page.js:203
-#: frappe/public/js/frappe/views/reports/report_view.js:1574
+#: frappe/public/js/frappe/views/reports/report_view.js:1572
 msgid "Toggle Sidebar"
 msgstr "تبديل الشريط الجانبي"
 
@@ -26880,10 +26876,10 @@ msgstr ""
 msgid "Topic"
 msgstr "موضوع"
 
-#: frappe/desk/query_report.py:546
+#: frappe/desk/query_report.py:551
 #: frappe/public/js/frappe/views/reports/print_grid.html:45
 #: frappe/public/js/frappe/views/reports/query_report.js:1323
-#: frappe/public/js/frappe/views/reports/report_view.js:1551
+#: frappe/public/js/frappe/views/reports/report_view.js:1549
 msgid "Total"
 msgstr "الاجمالي غير شامل الضريبة"
 
@@ -26933,11 +26929,11 @@ msgstr "إجمالي عدد الرسائل الإلكترونية المراد �
 msgid "Total:"
 msgstr "الاجمالي غير شامل الضريبة:"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1256
+#: frappe/public/js/frappe/views/reports/report_view.js:1254
 msgid "Totals"
 msgstr "المجاميع"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1231
+#: frappe/public/js/frappe/views/reports/report_view.js:1229
 msgid "Totals Row"
 msgstr "الصف الكلي"
 
@@ -27061,7 +27057,7 @@ msgstr ""
 msgid "Translate Link Fields"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1656
+#: frappe/public/js/frappe/views/reports/report_view.js:1654
 msgid "Translate values"
 msgstr ""
 
@@ -28059,7 +28055,7 @@ msgstr "إذن المستخدم"
 #: frappe/core/page/permission_manager/permission_manager_help.html:30
 #: frappe/core/workspace/users/users.json
 #: frappe/public/js/frappe/views/reports/query_report.js:1933
-#: frappe/public/js/frappe/views/reports/report_view.js:1752
+#: frappe/public/js/frappe/views/reports/report_view.js:1750
 msgid "User Permissions"
 msgstr "ضوابط المستخدم"
 
@@ -29381,7 +29377,7 @@ msgstr "الكتابة"
 msgid "Wrong Fetch From value"
 msgstr "إحضار خاطئ من القيمة"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:490
+#: frappe/public/js/frappe/views/reports/report_view.js:491
 msgid "X Axis Field"
 msgstr "X محور الحقل"
 
@@ -29400,7 +29396,7 @@ msgstr ""
 msgid "Y Axis"
 msgstr "المحور ص"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:497
+#: frappe/public/js/frappe/views/reports/report_view.js:498
 msgid "Y Axis Fields"
 msgstr "حقول محور Y"
 
@@ -29742,7 +29738,7 @@ msgstr "لا يوجد لديك الصلاحية الكافية لاتمام هذ
 msgid "You do not have permission to access field: {0}"
 msgstr ""
 
-#: frappe/desk/query_report.py:873
+#: frappe/desk/query_report.py:878
 msgid "You do not have permission to access {0}: {1}."
 msgstr ""
 
@@ -30804,7 +30800,7 @@ msgstr ""
 msgid "{0} Calendar"
 msgstr "{0} التقويم"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:570
+#: frappe/public/js/frappe/views/reports/report_view.js:571
 msgid "{0} Chart"
 msgstr "{0} الرسم البياني"
 
@@ -31066,7 +31062,7 @@ msgstr "{0} هو حقل بيانات غير صالح."
 msgid "{0} is an invalid email address in 'Recipients'"
 msgstr "{0} هو عنوان بريد إلكتروني غير صالح في &quot;المستلمين&quot;"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1468
+#: frappe/public/js/frappe/views/reports/report_view.js:1466
 msgid "{0} is between {1} and {2}"
 msgstr ""
 
@@ -31075,27 +31071,27 @@ msgstr ""
 msgid "{0} is currently {1}"
 msgstr "{0} حاليًا {1}"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1437
+#: frappe/public/js/frappe/views/reports/report_view.js:1435
 msgid "{0} is equal to {1}"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1457
+#: frappe/public/js/frappe/views/reports/report_view.js:1455
 msgid "{0} is greater than or equal to {1}"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1447
+#: frappe/public/js/frappe/views/reports/report_view.js:1445
 msgid "{0} is greater than {1}"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1462
+#: frappe/public/js/frappe/views/reports/report_view.js:1460
 msgid "{0} is less than or equal to {1}"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1452
+#: frappe/public/js/frappe/views/reports/report_view.js:1450
 msgid "{0} is less than {1}"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1487
+#: frappe/public/js/frappe/views/reports/report_view.js:1485
 msgid "{0} is like {1}"
 msgstr ""
 
@@ -31164,19 +31160,19 @@ msgstr "{0} ليس تنسيق تقرير صالحًا. يجب أن يكون تن
 msgid "{0} is not a zip file"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1442
+#: frappe/public/js/frappe/views/reports/report_view.js:1440
 msgid "{0} is not equal to {1}"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1489
+#: frappe/public/js/frappe/views/reports/report_view.js:1487
 msgid "{0} is not like {1}"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1483
+#: frappe/public/js/frappe/views/reports/report_view.js:1481
 msgid "{0} is not one of {1}"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1493
+#: frappe/public/js/frappe/views/reports/report_view.js:1491
 msgid "{0} is not set"
 msgstr ""
 
@@ -31184,7 +31180,7 @@ msgstr ""
 msgid "{0} is now default print format for {1} doctype"
 msgstr "{0} هو الآن تنسيق الطباعة الافتراضي لنوع المستند {1}"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1476
+#: frappe/public/js/frappe/views/reports/report_view.js:1474
 msgid "{0} is one of {1}"
 msgstr ""
 
@@ -31196,11 +31192,11 @@ msgstr ""
 msgid "{0} is required"
 msgstr "{0} مطلوب"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1492
+#: frappe/public/js/frappe/views/reports/report_view.js:1490
 msgid "{0} is set"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1471
+#: frappe/public/js/frappe/views/reports/report_view.js:1469
 msgid "{0} is within {1}"
 msgstr ""
 
@@ -31344,7 +31340,7 @@ msgstr ""
 msgid "{0} row #{1}: "
 msgstr ""
 
-#: frappe/desk/query_report.py:625
+#: frappe/desk/query_report.py:630
 msgid "{0} saved successfully"
 msgstr "تم حفظ {0} بنجاح"
 
@@ -31609,11 +31605,11 @@ msgstr "{{{0}}} غير صالح كأسم حقل. يجب أن يكون {{field_na
 msgid "{} Complete"
 msgstr "{} اكتمال"
 
-#: frappe/utils/data.py:2523
+#: frappe/utils/data.py:2525
 msgid "{} Invalid python code on line {}"
 msgstr ""
 
-#: frappe/utils/data.py:2532
+#: frappe/utils/data.py:2534
 msgid "{} Possibly invalid python code. <br>{}"
 msgstr ""
 
