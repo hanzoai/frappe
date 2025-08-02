@@ -267,6 +267,8 @@ frappe.views.FileView = class FileView extends frappe.views.ListView {
 		let html = this.data
 			.map((d) => {
 				const icon_class = d.icon_class + "-large";
+				const align_file_body_class =
+					d._type == "image" ? "align-flex-start" : "align-center";
 				const file_url = frappe.utils.escape_html(d.file_url);
 				const absolute_file_url = base_url + file_url;
 				let file_body_html =
@@ -283,7 +285,7 @@ frappe.views.FileView = class FileView extends frappe.views.ListView {
 						title="${__("Copy File URL")}"
 						data-file-url="${absolute_file_url}"
 					>
-						<svg class="es-icon es-line  icon-sm" style="" aria-hidden="true">
+						<svg class="es-icon es-line icon-sm copy-icon" aria-hidden="true">
 							<use class="" href="#es-line-copy-light"></use>
 						</svg>
 					</button>`;
@@ -296,7 +298,7 @@ frappe.views.FileView = class FileView extends frappe.views.ListView {
 						<input class="level-item list-row-checkbox hidden-xs" type="checkbox" data-name="${name}">
 						${!d.is_folder ? copy_url_btn : ""}
 					</div>
-					<div class="file-body">
+					<div class="file-body ${align_file_body_class}">
 						${file_body_html}
 					</div>
 					<div class="file-footer">
