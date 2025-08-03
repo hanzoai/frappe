@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-07-27 09:36+0000\n"
-"PO-Revision-Date: 2025-08-02 23:52\n"
+"PO-Revision-Date: 2025-08-03 23:57\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -4036,7 +4036,7 @@ msgstr "نمی‌توان {0} را حذف کرد"
 
 #: frappe/utils/nestedset.py:299
 msgid "Cannot delete {0} as it has child nodes"
-msgstr "نمی‌توان {0} را حذف کرد زیرا دارای گره های فرزند است"
+msgstr "نمی‌توان {0} را حذف کرد زیرا دارای گره‌های فرزند است"
 
 #: frappe/desk/doctype/dashboard/dashboard.py:48
 msgid "Cannot edit Standard Dashboards"
@@ -4134,7 +4134,7 @@ msgstr "نمی‌توان {0} را به روز کرد"
 
 #: frappe/model/db_query.py:1132
 msgid "Cannot use sub-query here."
-msgstr ""
+msgstr "اینجا نمی‌توان از پرسمان فرعی استفاده کرد."
 
 #: frappe/model/db_query.py:1160
 msgid "Cannot use {0} in order/group by"
@@ -9603,7 +9603,7 @@ msgstr "ورودهای ناموفق (30 روز گذشته)"
 
 #: frappe/model/workflow.py:306
 msgid "Failed Transactions"
-msgstr "تراکنش های ناموفق"
+msgstr "تراکنش‌های ناموفق"
 
 #: frappe/utils/synchronization.py:46
 msgid "Failed to aquire lock: {}. Lock may be held by another process."
@@ -10907,7 +10907,7 @@ msgstr ""
 
 #: frappe/public/js/frappe/views/treeview.js:419
 msgid "Further nodes can be only created under 'Group' type nodes"
-msgstr "گره های بیشتر را فقط می‌توان تحت گره های نوع «گروهی» ایجاد کرد"
+msgstr "گره‌های بیشتر را فقط می‌توان تحت گره‌های نوع «گروهی» ایجاد کرد"
 
 #: frappe/core/doctype/communication/communication.js:291
 msgid "Fw: {0}"
@@ -23374,7 +23374,7 @@ msgstr "حد را تنظیم کنید"
 #. DocType 'Document Naming Settings'
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.json
 msgid "Set Naming Series options on your transactions."
-msgstr "گزینه‌های سری نام‌گذاری را در تراکنش های خود تنظیم کنید."
+msgstr "گزینه‌های سری نام‌گذاری را در تراکنش‌های خود تنظیم کنید."
 
 #. Label of the new_password (Password) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
@@ -23595,7 +23595,7 @@ msgstr "راه‌اندازی کامل شد"
 #. Settings'
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.json
 msgid "Setup Series for transactions"
-msgstr "راه‌اندازی سری برای تراکنش ها"
+msgstr "راه‌اندازی سری برای تراکنش‌ها"
 
 #: frappe/desk/page/setup_wizard/setup_wizard.js:236
 msgid "Setup failed"
@@ -25037,7 +25037,7 @@ msgstr "تعداد مشاغل موفق"
 
 #: frappe/model/workflow.py:307
 msgid "Successful Transactions"
-msgstr "تراکنش های موفق"
+msgstr "تراکنش‌های موفق"
 
 #: frappe/model/rename_doc.py:699
 msgid "Successful: {0} to {1}"
@@ -25741,7 +25741,7 @@ msgstr "URL فایلی که وارد کرده اید نادرست است"
 
 #: frappe/automation/doctype/auto_repeat/auto_repeat.py:108
 msgid "The Next Scheduled Date cannot be later than the End Date."
-msgstr "تاریخ زمان‌بندی شده بعدی نمی تواند دیرتر از تاریخ پایان باشد."
+msgstr "تاریخ زمان‌بندی شده بعدی نمی‌تواند دیرتر از تاریخ پایان باشد."
 
 #: frappe/integrations/doctype/push_notification_settings/push_notification_settings.py:29
 msgid "The Push Relay Server URL key (`push_relay_server_url`) is missing in your site config"
@@ -26051,7 +26051,7 @@ msgstr "اگر از فهرست LDAP 'Custom' استفاده شود، این تن
 #. Description of the 'Defaults' (Section Break) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "These values will be automatically updated in transactions and also will be useful to restrict permissions for this user on transactions containing these values."
-msgstr "این مقادیر به طور خودکار در تراکنش ها به روز می‌شوند و همچنین برای محدود کردن مجوزهای این کاربر در تراکنش های حاوی این مقادیر مفید خواهند بود."
+msgstr "این مقادیر به طور خودکار در تراکنش‌ها به روز می‌شوند و همچنین برای محدود کردن مجوزهای این کاربر در تراکنش‌های حاوی این مقادیر مفید خواهند بود."
 
 #: frappe/www/third_party_apps.html:3 frappe/www/third_party_apps.html:14
 msgid "Third Party Apps"
