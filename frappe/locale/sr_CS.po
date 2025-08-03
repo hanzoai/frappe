@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-07-27 09:36+0000\n"
-"PO-Revision-Date: 2025-08-02 23:52\n"
+"PO-Revision-Date: 2025-08-03 23:57\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Serbian (Latin)\n"
 "MIME-Version: 1.0\n"
@@ -4320,7 +4320,7 @@ msgstr "Nije moguće ažurirati {0}"
 
 #: frappe/model/db_query.py:1132
 msgid "Cannot use sub-query here."
-msgstr ""
+msgstr "Nije moguće koristiti podupit ovde."
 
 #: frappe/model/db_query.py:1160
 msgid "Cannot use {0} in order/group by"
