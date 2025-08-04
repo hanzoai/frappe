@@ -176,6 +176,20 @@ class TestDBUpdate(IntegrationTestCase):
 
 		self.assertEqual(frappe.db.get_column_type(referring_doctype.name, link), "uuid")
 
+	@run_only_if(db_type_is.MARIADB)
+	def test_row_size(self):
+		from frappe.database.schema import add_column
+		from frappe.utils import get_table_name
+
+		test_doc = new_doctype().insert()
+		try:
+			for i in range(400):
+				add_column(test_doc.name, fieldtype="Data", column_name=f"col{i}", length=63)
+		except Exception as e:
+			print(e)
+		finally:
+			frappe.db.sql_ddl(f"drop table `{get_table_name(test_doc.name)}`")
+
 
 class TestDBUpdateSanityChecks(IntegrationTestCase):
 	@run_only_if(db_type_is.MARIADB)

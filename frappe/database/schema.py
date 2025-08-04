@@ -436,6 +436,7 @@ def get_definition(fieldtype, precision=None, length=None, *, options=None):
 
 		if length:
 			if coltype == "varchar":
+				# Reference: https://mariadb.com/docs/server/server-usage/storage-engines/innodb/innodb-row-formats/troubleshooting-row-size-too-large-errors-with-innodb
 				if length < 64:
 					length = 64
 				size = length
@@ -472,9 +473,5 @@ def add_column(doctype, column_name, fieldtype, precision=None, length=None, def
 		query += " not null"
 	if default:
 		query += f" default '{default}'"
-	try:
-		frappe.db.sql(query)
-	except Exception as err:
-		# 1118 is error code for the row size limit exceeded error
-		if hasattr(err, "args") and err.args[0] == 1118:
-			frappe.db.rollback()
+
+	frappe.db.sql(query)
