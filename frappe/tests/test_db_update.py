@@ -150,6 +150,67 @@ class TestDBUpdate(FrappeTestCase):
 		doctype.delete()
 		frappe.db.commit()
 
+<<<<<<< HEAD
+=======
+	def test_uuid_varchar_migration(self):
+		doctype = new_doctype().insert()
+		doctype.autoname = "UUID"
+		doctype.save()
+		self.assertEqual(frappe.db.get_column_type(doctype.name, "name"), "uuid")
+
+		doc = frappe.new_doc(doctype.name).insert()
+
+		doctype.autoname = "hash"
+		doctype.save()
+		varchar = "varchar" if frappe.db.db_type == "mariadb" else "character varying"
+		self.assertIn(varchar, frappe.db.get_column_type(doctype.name, "name"))
+		doc.reload()  # ensure that docs are still accesible
+
+	def test_uuid_link_field(self):
+		uuid_doctype = new_doctype().update({"autoname": "UUID"}).insert()
+		self.assertEqual(frappe.db.get_column_type(uuid_doctype.name, "name"), "uuid")
+
+		link = "link_field"
+		referring_doctype = new_doctype(
+			fields=[{"fieldname": link, "fieldtype": "Link", "options": uuid_doctype.name}]
+		).insert()
+
+		self.assertEqual(frappe.db.get_column_type(referring_doctype.name, link), "uuid")
+
+	@run_only_if(db_type_is.MARIADB)
+	def test_row_size(self):
+		from frappe.database.schema import add_column
+		from frappe.utils import get_table_name
+
+		test_doc = new_doctype().insert()
+		try:
+			for i in range(400):
+				add_column(test_doc.name, fieldtype="Data", column_name=f"col{i}", length=63)
+		except Exception as e:
+			print(e)
+		finally:
+			frappe.db.sql_ddl(f"drop table `{get_table_name(test_doc.name)}`")
+
+
+class TestDBUpdateSanityChecks(IntegrationTestCase):
+	@run_only_if(db_type_is.MARIADB)
+	def test_no_unnecessary_migrates(self):
+		doctypes = frappe.get_all("DocType", {"is_virtual": 0, "custom": 0}, pluck="name")
+
+		# Migrating all doctypes takes way too long of a time.
+		# NOTE: This test mostly won't be flaky, if it fails randomly, it is because it tests
+		# randomly.
+		# DO NOT IGNORE FAILURES.
+		random.shuffle(doctypes)
+		doctypes = doctypes[:20]
+
+		for doctype in doctypes:
+			with self.subTest(f"Check {doctype}"):
+				frappe.reload_doctype(doctype, force=True)
+				with self.assertQueryCount(0, query_type=("alter",)):
+					frappe.reload_doctype(doctype, force=True)
+
+>>>>>>> 3cb061bacb (fix: add reference and test_case)
 
 def get_fieldtype_from_def(field_def):
 	fieldtuple = frappe.db.type_map.get(field_def.fieldtype, ("", 0))
