@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
-"POT-Creation-Date: 2025-07-27 09:36+0000\n"
-"PO-Revision-Date: 2025-08-02 23:52\n"
+"POT-Creation-Date: 2025-08-03 09:36+0000\n"
+"PO-Revision-Date: 2025-08-04 23:54\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -61,7 +61,7 @@ msgstr "#{0}"
 msgid "${values.doctype_name} has been added to queue for optimization"
 msgstr "${values.doctype_name} optimizasyon için kuyruğa eklendi"
 
-#: frappe/public/js/frappe/ui/toolbar/about.js:8
+#: frappe/public/js/frappe/ui/toolbar/about.js:11
 msgid "&copy; Frappe Technologies Pvt. Ltd. and contributors"
 msgstr "&copy; Frappe Technologies Pvt. Ltd. ve katkıda bulunanlar"
 
@@ -74,7 +74,7 @@ msgstr "&lt;head&gt; HTML"
 msgid "'In Global Search' is not allowed for field {0} of type {1}"
 msgstr "{1} türündeki {0} alanı için 'Genel Arama' seçeneğine izin verilmiyor"
 
-#: frappe/core/doctype/doctype/doctype.py:1354
+#: frappe/core/doctype/doctype/doctype.py:1355
 msgid "'In Global Search' not allowed for type {0} in row {1}"
 msgstr "{1} satırındaki {0} türü için 'Genel Arama' seçeneğine izin verilmiyor"
 
@@ -82,19 +82,19 @@ msgstr "{1} satırındaki {0} türü için 'Genel Arama' seçeneğine izin veril
 msgid "'In List View' is not allowed for field {0} of type {1}"
 msgstr "{1} türündeki {0} alanı için 'Liste Görünümü' seçeneğine izin verilmiyor"
 
-#: frappe/custom/doctype/customize_form/customize_form.py:362
+#: frappe/custom/doctype/customize_form/customize_form.py:363
 msgid "'In List View' not allowed for type {0} in row {1}"
 msgstr "{1} satırındaki {0} türü için 'Liste Görünümü' seçeneğine izin verilmiyor"
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:156
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:161
 msgid "'Recipients' not specified"
 msgstr "'Alıcılar' belirtilmemiş"
 
-#: frappe/utils/__init__.py:256
+#: frappe/utils/__init__.py:259
 msgid "'{0}' is not a valid URL"
 msgstr "'{0}' geçerli bir URL değil"
 
-#: frappe/core/doctype/doctype/doctype.py:1348
+#: frappe/core/doctype/doctype/doctype.py:1349
 msgid "'{0}' not allowed for type {1} in row {2}"
 msgstr "'{0}' {2} satırındaki {1} türü için izin verilmiyor"
 
@@ -102,7 +102,7 @@ msgstr "'{0}' {2} satırındaki {1} türü için izin verilmiyor"
 msgid "(Mandatory)"
 msgstr "(Zorunlu)"
 
-#: frappe/model/rename_doc.py:704
+#: frappe/model/rename_doc.py:703
 msgid "** Failed: {0} to {1}: {2}"
 msgstr "** Başarısız: {0} - {1}: {2}"
 
@@ -144,10 +144,6 @@ msgstr "1 Google Takvim Etkinliği senkronize edildi."
 #: frappe/public/js/frappe/views/reports/query_report.js:954
 msgid "1 Report"
 msgstr "1 Rapor"
-
-#: frappe/website/doctype/blog_post/blog_post.py:380
-msgid "1 comment"
-msgstr "1 yorum"
 
 #: frappe/tests/test_utils.py:716
 msgid "1 day ago"
@@ -641,7 +637,7 @@ msgstr "<p>Yukarıdaki HTML ile etkileşim kurmak için `root_element` öğesini
 "some_class_element.textContent = \"Yeni içerik\";\n"
 "</code></pre>"
 
-#: frappe/twofactor.py:446
+#: frappe/twofactor.py:451
 msgid "<p>Your OTP secret on {0} has been reset. If you did not perform this reset and did not request it, please contact your System Administrator immediately.</p>"
 msgstr "<p> {0} üzerindeki OTP sırrınız sıfırlandı. Bu sıfırlamayı siz yapmadıysanız ve talep etmediyseniz lütfen hemen Sistem Yöneticinizle iletişime geçin.</p>"
 
@@ -731,7 +727,7 @@ msgstr ">"
 msgid ">="
 msgstr ">="
 
-#: frappe/core/doctype/doctype/doctype.py:1034
+#: frappe/core/doctype/doctype/doctype.py:1035
 msgid "A DocType's name should start with a letter and can only consist of letters, numbers, spaces, underscores and hyphens"
 msgstr "Bir DocType'ın adı bir harfle başlamalıdır ve yalnızca harfler, sayılar, boşluklar, alt çizgiler ve tire işaretlerinden oluşabilir"
 
@@ -739,10 +735,6 @@ msgstr "Bir DocType'ın adı bir harfle başlamalıdır ve yalnızca harfler, sa
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "A Frappe Framework instance can function as an OAuth Client, Resource, or Authorization server. This DocType contains settings related to all three."
 msgstr ""
-
-#: frappe/website/doctype/blog_post/blog_post.py:92
-msgid "A featured post must have a cover image"
-msgstr "Öne çıkan bir gönderinin kapak resmi olmalıdır"
 
 #: frappe/custom/doctype/custom_field/custom_field.py:175
 msgid "A field with the name {0} already exists in {1}"
@@ -761,7 +753,7 @@ msgstr "Kullanıcı izin verdikten sonra İstemci Uygulamasının erişebileceğ
 msgid "A new account has been created for you at {0}"
 msgstr "{0} adresinde sizin için yeni bir hesap oluşturuldu"
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:400
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:428
 msgid "A recurring {0} {1} has been created for you via Auto Repeat {2}."
 msgstr "Otomatik Tekrar {2} aracılığıyla sizin için tekrar eden bir {0} {1} oluşturuldu."
 
@@ -951,6 +943,20 @@ msgstr "Yaklaşık {0} dakika kaldı"
 #: frappe/core/doctype/data_import/data_import.js:25
 msgid "About {0} seconds remaining"
 msgstr "Yaklaşık {0} saniye kaldı"
+
+#: frappe/templates/emails/user_invitation.html:16
+msgid "Accept Invitation"
+msgstr ""
+
+#. Option for the 'Status' (Select) field in DocType 'User Invitation'
+#: frappe/core/doctype/user_invitation/user_invitation.json
+msgid "Accepted"
+msgstr "Kabul Edildi"
+
+#. Label of the accepted_at (Datetime) field in DocType 'User Invitation'
+#: frappe/core/doctype/user_invitation/user_invitation.json
+msgid "Accepted At"
+msgstr ""
 
 #. Label of the access_control_section (Section Break) field in DocType 'Web
 #. Form'
@@ -1206,10 +1212,10 @@ msgid "Add Child"
 msgstr "Alt öğe ekle"
 
 #: frappe/public/js/frappe/views/kanban/kanban_board.html:4
-#: frappe/public/js/frappe/views/reports/query_report.js:1821
-#: frappe/public/js/frappe/views/reports/query_report.js:1824
-#: frappe/public/js/frappe/views/reports/report_view.js:356
-#: frappe/public/js/frappe/views/reports/report_view.js:381
+#: frappe/public/js/frappe/views/reports/query_report.js:1823
+#: frappe/public/js/frappe/views/reports/query_report.js:1826
+#: frappe/public/js/frappe/views/reports/report_view.js:360
+#: frappe/public/js/frappe/views/reports/report_view.js:385
 #: frappe/public/js/print_format_builder/Field.vue:112
 msgid "Add Column"
 msgstr "Sütun Ekle"
@@ -1301,7 +1307,7 @@ msgstr "Abonelere Ekle "
 msgid "Add Tags"
 msgstr "Etiket Ekle"
 
-#: frappe/public/js/frappe/list/list_view.js:2002
+#: frappe/public/js/frappe/list/list_view.js:2023
 msgctxt "Button in list view actions menu"
 msgid "Add Tags"
 msgstr "Etiket Ekle"
@@ -1830,11 +1836,6 @@ msgstr "Misafire İzin Ver"
 msgid "Allow Guest to View"
 msgstr "Misafirin Görüntülemesine İzin Ver"
 
-#. Label of the allow_guest_to_comment (Check) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Allow Guest to comment"
-msgstr "Misafirin yorum yapmasına izin ver"
-
 #. Label of the allow_guests_to_upload_files (Check) field in DocType 'System
 #. Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
@@ -1883,7 +1884,7 @@ msgid "Allow Print for Cancelled"
 msgstr "İptal Edilenler İçin Yazdırmaya İzin Ver"
 
 #. Label of the allow_print_for_draft (Check) field in DocType 'Print Settings'
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:407
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:435
 #: frappe/printing/doctype/print_settings/print_settings.json
 msgid "Allow Print for Draft"
 msgstr "Taslak Yazdırmaya İzin Ver"
@@ -2124,11 +2125,11 @@ msgstr "Zaten kayıltı"
 msgid "Already in the following Users ToDo list:{0}"
 msgstr "Zaten şu Kullanıcıların Yapılacaklar listesinde:{0}"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:903
+#: frappe/public/js/frappe/views/reports/report_view.js:907
 msgid "Also adding the dependent currency field {0}"
 msgstr "Bağımlı para birimi alanı da ekleniyor {0}"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:916
+#: frappe/public/js/frappe/views/reports/report_view.js:920
 msgid "Also adding the status dependency field {0}"
 msgstr "Durum bağımlılığı alanı da ekleniyor {0}"
 
@@ -2308,10 +2309,12 @@ msgid "App Logo"
 msgstr "Uygulama Logosu"
 
 #. Label of the app_name (Select) field in DocType 'Module Def'
+#. Label of the app_name (Select) field in DocType 'User Invitation'
 #. Label of the app_name (Data) field in DocType 'Changelog Feed'
 #. Label of the app_name (Data) field in DocType 'Website Settings'
 #: frappe/core/doctype/installed_applications/installed_applications.js:27
 #: frappe/core/doctype/module_def/module_def.json
+#: frappe/core/doctype/user_invitation/user_invitation.json
 #: frappe/desk/doctype/changelog_feed/changelog_feed.json
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "App Name"
@@ -2391,7 +2394,7 @@ msgstr "Uygulandı"
 msgid "Apply"
 msgstr "Uygula"
 
-#: frappe/public/js/frappe/list/list_view.js:1987
+#: frappe/public/js/frappe/list/list_view.js:2008
 msgctxt "Button in list view actions menu"
 msgid "Apply Assignment Rule"
 msgstr "Arama Kuralı Uygula"
@@ -2439,7 +2442,7 @@ msgstr "Kullanıcı Sahibi ise bu kuralı uygulayın"
 msgid "Apply to all Documents Types"
 msgstr "Tüm Belge Türlerine Uygula"
 
-#: frappe/model/workflow.py:266
+#: frappe/model/workflow.py:322
 msgid "Applying: {0}"
 msgstr "Uygulanıyor: {0}"
 
@@ -2472,7 +2475,11 @@ msgstr "Arşivlendi"
 msgid "Archived Columns"
 msgstr "Arşivlenmiş Sütunlar"
 
-#: frappe/public/js/frappe/list/list_view.js:1966
+#: frappe/core/doctype/user_invitation/user_invitation.js:18
+msgid "Are you sure you want to cancel the invitation?"
+msgstr ""
+
+#: frappe/public/js/frappe/list/list_view.js:1987
 msgid "Are you sure you want to clear the assignments?"
 msgstr "Atamaları temizlemek istediğinizen emin misiniz?"
 
@@ -2576,7 +2583,7 @@ msgstr "Koşulu Ata"
 msgid "Assign To"
 msgstr "Ata"
 
-#: frappe/public/js/frappe/list/list_view.js:1948
+#: frappe/public/js/frappe/list/list_view.js:1969
 msgctxt "Button in list view actions menu"
 msgid "Assign To"
 msgstr "Ata"
@@ -2638,6 +2645,11 @@ msgstr "Atanan"
 #: frappe/desk/report/todo/todo.py:40
 msgid "Assigned To/Owner"
 msgstr "Atanan/Sahip"
+
+#. Label of the assignee (Table MultiSelect) field in DocType 'Auto Repeat'
+#: frappe/automation/doctype/auto_repeat/auto_repeat.json
+msgid "Assignee"
+msgstr ""
 
 #: frappe/public/js/frappe/form/sidebar/assign_to.js:269
 msgid "Assigning..."
@@ -2707,6 +2719,12 @@ msgstr "{0} ataması {1} tarafından kaldırıldı"
 #: frappe/public/js/frappe/form/sidebar/assign_to.js:255
 msgid "Assignments"
 msgstr "Atamalar"
+
+#. Label of the asynchronous (Check) field in DocType 'Workflow Transition
+#. Task'
+#: frappe/workflow/doctype/workflow_transition_task/workflow_transition_task.json
+msgid "Asynchronous"
+msgstr ""
 
 #: frappe/public/js/frappe/form/grid_row.js:680
 msgid "At least one column is required to show in the grid."
@@ -2984,11 +3002,11 @@ msgstr "Otomatik Tekrarla"
 msgid "Auto Repeat Day"
 msgstr "Otomatik Tekrar Günü"
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:165
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:170
 msgid "Auto Repeat Day{0} {1} has been repeated."
 msgstr "Otomatik Tekrarlama Günü {0} {1} tekrarlanmıştır."
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:448
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:476
 msgid "Auto Repeat Document Creation Failed"
 msgstr "Otomatik Tekrar Belge Oluşturma Başarısız"
 
@@ -2996,11 +3014,16 @@ msgstr "Otomatik Tekrar Belge Oluşturma Başarısız"
 msgid "Auto Repeat Schedule"
 msgstr "Otomatik Tekrar Programı"
 
+#. Name of a DocType
+#: frappe/automation/doctype/auto_repeat_user/auto_repeat_user.json
+msgid "Auto Repeat User"
+msgstr ""
+
 #: frappe/public/js/frappe/utils/common.js:434
 msgid "Auto Repeat created for this document"
 msgstr "Bu belge için Otomatik Tekrar oluşturuldu"
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:451
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:479
 msgid "Auto Repeat failed for {0}"
 msgstr "{0} için Otomatik Tekrarlama başarısız oldu"
 
@@ -3044,7 +3067,7 @@ msgstr "Yorum yaptığınız belgeleri otomatik takip edin"
 msgid "Auto follow documents that you create"
 msgstr "Oluşturduğunuz belgeleri otomatik takip edin"
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:227
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:239
 msgid "Auto repeat failed. Please enable auto repeat after fixing the issues."
 msgstr "Otomatik tekrarlama başarısız oldu. Lütfen sorunları giderdikten sonra otomatik tekrarı etkinleştirin."
 
@@ -3105,11 +3128,6 @@ msgstr "Hesabı otomatik olarak sil"
 #: frappe/automation/workspace/tools/tools.json
 msgid "Automation"
 msgstr "Otomasyon"
-
-#. Label of the avatar (Attach Image) field in DocType 'Blogger'
-#: frappe/website/doctype/blogger/blogger.json
-msgid "Avatar"
-msgstr "Profil Resmi"
 
 #. Option for the 'Chart Type' (Select) field in DocType 'Dashboard Chart'
 #. Option for the 'Group By Type' (Select) field in DocType 'Dashboard Chart'
@@ -3382,8 +3400,8 @@ msgstr "Ana URL"
 
 #. Label of the based_on (Link) field in DocType 'Language'
 #: frappe/core/doctype/language/language.json
-#: frappe/printing/page/print/print.js:273
-#: frappe/printing/page/print/print.js:327
+#: frappe/printing/page/print/print.js:286
+#: frappe/printing/page/print/print.js:340
 msgid "Based On"
 msgstr "Buna göre"
 
@@ -3500,10 +3518,8 @@ msgstr "Binary Günlük Kaydı"
 
 #. Label of the bio (Small Text) field in DocType 'User'
 #. Label of the bio (Small Text) field in DocType 'About Us Team Member'
-#. Label of the bio (Small Text) field in DocType 'Blogger'
 #: frappe/core/doctype/user/user.json
 #: frappe/website/doctype/about_us_team_member/about_us_team_member.json
-#: frappe/website/doctype/blogger/blogger.json
 msgid "Bio"
 msgstr "Hakkında"
 
@@ -3532,64 +3548,6 @@ msgstr ""
 #: frappe/desk/doctype/desktop_icon/desktop_icon.json
 msgid "Blocked"
 msgstr "Engellenmiş"
-
-#. Label of a Card Break in the Website Workspace
-#: frappe/website/doctype/blog_post/blog_post.py:245
-#: frappe/website/doctype/blog_post/templates/blog_post.html:13
-#: frappe/website/doctype/blog_post/templates/blog_post_list.html:2
-#: frappe/website/doctype/blog_post/templates/blog_post_list.html:11
-#: frappe/website/workspace/website/website.json
-msgid "Blog"
-msgstr "Blog"
-
-#. Name of a DocType
-#. Label of the blog_category (Link) field in DocType 'Blog Post'
-#. Label of a Link in the Website Workspace
-#: frappe/website/doctype/blog_category/blog_category.json
-#: frappe/website/doctype/blog_post/blog_post.json
-#: frappe/website/workspace/website/website.json
-msgid "Blog Category"
-msgstr "Blog Kategorisi"
-
-#. Label of the blog_intro (Small Text) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "Blog Intro"
-msgstr "Blog Girişi"
-
-#. Label of the blog_introduction (Small Text) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Blog Introduction"
-msgstr "Blog Tanıtımı"
-
-#. Name of a DocType
-#. Label of a Link in the Website Workspace
-#. Label of a shortcut in the Website Workspace
-#: frappe/website/doctype/blog_post/blog_post.json
-#: frappe/website/workspace/website/website.json
-msgid "Blog Post"
-msgstr "Blog Yazısı"
-
-#. Name of a DocType
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Blog Settings"
-msgstr "Blog Ayarları"
-
-#. Label of the blog_title (Data) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Blog Title"
-msgstr "Blog Başlığı"
-
-#. Name of a role
-#. Label of the blogger (Link) field in DocType 'Blog Post'
-#. Name of a DocType
-#. Label of a Link in the Website Workspace
-#: frappe/website/doctype/blog_category/blog_category.json
-#: frappe/website/doctype/blog_post/blog_post.json
-#: frappe/website/doctype/blog_settings/blog_settings.json
-#: frappe/website/doctype/blogger/blogger.json
-#: frappe/website/workspace/website/website.json
-msgid "Blogger"
-msgstr "Blog Yazarı"
 
 #. Option for the 'Color' (Select) field in DocType 'DocType State'
 #. Option for the 'Indicator' (Select) field in DocType 'Kanban Board Column'
@@ -3688,13 +3646,6 @@ msgstr "Marka, araç çubuğunun sol üst köşesinde görünen şeydir. Eğer b
 msgid "Breadcrumbs"
 msgstr ""
 
-#. Label of the browse_by_category (Check) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_post/templates/blog_post_list.html:18
-#: frappe/website/doctype/blog_post/templates/blog_post_list.html:21
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Browse by category"
-msgstr "Kategoriye göre görüntüle"
-
 #. Label of the browser (Data) field in DocType 'Web Page View'
 #: frappe/website/doctype/web_page_view/web_page_view.json
 #: frappe/website/report/website_analytics/website_analytics.js:36
@@ -3775,7 +3726,7 @@ msgstr "Toplu PDF Dışa Aktarma"
 msgid "Bulk Update"
 msgstr "Toplu Güncelleme"
 
-#: frappe/model/workflow.py:254
+#: frappe/model/workflow.py:310
 msgid "Bulk approval only support up to 500 documents."
 msgstr "Toplu işlemler yalnızca 500 belgeye kadar izin verilir."
 
@@ -3787,7 +3738,7 @@ msgstr "Toplu işlem arka planda sıraya alındı."
 msgid "Bulk operations only support up to 500 documents."
 msgstr "Toplu işlemler yalnızca 500 belgeye kadar destekler."
 
-#: frappe/model/workflow.py:243
+#: frappe/model/workflow.py:299
 msgid "Bulk {0} is enqueued in background."
 msgstr "Toplu {0} arka planda sıraya alındı."
 
@@ -3917,16 +3868,6 @@ msgstr "Vurgulamak istediğiniz öğe için CSS seçici."
 msgid "CSV"
 msgstr "CSV Dosyası"
 
-#. Label of the cta_label (Data) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "CTA Label"
-msgstr ""
-
-#. Label of the cta_url (Data) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "CTA URL"
-msgstr ""
-
 #. Label of the cache_section (Section Break) field in DocType 'System Health
 #. Report'
 #: frappe/desk/doctype/system_health_report/system_health_report.json
@@ -3975,11 +3916,6 @@ msgstr ""
 #. Label of the call_to_action_url (Data) field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Call To Action URL"
-msgstr ""
-
-#. Label of the cta_section (Section Break) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Call to Action"
 msgstr ""
 
 #. Label of the callback_message (Small Text) field in DocType 'Onboarding
@@ -4035,7 +3971,7 @@ msgstr "Yazma"
 msgid "Can not rename as column {0} is already present on DocType."
 msgstr "DocType üzerinde {0} sütunu zaten mevcut olduğu için yeniden adlandırılamıyor."
 
-#: frappe/core/doctype/doctype/doctype.py:1163
+#: frappe/core/doctype/doctype/doctype.py:1164
 msgid "Can only change to/from Autoincrement naming rule when there is no data in the doctype"
 msgstr ""
 
@@ -4061,12 +3997,13 @@ msgstr "{0} mevcut olmadığı için {0} adresini {1} olarak yeniden adlandıram
 #: frappe/core/doctype/docperm/docperm.json
 #: frappe/core/doctype/doctype/doctype_list.js:130
 #: frappe/core/doctype/user_document_type/user_document_type.json
+#: frappe/core/doctype/user_invitation/user_invitation.js:17
 #: frappe/email/doctype/notification/notification.json
 #: frappe/public/js/frappe/form/reminders.js:54
 msgid "Cancel"
 msgstr "İptal"
 
-#: frappe/public/js/frappe/list/list_view.js:2057
+#: frappe/public/js/frappe/list/list_view.js:2078
 msgctxt "Button in list view actions menu"
 msgid "Cancel"
 msgstr "İptal"
@@ -4084,16 +4021,18 @@ msgstr "Tümünü İptal Et"
 msgid "Cancel All Documents"
 msgstr "Tüm Belgeleri İptal Et"
 
-#: frappe/public/js/frappe/list/list_view.js:2062
+#: frappe/public/js/frappe/list/list_view.js:2083
 msgctxt "Title of confirmation dialog"
 msgid "Cancel {0} documents?"
 msgstr "{0} belge iptal edilsin mi?"
 
 #. Option for the 'Comment Type' (Select) field in DocType 'Comment'
+#. Option for the 'Status' (Select) field in DocType 'User Invitation'
 #. Option for the 'Status' (Select) field in DocType 'Event'
 #. Option for the 'Status' (Select) field in DocType 'ToDo'
 #. Option for the 'Status' (Select) field in DocType 'Integration Request'
 #: frappe/core/doctype/comment/comment.json
+#: frappe/core/doctype/user_invitation/user_invitation.json
 #: frappe/desk/doctype/event/event.json frappe/desk/doctype/todo/todo.json
 #: frappe/desk/form/save.py:64
 #: frappe/integrations/doctype/integration_request/integration_request.json
@@ -4143,7 +4082,7 @@ msgstr "Dosya yoluna erişilemiyor {0}"
 msgid "Cannot cancel before submitting while transitioning from <b>{0} State</b> to <b>{1} State</b>"
 msgstr "<b>{0} Durumundan</b> <b>{1} </b> <b> Durumuna</b> geçerken kaydetmeden önce iptal edilemez"
 
-#: frappe/workflow/doctype/workflow/workflow.py:109
+#: frappe/workflow/doctype/workflow/workflow.py:110
 msgid "Cannot cancel before submitting. See Transition {0}"
 msgstr "Göndermeden önce iptal edilemez. Geçişe bakın {0}"
 
@@ -4163,11 +4102,11 @@ msgstr "Docstatus (Doctype Durumu) 1 değerinden (Gönderildi) 0 değerine (Tasl
 msgid "Cannot change state of Cancelled Document <b>({0} State)</b>"
 msgstr "İptal Edilen Belgenin durumu değiştirilemiyor <b>({0} Durumu)</b>"
 
-#: frappe/workflow/doctype/workflow/workflow.py:98
+#: frappe/workflow/doctype/workflow/workflow.py:99
 msgid "Cannot change state of Cancelled Document. Transition row {0}"
 msgstr "İptal Edilen Belgenin durumu değiştirilemiyor. Geçiş satırı {0}"
 
-#: frappe/core/doctype/doctype/doctype.py:1153
+#: frappe/core/doctype/doctype/doctype.py:1154
 msgid "Cannot change to/from autoincrement autoname in Customize Form"
 msgstr "Özelleştir Formunda otomatik artırma otomatik adı olarak değiştirilemiyor"
 
@@ -4226,7 +4165,7 @@ msgstr "<b>{0}</b> öğesinin alt elemanları olduğu için silme işlemi yapıl
 msgid "Cannot edit Standard Dashboards"
 msgstr "Standart Panolar düzenlenemez"
 
-#: frappe/email/doctype/notification/notification.py:192
+#: frappe/email/doctype/notification/notification.py:202
 msgid "Cannot edit Standard Notification. To edit, please disable this and duplicate it"
 msgstr "Standart Bildirim düzenlenemiyor. Düzenlemek için lütfen bunu devre dışı bırakın ve çoğaltın"
 
@@ -4255,7 +4194,7 @@ msgstr "Standart Veri Kartları için filtreler düzenlenemez"
 msgid "Cannot edit standard fields"
 msgstr "Standart alanlar düzenlenemez"
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:127
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:132
 msgid "Cannot enable {0} for a non-submittable doctype"
 msgstr "Gönderilebilir olmayan bir doküman türü için {0} etkinleştirilemez"
 
@@ -4267,7 +4206,7 @@ msgstr "{} dosyası diskte bulunamadı"
 msgid "Cannot get file contents of a Folder"
 msgstr "Bir Klasörün dosya içerikleri alınamıyor"
 
-#: frappe/printing/page/print/print.js:844
+#: frappe/printing/page/print/print.js:857
 msgid "Cannot have multiple printers mapped to a single print format."
 msgstr "Tek bir yazdırma biçimine birden fazla yazıcı ile eşleşme yapılamaz."
 
@@ -4291,7 +4230,7 @@ msgstr "{0} sütunu herhangi bir alanla eşleştirilemiyor"
 msgid "Cannot move row"
 msgstr "Satır taşınamıyor"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:928
+#: frappe/public/js/frappe/views/reports/report_view.js:932
 msgid "Cannot remove ID field"
 msgstr "ID Alanı Kaldırılamaz"
 
@@ -4299,7 +4238,7 @@ msgstr "ID Alanı Kaldırılamaz"
 msgid "Cannot set 'Report' permission if 'Only If Creator' permission is set"
 msgstr "'Yalnızca Oluşturucu' izni ayarlanmışsa 'Rapor' izni ayarlanamaz"
 
-#: frappe/email/doctype/notification/notification.py:209
+#: frappe/email/doctype/notification/notification.py:235
 msgid "Cannot set Notification with event {0} on Document Type {1}"
 msgstr "Belge Türü {1} üzerinde {0} olayı için Bildirim ayarlanamıyor"
 
@@ -4316,11 +4255,11 @@ msgstr "{0} gönderilemiyor."
 msgid "Cannot update {0}"
 msgstr "{0} güncellenemiyor"
 
-#: frappe/model/db_query.py:1132
+#: frappe/model/db_query.py:1129
 msgid "Cannot use sub-query here."
 msgstr ""
 
-#: frappe/model/db_query.py:1160
+#: frappe/model/db_query.py:1157
 msgid "Cannot use {0} in order/group by"
 msgstr "{0} sıraya/gruplamaya göre kullanılamaz"
 
@@ -4505,7 +4444,7 @@ msgstr "Grafik Kaynağı"
 
 #. Label of the chart_type (Select) field in DocType 'Dashboard Chart'
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.json
-#: frappe/public/js/frappe/views/reports/report_view.js:506
+#: frappe/public/js/frappe/views/reports/report_view.js:510
 msgid "Chart Type"
 msgstr "Grafik Türü"
 
@@ -4538,7 +4477,7 @@ msgstr "Sohbet"
 msgid "Check"
 msgstr "Kontrol et"
 
-#: frappe/integrations/doctype/webhook/webhook.py:95
+#: frappe/integrations/doctype/webhook/webhook.py:99
 msgid "Check Request URL"
 msgstr ""
 
@@ -4546,7 +4485,7 @@ msgstr ""
 msgid "Check columns to select, drag to set order."
 msgstr ""
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:454
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:482
 msgid "Check the Error Log for more information: {0}"
 msgstr "Daha fazla bilgi için Hata Günlüğünü kontrol edin: {0}"
 
@@ -4601,7 +4540,7 @@ msgstr "Alt DocType'lara izin verilmiyor"
 msgid "Child Doctype"
 msgstr "Alt DocType"
 
-#: frappe/core/doctype/doctype/doctype.py:1647
+#: frappe/core/doctype/doctype/doctype.py:1648
 msgid "Child Table {0} for field {1}"
 msgstr ""
 
@@ -4666,7 +4605,7 @@ msgstr "Temizle ve Şablon Ekle"
 msgid "Clear All"
 msgstr "Temizle"
 
-#: frappe/public/js/frappe/list/list_view.js:1963
+#: frappe/public/js/frappe/list/list_view.js:1984
 msgctxt "Button in list view actions menu"
 msgid "Clear Assignment"
 msgstr "Atamayı Temizle"
@@ -4703,6 +4642,10 @@ msgstr "Yayınlanan sayfalar için geçmişte olamayacağı için bitiş tarihi 
 #: frappe/public/js/frappe/views/dashboard/dashboard_view.js:194
 msgid "Click On Customize to add your first widget"
 msgstr "İlk Bileşeni eklemek için Özelleştir'e tıklayın."
+
+#: frappe/templates/emails/user_invitation.html:8
+msgid "Click below to get started:"
+msgstr ""
 
 #: frappe/website/doctype/web_form/templates/web_form.html:147
 msgid "Click here"
@@ -4934,7 +4877,7 @@ msgctxt "Shrink code field."
 msgid "Collapse"
 msgstr "Daralt"
 
-#: frappe/public/js/frappe/views/reports/query_report.js:2102
+#: frappe/public/js/frappe/views/reports/query_report.js:2104
 #: frappe/public/js/frappe/views/treeview.js:123
 msgid "Collapse All"
 msgstr "Tümünü Daralt"
@@ -5118,16 +5061,6 @@ msgstr "Yorum Türü"
 msgid "Comment can only be edited by the owner"
 msgstr "Yorum yalnızca sahibi tarafından düzenlenebilir"
 
-#. Label of the comment_limit (Int) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Comment limit"
-msgstr "Yorum Sayısı Limiti"
-
-#. Description of the 'Comment limit' (Int) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Comment limit per hour"
-msgstr "Saatlik yorum limiti"
-
 #: frappe/desk/form/utils.py:75
 msgid "Comment publicity can only be updated by the original author or a System Manager."
 msgstr ""
@@ -5144,7 +5077,7 @@ msgstr "Yorumlar"
 msgid "Comments and Communications will be associated with this linked document"
 msgstr "Yorumlar ve Haberleşmeler bağlantılı belgeyle ilişkilendirilecek."
 
-#: frappe/templates/includes/comments/comments.py:38
+#: frappe/templates/includes/comments/comments.py:52
 msgid "Comments cannot have links or email addresses"
 msgstr "Yorumlarda bağlantı veya e-posta adresi bulunamaz"
 
@@ -5221,7 +5154,7 @@ msgstr "Şirket Adı"
 msgid "Compare Versions"
 msgstr "Versiyonları Karşılaştır"
 
-#: frappe/core/doctype/server_script/server_script.py:157
+#: frappe/core/doctype/server_script/server_script.py:159
 msgid "Compilation warning"
 msgstr "Derleme uyarısı"
 
@@ -5316,6 +5249,11 @@ msgstr "Koşul"
 msgid "Condition JSON"
 msgstr "Koşul JSON"
 
+#. Label of the condition_type (Select) field in DocType 'Notification'
+#: frappe/email/doctype/notification/notification.json
+msgid "Condition Type"
+msgstr ""
+
 #. Label of the condition_description (HTML) field in DocType 'Web Form'
 #: frappe/website/doctype/web_form/web_form.json
 msgid "Condition description"
@@ -5341,7 +5279,7 @@ msgstr ""
 msgid "Configuration"
 msgstr "Yapılandırma"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:488
+#: frappe/public/js/frappe/views/reports/report_view.js:492
 msgid "Configure Chart"
 msgstr "Grafiği Yapılandır"
 
@@ -5545,7 +5483,6 @@ msgstr "{0} güvenlik düzeltmesi içerir"
 #. Label of the content (HTML Editor) field in DocType 'Comment'
 #. Label of the content (Text Editor) field in DocType 'Note'
 #. Label of the content (Long Text) field in DocType 'Workspace'
-#. Label of the content (Text Editor) field in DocType 'Blog Post'
 #. Label of the content (Text Editor) field in DocType 'Help Article'
 #. Label of the section_title (Tab Break) field in DocType 'Web Page'
 #. Label of the sb1 (Section Break) field in DocType 'Web Page'
@@ -5553,7 +5490,6 @@ msgstr "{0} güvenlik düzeltmesi içerir"
 #: frappe/core/doctype/comment/comment.json frappe/desk/doctype/note/note.json
 #: frappe/desk/doctype/workspace/workspace.json
 #: frappe/public/js/frappe/utils/utils.js:1745
-#: frappe/website/doctype/blog_post/blog_post.json
 #: frappe/website/doctype/help_article/help_article.json
 #: frappe/website/doctype/web_page/web_page.json
 #: frappe/website/doctype/web_page_view/web_page_view.json
@@ -5561,24 +5497,12 @@ msgstr "{0} güvenlik düzeltmesi içerir"
 msgid "Content"
 msgstr "İçerik"
 
-#. Label of the content_html (HTML Editor) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "Content (HTML)"
-msgstr "İçerik (HTML)"
-
-#. Label of the content_md (Markdown Editor) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "Content (Markdown)"
-msgstr "İçerik (Markdown)"
-
 #. Label of the content_hash (Data) field in DocType 'File'
 #: frappe/core/doctype/file/file.json
 msgid "Content Hash"
 msgstr "Hash Doğrulaması"
 
-#. Label of the content_type (Select) field in DocType 'Blog Post'
 #. Label of the content_type (Select) field in DocType 'Web Page'
-#: frappe/website/doctype/blog_post/blog_post.json
 #: frappe/website/doctype/web_page/web_page.json
 msgid "Content Type"
 msgstr "İçerik Türü"
@@ -5659,7 +5583,7 @@ msgstr "Panoya Kopyala"
 msgid "Copyright"
 msgstr "Telif Hakkı"
 
-#: frappe/custom/doctype/customize_form/customize_form.py:122
+#: frappe/custom/doctype/customize_form/customize_form.py:123
 msgid "Core DocTypes cannot be customized."
 msgstr "Çekirdek Doctype'lar düzenlenemez."
 
@@ -5667,7 +5591,7 @@ msgstr "Çekirdek Doctype'lar düzenlenemez."
 msgid "Core Modules {0} cannot be searched in Global Search."
 msgstr "Çekirdek Modüller {0} Genel Aramada aranamaz."
 
-#: frappe/printing/page/print/print.js:620
+#: frappe/printing/page/print/print.js:633
 msgid "Correct version :"
 msgstr "Doğru versiyon:"
 
@@ -5907,7 +5831,7 @@ msgstr "Oluşturulma Zamanı"
 msgid "Created By"
 msgstr "Oluşturan"
 
-#: frappe/workflow/doctype/workflow/workflow.py:64
+#: frappe/workflow/doctype/workflow/workflow.py:65
 msgid "Created Custom Field {0} in {1}"
 msgstr "{0} özel alanı {1} için oluşturuldu."
 
@@ -5919,7 +5843,7 @@ msgstr "{0} özel alanı {1} için oluşturuldu."
 msgid "Created On"
 msgstr "Oluşturulma Zamanı"
 
-#: frappe/public/js/frappe/desk.js:523
+#: frappe/public/js/frappe/desk.js:517
 #: frappe/public/js/frappe/views/treeview.js:393
 msgid "Creating {0}"
 msgstr "{0} Oluşturuluyor"
@@ -6256,14 +6180,14 @@ msgstr "Özelleştirmeler Sıfırlandı"
 msgid "Customizations for <b>{0}</b> exported to:<br>{1}"
 msgstr "<b>{0}</b> için özelleştirmeler şuraya aktarıldı:<br>{1}"
 
-#: frappe/printing/page/print/print.js:171
+#: frappe/printing/page/print/print.js:184
 #: frappe/public/js/frappe/form/templates/print_layout.html:39
 #: frappe/public/js/frappe/form/toolbar.js:600
 #: frappe/public/js/frappe/views/dashboard/dashboard_view.js:197
 msgid "Customize"
 msgstr "Özelleştir"
 
-#: frappe/public/js/frappe/list/list_view.js:1800
+#: frappe/public/js/frappe/list/list_view.js:1821
 msgctxt "Button in list view menu"
 msgid "Customize"
 msgstr "Özelleştir"
@@ -6515,7 +6439,7 @@ msgstr "Veri İçe Aktarma Günlüğü"
 msgid "Data Import Template"
 msgstr "Veri İçe Aktarma Şablonu"
 
-#: frappe/custom/doctype/customize_form/customize_form.py:614
+#: frappe/custom/doctype/customize_form/customize_form.py:615
 msgid "Data Too Long"
 msgstr "Veri Çok Uzun"
 
@@ -6546,7 +6470,7 @@ msgstr "Veritabanı Satır Boyutu Kullanımı"
 msgid "Database Storage Usage By Tables"
 msgstr "Tablolara Göre Veritabanı Depolama Kullanımı"
 
-#: frappe/custom/doctype/customize_form/customize_form.py:248
+#: frappe/custom/doctype/customize_form/customize_form.py:249
 msgid "Database Table Row Size Limit"
 msgstr "Veritabanı Tablo Satır Boyutu Sınırı"
 
@@ -6850,11 +6774,11 @@ msgstr "Varsayılan Çalışma Alanı"
 msgid "Default display currency"
 msgstr "Varsayılan Olarak Görüntülenecek Para Birimi"
 
-#: frappe/core/doctype/doctype/doctype.py:1376
+#: frappe/core/doctype/doctype/doctype.py:1377
 msgid "Default for 'Check' type of field {0} must be either '0' or '1'"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1389
+#: frappe/core/doctype/doctype/doctype.py:1390
 msgid "Default value for {0} must be in the list of options."
 msgstr "{0} için varsayılan değer seçenekler listesinde olmalıdır."
 
@@ -6908,7 +6832,7 @@ msgstr "Gecikti"
 #: frappe/public/js/frappe/form/footer/form_timeline.js:626
 #: frappe/public/js/frappe/form/grid.js:66
 #: frappe/public/js/frappe/form/toolbar.js:464
-#: frappe/public/js/frappe/views/reports/report_view.js:1738
+#: frappe/public/js/frappe/views/reports/report_view.js:1742
 #: frappe/public/js/frappe/views/treeview.js:329
 #: frappe/public/js/frappe/web_form/web_form_list.js:282
 #: frappe/templates/discussions/reply_card.html:35
@@ -6916,7 +6840,7 @@ msgstr "Gecikti"
 msgid "Delete"
 msgstr "Sil"
 
-#: frappe/public/js/frappe/list/list_view.js:2025
+#: frappe/public/js/frappe/list/list_view.js:2046
 msgctxt "Button in list view actions menu"
 msgid "Delete"
 msgstr "Sil"
@@ -6994,12 +6918,12 @@ msgstr "Sekmeyi Sil"
 msgid "Delete this record to allow sending to this email address"
 msgstr "Bu kaydı silin ve bu e-posta adresine gönderilmesine izin verin"
 
-#: frappe/public/js/frappe/list/list_view.js:2030
+#: frappe/public/js/frappe/list/list_view.js:2051
 msgctxt "Title of confirmation dialog"
 msgid "Delete {0} item permanently?"
 msgstr "{0} girişi kalıcı olarak silinsin mi?"
 
-#: frappe/public/js/frappe/list/list_view.js:2036
+#: frappe/public/js/frappe/list/list_view.js:2057
 msgctxt "Title of confirmation dialog"
 msgid "Delete {0} items permanently?"
 msgstr "{0} öğesini kalıcı olarak sil?"
@@ -7098,7 +7022,7 @@ msgstr "Departman"
 msgid "Dependencies"
 msgstr "Bağımlılıklar"
 
-#: frappe/public/js/frappe/ui/toolbar/about.js:8
+#: frappe/public/js/frappe/ui/toolbar/about.js:11
 msgid "Dependencies & Licenses"
 msgstr "Bağımlılıklar ve Lisanslar"
 
@@ -7133,7 +7057,6 @@ msgstr ""
 #. Label of the description (Text Editor) field in DocType 'ToDo'
 #. Label of the description (HTML Editor) field in DocType 'Workspace Link'
 #. Label of the description (Small Text) field in DocType 'Print Heading'
-#. Label of the description (Small Text) field in DocType 'Blog Category'
 #. Label of the description (Small Text) field in DocType 'UTM Medium'
 #. Label of the description (Small Text) field in DocType 'UTM Source'
 #. Label of the description (Text) field in DocType 'Web Form Field'
@@ -7154,7 +7077,6 @@ msgstr ""
 #: frappe/printing/doctype/print_heading/print_heading.json
 #: frappe/public/js/frappe/form/reminders.js:44
 #: frappe/public/js/frappe/widgets/widget_dialog.js:256
-#: frappe/website/doctype/blog_category/blog_category.json
 #: frappe/website/doctype/utm_medium/utm_medium.json
 #: frappe/website/doctype/utm_source/utm_source.json
 #: frappe/website/doctype/web_form_field/web_form_field.json
@@ -7163,11 +7085,6 @@ msgstr ""
 #: frappe/www/attribution.html:24
 msgid "Description"
 msgstr "Açıklama"
-
-#. Description of the 'Blog Intro' (Small Text) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "Description for listing page, in plain text, only a couple of lines. (max 200 characters)"
-msgstr "Listeleme sayfası için açıklama, düz metin olarak, sadece birkaç satır. (maksimum 200 karakter)"
 
 #. Description of the 'Description' (Section Break) field in DocType
 #. 'Onboarding Step'
@@ -7313,11 +7230,6 @@ msgstr "Değişiklik Günlüğü Bildirimini Devre Dışı Bırak"
 msgid "Disable Comment Count"
 msgstr "Yorum Sayısını Gösterme"
 
-#. Label of the disable_comments (Check) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "Disable Comments"
-msgstr "Yorumları Devre Dışı Bırak"
-
 #. Label of the disable_contact_us (Check) field in DocType 'Contact Us
 #. Settings'
 #: frappe/website/doctype/contact_us_settings/contact_us_settings.json
@@ -7334,11 +7246,6 @@ msgstr "Sayıyı Gösterme"
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Disable Document Sharing"
 msgstr "Döküman Paylaşımını Devre Dışı Bırak"
-
-#. Label of the disable_likes (Check) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "Disable Likes"
-msgstr "Beğenileri Devre Dışı Bırak"
 
 #: frappe/core/doctype/report/report.js:39
 msgid "Disable Report"
@@ -7394,7 +7301,6 @@ msgstr "Yeni Kayıtlara İzin Verme"
 #. Label of the disabled (Check) field in DocType 'Letter Head'
 #. Label of the disabled (Check) field in DocType 'Print Format'
 #. Label of the disabled (Check) field in DocType 'Print Style'
-#. Label of the disabled (Check) field in DocType 'Blogger'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
 #: frappe/automation/doctype/auto_repeat/auto_repeat.json
 #: frappe/automation/doctype/milestone_tracker/milestone_tracker.json
@@ -7409,7 +7315,6 @@ msgstr "Yeni Kayıtlara İzin Verme"
 #: frappe/public/js/frappe/form/templates/address_list.html:35
 #: frappe/public/js/frappe/model/indicator.js:112
 #: frappe/public/js/frappe/model/indicator.js:119
-#: frappe/website/doctype/blogger/blogger.json
 msgid "Disabled"
 msgstr "Devre dışı"
 
@@ -7600,7 +7505,7 @@ msgstr ""
 msgid "DocType"
 msgstr "DocType"
 
-#: frappe/core/doctype/doctype/doctype.py:1577
+#: frappe/core/doctype/doctype/doctype.py:1578
 msgid "DocType <b>{0}</b> provided for the field <b>{1}</b> must have atleast one Link field"
 msgstr "DocType <b>{0}</b> alanı için sağlanmıştır <b>{1}</b> en az bir Bağlantı alanına sahip olmalıdır"
 
@@ -7647,11 +7552,11 @@ msgstr "DocType Durumu"
 msgid "DocType View"
 msgstr "DocType Görünümü"
 
-#: frappe/core/doctype/doctype/doctype.py:656
+#: frappe/core/doctype/doctype/doctype.py:657
 msgid "DocType can not be merged"
 msgstr "DocType birleştirilemiyor"
 
-#: frappe/core/doctype/doctype/doctype.py:650
+#: frappe/core/doctype/doctype/doctype.py:651
 msgid "DocType can only be renamed by Administrator"
 msgstr "DocType yalnızca Yönetici tarafından yeniden adlandırılabilir"
 
@@ -7660,7 +7565,7 @@ msgstr "DocType yalnızca Yönetici tarafından yeniden adlandırılabilir"
 msgid "DocType is a Table / Form in the application."
 msgstr "DocType uygulamadaki bir Tablo veya Formdur."
 
-#: frappe/integrations/doctype/webhook/webhook.py:79
+#: frappe/integrations/doctype/webhook/webhook.py:83
 msgid "DocType must be Submittable for the selected Doc Event"
 msgstr "DocType, seçilen Doc Event için Gönderilebilir olmalıdır"
 
@@ -7693,7 +7598,7 @@ msgstr "DocType {0} mevcut değil."
 msgid "DocType {} not found"
 msgstr "DocType {} bulunamadı"
 
-#: frappe/core/doctype/doctype/doctype.py:1028
+#: frappe/core/doctype/doctype/doctype.py:1029
 msgid "DocType's name should not start or end with whitespace"
 msgstr "DocType adı boşluk ile başlamamalı veya bitmemelidir"
 
@@ -7707,7 +7612,7 @@ msgstr "DocType değiştirelemiyor, lütfen bunun yerine {0} modülünü kullan�
 msgid "Doctype"
 msgstr "BelgeTipi"
 
-#: frappe/core/doctype/doctype/doctype.py:1022
+#: frappe/core/doctype/doctype/doctype.py:1023
 msgid "Doctype name is limited to {0} characters ({1})"
 msgstr "Doctype adı {0} karakterleriyle sınırlıdır ({1})"
 
@@ -7769,19 +7674,19 @@ msgstr "Belge Bağlama"
 msgid "Document Links"
 msgstr "Döküman Bağlantıları"
 
-#: frappe/core/doctype/doctype/doctype.py:1211
+#: frappe/core/doctype/doctype/doctype.py:1212
 msgid "Document Links Row #{0}: Could not find field {1} in {2} DocType"
 msgstr "Belge Bağlantıları Satırı #{0}: {2} DocType'da {1} alanı bulunamadı"
 
-#: frappe/core/doctype/doctype/doctype.py:1231
+#: frappe/core/doctype/doctype/doctype.py:1232
 msgid "Document Links Row #{0}: Invalid doctype or fieldname."
 msgstr "Belge Bağlantıları Satırı #{0}: Geçersiz doctype veya alan."
 
-#: frappe/core/doctype/doctype/doctype.py:1194
+#: frappe/core/doctype/doctype/doctype.py:1195
 msgid "Document Links Row #{0}: Parent DocType is mandatory for internal links"
 msgstr "Belge Bağlantıları Satırı #{0}: Dahili bağlantılar için Üst DocType zorunludur"
 
-#: frappe/core/doctype/doctype/doctype.py:1200
+#: frappe/core/doctype/doctype/doctype.py:1201
 msgid "Document Links Row #{0}: Table Fieldname is mandatory for internal links"
 msgstr ""
 
@@ -7986,15 +7891,15 @@ msgstr "Belge Kilidi Açıldı"
 msgid "Document follow is not enabled for this user."
 msgstr "Bu kullanıcı için belge takibi etkinleştirilmedi."
 
-#: frappe/public/js/frappe/list/list_view.js:1157
+#: frappe/public/js/frappe/list/list_view.js:1178
 msgid "Document has been cancelled"
 msgstr "Belge iptal edildi"
 
-#: frappe/public/js/frappe/list/list_view.js:1156
+#: frappe/public/js/frappe/list/list_view.js:1177
 msgid "Document has been submitted"
 msgstr "Belge Gönderildi"
 
-#: frappe/public/js/frappe/list/list_view.js:1155
+#: frappe/public/js/frappe/list/list_view.js:1176
 msgid "Document is in draft state"
 msgstr "Belge taslak durumundadır"
 
@@ -8370,7 +8275,7 @@ msgstr "ESC"
 #: frappe/public/js/frappe/form/templates/contact_list.html:13
 #: frappe/public/js/frappe/form/toolbar.js:748
 #: frappe/public/js/frappe/views/reports/query_report.js:879
-#: frappe/public/js/frappe/views/reports/query_report.js:1774
+#: frappe/public/js/frappe/views/reports/query_report.js:1776
 #: frappe/public/js/frappe/views/workspace/workspace.js:64
 #: frappe/public/js/frappe/widgets/base_widget.js:64
 #: frappe/public/js/frappe/widgets/chart_widget.js:299
@@ -8382,7 +8287,7 @@ msgstr "ESC"
 msgid "Edit"
 msgstr "Düzenle"
 
-#: frappe/public/js/frappe/list/list_view.js:2111
+#: frappe/public/js/frappe/list/list_view.js:2132
 msgctxt "Button in list view actions menu"
 msgid "Edit"
 msgstr "Düzenle"
@@ -8421,7 +8326,7 @@ msgstr "HTML Kodunu Düzenle"
 msgid "Edit DocType"
 msgstr "DocType Düzenle"
 
-#: frappe/public/js/frappe/list/list_view.js:1827
+#: frappe/public/js/frappe/list/list_view.js:1848
 msgctxt "Button in list view menu"
 msgid "Edit DocType"
 msgstr "DocType Düzenle"
@@ -8533,7 +8438,7 @@ msgstr "Yanıtınızı düzenleyin"
 msgid "Edit your workflow visually using the Workflow Builder."
 msgstr "İş Akışı Oluşturucu'yu kullanarak iş akışınızı görsel olarak düzenleyin."
 
-#: frappe/public/js/frappe/views/reports/report_view.js:679
+#: frappe/public/js/frappe/views/reports/report_view.js:683
 #: frappe/public/js/frappe/widgets/widget_dialog.js:52
 msgid "Edit {0}"
 msgstr "{0} Düzenle"
@@ -8580,6 +8485,7 @@ msgstr "Element Seçici"
 #. Label of the email (Data) field in DocType 'User'
 #. Label of the email_settings (Section Break) field in DocType 'User'
 #. Label of the email (Check) field in DocType 'User Document Type'
+#. Label of the email (Data) field in DocType 'User Invitation'
 #. Label of the email (Data) field in DocType 'Event Participants'
 #. Label of the email (Data) field in DocType 'Email Group Member'
 #. Label of the email (Data) field in DocType 'Email Unsubscribe'
@@ -8593,6 +8499,7 @@ msgstr "Element Seçici"
 #: frappe/core/doctype/system_settings/system_settings.json
 #: frappe/core/doctype/user/user.json
 #: frappe/core/doctype/user_document_type/user_document_type.json
+#: frappe/core/doctype/user_invitation/user_invitation.json
 #: frappe/desk/doctype/event_participants/event_participants.json
 #: frappe/email/doctype/email_group_member/email_group_member.json
 #: frappe/email/doctype/email_unsubscribe/email_unsubscribe.json
@@ -8764,10 +8671,10 @@ msgstr "E-posta Yeniden Deneme Limiti"
 msgid "Email Rule"
 msgstr "E-posta Kuralı"
 
-#. Label of the email_sent (Check) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "Email Sent"
-msgstr "E-posta Gönderildi"
+#. Label of the email_sent_at (Datetime) field in DocType 'User Invitation'
+#: frappe/core/doctype/user_invitation/user_invitation.json
+msgid "Email Sent At"
+msgstr "E-posta Gönderim Zamanı"
 
 #. Label of the email_settings_sb (Section Break) field in DocType 'DocType'
 #. Label of the email_settings_section (Section Break) field in DocType
@@ -8902,7 +8809,7 @@ msgstr "Etkinleştir"
 msgid "Enable Address Autocompletion"
 msgstr "Adres Otomatik Tamamlamayı Etkinleştir"
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:119
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:124
 msgid "Enable Allow Auto Repeat for the doctype {0} in Customize Form"
 msgstr "Formu Özelleştir'de {0} doctype için Otomatik Tekrara İzin Ver'i etkinleştirin"
 
@@ -8927,11 +8834,6 @@ msgstr "Yorumları Etkinleştir"
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Enable Dynamic Client Registration"
 msgstr ""
-
-#. Label of the enable_email_notification (Check) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "Enable Email Notification"
-msgstr "E-posta Bildirimini Etkinleştir"
 
 #. Label of the enable_email_notifications (Check) field in DocType
 #. 'Notification Settings'
@@ -9026,11 +8928,6 @@ msgstr "Güvenliği Etkinleştir"
 msgid "Enable Social Login"
 msgstr "Sosyal Medya ile Girişi Etkinleştir"
 
-#. Label of the enable_social_sharing (Check) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Enable Social Sharing"
-msgstr "Sosyal Medya Paylaşımını Etkinleştir"
-
 #: frappe/website/doctype/website_settings/website_settings.js:139
 msgid "Enable Tracking Page Views"
 msgstr "Sayfa Görüntülemelerini İzlemeyi Etkinleştir"
@@ -9038,7 +8935,7 @@ msgstr "Sayfa Görüntülemelerini İzlemeyi Etkinleştir"
 #. Label of the enable_two_factor_auth (Check) field in DocType 'System
 #. Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
-#: frappe/twofactor.py:433
+#: frappe/twofactor.py:438
 msgid "Enable Two Factor Auth"
 msgstr "2 Adımlı Doğrulamayı Aç"
 
@@ -9049,12 +8946,6 @@ msgstr "Standart bir Yazdırma Şablonu oluşturmak için geliştirici modunu et
 #: frappe/website/doctype/web_template/web_template.py:33
 msgid "Enable developer mode to create a standard Web Template"
 msgstr "Standart bir Yazdırma Şablonu oluşturmak için geliştirici modunu etkinleştirin"
-
-#. Description of the 'Enable Email Notification' (Check) field in DocType
-#. 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "Enable email notification for any comment or likes received on your Blog Post."
-msgstr "Blog Yazınıza gelen herhangi bir yorum veya beğeni için e-posta bildirimini etkinleştirin."
 
 #. Description of the 'Modal Trigger' (Check) field in DocType 'Form Tour Step'
 #: frappe/desk/doctype/form_tour_step/form_tour_step.json
@@ -9078,6 +8969,7 @@ msgstr "Uygulama içi web sitesi izlemeyi etkinleştirin"
 #. Label of the enabled (Check) field in DocType 'LDAP Settings'
 #. Label of the enabled (Check) field in DocType 'Webhook'
 #. Label of the enabled (Check) field in DocType 'Portal Menu Item'
+#. Label of the enabled (Check) field in DocType 'Workflow Transition Task'
 #: frappe/core/doctype/language/language.json
 #: frappe/core/doctype/user/user.json
 #: frappe/custom/doctype/client_script/client_script.json
@@ -9090,6 +8982,7 @@ msgstr "Uygulama içi web sitesi izlemeyi etkinleştirin"
 #: frappe/public/js/frappe/model/indicator.js:110
 #: frappe/public/js/frappe/model/indicator.js:121
 #: frappe/website/doctype/portal_menu_item/portal_menu_item.json
+#: frappe/workflow/doctype/workflow_transition_task/workflow_transition_task.json
 msgid "Enabled"
 msgstr "Etkin"
 
@@ -9139,11 +9032,11 @@ msgstr "Etkinleştirilirse belgeler arka planda gönderilir."
 msgid "Encrypt Backups"
 msgstr "Yedeklemeleri Şifrele"
 
-#: frappe/utils/password.py:197
+#: frappe/utils/password.py:196
 msgid "Encryption key is in invalid format!"
 msgstr "Şifreleme anahtarı geçersiz formatta!"
 
-#: frappe/utils/password.py:212
+#: frappe/utils/password.py:211
 msgid "Encryption key is invalid! Please check site_config.json"
 msgstr "Şifreleme anahtarı geçersiz! Lütfen site_config.json dosyasını kontrol edin."
 
@@ -9155,7 +9048,7 @@ msgstr "Bitir"
 #. Label of the end_date (Date) field in DocType 'Audit Trail'
 #. Label of the end_date (Datetime) field in DocType 'Web Page'
 #: frappe/automation/doctype/auto_repeat/auto_repeat.json
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:142
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:147
 #: frappe/core/doctype/audit_trail/audit_trail.json
 #: frappe/public/js/frappe/utils/common.js:416
 #: frappe/website/doctype/web_page/web_page.json
@@ -9285,10 +9178,16 @@ msgstr "Eşittir"
 #. Label of the error (Code) field in DocType 'Email Queue Recipient'
 #. Label of the error (Code) field in DocType 'Integration Request'
 #. Label of the error (Text) field in DocType 'Webhook Request Log'
+#: frappe/core/api/user_invitation.py:60 frappe/core/api/user_invitation.py:65
+#: frappe/core/api/user_invitation.py:71 frappe/core/api/user_invitation.py:102
 #: frappe/core/doctype/communication/communication.json
 #: frappe/core/doctype/data_import/data_import.json
 #: frappe/core/doctype/error_log/error_log.json
 #: frappe/core/doctype/prepared_report/prepared_report.json
+#: frappe/core/doctype/user_invitation/user_invitation.py:89
+#: frappe/core/doctype/user_invitation/user_invitation.py:93
+#: frappe/core/doctype/user_invitation/user_invitation.py:116
+#: frappe/core/doctype/user_invitation/user_invitation.py:118
 #: frappe/desk/page/backups/backups.js:37
 #: frappe/email/doctype/email_queue/email_queue.json
 #: frappe/email/doctype/email_queue_recipient/email_queue_recipient.json
@@ -9346,9 +9245,9 @@ msgstr "İstemci Komut Dosyasında Hata."
 msgid "Error in Header/Footer Script"
 msgstr "Üstbilgi/Altbilgi Kodunda Hata"
 
-#: frappe/email/doctype/notification/notification.py:598
-#: frappe/email/doctype/notification/notification.py:735
-#: frappe/email/doctype/notification/notification.py:741
+#: frappe/email/doctype/notification/notification.py:640
+#: frappe/email/doctype/notification/notification.py:780
+#: frappe/email/doctype/notification/notification.py:786
 msgid "Error in Notification"
 msgstr "Hata Bildirimi"
 
@@ -9368,7 +9267,7 @@ msgstr ""
 msgid "Error while connecting to email account {0}"
 msgstr "E-posta hesabına bağlanırken hata oluştu {0}"
 
-#: frappe/email/doctype/notification/notification.py:732
+#: frappe/email/doctype/notification/notification.py:777
 msgid "Error while evaluating Notification {0}. Please fix your template."
 msgstr "{0} Bildirim değerlendirilirken hata oluştu. Lütfen şablonunuzu düzeltin."
 
@@ -9529,7 +9428,7 @@ msgstr ""
 msgid "Executing..."
 msgstr "Çalıştırılıyor..."
 
-#: frappe/public/js/frappe/views/reports/query_report.js:2121
+#: frappe/public/js/frappe/views/reports/query_report.js:2123
 msgid "Execution Time: {0} sec"
 msgstr "Oluşturma Süresi: {0} sn"
 
@@ -9555,7 +9454,7 @@ msgctxt "Enlarge code field."
 msgid "Expand"
 msgstr "Genişlet"
 
-#: frappe/public/js/frappe/views/reports/query_report.js:2102
+#: frappe/public/js/frappe/views/reports/query_report.js:2104
 #: frappe/public/js/frappe/views/treeview.js:133
 msgid "Expand All"
 msgstr "Tümünü Genişlet"
@@ -9588,7 +9487,9 @@ msgid "Expire Notification On"
 msgstr "Sona Erme Bildirimi Açık"
 
 #. Option for the 'Delivery Status' (Select) field in DocType 'Communication'
+#. Option for the 'Status' (Select) field in DocType 'User Invitation'
 #: frappe/core/doctype/communication/communication.json
+#: frappe/core/doctype/user_invitation/user_invitation.json
 msgid "Expired"
 msgstr "Süresi Doldu"
 
@@ -9616,13 +9517,13 @@ msgstr "QR Kod Resim Sayfasının Sona Erme Süresi"
 #: frappe/core/doctype/recorder/recorder_list.js:37
 #: frappe/public/js/frappe/data_import/data_exporter.js:92
 #: frappe/public/js/frappe/data_import/data_exporter.js:243
-#: frappe/public/js/frappe/views/reports/query_report.js:1809
-#: frappe/public/js/frappe/views/reports/report_view.js:1625
+#: frappe/public/js/frappe/views/reports/query_report.js:1811
+#: frappe/public/js/frappe/views/reports/report_view.js:1629
 #: frappe/public/js/frappe/widgets/chart_widget.js:315
 msgid "Export"
 msgstr "Dışarı Aktar"
 
-#: frappe/public/js/frappe/list/list_view.js:2133
+#: frappe/public/js/frappe/list/list_view.js:2154
 msgctxt "Button in list view actions menu"
 msgid "Export"
 msgstr "Dışarı Aktar"
@@ -9668,11 +9569,11 @@ msgstr "Raporu Dışarı Aktar: {0}"
 msgid "Export Type"
 msgstr "Dışa Aktarma Türü"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1636
+#: frappe/public/js/frappe/views/reports/report_view.js:1640
 msgid "Export all matching rows?"
 msgstr "Eşleşen tüm satırlar dışarı aktarılsın mı?"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1646
+#: frappe/public/js/frappe/views/reports/report_view.js:1650
 msgid "Export all {0} rows?"
 msgstr "Tüm {0} satırları dışarı aktarılacak?"
 
@@ -9785,7 +9686,7 @@ msgstr "Başarısız İşler"
 msgid "Failed Logins (Last 30 days)"
 msgstr "Başarısız Girişler (Son 30 gün)"
 
-#: frappe/model/workflow.py:306
+#: frappe/model/workflow.py:362
 msgid "Failed Transactions"
 msgstr "Başarısız İşlemler"
 
@@ -9802,7 +9703,7 @@ msgstr "Parola değiştirme başarısız oldu."
 msgid "Failed to complete setup"
 msgstr "Kurulum tamamlanamadı"
 
-#: frappe/integrations/doctype/webhook/webhook.py:137
+#: frappe/integrations/doctype/webhook/webhook.py:141
 msgid "Failed to compute request body: {}"
 msgstr ""
 
@@ -9815,7 +9716,7 @@ msgstr "Sunucuya bağlanılamadı"
 msgid "Failed to decode token, please provide a valid base64-encoded token."
 msgstr ""
 
-#: frappe/utils/password.py:211
+#: frappe/utils/password.py:210
 msgid "Failed to decrypt key {0}"
 msgstr ""
 
@@ -9827,8 +9728,8 @@ msgstr "{0} belge silinemedi: {1}"
 msgid "Failed to enable scheduler: {0}"
 msgstr "Zamanlayıcı etkinleştirilemedi: {0}"
 
-#: frappe/email/doctype/notification/notification.py:99
-#: frappe/integrations/doctype/webhook/webhook.py:127
+#: frappe/email/doctype/notification/notification.py:105
+#: frappe/integrations/doctype/webhook/webhook.py:131
 msgid "Failed to evaluate conditions: {}"
 msgstr "Koşullar değerlendirilemedi: {}"
 
@@ -9864,11 +9765,11 @@ msgstr "Sanal belge türü {} içe aktarılamadı, denetleyici dosyası mevcut m
 msgid "Failed to optimize image: {0}"
 msgstr "Görüntü optimize edilemedi: {0}"
 
-#: frappe/email/doctype/notification/notification.py:116
+#: frappe/email/doctype/notification/notification.py:122
 msgid "Failed to render message: {}"
 msgstr "Mesaj oluşturulamadı: {}"
 
-#: frappe/email/doctype/notification/notification.py:134
+#: frappe/email/doctype/notification/notification.py:140
 msgid "Failed to render subject: {}"
 msgstr "Konu işlenemedi: {}"
 
@@ -9917,12 +9818,6 @@ msgstr "Favicon"
 #: frappe/contacts/doctype/address/address.json
 msgid "Fax"
 msgstr "Faks"
-
-#. Label of the featured (Check) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-#: frappe/website/doctype/blog_post/templates/blog_post_row.html:19
-msgid "Featured"
-msgstr "Öne Çıkan"
 
 #: frappe/public/js/frappe/form/templates/form_sidebar.html:33
 msgid "Feedback"
@@ -9981,17 +9876,17 @@ msgstr "Varsayılan Global Arama belgeleri getiriliyor."
 #: frappe/public/js/frappe/list/bulk_operations.js:327
 #: frappe/public/js/frappe/list/list_view_permission_restrictions.html:3
 #: frappe/public/js/frappe/views/reports/query_report.js:236
-#: frappe/public/js/frappe/views/reports/query_report.js:1868
+#: frappe/public/js/frappe/views/reports/query_report.js:1870
 #: frappe/website/doctype/web_form_field/web_form_field.json
 #: frappe/website/doctype/web_form_list_column/web_form_list_column.json
 msgid "Field"
 msgstr "Alan"
 
-#: frappe/core/doctype/doctype/doctype.py:417
+#: frappe/core/doctype/doctype/doctype.py:418
 msgid "Field \"route\" is mandatory for Web Views"
 msgstr "\"Rota\" alanı Web Görünümleri için zorunludur"
 
-#: frappe/core/doctype/doctype/doctype.py:1526
+#: frappe/core/doctype/doctype/doctype.py:1527
 msgid "Field \"title\" is mandatory if \"Website Search Field\" is set."
 msgstr "\"Web Sitesi Arama Alanı\" ayarlanmışsa \"başlık\" alanı zorunludur."
 
@@ -10004,7 +9899,7 @@ msgstr "\"Değer\" alanı zorunludur. Lütfen güncellenecek değeri belirtin"
 msgid "Field Description"
 msgstr "Alan Açıklaması"
 
-#: frappe/core/doctype/doctype/doctype.py:1077
+#: frappe/core/doctype/doctype/doctype.py:1078
 msgid "Field Missing"
 msgstr "Alan Eksik"
 
@@ -10064,7 +9959,7 @@ msgstr "{0} alanı varolmayan {1} doctype ile referansa sahip."
 msgid "Field {0} not found."
 msgstr "{0} alanı bulunamadı."
 
-#: frappe/email/doctype/notification/notification.py:503
+#: frappe/email/doctype/notification/notification.py:545
 msgid "Field {0} on document {1} is neither a Mobile number field nor a Customer or User link"
 msgstr "{1} belgesindeki {0} alanı ne bir Cep telefonu numarası alanı ne de bir Müşteri veya Kullanıcı bağlantısıdır"
 
@@ -10087,11 +9982,11 @@ msgstr "{1} belgesindeki {0} alanı ne bir Cep telefonu numarası alanı ne de b
 msgid "Fieldname"
 msgstr "Alan"
 
-#: frappe/core/doctype/doctype/doctype.py:270
+#: frappe/core/doctype/doctype/doctype.py:271
 msgid "Fieldname '{0}' conflicting with a {1} of the name {2} in {3}"
 msgstr "DocType Alanı  '{0}' {3}içinde {2} adında bir {1} ile çakışıyor"
 
-#: frappe/core/doctype/doctype/doctype.py:1076
+#: frappe/core/doctype/doctype/doctype.py:1077
 msgid "Fieldname called {0} must exist to enable autonaming"
 msgstr "Otomatik adlandırmayı etkinleştirmek için {0} adlı bir alan bulunmalıdır"
 
@@ -10115,11 +10010,11 @@ msgstr ""
 msgid "Fieldname {0} cannot have special characters like {1}"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1907
+#: frappe/core/doctype/doctype/doctype.py:1908
 msgid "Fieldname {0} conflicting with meta object"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:496
+#: frappe/core/doctype/doctype/doctype.py:497
 #: frappe/public/js/form_builder/utils.js:302
 msgid "Fieldname {0} is restricted"
 msgstr "Alan ismi {0} kısıtlanmıştır"
@@ -10191,7 +10086,7 @@ msgstr "AlanTipi"
 msgid "Fieldtype cannot be changed from {0} to {1}"
 msgstr ""
 
-#: frappe/custom/doctype/customize_form/customize_form.py:588
+#: frappe/custom/doctype/customize_form/customize_form.py:589
 msgid "Fieldtype cannot be changed from {0} to {1} in row {2}"
 msgstr ""
 
@@ -10295,7 +10190,7 @@ msgstr "Dosyalar"
 #: frappe/desk/doctype/number_card/number_card.js:205
 #: frappe/desk/doctype/number_card/number_card.js:336
 #: frappe/email/doctype/auto_email_report/auto_email_report.js:93
-#: frappe/public/js/frappe/list/base_list.js:953
+#: frappe/public/js/frappe/list/base_list.js:949
 #: frappe/public/js/frappe/ui/filters/filter_list.js:134
 #: frappe/website/doctype/web_form/web_form.js:197
 msgid "Filter"
@@ -10354,7 +10249,6 @@ msgstr "Filtre"
 msgid "Filtered Records"
 msgstr "Filtrelenmiş Kayıtlar"
 
-#: frappe/website/doctype/blog_post/blog_post.py:268
 #: frappe/website/doctype/help_article/help_article.py:91 frappe/www/list.py:45
 msgid "Filtered by \"{0}\""
 msgstr "\"{0}\" tarafından filtrelendi"
@@ -10369,7 +10263,9 @@ msgstr "\"{0}\" tarafından filtrelendi"
 #. Label of the filters (Code) field in DocType 'Kanban Board'
 #. Label of the filters (Long Text) field in DocType 'List Filter'
 #. Label of the filters (Text) field in DocType 'Auto Email Report'
-#. Label of the filters (Section Break) field in DocType 'Notification'
+#. Label of the filters (Code) field in DocType 'Notification'
+#. Option for the 'Condition Type' (Select) field in DocType 'Notification'
+#. Label of the filters_section (Section Break) field in DocType 'Notification'
 #: frappe/core/doctype/access_log/access_log.json
 #: frappe/core/doctype/prepared_report/prepared_report.json
 #: frappe/core/doctype/report/report.json
@@ -10390,6 +10286,11 @@ msgstr "Filtre Yapılandırması"
 #: frappe/email/doctype/auto_email_report/auto_email_report.json
 msgid "Filters Display"
 msgstr "Filtreler Ekranı"
+
+#. Label of the filters_editor (HTML) field in DocType 'Notification'
+#: frappe/email/doctype/notification/notification.json
+msgid "Filters Editor"
+msgstr ""
 
 #. Label of the filters_json (Code) field in DocType 'Dashboard Chart'
 #. Label of the filters_json (Code) field in DocType 'Number Card'
@@ -10420,7 +10321,7 @@ msgstr "Filtrelere <code>filtreleri</code>aracılığıyla erişilebilir. <br><b
 msgid "Filters {0}"
 msgstr "Filtreler {0}"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1425
+#: frappe/public/js/frappe/views/reports/report_view.js:1429
 msgid "Filters:"
 msgstr "Filtreler:"
 
@@ -10519,11 +10420,11 @@ msgstr "Ondalık Yuvarlama"
 msgid "Fold"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1450
+#: frappe/core/doctype/doctype/doctype.py:1451
 msgid "Fold can not be at the end of the form"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1448
+#: frappe/core/doctype/doctype/doctype.py:1449
 msgid "Fold must come before a Section Break"
 msgstr ""
 
@@ -10685,7 +10586,7 @@ msgstr "Altbilgi Şablonu"
 msgid "Footer Template Values"
 msgstr "Altbilgi Şablonu Değerleri"
 
-#: frappe/printing/page/print/print.js:116
+#: frappe/printing/page/print/print.js:129
 msgid "Footer might not be visible as {0} option is disabled</div>"
 msgstr "{0} seçeneği devre dışı bırakıldığı için altbilgi görünmeyebilir</div>"
 
@@ -10744,8 +10645,8 @@ msgstr "Kullanıcı"
 msgid "For Value"
 msgstr "Değer İçin"
 
-#: frappe/public/js/frappe/views/reports/query_report.js:2118
-#: frappe/public/js/frappe/views/reports/report_view.js:104
+#: frappe/public/js/frappe/views/reports/query_report.js:2120
+#: frappe/public/js/frappe/views/reports/report_view.js:108
 msgid "For comparison, use >5, <10 or =324. For ranges, use 5:10 (for values between 5 & 10)."
 msgstr "Karşılaştırmak için >5, <10 veya =324 kullanın. Örneğin 5-10 arasındaki değerleri göstermek için, 5:10 kullanın."
 
@@ -10791,7 +10692,7 @@ msgstr "Birden fazla adres için adresi farklı satırlara girin. örneğin test
 msgid "For updating, you can update only selective columns."
 msgstr "Yalnızca seçili sütunları güncelleştirebilirsiniz."
 
-#: frappe/core/doctype/doctype/doctype.py:1751
+#: frappe/core/doctype/doctype/doctype.py:1752
 msgid "For {0} at level {1} in {2} in row {3}"
 msgstr "{0} için {1} düzeyinde {2} içinde {3} satırında"
 
@@ -10846,7 +10747,7 @@ msgstr "Şifremi Unuttum"
 #: frappe/custom/doctype/client_script/client_script.json
 #: frappe/custom/doctype/customize_form/customize_form.json
 #: frappe/desk/doctype/form_tour/form_tour.json
-#: frappe/printing/page/print/print.js:83
+#: frappe/printing/page/print/print.js:96
 #: frappe/website/doctype/web_form/web_form.json
 msgid "Form"
 msgstr "Form"
@@ -10906,6 +10807,11 @@ msgstr "Biçim"
 msgid "Format Data"
 msgstr "Veriyi Biçimlendir"
 
+#. Option for the 'Frequency' (Select) field in DocType 'Auto Repeat'
+#: frappe/automation/doctype/auto_repeat/auto_repeat.json
+msgid "Fortnightly"
+msgstr "Onbeş Günde Bir"
+
 #: frappe/core/doctype/communication/communication.js:70
 msgid "Forward"
 msgstr "İlet"
@@ -10933,7 +10839,15 @@ msgstr "Kesir Birimleri"
 msgid "Frappe"
 msgstr "ERP"
 
-#: frappe/public/js/frappe/ui/toolbar/about.js:4
+#: frappe/public/js/frappe/ui/toolbar/about.js:11
+msgid "Frappe Blog"
+msgstr ""
+
+#: frappe/public/js/frappe/ui/toolbar/about.js:11
+msgid "Frappe Forum"
+msgstr ""
+
+#: frappe/public/js/frappe/ui/toolbar/about.js:8
 msgid "Frappe Framework"
 msgstr "Frappe Framework"
 
@@ -11022,7 +10936,7 @@ msgstr "Başlama Tarihi"
 msgid "From Date Field"
 msgstr "Başlangıç Tarihi Alanı"
 
-#: frappe/public/js/frappe/views/reports/query_report.js:1829
+#: frappe/public/js/frappe/views/reports/query_report.js:1831
 msgid "From Document Type"
 msgstr "Belge Türü"
 
@@ -11049,18 +10963,16 @@ msgstr "Tam"
 #. Label of the full_name (Data) field in DocType 'Activity Log'
 #. Label of the full_name (Data) field in DocType 'User'
 #. Label of the full_name (Data) field in DocType 'About Us Team Member'
-#. Label of the full_name (Data) field in DocType 'Blogger'
 #: frappe/contacts/doctype/contact/contact.json
 #: frappe/core/doctype/activity_log/activity_log.json
 #: frappe/core/doctype/user/user.json
 #: frappe/desk/page/setup_wizard/setup_wizard.js:479
 #: frappe/templates/signup.html:4
 #: frappe/website/doctype/about_us_team_member/about_us_team_member.json
-#: frappe/website/doctype/blogger/blogger.json
 msgid "Full Name"
 msgstr "Tam Adı"
 
-#: frappe/printing/page/print/print.js:67
+#: frappe/printing/page/print/print.js:80
 #: frappe/public/js/frappe/form/templates/print_layout.html:42
 msgid "Full Page"
 msgstr "Tam Sayfa"
@@ -11159,6 +11071,12 @@ msgstr "Yeni Rapor Oluştur"
 msgid "Generate Random Password"
 msgstr "Rastgele Şifre Oluştur"
 
+#. Label of the generate_separate_documents_for_each_assignee (Check) field in
+#. DocType 'Auto Repeat'
+#: frappe/automation/doctype/auto_repeat/auto_repeat.json
+msgid "Generate Separate Documents For Each Assignee"
+msgstr ""
+
 #: frappe/public/js/frappe/ui/toolbar/toolbar.js:178
 #: frappe/public/js/frappe/utils/utils.js:1790
 msgid "Generate Tracking URL"
@@ -11183,7 +11101,7 @@ msgstr "Konum"
 msgid "Geolocation Settings"
 msgstr "Coğrafi Konum Ayarları"
 
-#: frappe/email/doctype/notification/notification.js:219
+#: frappe/email/doctype/notification/notification.js:222
 msgid "Get Alerts for Today"
 msgstr "Bugünün Bildirimlerini Getir"
 
@@ -11489,11 +11407,6 @@ msgstr "Google E-Tablolar bağlantısı geçersiz veya herkes tarafından erişi
 msgid "Google Sheets URL must end with \"gid={number}\". Copy and paste the URL from the browser address bar and try again."
 msgstr "Google E-Tablolar bağlantısı \"gid={number}\" ile bitmelidir. Bağlantıyı tarayıcı adres çubuğundan kopyalayıp yapıştırın ve tekrar deneyin."
 
-#. Label of the google_preview (HTML) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "Google Snippet Preview"
-msgstr "Google Snippet Önizlemesi"
-
 #. Label of the grant_type (Select) field in DocType 'OAuth Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
 msgid "Grant Type"
@@ -11627,7 +11540,6 @@ msgstr "HH:mm:ss"
 #. Head'
 #. Option for the 'Footer Based On' (Select) field in DocType 'Letter Head'
 #. Label of the html (Code) field in DocType 'Print Format'
-#. Option for the 'Content Type' (Select) field in DocType 'Blog Post'
 #. Option for the 'Fieldtype' (Select) field in DocType 'Web Form Field'
 #. Option for the 'Content Type' (Select) field in DocType 'Web Page'
 #: frappe/core/doctype/docfield/docfield.json
@@ -11640,7 +11552,6 @@ msgstr "HH:mm:ss"
 #: frappe/printing/doctype/print_format/print_format.json
 #: frappe/printing/doctype/print_format/print_format.py:98
 #: frappe/public/js/print_format_builder/Field.vue:86
-#: frappe/website/doctype/blog_post/blog_post.json
 #: frappe/website/doctype/web_form_field/web_form_field.json
 #: frappe/website/doctype/web_page/web_page.js:92
 #: frappe/website/doctype/web_page/web_page.json
@@ -11802,6 +11713,12 @@ msgstr "Isı Haritası"
 msgid "Hello"
 msgstr "Merhaba"
 
+#: frappe/templates/emails/user_invitation.html:2
+#: frappe/templates/emails/user_invitation_cancelled.html:2
+#: frappe/templates/emails/user_invitation_expired.html:2
+msgid "Hello,"
+msgstr "Merhaba,"
+
 #. Label of the help_section (Section Break) field in DocType 'Server Script'
 #. Label of the help (HTML) field in DocType 'Property Setter'
 #: frappe/core/doctype/server_script/server_script.json
@@ -11936,11 +11853,6 @@ msgstr "Kenarları Gizle"
 msgid "Hide Buttons"
 msgstr "Butonları Gizle"
 
-#. Label of the hide_cta (Check) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "Hide CTA"
-msgstr ""
-
 #. Label of the allow_copy (Check) field in DocType 'DocType'
 #. Label of the allow_copy (Check) field in DocType 'Customize Form'
 #: frappe/core/doctype/doctype/doctype.json
@@ -12020,7 +11932,7 @@ msgstr "Kenar Çubuğunu, Menüyü ve Yorumları Gizle"
 msgid "Hide Standard Menu"
 msgstr "Standart Menüyü Gizle"
 
-#: frappe/public/js/frappe/list/list_view.js:1702
+#: frappe/public/js/frappe/list/list_view.js:1723
 msgid "Hide Tags"
 msgstr "Etiketleri Gizle"
 
@@ -12085,9 +11997,6 @@ msgstr "İpucu: Parolaya semboller, sayılar ve büyük harfler ekleyin."
 #: frappe/public/js/frappe/views/file/file_view.js:88
 #: frappe/public/js/frappe/views/pageview.js:153 frappe/templates/doc.html:19
 #: frappe/templates/includes/navbar/navbar.html:9
-#: frappe/website/doctype/blog_post/blog_post.py:159
-#: frappe/website/doctype/blog_post/blog_post.py:271
-#: frappe/website/doctype/blog_post/blog_post.py:273
 #: frappe/website/doctype/website_settings/website_settings.json
 #: frappe/website/web_template/primary_navbar/primary_navbar.html:9
 #: frappe/www/contact.py:22 frappe/www/login.html:170 frappe/www/me.html:76
@@ -12184,7 +12093,7 @@ msgid "ID"
 msgstr "ID"
 
 #: frappe/desk/reportview.py:491
-#: frappe/public/js/frappe/views/reports/report_view.js:985
+#: frappe/public/js/frappe/views/reports/report_view.js:989
 msgctxt "Label of name column in report"
 msgid "ID"
 msgstr "ID"
@@ -12280,7 +12189,7 @@ msgstr "Kısıtlı Kullanıcı İzni Uygula işaretliyse ve kullanıcıya bir Do
 msgid "If Checked workflow status will not override status in list view"
 msgstr "İşaretliyse iş akışı durumu liste görünümündeki durumu geçersiz kılmaz"
 
-#: frappe/core/doctype/doctype/doctype.py:1763
+#: frappe/core/doctype/doctype/doctype.py:1764
 #: frappe/core/report/user_doctype_permissions/user_doctype_permissions.py:45
 #: frappe/public/js/frappe/roles_editor.js:66
 msgid "If Owner"
@@ -12410,6 +12319,10 @@ msgstr "Kullanıcının herhangi bir rolü işaretlenmişse, kullanıcı \"Siste
 msgid "If these instructions where not helpful, please add in your suggestions on GitHub Issues."
 msgstr "Eğer bu talimatlar yardımcı olmadıysa lütfen GitHub Sorunları'na önerilerinizi ekleyin."
 
+#: frappe/templates/emails/user_invitation_cancelled.html:8
+msgid "If this was a mistake or you need access again, please reach out to your team."
+msgstr ""
+
 #. Description of the 'Fetch on Save if Empty' (Check) field in DocType
 #. 'DocField'
 #. Description of the 'Fetch on Save if Empty' (Check) field in DocType 'Custom
@@ -12441,7 +12354,11 @@ msgstr "Yeni kayıt yüklüyorsanız, varsa \"İsimlendirme Serisi\" zorunlu hal
 msgid "If you are uploading new records, leave the \"name\" (ID) column blank."
 msgstr "Yeni kayıt yüklüyorsanız \"isim\" (ID) sütununu boş bırakın."
 
-#: frappe/utils/password.py:214
+#: frappe/templates/emails/user_invitation.html:19
+msgid "If you have any questions, reach out to your system administrator."
+msgstr ""
+
+#: frappe/utils/password.py:213
 msgid "If you have recently restored the site, you may need to copy the site_config.json containing the original encryption key."
 msgstr "Siteyi yakın zamanda geri yüklediyseniz, orijinal şifreleme anahtarını içeren site_config.json dosyasını kopyalamanız gerekebilir."
 
@@ -12498,12 +12415,12 @@ msgstr "Bu boyuttan büyük ekleri yoksay"
 msgid "Ignored Apps"
 msgstr "Yoksayılan Uygulamalar"
 
-#: frappe/model/workflow.py:146
+#: frappe/model/workflow.py:202
 msgid "Illegal Document Status for {0}"
 msgstr "{0} için Uygun Olmayan Belge Durumu"
 
 #: frappe/model/db_query.py:452 frappe/model/db_query.py:455
-#: frappe/model/db_query.py:1123
+#: frappe/model/db_query.py:1120
 msgid "Illegal SQL Query"
 msgstr "Geçersiz SQL Sorgusu"
 
@@ -12564,11 +12481,11 @@ msgstr "Resim Görünümü"
 msgid "Image Width"
 msgstr "Resim Genişliği"
 
-#: frappe/core/doctype/doctype/doctype.py:1506
+#: frappe/core/doctype/doctype/doctype.py:1507
 msgid "Image field must be a valid fieldname"
 msgstr "Resim alanı geçerli bir alan adı olmalıdır"
 
-#: frappe/core/doctype/doctype/doctype.py:1508
+#: frappe/core/doctype/doctype/doctype.py:1509
 msgid "Image field must be of type Attach Image"
 msgstr "Resim alanı iliştirilen resim türünde olmalıdır"
 
@@ -12624,7 +12541,7 @@ msgstr ""
 msgid "Import"
 msgstr "İçe Aktar"
 
-#: frappe/public/js/frappe/list/list_view.js:1764
+#: frappe/public/js/frappe/list/list_view.js:1785
 msgctxt "Button in list view menu"
 msgid "Import"
 msgstr "İçe Aktar"
@@ -12919,7 +12836,7 @@ msgstr "Hatalı Yapılandırma"
 msgid "Incorrect URL"
 msgstr "Yanlış URL"
 
-#: frappe/utils/password.py:101
+#: frappe/utils/password.py:100
 msgid "Incorrect User or Password"
 msgstr "Hatalı Kullanıcı Adı veya Şifre"
 
@@ -12943,7 +12860,7 @@ msgstr "Geçersiz değer: "
 #: frappe/custom/doctype/custom_field/custom_field.json frappe/model/meta.py:55
 #: frappe/public/js/frappe/model/meta.js:203
 #: frappe/public/js/frappe/model/model.js:124
-#: frappe/public/js/frappe/views/reports/report_view.js:1006
+#: frappe/public/js/frappe/views/reports/report_view.js:1010
 msgid "Index"
 msgstr "Dizin"
 
@@ -13018,7 +12935,7 @@ msgstr "Yukarı Ekle"
 
 #. Label of the insert_after (Select) field in DocType 'Custom Field'
 #: frappe/custom/doctype/custom_field/custom_field.json
-#: frappe/public/js/frappe/views/reports/query_report.js:1874
+#: frappe/public/js/frappe/views/reports/query_report.js:1876
 msgid "Insert After"
 msgstr "Sonrasına Ekle"
 
@@ -13034,7 +12951,7 @@ msgstr ""
 msgid "Insert Below"
 msgstr "Aşağıya Ekle"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:391
+#: frappe/public/js/frappe/views/reports/report_view.js:395
 msgid "Insert Column Before {0}"
 msgstr "{0} Sütunundan Önce Ekle"
 
@@ -13051,6 +12968,10 @@ msgstr "Yeni Kayıt Ekle"
 #: frappe/website/doctype/web_page/web_page.json
 msgid "Insert Style"
 msgstr "Stil Ekle"
+
+#: frappe/public/js/frappe/ui/toolbar/about.js:11
+msgid "Instagram"
+msgstr ""
 
 #: frappe/public/js/frappe/ui/toolbar/search_utils.js:665
 #: frappe/public/js/frappe/ui/toolbar/search_utils.js:666
@@ -13070,7 +12991,7 @@ msgid "Installed Applications"
 msgstr "Yüklü Uygulamalar"
 
 #: frappe/core/doctype/installed_applications/installed_applications.js:18
-#: frappe/public/js/frappe/ui/toolbar/about.js:8
+#: frappe/public/js/frappe/ui/toolbar/about.js:11
 msgid "Installed Apps"
 msgstr "Yüklü Uygulamalar"
 
@@ -13099,7 +13020,7 @@ msgstr "Raporu silmek için mevcut izinler yetersiz"
 msgid "Insufficient Permissions for editing Report"
 msgstr "Raporu düzenlemek için mevcut izinler yetersiz"
 
-#: frappe/core/doctype/doctype/doctype.py:445
+#: frappe/core/doctype/doctype/doctype.py:446
 msgid "Insufficient attachment limit"
 msgstr "Yetersiz dosya eki limiti"
 
@@ -13205,7 +13126,7 @@ msgstr "Geçersiz"
 #: frappe/public/js/form_builder/utils.js:221
 #: frappe/public/js/frappe/form/grid_row.js:833
 #: frappe/public/js/frappe/form/layout.js:811
-#: frappe/public/js/frappe/views/reports/report_view.js:717
+#: frappe/public/js/frappe/views/reports/report_view.js:721
 msgid "Invalid \"depends_on\" expression"
 msgstr "Geçersiz \"depends_on\" ifadesi"
 
@@ -13229,7 +13150,7 @@ msgstr "Geçersiz CSV Formatı"
 msgid "Invalid Code. Please try again."
 msgstr "Geçersiz Kod. Lütfen tekrar deneyin."
 
-#: frappe/integrations/doctype/webhook/webhook.py:87
+#: frappe/integrations/doctype/webhook/webhook.py:91
 msgid "Invalid Condition: {}"
 msgstr "Geçersiz Koşul: {}"
 
@@ -13249,7 +13170,11 @@ msgstr "Geçersiz DocType"
 msgid "Invalid DocType: {0}"
 msgstr "Geçersiz DocType: {0}"
 
-#: frappe/core/doctype/doctype/doctype.py:1272
+#: frappe/email/doctype/email_group/email_group.py:51
+msgid "Invalid Doctype"
+msgstr ""
+
+#: frappe/core/doctype/doctype/doctype.py:1273
 msgid "Invalid Fieldname"
 msgstr "Geçersiz Alan Adı"
 
@@ -13299,8 +13224,8 @@ msgstr "Geçersiz Adlandırma Serisi: {}"
 msgid "Invalid Operation"
 msgstr "Geçersiz İşlem"
 
-#: frappe/core/doctype/doctype/doctype.py:1641
-#: frappe/core/doctype/doctype/doctype.py:1650
+#: frappe/core/doctype/doctype/doctype.py:1642
+#: frappe/core/doctype/doctype/doctype.py:1651
 msgid "Invalid Option"
 msgstr "Geçersiz Seçenek"
 
@@ -13339,7 +13264,7 @@ msgstr "Geçersiz İşlem. Lütfen Sayfayı Yenileyin."
 msgid "Invalid Search Field {0}"
 msgstr "Geçersiz Arama Alanı {0}"
 
-#: frappe/core/doctype/doctype/doctype.py:1214
+#: frappe/core/doctype/doctype/doctype.py:1215
 msgid "Invalid Table Fieldname"
 msgstr "Geçersiz Tablo Alanı Adı"
 
@@ -13362,7 +13287,7 @@ msgstr "Geçersiz Kullanıcı Adı veya Destek Şifresi. Lütfen düzeltin ve te
 msgid "Invalid Values"
 msgstr "Geçersiz Değerler"
 
-#: frappe/integrations/doctype/webhook/webhook.py:116
+#: frappe/integrations/doctype/webhook/webhook.py:120
 msgid "Invalid Webhook Secret"
 msgstr ""
 
@@ -13372,6 +13297,10 @@ msgstr ""
 
 #: frappe/database/query.py:1542
 msgid "Invalid alias format: {0}. Alias must be a simple identifier."
+msgstr ""
+
+#: frappe/core/doctype/user_invitation/user_invitation.py:178
+msgid "Invalid app"
 msgstr ""
 
 #: frappe/database/query.py:1468
@@ -13390,7 +13319,7 @@ msgstr ""
 msgid "Invalid characters in table name: {0}"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:400
+#: frappe/public/js/frappe/views/reports/report_view.js:404
 msgid "Invalid column"
 msgstr "Geçersiz Sütun"
 
@@ -13434,7 +13363,7 @@ msgstr "Geçersiz alan adı {0}"
 msgid "Invalid field type: {0}"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1085
+#: frappe/core/doctype/doctype/doctype.py:1086
 msgid "Invalid fieldname '{0}' in autoname"
 msgstr "Otomatik adlandırmada geçersiz alan adı '{0}'"
 
@@ -13462,10 +13391,18 @@ msgstr ""
 msgid "Invalid function dictionary format"
 msgstr ""
 
+#: frappe/core/api/user_invitation.py:17
+msgid "Invalid input"
+msgstr ""
+
 #: frappe/desk/doctype/dashboard/dashboard.py:67
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.py:424
 msgid "Invalid json added in the custom options: {0}"
 msgstr "Özel seçeneklere geçersiz json eklendi: {0}"
+
+#: frappe/core/api/user_invitation.py:102
+msgid "Invalid key"
+msgstr ""
 
 #: frappe/model/naming.py:490
 msgid "Invalid name type (integer) for varchar name column"
@@ -13486,6 +13423,10 @@ msgstr ""
 #: frappe/app.py:337
 msgid "Invalid request arguments"
 msgstr "Geçersiz istek değişkenleri"
+
+#: frappe/core/doctype/user_invitation/user_invitation.py:164
+msgid "Invalid role"
+msgstr ""
 
 #: frappe/database/query.py:410
 msgid "Invalid simple filter format: {0}"
@@ -13521,11 +13462,11 @@ msgctxt "Error message in web form"
 msgid "Invalid values for fields:"
 msgstr "Alanlar için geçersiz değerler:"
 
-#: frappe/printing/page/print/print.js:614
+#: frappe/printing/page/print/print.js:627
 msgid "Invalid wkhtmltopdf version"
 msgstr "Geçersiz wkhtmltopdf sürümü"
 
-#: frappe/core/doctype/doctype/doctype.py:1564
+#: frappe/core/doctype/doctype/doctype.py:1565
 msgid "Invalid {0} condition"
 msgstr "Geçersiz {0} koşulu"
 
@@ -13534,9 +13475,38 @@ msgstr "Geçersiz {0} koşulu"
 msgid "Inverse"
 msgstr "Tersine çevir"
 
+#: frappe/core/api/user_invitation.py:71
+msgid "Invitation cannot be cancelled"
+msgstr ""
+
+#: frappe/core/doctype/user_invitation/user_invitation.py:118
+msgid "Invitation is cancelled"
+msgstr ""
+
+#: frappe/core/doctype/user_invitation/user_invitation.py:116
+msgid "Invitation is expired"
+msgstr ""
+
+#: frappe/core/api/user_invitation.py:60 frappe/core/api/user_invitation.py:65
+msgid "Invitation not found"
+msgstr ""
+
+#: frappe/core/doctype/user_invitation/user_invitation.py:59
+msgid "Invitation to join {0} cancelled"
+msgstr ""
+
+#: frappe/core/doctype/user_invitation/user_invitation.py:76
+msgid "Invitation to join {0} expired"
+msgstr ""
+
 #: frappe/contacts/doctype/contact/contact.js:30
 msgid "Invite as User"
 msgstr "Kullanıcı olarak davet et"
+
+#. Label of the invited_by (Link) field in DocType 'User Invitation'
+#: frappe/core/doctype/user_invitation/user_invitation.json
+msgid "Invited By"
+msgstr ""
 
 #: frappe/public/js/frappe/ui/filters/filter.js:22
 msgid "Is"
@@ -13673,7 +13643,7 @@ msgstr "Herkese Açık"
 msgid "Is Published Field"
 msgstr "Yayınlanmış Alan"
 
-#: frappe/core/doctype/doctype/doctype.py:1515
+#: frappe/core/doctype/doctype/doctype.py:1516
 msgid "Is Published Field must be a valid fieldname"
 msgstr "Yayınlandı Alan geçerli bir alan olmalıdır"
 
@@ -13965,12 +13935,14 @@ msgstr "Tüm iletişimleri takip eder"
 
 #. Label of the defkey (Data) field in DocType 'DefaultValue'
 #. Label of the key (Data) field in DocType 'Document Share Key'
+#. Label of the key (Data) field in DocType 'User Invitation'
 #. Label of the key (Data) field in DocType 'Query Parameters'
 #. Label of the key (Data) field in DocType 'Webhook Data'
 #. Label of the key (Small Text) field in DocType 'Webhook Header'
 #. Label of the key (Data) field in DocType 'Website Meta Tag'
 #: frappe/core/doctype/defaultvalue/defaultvalue.json
 #: frappe/core/doctype/document_share_key/document_share_key.json
+#: frappe/core/doctype/user_invitation/user_invitation.json
 #: frappe/integrations/doctype/query_parameters/query_parameters.json
 #: frappe/integrations/doctype/webhook_data/webhook_data.json
 #: frappe/integrations/doctype/webhook_header/webhook_header.json
@@ -14243,7 +14215,7 @@ msgstr "Landscape"
 #: frappe/core/doctype/language/language.json
 #: frappe/core/doctype/system_settings/system_settings.json
 #: frappe/core/doctype/translation/translation.json
-#: frappe/core/doctype/user/user.json frappe/printing/page/print/print.js:104
+#: frappe/core/doctype/user/user.json frappe/printing/page/print/print.js:117
 #: frappe/public/js/frappe/form/templates/print_layout.html:11
 msgid "Language"
 msgstr "Dil"
@@ -14527,7 +14499,7 @@ msgstr ""
 #. Name of a DocType
 #: frappe/core/doctype/report/report.json
 #: frappe/printing/doctype/letter_head/letter_head.json
-#: frappe/printing/page/print/print.js:127
+#: frappe/printing/page/print/print.js:140
 #: frappe/public/js/frappe/form/print_utils.js:43
 #: frappe/public/js/frappe/form/templates/print_layout.html:16
 #: frappe/public/js/frappe/list/bulk_operations.js:52
@@ -14623,20 +14595,6 @@ msgstr "Açık Tema"
 msgid "Like"
 msgstr "Benzer"
 
-#. Label of the like_limit (Int) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Like limit"
-msgstr ""
-
-#. Description of the 'Like limit' (Int) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Like limit per hour"
-msgstr ""
-
-#: frappe/templates/includes/likes/likes.py:30
-msgid "Like on {0}: {1}"
-msgstr "Beğen {0}: {1}"
-
 #: frappe/desk/like.py:92
 msgid "Liked"
 msgstr "Beğendi"
@@ -14677,6 +14635,7 @@ msgstr "Çizgi"
 #. Option for the 'Type' (Select) field in DocType 'Workspace Link'
 #. Option for the 'Fieldtype' (Select) field in DocType 'Web Form Field'
 #. Option for the 'Fieldtype' (Select) field in DocType 'Web Template Field'
+#. Label of the link (Dynamic Link) field in DocType 'Workflow Transition Task'
 #: frappe/core/doctype/docfield/docfield.json
 #: frappe/core/doctype/report_column/report_column.json
 #: frappe/core/doctype/report_filter/report_filter.json
@@ -14690,6 +14649,7 @@ msgstr "Çizgi"
 #: frappe/public/js/frappe/file_uploader/FileUploader.vue:128
 #: frappe/website/doctype/web_form_field/web_form_field.json
 #: frappe/website/doctype/web_template_field/web_template_field.json
+#: frappe/workflow/doctype/workflow_transition_task/workflow_transition_task.json
 msgid "Link"
 msgstr "Bağlantı"
 
@@ -14820,6 +14780,10 @@ msgstr "Bağlantılı"
 msgid "Linked With"
 msgstr "Bağlantılar"
 
+#: frappe/public/js/frappe/ui/toolbar/about.js:11
+msgid "LinkedIn"
+msgstr "LinkedIn"
+
 #. Label of the links (Table) field in DocType 'Address'
 #. Label of the links (Table) field in DocType 'Contact'
 #. Label of the links_section (Tab Break) field in DocType 'DocType'
@@ -14872,7 +14836,7 @@ msgstr "Filtreyi Listele"
 msgid "List Settings"
 msgstr "Liste Ayarları"
 
-#: frappe/public/js/frappe/list/list_view.js:1844
+#: frappe/public/js/frappe/list/list_view.js:1865
 msgctxt "Button in list view menu"
 msgid "List Settings"
 msgstr "Liste Ayarları"
@@ -14922,9 +14886,8 @@ msgstr "Listeler"
 msgid "Load Balancing"
 msgstr "Yük Dengeleme"
 
-#: frappe/public/js/frappe/list/base_list.js:388
+#: frappe/public/js/frappe/list/base_list.js:384
 #: frappe/public/js/frappe/web_form/web_form_list.js:305
-#: frappe/website/doctype/blog_post/templates/blog_post_list.html:50
 #: frappe/website/doctype/help_article/templates/help_article_list.html:30
 msgid "Load More"
 msgstr "Daha Fazla Yükle"
@@ -14941,7 +14904,7 @@ msgstr "Daha fazla yükle"
 #: frappe/core/page/permission_manager/permission_manager.js:172
 #: frappe/public/js/frappe/form/controls/multicheck.js:13
 #: frappe/public/js/frappe/form/linked_with.js:13
-#: frappe/public/js/frappe/list/base_list.js:511
+#: frappe/public/js/frappe/list/base_list.js:507
 #: frappe/public/js/frappe/list/list_view.js:360
 #: frappe/public/js/frappe/ui/listing.html:16
 #: frappe/public/js/frappe/views/reports/query_report.js:1088
@@ -14956,7 +14919,7 @@ msgstr "Filtreler Yükleniyor..."
 msgid "Loading import file..."
 msgstr "İçe aktarma dosyası yükleniyor..."
 
-#: frappe/public/js/frappe/ui/toolbar/about.js:8
+#: frappe/public/js/frappe/ui/toolbar/about.js:11
 msgid "Loading versions..."
 msgstr "Versiyonlar yükleniyor..."
 
@@ -15448,10 +15411,8 @@ msgid "Mark as Unread"
 msgstr "Okunmadı Olarak İşaretle"
 
 #. Option for the 'Message Type' (Select) field in DocType 'Notification'
-#. Option for the 'Content Type' (Select) field in DocType 'Blog Post'
 #. Option for the 'Content Type' (Select) field in DocType 'Web Page'
 #: frappe/email/doctype/notification/notification.json
-#: frappe/website/doctype/blog_post/blog_post.json
 #: frappe/website/doctype/web_page/web_page.js:92
 #: frappe/website/doctype/web_page/web_page.json
 msgid "Markdown"
@@ -15532,7 +15493,7 @@ msgstr "Maksimum ek boyutu"
 msgid "Max auto email report per user"
 msgstr "Kullanıcı başına maksimum otomatik e-posta raporu"
 
-#: frappe/core/doctype/doctype/doctype.py:1342
+#: frappe/core/doctype/doctype/doctype.py:1343
 msgid "Max width for type Currency is 100px in row {0}"
 msgstr "Para Birimi türü için maksimum genişlik {0} satırında 100 pikseldir"
 
@@ -15554,7 +15515,7 @@ msgstr "Maksimum Alan Sayısı"
 msgid "Maximum attachment limit of {0} has been reached."
 msgstr "{0} maksimum ek sınırına ulaşıldı."
 
-#: frappe/model/rename_doc.py:690
+#: frappe/model/rename_doc.py:689
 msgid "Maximum {0} rows allowed"
 msgstr "İzin verilen en fazla satır sayısı {0}"
 
@@ -15722,29 +15683,21 @@ msgstr "Mesajlar"
 msgid "Meta"
 msgstr "Meta"
 
-#. Label of the meta_description (Small Text) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
 #: frappe/website/doctype/web_page/web_page.js:124
 msgid "Meta Description"
 msgstr "Meta Açıklaması"
 
-#. Label of the meta_image (Attach Image) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
 #: frappe/website/doctype/web_page/web_page.js:131
 msgid "Meta Image"
 msgstr ""
 
-#. Label of the meta_tags (Section Break) field in DocType 'Blog Post'
 #. Label of the metatags_section (Section Break) field in DocType 'Web Page'
 #. Label of the meta_tags (Table) field in DocType 'Website Route Meta'
-#: frappe/website/doctype/blog_post/blog_post.json
 #: frappe/website/doctype/web_page/web_page.json
 #: frappe/website/doctype/website_route_meta/website_route_meta.json
 msgid "Meta Tags"
 msgstr "Meta Etiketleri"
 
-#. Label of the meta_title (Data) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
 #: frappe/website/doctype/web_page/web_page.js:117
 msgid "Meta Title"
 msgstr "Meta Başlık"
@@ -15879,7 +15832,7 @@ msgstr "Bayan"
 msgid "Missing DocType"
 msgstr "Eksik DocType"
 
-#: frappe/core/doctype/doctype/doctype.py:1526
+#: frappe/core/doctype/doctype/doctype.py:1527
 msgid "Missing Field"
 msgstr "Eksik Veri"
 
@@ -16146,7 +16099,7 @@ msgstr "Sayfanın alt kısmı için daha fazla içerik."
 msgid "Most Used"
 msgstr "En Çok Kullanılan"
 
-#: frappe/utils/password.py:76
+#: frappe/utils/password.py:75
 msgid "Most probably your password is too long."
 msgstr "Büyük ihtimalle şifreniz çok uzun."
 
@@ -16405,12 +16358,12 @@ msgstr "Gezinti Çubuğu Şablonu"
 msgid "Navbar Template Values"
 msgstr "Gezinme Çubuğu Şablon Değerleri"
 
-#: frappe/public/js/frappe/list/list_view.js:1235
+#: frappe/public/js/frappe/list/list_view.js:1256
 msgctxt "Description of a list view shortcut"
 msgid "Navigate list down"
 msgstr "Listede Aşağı Git"
 
-#: frappe/public/js/frappe/list/list_view.js:1242
+#: frappe/public/js/frappe/list/list_view.js:1263
 msgctxt "Description of a list view shortcut"
 msgid "Navigate list up"
 msgstr "Listede Yukarı git"
@@ -16475,10 +16428,6 @@ msgstr "Yeni Adres"
 msgid "New Chart"
 msgstr "Yeni Grafik"
 
-#: frappe/templates/includes/comments/comments.py:62
-msgid "New Comment on {0}: {1}"
-msgstr "Yeni Yorum {0}: {1}"
-
 #: frappe/public/js/frappe/form/templates/contact_list.html:3
 msgid "New Contact"
 msgstr "Yeni Kişi"
@@ -16487,8 +16436,8 @@ msgstr "Yeni Kişi"
 msgid "New Custom Block"
 msgstr "Yeni Özel Blok"
 
-#: frappe/printing/page/print/print.js:295
-#: frappe/printing/page/print/print.js:342
+#: frappe/printing/page/print/print.js:308
+#: frappe/printing/page/print/print.js:355
 msgid "New Custom Print Format"
 msgstr "Yeni Yazdırma Formatı"
 
@@ -16558,8 +16507,8 @@ msgstr "Yeni Modül Tanıtımı"
 msgid "New Password"
 msgstr "Yeni Şifre"
 
-#: frappe/printing/page/print/print.js:267
-#: frappe/printing/page/print/print.js:321
+#: frappe/printing/page/print/print.js:280
+#: frappe/printing/page/print/print.js:334
 #: frappe/printing/page/print_format_builder_beta/print_format_builder_beta.js:61
 msgid "New Print Format Name"
 msgstr "Yeni Baskı Formatı Adı"
@@ -16568,7 +16517,7 @@ msgstr "Yeni Baskı Formatı Adı"
 msgid "New Quick List"
 msgstr "Yeni Hızlı Liste"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1382
+#: frappe/public/js/frappe/views/reports/report_view.js:1386
 msgid "New Report name"
 msgstr "Yeni Rapor İsmi"
 
@@ -16666,7 +16615,7 @@ msgstr "Yeni {0} {1}, {2} Panosuna eklendi."
 msgid "New {0} {1} created"
 msgstr "Yeni {0} {1} oluşturuldu"
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:385
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:413
 msgid "New {0}: {1}"
 msgstr "Yeni {0}: {1}"
 
@@ -16794,9 +16743,10 @@ msgstr "Sonraki Tıklamada"
 #. Settings'
 #. Option for the 'Standard' (Select) field in DocType 'Print Format'
 #: frappe/core/doctype/page/page.json frappe/core/doctype/report/report.json
-#: frappe/email/doctype/notification/notification.py:96
+#: frappe/email/doctype/notification/notification.py:100
+#: frappe/email/doctype/notification/notification.py:102
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
-#: frappe/integrations/doctype/webhook/webhook.py:128
+#: frappe/integrations/doctype/webhook/webhook.py:132
 #: frappe/printing/doctype/print_format/print_format.json
 #: frappe/public/js/form_builder/utils.js:341
 #: frappe/public/js/frappe/form/controls/link.js:494
@@ -16851,6 +16801,10 @@ msgstr "E-posta Hesabı Yok"
 msgid "No Email Accounts Assigned"
 msgstr "Hiçbir E-posta Hesabı Atanmadı"
 
+#: frappe/email/doctype/email_group/email_group.py:50
+msgid "No Email field found in {0}"
+msgstr ""
+
 #: frappe/public/js/frappe/views/inbox/inbox_view.js:183
 msgid "No Emails"
 msgstr "E-posta Yok"
@@ -16886,8 +16840,8 @@ msgstr "E-posta için LDAP Kullanıcısı bulunamadı: {0}"
 msgid "No Label"
 msgstr "Etiket Yok"
 
-#: frappe/printing/page/print/print.js:703
-#: frappe/printing/page/print/print.js:784
+#: frappe/printing/page/print/print.js:716
+#: frappe/printing/page/print/print.js:797
 #: frappe/public/js/frappe/list/bulk_operations.js:98
 #: frappe/public/js/frappe/list/bulk_operations.js:170
 #: frappe/utils/weasyprint.py:52
@@ -16902,7 +16856,7 @@ msgstr "{0} için İsim Belirtilmemiş"
 msgid "No New notifications"
 msgstr "Yeni Bildirim Yok"
 
-#: frappe/core/doctype/doctype/doctype.py:1743
+#: frappe/core/doctype/doctype/doctype.py:1744
 msgid "No Permissions Specified"
 msgstr "Hiçbir İzin Belirtilmemiş"
 
@@ -16922,11 +16876,11 @@ msgstr "Bu Gösterge Panosunda Görüntülemeniz için İzin Verilen Grafik Yok"
 msgid "No Preview"
 msgstr "Önizleme Yok"
 
-#: frappe/printing/page/print/print.js:707
+#: frappe/printing/page/print/print.js:720
 msgid "No Preview Available"
 msgstr "Önizleme Mevcut Değil"
 
-#: frappe/printing/page/print/print.js:862
+#: frappe/printing/page/print/print.js:875
 msgid "No Printer is Available."
 msgstr "Uygun Yazıcı Bulunamadı."
 
@@ -16966,7 +16920,7 @@ msgstr "Yaklaşan Etkinlik Yok"
 msgid "No address added yet."
 msgstr "Henüz adres eklenmemiş."
 
-#: frappe/email/doctype/notification/notification.js:229
+#: frappe/email/doctype/notification/notification.js:232
 msgid "No alerts for today"
 msgstr "Bugün için herhangi bir bildirim yok"
 
@@ -16994,10 +16948,6 @@ msgstr "Senkronizasyonda değişiklik yok"
 msgid "No changes to update"
 msgstr "Güncellenecek değişiklik yok"
 
-#: frappe/website/doctype/blog_post/blog_post.py:378
-msgid "No comments yet"
-msgstr "Henüz yorum yok"
-
 #: frappe/templates/includes/comments/comments.html:4
 msgid "No comments yet. "
 msgstr "Henüz yorum yok. "
@@ -17006,7 +16956,7 @@ msgstr "Henüz yorum yok. "
 msgid "No contacts added yet."
 msgstr "Henüz kişi eklenmedi."
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:438
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:466
 msgid "No contacts linked to document"
 msgstr "Belgeye bağlı kişi yok"
 
@@ -17025,6 +16975,10 @@ msgstr "{0} ile etiketlenen belge bulunamadı"
 #: frappe/public/js/frappe/views/inbox/inbox_view.js:21
 msgid "No email account associated with the User. Please add an account under User > Email Inbox."
 msgstr "Kullanıcıyla ilişkilendirilmiş bir e-posta hesabı bulunmamaktadır. Lütfen bir hesap ekleyin: Kullanıcı > E-posta Gelen Kutusu."
+
+#: frappe/core/api/user_invitation.py:17
+msgid "No email addresses to invite"
+msgstr ""
 
 #: frappe/core/doctype/data_import/data_import.js:478
 msgid "No failed logs"
@@ -17098,7 +17052,7 @@ msgctxt "{0} = verb, {1} = object"
 msgid "No permission to '{0}' {1}"
 msgstr ""
 
-#: frappe/model/db_query.py:950
+#: frappe/model/db_query.py:947
 msgid "No permission to read {0}"
 msgstr "Okuma {0} izni yok"
 
@@ -17126,7 +17080,7 @@ msgstr "Hiçbir kayıt dışa aktarılmayacak"
 msgid "No rows"
 msgstr "Sıra yok"
 
-#: frappe/email/doctype/notification/notification.py:129
+#: frappe/email/doctype/notification/notification.py:135
 msgid "No subject"
 msgstr "Konu yok"
 
@@ -17262,7 +17216,6 @@ msgstr "İzin yok"
 msgid "Not Permitted to read {0}"
 msgstr "{0} için Okuma izni yok"
 
-#: frappe/website/doctype/blog_post/blog_post_list.js:7
 #: frappe/website/doctype/web_form/web_form_list.js:7
 #: frappe/website/doctype/web_page/web_page_list.js:7
 msgid "Not Published"
@@ -17272,7 +17225,7 @@ msgstr "Yayınlanmadı"
 #: frappe/public/js/frappe/form/toolbar.js:816
 #: frappe/public/js/frappe/model/indicator.js:28
 #: frappe/public/js/frappe/views/kanban/kanban_view.js:169
-#: frappe/public/js/frappe/views/reports/report_view.js:205
+#: frappe/public/js/frappe/views/reports/report_view.js:209
 #: frappe/public/js/print_format_builder/print_format_builder.bundle.js:39
 #: frappe/website/doctype/web_form/templates/web_form.html:78
 msgid "Not Saved"
@@ -17306,7 +17259,7 @@ msgstr "Virgülle Ayrılmış Geçerli Bir CSV Dosyası Değil"
 msgid "Not a valid User Image."
 msgstr "Geçerli bir Kullanıcı Resmi değil."
 
-#: frappe/model/workflow.py:114
+#: frappe/model/workflow.py:117
 msgid "Not a valid Workflow Action"
 msgstr "Geçerli bir İş Akışı Eylemi değil"
 
@@ -17322,11 +17275,11 @@ msgstr "Aktif değil"
 msgid "Not allowed for {0}: {1}"
 msgstr "{0} için izin verilmiyor: {1}"
 
-#: frappe/email/doctype/notification/notification.py:595
+#: frappe/email/doctype/notification/notification.py:637
 msgid "Not allowed to attach {0} document, please enable Allow Print For {0} in Print Settings"
 msgstr "{0} belgesinin eklenmesine izin verilmiyor, lütfen Yazdırma Ayarları'nda {0} için Yazdırmaya İzin Ver ayarını etkinleştirin"
 
-#: frappe/core/doctype/doctype/doctype.py:335
+#: frappe/core/doctype/doctype/doctype.py:336
 msgid "Not allowed to create custom Virtual DocType."
 msgstr "Özel Sanal DocType oluşturulmasına izin verilmiyor."
 
@@ -17350,7 +17303,7 @@ msgstr "Bulunamadı"
 msgid "Not in Developer Mode"
 msgstr "Geliştirici modunda değil"
 
-#: frappe/core/doctype/doctype/doctype.py:330
+#: frappe/core/doctype/doctype/doctype.py:331
 msgid "Not in Developer Mode! Set in site_config.json or make 'Custom' DocType."
 msgstr "Geliştirici Modunda değil! site_config.json dosyasına ayarlayın veya 'Özel' DocType yapın."
 
@@ -17370,7 +17323,7 @@ msgstr "Görüntülemek için yetkiniz yok: {0}"
 
 #. Label of a Link in the Tools Workspace
 #. Name of a DocType
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:407
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:435
 #: frappe/automation/workspace/tools/tools.json
 #: frappe/desk/doctype/note/note.json
 msgid "Note"
@@ -17429,10 +17382,9 @@ msgstr "Yeniden yapılacak hiçbir şey kalmadı"
 msgid "Nothing left to undo"
 msgstr "Geri Alınacak Bir Şey Kalmadı"
 
-#: frappe/public/js/frappe/list/base_list.js:372
+#: frappe/public/js/frappe/list/base_list.js:368
 #: frappe/public/js/frappe/views/reports/query_report.js:105
 #: frappe/templates/includes/list/list.html:9
-#: frappe/website/doctype/blog_post/templates/blog_post_list.html:41
 #: frappe/website/doctype/help_article/templates/help_article_list.html:21
 msgid "Nothing to show"
 msgstr "Gösterilecek bir şey yok"
@@ -17478,15 +17430,15 @@ msgstr "Bildirim İçin Abone Olunan Belge"
 msgid "Notification sent to"
 msgstr ""
 
-#: frappe/email/doctype/notification/notification.py:500
+#: frappe/email/doctype/notification/notification.py:542
 msgid "Notification: customer {0} has no Mobile number set"
 msgstr "Bildirim: {0} isimli Müşterinin belirlenmiş bir cep telefonu numarası yok"
 
-#: frappe/email/doctype/notification/notification.py:486
+#: frappe/email/doctype/notification/notification.py:528
 msgid "Notification: document {0} has no {1} number set (field: {2})"
 msgstr "Bildirim: {0} belgesinin {1} sayı kümesi yok (alan: {2})"
 
-#: frappe/email/doctype/notification/notification.py:495
+#: frappe/email/doctype/notification/notification.py:537
 msgid "Notification: user {0} has no Mobile number set"
 msgstr "Bildirim: {0} kullanıcısının ayarlanmış bir Cep telefonu numarası yok"
 
@@ -17537,7 +17489,7 @@ msgstr "Cevaplamazsa Bildir (Dakika)"
 msgid "Notify users with a popup when they log in"
 msgstr "Oturum Açıldığında Kullanıcıları Bilgilendir"
 
-#: frappe/public/js/frappe/form/controls/datetime.js:28
+#: frappe/public/js/frappe/form/controls/datetime.js:41
 #: frappe/public/js/frappe/form/controls/time.js:37
 msgid "Now"
 msgstr "Şimdi"
@@ -17595,7 +17547,7 @@ msgstr "Grup Sayısı"
 msgid "Number of Queries"
 msgstr "Sorgu Sayısı"
 
-#: frappe/core/doctype/doctype/doctype.py:442
+#: frappe/core/doctype/doctype/doctype.py:443
 #: frappe/public/js/frappe/doctype/index.js:59
 msgid "Number of attachment fields are more than {}, limit updated to {}."
 msgstr ""
@@ -17709,11 +17661,11 @@ msgstr "Uygulama"
 msgid "OTP Issuer Name"
 msgstr ""
 
-#: frappe/twofactor.py:445
+#: frappe/twofactor.py:450
 msgid "OTP Secret Reset - {0}"
 msgstr ""
 
-#: frappe/twofactor.py:464
+#: frappe/twofactor.py:469
 msgid "OTP Secret has been reset. Re-registration will be required on next login."
 msgstr ""
 
@@ -17917,7 +17869,7 @@ msgstr "Kaydediciyi yalnızca Yönetici kullanabilir"
 msgid "Only Allow Edit For"
 msgstr "Düzenleme Yetkisi"
 
-#: frappe/core/doctype/doctype/doctype.py:1620
+#: frappe/core/doctype/doctype/doctype.py:1621
 msgid "Only Options allowed for Data field are:"
 msgstr "Veri alanı için yalnızca şu Seçeneklere izin verilir:"
 
@@ -17961,7 +17913,7 @@ msgstr "Yalnızca Rapor Oluşturucu türündeki raporlar silinebilir"
 msgid "Only reports of type Report Builder can be edited"
 msgstr "Yalnızca Rapor Oluşturucu türündeki raporlar düzenlenebilir"
 
-#: frappe/custom/doctype/customize_form/customize_form.py:128
+#: frappe/custom/doctype/customize_form/customize_form.py:129
 msgid "Only standard DocTypes are allowed to be customized from Customize Form."
 msgstr "Formu Özelleştir'den yalnızca standart DocType'ların özelleştirilmesine izin verilir."
 
@@ -18035,7 +17987,7 @@ msgstr "Açık Referans Belgesi"
 msgid "Open Settings"
 msgstr "Ayarları Aç"
 
-#: frappe/public/js/frappe/ui/toolbar/about.js:8
+#: frappe/public/js/frappe/ui/toolbar/about.js:11
 msgid "Open Source Applications for the Web"
 msgstr "Web için Açık Kaynaklı Uygulamalar"
 
@@ -18061,7 +18013,7 @@ msgstr ""
 msgid "Open in a new tab"
 msgstr "Yeni sekmede aç"
 
-#: frappe/public/js/frappe/list/list_view.js:1288
+#: frappe/public/js/frappe/list/list_view.js:1309
 msgctxt "Description of a list view shortcut"
 msgid "Open list item"
 msgstr "Liste Öğesini Aç"
@@ -18132,7 +18084,7 @@ msgstr "Seçenek 2"
 msgid "Option 3"
 msgstr "Seçenek 3"
 
-#: frappe/core/doctype/doctype/doctype.py:1638
+#: frappe/core/doctype/doctype/doctype.py:1639
 msgid "Option {0} for field {1} is not a child table"
 msgstr ""
 
@@ -18164,7 +18116,7 @@ msgstr "İsteğe bağlı: Bu ifade doğruysa uyarı gönderilecektir"
 msgid "Options"
 msgstr "Şeçenekler"
 
-#: frappe/core/doctype/doctype/doctype.py:1366
+#: frappe/core/doctype/doctype/doctype.py:1367
 msgid "Options 'Dynamic Link' type of field must point to another Link Field with options as 'DocType'"
 msgstr "Seçenekler 'Dinamik Bağlantı' türündeki alan, 'DocType' gibi seçeneklere sahip başka bir Bağlantı Alanına işaret etmelidir"
 
@@ -18173,7 +18125,7 @@ msgstr "Seçenekler 'Dinamik Bağlantı' türündeki alan, 'DocType' gibi seçen
 msgid "Options Help"
 msgstr "Seçenekler Yardımı"
 
-#: frappe/core/doctype/doctype/doctype.py:1660
+#: frappe/core/doctype/doctype/doctype.py:1661
 msgid "Options for Rating field can range from 3 to 10"
 msgstr "Derecelendirme alanı için seçenekler 3 ila 10 arasında değişebilir"
 
@@ -18181,7 +18133,7 @@ msgstr "Derecelendirme alanı için seçenekler 3 ila 10 arasında değişebilir
 msgid "Options for select. Each option on a new line."
 msgstr "Seçim için seçenekler. Her seçenek yeni bir satırda."
 
-#: frappe/core/doctype/doctype/doctype.py:1383
+#: frappe/core/doctype/doctype/doctype.py:1384
 msgid "Options for {0} must be set before setting the default value."
 msgstr "Varsayılan değeri ayarlamadan önce {0} seçenekleri ayarlanmalıdır."
 
@@ -18305,9 +18257,9 @@ msgstr ""
 
 #. Option for the 'Format' (Select) field in DocType 'Auto Email Report'
 #: frappe/email/doctype/auto_email_report/auto_email_report.json
-#: frappe/printing/page/print/print.js:71
+#: frappe/printing/page/print/print.js:84
 #: frappe/public/js/frappe/form/templates/print_layout.html:44
-#: frappe/public/js/frappe/views/reports/query_report.js:1794
+#: frappe/public/js/frappe/views/reports/query_report.js:1796
 msgid "PDF"
 msgstr "PDF"
 
@@ -18348,11 +18300,11 @@ msgstr "PDF oluşturma başarısız oldu"
 msgid "PDF generation failed because of broken image links"
 msgstr "Bozuk resim bağlantıları nedeniyle PDF oluşturma başarısız oldu"
 
-#: frappe/printing/page/print/print.js:616
+#: frappe/printing/page/print/print.js:629
 msgid "PDF generation may not work as expected."
 msgstr "PDF oluşturma işlemi beklendiği gibi çalışmayabilir."
 
-#: frappe/printing/page/print/print.js:534
+#: frappe/printing/page/print/print.js:547
 msgid "PDF printing via \"Raw Print\" is not supported."
 msgstr ""
 
@@ -18568,11 +18520,11 @@ msgstr ""
 
 #. Label of the nsm_parent_field (Data) field in DocType 'DocType'
 #: frappe/core/doctype/doctype/doctype.json
-#: frappe/core/doctype/doctype/doctype.py:933
+#: frappe/core/doctype/doctype/doctype.py:934
 msgid "Parent Field (Tree)"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:939
+#: frappe/core/doctype/doctype/doctype.py:940
 msgid "Parent Field must be a valid fieldname"
 msgstr ""
 
@@ -18581,7 +18533,7 @@ msgstr ""
 msgid "Parent Label"
 msgstr "Ana Etiket"
 
-#: frappe/core/doctype/doctype/doctype.py:1197
+#: frappe/core/doctype/doctype/doctype.py:1198
 msgid "Parent Missing"
 msgstr ""
 
@@ -18794,10 +18746,12 @@ msgstr "En Yüksek Bellek Kullanımı"
 
 #. Option for the 'Status' (Select) field in DocType 'Data Import'
 #. Option for the 'Contribution Status' (Select) field in DocType 'Translation'
+#. Option for the 'Status' (Select) field in DocType 'User Invitation'
 #. Option for the 'Status' (Select) field in DocType 'Personal Data Deletion
 #. Step'
 #: frappe/core/doctype/data_import/data_import.json
 #: frappe/core/doctype/translation/translation.json
+#: frappe/core/doctype/user_invitation/user_invitation.json
 #: frappe/website/doctype/personal_data_deletion_step/personal_data_deletion_step.json
 msgid "Pending"
 msgstr "Bekliyor"
@@ -18941,8 +18895,8 @@ msgstr "İzin Türü"
 msgid "Permissions"
 msgstr "İzinler"
 
-#: frappe/core/doctype/doctype/doctype.py:1834
-#: frappe/core/doctype/doctype/doctype.py:1844
+#: frappe/core/doctype/doctype/doctype.py:1835
+#: frappe/core/doctype/doctype/doctype.py:1845
 msgid "Permissions Error"
 msgstr "İzin Hatası"
 
@@ -19030,8 +18984,8 @@ msgid "Phone Number {0} set in field {1} is not valid."
 msgstr "{1} alanına girilen Telefon Numarası {0} geçerli değil."
 
 #: frappe/public/js/frappe/form/print_utils.js:53
-#: frappe/public/js/frappe/views/reports/report_view.js:1577
-#: frappe/public/js/frappe/views/reports/report_view.js:1580
+#: frappe/public/js/frappe/views/reports/report_view.js:1581
+#: frappe/public/js/frappe/views/reports/report_view.js:1584
 msgid "Pick Columns"
 msgstr "Sütunları Seç"
 
@@ -19091,11 +19045,11 @@ msgstr "Ldap işlevselliğini kullanmak için lütfen pip aracılığıyla ldap3
 msgid "Please Set Chart"
 msgstr "Lütfen Tabloyu Ayarlayın"
 
-#: frappe/core/doctype/sms_settings/sms_settings.py:84
+#: frappe/core/doctype/sms_settings/sms_settings.py:88
 msgid "Please Update SMS Settings"
 msgstr "Lütfen SMS Ayarlarını Güncelleyin"
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:582
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:610
 msgid "Please add a subject to your email"
 msgstr "Lütfen e-postanıza bir konu ekleyin"
 
@@ -19167,7 +19121,7 @@ msgstr "Yeni şifrenizi belirlemek için lütfen aşağıdaki bağlantıya tıkl
 msgid "Please confirm your action to {0} this document."
 msgstr ""
 
-#: frappe/printing/page/print/print.js:618
+#: frappe/printing/page/print/print.js:631
 msgid "Please contact your system manager to install correct version."
 msgstr "Doğru sürümü yüklemek için lütfen sistem yöneticinizle iletişime geçin."
 
@@ -19197,8 +19151,8 @@ msgstr "Kullanıcı adı/şifre tabanlı girişi devre dışı bırakmadan önce
 
 #: frappe/desk/doctype/notification_log/notification_log.js:45
 #: frappe/email/doctype/auto_email_report/auto_email_report.js:17
-#: frappe/printing/page/print/print.js:638
-#: frappe/printing/page/print/print.js:668
+#: frappe/printing/page/print/print.js:651
+#: frappe/printing/page/print/print.js:681
 #: frappe/public/js/frappe/list/bulk_operations.js:161
 #: frappe/public/js/frappe/utils/utils.js:1434
 msgid "Please enable pop-ups"
@@ -19274,11 +19228,12 @@ msgstr "Lütfen yeni şifrenizi girin."
 msgid "Please enter your old password."
 msgstr "Lütfen eski şifrenizi giriniz."
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:413
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:441
 msgid "Please find attached {0}: {1}"
 msgstr "Dosya eki olarak {{ doc.doctype }} #{{ doc.name }} bulunmaktadır."
 
-#: frappe/templates/includes/comments/comments.py:31
+#: frappe/templates/includes/comments/comments.py:42
+#: frappe/templates/includes/comments/comments.py:45
 msgid "Please login to post a comment."
 msgstr "Yorum göndermek için lütfen üye girişi yapın."
 
@@ -19290,7 +19245,7 @@ msgstr "Lütfen Referans İletişim Belgelerinin döngüsel olarak bağlantılı
 msgid "Please refresh to get the latest document."
 msgstr "En son versiyonu almak için lütfen sayfayı yenileyin."
 
-#: frappe/printing/page/print/print.js:535
+#: frappe/printing/page/print/print.js:548
 msgid "Please remove the printer mapping in Printer Settings and try again."
 msgstr "Lütfen Yazıcı Ayarları'ndan yazıcı eşlemesini kaldırın ve tekrar deneyin."
 
@@ -19306,7 +19261,7 @@ msgstr "Lütfen atamadan önce belgeyi kaydedin"
 msgid "Please save the document before removing assignment"
 msgstr "Lütfen atamayı kaldırmadan önce belgeyi kaydedin"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1707
+#: frappe/public/js/frappe/views/reports/report_view.js:1711
 msgid "Please save the report first"
 msgstr "Lütfen önce raporu kaydedin."
 
@@ -19342,7 +19297,7 @@ msgstr "Lütfen önce bir dosya seçin."
 msgid "Please select a file or url"
 msgstr "Lütfen bir dosya veya url seçin"
 
-#: frappe/model/rename_doc.py:685
+#: frappe/model/rename_doc.py:684
 msgid "Please select a valid csv file with data"
 msgstr "Lütfen veri içeren geçerli bir csv dosyası seçin"
 
@@ -19354,7 +19309,7 @@ msgstr "Lütfen geçerli bir tarih filtresi seçin"
 msgid "Please select applicable Doctypes"
 msgstr "Lütfen geçerli DocType'ları seçin"
 
-#: frappe/model/db_query.py:1155
+#: frappe/model/db_query.py:1152
 msgid "Please select atleast 1 column from {0} to sort/group"
 msgstr "Lütfen sıralamak/gruplamak için {0} en az 1 sütun seçin"
 
@@ -19380,7 +19335,7 @@ msgstr "Lütfen {0} seçiniz"
 msgid "Please set Email Address"
 msgstr "Lütfen E-posta Adresini ayarlayın"
 
-#: frappe/printing/page/print/print.js:549
+#: frappe/printing/page/print/print.js:562
 msgid "Please set a printer mapping for this print format in the Printer Settings"
 msgstr "Lütfen Yazıcı Ayarları'nda bu yazdırma biçimi için bir yazıcı eşlemesi ayarlayın"
 
@@ -19428,23 +19383,23 @@ msgstr "Lütfen belirtiniz"
 msgid "Please specify a valid parent DocType for {0}"
 msgstr "Lütfen {0} için geçerli bir üst DocType belirtin"
 
-#: frappe/email/doctype/notification/notification.py:154
+#: frappe/email/doctype/notification/notification.py:163
 msgid "Please specify at least 10 minutes due to the trigger cadence of the scheduler"
 msgstr ""
 
-#: frappe/email/doctype/notification/notification.py:151
+#: frappe/email/doctype/notification/notification.py:160
 msgid "Please specify the minutes offset"
 msgstr ""
 
-#: frappe/email/doctype/notification/notification.py:145
+#: frappe/email/doctype/notification/notification.py:154
 msgid "Please specify which date field must be checked"
 msgstr "Lütfen hangi tarih alanının işaretlenmesi gerektiğini belirtin"
 
-#: frappe/email/doctype/notification/notification.py:149
+#: frappe/email/doctype/notification/notification.py:158
 msgid "Please specify which datetime field must be checked"
 msgstr ""
 
-#: frappe/email/doctype/notification/notification.py:158
+#: frappe/email/doctype/notification/notification.py:167
 msgid "Please specify which value field must be checked"
 msgstr "Lütfen hangi değer alanının kontrol edilmesi gerektiğini belirtin"
 
@@ -19465,7 +19420,7 @@ msgstr "Lütfen geçerli bir LDAP arama filtresi kullanın"
 msgid "Please use following links to download file backup."
 msgstr ""
 
-#: frappe/utils/password.py:218
+#: frappe/utils/password.py:217
 msgid "Please visit https://frappecloud.com/docs/sites/migrate-an-existing-site#encryption-key for more information."
 msgstr "Daha fazla bilgi için lütfen https://frappecloud.com/docs/sites/migrate-an-existing-site#encryption-key adresini ziyaret edin."
 
@@ -19555,14 +19510,6 @@ msgstr "Posta Kodu"
 msgid "Posting Timestamp"
 msgstr "Gönderim Saati"
 
-#: frappe/website/doctype/blog_post/blog_post.py:264
-msgid "Posts by {0}"
-msgstr "{0} tarafından gönderilen gönderiler"
-
-#: frappe/website/doctype/blog_post/blog_post.py:256
-msgid "Posts filed under {0}"
-msgstr ""
-
 #: frappe/database/query.py:1518
 msgid "Potentially dangerous content in string literal: {0}"
 msgstr ""
@@ -19578,7 +19525,7 @@ msgstr ""
 msgid "Precision"
 msgstr "Kesinlik"
 
-#: frappe/core/doctype/doctype/doctype.py:1400
+#: frappe/core/doctype/doctype/doctype.py:1401
 msgid "Precision should be between 1 and 6"
 msgstr ""
 
@@ -19667,13 +19614,6 @@ msgstr "Önizleme"
 #. Label of the preview_html (HTML) field in DocType 'File'
 #: frappe/core/doctype/file/file.json
 msgid "Preview HTML"
-msgstr ""
-
-#. Label of the preview_image (Attach Image) field in DocType 'Blog Category'
-#. Label of the preview_image (Attach Image) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_category/blog_category.json
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Preview Image"
 msgstr ""
 
 #. Label of the preview_message (Button) field in DocType 'Auto Repeat'
@@ -19767,19 +19707,19 @@ msgstr "{0} belge türünün birincil anahtarı mevcut değerler olduğundan de�
 #: frappe/core/doctype/docperm/docperm.json
 #: frappe/core/doctype/success_action/success_action.js:58
 #: frappe/core/doctype/user_document_type/user_document_type.json
-#: frappe/printing/page/print/print.js:65
+#: frappe/printing/page/print/print.js:78
 #: frappe/public/js/frappe/form/success_action.js:81
 #: frappe/public/js/frappe/form/templates/print_layout.html:46
 #: frappe/public/js/frappe/form/toolbar.js:360
 #: frappe/public/js/frappe/form/toolbar.js:372
 #: frappe/public/js/frappe/list/bulk_operations.js:95
-#: frappe/public/js/frappe/views/reports/query_report.js:1780
-#: frappe/public/js/frappe/views/reports/report_view.js:1535
+#: frappe/public/js/frappe/views/reports/query_report.js:1782
+#: frappe/public/js/frappe/views/reports/report_view.js:1539
 #: frappe/public/js/frappe/views/treeview.js:490 frappe/www/printview.html:18
 msgid "Print"
 msgstr "Yazdır"
 
-#: frappe/public/js/frappe/list/list_view.js:2017
+#: frappe/public/js/frappe/list/list_view.js:2038
 msgctxt "Button in list view actions menu"
 msgid "Print"
 msgstr "Yazdır"
@@ -19797,8 +19737,8 @@ msgstr "Belgeleri Yazdır"
 #: frappe/core/workspace/build/build.json
 #: frappe/email/doctype/notification/notification.json
 #: frappe/printing/doctype/print_format/print_format.json
-#: frappe/printing/page/print/print.js:94
-#: frappe/printing/page/print/print.js:821
+#: frappe/printing/page/print/print.js:107
+#: frappe/printing/page/print/print.js:834
 #: frappe/public/js/frappe/list/bulk_operations.js:59
 #: frappe/website/doctype/web_form/web_form.json
 msgid "Print Format"
@@ -19905,7 +19845,7 @@ msgstr "Yazdırma Sunucusu"
 #: frappe/email/doctype/notification/notification.json
 #: frappe/printing/doctype/print_settings/print_settings.json
 #: frappe/printing/doctype/print_style/print_style.js:6
-#: frappe/printing/page/print/print.js:160
+#: frappe/printing/page/print/print.js:173
 #: frappe/public/js/frappe/form/print_utils.js:84
 #: frappe/public/js/frappe/form/templates/print_layout.html:35
 msgid "Print Settings"
@@ -19954,11 +19894,11 @@ msgstr "Belgeyi Yazdır"
 msgid "Print with letterhead"
 msgstr "Antetli Kağıda Yazdır"
 
-#: frappe/printing/page/print/print.js:830
+#: frappe/printing/page/print/print.js:843
 msgid "Printer"
 msgstr "Yazıcı"
 
-#: frappe/printing/page/print/print.js:807
+#: frappe/printing/page/print/print.js:820
 msgid "Printer Mapping"
 msgstr "Yazıcı Eşlemesi"
 
@@ -19968,11 +19908,11 @@ msgstr "Yazıcı Eşlemesi"
 msgid "Printer Name"
 msgstr "Yazıcı Adı"
 
-#: frappe/printing/page/print/print.js:799
+#: frappe/printing/page/print/print.js:812
 msgid "Printer Settings"
 msgstr "Yazıcı Ayarları"
 
-#: frappe/printing/page/print/print.js:548
+#: frappe/printing/page/print/print.js:561
 msgid "Printer mapping not set."
 msgstr "Yazıcı eşlemesi ayarlanmadı."
 
@@ -20149,23 +20089,17 @@ msgstr ""
 #. Label of the publish (Check) field in DocType 'Package Release'
 #: frappe/core/doctype/package_release/package_release.json
 #: frappe/public/js/frappe/form/footer/form_timeline.js:632
-#: frappe/website/doctype/blog_post/blog_post.js:36
 #: frappe/website/doctype/web_form/web_form.js:86
 msgid "Publish"
 msgstr "Yayınla"
 
 #. Label of the published (Check) field in DocType 'Comment'
-#. Label of the published (Check) field in DocType 'Blog Category'
-#. Label of the published (Check) field in DocType 'Blog Post'
 #. Label of the published (Check) field in DocType 'Help Article'
 #. Label of the published (Check) field in DocType 'Help Category'
 #. Label of the published (Check) field in DocType 'Web Form'
 #. Label of the published (Check) field in DocType 'Web Page'
 #: frappe/core/doctype/comment/comment.json
 #: frappe/public/js/frappe/form/templates/timeline_message_box.html:42
-#: frappe/website/doctype/blog_category/blog_category.json
-#: frappe/website/doctype/blog_post/blog_post.json
-#: frappe/website/doctype/blog_post/blog_post_list.js:5
 #: frappe/website/doctype/help_article/help_article.json
 #: frappe/website/doctype/help_category/help_category.json
 #: frappe/website/doctype/web_form/web_form.json
@@ -20174,15 +20108,6 @@ msgstr "Yayınla"
 #: frappe/website/doctype/web_page/web_page_list.js:5
 msgid "Published"
 msgstr "Yayınlandı"
-
-#. Label of the published_on (Date) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "Published On"
-msgstr "Yayınlanma Zamanı"
-
-#: frappe/website/doctype/blog_post/templates/blog_post.html:59
-msgid "Published on"
-msgstr "Yayınlanma Tarihi"
 
 #. Label of the publishing_dates_section (Section Break) field in DocType 'Web
 #. Page'
@@ -20273,7 +20198,9 @@ msgid "Put on Hold"
 msgstr "Beklemeye Alın"
 
 #. Option for the 'Type' (Select) field in DocType 'System Console'
+#. Option for the 'Condition Type' (Select) field in DocType 'Notification'
 #: frappe/desk/doctype/system_console/system_console.json
+#: frappe/email/doctype/notification/notification.json
 msgid "Python"
 msgstr "Python"
 
@@ -20336,7 +20263,7 @@ msgstr "Sorgu Raporu"
 msgid "Query analysis complete. Check suggested indexes."
 msgstr "Sorgu analizi tamamlandı. Önerilen dizinleri kontrol edin."
 
-#: frappe/utils/safe_exec.py:495
+#: frappe/utils/safe_exec.py:497
 msgid "Query must be of SELECT or read-only WITH type."
 msgstr "Sorgu SELECT veya salt okunur WITH türünde olmalıdır."
 
@@ -20473,12 +20400,6 @@ msgstr "Aralık"
 msgid "Rate Limiting"
 msgstr ""
 
-#. Label of the section_break_12 (Section Break) field in DocType 'Blog
-#. Settings'
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Rate Limits"
-msgstr ""
-
 #. Label of the rate_limit_email_link_login (Int) field in DocType 'System
 #. Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
@@ -20515,7 +20436,7 @@ msgstr "Ham E-posta"
 msgid "Raw Printing"
 msgstr "Sade Yazdırma"
 
-#: frappe/printing/page/print/print.js:165
+#: frappe/printing/page/print/print.js:178
 msgid "Raw Printing Setting"
 msgstr ""
 
@@ -20589,11 +20510,6 @@ msgstr "Sadece Okunur Koşulu (JS)"
 msgid "Read Only Mode"
 msgstr "Salt Okunur Modu"
 
-#. Label of the read_time (Int) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "Read Time"
-msgstr "Okuma Süresi"
-
 #. Label of the read_by_recipient (Check) field in DocType 'Communication'
 #: frappe/core/doctype/communication/communication.json
 msgid "Read by Recipient"
@@ -20609,7 +20525,7 @@ msgstr "Alıcı Tarafından Okundu"
 msgid "Read mode"
 msgstr "Okuma Modu"
 
-#: frappe/utils/safe_exec.py:98
+#: frappe/utils/safe_exec.py:99
 msgid "Read the documentation to know more"
 msgstr "Daha fazlasını öğrenmek için belgeleri okuyun"
 
@@ -20682,6 +20598,14 @@ msgstr "Son İşlemler"
 msgid "Recipient"
 msgstr "Alıcı"
 
+#. Label of the recipient_account_field (Data) field in DocType 'DocType'
+#. Label of the recipient_account_field (Data) field in DocType 'Customize
+#. Form'
+#: frappe/core/doctype/doctype/doctype.json
+#: frappe/custom/doctype/customize_form/customize_form.json
+msgid "Recipient Account Field"
+msgstr ""
+
 #. Option for the 'Delivery Status' (Select) field in DocType 'Communication'
 #: frappe/core/doctype/communication/communication.json
 msgid "Recipient Unsubscribed"
@@ -20714,7 +20638,7 @@ msgstr ""
 msgid "Records for following doctypes will be filtered"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1608
+#: frappe/core/doctype/doctype/doctype.py:1609
 msgid "Recursive Fetch From"
 msgstr ""
 
@@ -20730,6 +20654,11 @@ msgstr "Kırmızı"
 #: frappe/website/doctype/website_route_redirect/website_route_redirect.json
 msgid "Redirect HTTP Status"
 msgstr "HTTP Yönlendirme Durumu"
+
+#. Label of the redirect_to_path (Data) field in DocType 'User Invitation'
+#: frappe/core/doctype/user_invitation/user_invitation.json
+msgid "Redirect To Path"
+msgstr ""
 
 #. Label of the redirect_uri (Data) field in DocType 'Connected App'
 #: frappe/integrations/doctype/connected_app/connected_app.json
@@ -20993,12 +20922,12 @@ msgstr "Referans: {0} {1}"
 msgid "Referrer"
 msgstr "Referans Olan"
 
-#: frappe/printing/page/print/print.js:73 frappe/public/js/frappe/desk.js:168
-#: frappe/public/js/frappe/desk.js:558
+#: frappe/printing/page/print/print.js:86 frappe/public/js/frappe/desk.js:168
+#: frappe/public/js/frappe/desk.js:552
 #: frappe/public/js/frappe/form/form.js:1201
 #: frappe/public/js/frappe/form/templates/print_layout.html:6
 #: frappe/public/js/frappe/list/base_list.js:66
-#: frappe/public/js/frappe/views/reports/query_report.js:1769
+#: frappe/public/js/frappe/views/reports/query_report.js:1771
 #: frappe/public/js/frappe/views/treeview.js:496
 #: frappe/public/js/frappe/widgets/chart_widget.js:291
 #: frappe/public/js/frappe/widgets/number_card_widget.js:340
@@ -21214,7 +21143,7 @@ msgstr "Alanı Yeniden Adlandır"
 msgid "Rename {0}"
 msgstr "Yeniden Adlandır"
 
-#: frappe/core/doctype/doctype/doctype.py:698
+#: frappe/core/doctype/doctype/doctype.py:699
 msgid "Renamed files and replaced code in controllers, please check!"
 msgstr "Dosyalar yeniden adlandırıldı ve kod değiştirildi, lütfen kontrol edin!"
 
@@ -21417,7 +21346,7 @@ msgstr "Rapor Yöneticisi"
 #: frappe/core/report/prepared_report_analytics/prepared_report_analytics.py:39
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.json
 #: frappe/desk/doctype/number_card/number_card.json
-#: frappe/public/js/frappe/views/reports/query_report.js:1954
+#: frappe/public/js/frappe/views/reports/query_report.js:1956
 msgid "Report Name"
 msgstr "Rapor İsmi"
 
@@ -21455,7 +21384,7 @@ msgstr "Rapor Görünümü"
 msgid "Report bug"
 msgstr "Hata bildir"
 
-#: frappe/core/doctype/doctype/doctype.py:1809
+#: frappe/core/doctype/doctype/doctype.py:1810
 msgid "Report cannot be set for Single types"
 msgstr "Rapor Tek türler için ayarlanamaz"
 
@@ -21485,11 +21414,11 @@ msgstr "Rapor zaman aşımına uğradı."
 msgid "Report updated successfully"
 msgstr "Rapor başarıyla güncellendi"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1355
+#: frappe/public/js/frappe/views/reports/report_view.js:1359
 msgid "Report was not saved (there were errors)"
 msgstr "Rapor Kaydedilemedi (hatalar içeriyor)"
 
-#: frappe/public/js/frappe/views/reports/query_report.js:1992
+#: frappe/public/js/frappe/views/reports/query_report.js:1994
 msgid "Report with more than 10 columns looks better in Landscape mode."
 msgstr "10'dan fazla sütun içeren rapor Yatay modda daha iyi görünür."
 
@@ -21860,9 +21789,7 @@ msgstr "İptal Et"
 msgid "Revoked"
 msgstr ""
 
-#. Option for the 'Content Type' (Select) field in DocType 'Blog Post'
 #. Option for the 'Content Type' (Select) field in DocType 'Web Page'
-#: frappe/website/doctype/blog_post/blog_post.json
 #: frappe/website/doctype/web_page/web_page.js:92
 #: frappe/website/doctype/web_page/web_page.json
 msgid "Rich Text"
@@ -21903,6 +21830,7 @@ msgstr "Robots.txt"
 #. Label of the role (Link) field in DocType 'DocPerm'
 #. Label of the role (Link) field in DocType 'Has Role'
 #. Name of a DocType
+#. Label of the role (Link) field in DocType 'User Role'
 #. Label of the role (Link) field in DocType 'User Type'
 #. Label of a Link in the Users Workspace
 #. Label of a shortcut in the Users Workspace
@@ -21916,6 +21844,7 @@ msgstr "Robots.txt"
 #: frappe/core/doctype/docperm/docperm.json
 #: frappe/core/doctype/has_role/has_role.json
 #: frappe/core/doctype/role/role.json
+#: frappe/core/doctype/user_role/user_role.json
 #: frappe/core/doctype/user_type/user_type.json
 #: frappe/core/doctype/user_type/user_type.py:110
 #: frappe/core/page/permission_manager/permission_manager.js:219
@@ -21964,7 +21893,7 @@ msgstr "Rol İzinleri"
 msgid "Role Permissions Manager"
 msgstr "Rol İzinlerini Yönet"
 
-#: frappe/public/js/frappe/list/list_view.js:1786
+#: frappe/public/js/frappe/list/list_view.js:1807
 msgctxt "Button in list view menu"
 msgid "Role Permissions Manager"
 msgstr "Rol İzinlerini Yönet"
@@ -22007,6 +21936,7 @@ msgstr "Rol, {0} kullanıcısı türüne göre ayarlandı"
 #. Label of the roles (Table) field in DocType 'Role Permission for Page and
 #. Report'
 #. Label of the sb1 (Section Break) field in DocType 'User'
+#. Label of the roles (Table MultiSelect) field in DocType 'User Invitation'
 #. Label of the roles_section (Section Break) field in DocType 'Custom HTML
 #. Block'
 #. Label of the roles (Table) field in DocType 'Custom HTML Block'
@@ -22016,6 +21946,7 @@ msgstr "Rol, {0} kullanıcısı türüne göre ayarlandı"
 #: frappe/core/doctype/page/page.json frappe/core/doctype/report/report.json
 #: frappe/core/doctype/role_permission_for_page_and_report/role_permission_for_page_and_report.json
 #: frappe/core/doctype/user/user.json
+#: frappe/core/doctype/user_invitation/user_invitation.json
 #: frappe/core/page/permission_manager/permission_manager.js:66
 #: frappe/desk/doctype/custom_html_block/custom_html_block.json
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.json
@@ -22072,8 +22003,6 @@ msgstr "Yuvarlama Yöntemi"
 #. Label of the route (Data) field in DocType 'Navbar Item'
 #. Label of the route (Data) field in DocType 'DocType Layout'
 #. Label of the route (Data) field in DocType 'Route History'
-#. Label of the route (Data) field in DocType 'Blog Category'
-#. Label of the route (Data) field in DocType 'Blog Post'
 #. Label of the route (Data) field in DocType 'Help Article'
 #. Label of the route (Data) field in DocType 'Help Category'
 #. Label of the route (Data) field in DocType 'Portal Menu Item'
@@ -22085,8 +22014,6 @@ msgstr "Yuvarlama Yöntemi"
 #: frappe/core/doctype/navbar_item/navbar_item.json
 #: frappe/custom/doctype/doctype_layout/doctype_layout.json
 #: frappe/desk/doctype/route_history/route_history.json
-#: frappe/website/doctype/blog_category/blog_category.json
-#: frappe/website/doctype/blog_post/blog_post.json
 #: frappe/website/doctype/help_article/help_article.json
 #: frappe/website/doctype/help_category/help_category.json
 #: frappe/website/doctype/portal_menu_item/portal_menu_item.json
@@ -22119,8 +22046,8 @@ msgstr "Satır"
 msgid "Row #"
 msgstr "Satır #"
 
-#: frappe/core/doctype/doctype/doctype.py:1831
-#: frappe/core/doctype/doctype/doctype.py:1841
+#: frappe/core/doctype/doctype/doctype.py:1832
+#: frappe/core/doctype/doctype/doctype.py:1842
 msgid "Row # {0}: Non administrator user can not set the role {1} to the custom doctype"
 msgstr "Satır # {0}: Yönetici olmayan kullanıcı {1} rolünü özel doctype'a ayarlayamaz"
 
@@ -22128,7 +22055,7 @@ msgstr "Satır # {0}: Yönetici olmayan kullanıcı {1} rolünü özel doctype'a
 msgid "Row #{0}:"
 msgstr "Satır #{0}:"
 
-#: frappe/core/doctype/doctype/doctype.py:491
+#: frappe/core/doctype/doctype/doctype.py:492
 msgid "Row #{}: Fieldname is required"
 msgstr "Satır #{}: Alan adı gereklidir"
 
@@ -22164,11 +22091,11 @@ msgstr "Satır Değerleri Değişti"
 msgid "Row {0}"
 msgstr "Satır {0}"
 
-#: frappe/custom/doctype/customize_form/customize_form.py:352
+#: frappe/custom/doctype/customize_form/customize_form.py:353
 msgid "Row {0}: Not allowed to disable Mandatory for standard fields"
 msgstr "Satır {0}: Standart alanlar devre dışı bırakılamaz."
 
-#: frappe/custom/doctype/customize_form/customize_form.py:341
+#: frappe/custom/doctype/customize_form/customize_form.py:342
 msgid "Row {0}: Not allowed to enable Allow on Submit for standard fields"
 msgstr "Satır {0}: Standart alanlar için Gönder'de İzin Ver'i etkinleştirmeye izin verilmiyor"
 
@@ -22278,7 +22205,7 @@ msgstr "SMS Parametresi"
 msgid "SMS Settings"
 msgstr "SMS Ayarları"
 
-#: frappe/core/doctype/sms_settings/sms_settings.py:110
+#: frappe/core/doctype/sms_settings/sms_settings.py:114
 msgid "SMS sent successfully"
 msgstr ""
 
@@ -22356,7 +22283,7 @@ msgstr "Satış Gücü"
 msgid "Salutation"
 msgstr "Hitap"
 
-#: frappe/integrations/doctype/webhook/webhook.py:109
+#: frappe/integrations/doctype/webhook/webhook.py:113
 msgid "Same Field is entered more than once"
 msgstr "Aynı Alana birden fazla kez girilmiş"
 
@@ -22384,7 +22311,7 @@ msgstr "Cumartesi"
 #. Option for the 'Send Alert On' (Select) field in DocType 'Notification'
 #: frappe/core/doctype/data_import/data_import.js:113
 #: frappe/email/doctype/notification/notification.json
-#: frappe/printing/page/print/print.js:858
+#: frappe/printing/page/print/print.js:871
 #: frappe/printing/page/print_format_builder/print_format_builder.js:160
 #: frappe/public/js/frappe/form/footer/form_timeline.js:677
 #: frappe/public/js/frappe/form/quick_entry.js:185
@@ -22396,8 +22323,8 @@ msgstr "Cumartesi"
 #: frappe/public/js/frappe/views/kanban/kanban_settings.js:45
 #: frappe/public/js/frappe/views/kanban/kanban_settings.js:189
 #: frappe/public/js/frappe/views/kanban/kanban_view.js:343
-#: frappe/public/js/frappe/views/reports/query_report.js:1946
-#: frappe/public/js/frappe/views/reports/report_view.js:1724
+#: frappe/public/js/frappe/views/reports/query_report.js:1948
+#: frappe/public/js/frappe/views/reports/report_view.js:1728
 #: frappe/public/js/frappe/views/workspace/workspace.js:335
 #: frappe/public/js/frappe/widgets/base_widget.js:142
 #: frappe/public/js/frappe/widgets/quick_list_widget.js:120
@@ -22414,8 +22341,8 @@ msgstr "API Gizli Anahtarını Kaydet: {0}"
 msgid "Save Anyway"
 msgstr "Yine de Kaydet"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1386
-#: frappe/public/js/frappe/views/reports/report_view.js:1731
+#: frappe/public/js/frappe/views/reports/report_view.js:1390
+#: frappe/public/js/frappe/views/reports/report_view.js:1735
 msgid "Save As"
 msgstr "Farklı Kaydet"
 
@@ -22423,7 +22350,7 @@ msgstr "Farklı Kaydet"
 msgid "Save Customizations"
 msgstr "Özelleştirmeleri Kaydet"
 
-#: frappe/public/js/frappe/views/reports/query_report.js:1949
+#: frappe/public/js/frappe/views/reports/query_report.js:1951
 msgid "Save Report"
 msgstr "Raporu Kaydet"
 
@@ -22531,7 +22458,7 @@ msgstr "Planlanmış Görev Türü"
 msgid "Scheduled Jobs Logs"
 msgstr "Planlanmış Görev Kayıtları"
 
-#: frappe/core/doctype/server_script/server_script.py:148
+#: frappe/core/doctype/server_script/server_script.py:150
 msgid "Scheduled execution for script {0} has updated"
 msgstr "{0} betiği için planlanan yürütme güncellendi"
 
@@ -22699,7 +22626,7 @@ msgstr "Sonuçlarda Ara"
 msgid "Search by filename or extension"
 msgstr "Dosya adına veya uzantıya göre arama yapın"
 
-#: frappe/core/doctype/doctype/doctype.py:1467
+#: frappe/core/doctype/doctype/doctype.py:1468
 msgid "Search field {0} is not valid"
 msgstr "Arama alanı {0} geçerli değil"
 
@@ -22855,7 +22782,7 @@ msgstr "Görüntüleyenler Tablosu"
 #: frappe/core/doctype/report_filter/report_filter.json
 #: frappe/custom/doctype/custom_field/custom_field.json
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
-#: frappe/printing/page/print/print.js:602
+#: frappe/printing/page/print/print.js:615
 #: frappe/website/doctype/web_form_field/web_form_field.json
 #: frappe/website/doctype/web_template_field/web_template_field.json
 msgid "Select"
@@ -22879,7 +22806,7 @@ msgstr "Dosya Seçimi"
 msgid "Select Child Table"
 msgstr "Alt Tabloyu Seçin"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:384
+#: frappe/public/js/frappe/views/reports/report_view.js:388
 msgid "Select Column"
 msgstr "Sütun Seç"
 
@@ -22994,8 +22921,8 @@ msgstr ""
 msgid "Select Module"
 msgstr "Modül Seç"
 
-#: frappe/printing/page/print/print.js:175
-#: frappe/printing/page/print/print.js:585
+#: frappe/printing/page/print/print.js:188
+#: frappe/printing/page/print/print.js:598
 msgid "Select Network Printer"
 msgstr "Ağ Yazıcısını Seçin"
 
@@ -23063,11 +22990,11 @@ msgstr "Düzenlemek için bir alan seçin."
 msgid "Select a group node first."
 msgstr "Önce bir grup seçin."
 
-#: frappe/core/doctype/doctype/doctype.py:1942
+#: frappe/core/doctype/doctype/doctype.py:1943
 msgid "Select a valid Sender Field for creating documents from Email"
 msgstr "E-postadan belge oluşturmak için geçerli bir Gönderen Alanı seçin"
 
-#: frappe/core/doctype/doctype/doctype.py:1926
+#: frappe/core/doctype/doctype/doctype.py:1927
 msgid "Select a valid Subject field for creating documents from Email"
 msgstr "E-postadan belge oluşturmak için geçerli bir Konu alanı seçin"
 
@@ -23097,13 +23024,13 @@ msgstr "Yazdırmak için en az 1 kayıt seçin"
 msgid "Select atleast 2 actions"
 msgstr "En az 2 eylem seçin"
 
-#: frappe/public/js/frappe/list/list_view.js:1302
+#: frappe/public/js/frappe/list/list_view.js:1323
 msgctxt "Description of a list view shortcut"
 msgid "Select list item"
 msgstr "Liste Öğesini Seç"
 
-#: frappe/public/js/frappe/list/list_view.js:1254
-#: frappe/public/js/frappe/list/list_view.js:1270
+#: frappe/public/js/frappe/list/list_view.js:1275
+#: frappe/public/js/frappe/list/list_view.js:1291
 msgctxt "Description of a list view shortcut"
 msgid "Select multiple list items"
 msgstr "Birden Fazla Öğe Seçin"
@@ -23137,7 +23064,7 @@ msgstr "Farkı görmek için iki versiyonuda seçin."
 msgid "Select {0}"
 msgstr "{0} Seçimi"
 
-#: frappe/model/workflow.py:117
+#: frappe/model/workflow.py:120
 msgid "Self approval is not allowed"
 msgstr "Kendi kendini onaylamaya izin verilmiyor"
 
@@ -23321,7 +23248,7 @@ msgstr "Gönderen E-postası"
 msgid "Sender Email Field"
 msgstr "Gönderen E-posta Alanı"
 
-#: frappe/core/doctype/doctype/doctype.py:1945
+#: frappe/core/doctype/doctype/doctype.py:1946
 msgid "Sender Field should have Email in options"
 msgstr "Gönderen Alanı seçeneklerinde E-posta olmalıdır"
 
@@ -23415,7 +23342,7 @@ msgstr "Seriler {} İçin Güncellendi"
 msgid "Series counter for {} updated to {} successfully"
 msgstr "{} için seri sayacı başarıyla {} olarak güncellendi"
 
-#: frappe/core/doctype/doctype/doctype.py:1109
+#: frappe/core/doctype/doctype/doctype.py:1110
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.py:170
 msgid "Series {0} already used in {1}"
 msgstr "Seri {0} zaten {1} adresinde kullanılıyor"
@@ -23444,7 +23371,7 @@ msgstr "Sunucu IP"
 msgid "Server Script"
 msgstr "Sunucu Komut Dosyası"
 
-#: frappe/utils/safe_exec.py:97
+#: frappe/utils/safe_exec.py:98
 msgid "Server Scripts are disabled. Please enable server scripts from bench configuration."
 msgstr "Sunucu Komut Dosyaları devre dışı. Lütfen bench yapılandırmasından sunucu komut dosyalarını etkinleştirin."
 
@@ -23549,7 +23476,7 @@ msgstr "Filtreleri Ayarlayın"
 msgid "Set Filters for {0}"
 msgstr "{0} İçin Filtreleri Ayarla"
 
-#: frappe/public/js/frappe/views/reports/query_report.js:2102
+#: frappe/public/js/frappe/views/reports/query_report.js:2104
 msgid "Set Level"
 msgstr "Seviye Ayarla"
 
@@ -23768,11 +23695,6 @@ msgstr "Bize Ulaşın Sayfası Ayarları"
 msgid "Settings for the About Us Page"
 msgstr "Hakkımızda Sayfasının Ayarları"
 
-#. Description of a DocType
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Settings to control blog categories and interactions like comments and likes"
-msgstr "Blog kategorilerini ve yorumlar ve beğeniler gibi etkileşimleri kontrol etmek için ayarlar"
-
 #. Option for the 'Show in Module Section' (Select) field in DocType 'DocType'
 #: frappe/core/doctype/doctype/doctype.json
 #: frappe/public/js/frappe/ui/toolbar/search_utils.js:567
@@ -23791,8 +23713,8 @@ msgstr "Kurulum > Kullanıcı"
 msgid "Setup > User Permissions"
 msgstr "Kurulum > Kullanıcı İzinleri"
 
-#: frappe/public/js/frappe/views/reports/query_report.js:1815
-#: frappe/public/js/frappe/views/reports/report_view.js:1702
+#: frappe/public/js/frappe/views/reports/query_report.js:1817
+#: frappe/public/js/frappe/views/reports/report_view.js:1706
 msgid "Setup Auto Email"
 msgstr "Otomatik E-Postayı Ayarla"
 
@@ -23861,11 +23783,6 @@ msgstr "Sevkiyat Adresi"
 msgid "Shop"
 msgstr "Mağaza"
 
-#. Label of the short_name (Data) field in DocType 'Blogger'
-#: frappe/website/doctype/blogger/blogger.json
-msgid "Short Name"
-msgstr "Kısa Adı"
-
 #: frappe/utils/password_strength.py:91
 msgid "Short keyboard patterns are easy to guess"
 msgstr ""
@@ -23884,11 +23801,6 @@ msgstr "Kısa Yollar"
 #: frappe/www/update-password.html:120
 msgid "Show"
 msgstr "Göster"
-
-#. Label of the show_cta_in_blog (Check) field in DocType 'Blog Settings'
-#: frappe/website/doctype/blog_settings/blog_settings.json
-msgid "Show \"Call to Action\" in Blog"
-msgstr ""
 
 #. Label of the show_absolute_datetime_in_timeline (Check) field in DocType
 #. 'System Settings'
@@ -24070,7 +23982,7 @@ msgid "Show Social Login Key as Authorization Server"
 msgstr ""
 
 #: frappe/public/js/frappe/list/list_sidebar.html:77
-#: frappe/public/js/frappe/list/list_view.js:1702
+#: frappe/public/js/frappe/list/list_view.js:1723
 msgid "Show Tags"
 msgstr "Etiketleri Göster"
 
@@ -24087,7 +23999,7 @@ msgstr "Başlığı Göster"
 msgid "Show Title in Link Fields"
 msgstr "Bağlantı Alanlarında Başlığı Göster"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1525
+#: frappe/public/js/frappe/views/reports/report_view.js:1529
 msgid "Show Totals"
 msgstr "Toplamı Göster"
 
@@ -24126,10 +24038,6 @@ msgstr "Tüm Versiyonları Göster"
 #: frappe/public/js/frappe/form/footer/form_timeline.js:69
 msgid "Show all activity"
 msgstr "Tüm etkinlikleri göster"
-
-#: frappe/website/doctype/blog_post/templates/blog_post_list.html:24
-msgid "Show all blogs"
-msgstr "Tüm blogları göster"
 
 #. Label of the show_as_cc (Small Text) field in DocType 'Email Queue'
 #: frappe/email/doctype/email_queue/email_queue.json
@@ -24209,7 +24117,7 @@ msgstr ""
 msgid "Show {0} List"
 msgstr "{0} Listesini Göster"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:502
+#: frappe/public/js/frappe/views/reports/report_view.js:506
 msgid "Showing only Numeric fields from Report"
 msgstr "Rapordan yalnızca Sayısal alanlar gösteriliyor"
 
@@ -24304,7 +24212,7 @@ msgstr "Basit Python İfadesi, Örnek: status == 'Open' ve type == 'Bug'"
 msgid "Simultaneous Sessions"
 msgstr "Eşzamanlı Oturumlar"
 
-#: frappe/custom/doctype/customize_form/customize_form.py:125
+#: frappe/custom/doctype/customize_form/customize_form.py:126
 msgid "Single DocTypes cannot be customized."
 msgstr "Tek Sayfa DocType'lar özelleştirilemez."
 
@@ -24572,19 +24480,22 @@ msgstr "Sıralama Seçenekleri"
 msgid "Sort Order"
 msgstr "Sıralama"
 
-#: frappe/core/doctype/doctype/doctype.py:1550
+#: frappe/core/doctype/doctype/doctype.py:1551
 msgid "Sort field {0} must be a valid fieldname"
 msgstr "Sıralama alanı {0} geçerli bir alan adı olmalıdır"
 
 #. Label of the source (Data) field in DocType 'Web Page View'
 #. Label of the source (Small Text) field in DocType 'Website Route Redirect'
-#: frappe/public/js/frappe/ui/toolbar/about.js:8
 #: frappe/public/js/frappe/utils/utils.js:1720
 #: frappe/website/doctype/web_page_view/web_page_view.json
 #: frappe/website/doctype/website_route_redirect/website_route_redirect.json
 #: frappe/website/report/website_analytics/website_analytics.js:38
 msgid "Source"
 msgstr "Kaynak"
+
+#: frappe/public/js/frappe/ui/toolbar/about.js:11
+msgid "Source Code"
+msgstr ""
 
 #. Label of the source_name (Data) field in DocType 'Dashboard Chart Source'
 #: frappe/desk/doctype/dashboard_chart_source/dashboard_chart_source.json
@@ -24611,6 +24522,12 @@ msgstr "Gereksiz"
 #: frappe/email/doctype/email_account/email_account.json
 msgid "SparkPost"
 msgstr "SparkPost"
+
+#. Description of the 'Asynchronous' (Check) field in DocType 'Workflow
+#. Transition Task'
+#: frappe/workflow/doctype/workflow_transition_task/workflow_transition_task.json
+msgid "Spawns actions in a background job"
+msgstr ""
 
 #: frappe/custom/doctype/custom_field/custom_field.js:83
 msgid "Special Characters are not allowed"
@@ -24673,7 +24590,7 @@ msgstr "Standart"
 msgid "Standard DocType can not be deleted."
 msgstr "Standart DocType silinemez."
 
-#: frappe/core/doctype/doctype/doctype.py:228
+#: frappe/core/doctype/doctype/doctype.py:229
 msgid "Standard DocType cannot have default print format, use Customize Form"
 msgstr "Standart DocType varsayılan yazdırma biçimine sahip olamaz, Form Özelleştir'i kullanın"
 
@@ -24729,8 +24646,8 @@ msgstr "Standart kullanıcı türü {0} silinemez."
 
 #: frappe/core/doctype/recorder/recorder_list.js:87
 #: frappe/core/report/prepared_report_analytics/prepared_report_analytics.py:45
-#: frappe/printing/page/print/print.js:296
-#: frappe/printing/page/print/print.js:343
+#: frappe/printing/page/print/print.js:309
+#: frappe/printing/page/print/print.js:356
 msgid "Start"
 msgstr "Başlangıç"
 
@@ -24738,7 +24655,7 @@ msgstr "Başlangıç"
 #. Label of the start_date (Date) field in DocType 'Audit Trail'
 #. Label of the start_date (Datetime) field in DocType 'Web Page'
 #: frappe/automation/doctype/auto_repeat/auto_repeat.json
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:142
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:147
 #: frappe/core/doctype/audit_trail/audit_trail.json
 #: frappe/public/js/frappe/utils/common.js:409
 #: frappe/website/doctype/web_page/web_page.json
@@ -24811,7 +24728,7 @@ msgstr "Başlangıç"
 msgid "State"
 msgstr "Eyalet"
 
-#: frappe/public/js/workflow_builder/components/Properties.vue:24
+#: frappe/public/js/workflow_builder/components/Properties.vue:26
 msgid "State Properties"
 msgstr ""
 
@@ -24867,6 +24784,7 @@ msgstr "Zaman Aralığı"
 #. Label of the status_section (Section Break) field in DocType 'Scheduled Job
 #. Type'
 #. Label of the status (Select) field in DocType 'Submission Queue'
+#. Label of the status (Select) field in DocType 'User Invitation'
 #. Label of the status (Select) field in DocType 'Event'
 #. Label of the status (Select) field in DocType 'Kanban Board Column'
 #. Label of the status (Select) field in DocType 'ToDo'
@@ -24891,6 +24809,7 @@ msgstr "Zaman Aralığı"
 #: frappe/core/doctype/scheduled_job_log/scheduled_job_log.json
 #: frappe/core/doctype/scheduled_job_type/scheduled_job_type.json
 #: frappe/core/doctype/submission_queue/submission_queue.json
+#: frappe/core/doctype/user_invitation/user_invitation.json
 #: frappe/desk/doctype/event/event.json
 #: frappe/desk/doctype/kanban_board_column/kanban_board_column.json
 #: frappe/desk/doctype/todo/todo.json
@@ -24899,7 +24818,7 @@ msgstr "Zaman Aralığı"
 #: frappe/integrations/doctype/integration_request/integration_request.json
 #: frappe/integrations/doctype/oauth_bearer_token/oauth_bearer_token.json
 #: frappe/public/js/frappe/list/list_settings.js:359
-#: frappe/public/js/frappe/views/reports/report_view.js:976
+#: frappe/public/js/frappe/views/reports/report_view.js:980
 #: frappe/website/doctype/personal_data_deletion_request/personal_data_deletion_request.json
 #: frappe/website/doctype/personal_data_deletion_step/personal_data_deletion_step.json
 #: frappe/workflow/doctype/workflow_action/workflow_action.json
@@ -25060,7 +24979,7 @@ msgstr "Konu"
 msgid "Subject Field"
 msgstr "Konu"
 
-#: frappe/core/doctype/doctype/doctype.py:1935
+#: frappe/core/doctype/doctype/doctype.py:1936
 msgid "Subject Field type should be Data, Text, Long Text, Small Text, Text Editor"
 msgstr ""
 
@@ -25085,7 +25004,7 @@ msgstr "Gönderim Kuyruğu"
 msgid "Submit"
 msgstr "Gönder"
 
-#: frappe/public/js/frappe/list/list_view.js:2084
+#: frappe/public/js/frappe/list/list_view.js:2105
 msgctxt "Button in list view actions menu"
 msgid "Submit"
 msgstr "Gönder/İşle"
@@ -25131,7 +25050,7 @@ msgstr "Gönder Butonu Etiketi"
 
 #. Label of the submit_on_creation (Check) field in DocType 'Auto Repeat'
 #: frappe/automation/doctype/auto_repeat/auto_repeat.json
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:128
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:133
 msgid "Submit on Creation"
 msgstr "Oluştururken Gönder"
 
@@ -25143,7 +25062,7 @@ msgstr "Bu adımı tamamlamak için bu belgeyi gönderin."
 msgid "Submit this document to confirm"
 msgstr "Onaylamak için bu belgeyi gönderin"
 
-#: frappe/public/js/frappe/list/list_view.js:2089
+#: frappe/public/js/frappe/list/list_view.js:2110
 msgctxt "Title of confirmation dialog"
 msgid "Submit {0} documents?"
 msgstr "{0} belge gönderilsin mi?"
@@ -25156,7 +25075,7 @@ msgstr "{0} belge gönderilsin mi?"
 msgid "Submitted"
 msgstr "İşlendi"
 
-#: frappe/workflow/doctype/workflow/workflow.py:103
+#: frappe/workflow/doctype/workflow/workflow.py:104
 msgid "Submitted Document cannot be converted back to draft. Transition row {0}"
 msgstr ""
 
@@ -25179,9 +25098,7 @@ msgid "Subsidiary"
 msgstr ""
 
 #. Label of the subtitle (Data) field in DocType 'Module Onboarding'
-#. Label of the subtitle (Data) field in DocType 'Blog Settings'
 #: frappe/desk/doctype/module_onboarding/module_onboarding.json
-#: frappe/website/doctype/blog_settings/blog_settings.json
 msgid "Subtitle"
 msgstr "Alt Başlık"
 
@@ -25246,11 +25163,11 @@ msgstr "Başarılı! Artık Hazırsınız 👍"
 msgid "Successful Job Count"
 msgstr "Başarılı İş Sayısı"
 
-#: frappe/model/workflow.py:307
+#: frappe/model/workflow.py:363
 msgid "Successful Transactions"
 msgstr "Başarılı İşlemler"
 
-#: frappe/model/rename_doc.py:699
+#: frappe/model/rename_doc.py:698
 msgid "Successful: {0} to {1}"
 msgstr ""
 
@@ -25537,6 +25454,7 @@ msgstr "Sistem Günlükleri"
 #: frappe/core/doctype/translation/translation.json
 #: frappe/core/doctype/user/user.json
 #: frappe/core/doctype/user_group/user_group.json
+#: frappe/core/doctype/user_invitation/user_invitation.json
 #: frappe/core/doctype/user_permission/user_permission.json
 #: frappe/core/doctype/user_type/user_type.json
 #: frappe/core/doctype/version/version.json
@@ -25619,6 +25537,7 @@ msgstr "Sistem Günlükleri"
 #: frappe/workflow/doctype/workflow/workflow.json
 #: frappe/workflow/doctype/workflow_action_master/workflow_action_master.json
 #: frappe/workflow/doctype/workflow_state/workflow_state.json
+#: frappe/workflow/doctype/workflow_transition_tasks/workflow_transition_tasks.json
 msgid "System Manager"
 msgstr "Sistem Yöneticisi"
 
@@ -25701,7 +25620,7 @@ msgstr "Tablo Alanı"
 msgid "Table Fieldname"
 msgstr "Tablo Alan Adı"
 
-#: frappe/core/doctype/doctype/doctype.py:1203
+#: frappe/core/doctype/doctype/doctype.py:1204
 msgid "Table Fieldname Missing"
 msgstr "Tablo Alanı Adı Eksik"
 
@@ -25769,10 +25688,17 @@ msgstr "Fotoğraf Çek"
 msgid "Target"
 msgstr "Hedef"
 
+#. Label of the task (Select) field in DocType 'Workflow Transition Task'
 #: frappe/desk/doctype/todo/todo_calendar.js:19
 #: frappe/desk/doctype/todo/todo_calendar.js:25
+#: frappe/workflow/doctype/workflow_transition_task/workflow_transition_task.json
 msgid "Task"
 msgstr "Görev"
+
+#. Label of the tasks (Table) field in DocType 'Workflow Transition Tasks'
+#: frappe/workflow/doctype/workflow_transition_tasks/workflow_transition_tasks.json
+msgid "Tasks"
+msgstr "Görevler"
 
 #. Label of the sb1 (Section Break) field in DocType 'About Us Settings'
 #. Label of the team_members (Table) field in DocType 'About Us Settings'
@@ -25946,7 +25872,7 @@ msgstr "Google Cloud Konsolundan <a href=\"https://console.cloud.google.com/apis
 "\"API'ler &amp; Hizmetler\" &gt; \"Kimlik Bilgileri\"\n"
 "</a>altında elde edilen İstemci Kimliği"
 
-#: frappe/email/doctype/notification/notification.py:201
+#: frappe/email/doctype/notification/notification.py:219
 msgid "The Condition '{0}' is invalid"
 msgstr "Koşul '{0}' geçersiz"
 
@@ -25954,7 +25880,7 @@ msgstr "Koşul '{0}' geçersiz"
 msgid "The File URL you've entered is incorrect"
 msgstr "Girdiğiniz Dosya URL'si yanlış"
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:108
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:113
 msgid "The Next Scheduled Date cannot be later than the End Date."
 msgstr ""
 
@@ -25997,7 +25923,7 @@ msgstr "Değişiklikler geri alındı."
 msgid "The column {0} has {1} different date formats. Automatically setting {2} as the default format as it is the most common. Please change other values in this column to this format."
 msgstr "{0} sütunu {1} farklı tarih biçimine sahiptir. En yaygın olduğu için {2} varsayılan biçim olarak otomatik olarak ayarlanıyor. Lütfen bu sütundaki diğer değerleri bu biçime değiştirin."
 
-#: frappe/templates/includes/comments/comments.py:34
+#: frappe/templates/includes/comments/comments.py:48
 msgid "The comment cannot be empty"
 msgstr "Yorum alanı boş olamaz"
 
@@ -26148,7 +26074,7 @@ msgstr "Yapıştırdığınız değer {0} karakter uzunluğunda. İzin verilen m
 msgid "The webhook will be triggered if this expression is true"
 msgstr "Bu ifade doğruysa web kancası tetiklenecektir"
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:175
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:180
 msgid "The {0} is already on auto repeat {1}"
 msgstr "{0} zaten otomatik tekrarda {1}"
 
@@ -26197,7 +26123,7 @@ msgstr "Aynı filtrelere sahip {0} zaten kuyrukta mevcut:"
 msgid "There can be only 9 Page Break fields in a Web Form"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1443
+#: frappe/core/doctype/doctype/doctype.py:1444
 msgid "There can be only one Fold in a form"
 msgstr ""
 
@@ -26208,6 +26134,10 @@ msgstr "Adres Şablonunuzda bir hata var {0}"
 #: frappe/core/doctype/data_export/exporter.py:162
 msgid "There is no data to be exported"
 msgstr "Dışarı aktarılacak veri yok"
+
+#: frappe/model/workflow.py:170
+msgid "There is no task called \"{}\""
+msgstr ""
 
 #: frappe/public/js/frappe/ui/notifications/notifications.js:492
 msgid "There is nothing new to show you right now."
@@ -26333,7 +26263,7 @@ msgstr "Bu ayar seçilirse, tüm Kullanıcılar tarafından kullanılabilir olac
 msgid "This doctype has no orphan fields to trim"
 msgstr "Bu dcotype için temizlenecek artık alan yok"
 
-#: frappe/core/doctype/doctype/doctype.py:1054
+#: frappe/core/doctype/doctype/doctype.py:1055
 msgid "This doctype has pending migrations, run 'bench migrate' before modifying the doctype to avoid losing changes."
 msgstr ""
 
@@ -26414,7 +26344,7 @@ msgstr ""
 msgid "This goes above the slideshow."
 msgstr "Bu slayt gösterisinin üstüne gelir."
 
-#: frappe/public/js/frappe/views/reports/query_report.js:2178
+#: frappe/public/js/frappe/views/reports/query_report.js:2180
 msgid "This is a background report. Please set the appropriate filters and then generate a new one."
 msgstr "Bu bir arka plan raporudur. Lütfen uygun filtreleri ayarlayın ve ardından yeni bir tane oluşturun."
 
@@ -26438,12 +26368,6 @@ msgstr "Bu bir Sanal DocType türüdür ve veriler periyodik olarak temizlenir."
 msgid "This is an automatically generated reply"
 msgstr "Bu otomatik olarak oluşturulmuş bir cevaptır"
 
-#. Description of the 'Google Snippet Preview' (HTML) field in DocType 'Blog
-#. Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "This is an example Google SERP Preview."
-msgstr "Bu bir Google SERP Önizlemesi örneğidir."
-
 #: frappe/utils/password_strength.py:164
 msgid "This is similar to a commonly used password."
 msgstr ""
@@ -26462,7 +26386,7 @@ msgstr "Bu bağlantı doğrulama için zaten etkinleştirildi."
 msgid "This link is invalid or expired. Please make sure you have pasted correctly."
 msgstr "Bu bağlantı geçersiz veya süresi dolmuş. Lütfen bağlantıyı doğru yapıştırdığınızdan emin olun."
 
-#: frappe/printing/page/print/print.js:410
+#: frappe/printing/page/print/print.js:423
 msgid "This may get printed on multiple pages"
 msgstr ""
 
@@ -26693,11 +26617,11 @@ msgstr "Zaman Çizelgesi Bağlantıları"
 msgid "Timeline Name"
 msgstr "Zaman Çizelgesi Adı"
 
-#: frappe/core/doctype/doctype/doctype.py:1538
+#: frappe/core/doctype/doctype/doctype.py:1539
 msgid "Timeline field must be a Link or Dynamic Link"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1534
+#: frappe/core/doctype/doctype/doctype.py:1535
 msgid "Timeline field must be a valid fieldname"
 msgstr ""
 
@@ -26746,9 +26670,6 @@ msgstr ""
 #. Label of the title (Data) field in DocType 'System Health Report Errors'
 #. Label of the title (Data) field in DocType 'Workspace'
 #. Label of the title (Data) field in DocType 'Email Group'
-#. Label of the title (Data) field in DocType 'Blog Category'
-#. Label of the title (Data) field in DocType 'Blog Post'
-#. Label of the title (Data) field in DocType 'Blog Settings'
 #. Label of the title (Data) field in DocType 'Discussion Topic'
 #. Label of the title (Data) field in DocType 'Help Article'
 #. Label of the title (Data) field in DocType 'Portal Menu Item'
@@ -26773,9 +26694,6 @@ msgstr ""
 #: frappe/desk/doctype/workspace/workspace.json
 #: frappe/email/doctype/email_group/email_group.json
 #: frappe/public/js/frappe/views/workspace/workspace.js:393
-#: frappe/website/doctype/blog_category/blog_category.json
-#: frappe/website/doctype/blog_post/blog_post.json
-#: frappe/website/doctype/blog_settings/blog_settings.json
 #: frappe/website/doctype/discussion_topic/discussion_topic.json
 #: frappe/website/doctype/help_article/help_article.json
 #: frappe/website/doctype/portal_menu_item/portal_menu_item.json
@@ -26798,7 +26716,7 @@ msgstr "Başlık Alanı"
 msgid "Title Prefix"
 msgstr "Başlık Öneki"
 
-#: frappe/core/doctype/doctype/doctype.py:1475
+#: frappe/core/doctype/doctype/doctype.py:1476
 msgid "Title field must be a valid fieldname"
 msgstr ""
 
@@ -26954,7 +26872,7 @@ msgstr "Yapılacaklar"
 msgid "Today"
 msgstr "Bugün"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1568
+#: frappe/public/js/frappe/views/reports/report_view.js:1572
 msgid "Toggle Chart"
 msgstr "Grafiği Aç/Kapat"
 
@@ -26970,11 +26888,11 @@ msgstr "Izgara Görünümü"
 
 #: frappe/public/js/frappe/ui/page.js:201
 #: frappe/public/js/frappe/ui/page.js:203
-#: frappe/public/js/frappe/views/reports/report_view.js:1572
+#: frappe/public/js/frappe/views/reports/report_view.js:1576
 msgid "Toggle Sidebar"
 msgstr "Kenar Çubuğunu Aç/Kapat"
 
-#: frappe/public/js/frappe/list/list_view.js:1817
+#: frappe/public/js/frappe/list/list_view.js:1838
 msgctxt "Button in list view menu"
 msgid "Toggle Sidebar"
 msgstr "Kenar Çubuğunu Aç/Kapat"
@@ -27020,7 +26938,7 @@ msgid "Tomorrow"
 msgstr ""
 
 #: frappe/desk/doctype/bulk_update/bulk_update.py:68
-#: frappe/model/workflow.py:254
+#: frappe/model/workflow.py:310
 msgid "Too Many Documents"
 msgstr "Çok Fazla Seçim Yapıldı"
 
@@ -27101,7 +27019,7 @@ msgstr "Konu"
 #: frappe/desk/query_report.py:551
 #: frappe/public/js/frappe/views/reports/print_grid.html:45
 #: frappe/public/js/frappe/views/reports/query_report.js:1323
-#: frappe/public/js/frappe/views/reports/report_view.js:1549
+#: frappe/public/js/frappe/views/reports/report_view.js:1553
 msgid "Total"
 msgstr "Toplam"
 
@@ -27151,11 +27069,11 @@ msgstr "İlk senkronizasyon işleminde senkronize edilecek toplam e-posta sayıs
 msgid "Total:"
 msgstr "Toplam:"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1254
+#: frappe/public/js/frappe/views/reports/report_view.js:1258
 msgid "Totals"
 msgstr "Toplamlar"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1229
+#: frappe/public/js/frappe/views/reports/report_view.js:1233
 msgid "Totals Row"
 msgstr "Toplam Satır"
 
@@ -27256,6 +27174,11 @@ msgstr ""
 msgid "Transition Rules"
 msgstr "Geçiş Kuralları"
 
+#. Label of the transition_tasks (Link) field in DocType 'Workflow Transition'
+#: frappe/workflow/doctype/workflow_transition/workflow_transition.json
+msgid "Transition Tasks"
+msgstr ""
+
 #. Label of the transitions (Table) field in DocType 'Workflow'
 #: frappe/workflow/doctype/workflow/workflow.json
 msgid "Transitions"
@@ -27270,7 +27193,7 @@ msgstr "Geçişler"
 msgid "Translatable"
 msgstr "Çevirilebilir"
 
-#: frappe/public/js/frappe/views/reports/query_report.js:2233
+#: frappe/public/js/frappe/views/reports/query_report.js:2235
 msgid "Translate Data"
 msgstr ""
 
@@ -27281,7 +27204,7 @@ msgstr ""
 msgid "Translate Link Fields"
 msgstr "Bağlantı Alanlarını Çevir"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1654
+#: frappe/public/js/frappe/views/reports/report_view.js:1658
 msgid "Translate values"
 msgstr "Değerleri çevir"
 
@@ -27365,8 +27288,8 @@ msgstr "Tekrar Deneyin"
 msgid "Try a Naming Series"
 msgstr "Adlandırma Serisi Önizleme"
 
-#: frappe/printing/page/print/print.js:189
-#: frappe/printing/page/print/print.js:195
+#: frappe/printing/page/print/print.js:202
+#: frappe/printing/page/print/print.js:208
 msgid "Try the new Print Designer"
 msgstr "Yeni Yazdırma Tasarımcısını Deneyin"
 
@@ -27714,7 +27637,6 @@ msgid "Unlock Reference Document"
 msgstr "Referans Belgesinin Kilidini Aç"
 
 #: frappe/public/js/frappe/form/footer/form_timeline.js:632
-#: frappe/website/doctype/blog_post/blog_post.js:36
 #: frappe/website/doctype/web_form/web_form.js:86
 msgid "Unpublish"
 msgstr "Taslağa Çevir"
@@ -27730,7 +27652,7 @@ msgstr "Okunmamış"
 msgid "Unread Notification Sent"
 msgstr "Okunmamış Bildirim Gönderildi"
 
-#: frappe/utils/safe_exec.py:496
+#: frappe/utils/safe_exec.py:498
 msgid "Unsafe SQL query"
 msgstr "Güvenli olmayan SQL sorgusu"
 
@@ -27887,7 +27809,7 @@ msgstr "Güncellendi"
 msgid "Updated Successfully"
 msgstr "Başarıyla Güncellendi"
 
-#: frappe/public/js/frappe/desk.js:452
+#: frappe/public/js/frappe/desk.js:446
 msgid "Updated To A New Version 🎉"
 msgstr "Yeni Bir Sürüme Güncellendi 🎉"
 
@@ -28060,7 +27982,7 @@ msgstr ""
 msgid "Use of sub-query or function is restricted"
 msgstr ""
 
-#: frappe/printing/page/print/print.js:279
+#: frappe/printing/page/print/print.js:292
 msgid "Use the new Print Format Builder"
 msgstr "Yeni Yazdırma Formatı Oluşturucuyu Kullan"
 
@@ -28081,6 +28003,7 @@ msgid "Used OAuth"
 msgstr "OAuth Kullanıldı"
 
 #. Label of the user (Link) field in DocType 'Assignment Rule User'
+#. Label of the user (Link) field in DocType 'Auto Repeat User'
 #. Label of the user (Link) field in DocType 'Reminder'
 #. Label of the user (Link) field in DocType 'Activity Log'
 #. Label of the user (Link) field in DocType 'API Request Log'
@@ -28090,6 +28013,7 @@ msgstr "OAuth Kullanıldı"
 #. Label of the user (Link) field in DocType 'Permission Inspector'
 #. Name of a DocType
 #. Label of the user (Link) field in DocType 'User Group Member'
+#. Label of the user (Link) field in DocType 'User Invitation'
 #. Label of the user (Link) field in DocType 'User Permission'
 #. Label of a Link in the Users Workspace
 #. Label of a shortcut in the Users Workspace
@@ -28104,10 +28028,10 @@ msgstr "OAuth Kullanıldı"
 #. Label of the user (Link) field in DocType 'OAuth Client'
 #. Label of the user (Link) field in DocType 'Token Cache'
 #. Label of the user (Link) field in DocType 'Webhook Request Log'
-#. Label of the user (Link) field in DocType 'Blogger'
 #. Label of the user (Link) field in DocType 'Personal Data Download Request'
 #. Label of the user (Link) field in DocType 'Workflow Action'
 #: frappe/automation/doctype/assignment_rule_user/assignment_rule_user.json
+#: frappe/automation/doctype/auto_repeat_user/auto_repeat_user.json
 #: frappe/automation/doctype/reminder/reminder.json
 #: frappe/core/doctype/activity_log/activity_log.json
 #: frappe/core/doctype/api_request_log/api_request_log.json
@@ -28117,6 +28041,7 @@ msgstr "OAuth Kullanıldı"
 #: frappe/core/doctype/permission_inspector/permission_inspector.json
 #: frappe/core/doctype/user/user.json
 #: frappe/core/doctype/user_group_member/user_group_member.json
+#: frappe/core/doctype/user_invitation/user_invitation.json
 #: frappe/core/doctype/user_permission/user_permission.json
 #: frappe/core/report/permitted_documents_for_user/permitted_documents_for_user.js:8
 #: frappe/core/report/user_doctype_permissions/user_doctype_permissions.js:8
@@ -28133,7 +28058,6 @@ msgstr "OAuth Kullanıldı"
 #: frappe/integrations/doctype/token_cache/token_cache.json
 #: frappe/integrations/doctype/webhook_request_log/webhook_request_log.json
 #: frappe/public/js/frappe/form/templates/set_sharing.html:3
-#: frappe/website/doctype/blogger/blogger.json
 #: frappe/website/doctype/personal_data_download_request/personal_data_download_request.json
 #: frappe/workflow/doctype/workflow_action/workflow_action.json
 msgid "User"
@@ -28173,7 +28097,7 @@ msgstr "Kullanıcı Oluşturamaz"
 msgid "User Cannot Search"
 msgstr "Kullanıcı Arama Yapamaz"
 
-#: frappe/public/js/frappe/desk.js:556
+#: frappe/public/js/frappe/desk.js:550
 msgid "User Changed"
 msgstr "Kullanıcı Değiştirildi"
 
@@ -28237,11 +28161,6 @@ msgstr "Kullanıcı ID"
 msgid "User ID Property"
 msgstr "Kullanıcı Kimliği Özelliği"
 
-#. Description of a DocType
-#: frappe/website/doctype/blogger/blogger.json
-msgid "User ID of a Blogger"
-msgstr ""
-
 #. Label of the user (Link) field in DocType 'Contact'
 #: frappe/contacts/doctype/contact/contact.json
 msgid "User Id"
@@ -28261,6 +28180,11 @@ msgstr "Kullanıcı Kimliği Alanı {0} kullanıcı türünde zorunludur"
 msgid "User Image"
 msgstr "Kullanıcı Resmi"
 
+#. Name of a DocType
+#: frappe/core/doctype/user_invitation/user_invitation.json
+msgid "User Invitation"
+msgstr ""
+
 #: frappe/public/js/frappe/ui/toolbar/navbar.html:115
 msgid "User Menu"
 msgstr "Kullanıcı Menüsü"
@@ -28279,12 +28203,12 @@ msgstr "Kullanıcı İzinleri"
 #. Label of a Link in the Users Workspace
 #: frappe/core/page/permission_manager/permission_manager_help.html:30
 #: frappe/core/workspace/users/users.json
-#: frappe/public/js/frappe/views/reports/query_report.js:1933
-#: frappe/public/js/frappe/views/reports/report_view.js:1750
+#: frappe/public/js/frappe/views/reports/query_report.js:1935
+#: frappe/public/js/frappe/views/reports/report_view.js:1754
 msgid "User Permissions"
 msgstr "Kullanıcı İzinleri"
 
-#: frappe/public/js/frappe/list/list_view.js:1775
+#: frappe/public/js/frappe/list/list_view.js:1796
 msgctxt "Button in list view menu"
 msgid "User Permissions"
 msgstr "Kullanıcı İzinleri"
@@ -28297,7 +28221,9 @@ msgstr "Kullanıcı İzinleri, kullanıcıları belirli kayıtlarla sınırlamak
 msgid "User Permissions created successfully"
 msgstr "Kullanıcı İzinleri başarıyla oluşturuldu"
 
+#. Name of a DocType
 #. Label of the erpnext_role (Link) field in DocType 'LDAP Group Mapping'
+#: frappe/core/doctype/user_role/user_role.json
 #: frappe/integrations/doctype/ldap_group_mapping/ldap_group_mapping.json
 msgid "User Role"
 msgstr "Kullanıcı Rolü"
@@ -28599,7 +28525,7 @@ msgstr "{0} için değer negatif olamaz : {1}"
 msgid "Value for a check field can be either 0 or 1"
 msgstr "Bir kontrol alanı için değer 0 veya 1 olabilir"
 
-#: frappe/custom/doctype/customize_form/customize_form.py:611
+#: frappe/custom/doctype/customize_form/customize_form.py:612
 msgid "Value for field {0} is too long in {1}. Length should be lesser than {2} characters"
 msgstr "{0} alanı için değer {1} için çok uzun. Uzunluk {2} karakterden daha az olmalıdır"
 
@@ -28658,7 +28584,7 @@ msgstr "Verdana"
 msgid "Verification"
 msgstr "Doğrulama"
 
-#: frappe/templates/includes/login/login.js:336 frappe/twofactor.py:352
+#: frappe/templates/includes/login/login.js:336 frappe/twofactor.py:357
 msgid "Verification Code"
 msgstr "Doğrulama Kodu"
 
@@ -28719,14 +28645,6 @@ msgstr "Tümünü Göster"
 #: frappe/public/js/frappe/form/toolbar.js:580
 msgid "View Audit Trail"
 msgstr "Denetim İzini Görüntüle"
-
-#: frappe/templates/includes/likes/likes.py:34
-msgid "View Blog Post"
-msgstr "Blog Yazısını Görüntüle"
-
-#: frappe/templates/includes/comments/comments.py:56
-msgid "View Comment"
-msgstr "Yorumu Görüntüle"
 
 #: frappe/core/doctype/user/user.js:151
 msgid "View Doctype Permissions"
@@ -28874,7 +28792,7 @@ msgstr "Uyarı"
 msgid "Warning: DATA LOSS IMMINENT! Proceeding will permanently delete following database columns from doctype {0}:"
 msgstr "Uyarı: VERİ KAYBI YAKLAŞIYOR! Devam edilmesi durumunda aşağıdaki veritabanı sütunları {0} DocType'ı için kalıcı olarak silinecektir:"
 
-#: frappe/core/doctype/doctype/doctype.py:1125
+#: frappe/core/doctype/doctype/doctype.py:1126
 msgid "Warning: Naming is not set"
 msgstr "Uyarı: Adlandırma ayarlanmamış"
 
@@ -29063,7 +28981,7 @@ msgstr ""
 #. Name of a Workspace
 #: frappe/core/doctype/module_def/module_def.json
 #: frappe/public/js/frappe/ui/apps_switcher.js:125
-#: frappe/public/js/frappe/ui/toolbar/about.js:8
+#: frappe/public/js/frappe/ui/toolbar/about.js:11
 #: frappe/website/workspace/website/website.json
 msgid "Website"
 msgstr "Website"
@@ -29076,10 +28994,6 @@ msgstr "Web Sitesi Analitiği"
 #. Name of a role
 #: frappe/core/doctype/comment/comment.json
 #: frappe/website/doctype/about_us_settings/about_us_settings.json
-#: frappe/website/doctype/blog_category/blog_category.json
-#: frappe/website/doctype/blog_post/blog_post.json
-#: frappe/website/doctype/blog_settings/blog_settings.json
-#: frappe/website/doctype/blogger/blogger.json
 #: frappe/website/doctype/color/color.json
 #: frappe/website/doctype/contact_us_settings/contact_us_settings.json
 #: frappe/website/doctype/help_category/help_category.json
@@ -29123,7 +29037,7 @@ msgstr "Komut Dosyası"
 msgid "Website Search Field"
 msgstr "Web Sitesi Arama Alanı"
 
-#: frappe/core/doctype/doctype/doctype.py:1522
+#: frappe/core/doctype/doctype/doctype.py:1523
 msgid "Website Search Field must be a valid fieldname"
 msgstr "Web Sitesi Arama Alanı geçerli bir alan adı olmalıdır"
 
@@ -29340,11 +29254,6 @@ msgstr "Genel Filtre"
 msgid "Will add \"%\" before and after the query"
 msgstr "Sorgudan önce ve sonra \"%\" eklenecek"
 
-#. Description of the 'Short Name' (Data) field in DocType 'Blogger'
-#: frappe/website/doctype/blogger/blogger.json
-msgid "Will be used in url (usually first name)."
-msgstr "URL'de kullanılacak (genellikle ilk isim)."
-
 #: frappe/desk/page/setup_wizard/setup_wizard.js:485
 msgid "Will be your login ID"
 msgstr "Giriş kimliğiniz olacak"
@@ -29437,7 +29346,7 @@ msgstr "İş Akışı Oluşturucu, iş akışlarını görsel olarak oluşturman
 msgid "Workflow Data"
 msgstr "İş Akışı Verileri"
 
-#: frappe/public/js/workflow_builder/components/Properties.vue:42
+#: frappe/public/js/workflow_builder/components/Properties.vue:44
 msgid "Workflow Details"
 msgstr "İş Akışı Ayrıntıları"
 
@@ -29463,11 +29372,11 @@ msgstr "İş Akışı Durumu"
 msgid "Workflow State Field"
 msgstr "İş Akışı Durum Alanı"
 
-#: frappe/model/workflow.py:61
+#: frappe/model/workflow.py:64
 msgid "Workflow State not set"
 msgstr "İş Akışı Durumu ayarlanmamış"
 
-#: frappe/model/workflow.py:204 frappe/model/workflow.py:212
+#: frappe/model/workflow.py:260 frappe/model/workflow.py:268
 msgid "Workflow State transition not allowed from {0} to {1}"
 msgstr "İş Akışı Durumu geçişine {0} adresinden {1} adresine izin verilmiyor"
 
@@ -29475,14 +29384,29 @@ msgstr "İş Akışı Durumu geçişine {0} adresinden {1} adresine izin verilmi
 msgid "Workflow States Don't Exist"
 msgstr ""
 
-#: frappe/model/workflow.py:328
+#: frappe/model/workflow.py:384
 msgid "Workflow Status"
 msgstr "İş Akışı Durumu"
+
+#. Option for the 'Script Type' (Select) field in DocType 'Server Script'
+#: frappe/core/doctype/server_script/server_script.json
+msgid "Workflow Task"
+msgstr ""
 
 #. Name of a DocType
 #: frappe/workflow/doctype/workflow_transition/workflow_transition.json
 msgid "Workflow Transition"
 msgstr "İş Akışı Geçişi"
+
+#. Name of a DocType
+#: frappe/workflow/doctype/workflow_transition_task/workflow_transition_task.json
+msgid "Workflow Transition Task"
+msgstr ""
+
+#. Name of a DocType
+#: frappe/workflow/doctype/workflow_transition_tasks/workflow_transition_tasks.json
+msgid "Workflow Transition Tasks"
+msgstr ""
 
 #. Description of a DocType
 #: frappe/workflow/doctype/workflow_state/workflow_state.json
@@ -29602,7 +29526,7 @@ msgstr "Yazma"
 msgid "Wrong Fetch From value"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:491
+#: frappe/public/js/frappe/views/reports/report_view.js:495
 msgid "X Axis Field"
 msgstr "X Ekseni Alanı"
 
@@ -29621,7 +29545,7 @@ msgstr "XLSX"
 msgid "Y Axis"
 msgstr "Y Ekseni"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:498
+#: frappe/public/js/frappe/views/reports/report_view.js:502
 msgid "Y Axis Fields"
 msgstr "Y Ekseni Alanları"
 
@@ -29679,11 +29603,12 @@ msgstr "Sarı"
 #. Settings'
 #. Option for the 'Standard' (Select) field in DocType 'Print Format'
 #: frappe/core/doctype/page/page.json frappe/core/doctype/report/report.json
-#: frappe/email/doctype/notification/notification.py:92
-#: frappe/email/doctype/notification/notification.py:96
+#: frappe/email/doctype/notification/notification.py:95
+#: frappe/email/doctype/notification/notification.py:100
+#: frappe/email/doctype/notification/notification.py:102
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
-#: frappe/integrations/doctype/webhook/webhook.py:121
-#: frappe/integrations/doctype/webhook/webhook.py:128
+#: frappe/integrations/doctype/webhook/webhook.py:125
+#: frappe/integrations/doctype/webhook/webhook.py:132
 #: frappe/printing/doctype/print_format/print_format.json
 #: frappe/public/js/form_builder/utils.js:336
 #: frappe/public/js/frappe/form/controls/link.js:494
@@ -29824,6 +29749,10 @@ msgstr "Bunu da kopyalayıp yapıştırabilirsiniz "
 msgid "You can also copy-paste this {0} to your browser"
 msgstr "Ayrıca bu {0} adresini tarayıcınıza kopyalayıp yapıştırabilirsiniz"
 
+#: frappe/templates/emails/user_invitation_expired.html:8
+msgid "You can ask your team to resend the invitation if you'd still like to join."
+msgstr ""
+
 #: frappe/core/page/permission_manager/permission_manager_help.html:17
 msgid "You can change Submitted documents by cancelling them and then, amending them."
 msgstr "Gönderilen dokümanları İptal edip daha sonra değişiklik yapıp değiştirebilirsiniz."
@@ -29890,11 +29819,11 @@ msgstr "Alanların yetki seviyelerini ayarlamak için Formu Özelleştir'i kulla
 msgid "You can use wildcard %"
 msgstr "Filtrede % karakteriyle arama yapabilirsiniz"
 
-#: frappe/custom/doctype/customize_form/customize_form.py:389
+#: frappe/custom/doctype/customize_form/customize_form.py:390
 msgid "You can't set 'Options' for field {0}"
 msgstr "{0} alanı için 'Seçenekler'i ayarlayamazsınız"
 
-#: frappe/custom/doctype/customize_form/customize_form.py:393
+#: frappe/custom/doctype/customize_form/customize_form.py:394
 msgid "You can't set 'Translatable' for field {0}"
 msgstr "{0} alanı için 'Çevrilebilir' ayarlayamazsınız"
 
@@ -29912,7 +29841,7 @@ msgstr "Bu belgeyi iptal ettiniz {1}"
 msgid "You cannot create a dashboard chart from single DocTypes"
 msgstr "Tek DocType'lardan bir gösterge tablosu grafiği oluşturamazsınız"
 
-#: frappe/custom/doctype/customize_form/customize_form.py:385
+#: frappe/custom/doctype/customize_form/customize_form.py:386
 msgid "You cannot unset 'Read Only' for field {0}"
 msgstr "{0} alanı için 'Salt Okunur' ayarını değiştiremezsiniz"
 
@@ -29999,7 +29928,7 @@ msgstr "Şu kişiden yeni bir mesajınız var: "
 msgid "You have been successfully logged out"
 msgstr "Başarıyla çıkış yaptınız"
 
-#: frappe/custom/doctype/customize_form/customize_form.py:244
+#: frappe/custom/doctype/customize_form/customize_form.py:245
 msgid "You have hit the row size limit on database table: {0}"
 msgstr "Veritabanı tablosunda satır boyutu sınırına ulaştınız: {0}"
 
@@ -30007,11 +29936,7 @@ msgstr "Veritabanı tablosunda satır boyutu sınırına ulaştınız: {0}"
 msgid "You have not entered a value. The field will be set to empty."
 msgstr "Herhang bir değer girilmedi. Alan boş olarak ayarlanacak."
 
-#: frappe/templates/includes/likes/likes.py:31
-msgid "You have received a ❤️ like on your blog post"
-msgstr "Blog yazınızda ❤️ beğeni aldınız"
-
-#: frappe/twofactor.py:432
+#: frappe/twofactor.py:437
 msgid "You have to enable Two Factor Auth from System Settings."
 msgstr "Sistem Ayarlarından İki Faktörlü Kimlik Doğrulamayı etkinleştirmeniz gerekiyor."
 
@@ -30159,9 +30084,21 @@ msgstr "Bu belgeyi takip etmeyi bıraktınız"
 msgid "You viewed this"
 msgstr "Bunu görüntülediniz"
 
-#: frappe/public/js/frappe/desk.js:553
+#: frappe/core/doctype/user_invitation/user_invitation.py:104
+msgid "You've been invited to join {0}"
+msgstr ""
+
+#: frappe/templates/emails/user_invitation.html:5
+msgid "You've been invited to join {0}."
+msgstr ""
+
+#: frappe/public/js/frappe/desk.js:547
 msgid "You've logged in as another user from another tab. Refresh this page to continue using system."
 msgstr "Başka bir sekmeden başka bir kullanıcı olarak oturum açtınız. Sistemi kullanmaya devam etmek için bu sayfayı yenileyin."
+
+#: frappe/public/js/frappe/ui/toolbar/about.js:11
+msgid "YouTube"
+msgstr "Youtube"
 
 #: frappe/core/doctype/prepared_report/prepared_report.js:57
 msgid "Your CSV file is being generated and will appear in the Attachments section once ready. Additionally, you will get notified when the file is available for download."
@@ -30219,6 +30156,14 @@ msgstr "E-posta Adresiniz"
 #: frappe/public/js/frappe/web_form/web_form.js:428
 msgid "Your form has been successfully updated"
 msgstr "Formunuz başarıyla güncellendi"
+
+#: frappe/templates/emails/user_invitation_cancelled.html:5
+msgid "Your invitation to join {0} has been cancelled by the site administrator."
+msgstr ""
+
+#: frappe/templates/emails/user_invitation_expired.html:5
+msgid "Your invitation to join {0} has expired."
+msgstr ""
 
 #: frappe/templates/emails/new_user.html:6
 msgid "Your login id is"
@@ -30304,6 +30249,10 @@ msgstr "değiştir"
 #: frappe/public/js/frappe/utils/utils.js:395 frappe/utils/data.py:1564
 msgid "and"
 msgstr "ve"
+
+#: frappe/core/doctype/user_invitation/user_invitation.py:178
+msgid "application is not installed"
+msgstr ""
 
 #: frappe/public/js/frappe/ui/sort_selector.html:5
 #: frappe/public/js/frappe/ui/sort_selector.js:48
@@ -30546,10 +30495,13 @@ msgstr "simge"
 msgid "import"
 msgstr "i̇çe Aktar"
 
-#. Description of the 'Read Time' (Int) field in DocType 'Blog Post'
-#: frappe/website/doctype/blog_post/blog_post.json
-msgid "in minutes"
-msgstr "dakika"
+#: frappe/core/doctype/user_invitation/user_invitation.py:89
+msgid "invitation already accepted"
+msgstr ""
+
+#: frappe/core/doctype/user_invitation/user_invitation.py:93
+msgid "invitation already exists"
+msgstr ""
 
 #: frappe/templates/signup.html:11 frappe/www/login.html:11
 msgid "jane@example.com"
@@ -30608,11 +30560,6 @@ msgstr "d"
 #: frappe/model/rename_doc.py:215
 msgid "merged {0} into {1}"
 msgstr ""
-
-#: frappe/website/doctype/blog_post/templates/blog_post.html:25
-#: frappe/website/doctype/blog_post/templates/blog_post_row.html:36
-msgid "min read"
-msgstr "dakika okuma süresi"
 
 #. Option for the 'Date Format' (Select) field in DocType 'Language'
 #. Option for the 'Date Format' (Select) field in DocType 'System Settings'
@@ -30917,7 +30864,7 @@ msgstr ""
 msgid "via Assignment Rule"
 msgstr "Atama Kuralı ile"
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:242
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:261
 msgid "via Auto Repeat"
 msgstr ""
 
@@ -30931,7 +30878,7 @@ msgstr "Veri İçe Aktarma ile"
 msgid "via Google Meet"
 msgstr "Google Meet ile"
 
-#: frappe/email/doctype/notification/notification.py:361
+#: frappe/email/doctype/notification/notification.py:403
 msgid "via Notification"
 msgstr "Bildirim aracılığıyla"
 
@@ -30964,8 +30911,13 @@ msgstr "öğeye tıklandığında, varsa açılır pencereyi odaklayacaktır."
 msgid "wkhtmltopdf"
 msgstr ""
 
-#: frappe/printing/page/print/print.js:622
+#: frappe/printing/page/print/print.js:635
 msgid "wkhtmltopdf 0.12.x (with patched qt)."
+msgstr ""
+
+#. Option for the 'Doc Event' (Select) field in DocType 'Webhook'
+#: frappe/integrations/doctype/webhook/webhook.json
+msgid "workflow_transition"
 msgstr ""
 
 #. Option for the 'Permission Type' (Select) field in DocType 'Permission
@@ -31025,7 +30977,7 @@ msgstr "{0} = {1}"
 msgid "{0} Calendar"
 msgstr "{0} Takvimi"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:571
+#: frappe/public/js/frappe/views/reports/report_view.js:575
 msgid "{0} Chart"
 msgstr "{0} Grafiği"
 
@@ -31191,11 +31143,7 @@ msgctxt "Form timeline"
 msgid "{0} changed {1} to {2}"
 msgstr "{0} {1} değerini {2} olarak değiştirdi"
 
-#: frappe/website/doctype/blog_post/blog_post.py:382
-msgid "{0} comments"
-msgstr "{0} yorum"
-
-#: frappe/core/doctype/doctype/doctype.py:1605
+#: frappe/core/doctype/doctype/doctype.py:1606
 msgid "{0} contains an invalid Fetch From expression, Fetch From can't be self-referential."
 msgstr ""
 
@@ -31271,7 +31219,7 @@ msgstr ""
 msgid "{0} in row {1} cannot have both URL and child items"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:934
+#: frappe/core/doctype/doctype/doctype.py:935
 msgid "{0} is a mandatory field"
 msgstr "{0} zorunlu bir alandır"
 
@@ -31279,15 +31227,15 @@ msgstr "{0} zorunlu bir alandır"
 msgid "{0} is a not a valid zip file"
 msgstr "{0} geçerli bir zip dosyası değil"
 
-#: frappe/core/doctype/doctype/doctype.py:1618
+#: frappe/core/doctype/doctype/doctype.py:1619
 msgid "{0} is an invalid Data field."
 msgstr "{0} geçersiz bir Veri alanıdır."
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:154
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:159
 msgid "{0} is an invalid email address in 'Recipients'"
 msgstr "{0} 'Alıcılar' bölümünde geçersiz bir e-posta adresi var"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1466
+#: frappe/public/js/frappe/views/reports/report_view.js:1470
 msgid "{0} is between {1} and {2}"
 msgstr ""
 
@@ -31296,27 +31244,27 @@ msgstr ""
 msgid "{0} is currently {1}"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1435
+#: frappe/public/js/frappe/views/reports/report_view.js:1439
 msgid "{0} is equal to {1}"
 msgstr "{0} ile {1} eşittir"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1455
+#: frappe/public/js/frappe/views/reports/report_view.js:1459
 msgid "{0} is greater than or equal to {1}"
 msgstr "{0} değeri {1} değerinden büyük veya eşittir"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1445
+#: frappe/public/js/frappe/views/reports/report_view.js:1449
 msgid "{0} is greater than {1}"
 msgstr "{0} değeri {1} değerinden büyüktür"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1460
+#: frappe/public/js/frappe/views/reports/report_view.js:1464
 msgid "{0} is less than or equal to {1}"
 msgstr "{0} değeri {1} değerinden küçük veya eşittir"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1450
+#: frappe/public/js/frappe/views/reports/report_view.js:1454
 msgid "{0} is less than {1}"
 msgstr "{0} değeri {1} değerinden küçüktür"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1485
+#: frappe/public/js/frappe/views/reports/report_view.js:1489
 msgid "{0} is like {1}"
 msgstr "{0} {1} gibi"
 
@@ -31348,8 +31296,8 @@ msgstr ""
 msgid "{0} is not a valid DocType for Dynamic Link"
 msgstr "{0} Dinamik Bağlantı için geçerli bir DocType değil"
 
-#: frappe/email/doctype/email_group/email_group.py:131
-#: frappe/utils/__init__.py:203
+#: frappe/email/doctype/email_group/email_group.py:140
+#: frappe/utils/__init__.py:206
 msgid "{0} is not a valid Email Address"
 msgstr "{0} geçerli bir E-Posta Adresi değil."
 
@@ -31357,15 +31305,15 @@ msgstr "{0} geçerli bir E-Posta Adresi değil."
 msgid "{0} is not a valid ISO 3166 ALPHA-2 code."
 msgstr "{0} geçerli bir ISO 3166 ALPHA-2 kodu değil."
 
-#: frappe/utils/__init__.py:171
+#: frappe/utils/__init__.py:174
 msgid "{0} is not a valid Name"
 msgstr "{0} geçerli bir İsim değil"
 
-#: frappe/utils/__init__.py:150
+#: frappe/utils/__init__.py:153
 msgid "{0} is not a valid Phone Number"
 msgstr "{0} geçerli bir Telefon Numarası değil"
 
-#: frappe/model/workflow.py:189
+#: frappe/model/workflow.py:245
 msgid "{0} is not a valid Workflow State. Please update your Workflow and try again."
 msgstr "{0} geçerli bir İş Akışı Durumu değil. Lütfen İş Akışınızı güncelleyin ve tekrar deneyin."
 
@@ -31385,19 +31333,23 @@ msgstr "{0} geçerli bir rapor biçimi değil. Rapor biçimi aşağıdakilerden 
 msgid "{0} is not a zip file"
 msgstr "{0} bir zip dosyası değil"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1440
+#: frappe/core/doctype/user_invitation/user_invitation.py:165
+msgid "{0} is not an allowed role for {1}"
+msgstr ""
+
+#: frappe/public/js/frappe/views/reports/report_view.js:1444
 msgid "{0} is not equal to {1}"
 msgstr "{0} ile {1} eşit değildir"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1487
+#: frappe/public/js/frappe/views/reports/report_view.js:1491
 msgid "{0} is not like {1}"
 msgstr "{0} ile {1} benzer değil"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1481
+#: frappe/public/js/frappe/views/reports/report_view.js:1485
 msgid "{0} is not one of {1}"
 msgstr ""
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1491
+#: frappe/public/js/frappe/views/reports/report_view.js:1495
 msgid "{0} is not set"
 msgstr "{0} ayarlanmamış"
 
@@ -31405,7 +31357,7 @@ msgstr "{0} ayarlanmamış"
 msgid "{0} is now default print format for {1} doctype"
 msgstr "{0} artık {1} belge türü için varsayılan yazdırma biçimidir"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1474
+#: frappe/public/js/frappe/views/reports/report_view.js:1478
 msgid "{0} is one of {1}"
 msgstr ""
 
@@ -31417,15 +31369,15 @@ msgstr ""
 msgid "{0} is required"
 msgstr "{0} içerir"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1490
+#: frappe/public/js/frappe/views/reports/report_view.js:1494
 msgid "{0} is set"
 msgstr "{0} ayarlandı"
 
-#: frappe/public/js/frappe/views/reports/report_view.js:1469
+#: frappe/public/js/frappe/views/reports/report_view.js:1473
 msgid "{0} is within {1}"
 msgstr ""
 
-#: frappe/public/js/frappe/list/list_view.js:1692
+#: frappe/public/js/frappe/list/list_view.js:1713
 msgid "{0} items selected"
 msgstr "{0} Kayıt Seçildi"
 
@@ -31498,7 +31450,7 @@ msgstr ""
 msgid "{0} must begin and end with a letter and can only contain letters, hyphen or underscore."
 msgstr ""
 
-#: frappe/workflow/doctype/workflow/workflow.py:90
+#: frappe/workflow/doctype/workflow/workflow.py:91
 msgid "{0} not a valid State"
 msgstr "{0} geçerli bir Durum değildir"
 
@@ -31511,11 +31463,11 @@ msgid "{0} not found"
 msgstr "{0} bulunamadı"
 
 #: frappe/core/doctype/report/report.py:427
-#: frappe/public/js/frappe/list/list_view.js:1068
+#: frappe/public/js/frappe/list/list_view.js:1089
 msgid "{0} of {1}"
 msgstr "{0}/{1} Kayıt Listeleniyor"
 
-#: frappe/public/js/frappe/list/list_view.js:1070
+#: frappe/public/js/frappe/list/list_view.js:1091
 msgid "{0} of {1} ({2} rows with children)"
 msgstr ""
 
@@ -31585,11 +31537,11 @@ msgstr "{0} bu belgeyi herkesle paylaştı"
 msgid "{0} shared this document with {1}"
 msgstr "{0} bu belgeyi {1} ile paylaştı"
 
-#: frappe/core/doctype/doctype/doctype.py:316
+#: frappe/core/doctype/doctype/doctype.py:317
 msgid "{0} should be indexed because it's referred in dashboard connections"
 msgstr ""
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:141
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:146
 msgid "{0} should not be same as {1}"
 msgstr "{0} {1} ile aynı olmamalıdır"
 
@@ -31602,8 +31554,8 @@ msgctxt "Form timeline"
 msgid "{0} submitted this document {1}"
 msgstr "{0} {1} bu dökümanı gönderdi."
 
-#: frappe/email/doctype/email_group/email_group.py:62
-#: frappe/email/doctype/email_group/email_group.py:133
+#: frappe/email/doctype/email_group/email_group.py:71
+#: frappe/email/doctype/email_group/email_group.py:142
 msgid "{0} subscribers added"
 msgstr "{0} aboneler eklendi"
 
@@ -31621,7 +31573,7 @@ msgstr ""
 msgid "{0} un-shared this document with {1}"
 msgstr ""
 
-#: frappe/custom/doctype/customize_form/customize_form.py:253
+#: frappe/custom/doctype/customize_form/customize_form.py:254
 msgid "{0} updated"
 msgstr "{0} Güncellendi"
 
@@ -31697,75 +31649,75 @@ msgstr ""
 msgid "{0}: '{1}' ({3}) will get truncated, as max characters allowed is {2}"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1800
+#: frappe/core/doctype/doctype/doctype.py:1801
 msgid "{0}: Cannot set Amend without Cancel"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1818
+#: frappe/core/doctype/doctype/doctype.py:1819
 msgid "{0}: Cannot set Assign Amend if not Submittable"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1816
+#: frappe/core/doctype/doctype/doctype.py:1817
 msgid "{0}: Cannot set Assign Submit if not Submittable"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1795
+#: frappe/core/doctype/doctype/doctype.py:1796
 msgid "{0}: Cannot set Cancel without Submit"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1802
+#: frappe/core/doctype/doctype/doctype.py:1803
 msgid "{0}: Cannot set Import without Create"
 msgstr "{0}: Oluşturmadan İçe Aktarma ayarlanamıyor"
 
-#: frappe/core/doctype/doctype/doctype.py:1798
+#: frappe/core/doctype/doctype/doctype.py:1799
 msgid "{0}: Cannot set Submit, Cancel, Amend without Write"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1822
+#: frappe/core/doctype/doctype/doctype.py:1823
 msgid "{0}: Cannot set import as {1} is not importable"
 msgstr ""
 
-#: frappe/automation/doctype/auto_repeat/auto_repeat.py:405
+#: frappe/automation/doctype/auto_repeat/auto_repeat.py:433
 msgid "{0}: Failed to attach new recurring document. To enable attaching document in the auto repeat notification email, enable {1} in Print Settings"
 msgstr "{0}: Yeni yinelenen belge eklenemedi. Otomatik tekrarlama bildirim e-postasına belge eklemeyi etkinleştirmek için Yazdırma Ayarları'nda {1} adresini etkinleştirin"
 
-#: frappe/core/doctype/doctype/doctype.py:1426
+#: frappe/core/doctype/doctype/doctype.py:1427
 msgid "{0}: Field '{1}' cannot be set as Unique as it has non-unique values"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1334
+#: frappe/core/doctype/doctype/doctype.py:1335
 msgid "{0}: Field {1} in row {2} cannot be hidden and mandatory without default"
 msgstr "{0}: {2} satırındaki {1} alanı varsayılan olmadan gizlenemez ve zorunlu olamaz"
 
-#: frappe/core/doctype/doctype/doctype.py:1293
+#: frappe/core/doctype/doctype/doctype.py:1294
 msgid "{0}: Field {1} of type {2} cannot be mandatory"
 msgstr "{0}: {2} türündeki {1} alanı zorunlu olamaz"
 
-#: frappe/core/doctype/doctype/doctype.py:1281
+#: frappe/core/doctype/doctype/doctype.py:1282
 msgid "{0}: Fieldname {1} appears multiple times in rows {2}"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1413
+#: frappe/core/doctype/doctype/doctype.py:1414
 msgid "{0}: Fieldtype {1} for {2} cannot be unique"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1755
+#: frappe/core/doctype/doctype/doctype.py:1756
 msgid "{0}: No basic permissions set"
 msgstr "{0}: Basit izinler ayarlanamadı"
 
-#: frappe/core/doctype/doctype/doctype.py:1769
+#: frappe/core/doctype/doctype/doctype.py:1770
 msgid "{0}: Only one rule allowed with the same Role, Level and {1}"
 msgstr "{0}: Aynı Rol, Seviye ve {1} ile sadece bir kurala izin verilir"
 
-#: frappe/core/doctype/doctype/doctype.py:1315
+#: frappe/core/doctype/doctype/doctype.py:1316
 msgid "{0}: Options must be a valid DocType for field {1} in row {2}"
 msgstr "{0}: Seçenekler, {2} satırındaki {1} alanı için geçerli bir DocType olmalıdır"
 
-#: frappe/core/doctype/doctype/doctype.py:1304
+#: frappe/core/doctype/doctype/doctype.py:1305
 msgid "{0}: Options required for Link or Table type field {1} in row {2}"
 msgstr "{0}: {1} satırındaki Bağlantı veya Tablo türü alanı {2} için olması gerekli seçenekler"
 
-#: frappe/core/doctype/doctype/doctype.py:1322
+#: frappe/core/doctype/doctype/doctype.py:1323
 msgid "{0}: Options {1} must be the same as doctype name {2} for the field {3}"
 msgstr "{0}: Seçenekler {1} , {3}alanı için doctype adı {2} ile aynı olmalıdır"
 
@@ -31773,7 +31725,7 @@ msgstr "{0}: Seçenekler {1} , {3}alanı için doctype adı {2} ile aynı olmal�
 msgid "{0}: Other permission rules may also apply"
 msgstr "{0}: Diğer izin kuralları da geçerli olabilir"
 
-#: frappe/core/doctype/doctype/doctype.py:1784
+#: frappe/core/doctype/doctype/doctype.py:1785
 msgid "{0}: Permission at level 0 must be set before higher levels are set"
 msgstr "{0}: Daha yüksek seviyeler ayarlanmadan önce seviye 0'daki izin ayarlanmalıdır"
 
@@ -31781,7 +31733,7 @@ msgstr "{0}: Daha yüksek seviyeler ayarlanmadan önce seviye 0'daki izin ayarla
 msgid "{0}: You can increase the limit for the field if required via {1}"
 msgstr ""
 
-#: frappe/core/doctype/doctype/doctype.py:1268
+#: frappe/core/doctype/doctype/doctype.py:1269
 msgid "{0}: fieldname cannot be set to reserved keyword {1}"
 msgstr ""
 
@@ -31798,7 +31750,7 @@ msgstr ""
 msgid "{0}: {1} vs {2}"
 msgstr "{0}: {1} ile {2}"
 
-#: frappe/core/doctype/doctype/doctype.py:1434
+#: frappe/core/doctype/doctype/doctype.py:1435
 msgid "{0}:Fieldtype {1} for {2} cannot be indexed"
 msgstr ""
 
@@ -31822,7 +31774,7 @@ msgstr "{count} satır seçildi"
 msgid "{count} rows selected"
 msgstr "{count} satır seçildi"
 
-#: frappe/core/doctype/doctype/doctype.py:1488
+#: frappe/core/doctype/doctype/doctype.py:1489
 msgid "{{{0}}} is not a valid fieldname pattern. It should be {{field_name}}."
 msgstr ""
 
