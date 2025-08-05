@@ -481,7 +481,7 @@ function show_api_key_dialog(api_key, api_secret) {
 
 	dialog.show();
 	dialog.show_message(
-		__("Store the API Secret securely, it won't be displayed again."),
+		__("Store the API secret securely. It won't be displayed again."),
 		"yellow",
 		1
 	);
