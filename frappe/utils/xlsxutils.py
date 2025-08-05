@@ -21,8 +21,14 @@ ILLEGAL_CHARACTERS_RE = re.compile(
 
 
 def get_excel_date_format():
-	frappe_format = frappe.get_system_settings("date_format") or "yyyy-mm-dd"
-	return frappe_format.upper().replace("YYYY", "yyyy").replace("DD", "dd").replace("MM", "mm")
+	date_format = frappe.get_system_settings("date_format")
+	time_format = frappe.get_system_settings("time_format")
+
+	# Excel-compatible format
+	date_format = date_format.upper().replace("YYYY", "yyyy").replace("DD", "dd").replace("MM", "mm")
+	time_format = time_format.upper().replace("HH", "hh").replace("MM", "mm").replace("SS", "ss")
+
+	return date_format, time_format
 
 
 # return xlsx file object
@@ -41,7 +47,7 @@ def make_xlsx(data, sheet_name, wb=None, column_widths=None):
 	row1 = ws.row_dimensions[1]
 	row1.font = Font(name="Calibri", bold=True)
 
-	date_format = get_excel_date_format()
+	date_format, time_format = get_excel_date_format()
 
 	for row in data:
 		clean_row = []
@@ -56,11 +62,12 @@ def make_xlsx(data, sheet_name, wb=None, column_widths=None):
 				value = ILLEGAL_CHARACTERS_RE.sub("", value)
 
 			if isinstance(value, datetime.date | datetime.datetime):
+				number_format = date_format
 				if isinstance(value, datetime.datetime):
-					date_format += " HH:MM:SS"
+					number_format = f"{date_format} {time_format}"
 
 				cell = WriteOnlyCell(ws, value=value)
-				cell.number_format = date_format
+				cell.number_format = number_format
 				clean_row.append(cell)
 			else:
 				clean_row.append(value)
