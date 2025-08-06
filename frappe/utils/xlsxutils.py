@@ -25,8 +25,7 @@ def get_excel_date_format():
 	time_format = frappe.get_system_settings("time_format")
 
 	# Excel-compatible format
-	date_format = date_format.upper().replace("YYYY", "yyyy").replace("DD", "dd").replace("MM", "mm")
-	time_format = time_format.upper().replace("HH", "hh").replace("MM", "mm").replace("SS", "ss")
+	date_format = date_format.replace("mm", "MM")
 
 	return date_format, time_format
 
