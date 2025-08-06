@@ -566,3 +566,10 @@ persistent_cache_keys = [
 	"rate-limit-counter-*",
 	"rl:*",
 ]
+
+fixtures = [
+	{
+		"dt": "Permission Type",
+		"filters": {"name": "impersonate", "applicable_for": "User"},
+	},
+]

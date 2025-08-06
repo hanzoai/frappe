@@ -1,0 +1,9 @@
+[
+ {
+  "applicable_for": "User",
+  "docstatus": 0,
+  "doctype": "Permission Type",
+  "modified": "2025-08-06 12:43:58.843550",
+  "name": "impersonate"
+ }
+]
