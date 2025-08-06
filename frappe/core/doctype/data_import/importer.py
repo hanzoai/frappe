@@ -733,8 +733,23 @@ class Row:
 					}
 				)
 				return
-		elif df.fieldtype in ["Date", "Datetime"]:
+		elif df.fieldtype == "Date":
 			value = self.get_date(value, col)
+			if isinstance(value, str):
+				# value was not parsed as datetime object
+				self.warnings.append(
+					{
+						"row": self.row_number,
+						"col": col.column_number,
+						"field": df_as_json(df),
+						"message": _("Value {0} must in {1} format").format(
+							frappe.bold(value), frappe.bold(get_user_format(col.date_format))
+						),
+					}
+				)
+				return
+		elif df.fieldtype == "Datetime":
+			value = self.get_datetime(value, col)
 			if isinstance(value, str):
 				# value was not parsed as datetime object
 				self.warnings.append(
@@ -783,15 +798,31 @@ class Row:
 			value = cint(value)
 		elif df.fieldtype in ["Float", "Percent", "Currency"]:
 			value = flt(value)
-		elif df.fieldtype in ["Date", "Datetime"]:
+		elif df.fieldtype == "Date":
 			value = self.get_date(value, col)
+		elif df.fieldtype == "Datetime":
+			value = self.get_datetime(value, col)
 		elif df.fieldtype == "Duration":
 			value = duration_to_seconds(value)
 
 		return value
 
-	def get_date(self, value, column):
-		if isinstance(value, datetime | date):
+	def get_date(self, value, column) -> date:
+		if isinstance(value, date):
+			return value
+
+		date_format = column.date_format
+		if date_format:
+			try:
+				return datetime.strptime(value, date_format).date()
+			except ValueError:
+				# ignore date values that dont match the format
+				# import will break for these values later
+				pass
+		return value
+
+	def get_datetime(self, value, column) -> datetime:
+		if isinstance(value, datetime):
 			return value
 
 		date_format = column.date_format
@@ -1004,8 +1035,11 @@ class Column:
 
 		if self.df.fieldtype == "Link":
 			# find all values that dont exist
-			values = list({cstr(v) for v in self.column_values if v})
-			exists = [cstr(d.name) for d in frappe.get_all(self.df.options, filters={"name": ("in", values)})]
+			transform = (lambda v: cstr(v).lower()) if frappe.db.db_type == "mariadb" else cstr
+			values = list({transform(v) for v in self.column_values if v})
+			exists = [
+				transform(d.name) for d in frappe.get_all(self.df.options, filters={"name": ("in", values)})
+			]
 			not_exists = list(set(values) - set(exists))
 			if not_exists:
 				missing_values = ", ".join(not_exists)

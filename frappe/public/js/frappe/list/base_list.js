@@ -290,11 +290,7 @@ frappe.views.BaseList = class BaseList {
 	}
 
 	toggle_side_bar(show) {
-		let show_sidebar = show || JSON.parse(localStorage.show_sidebar || "true");
-		show_sidebar = !show_sidebar;
-		localStorage.show_sidebar = show_sidebar;
-		this.show_or_hide_sidebar();
-		$(document.body).trigger("toggleListSidebar");
+		frappe.app.sidebar.toggle_sidebar();
 	}
 
 	show_or_hide_sidebar() {
@@ -650,6 +646,40 @@ class FilterArea {
 			300
 		);
 		this.setup();
+		if (frappe.is_mobile()) this.setup_mobile(list_view);
+	}
+	setup_mobile(list_view) {
+		const me = this;
+		this.standard_filters_visible = false;
+		this.standard_filters_wrapper.hide();
+		this.list_view.page.page_form.css("justify-content", "flex-end");
+		$(`<button class="filter-toggle btn btn-default btn-sm filter-button">
+					<span class="filter-icon button-icon">
+						${frappe.utils.icon("funnel-plus")}
+					</span>
+				</button>
+			</div>`)
+			.prependTo(this.$filter_list_wrapper.find(".filter-selector"))
+			.on("click", function () {
+				me.toggle_standard_filter();
+			});
+		let children = list_view.page.page_form.children();
+		list_view.page.page_form.append(children.get().reverse());
+	}
+
+	toggle_standard_filter() {
+		if (this.standard_filters_visible) {
+			this.standard_filters_visible = false;
+			this.standard_filters_wrapper.hide();
+		} else {
+			this.standard_filters_visible = true;
+			this.standard_filters_wrapper.show();
+		}
+		let icon_name = !this.standard_filters_visible ? "funnel-plus" : "funnel-x";
+		this.$filter_list_wrapper
+			.find(".filter-toggle")
+			.find("use")
+			.attr("href", `#icon-${icon_name}`);
 	}
 
 	setup() {
@@ -845,8 +875,9 @@ class FilterArea {
 			doctype_fields
 				.filter(
 					(df) =>
-						df.fieldname === title_field ||
-						(df.in_standard_filter && frappe.model.is_value_type(df.fieldtype))
+						(df.fieldname === title_field ||
+							(df.in_standard_filter && frappe.model.is_value_type(df.fieldtype))) &&
+						frappe.perm.has_perm(this.list_view.doctype, df.permlevel)
 				)
 				.map((df) => {
 					let options = df.options;

@@ -13,7 +13,7 @@ from frappe.contacts.doctype.contact.contact import (
 	get_contacts_linking_to,
 )
 from frappe.core.doctype.communication.email import make
-from frappe.desk.form import assign_to
+from frappe.desk.form.assign_to import add as assign_to
 from frappe.model.document import Document
 from frappe.utils import (
 	add_days,
@@ -49,11 +49,16 @@ class AutoRepeat(Document):
 
 	if TYPE_CHECKING:
 		from frappe.automation.doctype.auto_repeat_day.auto_repeat_day import AutoRepeatDay
+		from frappe.automation.doctype.auto_repeat_user.auto_repeat_user import AutoRepeatUser
 		from frappe.types import DF
 
+		assignee: DF.TableMultiSelect[AutoRepeatUser]
 		disabled: DF.Check
 		end_date: DF.Date | None
-		frequency: DF.Literal["", "Daily", "Weekly", "Monthly", "Quarterly", "Half-yearly", "Yearly"]
+		frequency: DF.Literal[
+			"", "Daily", "Weekly", "Fortnightly", "Monthly", "Quarterly", "Half-yearly", "Yearly"
+		]
+		generate_separate_documents_for_each_assignee: DF.Check
 		message: DF.Text | None
 		next_schedule_date: DF.Date | None
 		notify_by_email: DF.Check
@@ -86,7 +91,7 @@ class AutoRepeat(Document):
 		validate_template(self.message or "")
 
 	def before_insert(self):
-		if not frappe.flags.in_test:
+		if not frappe.in_test:
 			start_date = getdate(self.start_date)
 			today_date = getdate(today())
 			if start_date <= today_date:
@@ -112,7 +117,7 @@ class AutoRepeat(Document):
 			frappe.db.set_value(self.reference_doctype, self.reference_document, "auto_repeat", "")
 
 	def validate_reference_doctype(self):
-		if frappe.flags.in_test or frappe.flags.in_patch:
+		if frappe.in_test or frappe.flags.in_patch:
 			return
 		if not frappe.get_meta(self.reference_doctype).allow_auto_repeat:
 			frappe.throw(
@@ -219,9 +224,16 @@ class AutoRepeat(Document):
 
 	def create_documents(self):
 		try:
-			new_doc = self.make_new_document()
+			if self.generate_separate_documents_for_each_assignee and self.assignee:
+				new_docs = self.make_new_documents()
+			else:
+				new_docs = self.make_new_document([assignee.user for assignee in self.assignee])
 			if self.notify_by_email and self.recipients:
-				self.send_notification(new_doc)
+				if isinstance(new_docs, list):
+					for new_doc in new_docs:
+						self.send_notification(new_doc)
+				else:
+					self.send_notification(new_docs)
 		except Exception:
 			error_log = self.log_error(
 				_("Auto repeat failed. Please enable auto repeat after fixing the issues.")
@@ -229,15 +241,34 @@ class AutoRepeat(Document):
 
 			self.disable_auto_repeat()
 
-			if self.reference_document and not frappe.flags.in_test:
+			if self.reference_document and not frappe.in_test:
 				self.notify_error_to_user(error_log)
 
-	def make_new_document(self):
+	def make_new_documents(self):
+		docs = []
+		for assignee in self.assignee:
+			new_doc = self.make_new_document(assignee=[assignee.user])
+			docs.append(new_doc)
+		return docs
+
+	def make_new_document(self, assignee=None):
 		reference_doc = frappe.get_doc(self.reference_doctype, self.reference_document)
 		new_doc = frappe.copy_doc(reference_doc, ignore_no_copy=False)
 		self.update_doc(new_doc, reference_doc)
+		new_doc.flags.updater_reference = {
+			"doctype": self.doctype,
+			"docname": self.name,
+			"label": _("via Auto Repeat"),
+		}
 		new_doc.insert(ignore_permissions=True)
-
+		if assignee:
+			args = {
+				"assign_to": assignee,
+				"doctype": self.reference_doctype,
+				"name": new_doc.name,
+				"description": new_doc.get_title(),
+			}
+			assign_to(args=args)
 		if self.submit_on_creation:
 			new_doc.submit()
 
@@ -343,6 +374,8 @@ class AutoRepeat(Document):
 	def get_days(self, schedule_date):
 		if self.frequency == "Weekly":
 			days = self.get_offset_for_weekly_frequency(schedule_date)
+		elif self.frequency == "Fortnightly":
+			days = 14
 		else:
 			# daily frequency
 			days = 1
@@ -483,9 +516,7 @@ def make_auto_repeat_entry():
 	if not jobs or enqueued_method not in jobs[frappe.local.site]:
 		date = getdate(today())
 		data = get_auto_repeat_entries(date)
-		frappe.enqueue(enqueued_method, data=data)
-		# Set auto-repeat to complete when all auto-repeats are added to the queue
-		set_auto_repeat_as_completed(data)
+		frappe.enqueue(enqueued_method, data=data, queue="long")
 
 
 def create_repeated_entries(data):
@@ -501,6 +532,10 @@ def create_repeated_entries(data):
 			if schedule_date and not doc.disabled:
 				frappe.db.set_value("Auto Repeat", doc.name, "next_schedule_date", schedule_date)
 
+		if doc.is_completed():
+			doc.status = "Completed"
+			doc.save()
+
 
 def get_auto_repeat_entries(date=None):
 	if not date:
@@ -515,14 +550,6 @@ def get_auto_repeat_entries(date=None):
 		& ((auto_repeat.end_date >= auto_repeat.next_schedule_date) | (auto_repeat.end_date.isnull()))
 	)
 	return query.run(as_dict=1)
-
-
-def set_auto_repeat_as_completed(auto_repeat):
-	for entry in auto_repeat:
-		doc = frappe.get_doc("Auto Repeat", entry.name)
-		if doc.is_completed():
-			doc.status = "Completed"
-			doc.save()
 
 
 @frappe.whitelist()

@@ -14,7 +14,6 @@ import random
 import time
 from typing import NoReturn
 
-import setproctitle
 from croniter import CroniterBadCronError
 from filelock import FileLock, Timeout
 
@@ -36,13 +35,9 @@ def cprint(*args, **kwargs):
 		pass
 
 
-def _proctitle(message):
-	setproctitle.setthreadtitle(f"frappe-scheduler: {message}")
-
-
 def start_scheduler() -> NoReturn:
 	"""Run enqueue_events_for_all_sites based on scheduler tick.
-	Specify scheduler_interval in seconds in common_site_config.json"""
+	Specify scheduler_tick_interval in seconds in common_site_config.json"""
 
 	tick = get_scheduler_tick()
 	set_niceness()
@@ -57,7 +52,6 @@ def start_scheduler() -> NoReturn:
 		return
 
 	while True:
-		_proctitle("idle")
 		time.sleep(sleep_duration(tick))
 		enqueue_events_for_all_sites()
 
@@ -118,7 +112,6 @@ def enqueue_events_for_site(site: str) -> None:
 		frappe.logger("scheduler").error(f"Exception in Enqueue Events for Site {site}", exc_info=True)
 
 	try:
-		_proctitle(f"scheduling events for {site}")
 		frappe.init(site)
 		frappe.connect()
 		if is_scheduler_inactive():
@@ -177,9 +170,7 @@ def is_scheduler_disabled(verbose=True) -> bool:
 			cprint(f"{frappe.local.site}: frappe.conf.disable_scheduler is SET")
 		return True
 
-	scheduler_disabled = not frappe.utils.cint(
-		frappe.db.get_single_value("System Settings", "enable_scheduler")
-	)
+	scheduler_disabled = not frappe.get_system_settings("enable_scheduler")
 	if scheduler_disabled:
 		if verbose:
 			cprint(f"{frappe.local.site}: SystemSettings.enable_scheduler is UNSET")

@@ -1,4 +1,3 @@
-import re
 from contextlib import contextmanager
 
 import pymysql
@@ -10,8 +9,6 @@ from frappe.database.database import Database
 from frappe.database.mariadb.schema import MariaDBTable
 from frappe.utils import UnicodeWithAttrs, cstr, get_datetime, get_table_name
 
-_PARAM_COMP = re.compile(r"%\([\w]*\)s")
-
 
 class MariaDBExceptionUtil:
 	ProgrammingError = pymysql.ProgrammingError
@@ -20,6 +17,7 @@ class MariaDBExceptionUtil:
 	InternalError = pymysql.InternalError
 	SQLError = pymysql.ProgrammingError
 	DataError = pymysql.DataError
+	InterfaceError = pymysql.InterfaceError
 
 	# match ER_SEQUENCE_RUN_OUT - https://mariadb.com/kb/en/mariadb-error-codes/
 	SequenceGeneratorLimitExceeded = pymysql.OperationalError
@@ -27,7 +25,8 @@ class MariaDBExceptionUtil:
 
 	@staticmethod
 	def is_deadlocked(e: pymysql.Error) -> bool:
-		return e.args[0] == ER.LOCK_DEADLOCK
+		# Snapshot isolation is also treated as deadlock from User POV
+		return e.args[0] in (ER.LOCK_DEADLOCK, ER.CHECKREAD)
 
 	@staticmethod
 	def is_timedout(e: pymysql.Error) -> bool:
@@ -123,6 +122,7 @@ class MariaDBConnectionUtil:
 			"user": self.user,
 			"conv": self.CONVERSION_MAP,
 			"charset": "utf8mb4",
+			"collation": "utf8mb4_unicode_ci",
 			"use_unicode": True,
 		}
 
@@ -142,12 +142,19 @@ class MariaDBConnectionUtil:
 		if frappe.conf.local_infile:
 			conn_settings["local_infile"] = frappe.conf.local_infile
 
-		if frappe.conf.db_ssl_ca and frappe.conf.db_ssl_cert and frappe.conf.db_ssl_key:
-			conn_settings["ssl"] = {
+		# Configure SSL settings
+		if frappe.conf.db_ssl_ca:
+			ssl_config = {
 				"ca": frappe.conf.db_ssl_ca,
-				"cert": frappe.conf.db_ssl_cert,
-				"key": frappe.conf.db_ssl_key,
+				"check_hostname": frappe.conf.db_ssl_check_hostname,
 			}
+
+			# Add client certificates for mutual SSL if available
+			if frappe.conf.db_ssl_cert and frappe.conf.db_ssl_key:
+				ssl_config.update({"cert": frappe.conf.db_ssl_cert, "key": frappe.conf.db_ssl_key})
+
+			conn_settings["ssl"] = ssl_config
+
 		return conn_settings
 
 
@@ -165,11 +172,11 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 		self.db_type = "mariadb"
 		self.type_map = {
 			"Currency": ("decimal", "21,9"),
-			"Int": ("int", None),
+			"Int": ("int", "11"),
 			"Long Int": ("bigint", "20"),
 			"Float": ("decimal", "21,9"),
 			"Percent": ("decimal", "21,9"),
-			"Check": ("tinyint", None),
+			"Check": ("tinyint", 4),
 			"Small Text": ("text", ""),
 			"Long Text": ("longtext", ""),
 			"Code": ("longtext", ""),
@@ -214,10 +221,11 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 
 		return db_size[0].get("database_size")
 
-	def log_query(self, query, values, debug, explain):
-		self.last_query = self._cursor._executed
-		self._log_query(self.last_query, debug, explain, query)
-		return self.last_query
+	def log_query(self, query, query_type, values, debug):
+		mogrified_query = self._cursor._executed
+		self.last_query = mogrified_query
+		self._log_query(mogrified_query, query_type, debug, query)
+		return mogrified_query
 
 	def _clean_up(self):
 		# PERF: Erase internal references of pymysql to trigger GC as soon as
@@ -321,7 +329,7 @@ class MariaDBDatabase(MariaDBConnectionUtil, MariaDBExceptionUtil, Database):
 			`doctype` VARCHAR(180) NOT NULL,
 			`data` TEXT,
 			UNIQUE(user, doctype)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8"""
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"""
 		)
 
 	@staticmethod

@@ -19,6 +19,8 @@ from frappe.model.utils import is_virtual_doctype
 from frappe.utils import add_user_info, cint, format_duration
 from frappe.utils.data import sbool
 
+DISALLOWED_PARAMS = ("cmd", "data", "ignore_permissions", "view", "user", "csrf_token", "join")
+
 
 @frappe.whitelist()
 @frappe.read_only()
@@ -241,8 +243,9 @@ def update_wildcard_field_param(data):
 
 
 def clean_params(data):
-	for param in ("cmd", "data", "ignore_permissions", "view", "user", "csrf_token", "join"):
-		data.pop(param, None)
+	for param in DISALLOWED_PARAMS:
+		if param in data:
+			del data[param]
 
 
 def parse_json(data):
@@ -312,7 +315,7 @@ def compress(data, args=None):
 	return {"keys": keys, "values": values, "user_info": user_info}
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST", "PUT"])
 def save_report(name, doctype, report_settings):
 	"""Save reports of type Report Builder from Report View"""
 
@@ -342,7 +345,7 @@ def save_report(name, doctype, report_settings):
 	return report.name
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST", "DELETE"])
 def delete_report(name):
 	"""Delete reports of type Report Builder from Report View"""
 
@@ -552,7 +555,7 @@ def parse_field(field: str) -> tuple[str | None, str]:
 	return None, key.strip("`")
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST", "DELETE"])
 def delete_items():
 	"""delete selected items"""
 	import json

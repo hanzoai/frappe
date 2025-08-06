@@ -4,7 +4,7 @@ let isFCUser = false;
 $(document).ready(function () {
 	if (
 		frappe.boot.is_fc_site &&
-		frappe.boot.setup_complete === 1 &&
+		!!frappe.boot.setup_complete &&
 		!frappe.is_mobile() &&
 		frappe.user.has_role("System Manager")
 	) {
@@ -39,7 +39,7 @@ function setErrorMessage(message) {
 
 function addManageBillingDropdown() {
 	$(".dropdown-navbar-user .dropdown-menu .dropdown-divider").before(
-		`<div class="dropdown-item login-to-fc" target="_blank">Manage Billing</div>`
+		`<button class="dropdown-item login-to-fc" target="_blank">Manage Billing</button>`
 	);
 }
 

@@ -62,10 +62,7 @@ def handle():
 
 def execute_cmd(cmd, from_async=False):
 	"""execute a request as python module"""
-	for hook in reversed(frappe.get_hooks("override_whitelisted_methods", {}).get(cmd, [])):
-		# override using the last hook
-		cmd = hook
-		break
+	cmd = frappe.override_whitelisted_method(cmd)
 
 	# via server script
 	server_script = get_server_script_map().get("_api", {}).get(cmd)
@@ -131,7 +128,7 @@ def upload_file():
 		else:
 			raise frappe.PermissionError
 	else:
-		user: User = frappe.get_doc("User", frappe.session.user)
+		user: User = frappe.get_lazy_doc("User", frappe.session.user)
 		ignore_permissions = False
 
 	files = frappe.request.files
@@ -213,7 +210,7 @@ def check_write_permission(doctype: str | None = None, name: str | None = None):
 		return
 
 	try:
-		doc = frappe.get_doc(doctype, name)
+		doc = frappe.get_lazy_doc(doctype, name)
 	except frappe.DoesNotExistError:
 		# doc has not been inserted yet, name is set to "new-some-doctype"
 		# If doc inserts fine then only this attachment will be linked see file/utils.py:relink_mismatched_files
