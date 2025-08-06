@@ -18,34 +18,41 @@ class PermissionType(Document):
 	# end: auto-generated types
 
 	def on_update(self):
+		doctypes = ["Custom DocPerm", "DocPerm"]
+		for doctype in doctypes:
+			self.create_custom_docperm(doctype)
+
+	def create_custom_docperm(self, doctype):
 		from frappe.custom.doctype.custom_field.custom_field import create_custom_field
 
 		if not frappe.db.exists(
-			"Custom DocPerm",
+			doctype,
 			{
 				"fieldname": self.name,
-				"reference_doctype": self.applicable_for,
+				"parent": self.applicable_for,
 			},
 		):
-			# create custom field in Custom DocPerm
 			create_custom_field(
-				"Custom DocPerm",
+				doctype,
 				{
 					"fieldname": self.name,
 					"label": self.name.replace("_", " ").title(),
 					"fieldtype": "Check",
-					# TODO: insert after the last field. use meta to find the last field
-					"insert_after": "additional_permissions",
+					"insert_after": "append",
 					"depends_on": f"eval:doc.parent == '{self.applicable_for}'",
 				},
 			)
 
 	def on_trash(self):
+		for doctype in ["Custom DocPerm", "DocPerm"]:
+			self.delete_custom_docperm(doctype)
+
+	def delete_custom_docperm(self, doctype):
 		if name := frappe.db.exists(
-			"Custom DocPerm",
+			"Custom Field",
 			{
 				"fieldname": self.name,
-				"reference_doctype": self.applicable_for,
+				"dt": doctype,
 			},
 		):
-			frappe.delete_doc("Custom DocPerm", name)
+			frappe.delete_doc("Custom Field", name)
