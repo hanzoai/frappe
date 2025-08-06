@@ -328,6 +328,12 @@ def add_to_installed_apps(app_name, rebuild_website=True):
 		if frappe.flags.in_install:
 			post_install(rebuild_website)
 
+<<<<<<< HEAD
+=======
+	frappe.get_single("Installed Applications").update_versions()
+	frappe.db.commit()
+
+>>>>>>> cb7c10e2bd (fix: Commit changes to installed apps (#33550))
 
 def remove_from_installed_apps(app_name):
 	installed_apps = frappe.get_installed_apps()
