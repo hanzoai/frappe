@@ -1,0 +1,38 @@
+---
+base_template: "templates/base.html"
+no_cache: 1
+---
+
+{%- block navbar -%} {% from "frappe/templates/includes/avatar_macro.html" import avatar %} {%-
+endblock -%} {%- block footer -%} {%- endblock -%} {% block content %}
+<div class="container">
+    <div class="desktop-container">
+        <div class="icons">
+            {% for icon in icons %}
+                <div class="desktop-icon" data-icon="{{ icon.icon }}">
+                    <div class="icon-container" data-color="{{ icon.color }}"> </div>
+                    {{ icon.label }}
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %} {% block script %}
+<script>
+    console.log('Desktop is back')
+    frappe.ready(function(){
+        $(".desktop-icon").each((i, el)=> {
+            let icon_name = $(el).attr("data-icon");
+            let icon_container = $(el.children[0])
+            const svg = frappe.utils.icon(icon_name, "xl d-icon")
+            if (svg) {
+                icon_container.html(svg)
+            }
+            let color_name = icon_container.attr("data-color")
+            icon_container.css("background-color", color_name)
+        })
+    })
+</script>
+{% endblock %}

@@ -24,12 +24,11 @@ class DesktopIcon(Document):
 		app: DF.Data | None
 		blocked: DF.Check
 		category: DF.Data | None
-		color: DF.Data | None
+		color: DF.Color | None
 		custom: DF.Check
 		description: DF.SmallText | None
 		force_show: DF.Check
 		hidden: DF.Check
-		icon: DF.Data | None
 		idx: DF.Int
 		label: DF.Data | None
 		link: DF.SmallText | None

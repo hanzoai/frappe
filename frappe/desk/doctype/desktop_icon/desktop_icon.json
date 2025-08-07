@@ -125,12 +125,12 @@
   },
   {
    "fieldname": "color",
-   "fieldtype": "Data",
+   "fieldtype": "Color",
    "label": "Color"
   },
   {
    "fieldname": "icon",
-   "fieldtype": "Data",
+   "fieldtype": "Icon",
    "label": "Icon"
   },
   {
@@ -145,9 +145,8 @@
    "label": "Idx"
   }
  ],
- "in_create": 1,
  "links": [],
- "modified": "2024-03-23 16:02:17.847139",
+ "modified": "2025-08-07 13:11:45.701693",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Desktop Icon",
@@ -167,6 +166,7 @@
   }
  ],
  "read_only": 1,
+ "row_format": "Dynamic",
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
