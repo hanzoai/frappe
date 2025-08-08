@@ -779,7 +779,22 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	get_left_html(doc) {
-		let left_html = this.columns.map((col) => this.get_column_html(col, doc)).join("");
+		// let left_html = this.columns.map((col) => this.get_column_html(col, doc)).join("");
+
+		let left_html = "";
+		for (let i = 0; i < this.columns.length; i++) {
+			let col = this.columns[i];
+
+			if (frappe.is_mobile() && col.type == "Field" && [3, 4].includes(i)) {
+				left_html += `<div class="mobile-layout">${this.get_column_html(
+					col,
+					doc,
+					true
+				)}</div>`;
+			} else {
+				left_html += this.get_column_html(col, doc, false);
+			}
+		}
 
 		left_html += this.generate_button_html(doc);
 		left_html += this.generate_dropdown_html(doc);
@@ -810,7 +825,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		`;
 	}
 
-	get_column_html(col, doc) {
+	get_column_html(col, doc, show_in_mobile) {
 		if (col.type === "Status" || col.df?.options == "Workflow State") {
 			let show_workflow_state = col.df?.options == "Workflow State";
 			return `
@@ -918,9 +933,9 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 
 		const class_map = {
 			Subject: "list-subject level",
-			Field: "hidden-xs",
+			Field: !show_in_mobile ? "hidden-xs" : "",
 		};
-		const css_class = [
+		let css_class = [
 			"list-row-col ellipsis",
 			class_map[col.type],
 			frappe.model.is_numeric_field(df) ? "text-right" : "",
@@ -941,6 +956,10 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			}[col.type];
 		}
 
+		if (frappe.is_mobile() && col.type == "Subject") {
+			css_class += " bold";
+		}
+
 		/**
 		 * Calculates the width of a text element based on its length.
 		 * If the length of the text is not available, it defaults to a length of 22.5.
@@ -953,8 +972,9 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		 * If no width is set for the column, or the newly calculated width exceeds the current width, the width is updated.
 		 */
 		if (
-			!this.column_max_widths[fieldname] ||
-			calculatedWidth > this.column_max_widths[fieldname]
+			(!this.column_max_widths[fieldname] ||
+				calculatedWidth > this.column_max_widths[fieldname]) &&
+			!frappe.is_mobile()
 		) {
 			this.column_max_widths[fieldname] = calculatedWidth;
 		}
