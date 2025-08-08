@@ -779,8 +779,6 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	}
 
 	get_left_html(doc) {
-		// let left_html = this.columns.map((col) => this.get_column_html(col, doc)).join("");
-
 		let left_html = "";
 		for (let i = 0; i < this.columns.length; i++) {
 			let col = this.columns[i];
