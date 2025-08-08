@@ -588,6 +588,8 @@ input.list-header-checkbox {
 					}
 				}
 				.level-right {
+					flex: 0 0 auto;
+					width: auto;
 					.level-item.visible-xs {
 						margin-top: 5px;
 					}
