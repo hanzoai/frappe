@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-08-03 09:36+0000\n"
-"PO-Revision-Date: 2025-08-08 00:18\n"
+"PO-Revision-Date: 2025-08-09 09:36\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -808,7 +808,7 @@ msgstr ""
 #: frappe/core/doctype/access_log/access_log.json
 #: frappe/core/workspace/users/users.json
 msgid "Access Log"
-msgstr ""
+msgstr "Log Accessi"
 
 #. Label of the access_token (Data) field in DocType 'OAuth Bearer Token'
 #. Label of the access_token (Password) field in DocType 'Token Cache'
@@ -843,7 +843,7 @@ msgstr "Impostazioni di Eliminazione Account"
 #: frappe/contacts/doctype/contact/contact.json
 #: frappe/geo/doctype/currency/currency.json
 msgid "Accounts Manager"
-msgstr ""
+msgstr "Responsabile Contabilità"
 
 #. Name of a role
 #: frappe/automation/doctype/auto_repeat/auto_repeat.json
@@ -8227,7 +8227,7 @@ msgstr ""
 
 #: frappe/www/me.html:38
 msgid "Edit Profile"
-msgstr ""
+msgstr "Modifica Profilo"
 
 #: frappe/printing/page/print_format_builder/print_format_builder.js:173
 msgid "Edit Properties"
@@ -14840,7 +14840,7 @@ msgstr ""
 #: frappe/website/page_renderers/not_permitted_page.py:24
 #: frappe/www/login.html:45
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #. Label of the login_after (Int) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
@@ -15010,7 +15010,7 @@ msgstr ""
 
 #: frappe/www/third_party_apps.html:59
 msgid "Looks like you haven’t added any third party apps."
-msgstr ""
+msgstr "Sembra che tu non abbia aggiunto app di terze parti."
 
 #: frappe/public/js/frappe/ui/notifications/notifications.js:315
 msgid "Looks like you haven’t received any notifications."
@@ -15054,13 +15054,13 @@ msgstr "Sezione Principale (Markdown)"
 #. Name of a role
 #: frappe/contacts/doctype/contact/contact.json
 msgid "Maintenance Manager"
-msgstr ""
+msgstr "Responsabile Manutenzione"
 
 #. Name of a role
 #: frappe/contacts/doctype/address/address.json
 #: frappe/contacts/doctype/contact/contact.json
 msgid "Maintenance User"
-msgstr ""
+msgstr "Utente Manutenzione"
 
 #. Label of the major (Int) field in DocType 'Package Release'
 #: frappe/core/doctype/package_release/package_release.json
@@ -15109,7 +15109,7 @@ msgstr "Maschio"
 
 #: frappe/www/me.html:56
 msgid "Manage 3rd party apps"
-msgstr ""
+msgstr "Gestisci app di terze parti"
 
 #. Description of a Card Break in the Tools Workspace
 #: frappe/automation/workspace/tools/tools.json
@@ -15801,7 +15801,7 @@ msgstr "Modulo Primo Avvio"
 #: frappe/core/doctype/module_profile/module_profile.json
 #: frappe/core/doctype/user/user.json frappe/core/workspace/users/users.json
 msgid "Module Profile"
-msgstr ""
+msgstr "Profilo del Modulo"
 
 #. Label of the module_profile_name (Data) field in DocType 'Module Profile'
 #: frappe/core/doctype/module_profile/module_profile.json
@@ -16464,7 +16464,7 @@ msgstr ""
 #: frappe/email/doctype/email_group_member/email_group_member.json
 #: frappe/website/doctype/utm_campaign/utm_campaign.json
 msgid "Newsletter Manager"
-msgstr ""
+msgstr "Responsabile Newsletter"
 
 #: frappe/public/js/frappe/form/form_tour.js:14
 #: frappe/public/js/frappe/form/form_tour.js:324
@@ -16600,7 +16600,7 @@ msgstr "No"
 
 #: frappe/www/third_party_apps.html:56
 msgid "No Active Sessions"
-msgstr ""
+msgstr "Nessuna Sessione Attiva"
 
 #. Label of the no_copy (Check) field in DocType 'DocField'
 #. Label of the no_copy (Check) field in DocType 'Custom Field'
@@ -17547,7 +17547,7 @@ msgstr ""
 
 #: frappe/www/update-password.html:38
 msgid "Old Password"
-msgstr ""
+msgstr "Vecchia Password"
 
 #: frappe/custom/doctype/custom_field/custom_field.py:412
 msgid "Old and new fieldnames are same."
@@ -17888,7 +17888,7 @@ msgstr ""
 #. Label of the operation (Select) field in DocType 'Activity Log'
 #: frappe/core/doctype/activity_log/activity_log.json
 msgid "Operation"
-msgstr ""
+msgstr "Operazione"
 
 #: frappe/utils/data.py:2130
 msgid "Operator must be one of {0}"
@@ -19980,19 +19980,19 @@ msgstr ""
 #. Name of a role
 #: frappe/contacts/doctype/contact/contact.json
 msgid "Purchase Manager"
-msgstr ""
+msgstr "Responsabile Acquisti"
 
 #. Name of a role
 #: frappe/contacts/doctype/contact/contact.json
 msgid "Purchase Master Manager"
-msgstr ""
+msgstr "Direttore Acquisti"
 
 #. Name of a role
 #: frappe/contacts/doctype/address/address.json
 #: frappe/contacts/doctype/contact/contact.json
 #: frappe/geo/doctype/currency/currency.json
 msgid "Purchase User"
-msgstr ""
+msgstr "Utente Acquisti"
 
 #. Option for the 'Color' (Select) field in DocType 'DocType State'
 #. Option for the 'Indicator' (Select) field in DocType 'Kanban Board Column'
@@ -21165,7 +21165,7 @@ msgstr ""
 #: frappe/core/doctype/report/report.json
 #: frappe/email/doctype/auto_email_report/auto_email_report.json
 msgid "Report Manager"
-msgstr ""
+msgstr "Responsabile Report"
 
 #. Label of the report_name (Data) field in DocType 'Access Log'
 #. Label of the report_name (Data) field in DocType 'Prepared Report'
@@ -21428,7 +21428,7 @@ msgstr ""
 #: frappe/www/me.html:48 frappe/www/update-password.html:3
 #: frappe/www/update-password.html:32
 msgid "Reset Password"
-msgstr ""
+msgstr "Reimposta Password"
 
 #. Label of the reset_password_key (Data) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
@@ -21703,7 +21703,7 @@ msgstr ""
 #: frappe/core/doctype/role/role.json
 #: frappe/core/doctype/role_profile/role_profile.json
 msgid "Role Name"
-msgstr ""
+msgstr "Nome del Ruolo"
 
 #. Name of a DocType
 #. Label of a Link in the Users Workspace
@@ -21739,7 +21739,7 @@ msgstr "Gestione Permessi Ruolo"
 #: frappe/core/doctype/user_role_profile/user_role_profile.json
 #: frappe/core/workspace/users/users.json
 msgid "Role Profile"
-msgstr ""
+msgstr "Profilo del Ruolo"
 
 #. Label of the role_profiles (Table MultiSelect) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
@@ -22624,7 +22624,7 @@ msgstr "Seleziona"
 #: frappe/public/js/frappe/form/controls/multicheck.js:166
 #: frappe/public/js/frappe/form/grid_row.js:481
 msgid "Select All"
-msgstr ""
+msgstr "Seleziona Tutto"
 
 #: frappe/public/js/frappe/views/communication.js:177
 #: frappe/public/js/frappe/views/communication.js:598
@@ -22836,7 +22836,7 @@ msgstr ""
 
 #: frappe/www/apps.html:10
 msgid "Select an app to continue"
-msgstr ""
+msgstr "Seleziona un'app per continuare"
 
 #: frappe/printing/page/print_format_builder/print_format_builder_start.html:2
 msgid "Select an existing format to edit or start a new format."
@@ -26004,7 +26004,7 @@ msgstr ""
 
 #: frappe/www/third_party_apps.html:3 frappe/www/third_party_apps.html:14
 msgid "Third Party Apps"
-msgstr ""
+msgstr "App di Terze Parti"
 
 #. Label of the third_party_authentication (Section Break) field in DocType
 #. 'User'
