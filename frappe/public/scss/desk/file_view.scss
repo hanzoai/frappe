@@ -60,10 +60,6 @@
 					.copy-file-url {
 						display: none;
 					}
-					.copy-icon {
-						background-color: var(--card-bg);
-						border-radius: var(--border-radius-tiny);
-					}
 				}
 
 				.file-footer {
@@ -94,7 +90,6 @@
 					min-width: 100%;
 
 					img {
-						border-radius: var(--border-radius) var(--border-radius) 0 0;
 						object-position: top;
 						object-fit: cover;
 						margin: 0 auto;
