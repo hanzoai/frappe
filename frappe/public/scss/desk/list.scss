@@ -549,7 +549,7 @@ input.list-header-checkbox {
 @media (max-width: map-get($grid-breakpoints, "sm")) {
 	.layout-main-section .frappe-list .result-container {
 		.result {
-			overflow: hidden;
+			overflow-x: hidden;
 			input.list-row-checkbox,
 			input.list-header-checkbox {
 				width: 15px !important;
