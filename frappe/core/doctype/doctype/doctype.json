@@ -708,7 +708,7 @@
    "depends_on": "email_append_to",
    "fieldname": "recipient_account_field",
    "fieldtype": "Data",
-   "label": "Sender Email Account Field"
+   "label": "Recipient Account Field"
   }
  ],
  "icon": "fa fa-bolt",
