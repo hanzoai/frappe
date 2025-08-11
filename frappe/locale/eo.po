@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
-"POT-Creation-Date: 2025-08-03 09:36+0000\n"
-"PO-Revision-Date: 2025-08-04 23:55\n"
+"POT-Creation-Date: 2025-08-10 09:35+0000\n"
+"PO-Revision-Date: 2025-08-11 10:12\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Esperanto\n"
 "MIME-Version: 1.0\n"
@@ -240,6 +240,13 @@ msgstr "crwdns127918:0crwdne127918:0"
 #: frappe/core/doctype/document_naming_rule_condition/document_naming_rule_condition.json
 msgid "<="
 msgstr "crwdns127920:0crwdne127920:0"
+
+#. Description of the 'Generate Keys' (Button) field in DocType 'User'
+#: frappe/core/doctype/user/user.json
+msgid "<a href=\"https://docs.frappe.io/framework/user/en/api/rest#1-token-based-authentication\" target=\"_blank\">\n"
+"  Click here to learn about token-based authentication\n"
+"</a>"
+msgstr "crwdns157434:0crwdne157434:0"
 
 #: frappe/public/js/frappe/widgets/widget_dialog.js:601
 msgid "<b>{0}</b> is not a valid URL"
@@ -675,7 +682,7 @@ msgstr "crwdns127990:0crwdne127990:0"
 #. Label of the api_key (Data) field in DocType 'Google Settings'
 #. Label of the sb_01 (Section Break) field in DocType 'Google Settings'
 #. Label of the api_key (Data) field in DocType 'Push Notification Settings'
-#: frappe/core/doctype/user/user.json
+#: frappe/core/doctype/user/user.js:446 frappe/core/doctype/user/user.json
 #: frappe/email/doctype/email_account/email_account.json
 #: frappe/integrations/doctype/geolocation_settings/geolocation_settings.json
 #: frappe/integrations/doctype/google_settings/google_settings.json
@@ -693,6 +700,10 @@ msgstr "crwdns127994:0crwdne127994:0"
 #: frappe/core/doctype/user/user.json
 msgid "API Key cannot be regenerated"
 msgstr "crwdns127996:0crwdne127996:0"
+
+#: frappe/core/doctype/user/user.js:443
+msgid "API Keys"
+msgstr "crwdns157436:0crwdne157436:0"
 
 #. Label of the api_logging_section (Section Break) field in DocType 'System
 #. Settings'
@@ -714,7 +725,7 @@ msgstr "crwdns155318:0crwdne155318:0"
 #. Label of the api_secret (Password) field in DocType 'Email Account'
 #. Label of the api_secret (Password) field in DocType 'Push Notification
 #. Settings'
-#: frappe/core/doctype/user/user.json
+#: frappe/core/doctype/user/user.js:453 frappe/core/doctype/user/user.json
 #: frappe/email/doctype/email_account/email_account.json
 #: frappe/integrations/doctype/push_notification_settings/push_notification_settings.json
 msgid "API Secret"
@@ -996,7 +1007,7 @@ msgstr "crwdns90810:0crwdne90810:0"
 msgid "Add A New Rule"
 msgstr "crwdns90812:0crwdne90812:0"
 
-#: frappe/public/js/frappe/views/communication.js:598
+#: frappe/public/js/frappe/views/communication.js:601
 #: frappe/public/js/frappe/views/interaction.js:159
 msgid "Add Attachment"
 msgstr "crwdns90814:0crwdne90814:0"
@@ -1124,12 +1135,12 @@ msgstr "crwdns90862:0crwdne90862:0"
 msgid "Add Tags"
 msgstr "crwdns90864:0crwdne90864:0"
 
-#: frappe/public/js/frappe/list/list_view.js:2023
+#: frappe/public/js/frappe/list/list_view.js:2092
 msgctxt "Button in list view actions menu"
 msgid "Add Tags"
 msgstr "crwdns90866:0crwdne90866:0"
 
-#: frappe/public/js/frappe/views/communication.js:430
+#: frappe/public/js/frappe/views/communication.js:433
 msgid "Add Template"
 msgstr "crwdns90868:0crwdne90868:0"
 
@@ -1256,7 +1267,7 @@ msgstr "crwdns90900:0{0}crwdne90900:0"
 msgid "Add {0}"
 msgstr "crwdns110798:0{0}crwdne110798:0"
 
-#: frappe/public/js/frappe/list/list_view.js:286
+#: frappe/public/js/frappe/list/list_view.js:287
 msgctxt "Primary action in list view"
 msgid "Add {0}"
 msgstr "crwdns142870:0{0}crwdne142870:0"
@@ -1416,8 +1427,8 @@ msgstr "crwdns128068:0crwdne128068:0"
 msgid "Advanced Control"
 msgstr "crwdns128070:0crwdne128070:0"
 
-#: frappe/public/js/frappe/form/controls/link.js:335
-#: frappe/public/js/frappe/form/controls/link.js:337
+#: frappe/public/js/frappe/form/controls/link.js:339
+#: frappe/public/js/frappe/form/controls/link.js:341
 msgid "Advanced Search"
 msgstr "crwdns90962:0crwdne90962:0"
 
@@ -2210,7 +2221,7 @@ msgstr "crwdns128252:0crwdne128252:0"
 msgid "Apply"
 msgstr "crwdns142988:0crwdne142988:0"
 
-#: frappe/public/js/frappe/list/list_view.js:2008
+#: frappe/public/js/frappe/list/list_view.js:2077
 msgctxt "Button in list view actions menu"
 msgid "Apply Assignment Rule"
 msgstr "crwdns91270:0crwdne91270:0"
@@ -2295,7 +2306,7 @@ msgstr "crwdns91306:0crwdne91306:0"
 msgid "Are you sure you want to cancel the invitation?"
 msgstr "crwdns157294:0crwdne157294:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1987
+#: frappe/public/js/frappe/list/list_view.js:2056
 msgid "Are you sure you want to clear the assignments?"
 msgstr "crwdns104470:0crwdne104470:0"
 
@@ -2399,7 +2410,7 @@ msgstr "crwdns128278:0crwdne128278:0"
 msgid "Assign To"
 msgstr "crwdns91344:0crwdne91344:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1969
+#: frappe/public/js/frappe/list/list_view.js:2038
 msgctxt "Button in list view actions menu"
 msgid "Assign To"
 msgstr "crwdns91346:0crwdne91346:0"
@@ -2931,7 +2942,7 @@ msgstr "crwdns91594:0crwdne91594:0"
 msgid "Automatically Assign Documents to Users"
 msgstr "crwdns111488:0crwdne111488:0"
 
-#: frappe/public/js/frappe/list/list_view.js:128
+#: frappe/public/js/frappe/list/list_view.js:129
 msgid "Automatically applied a filter for recent data. You can disable this behavior from the list view settings."
 msgstr "crwdns154292:0crwdne154292:0"
 
@@ -3818,7 +3829,7 @@ msgstr "crwdns92008:0{0}crwdnd92008:0{1}crwdnd92008:0{0}crwdne92008:0"
 msgid "Cancel"
 msgstr "crwdns92010:0crwdne92010:0"
 
-#: frappe/public/js/frappe/list/list_view.js:2078
+#: frappe/public/js/frappe/list/list_view.js:2147
 msgctxt "Button in list view actions menu"
 msgid "Cancel"
 msgstr "crwdns92012:0crwdne92012:0"
@@ -3836,7 +3847,7 @@ msgstr "crwdns92026:0crwdne92026:0"
 msgid "Cancel All Documents"
 msgstr "crwdns92028:0crwdne92028:0"
 
-#: frappe/public/js/frappe/list/list_view.js:2083
+#: frappe/public/js/frappe/list/list_view.js:2152
 msgctxt "Title of confirmation dialog"
 msgid "Cancel {0} documents?"
 msgstr "crwdns92032:0{0}crwdne92032:0"
@@ -4407,7 +4418,7 @@ msgstr "crwdns128636:0crwdne128636:0"
 msgid "Clear"
 msgstr "crwdns92294:0crwdne92294:0"
 
-#: frappe/public/js/frappe/views/communication.js:435
+#: frappe/public/js/frappe/views/communication.js:438
 msgid "Clear & Add Template"
 msgstr "crwdns92296:0crwdne92296:0"
 
@@ -4419,7 +4430,7 @@ msgstr "crwdns92298:0crwdne92298:0"
 msgid "Clear All"
 msgstr "crwdns155956:0crwdne155956:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1984
+#: frappe/public/js/frappe/list/list_view.js:2053
 msgctxt "Button in list view actions menu"
 msgid "Clear Assignment"
 msgstr "crwdns104478:0crwdne104478:0"
@@ -4445,7 +4456,7 @@ msgstr "crwdns128638:0crwdne128638:0"
 msgid "Clear User Permissions"
 msgstr "crwdns92306:0crwdne92306:0"
 
-#: frappe/public/js/frappe/views/communication.js:436
+#: frappe/public/js/frappe/views/communication.js:439
 msgid "Clear the email message and add the template"
 msgstr "crwdns92308:0crwdne92308:0"
 
@@ -4513,7 +4524,7 @@ msgstr "crwdns110842:0crwdne110842:0"
 msgid "Click to Set Filters"
 msgstr "crwdns110844:0crwdne110844:0"
 
-#: frappe/public/js/frappe/list/list_view.js:711
+#: frappe/public/js/frappe/list/list_view.js:729
 msgid "Click to sort by {0}"
 msgstr "crwdns110846:0{0}crwdne110846:0"
 
@@ -5390,6 +5401,10 @@ msgstr "crwdns92732:0crwdne92732:0"
 msgid "Copy to Clipboard"
 msgstr "crwdns148722:0crwdne148722:0"
 
+#: frappe/core/doctype/user/user.js:474
+msgid "Copy token to clipboard"
+msgstr "crwdns157438:0crwdne157438:0"
+
 #. Label of the copyright (Data) field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Copyright"
@@ -5564,7 +5579,7 @@ msgstr "crwdns128770:0crwdne128770:0"
 msgid "Create New"
 msgstr "crwdns92808:0crwdne92808:0"
 
-#: frappe/public/js/frappe/list/list_view.js:509
+#: frappe/public/js/frappe/list/list_view.js:510
 msgctxt "Create a new document from list view"
 msgid "Create New"
 msgstr "crwdns110866:0crwdne110866:0"
@@ -5597,10 +5612,10 @@ msgstr "crwdns92820:0crwdne92820:0"
 msgid "Create a new record"
 msgstr "crwdns92822:0crwdne92822:0"
 
-#: frappe/public/js/frappe/form/controls/link.js:311
-#: frappe/public/js/frappe/form/controls/link.js:313
+#: frappe/public/js/frappe/form/controls/link.js:315
+#: frappe/public/js/frappe/form/controls/link.js:317
 #: frappe/public/js/frappe/form/link_selector.js:139
-#: frappe/public/js/frappe/list/list_view.js:501
+#: frappe/public/js/frappe/list/list_view.js:502
 #: frappe/public/js/frappe/web_form/web_form_list.js:225
 msgid "Create a new {0}"
 msgstr "crwdns92824:0{0}crwdne92824:0"
@@ -5617,7 +5632,7 @@ msgstr "crwdns92828:0crwdne92828:0"
 msgid "Create or Edit Workflow"
 msgstr "crwdns92830:0crwdne92830:0"
 
-#: frappe/public/js/frappe/list/list_view.js:504
+#: frappe/public/js/frappe/list/list_view.js:505
 msgid "Create your first {0}"
 msgstr "crwdns92832:0{0}crwdne92832:0"
 
@@ -5999,7 +6014,7 @@ msgstr "crwdns93014:0{0}crwdnd93014:0{1}crwdne93014:0"
 msgid "Customize"
 msgstr "crwdns93016:0crwdne93016:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1821
+#: frappe/public/js/frappe/list/list_view.js:1890
 msgctxt "Button in list view menu"
 msgid "Customize"
 msgstr "crwdns93018:0crwdne93018:0"
@@ -6420,11 +6435,11 @@ msgstr "crwdns93242:0{0}crwdne93242:0"
 msgid "Debug Log"
 msgstr "crwdns128868:0crwdne128868:0"
 
-#: frappe/public/js/frappe/views/reports/report_utils.js:308
+#: frappe/public/js/frappe/views/reports/report_utils.js:313
 msgid "Decimal Separator must be '.' when Quoting is set to Non-numeric"
 msgstr "crwdns127620:0crwdne127620:0"
 
-#: frappe/public/js/frappe/views/reports/report_utils.js:300
+#: frappe/public/js/frappe/views/reports/report_utils.js:305
 msgid "Decimal Separator must be a single character"
 msgstr "crwdns127622:0crwdne127622:0"
 
@@ -6641,7 +6656,7 @@ msgstr "crwdns128908:0crwdne128908:0"
 #: frappe/core/doctype/docperm/docperm.json
 #: frappe/core/doctype/user_document_type/user_document_type.json
 #: frappe/core/doctype/user_permission/user_permission_list.js:189
-#: frappe/public/js/frappe/form/footer/form_timeline.js:626
+#: frappe/public/js/frappe/form/footer/form_timeline.js:627
 #: frappe/public/js/frappe/form/grid.js:66
 #: frappe/public/js/frappe/form/toolbar.js:464
 #: frappe/public/js/frappe/views/reports/report_view.js:1742
@@ -6652,7 +6667,7 @@ msgstr "crwdns128908:0crwdne128908:0"
 msgid "Delete"
 msgstr "crwdns93336:0crwdne93336:0"
 
-#: frappe/public/js/frappe/list/list_view.js:2046
+#: frappe/public/js/frappe/list/list_view.js:2115
 msgctxt "Button in list view actions menu"
 msgid "Delete"
 msgstr "crwdns93338:0crwdne93338:0"
@@ -6697,7 +6712,7 @@ msgctxt "Button text"
 msgid "Delete column"
 msgstr "crwdns143028:0crwdne143028:0"
 
-#: frappe/public/js/frappe/form/footer/form_timeline.js:741
+#: frappe/public/js/frappe/form/footer/form_timeline.js:742
 msgid "Delete comment?"
 msgstr "crwdns93354:0crwdne93354:0"
 
@@ -6730,12 +6745,12 @@ msgstr "crwdns143038:0crwdne143038:0"
 msgid "Delete this record to allow sending to this email address"
 msgstr "crwdns93356:0crwdne93356:0"
 
-#: frappe/public/js/frappe/list/list_view.js:2051
+#: frappe/public/js/frappe/list/list_view.js:2120
 msgctxt "Title of confirmation dialog"
 msgid "Delete {0} item permanently?"
 msgstr "crwdns93358:0{0}crwdne93358:0"
 
-#: frappe/public/js/frappe/list/list_view.js:2057
+#: frappe/public/js/frappe/list/list_view.js:2126
 msgctxt "Title of confirmation dialog"
 msgid "Delete {0} items permanently?"
 msgstr "crwdns93360:0{0}crwdne93360:0"
@@ -6807,7 +6822,7 @@ msgstr "crwdns128918:0crwdne128918:0"
 msgid "Delimiter detection failed. Try to enable custom delimiters and adjust the delimiter options as per your data."
 msgstr "crwdns127866:0crwdne127866:0"
 
-#: frappe/public/js/frappe/views/reports/report_utils.js:296
+#: frappe/public/js/frappe/views/reports/report_utils.js:301
 msgid "Delimiter must be a single character"
 msgstr "crwdns93388:0crwdne93388:0"
 
@@ -7178,7 +7193,7 @@ msgstr "crwdns93542:0crwdne93542:0"
 msgid "Discussion Topic"
 msgstr "crwdns93544:0crwdne93544:0"
 
-#: frappe/public/js/frappe/form/footer/form_timeline.js:638
+#: frappe/public/js/frappe/form/footer/form_timeline.js:639
 #: frappe/templates/discussions/reply_card.html:16
 #: frappe/templates/discussions/reply_section.html:29
 msgid "Dismiss"
@@ -7703,15 +7718,15 @@ msgstr "crwdns93812:0crwdne93812:0"
 msgid "Document follow is not enabled for this user."
 msgstr "crwdns148644:0crwdne148644:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1178
+#: frappe/public/js/frappe/list/list_view.js:1247
 msgid "Document has been cancelled"
 msgstr "crwdns93814:0crwdne93814:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1177
+#: frappe/public/js/frappe/list/list_view.js:1246
 msgid "Document has been submitted"
 msgstr "crwdns93816:0crwdne93816:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1176
+#: frappe/public/js/frappe/list/list_view.js:1245
 msgid "Document is in draft state"
 msgstr "crwdns93818:0crwdne93818:0"
 
@@ -7853,13 +7868,13 @@ msgstr "crwdns129040:0crwdne129040:0"
 msgid "Double click to edit label"
 msgstr "crwdns143042:0crwdne143042:0"
 
-#: frappe/core/doctype/file/file.js:15
+#: frappe/core/doctype/file/file.js:15 frappe/core/doctype/user/user.js:461
 #: frappe/email/doctype/auto_email_report/auto_email_report.js:8
 #: frappe/public/js/frappe/form/grid.js:66
 msgid "Download"
 msgstr "crwdns93880:0crwdne93880:0"
 
-#: frappe/public/js/frappe/views/reports/report_utils.js:237
+#: frappe/public/js/frappe/views/reports/report_utils.js:242
 msgctxt "Export report"
 msgid "Download"
 msgstr "crwdns93882:0crwdne93882:0"
@@ -8081,8 +8096,8 @@ msgstr "crwdns110894:0crwdne110894:0"
 #: frappe/printing/page/print_format_builder_beta/print_format_builder_beta.js:46
 #: frappe/printing/page/print_format_builder_beta/print_format_builder_beta.js:85
 #: frappe/public/js/frappe/form/controls/markdown_editor.js:31
-#: frappe/public/js/frappe/form/footer/form_timeline.js:669
-#: frappe/public/js/frappe/form/footer/form_timeline.js:677
+#: frappe/public/js/frappe/form/footer/form_timeline.js:670
+#: frappe/public/js/frappe/form/footer/form_timeline.js:678
 #: frappe/public/js/frappe/form/templates/address_list.html:13
 #: frappe/public/js/frappe/form/templates/contact_list.html:13
 #: frappe/public/js/frappe/form/toolbar.js:748
@@ -8099,7 +8114,7 @@ msgstr "crwdns110894:0crwdne110894:0"
 msgid "Edit"
 msgstr "crwdns93974:0crwdne93974:0"
 
-#: frappe/public/js/frappe/list/list_view.js:2132
+#: frappe/public/js/frappe/list/list_view.js:2201
 msgctxt "Button in list view actions menu"
 msgid "Edit"
 msgstr "crwdns93976:0crwdne93976:0"
@@ -8138,7 +8153,7 @@ msgstr "crwdns93982:0crwdne93982:0"
 msgid "Edit DocType"
 msgstr "crwdns93984:0crwdne93984:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1848
+#: frappe/public/js/frappe/list/list_view.js:1917
 msgctxt "Button in list view menu"
 msgid "Edit DocType"
 msgstr "crwdns93986:0crwdne93986:0"
@@ -8555,7 +8570,7 @@ msgstr "crwdns94174:0crwdne94174:0"
 msgid "Email is mandatory to create User Email"
 msgstr "crwdns151610:0crwdne151610:0"
 
-#: frappe/public/js/frappe/views/communication.js:819
+#: frappe/public/js/frappe/views/communication.js:822
 msgid "Email not sent to {0} (unsubscribed / disabled)"
 msgstr "crwdns94176:0{0}crwdne94176:0"
 
@@ -8920,7 +8935,7 @@ msgstr "crwdns94356:0crwdne94356:0"
 msgid "Enter Code displayed in OTP App."
 msgstr "crwdns110922:0crwdne110922:0"
 
-#: frappe/public/js/frappe/views/communication.js:774
+#: frappe/public/js/frappe/views/communication.js:777
 msgid "Enter Email Recipient(s)"
 msgstr "crwdns94358:0crwdne94358:0"
 
@@ -9232,7 +9247,7 @@ msgstr "crwdns94490:0crwdne94490:0"
 msgid "Execute Console script"
 msgstr "crwdns94494:0crwdne94494:0"
 
-#: frappe/public/js/frappe/ui/dropdown_console.js:125
+#: frappe/public/js/frappe/ui/dropdown_console.js:132
 msgid "Executing Code"
 msgstr "crwdns155330:0crwdne155330:0"
 
@@ -9335,7 +9350,7 @@ msgstr "crwdns129232:0crwdne129232:0"
 msgid "Export"
 msgstr "crwdns94526:0crwdne94526:0"
 
-#: frappe/public/js/frappe/list/list_view.js:2154
+#: frappe/public/js/frappe/list/list_view.js:2223
 msgctxt "Button in list view actions menu"
 msgid "Export"
 msgstr "crwdns94528:0crwdne94528:0"
@@ -9372,7 +9387,7 @@ msgstr "crwdns129234:0crwdne129234:0"
 msgid "Export Import Log"
 msgstr "crwdns94550:0crwdne94550:0"
 
-#: frappe/public/js/frappe/views/reports/report_utils.js:235
+#: frappe/public/js/frappe/views/reports/report_utils.js:240
 msgctxt "Export report"
 msgid "Export Report: {0}"
 msgstr "crwdns94552:0{0}crwdne94552:0"
@@ -9557,7 +9572,7 @@ msgstr "crwdns94612:0crwdne94612:0"
 msgid "Failed to generate preview of series"
 msgstr "crwdns94614:0crwdne94614:0"
 
-#: frappe/handler.py:75
+#: frappe/handler.py:76
 msgid "Failed to get method for command {0} with {1}"
 msgstr "crwdns94616:0{0}crwdnd94616:0{1}crwdne94616:0"
 
@@ -10002,7 +10017,7 @@ msgstr "crwdns129306:0crwdne129306:0"
 #: frappe/desk/doctype/number_card/number_card.js:205
 #: frappe/desk/doctype/number_card/number_card.js:336
 #: frappe/email/doctype/auto_email_report/auto_email_report.js:93
-#: frappe/public/js/frappe/list/base_list.js:949
+#: frappe/public/js/frappe/list/base_list.js:958
 #: frappe/public/js/frappe/ui/filters/filter_list.js:134
 #: frappe/website/doctype/web_form/web_form.js:197
 msgid "Filter"
@@ -10116,7 +10131,7 @@ msgstr "crwdns129324:0crwdne129324:0"
 msgid "Filters Section"
 msgstr "crwdns129326:0crwdne129326:0"
 
-#: frappe/public/js/frappe/form/controls/link.js:510
+#: frappe/public/js/frappe/form/controls/link.js:514
 msgid "Filters applied for {0}"
 msgstr "crwdns94880:0{0}crwdne94880:0"
 
@@ -10486,8 +10501,8 @@ msgstr "crwdns129396:0crwdne129396:0"
 #. Description of the 'Enable Automatic Linking in Documents' (Check) field in
 #. DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
-msgid "For more information, <a class=\"text-muted\" href=\"https://erpnext.com/docs/user/manual/en/setting-up/email/linking-emails-to-document\">click here</a>."
-msgstr "crwdns129398:0crwdne129398:0"
+msgid "For more information, <a class=\"text-muted\" href=\"https://docs.frappe.io/erpnext/user/manual/en/linking-emails-to-document\">click here</a>."
+msgstr "crwdns157440:0crwdne157440:0"
 
 #: frappe/integrations/doctype/google_settings/google_settings.js:7
 msgid "For more information, {0}."
@@ -11743,7 +11758,7 @@ msgstr "crwdns129578:0crwdne129578:0"
 msgid "Hide Standard Menu"
 msgstr "crwdns129580:0crwdne129580:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1723
+#: frappe/public/js/frappe/list/list_view.js:1792
 msgid "Hide Tags"
 msgstr "crwdns95620:0crwdne95620:0"
 
@@ -11896,8 +11911,8 @@ msgstr "crwdns148656:0crwdne148656:0"
 #: frappe/public/js/frappe/data_import/data_exporter.js:330
 #: frappe/public/js/frappe/data_import/data_exporter.js:345
 #: frappe/public/js/frappe/list/list_settings.js:337
-#: frappe/public/js/frappe/list/list_view.js:383
-#: frappe/public/js/frappe/list/list_view.js:447
+#: frappe/public/js/frappe/list/list_view.js:384
+#: frappe/public/js/frappe/list/list_view.js:448
 #: frappe/public/js/frappe/model/meta.js:200
 #: frappe/public/js/frappe/model/model.js:122
 msgid "ID"
@@ -12352,7 +12367,7 @@ msgstr "crwdns129692:0crwdne129692:0"
 msgid "Import"
 msgstr "crwdns95866:0crwdne95866:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1785
+#: frappe/public/js/frappe/list/list_view.js:1854
 msgctxt "Button in list view menu"
 msgid "Import"
 msgstr "crwdns95868:0crwdne95868:0"
@@ -14647,7 +14662,7 @@ msgstr "crwdns96864:0crwdne96864:0"
 msgid "List Settings"
 msgstr "crwdns130060:0crwdne130060:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1865
+#: frappe/public/js/frappe/list/list_view.js:1934
 msgctxt "Button in list view menu"
 msgid "List Settings"
 msgstr "crwdns96868:0crwdne96868:0"
@@ -14697,7 +14712,7 @@ msgstr "crwdns96884:0crwdne96884:0"
 msgid "Load Balancing"
 msgstr "crwdns130066:0crwdne130066:0"
 
-#: frappe/public/js/frappe/list/base_list.js:384
+#: frappe/public/js/frappe/list/base_list.js:393
 #: frappe/public/js/frappe/web_form/web_form_list.js:305
 #: frappe/website/doctype/help_article/templates/help_article_list.html:30
 msgid "Load More"
@@ -14715,8 +14730,8 @@ msgstr "crwdns143088:0crwdne143088:0"
 #: frappe/core/page/permission_manager/permission_manager.js:172
 #: frappe/public/js/frappe/form/controls/multicheck.js:13
 #: frappe/public/js/frappe/form/linked_with.js:13
-#: frappe/public/js/frappe/list/base_list.js:507
-#: frappe/public/js/frappe/list/list_view.js:360
+#: frappe/public/js/frappe/list/base_list.js:516
+#: frappe/public/js/frappe/list/list_view.js:361
 #: frappe/public/js/frappe/ui/listing.html:16
 #: frappe/public/js/frappe/views/reports/query_report.js:1088
 msgid "Loading"
@@ -14801,7 +14816,7 @@ msgstr "crwdns96916:0crwdne96916:0"
 msgid "Log out"
 msgstr "crwdns96918:0crwdne96918:0"
 
-#: frappe/handler.py:118
+#: frappe/handler.py:119
 msgid "Logged Out"
 msgstr "crwdns96920:0crwdne96920:0"
 
@@ -15462,7 +15477,7 @@ msgstr "crwdns148312:0crwdne148312:0"
 msgid "Message Type"
 msgstr "crwdns130188:0crwdne130188:0"
 
-#: frappe/public/js/frappe/views/communication.js:953
+#: frappe/public/js/frappe/views/communication.js:956
 msgid "Message clipped"
 msgstr "crwdns97214:0crwdne97214:0"
 
@@ -16167,12 +16182,12 @@ msgstr "crwdns130264:0crwdne130264:0"
 msgid "Navbar Template Values"
 msgstr "crwdns130266:0crwdne130266:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1256
+#: frappe/public/js/frappe/list/list_view.js:1325
 msgctxt "Description of a list view shortcut"
 msgid "Navigate list down"
 msgstr "crwdns97564:0crwdne97564:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1263
+#: frappe/public/js/frappe/list/list_view.js:1332
 msgctxt "Description of a list view shortcut"
 msgid "Navigate list up"
 msgstr "crwdns97566:0crwdne97566:0"
@@ -16187,7 +16202,7 @@ msgstr "crwdns97568:0crwdne97568:0"
 msgid "Navigation Settings"
 msgstr "crwdns130268:0crwdne130268:0"
 
-#: frappe/desk/doctype/workspace/workspace.py:319
+#: frappe/desk/doctype/workspace/workspace.py:322
 msgid "Need Workspace Manager role to edit private workspace of other users"
 msgstr "crwdns97572:0crwdne97572:0"
 
@@ -16344,8 +16359,8 @@ msgstr "crwdns111028:0crwdne111028:0"
 msgid "New Users (Last 30 days)"
 msgstr "crwdns130272:0crwdne130272:0"
 
-#: frappe/core/doctype/version/version_view.html:14
-#: frappe/core/doctype/version/version_view.html:76
+#: frappe/core/doctype/version/version_view.html:15
+#: frappe/core/doctype/version/version_view.html:77
 msgid "New Value"
 msgstr "crwdns111030:0crwdne111030:0"
 
@@ -16558,7 +16573,7 @@ msgstr "crwdns130294:0crwdne130294:0"
 #: frappe/integrations/doctype/webhook/webhook.py:132
 #: frappe/printing/doctype/print_format/print_format.json
 #: frappe/public/js/form_builder/utils.js:341
-#: frappe/public/js/frappe/form/controls/link.js:494
+#: frappe/public/js/frappe/form/controls/link.js:498
 #: frappe/public/js/frappe/list/list_sidebar_group_by.js:223
 #: frappe/public/js/frappe/views/reports/query_report.js:1663
 #: frappe/website/doctype/help_article/templates/help_article.html:26
@@ -16913,7 +16928,7 @@ msgstr "crwdns111076:0{0}crwdne111076:0"
 msgid "No {0} found"
 msgstr "crwdns111078:0{0}crwdne111078:0"
 
-#: frappe/public/js/frappe/list/list_view.js:494
+#: frappe/public/js/frappe/list/list_view.js:495
 msgid "No {0} found with matching filters. Clear filters to see all {0}."
 msgstr "crwdns97826:0{0}crwdnd97826:0{0}crwdne97826:0"
 
@@ -17126,7 +17141,7 @@ msgstr "crwdns97910:0crwdne97910:0"
 msgid "Not permitted"
 msgstr "crwdns97912:0crwdne97912:0"
 
-#: frappe/public/js/frappe/list/list_view.js:50
+#: frappe/public/js/frappe/list/list_view.js:51
 msgid "Not permitted to view {0}"
 msgstr "crwdns97914:0{0}crwdne97914:0"
 
@@ -17191,7 +17206,7 @@ msgstr "crwdns97940:0crwdne97940:0"
 msgid "Nothing left to undo"
 msgstr "crwdns97942:0crwdne97942:0"
 
-#: frappe/public/js/frappe/list/base_list.js:368
+#: frappe/public/js/frappe/list/base_list.js:377
 #: frappe/public/js/frappe/views/reports/query_report.js:105
 #: frappe/templates/includes/list/list.html:9
 #: frappe/website/doctype/help_article/templates/help_article_list.html:21
@@ -17593,7 +17608,7 @@ msgstr "crwdns149004:0crwdne149004:0"
 msgid "On or Before"
 msgstr "crwdns149006:0crwdne149006:0"
 
-#: frappe/public/js/frappe/views/communication.js:963
+#: frappe/public/js/frappe/views/communication.js:966
 msgid "On {0}, {1} wrote:"
 msgstr "crwdns111096:0{0}crwdnd111096:0{1}crwdne111096:0"
 
@@ -17822,7 +17837,7 @@ msgstr "crwdns155340:0crwdne155340:0"
 msgid "Open in a new tab"
 msgstr "crwdns143102:0crwdne143102:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1309
+#: frappe/public/js/frappe/list/list_view.js:1378
 msgctxt "Description of a list view shortcut"
 msgid "Open list item"
 msgstr "crwdns98186:0crwdne98186:0"
@@ -17986,8 +18001,8 @@ msgstr "crwdns130442:0crwdne130442:0"
 msgid "Orientation"
 msgstr "crwdns98256:0crwdne98256:0"
 
-#: frappe/core/doctype/version/version_view.html:13
-#: frappe/core/doctype/version/version_view.html:75
+#: frappe/core/doctype/version/version_view.html:14
+#: frappe/core/doctype/version/version_view.html:76
 msgid "Original Value"
 msgstr "crwdns111108:0crwdne111108:0"
 
@@ -19390,7 +19405,7 @@ msgstr "crwdns98880:0crwdne98880:0"
 msgid "Preparing Report"
 msgstr "crwdns98882:0crwdne98882:0"
 
-#: frappe/public/js/frappe/views/communication.js:431
+#: frappe/public/js/frappe/views/communication.js:434
 msgid "Prepend the template to the email message"
 msgstr "crwdns98884:0crwdne98884:0"
 
@@ -19528,7 +19543,7 @@ msgstr "crwdns112704:0{0}crwdne112704:0"
 msgid "Print"
 msgstr "crwdns98924:0crwdne98924:0"
 
-#: frappe/public/js/frappe/list/list_view.js:2038
+#: frappe/public/js/frappe/list/list_view.js:2107
 msgctxt "Button in list view actions menu"
 msgid "Print"
 msgstr "crwdns98926:0crwdne98926:0"
@@ -19809,9 +19824,9 @@ msgid "Project"
 msgstr "crwdns99062:0crwdne99062:0"
 
 #. Label of the property (Data) field in DocType 'Property Setter'
-#: frappe/core/doctype/version/version_view.html:12
-#: frappe/core/doctype/version/version_view.html:37
-#: frappe/core/doctype/version/version_view.html:74
+#: frappe/core/doctype/version/version_view.html:13
+#: frappe/core/doctype/version/version_view.html:38
+#: frappe/core/doctype/version/version_view.html:75
 #: frappe/custom/doctype/property_setter/property_setter.json
 msgid "Property"
 msgstr "crwdns111146:0crwdne111146:0"
@@ -19897,7 +19912,7 @@ msgstr "crwdns156002:0crwdne156002:0"
 
 #. Label of the publish (Check) field in DocType 'Package Release'
 #: frappe/core/doctype/package_release/package_release.json
-#: frappe/public/js/frappe/form/footer/form_timeline.js:632
+#: frappe/public/js/frappe/form/footer/form_timeline.js:633
 #: frappe/website/doctype/web_form/web_form.js:86
 msgid "Publish"
 msgstr "crwdns99094:0crwdne99094:0"
@@ -20172,7 +20187,7 @@ msgstr "crwdns130710:0crwdne130710:0"
 msgid "Quick Lists"
 msgstr "crwdns130712:0crwdne130712:0"
 
-#: frappe/public/js/frappe/views/reports/report_utils.js:304
+#: frappe/public/js/frappe/views/reports/report_utils.js:309
 msgid "Quoting must be between 0 and 3"
 msgstr "crwdns99228:0crwdne99228:0"
 
@@ -20262,8 +20277,8 @@ msgid "Re:"
 msgstr "crwdns99270:0crwdne99270:0"
 
 #: frappe/core/doctype/communication/communication.js:268
-#: frappe/public/js/frappe/form/footer/form_timeline.js:600
-#: frappe/public/js/frappe/views/communication.js:367
+#: frappe/public/js/frappe/form/footer/form_timeline.js:601
+#: frappe/public/js/frappe/views/communication.js:370
 msgid "Re: {0}"
 msgstr "crwdns99272:0{0}crwdne99272:0"
 
@@ -20764,7 +20779,7 @@ msgstr "crwdns130796:0crwdne130796:0"
 msgid "Refresh Token"
 msgstr "crwdns130798:0crwdne130798:0"
 
-#: frappe/public/js/frappe/list/list_view.js:531
+#: frappe/public/js/frappe/list/list_view.js:532
 msgctxt "Document count in list view"
 msgid "Refreshing"
 msgstr "crwdns111160:0crwdne111160:0"
@@ -21546,7 +21561,7 @@ msgstr "crwdns130884:0crwdne130884:0"
 msgid "Restrict user from this IP address only. Multiple IP addresses can be added by separating with commas. Also accepts partial IP addresses like (111.111.111)"
 msgstr "crwdns130886:0crwdne130886:0"
 
-#: frappe/public/js/frappe/list/list_view.js:196
+#: frappe/public/js/frappe/list/list_view.js:197
 msgctxt "Title of message showing restrictions in list view"
 msgid "Restrictions"
 msgstr "crwdns99868:0crwdne99868:0"
@@ -21702,7 +21717,7 @@ msgstr "crwdns99964:0crwdne99964:0"
 msgid "Role Permissions Manager"
 msgstr "crwdns99968:0crwdne99968:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1807
+#: frappe/public/js/frappe/list/list_view.js:1876
 msgctxt "Button in list view menu"
 msgid "Role Permissions Manager"
 msgstr "crwdns99970:0crwdne99970:0"
@@ -21851,7 +21866,7 @@ msgstr "crwdns130932:0crwdne130932:0"
 msgid "Row"
 msgstr "crwdns100054:0crwdne100054:0"
 
-#: frappe/core/doctype/version/version_view.html:73
+#: frappe/core/doctype/version/version_view.html:74
 msgid "Row #"
 msgstr "crwdns111178:0crwdne111178:0"
 
@@ -21892,7 +21907,7 @@ msgstr "crwdns130938:0crwdne130938:0"
 msgid "Row Number"
 msgstr "crwdns111180:0crwdne111180:0"
 
-#: frappe/core/doctype/version/version_view.html:68
+#: frappe/core/doctype/version/version_view.html:69
 msgid "Row Values Changed"
 msgstr "crwdns111182:0crwdne111182:0"
 
@@ -21911,14 +21926,14 @@ msgstr "crwdns100070:0{0}crwdne100070:0"
 #. Label of the rows_added_section (Section Break) field in DocType 'Audit
 #. Trail'
 #: frappe/core/doctype/audit_trail/audit_trail.json
-#: frappe/core/doctype/version/version_view.html:32
+#: frappe/core/doctype/version/version_view.html:33
 msgid "Rows Added"
 msgstr "crwdns111186:0crwdne111186:0"
 
 #. Label of the rows_removed_section (Section Break) field in DocType 'Audit
 #. Trail'
 #: frappe/core/doctype/audit_trail/audit_trail.json
-#: frappe/core/doctype/version/version_view.html:32
+#: frappe/core/doctype/version/version_view.html:33
 msgid "Rows Removed"
 msgstr "crwdns111188:0crwdne111188:0"
 
@@ -22122,7 +22137,7 @@ msgstr "crwdns130978:0crwdne130978:0"
 #: frappe/email/doctype/notification/notification.json
 #: frappe/printing/page/print/print.js:871
 #: frappe/printing/page/print_format_builder/print_format_builder.js:160
-#: frappe/public/js/frappe/form/footer/form_timeline.js:677
+#: frappe/public/js/frappe/form/footer/form_timeline.js:678
 #: frappe/public/js/frappe/form/quick_entry.js:185
 #: frappe/public/js/frappe/list/list_settings.js:36
 #: frappe/public/js/frappe/list/list_settings.js:247
@@ -22141,10 +22156,6 @@ msgstr "crwdns130978:0crwdne130978:0"
 #: frappe/public/js/workflow_builder/workflow_builder.bundle.js:33
 msgid "Save"
 msgstr "crwdns100170:0crwdne100170:0"
-
-#: frappe/core/doctype/user/user.js:339
-msgid "Save API Secret: {0}"
-msgstr "crwdns100174:0{0}crwdne100174:0"
 
 #: frappe/workflow/doctype/workflow/workflow.js:143
 msgid "Save Anyway"
@@ -22604,7 +22615,7 @@ msgid "Select All"
 msgstr "crwdns111204:0crwdne111204:0"
 
 #: frappe/public/js/frappe/views/communication.js:177
-#: frappe/public/js/frappe/views/communication.js:598
+#: frappe/public/js/frappe/views/communication.js:601
 #: frappe/public/js/frappe/views/interaction.js:93
 #: frappe/public/js/frappe/views/interaction.js:155
 msgid "Select Attachments"
@@ -22833,13 +22844,13 @@ msgstr "crwdns100474:0crwdne100474:0"
 msgid "Select atleast 2 actions"
 msgstr "crwdns100476:0crwdne100476:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1323
+#: frappe/public/js/frappe/list/list_view.js:1392
 msgctxt "Description of a list view shortcut"
 msgid "Select list item"
 msgstr "crwdns100478:0crwdne100478:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1275
-#: frappe/public/js/frappe/list/list_view.js:1291
+#: frappe/public/js/frappe/list/list_view.js:1344
+#: frappe/public/js/frappe/list/list_view.js:1360
 msgctxt "Description of a list view shortcut"
 msgid "Select multiple list items"
 msgstr "crwdns100480:0crwdne100480:0"
@@ -23767,7 +23778,7 @@ msgid "Show Social Login Key as Authorization Server"
 msgstr "crwdns156020:0crwdne156020:0"
 
 #: frappe/public/js/frappe/list/list_sidebar.html:77
-#: frappe/public/js/frappe/list/list_view.js:1723
+#: frappe/public/js/frappe/list/list_view.js:1792
 msgid "Show Tags"
 msgstr "crwdns100886:0crwdne100886:0"
 
@@ -24670,6 +24681,10 @@ msgstr "crwdns131334:0crwdne131334:0"
 msgid "Store Attached PDF Document"
 msgstr "crwdns131336:0crwdne131336:0"
 
+#: frappe/core/doctype/user/user.js:484
+msgid "Store the API secret securely. It won't be displayed again."
+msgstr "crwdns157442:0crwdne157442:0"
+
 #. Description of the 'Last Known Versions' (Text) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "Stores the JSON of last known versions of various installed apps. It is used to show release notes."
@@ -24789,7 +24804,7 @@ msgstr "crwdns101312:0crwdne101312:0"
 msgid "Submit"
 msgstr "crwdns101314:0crwdne101314:0"
 
-#: frappe/public/js/frappe/list/list_view.js:2105
+#: frappe/public/js/frappe/list/list_view.js:2174
 msgctxt "Button in list view actions menu"
 msgid "Submit"
 msgstr "crwdns101316:0crwdne101316:0"
@@ -24847,7 +24862,7 @@ msgstr "crwdns101344:0crwdne101344:0"
 msgid "Submit this document to confirm"
 msgstr "crwdns101346:0crwdne101346:0"
 
-#: frappe/public/js/frappe/list/list_view.js:2110
+#: frappe/public/js/frappe/list/list_view.js:2179
 msgctxt "Title of confirmation dialog"
 msgid "Submit {0} documents?"
 msgstr "crwdns101348:0{0}crwdne101348:0"
@@ -25396,7 +25411,7 @@ msgstr "crwdns101512:0crwdne101512:0"
 msgid "Table Break"
 msgstr "crwdns131404:0crwdne131404:0"
 
-#: frappe/core/doctype/version/version_view.html:72
+#: frappe/core/doctype/version/version_view.html:73
 msgid "Table Field"
 msgstr "crwdns111268:0crwdne111268:0"
 
@@ -25710,7 +25725,7 @@ msgstr "crwdns101654:0crwdne101654:0"
 msgid "The contents of this email are strictly confidential. Please do not forward this email to anyone."
 msgstr "crwdns142920:0crwdne142920:0"
 
-#: frappe/public/js/frappe/list/list_view.js:658
+#: frappe/public/js/frappe/list/list_view.js:675
 msgid "The count shown is an estimated count. Click here to see the accurate count."
 msgstr "crwdns111470:0crwdne111470:0"
 
@@ -25948,7 +25963,7 @@ msgstr "crwdns101750:0crwdne101750:0"
 msgid "There were errors while creating the document. Please try again."
 msgstr "crwdns101752:0crwdne101752:0"
 
-#: frappe/public/js/frappe/views/communication.js:840
+#: frappe/public/js/frappe/views/communication.js:843
 msgid "There were errors while sending email. Please try again."
 msgstr "crwdns101754:0crwdne101754:0"
 
@@ -26662,7 +26677,7 @@ msgstr "crwdns102084:0crwdne102084:0"
 msgid "Toggle Sidebar"
 msgstr "crwdns102086:0crwdne102086:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1838
+#: frappe/public/js/frappe/list/list_view.js:1907
 msgctxt "Button in list view menu"
 msgid "Toggle Sidebar"
 msgstr "crwdns102088:0crwdne102088:0"
@@ -27403,7 +27418,7 @@ msgstr "crwdns127890:0{0}crwdne127890:0"
 msgid "Unlock Reference Document"
 msgstr "crwdns102374:0crwdne102374:0"
 
-#: frappe/public/js/frappe/form/footer/form_timeline.js:632
+#: frappe/public/js/frappe/form/footer/form_timeline.js:633
 #: frappe/website/doctype/web_form/web_form.js:86
 msgid "Unpublish"
 msgstr "crwdns102376:0crwdne102376:0"
@@ -27975,7 +27990,7 @@ msgstr "crwdns102624:0crwdne102624:0"
 msgid "User Permissions"
 msgstr "crwdns102628:0crwdne102628:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1796
+#: frappe/public/js/frappe/list/list_view.js:1865
 msgctxt "Button in list view menu"
 msgid "User Permissions"
 msgstr "crwdns102630:0crwdne102630:0"
@@ -28338,7 +28353,7 @@ msgstr "crwdns102774:0{0}crwdne102774:0"
 msgid "Value {0} must in {1} format"
 msgstr "crwdns102776:0{0}crwdnd102776:0{1}crwdne102776:0"
 
-#: frappe/core/doctype/version/version_view.html:8
+#: frappe/core/doctype/version/version_view.html:9
 msgid "Values Changed"
 msgstr "crwdns111318:0crwdne111318:0"
 
@@ -29266,11 +29281,11 @@ msgstr "crwdns148712:0{0}crwdne148712:0"
 msgid "Workspaces"
 msgstr "crwdns131892:0crwdne131892:0"
 
-#: frappe/public/js/frappe/form/footer/form_timeline.js:756
+#: frappe/public/js/frappe/form/footer/form_timeline.js:757
 msgid "Would you like to publish this comment? This means it will become visible to website/portal users."
 msgstr "crwdns154738:0crwdne154738:0"
 
-#: frappe/public/js/frappe/form/footer/form_timeline.js:760
+#: frappe/public/js/frappe/form/footer/form_timeline.js:761
 msgid "Would you like to unpublish this comment? This means it will no longer be visible to website/portal users."
 msgstr "crwdns154740:0crwdne154740:0"
 
@@ -29378,7 +29393,7 @@ msgstr "crwdns131908:0crwdne131908:0"
 #: frappe/integrations/doctype/webhook/webhook.py:132
 #: frappe/printing/doctype/print_format/print_format.json
 #: frappe/public/js/form_builder/utils.js:336
-#: frappe/public/js/frappe/form/controls/link.js:494
+#: frappe/public/js/frappe/form/controls/link.js:498
 #: frappe/public/js/frappe/list/list_sidebar_group_by.js:223
 #: frappe/public/js/frappe/views/reports/query_report.js:1663
 #: frappe/website/doctype/help_article/templates/help_article.html:25
@@ -29455,7 +29470,7 @@ msgstr "crwdns103270:0crwdne103270:0"
 msgid "You are not allowed to print this report"
 msgstr "crwdns103272:0crwdne103272:0"
 
-#: frappe/public/js/frappe/views/communication.js:784
+#: frappe/public/js/frappe/views/communication.js:787
 msgid "You are not allowed to send emails related to this document"
 msgstr "crwdns103274:0crwdne103274:0"
 
@@ -29556,7 +29571,7 @@ msgstr "crwdns111480:0{0}crwdne111480:0"
 msgid "You can only set the 3 custom doctypes in the Document Types table."
 msgstr "crwdns103312:0crwdne103312:0"
 
-#: frappe/handler.py:182
+#: frappe/handler.py:183
 msgid "You can only upload JPG, PNG, PDF, TXT, CSV or Microsoft documents."
 msgstr "crwdns152016:0crwdne152016:0"
 
@@ -29691,7 +29706,7 @@ msgstr "crwdns103370:0crwdne103370:0"
 msgid "You have a new message from: "
 msgstr "crwdns103376:0crwdne103376:0"
 
-#: frappe/handler.py:118
+#: frappe/handler.py:119
 msgid "You have been successfully logged out"
 msgstr "crwdns103378:0crwdne103378:0"
 
@@ -29723,7 +29738,7 @@ msgstr "crwdns103390:0{0}crwdne103390:0"
 msgid "You haven't added any Dashboard Charts or Number Cards yet."
 msgstr "crwdns111346:0crwdne111346:0"
 
-#: frappe/public/js/frappe/list/list_view.js:498
+#: frappe/public/js/frappe/list/list_view.js:499
 msgid "You haven't created a {0} yet"
 msgstr "crwdns103392:0{0}crwdne103392:0"
 
@@ -30190,7 +30205,7 @@ msgid "email inbox"
 msgstr "crwdns103630:0crwdne103630:0"
 
 #: frappe/permissions.py:425 frappe/permissions.py:436
-#: frappe/public/js/frappe/form/controls/link.js:503
+#: frappe/public/js/frappe/form/controls/link.js:507
 msgid "empty"
 msgstr "crwdns103632:0crwdne103632:0"
 
@@ -31144,7 +31159,7 @@ msgstr "crwdns104264:0{0}crwdne104264:0"
 msgid "{0} is within {1}"
 msgstr "crwdns104266:0{0}crwdnd104266:0{1}crwdne104266:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1713
+#: frappe/public/js/frappe/list/list_view.js:1782
 msgid "{0} items selected"
 msgstr "crwdns104268:0{0}crwdne104268:0"
 
@@ -31230,11 +31245,11 @@ msgid "{0} not found"
 msgstr "crwdns104298:0{0}crwdne104298:0"
 
 #: frappe/core/doctype/report/report.py:427
-#: frappe/public/js/frappe/list/list_view.js:1089
+#: frappe/public/js/frappe/list/list_view.js:1158
 msgid "{0} of {1}"
 msgstr "crwdns104300:0{0}crwdnd104300:0{1}crwdne104300:0"
 
-#: frappe/public/js/frappe/list/list_view.js:1091
+#: frappe/public/js/frappe/list/list_view.js:1160
 msgid "{0} of {1} ({2} rows with children)"
 msgstr "crwdns104302:0{0}crwdnd104302:0{1}crwdnd104302:0{2}crwdne104302:0"
 
