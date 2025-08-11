@@ -280,15 +280,14 @@ frappe.views.FileView = class FileView extends frappe.views.ListView {
 						  });
 				const name = escape(d.name);
 				const copy_url_btn = `
-					<button
-						class="btn icon-btn copy-file-url"
-						title="${__("Copy File URL")}"
-						data-file-url="${absolute_file_url}"
-					>
+					<div class="copy-file-url hidden-xs" title="${__(
+						"Copy File URL"
+					)}" data-file-url="${absolute_file_url}">
 						<svg class="es-icon es-line icon-sm" aria-hidden="true">
 							<use class="" href="#es-line-copy-light"></use>
 						</svg>
-					</button>`;
+					</div>
+					`;
 				const draggable = d.type == "Folder" ? false : true;
 
 				return `

@@ -58,7 +58,8 @@
 					}
 
 					.copy-file-url {
-						display: none;
+						visibility: hidden;
+						display: flex;
 					}
 				}
 
@@ -112,7 +113,7 @@
 				}
 
 				.copy-file-url {
-					display: flex;
+					visibility: visible;
 				}
 			}
 
