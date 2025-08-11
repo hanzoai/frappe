@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-08-03 09:36+0000\n"
-"PO-Revision-Date: 2025-08-06 00:17\n"
+"PO-Revision-Date: 2025-08-09 09:36\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -521,7 +521,7 @@ msgstr "<h4>Standardvorlage</h4>\n"
 "{% if address_line2 %}{{ address_line2 }}&lt;br&gt;{% endif -%}\n"
 "{{ city }}&lt;br&gt;\n"
 "{% if state %}{{ state }}&lt;br&gt;{% endif -%}\n"
-"{% if pincode %} PIN:  {{ pincode }}&lt;br&gt;{% endif -%}\n"
+"{% if pincode %} PLZ:  {{ pincode }}&lt;br&gt;{% endif -%}\n"
 "{{ country }}&lt;br&gt;\n"
 "{% if phone %}Telefon: {{ phone }}&lt;br&gt;{% endif -%}\n"
 "{% if fax %}Fax: {{ fax }}&lt;br&gt;{% endif -%}\n"
@@ -593,8 +593,8 @@ msgstr "<h5>Nachrichtenbeispiel</h5>\n\n"
 msgid "<p><strong>Condition Examples:</strong></p>\n"
 "<pre>doc.status==\"Open\"<br>doc.due_date==nowdate()<br>doc.total &gt; 40000\n"
 "</pre>"
-msgstr "<p><strong>Bedingungsbeispiele:</strong></p>\n"
-"<pre>doc.status==\"Öffnen\"<br>doc.due_date==nowdate()<br>doc.total &gt; 40000\n\n"
+msgstr "<p><strong>Beispiel für eine Bedingung:</strong></p>\n"
+"<pre>doc.status==\"Open\"<br>doc.due_date==nowdate()<br>doc.total &gt; 40000\n\n"
 "</pre>"
 
 #. Content of the 'html_7' (HTML) field in DocType 'Notification'
@@ -602,8 +602,8 @@ msgstr "<p><strong>Bedingungsbeispiele:</strong></p>\n"
 msgid "<p><strong>Condition Examples:</strong></p>\n"
 "<pre>doc.status==\"Open\"<br>doc.due_date==nowdate()<br>doc.total &gt; 40000\n"
 "</pre>\n"
-msgstr "<p><strong>Bedingungsbeispiele:</strong></p>\n"
-"<pre>doc.status==\"Öffnen\"<br>doc.due_date==nowdate()<br>doc.total &gt; 40000\n"
+msgstr "<p><strong>Beispiel für eine Bedingung:</strong></p>\n"
+"<pre>doc.status==\"Open\"<br>doc.due_date==nowdate()<br>doc.total &gt; 40000\n"
 "</pre>\n"
 
 #. Content of the 'Condition description' (HTML) field in DocType 'Web Form'
@@ -611,9 +611,8 @@ msgstr "<p><strong>Bedingungsbeispiele:</strong></p>\n"
 msgid "<p>Multiple webforms can be created for a single doctype. Add filters specific to this webform to display correct record after submission.</p><p>For Example:</p>\n"
 "<p>If you create a separate webform every year to capture feedback from employees add a \n"
 " field named year in doctype and add a filter <b>year = 2023</b></p>\n"
-msgstr "<p>Mehrere Webformulare können für ein einzelnes Doctyle erstellt werden. Fügen Sie Filter für dieses Webformular hinzu, um den korrekten Datensatz nach dem Einreichen anzuzeigen.</p><p>Zum Beispiel:</p>\n"
-"<p>Wenn Sie jedes Jahr ein separates Webformular erstellen, um Feedback von Mitarbeitern zu erfassen, fügen Sie ein \n"
-" Feld mit dem Namen Jahr in Doctype hinzu und fügen Sie einen Filter <b>Jahr = 2023</b></p>\n"
+msgstr "<p>Mehrere Webformulare können für einen einzelnen Doctype erstellt werden. Fügen Sie Filter speziel für dieses Webformular hinzu, um den korrekten Datensatz nach der Buchung anzuzeigen.</p><p>Zum Beispiel:</p>\n"
+"<p>Wenn Sie jedes Jahr ein separates Webformular erstellen, um Feedback von Mitarbeitern zu erfassen, fügen Sie ein Feld mit dem Namen Jahr im Doctype Sie einen Filter <b>jahr = 2023</b> hinzu.</p>\n"
 
 #. Description of the 'Context Script' (Code) field in DocType 'Web Page'
 #: frappe/website/doctype/web_page/web_page.json
@@ -2724,7 +2723,7 @@ msgstr "Zuordnungen"
 #. Task'
 #: frappe/workflow/doctype/workflow_transition_task/workflow_transition_task.json
 msgid "Asynchronous"
-msgstr ""
+msgstr "Asynchron"
 
 #: frappe/public/js/frappe/form/grid_row.js:680
 msgid "At least one column is required to show in the grid."
@@ -2903,7 +2902,7 @@ msgstr "Autor"
 #. Label of the authorization_tab (Tab Break) field in DocType 'OAuth Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Authorization"
-msgstr ""
+msgstr "Autorisierung"
 
 #. Label of the authorization_code (Password) field in DocType 'Google
 #. Calendar'
@@ -3389,7 +3388,7 @@ msgstr "Barcode"
 #. Label of the base_dn (Data) field in DocType 'LDAP Settings'
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
 msgid "Base Distinguished Name (DN)"
-msgstr "kennzeichnender Name (DN)"
+msgstr "Base Distinguished Name (DN)"
 
 #. Label of the base_url (Data) field in DocType 'Geolocation Settings'
 #. Label of the base_url (Data) field in DocType 'Social Login Key'
@@ -3802,7 +3801,7 @@ msgstr "Überprüfung der eingeschränkten IP-Adresse umgehen, wenn Zwei-Faktor-
 #. 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Bypass Two Factor Auth for users who login from restricted IP Address"
-msgstr "Zwei Faktor Autorisierung für Benutzer aus eingeschränktem IP-Adressraum übergehen."
+msgstr "Zwei-Faktor-Authentifizierung für Benutzer, die sich von einer eingeschränkten IP-Adresse anmelden, umgehen"
 
 #. Label of the bypass_restrict_ip_check_if_2fa_enabled (Check) field in
 #. DocType 'System Settings'
@@ -4645,7 +4644,7 @@ msgstr "Klicken Sie auf „Anpassen“, um Ihr erstes Widget hinzuzufügen"
 
 #: frappe/templates/emails/user_invitation.html:8
 msgid "Click below to get started:"
-msgstr ""
+msgstr "Klicken Sie unten, um zu beginnen:"
 
 #: frappe/website/doctype/web_form/templates/web_form.html:147
 msgid "Click here"
@@ -5271,7 +5270,7 @@ msgstr "Bedingungen"
 #. Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Config"
-msgstr ""
+msgstr "Konfiguration"
 
 #. Label of the configuration_section (Section Break) field in DocType 'Social
 #. Login Key'
@@ -5609,7 +5608,7 @@ msgstr "Die Spalte {0} konnte dem Feld {1} nicht zugeordnet werden."
 
 #: frappe/database/query.py:564
 msgid "Could not parse field: {0}"
-msgstr ""
+msgstr "Feld konnte nicht geparst werden: {0}"
 
 #: frappe/desk/page/setup_wizard/setup_wizard.js:234
 msgid "Could not start up: "
@@ -5646,7 +5645,7 @@ msgstr "Filter zählen"
 
 #: frappe/public/js/frappe/form/dashboard.js:509
 msgid "Count of linked documents"
-msgstr ""
+msgstr "Anzahl der verknüpften Dokumente"
 
 #. Label of the counter (Int) field in DocType 'Document Naming Rule'
 #: frappe/core/doctype/document_naming_rule/document_naming_rule.json
@@ -6147,7 +6146,7 @@ msgstr "Benutzerdefiniertes Feld erfolgreich in {0} umbenannt."
 
 #: frappe/api/v2.py:148
 msgid "Custom get_list method for {0} must return a QueryBuilder object or None, got {1}"
-msgstr ""
+msgstr "Benutzerdefinierte get_list-Methode für {0} muss ein QueryBuilder-Objekt oder None zurückgeben. Es erhielt {1}"
 
 #. Label of the custom (Check) field in DocType 'DocType'
 #. Label of the custom (Check) field in DocType 'Website Theme'
@@ -8794,7 +8793,7 @@ msgstr "Leere Spalte"
 
 #: frappe/database/query.py:1455
 msgid "Empty string arguments are not allowed"
-msgstr ""
+msgstr "Leere String-Argumente sind nicht zulässig"
 
 #. Label of the enable (Check) field in DocType 'Google Calendar'
 #. Label of the enable (Check) field in DocType 'Google Contacts'
@@ -9260,11 +9259,11 @@ msgstr "Fehler im Druckformat in Zeile {0}: {1}"
 
 #: frappe/api/v2.py:156
 msgid "Error in {0}.get_list: {1}"
-msgstr ""
+msgstr "Fehler in {0}.get_list: {1}"
 
 #: frappe/database/query.py:231
 msgid "Error parsing nested filters: {0}"
-msgstr ""
+msgstr "Fehler beim Parsen verschachtelter Filter: {0}"
 
 #: frappe/email/doctype/email_account/email_account.py:670
 msgid "Error while connecting to email account {0}"
@@ -9464,7 +9463,7 @@ msgstr "Alle ausklappen"
 
 #: frappe/database/query.py:352
 msgid "Expected 'and' or 'or' operator, found: {0}"
-msgstr ""
+msgstr "Erwartet 'and' oder 'or' Operator, gefunden: {0}"
 
 #: frappe/public/js/frappe/form/templates/form_sidebar.html:23
 msgid "Experimental"
@@ -10668,7 +10667,7 @@ msgstr "Beispiel: Wenn Sie die Dokumenten-ID mit einschliessen möchten, verwend
 #. Description of the 'Format' (Data) field in DocType 'Workspace Shortcut'
 #: frappe/desk/doctype/workspace_shortcut/workspace_shortcut.json
 msgid "For example: {} Open"
-msgstr "Zum Beispiel: {} Öffnen"
+msgstr "Zum Beispiel: {} Offen"
 
 #. Description of the 'Client script' (Code) field in DocType 'Web Form'
 #: frappe/website/doctype/web_form/web_form.json
@@ -10844,11 +10843,11 @@ msgstr "Frappé"
 
 #: frappe/public/js/frappe/ui/toolbar/about.js:11
 msgid "Frappe Blog"
-msgstr ""
+msgstr "Frappe Blog"
 
 #: frappe/public/js/frappe/ui/toolbar/about.js:11
 msgid "Frappe Forum"
-msgstr ""
+msgstr "Frappe Forum"
 
 #: frappe/public/js/frappe/ui/toolbar/about.js:8
 msgid "Frappe Framework"
@@ -10870,7 +10869,7 @@ msgstr "Frappe Mail OAuth-Fehler"
 #. Label of the frappe_mail_site (Data) field in DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
 msgid "Frappe Mail Site"
-msgstr ""
+msgstr "Frappe Mail Seite"
 
 #. Label of a standard help item
 #. Type: Route
@@ -11825,7 +11824,7 @@ msgstr "Versteckte Felder"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:1641
 msgid "Hidden columns include: {0}"
-msgstr ""
+msgstr "Versteckte Spalten enthalten: {0}"
 
 #. Option for the 'Page Number' (Select) field in DocType 'Print Format'
 #: frappe/printing/doctype/print_format/print_format.json
@@ -12778,7 +12777,7 @@ msgstr "Filter einbeziehen"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:1639
 msgid "Include hidden columns"
-msgstr ""
+msgstr "Versteckte Spalten einbeziehen"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:1611
 msgid "Include indentation"
@@ -13175,7 +13174,7 @@ msgstr "Ungültiger DocType: {0}"
 
 #: frappe/email/doctype/email_group/email_group.py:51
 msgid "Invalid Doctype"
-msgstr ""
+msgstr "Ungültiger DocType"
 
 #: frappe/core/doctype/doctype/doctype.py:1273
 msgid "Invalid Fieldname"
@@ -13188,7 +13187,7 @@ msgstr "Ungültige Datei-URL"
 #: frappe/database/query.py:427 frappe/database/query.py:454
 #: frappe/database/query.py:464 frappe/database/query.py:487
 msgid "Invalid Filter"
-msgstr ""
+msgstr "Ungültiger Filter"
 
 #: frappe/public/js/form_builder/store.js:221
 msgid "Invalid Filter Format for field {0} of type {1}. Try using filter icon on the field to set it correctly"
@@ -13304,23 +13303,23 @@ msgstr "Ungültiges Alias-Format: {0}. Alias muss ein einfacher Bezeichner sein.
 
 #: frappe/core/doctype/user_invitation/user_invitation.py:178
 msgid "Invalid app"
-msgstr ""
+msgstr "Ungültige App"
 
 #: frappe/database/query.py:1468
 msgid "Invalid argument format: {0}. Only quoted string literals or simple field names are allowed."
-msgstr ""
+msgstr "Ungültiges Argumentformat: {0}. Nur in Anführungszeichen gesetzte Zeichenfolgenliterale oder einfache Feldnamen sind zulässig."
 
 #: frappe/database/query.py:1444
 msgid "Invalid argument type: {0}. Only strings, numbers, and None are allowed."
-msgstr ""
+msgstr "Ungültiger Argumenttyp: {0}. Nur Zeichenfolgen, Zahlen und None sind zulässig."
 
 #: frappe/database/query.py:460
 msgid "Invalid characters in fieldname: {0}. Only letters, numbers, and underscores are allowed."
-msgstr ""
+msgstr "Ungültige Zeichen im Feldnamen: {0}. Nur Buchstaben, Zahlen und Unterstriche sind zulässig."
 
 #: frappe/database/query.py:575
 msgid "Invalid characters in table name: {0}"
-msgstr ""
+msgstr "Ungültige Zeichen im Tabellenname: {0}"
 
 #: frappe/public/js/frappe/views/reports/report_view.js:404
 msgid "Invalid column"
@@ -13328,11 +13327,11 @@ msgstr "Ungültige Spalte"
 
 #: frappe/database/query.py:381
 msgid "Invalid condition type in nested filters: {0}"
-msgstr ""
+msgstr "Ungültiger Bedingungstyp in verschachtelten Filtern: {0}"
 
 #: frappe/database/query.py:787
 msgid "Invalid direction in Order By: {0}. Must be 'ASC' or 'DESC'."
-msgstr ""
+msgstr "Ungültige Richtung in „Sortieren nach“: {0}. Muss „ASC“ oder „DESC“ sein."
 
 #: frappe/model/document.py:1016 frappe/model/document.py:1030
 msgid "Invalid docstatus"
@@ -13352,7 +13351,7 @@ msgstr "Ungültiges Feldformat für SELECT: {0}. Feldnamen müssen einfach, mit 
 
 #: frappe/database/query.py:734
 msgid "Invalid field format in {0}: {1}. Use 'field', 'link_field.field', or 'child_table.field'."
-msgstr ""
+msgstr "Ungültiges Feldformat in {0}: {1}. Verwenden Sie 'field', 'link_field.field', oder 'child_table.field'."
 
 #: frappe/database/query.py:1620
 msgid "Invalid field name in function: {0}. Only simple field names are allowed."
@@ -13364,7 +13363,7 @@ msgstr "Ungültiger Feldname {0}"
 
 #: frappe/database/query.py:668
 msgid "Invalid field type: {0}"
-msgstr ""
+msgstr "Ungültiger Feldtyp: {0}"
 
 #: frappe/core/doctype/doctype/doctype.py:1086
 msgid "Invalid fieldname '{0}' in autoname"
@@ -13596,7 +13595,7 @@ msgstr "Ist versteckt"
 #. Label of the is_home_folder (Check) field in DocType 'File'
 #: frappe/core/doctype/file/file.json
 msgid "Is Home Folder"
-msgstr "Ist Ordner für Startseite"
+msgstr "Ist Home-Verzeichnis"
 
 #. Label of the reqd (Check) field in DocType 'Custom Field'
 #: frappe/custom/doctype/custom_field/custom_field.json
@@ -13660,13 +13659,13 @@ msgstr "Ist Abfragebericht"
 #. Request'
 #: frappe/integrations/doctype/integration_request/integration_request.json
 msgid "Is Remote Request?"
-msgstr "Ist dies eine Remote-Anfrage?"
+msgstr "Ist Remote-Anfrage?"
 
 #. Label of the is_setup_complete (Check) field in DocType 'Installed
 #. Application'
 #: frappe/core/doctype/installed_application/installed_application.json
 msgid "Is Setup Complete?"
-msgstr ""
+msgstr "Ist die Einrichtung abgeschlossen?"
 
 #. Label of the issingle (Check) field in DocType 'DocType'
 #. Label of the is_single (Check) field in DocType 'Onboarding Step'
@@ -13679,12 +13678,12 @@ msgstr "Ist einzeln"
 #. Label of the is_skipped (Check) field in DocType 'Onboarding Step'
 #: frappe/desk/doctype/onboarding_step/onboarding_step.json
 msgid "Is Skipped"
-msgstr "Wird übersprungen"
+msgstr "Ist übersprungen"
 
 #. Label of the is_spam (Check) field in DocType 'Email Rule'
 #: frappe/email/doctype/email_rule/email_rule.json
 msgid "Is Spam"
-msgstr "ist Spam"
+msgstr "Ist Spam"
 
 #. Label of the is_standard (Check) field in DocType 'Navbar Item'
 #. Label of the is_standard (Select) field in DocType 'Report'
@@ -13719,7 +13718,7 @@ msgstr "Ist übertragbar"
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
 #: frappe/custom/doctype/property_setter/property_setter.json
 msgid "Is System Generated"
-msgstr "Wurde vom System generiert"
+msgstr "Ist Systemgeneriert"
 
 #. Label of the istable (Check) field in DocType 'Customize Form'
 #: frappe/custom/doctype/customize_form/customize_form.json
@@ -13869,7 +13868,7 @@ msgstr "Job erfolgreich beendet"
 
 #: frappe/core/doctype/rq_job/rq_job.py:121
 msgid "Job is in {0} state and can't be cancelled"
-msgstr ""
+msgstr "Job ist im Status {0} und kann nicht storniert werden"
 
 #: frappe/core/doctype/rq_job/rq_job.py:113
 msgid "Job is not running."
@@ -14302,7 +14301,7 @@ msgstr "Zuletzt geändert am"
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.json
 #: frappe/public/js/frappe/ui/filters/filter.js:644
 msgid "Last Month"
-msgstr "Vergangener Monat"
+msgstr "Letzter Monat"
 
 #. Label of the last_name (Data) field in DocType 'Contact'
 #. Label of the last_name (Data) field in DocType 'User'
@@ -14320,7 +14319,7 @@ msgstr "Datum der letzten Kennwortrücksetzung"
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.json
 #: frappe/public/js/frappe/ui/filters/filter.js:648
 msgid "Last Quarter"
-msgstr "Vergangenes Quartal"
+msgstr "Letztes Quartal"
 
 #. Label of the last_reset_password_key_generated_on (Datetime) field in
 #. DocType 'User'
@@ -14331,7 +14330,7 @@ msgstr "Letzter Schlüssel zum Zurücksetzen des Passworts Erzeugt am"
 #. Label of the datetime_last_run (Datetime) field in DocType 'Notification'
 #: frappe/email/doctype/notification/notification.json
 msgid "Last Run"
-msgstr ""
+msgstr "Letzter Lauf"
 
 #. Label of the last_sync_on (Datetime) field in DocType 'Google Contacts'
 #: frappe/integrations/doctype/google_contacts/google_contacts.json
@@ -16391,7 +16390,7 @@ msgstr "Negativer Wert"
 
 #: frappe/database/query.py:333
 msgid "Nested filters must be provided as a list or tuple."
-msgstr ""
+msgstr "Verschachtelte Filter müssen als Liste oder Tupel angegeben werden."
 
 #: frappe/utils/nestedset.py:94
 msgid "Nested set error. Please contact the Administrator."
@@ -16729,7 +16728,7 @@ msgstr "Nächste Woche"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:708
 msgid "Next Year"
-msgstr ""
+msgstr "Nächstes Jahr"
 
 #: frappe/public/js/frappe/form/workflow.js:45
 msgid "Next actions"
@@ -16806,7 +16805,7 @@ msgstr "Keine E-Mail-Konten zugewiesen"
 
 #: frappe/email/doctype/email_group/email_group.py:50
 msgid "No Email field found in {0}"
-msgstr ""
+msgstr "Kein E-Mail-Feld in {0} gefunden"
 
 #: frappe/public/js/frappe/views/inbox/inbox_view.js:183
 msgid "No Emails"
