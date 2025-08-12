@@ -386,8 +386,10 @@ def get_wkhtmltopdf_version():
 	return wkhtmltopdf_version or "0"
 
 
-def is_pdf_safe(pdf_path):
-	reader = PdfReader(pdf_path)
+def is_pdf_safe(file_content):
+	from io import BytesIO
+
+	reader = PdfReader(BytesIO(file_content))
 
 	def has_javascript(obj):
 		if isinstance(obj, dict):

@@ -133,7 +133,7 @@ class File(Document):
 		self.validate_file_url()
 		self.validate_file_on_disk()
 		self.file_size = frappe.form_dict.file_size or self.file_size
-		self.check_for_malicious_content()
+		self.check_content()
 
 	def validate_attachment_references(self):
 		if not self.attached_to_doctype:
@@ -375,10 +375,8 @@ class File(Document):
 		if self.file_type not in allowed_extensions.splitlines():
 			frappe.throw(_("File type of {0} is not allowed").format(self.file_type), exc=FileTypeNotAllowed)
 
-	def check_for_malicious_content(self):
-		file_name = self.file_url.split("/")[-1]
-		print(self.file_type)
-		if self.file_type == "PDF" and not is_pdf_safe(get_files_path(file_name, is_private=self.is_private)):
+	def check_content(self):
+		if self.file_type == "PDF" and not is_pdf_safe(self._content):
 			frappe.throw("PDF contains malicious content")
 
 	def validate_duplicate_entry(self):
@@ -641,7 +639,7 @@ class File(Document):
 
 		if isinstance(self._content, str):
 			self._content = self._content.encode()
-
+		self.check_content()
 		with open(file_path, "wb+") as f:
 			f.write(self._content)
 			os.fsync(f.fileno())
