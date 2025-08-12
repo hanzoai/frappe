@@ -34,8 +34,10 @@ class DesktopIcon(Document):
 		link: DF.SmallText | None
 		module_name: DF.Data | None
 		reverse: DF.Check
+		route: DF.Data | None
 		standard: DF.Check
-		type: DF.Literal["module", "list", "link", "page", "query-report"]
+		type: DF.Literal["module", "list", "link", "page", "query-report", "workspace"]
+		workspace: DF.Link | None
 	# end: auto-generated types
 
 	def validate(self):
@@ -43,6 +45,9 @@ class DesktopIcon(Document):
 			self.label = self.module_name
 
 	def on_trash(self):
+		clear_desktop_icons_cache()
+
+	def after_insert(self):
 		clear_desktop_icons_cache()
 
 
@@ -76,6 +81,8 @@ def get_desktop_icons(user=None):
 			"custom",
 			"standard",
 			"blocked",
+			"workspace",
+			"route",
 		]
 
 		active_domains = frappe.get_active_domains()
@@ -569,3 +576,25 @@ def hide(name, user=None):
 		return False
 
 	return True
+
+
+def create_desktop_icons_from_workspace():
+	all_workspaces = frappe.get_all("Workspace", filters={"public": 1}, pluck="name")
+	for w in all_workspaces:
+		icon = frappe.new_doc("Desktop Icon")
+		icon.type = "workspace"
+		icon.workspace = w
+		icon.route = "/app/" + w.lower()
+		icon.label = w
+		icon.color = generate_color()
+		icon.icon = frappe.db.get_value("Workspace", w, "icon")
+		icon.insert(ignore_if_duplicate=True)
+
+
+def generate_color():
+	import random
+
+	def hex():
+		return random.randint(0, 255)
+
+	return "#%02X%02X%02X" % (hex(), hex(), hex())

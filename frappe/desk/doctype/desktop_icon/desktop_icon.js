@@ -3,4 +3,29 @@
 
 frappe.ui.form.on("Desktop Icon", {
 	refresh: function (frm) {},
+	before_save: function (frm) {
+		if (frm.doc.type == "workspace") {
+			frappe.call({
+				method: "frappe.client.get",
+				args: {
+					doctype: "Workspace", // e.g., "User"
+					name: frm.doc.workspace,
+				},
+				callback: function (r) {
+					if (r.message) {
+						// Access attributes like r.message.another_field
+						let doc = r.message;
+						let url = `/app/${
+							doc.public
+								? frappe.router.slug(doc.title)
+								: "private/" + frappe.router.slug(doc.title)
+						}`;
+						frm.doc.route = url;
+					}
+				},
+			});
+		} else if (frm.doc.type == "link") {
+			frm.doc.route = frm.doc.link;
+		}
+	},
 });

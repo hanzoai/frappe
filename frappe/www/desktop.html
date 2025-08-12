@@ -9,9 +9,9 @@ endblock -%} {%- block footer -%} {%- endblock -%} {% block content %}
     <div class="desktop-container">
         <div class="icons">
             {% for icon in icons %}
-                <div class="desktop-icon" data-icon="{{ icon.icon }}">
+                <div class="desktop-icon" data-icon="{{ icon.icon }}" data-type="{{ icon.type }}" data-route="{{ icon.route }}">
                     <div class="icon-container" data-color="{{ icon.color }}"> </div>
-                    {{ icon.label }}
+                    <div class="icon-label">{{ icon.label }}</div>
                 </div>
 
             {% endfor %}
@@ -21,7 +21,6 @@ endblock -%} {%- block footer -%} {%- endblock -%} {% block content %}
 </div>
 {% endblock %} {% block script %}
 <script>
-    console.log('Desktop is back')
     frappe.ready(function(){
         $(".desktop-icon").each((i, el)=> {
             let icon_name = $(el).attr("data-icon");
@@ -33,6 +32,18 @@ endblock -%} {%- block footer -%} {%- endblock -%} {% block content %}
             let color_name = icon_container.attr("data-color")
             icon_container.css("background-color", color_name)
         })
+        setup_click()
     })
+
+function setup_click(){
+    $(".desktop-icon").on("click",(ev)=> {
+        let current = $(ev.currentTarget)
+        if(current.attr("data-type") == "workspace"){
+            window.location.href = window.location.origin + current.attr("data-route")
+        }else{
+            window.location.href = current.attr("data-route")
+        }
+    })
+}
 </script>
 {% endblock %}
