@@ -65,6 +65,7 @@ class FileUploader {
 			allow_toggle_private,
 			allow_toggle_optimize,
 			allow_google_drive,
+			other_options: this.get_extra_options(),
 		});
 		SetVueGlobals(app);
 		this.uploader = app.mount(this.wrapper);
@@ -124,6 +125,11 @@ class FileUploader {
 
 	upload_files() {
 		return this.uploader.upload_files(this.dialog);
+	}
+
+	get_extra_options() {
+		// Defaults to empty list, can be overriden externally
+		return [];
 	}
 
 	make_dialog(title) {
