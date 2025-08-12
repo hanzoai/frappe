@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-08-10 09:35+0000\n"
-"PO-Revision-Date: 2025-08-11 10:12\n"
+"PO-Revision-Date: 2025-08-12 10:24\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -1661,7 +1661,7 @@ msgstr "اجازه مهمان"
 #. Label of the allow_guest_to_view (Check) field in DocType 'DocType'
 #: frappe/core/doctype/doctype/doctype.json
 msgid "Allow Guest to View"
-msgstr "به مهمان اجازه مشاهده بدهید"
+msgstr "اجازه مشاهده به مهمان"
 
 #. Label of the allow_guests_to_upload_files (Check) field in DocType 'System
 #. Settings'
@@ -2003,7 +2003,7 @@ msgstr "اصلاح"
 #: frappe/core/doctype/amended_document_naming_settings/amended_document_naming_settings.json
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.json
 msgid "Amend Counter"
-msgstr "اصلاح شمارنده"
+msgstr "شمارنده اصلاح"
 
 #. Name of a DocType
 #: frappe/core/doctype/amended_document_naming_settings/amended_document_naming_settings.json
@@ -3295,7 +3295,7 @@ msgstr "قبل از ذخیره"
 #. Option for the 'DocType Event' (Select) field in DocType 'Server Script'
 #: frappe/core/doctype/server_script/server_script.json
 msgid "Before Save (Submitted Document)"
-msgstr "قبل از ذخیره (سند ارسالی)"
+msgstr "قبل از ذخیره (سند ارسال شده)"
 
 #. Option for the 'DocType Event' (Select) field in DocType 'Server Script'
 #: frappe/core/doctype/server_script/server_script.json
@@ -3432,7 +3432,7 @@ msgstr "پایین سمت چپ"
 #: frappe/printing/doctype/print_format/print_format.json
 #: frappe/public/js/print_format_builder/PrintFormatControls.vue:249
 msgid "Bottom Right"
-msgstr "سمت راست پایین"
+msgstr "پایین سمت راست"
 
 #. Option for the 'Delivery Status' (Select) field in DocType 'Communication'
 #: frappe/core/doctype/communication/communication.json
@@ -3520,7 +3520,7 @@ msgstr "ساخته شده در {0}"
 #. Label of the bulk_actions (Check) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "Bulk Actions"
-msgstr "اعمال انبوه"
+msgstr "اقدامات انبوه"
 
 #: frappe/core/doctype/user_permission/user_permission_list.js:142
 msgid "Bulk Delete"
@@ -3591,7 +3591,7 @@ msgstr "گوشه های گرد دکمه"
 #. Label of the button_shadows (Check) field in DocType 'Website Theme'
 #: frappe/website/doctype/website_theme/website_theme.json
 msgid "Button Shadows"
-msgstr "سایه های دکمه ای"
+msgstr "سایه های دکمه"
 
 #. Option for the 'Naming Rule' (Select) field in DocType 'DocType'
 #. Option for the 'Naming Rule' (Select) field in DocType 'Customize Form'
@@ -3610,7 +3610,7 @@ msgstr "به طور پیش‌فرض عنوان به عنوان عنوان متا
 #: frappe/core/doctype/doctype/doctype.json
 #: frappe/custom/doctype/customize_form/customize_form.json
 msgid "By fieldname"
-msgstr "با نام فیلد"
+msgstr "بر اساس نام فیلد"
 
 #. Option for the 'Naming Rule' (Select) field in DocType 'DocType'
 #. Option for the 'Naming Rule' (Select) field in DocType 'Customize Form'
@@ -4110,7 +4110,7 @@ msgstr "کارت"
 #. Option for the 'Type' (Select) field in DocType 'Workspace Link'
 #: frappe/desk/doctype/workspace_link/workspace_link.json
 msgid "Card Break"
-msgstr "کارت شکستن"
+msgstr "شکستن کارت"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:262
 msgid "Card Label"
@@ -4285,7 +4285,7 @@ msgstr "نمودار"
 #. Option for the 'Type' (Select) field in DocType 'Communication'
 #: frappe/core/doctype/communication/communication.json
 msgid "Chat"
-msgstr "چت کنید"
+msgstr "چت"
 
 #. Option for the 'Type' (Select) field in DocType 'DocField'
 #. Option for the 'Fieldtype' (Select) field in DocType 'Report Column'
@@ -4867,7 +4867,7 @@ msgstr "Comm10E"
 #: frappe/public/js/frappe/form/sidebar/assign_to.js:237
 #: frappe/templates/includes/comments/comments.html:34
 msgid "Comment"
-msgstr "اظهار نظر"
+msgstr "دیدگاه"
 
 #. Label of the comment_by (Data) field in DocType 'Comment'
 #: frappe/core/doctype/comment/comment.json
@@ -4897,16 +4897,16 @@ msgstr ""
 #: frappe/public/js/frappe/model/model.js:135
 #: frappe/website/doctype/web_form/templates/web_form.html:122
 msgid "Comments"
-msgstr "نظرات"
+msgstr "دیدگاه‌ها"
 
 #. Description of the 'Timeline Field' (Data) field in DocType 'DocType'
 #: frappe/core/doctype/doctype/doctype.json
 msgid "Comments and Communications will be associated with this linked document"
-msgstr "نظرات و ارتباطات با این سند پیوندی مرتبط خواهد شد"
+msgstr "دیدگاه‌ها و ارتباطات با این سند پیوندی مرتبط خواهد شد"
 
 #: frappe/templates/includes/comments/comments.py:52
 msgid "Comments cannot have links or email addresses"
-msgstr "نظرات نمی‌توانند پیوند یا آدرس ایمیل داشته باشند"
+msgstr "دیدگاه‌ها نمی‌توانند پیوند یا آدرس ایمیل داشته باشند"
 
 #. Option for the 'Rounding Method' (Select) field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
@@ -5347,12 +5347,12 @@ msgstr "نوع محتوا برای ساخت صفحه"
 #: frappe/core/doctype/translation/translation.json
 #: frappe/website/doctype/web_page/web_page.json
 msgid "Context"
-msgstr "متن نوشته"
+msgstr "زمینه"
 
 #. Label of the context_script (Code) field in DocType 'Web Page'
 #: frappe/website/doctype/web_page/web_page.json
 msgid "Context Script"
-msgstr "متن اسکریپت"
+msgstr "اسکریپت زمینه"
 
 #: frappe/public/js/frappe/widgets/onboarding_widget.js:204
 #: frappe/public/js/frappe/widgets/onboarding_widget.js:232
@@ -5444,7 +5444,7 @@ msgstr ""
 
 #: frappe/desk/page/setup_wizard/setup_wizard.js:234
 msgid "Could not start up: "
-msgstr "راه اندازی نشد: "
+msgstr "راه‌اندازی نشد: "
 
 #: frappe/public/js/frappe/web_form/web_form.js:359
 msgid "Couldn't save, please check the data you have entered"
@@ -7059,7 +7059,7 @@ msgstr "غیرفعال کردن اعلان لاگ تغییر"
 #. Settings'
 #: frappe/desk/doctype/list_view_settings/list_view_settings.json
 msgid "Disable Comment Count"
-msgstr "غیرفعال کردن تعداد نظرات"
+msgstr "غیرفعال کردن تعداد دیدگاه‌ها"
 
 #. Label of the disable_contact_us (Check) field in DocType 'Contact Us
 #. Settings'
@@ -7580,7 +7580,7 @@ msgstr "سند ذخیره شد"
 #. Settings'
 #: frappe/desk/doctype/notification_settings/notification_settings.json
 msgid "Document Share"
-msgstr "اشتراک سند"
+msgstr "اشتراک‌گذاری سند"
 
 #. Name of a DocType
 #: frappe/core/doctype/document_share_key/document_share_key.json
@@ -7922,7 +7922,7 @@ msgstr "داده های خود را دانلود کنید"
 
 #: frappe/core/doctype/prepared_report/prepared_report.js:49
 msgid "Download as CSV"
-msgstr ""
+msgstr "دانلود به صورت CSV"
 
 #: frappe/contacts/doctype/contact/contact.js:98
 msgid "Download vCard"
@@ -8658,7 +8658,7 @@ msgstr "اتصال خودکار در اسناد را فعال کنید"
 #. Label of the enable_comments (Check) field in DocType 'Web Page'
 #: frappe/website/doctype/web_page/web_page.json
 msgid "Enable Comments"
-msgstr "فعال کردن نظرات"
+msgstr "فعال کردن دیدگاه‌ها"
 
 #. Label of the enable_dynamic_client_registration (Check) field in DocType
 #. 'OAuth Settings'
@@ -9329,7 +9329,7 @@ msgstr "منقضی شده"
 #: frappe/integrations/doctype/oauth_bearer_token/oauth_bearer_token.json
 #: frappe/integrations/doctype/token_cache/token_cache.json
 msgid "Expires In"
-msgstr "منقضی می‌شود"
+msgstr "منقضی می‌شود در"
 
 #. Label of the expires_on (Date) field in DocType 'Document Share Key'
 #: frappe/core/doctype/document_share_key/document_share_key.json
@@ -11755,7 +11755,7 @@ msgstr "مخفی کردن ثانیه ها"
 #. Label of the hide_toolbar (Check) field in DocType 'DocType'
 #: frappe/core/doctype/doctype/doctype.json
 msgid "Hide Sidebar, Menu, and Comments"
-msgstr "نوار کناری، منو و نظرات را پنهان کنید"
+msgstr "نوار کناری، منو و دیدگاه‌ها را پنهان کنید"
 
 #. Label of the hide_standard_menu (Check) field in DocType 'Portal Settings'
 #: frappe/website/doctype/portal_settings/portal_settings.json
@@ -15305,7 +15305,7 @@ msgstr "بیشترین طول"
 #. Label of the max_report_rows (Int) field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Max Report Rows"
-msgstr ""
+msgstr "حداکثر ردیف‌های گزارش"
 
 #. Label of the max_value (Int) field in DocType 'Web Form Field'
 #: frappe/website/doctype/web_form_field/web_form_field.json
@@ -23532,7 +23532,7 @@ msgstr "راه‌اندازی سری برای تراکنش‌ها"
 
 #: frappe/desk/page/setup_wizard/setup_wizard.js:236
 msgid "Setup failed"
-msgstr "راه اندازی انجام نشد"
+msgstr "راه‌اندازی انجام نشد"
 
 #. Label of the share (Check) field in DocType 'Custom DocPerm'
 #. Label of the share (Check) field in DocType 'DocPerm'
@@ -23683,7 +23683,7 @@ msgstr "نمایش فرم کامل؟"
 #. Label of the show_full_number (Check) field in DocType 'Number Card'
 #: frappe/desk/doctype/number_card/number_card.json
 msgid "Show Full Number"
-msgstr ""
+msgstr "نمایش کامل شماره"
 
 #: frappe/public/js/frappe/ui/keyboard.js:234
 msgid "Show Keyboard Shortcuts"
@@ -23944,7 +23944,7 @@ msgstr "تنظیمات نوار کناری"
 #. Label of the section_break_17 (Section Break) field in DocType 'Web Page'
 #: frappe/website/doctype/web_page/web_page.json
 msgid "Sidebar and Comments"
-msgstr "نوار کناری و نظرات"
+msgstr "نوار کناری و دیدگاه‌ها"
 
 #. Label of the sign_up_and_confirmation_section (Section Break) field in
 #. DocType 'Email Group'
