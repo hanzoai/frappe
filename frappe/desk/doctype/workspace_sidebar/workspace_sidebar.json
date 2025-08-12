@@ -1,0 +1,62 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:title",
+ "creation": "2025-08-12 12:06:45.016314",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "desktop_icon",
+  "title",
+  "items"
+ ],
+ "fields": [
+  {
+   "fieldname": "desktop_icon",
+   "fieldtype": "Link",
+   "label": "Desktop Icon",
+   "options": "Desktop Icon",
+   "unique": 1
+  },
+  {
+   "fetch_from": "desktop_icon.label",
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "unique": 1
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "Workspace Sidebar Item"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-08-12 12:48:17.192321",
+ "modified_by": "Administrator",
+ "module": "Desk",
+ "name": "Workspace Sidebar",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

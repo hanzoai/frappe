@@ -80,7 +80,7 @@ frappe.breadcrumbs = {
 			frappe.workspace_map[breadcrumbs.workspace]?.app != frappe.current_app
 		) {
 			let app = frappe.workspace_map[breadcrumbs.workspace].app;
-			frappe.app.sidebar.apps_switcher.set_current_app(app);
+			frappe.app.sidebar.sidebar_header.set_current_app(app);
 		}
 
 		this.toggle(true);

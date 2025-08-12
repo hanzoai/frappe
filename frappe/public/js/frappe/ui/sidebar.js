@@ -48,7 +48,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.wrapper.find(".overlay").on("click", () => {
 			this.close_sidebar();
 		});
-		this.apps_switcher = new frappe.ui.AppsSwitcher(this);
+		this.apps_switcher = new frappe.ui.SidebarHeader(this);
 		this.apps_switcher.create_app_data_map();
 	}
 

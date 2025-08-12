@@ -7,7 +7,6 @@ import random
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils.user import UserPermissions
 
 
 class DesktopIcon(Document):
@@ -483,6 +482,8 @@ def get_module_icons(user=None):
 
 def get_user_icons(user):
 	"""Get user icons for module setup page"""
+	from frappe.utils.user import UserPermissions
+
 	user_perms = UserPermissions(user)
 	user_perms.build_permissions()
 

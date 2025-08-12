@@ -1,4 +1,4 @@
-frappe.ui.AppsSwitcher = class AppsSwitcher {
+frappe.ui.SidebarHeader = class SidebarHeader {
 	constructor(sidebar) {
 		this.sidebar = sidebar;
 		this.sidebar_wrapper = $(this.sidebar.wrapper.find(".body-sidebar"));
@@ -10,14 +10,13 @@ frappe.ui.AppsSwitcher = class AppsSwitcher {
 
 	make() {
 		this.wrapper = $(
-			frappe.render_template("apps_switcher", {
+			frappe.render_template("sidebar_header", {
 				app_logo_url: frappe.boot.app_data[0].app_logo_url,
 				app_title: __(frappe.boot.app_data[0].app_title),
 			})
 		).prependTo(this.sidebar_wrapper);
 		this.app_switcher_dropdown = $(".app-switcher-dropdown");
 	}
-
 	setup_app_switcher() {
 		this.app_switcher_menu = $(".app-switcher-menu");
 		$(".app-switcher-dropdown").on("click", (e) => {
