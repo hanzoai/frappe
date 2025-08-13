@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-08-10 09:35+0000\n"
-"PO-Revision-Date: 2025-08-11 10:12\n"
+"PO-Revision-Date: 2025-08-12 10:24\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Serbian (Cyrillic)\n"
 "MIME-Version: 1.0\n"
@@ -247,7 +247,7 @@ msgstr "<="
 msgid "<a href=\"https://docs.frappe.io/framework/user/en/api/rest#1-token-based-authentication\" target=\"_blank\">\n"
 "  Click here to learn about token-based authentication\n"
 "</a>"
-msgstr ""
+msgstr "<a href=\"https://docs.frappe.io/framework/user/en/api/rest#1-token-based-authentication\" target=\"_blank\"> Кликните овде да бисте сазнали више о аутентификацији путем токена </a>"
 
 #: frappe/public/js/frappe/widgets/widget_dialog.js:601
 msgid "<b>{0}</b> is not a valid URL"
@@ -887,7 +887,7 @@ msgstr "API кључ се не може поново генерисати"
 
 #: frappe/core/doctype/user/user.js:443
 msgid "API Keys"
-msgstr ""
+msgstr "API кључеви"
 
 #. Label of the api_logging_section (Section Break) field in DocType 'System
 #. Settings'
@@ -5592,7 +5592,7 @@ msgstr "Копирај у међуспремник"
 
 #: frappe/core/doctype/user/user.js:474
 msgid "Copy token to clipboard"
-msgstr ""
+msgstr "Копирајте токен у међуспремник"
 
 #. Label of the copyright (Data) field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
@@ -24905,7 +24905,7 @@ msgstr "Спреми приложени PDF документ"
 
 #: frappe/core/doctype/user/user.js:484
 msgid "Store the API secret securely. It won't be displayed again."
-msgstr ""
+msgstr "Сачувајте API тајну на сигурном месту. Неће бити више приказивана."
 
 #. Description of the 'Last Known Versions' (Text) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
