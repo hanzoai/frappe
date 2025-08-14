@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-08-10 09:35+0000\n"
-"PO-Revision-Date: 2025-08-11 10:12\n"
+"PO-Revision-Date: 2025-08-14 10:37\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -556,7 +556,7 @@ msgstr ""
 #. Description of a DocType
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "A Frappe Framework instance can function as an OAuth Client, Resource, or Authorization server. This DocType contains settings related to all three."
-msgstr ""
+msgstr "Egy Frappe Framework példány működhet OAuth-ügyfélként, erőforrásként vagy engedélyezési kiszolgálóként. Ez a DocType mindháromhoz kapcsolódó beállításokat tartalmaz."
 
 #: frappe/custom/doctype/custom_field/custom_field.py:175
 msgid "A field with the name {0} already exists in {1}"
