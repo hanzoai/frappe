@@ -4,6 +4,7 @@ omit =
     .github/*
     commands/*
     **/test_*.py
+    **/test_*/*
 
 [report]
 exclude_lines =
