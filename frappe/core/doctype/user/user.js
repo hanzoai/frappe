@@ -69,6 +69,7 @@ frappe.ui.form.on("User", {
 						let d = frm.add_child("block_modules");
 						d.module = v.module;
 					});
+					frm.module_editor.disable = 1;
 					frm.module_editor && frm.module_editor.show();
 				},
 			});
@@ -100,7 +101,11 @@ frappe.ui.form.on("User", {
 
 				if (frm.doc.user_type == "System User") {
 					var module_area = $("<div>").appendTo(frm.fields_dict.modules_html.wrapper);
-					frm.module_editor = new frappe.ModuleEditor(frm, module_area);
+					frm.module_editor = new frappe.ModuleEditor(
+						frm,
+						module_area,
+						frm.doc.module_profile && frm.doc.module_profile.length ? 1 : 0
+					);
 				}
 			} else {
 				frm.roles_editor.show();
@@ -245,6 +250,8 @@ frappe.ui.form.on("User", {
 				frm.roles_editor.show();
 			}
 
+			frm.module_editor.disable =
+				frm.doc.module_profile && frm.doc.module_profile.length ? 1 : 0;
 			frm.module_editor && frm.module_editor.show();
 
 			if (frappe.session.user == doc.name) {
