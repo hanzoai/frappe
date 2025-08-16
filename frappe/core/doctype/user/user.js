@@ -97,7 +97,7 @@ frappe.ui.form.on("User", {
 					frm.module_editor = new frappe.ModuleEditor(
 						frm,
 						module_area,
-						frm.doc.module_profile && frm.doc.module_profile.length ? 1 : 0
+						frm.doc.module_profile ? 1 : 0
 					);
 				}
 			} else {
@@ -253,8 +253,7 @@ frappe.ui.form.on("User", {
 				frm.roles_editor.show();
 			}
 
-			frm.module_editor.disable =
-				frm.doc.module_profile && frm.doc.module_profile.length ? 1 : 0;
+			frm.module_editor.disable = frm.doc.module_profile ? 1 : 0;
 			frm.module_editor && frm.module_editor.show();
 
 			if (frappe.session.user == doc.name) {
