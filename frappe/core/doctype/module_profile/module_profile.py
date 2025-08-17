@@ -55,10 +55,10 @@ class ModuleProfile(Document):
 
 		module_profile_modules = {module.module for module in self.block_modules}
 
-		for user, modules in user_modules.items():
+		for user_name, modules in user_modules.items():
 			if modules != module_profile_modules:
-				user = frappe.get_doc("User", user)
+				user = frappe.get_doc("User", user_name)
 				user.block_modules = []
 				for module in module_profile_modules:
 					user.append("block_modules", {"module": module})
-			user.save()
+				user.save()
