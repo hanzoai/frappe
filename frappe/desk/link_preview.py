@@ -1,13 +1,15 @@
 import frappe
 from frappe.model import no_value_fields, table_fields
 from frappe.utils.caching import http_cache
+from frappe.www.printview import set_link_titles
 
 
 @frappe.whitelist()
 @http_cache(max_age=60 * 10)
 def get_preview_data(doctype, docname):
 	preview_fields = []
-	meta = frappe.get_meta(doctype)
+	doc = frappe.get_doc(doctype, docname)
+	meta = doc.meta
 	if not meta.show_preview_popup:
 		return
 
@@ -43,11 +45,14 @@ def get_preview_data(doctype, docname):
 		"name": preview_data.get("name"),
 	}
 
+	set_link_titles(doc)
+
 	for key, val in preview_data.items():
 		if val and meta.has_field(key) and key not in [image_field, title_field, "name"]:
 			formatted_preview_data[meta.get_field(key).label] = frappe.format(
-				val,
-				meta.get_field(key).fieldtype,
+				value=val,
+				doc=doc,
+				df=meta.get_field(key),
 				translated=True,
 			)
 
