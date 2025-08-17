@@ -6,29 +6,23 @@ from frappe.tests import IntegrationTestCase
 
 class TestModuleProfile(IntegrationTestCase):
 	def setUp(self):
-		# Clean slate before each test
 		frappe.delete_doc_if_exists("Module Profile", "_Test Module Profile", force=1)
 		frappe.delete_doc_if_exists("Module Profile", "_Test Module Profile 2", force=1)
 		frappe.delete_doc_if_exists("User", "test-module-user1@example.com", force=1)
 		frappe.delete_doc_if_exists("User", "test-module-user2@example.com", force=1)
 
 	def test_make_new_module_profile(self):
-		if not frappe.db.get_value("Module Profile", "_Test Module Profile"):
-			frappe.get_doc(
-				{
-					"doctype": "Module Profile",
-					"module_profile_name": "_Test Module Profile",
-					"block_modules": [{"module": "Accounts"}],
-				}
-			).insert()
+		frappe.get_doc(
+			{
+				"doctype": "Module Profile",
+				"module_profile_name": "_Test Module Profile",
+				"block_modules": [{"module": "Accounts"}],
+			}
+		).insert()
 
-		# add to user and check
-		if not frappe.db.get_value("User", "test-for-module_profile@example.com"):
-			new_user = frappe.get_doc(
-				{"doctype": "User", "email": "test-for-module_profile@example.com", "first_name": "Test User"}
-			).insert()
-		else:
-			new_user = frappe.get_doc("User", "test-for-module_profile@example.com")
+		new_user = frappe.get_doc(
+			{"doctype": "User", "email": "test-module-user1@example.com", "first_name": "Test User"}
+		).insert()
 
 		new_user.module_profile = "_Test Module Profile"
 		new_user.save()
@@ -73,8 +67,6 @@ class TestModuleProfile(IntegrationTestCase):
 
 		self.assertEqual({bm.module for bm in user.block_modules}, {"Accounts"})
 
-		# Update module profile
-
 		module_profile.append("block_modules", {"module": "Projects"})
 		module_profile.save()
 
@@ -99,7 +91,6 @@ class TestModuleProfile(IntegrationTestCase):
 		user.save()
 		self.assertTrue(user.block_modules)
 
-		# Clear profile modules
 		module_profile.block_modules = []
 		module_profile.save()
 
@@ -127,7 +118,6 @@ class TestModuleProfile(IntegrationTestCase):
 			u.module_profile = module_profile.name
 			u.save()
 
-		# Update profile
 		module_profile.append("block_modules", {"module": "Projects"})
 		module_profile.save()
 
@@ -161,7 +151,6 @@ class TestModuleProfile(IntegrationTestCase):
 		user.save()
 		self.assertEqual([bm.module for bm in user.block_modules], ["Accounts"])
 
-		# Switch to another profile
 		user.module_profile = profile2.name
 		user.save()
 		self.assertEqual([bm.module for bm in user.block_modules], ["HR"])
