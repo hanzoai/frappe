@@ -377,7 +377,7 @@ class File(Document):
 
 	def check_content(self):
 		if self.file_type == "PDF" and not is_pdf_safe(self._content):
-			frappe.throw("PDF contains malicious content")
+			frappe.throw(_("PDF cannot be uploaded, It contains unsafe content"))
 
 	def validate_duplicate_entry(self):
 		if not self.flags.ignore_duplicate_entry_error and not self.is_folder:
