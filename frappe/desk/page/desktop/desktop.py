@@ -7,4 +7,4 @@ def get_context(context):
 		frappe.local.flags.redirect_location = "/app"
 		raise frappe.Redirect
 	context.icons = get_desktop_icons()
-	return context
+	return {"icons": get_desktop_icons()}

@@ -60,7 +60,7 @@ website_route_rules = [
 ]
 
 website_redirects = [
-	{"source": r"/desk", "target": r"/app\1"},
+	{"source": r"/desk(.*)", "target": r"/app\1"},
 ]
 
 base_template = "templates/base.html"

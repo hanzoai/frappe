@@ -1,0 +1,14 @@
+<!-- jinja -->
+<div class="container">
+    <div class="desktop-container">
+        <div class="icons">
+            {% for icon in icons %}
+                <div class="desktop-icon" data-icon="{{ icon.icon }}" data-type="{{ icon.type }}" data-route="{{ icon.route }}">
+                    <div class="icon-container" data-color="{{ icon.color }}"> </div>
+                    <div class="icon-label">{{ icon.label }}</div>
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+</div>
