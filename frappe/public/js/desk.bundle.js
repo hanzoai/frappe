@@ -10,6 +10,7 @@ import "./frappe/ui/messages.js";
 import "./frappe/ui/keyboard.js";
 import "./frappe/ui/colors.js";
 import "./frappe/ui/sidebar.html";
+import "./frappe/ui/sidebar_item.html";
 import "./frappe/ui/sidebar.js";
 import "./frappe/ui/sidebar_header.js";
 import "./frappe/ui/sidebar_header.html";

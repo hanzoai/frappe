@@ -14,6 +14,7 @@ class WorkspaceSidebarItem(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
+		child: DF.Check
 		label: DF.Data | None
 		link_to: DF.DynamicLink | None
 		link_type: DF.Literal["Page", "DocType", "Report"]

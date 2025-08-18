@@ -42,7 +42,6 @@ frappe.breadcrumbs = {
 		}
 		this.all[frappe.breadcrumbs.current_page()] = obj;
 		this.update();
-		frappe.app.sidebar.set_active_workspace_item();
 	},
 
 	current_page() {
@@ -72,15 +71,6 @@ frappe.breadcrumbs = {
 			} else if (breadcrumbs.doctype && view == "dashboard-view") {
 				this.set_list_breadcrumb(breadcrumbs);
 			}
-		}
-
-		if (
-			breadcrumbs.workspace &&
-			frappe.workspace_map[breadcrumbs.workspace]?.app &&
-			frappe.workspace_map[breadcrumbs.workspace]?.app != frappe.current_app
-		) {
-			let app = frappe.workspace_map[breadcrumbs.workspace].app;
-			frappe.app.sidebar.sidebar_header.set_current_app(app);
 		}
 
 		this.toggle(true);

@@ -1,21 +1,28 @@
 frappe.ui.SidebarHeader = class SidebarHeader {
-	constructor(sidebar) {
+	constructor(sidebar, workspace_title) {
 		this.sidebar = sidebar;
 		this.sidebar_wrapper = $(this.sidebar.wrapper.find(".body-sidebar"));
 		this.drop_down_expanded = false;
+		this.workspace_title = workspace_title;
+
 		this.make();
 		this.setup_app_switcher();
 		this.set_hover();
+		this.populate_apps_menu();
 	}
 
 	make() {
+		this.desktop_icon = this.get_desktop_icon();
 		this.wrapper = $(
 			frappe.render_template("sidebar_header", {
-				app_logo_url: frappe.boot.app_data[0].app_logo_url,
-				app_title: __(frappe.boot.app_data[0].app_title),
+				workspace_title: this.workspace_title,
+				icon: frappe.utils.icon(this.desktop_icon.icon, "lg"),
 			})
 		).prependTo(this.sidebar_wrapper);
 		this.app_switcher_dropdown = $(".app-switcher-dropdown");
+	}
+	get_desktop_icon() {
+		return frappe.boot.desktop_icons.filter((f) => f.label == this.workspace_title)[0];
 	}
 	setup_app_switcher() {
 		this.app_switcher_menu = $(".app-switcher-menu");
@@ -38,11 +45,8 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		}
 	}
 	populate_apps_menu() {
-		this.add_private_app();
-
 		this.add_website_select();
 		this.add_settings_select();
-		this.setup_select_app();
 	}
 
 	add_app_item(app) {
@@ -117,7 +121,6 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 	}
 	// refactor them into one single function
 	add_website_select() {
-		$(`<div class="divider"></div>`).appendTo(this.app_switcher_menu);
 		this.add_app_item(
 			{
 				app_name: "website",

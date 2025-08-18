@@ -185,7 +185,7 @@ body {
 			align-items: center;
 			// padding: 3px 0px 3px 11px;
 			flex: 1;
-
+			height: 30px;
 			&:hover {
 				text-decoration: none !important;
 			}
@@ -194,7 +194,6 @@ body {
 				padding: 7px;
 
 				width: 30px;
-				height: 30px;
 
 				svg {
 					width: 16px;
@@ -329,6 +328,7 @@ body {
 	}
 }
 
+// Sidebar Header
 .app-switcher-dropdown {
 	position: relative;
 	text-decoration: none;

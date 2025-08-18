@@ -9,7 +9,9 @@
   "label",
   "type",
   "link_type",
-  "link_to"
+  "link_to",
+  "icon",
+  "child"
  ],
  "fields": [
   {
@@ -39,13 +41,26 @@
    "in_list_view": 1,
    "label": "Link To",
    "options": "link_type"
+  },
+  {
+   "fieldname": "icon",
+   "fieldtype": "Icon",
+   "in_list_view": 1,
+   "label": "Icon"
+  },
+  {
+   "default": "0",
+   "fieldname": "child",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Child Item"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-08-12 12:55:03.654000",
+ "modified": "2025-08-18 03:41:56.405534",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Workspace Sidebar Item",

@@ -14,6 +14,7 @@ from frappe.core.doctype.installed_applications.installed_applications import (
 )
 from frappe.core.doctype.navbar_settings.navbar_settings import get_app_logo, get_navbar_settings
 from frappe.desk.doctype.changelog_feed.changelog_feed import get_changelog_feed_items
+from frappe.desk.doctype.desktop_icon.desktop_icon import get_desktop_icons
 from frappe.desk.doctype.form_tour.form_tour import get_onboarding_ui_tours
 from frappe.desk.doctype.route_history.route_history import frequently_visited_links
 from frappe.desk.form.load import get_meta_bundle
@@ -148,8 +149,11 @@ def load_conf_settings(bootinfo):
 def load_desktop_data(bootinfo):
 	from frappe.desk.desktop import get_workspace_sidebar_items
 
-	bootinfo.sidebar_pages = get_workspace_sidebar_items()
-	allowed_pages = [d.name for d in bootinfo.sidebar_pages.get("pages")]
+	bootinfo.desktop_icons = get_desktop_icons()
+	bootinfo.workspaces = get_workspace_sidebar_items()
+	bootinfo.workspace_sidebar_item = get_sidebar_items()
+	print(bootinfo.workspace_sidebar_item)
+	allowed_pages = [d.name for d in bootinfo.workspaces.get("pages")]
 	bootinfo.module_wise_workspaces = get_controller("Workspace").get_module_wise_workspaces()
 	bootinfo.dashboards = frappe.get_all("Dashboard")
 	bootinfo.app_data = []
@@ -518,3 +522,26 @@ def get_sentry_dsn():
 		return
 
 	return os.getenv("FRAPPE_SENTRY_DSN")
+
+
+def get_sidebar_items():
+	sidebars = frappe.get_all("Workspace Sidebar", pluck="name")
+	sidebar_items = {}
+
+	for s in sidebars:
+		w = frappe.get_doc("Workspace Sidebar", s)
+		desktop_icon = frappe.db.get_value("Desktop Icon", w.desktop_icon, "label").lower()
+		sidebar_items[desktop_icon] = []
+
+		for si in w.items:
+			workspace_sidebar = {
+				"label": si.label,
+				"link_to": si.link_to,
+				"link_type": si.link_type,
+				"type": si.type,
+				"icon": si.icon,
+				"child": si.child,
+			}
+			sidebar_items[desktop_icon].append(workspace_sidebar)
+
+	return sidebar_items
