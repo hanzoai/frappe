@@ -9,7 +9,7 @@ frappe.ui.form.Control = class BaseControl {
 	make() {
 		this.make_wrapper();
 		this.$wrapper
-			.attr("data-fieldtype", this.df?.old_fieldtype || this.df.fieldtype)
+			.attr("data-fieldtype", this.df.fieldtype)
 			.attr("data-fieldname", this.df.fieldname);
 		this.wrapper = this.$wrapper.get(0);
 		this.wrapper.fieldobj = this; // reference for event handlers

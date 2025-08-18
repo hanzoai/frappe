@@ -88,14 +88,13 @@ def get_meta(doctype: "str | DocType", cached: bool = True) -> "_Meta":
 
 	meta = Meta(doctype)
 
-	key = f"doctype_meta::{meta.name}"
-	frappe.client_cache.set_value(key, meta)
-
 	if meta.name not in meta.special_doctypes:
 		from frappe.desk.form.meta import mask_protected_fields
 
 		meta = mask_protected_fields(meta)
 
+	key = f"doctype_meta::{meta.name}"
+	frappe.client_cache.set_value(key, meta)
 	return meta
 
 

@@ -273,70 +273,16 @@ class Document(BaseDocument):
 
 		return self
 
-	def mask_field_value(self, field):
-		# TODO: use this method to mask value and remove other code
-		already_masked = False
-
-		if field.fieldtype == "Data" and field.options == "Phone":
-			already_masked = True
-			self.set(field.fieldname, self.get(field.fieldname)[0:3] + "XXXXXXX")
-
-		if field.fieldtype == "Data" and field.options == "Email":
-			already_masked = True
-			email = self.get(field.fieldname)
-			if email:
-				email = email.split("@")
-				self.set(field.fieldname, "XXXXXXXX" + "@" + email[1])
-
-		if field.fieldtype == "Date":
-			already_masked = True
-			date = self.get(field.fieldname)
-			if date:
-				self.set(field.fieldname, "XX-XX-XXXX")
-
-		if field.fieldtype == "Time":
-			already_masked = True
-			date = self.get(field.fieldname)
-			if date:
-				self.set(field.fieldname, "XX:XX")
-
-		if not already_masked:
-			self.set(field.fieldname, "XXXXXXXX")
-
 	def mask_fields(self):
+		from frappe.model.db_query import mask_field_value
+
 		mask_fields = frappe.get_meta(self.doctype).get_masked_fields()
 
 		if not mask_fields:
 			return
 		for field in mask_fields:
-			already_masked = False
-
-			# if field type is Data and option is Phone the mask all value except last 3
-			if field.old_fieldtype == "Data" and field.options == "Phone":
-				already_masked = True
-				self.set(field.fieldname, self.get(field.fieldname)[0:3] + "XXXXXXX")
-
-			if field.old_fieldtype == "Data" and field.options == "Email":
-				already_masked = True
-				email = self.get(field.fieldname)
-				if email:
-					email = email.split("@")
-					self.set(field.fieldname, "XXXXXXXX" + "@" + email[1])
-
-			if field.old_fieldtype == "Date":
-				already_masked = True
-				date = self.get(field.fieldname)
-				if date:
-					self.set(field.fieldname, "XX-XX-XXXX")
-
-			if field.old_fieldtype == "Time":
-				already_masked = True
-				date = self.get(field.fieldname)
-				if date:
-					self.set(field.fieldname, "XX:XXXX")
-
-			if not already_masked:
-				self.set(field.fieldname, "XXXXXXXX")
+			val = self.get(field.fieldname)
+			self.set(field.fieldname, mask_field_value(field, val))
 
 	def load_children_from_db(self):
 		is_doctype = self.doctype == "DocType"
@@ -981,7 +927,6 @@ class Document(BaseDocument):
 			return
 
 		# check for child tables
-		print(high_permlevel_fields, "high_permlevel_fields \n\n\n")
 		for df in self.meta.get_table_fields():
 			high_permlevel_fields = frappe.get_meta(df.options).get_high_permlevel_fields()
 			if high_permlevel_fields:

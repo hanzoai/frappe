@@ -376,8 +376,7 @@ def export_query():
 	form_params = get_form_params()
 	form_params["limit_page_length"] = None
 
-	# remove as_list param because key is needed for data masking
-	# form_params["as_list"] = True
+	form_params["as_list"] = True
 	doctype = form_params.pop("doctype")
 	if isinstance(form_params["fields"], list):
 		form_params["fields"].append("owner")
@@ -420,10 +419,6 @@ def export_query():
 	labels = [info["label"] for info in fields_info]
 	data = [[_("Sr"), *labels]]
 	processed_data = []
-
-	# convert ret to a list of lists if it is a list of dicts
-	if isinstance(ret, list) and ret and isinstance(ret[0], dict):
-		ret = [[value for value in row.values()] for row in ret]
 
 	if frappe.local.lang == "en" or not translate_values:
 		data.extend([i + 1, *list(row)] for i, row in enumerate(ret))

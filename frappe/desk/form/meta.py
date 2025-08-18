@@ -52,24 +52,12 @@ def get_meta(doctype, cached=True) -> "FormMeta":
 
 
 def mask_protected_fields(meta):
-	if (
-		frappe.flags.in_patch
-		or frappe.flags.in_install
-		or frappe.flags.in_migrate
-		or frappe.flags.in_setup_wizard
-	):
-		return meta
-
 	for df in meta.fields:
 		if df.mask and not meta.has_permlevel_access_to(
 			fieldname=df.fieldname, df=df, permission_type="mask"
 		):
 			# store orignal fieldtype and change fieldtype to Data
-			df.read_only = 1
 			df.mask_readonly = 1
-			df.set("old_fieldtype", df.get("old_fieldtype") or df.fieldtype)
-			if df.fieldtype != "Data":
-				df.fieldtype = "Data"
 	return meta
 
 

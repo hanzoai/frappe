@@ -231,24 +231,36 @@ class DatabaseQuery:
 		if not masked_fields:
 			return result
 
-		for row in result:
-			for field in masked_fields:
-				if field.fieldname in row:
-					val = row[field.fieldname]
-					if not val:
-						continue
+		if self.as_list:
+			masked_result = []
+			field_index_map = {}
+			for idx, field in enumerate(self.fields):
+				# handle aliases (e.g. `tabSI`.`posting_date` as posting_date)
+				if " as " in field.lower():
+					alias = field.split(" as ")[1].strip(" '")
+					field_index_map[alias] = idx
+				else:
+					# extract last part after `.`
+					col = field.split(".")[-1].strip("`")
+					field_index_map[col] = idx
+			# if as_list then we don't have field names in the result so we need to mask by position
+			for row in result:
+				row = list(row)  # convert tuple to list mutable
+				for field in masked_fields:
+					if field.fieldname in field_index_map:
+						idx = field_index_map[field.fieldname]
+						val = row[idx]
+						row[idx] = mask_field_value(field, val)
 
-					if field.old_fieldtype == "Data" and field.options == "Phone":
-						row[field.fieldname] = val[:3] + "XXXXXX"
-					elif field.old_fieldtype == "Data" and field.options == "Email":
-						email = val.split("@")
-						row[field.fieldname] = "XXXXXX@" + email[1]
-					elif field.old_fieldtype == "Date":
-						row[field.fieldname] = "XX-XX-XXXX"
-					elif field.old_fieldtype == "Time":
-						row[field.fieldname] = "XX:XX"
-					else:
-						row[field.fieldname] = "XXXXXXXX"
+				masked_result.append(tuple(row))  # convert back to tuple
+			result = masked_result
+		else:
+			for row in result:
+				for field in masked_fields:
+					if field.fieldname in row:
+						val = row[field.fieldname]
+						row[field.fieldname] = mask_field_value(field, val)
+
 		return result
 
 	def get_masked_fields(self):
@@ -660,15 +672,6 @@ from {tables}
 			)
 		)
 
-		# get_permitted_field = get_permitted_fields(
-		# 	doctype=self.doctype,
-		# 	parenttype=self.parent_doctype,
-		# 	permission_type=self.permission_map.get(self.doctype),
-		# 	ignore_virtual=True,
-		# )
-
-		print(self.doctype, self.permission_map.get(self.doctype), "permitted_fields \n\n\n\n")
-		# print(get_permitted_field, "get_permitted_field \n\n\n\n")
 		permitted_child_table_fields = {}
 
 		for i, field in enumerate(self.fields):
@@ -1237,6 +1240,23 @@ from {tables}
 			user_settings["fields"] = self.user_settings_fields
 
 		update_user_settings(self.doctype, user_settings)
+
+
+def mask_field_value(field, val):
+	if not val:
+		return val
+
+	if field.fieldtype == "Data" and field.options == "Phone":
+		return val[:3] + "XXXXXX"
+	elif field.fieldtype == "Data" and field.options == "Email":
+		email = val.split("@")
+		return "XXXXXX@" + email[1] if len(email) > 1 else "XXXXXX"
+	elif field.fieldtype == "Date":
+		return "XX-XX-XXXX"
+	elif field.fieldtype == "Time":
+		return "XX:XX"
+	else:
+		return "XXXXXXXX"
 
 
 def cast_name(column: str) -> str:
