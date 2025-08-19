@@ -1772,26 +1772,6 @@ Object.assign(frappe.utils, {
 			__("Generate Tracking URL")
 		);
 	},
-<<<<<<< HEAD
-=======
-	/**
-	 * Checks if a value is empty.
-	 *
-	 * Returns false for: "hello", 0, 1, 3.1415, {"a": 1}, [1, 2, 3]
-	 * Returns true for: "", null, undefined, {}, []
-	 *
-	 * @param {*} value - The value to check.
-	 * @returns {boolean} - Returns `true` if the value is empty, `false` otherwise.
-	 */
-	is_empty(value) {
-		if (!value && value !== 0) return true;
-
-		if (typeof value === "object")
-			return (Array.isArray(value) ? value : Object.keys(value)).length === 0;
-
-		return false;
-	},
-
 	/**
 	 * Masks passwords in an object by replacing the values of keys containing
 	 * "password" or "passphrase" with "*****".
@@ -1806,5 +1786,4 @@ Object.assign(frappe.utils, {
 			}
 		}
 	},
->>>>>>> f90c7b6e09 (fix: mask passwords (#33635))
 });
