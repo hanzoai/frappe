@@ -582,7 +582,7 @@ input.list-header-checkbox {
 						padding-left: 27px;
 						margin-right: 6px;
 
-						&::after {
+						&:not(.no-seperator)::after {
 							content: "\2022";
 							position: absolute;
 							right: 0;

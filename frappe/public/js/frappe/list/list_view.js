@@ -783,8 +783,13 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 
 	get_left_html(doc) {
 		let left_html = "";
+		let has_value_in_second_column = true;
 		for (let i = 0; i < this.columns.length; i++) {
 			let col = this.columns[i];
+
+			if (i == 4 && !doc[col.df.fieldname]) {
+				has_value_in_second_column = false;
+			}
 
 			if (frappe.is_mobile() && col.type == "Field" && [3, 4].includes(i)) {
 				left_html += `<div class="mobile-layout">${this.get_column_html(
@@ -795,6 +800,17 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			} else {
 				left_html += this.get_column_html(col, doc, false);
 			}
+		}
+
+		if (!has_value_in_second_column) {
+			const container = document.createElement("div");
+			container.innerHTML = left_html;
+			const firstMobileLayout = container.querySelector(".mobile-layout");
+
+			if (firstMobileLayout) {
+				firstMobileLayout.classList.add("no-seperator");
+			}
+			left_html = container.innerHTML;
 		}
 
 		left_html += this.generate_button_html(doc);
