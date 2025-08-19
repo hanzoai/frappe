@@ -4,17 +4,13 @@ import frappe
 from frappe.tests.utils import FrappeTestCase
 
 
-<<<<<<< HEAD
 class TestModuleProfile(FrappeTestCase):
-=======
-class TestModuleProfile(IntegrationTestCase):
 	def setUp(self):
 		frappe.delete_doc_if_exists("Module Profile", "_Test Module Profile", force=1)
 		frappe.delete_doc_if_exists("Module Profile", "_Test Module Profile 2", force=1)
 		frappe.delete_doc_if_exists("User", "test-module-user1@example.com", force=1)
 		frappe.delete_doc_if_exists("User", "test-module-user2@example.com", force=1)
 
->>>>>>> 8d04ecba9e (ci: add unit tests)
 	def test_make_new_module_profile(self):
 		frappe.get_doc(
 			{

@@ -25,11 +25,6 @@ class ModuleProfile(Document):
 		from frappe.config import get_modules_from_all_apps
 
 		self.set_onload("all_modules", sorted(m.get("module_name") for m in get_modules_from_all_apps()))
-<<<<<<< HEAD
-=======
-
-	def get_permission_log_options(self, event=None):
-		return {"fields": ["block_modules"]}
 
 	def on_update(self):
 		self.clear_cache()
@@ -63,9 +58,4 @@ class ModuleProfile(Document):
 				user.block_modules = []
 				for module in module_profile_modules:
 					user.append("block_modules", {"module": module})
-<<<<<<< HEAD
-			user.save()
->>>>>>> f711e52fc9 (fix: sync user block_modules on update)
-=======
 				user.save()
->>>>>>> 8d04ecba9e (ci: add unit tests)
