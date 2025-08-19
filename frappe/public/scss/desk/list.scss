@@ -571,6 +571,7 @@ input.list-header-checkbox {
 						padding-left: 10px;
 						.list-row-col {
 							margin-right: 0px;
+							min-width: auto;
 						}
 					}
 					.mobile-layout:not(.mobile-layout ~ .mobile-layout) {
