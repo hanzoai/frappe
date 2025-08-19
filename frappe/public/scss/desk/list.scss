@@ -573,6 +573,10 @@ input.list-header-checkbox {
 							margin-right: 0px;
 							min-width: auto;
 						}
+						&:has(.filterable:empty) {
+							display: none;
+							padding-left: 37px;
+						}
 					}
 					.mobile-layout:not(.mobile-layout ~ .mobile-layout) {
 						padding-left: 27px;
