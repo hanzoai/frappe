@@ -1,4 +1,5 @@
 frappe.pages["desktop"].on_page_load = function (wrapper) {
+	hide_sidebar();
 	var page = frappe.ui.make_app_page({
 		parent: wrapper,
 		title: "Desktop",
@@ -31,4 +32,10 @@ function setup_click() {
 			window.location.href = current.attr("data-route");
 		}
 	});
+}
+
+function hide_sidebar() {
+	if (frappe.app.sidebar) {
+		frappe.app.sidebar.wrapper.hide();
+	}
 }
