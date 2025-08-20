@@ -632,6 +632,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	render_list() {
 		// clear rows
 		this.$result.find(".list-row-container").remove();
+		this.parent.page.main.parent().addClass("list-view");
 		this.render_header();
 
 		let has_assignto = false;
