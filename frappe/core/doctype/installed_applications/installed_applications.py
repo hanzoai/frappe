@@ -32,11 +32,11 @@ class InstalledApplications(Document):
 
 		self.delete_key("installed_applications")
 		for app in frappe.utils.get_installed_apps_info():
-			has_setup_wizard = 0
-			if app.get("app_name") == "frappe" or frappe.get_hooks(app_name=app.get("app_name")).get(
-				"setup_wizard_stages"
-			):
-				has_setup_wizard = 1
+			has_setup_wizard = 1
+			setup_complete = app_wise_setup_details.get(app.get("app_name")) or 0
+			if app.get("app_name") not in ["frappe", "erpnext"]:
+				setup_complete = 0
+				has_setup_wizard = 0
 
 			self.append(
 				"installed_applications",
@@ -45,7 +45,7 @@ class InstalledApplications(Document):
 					"app_version": app.get("version") or "UNVERSIONED",
 					"git_branch": app.get("branch") or "UNVERSIONED",
 					"has_setup_wizard": has_setup_wizard,
-					"is_setup_complete": app_wise_setup_details.get(app.get("app_name")) or 0,
+					"is_setup_complete": setup_complete,
 				},
 			)
 
