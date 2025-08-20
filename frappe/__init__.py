@@ -1511,10 +1511,6 @@ def is_setup_complete():
 	if not frappe.db.table_exists("Installed Application"):
 		return setup_complete
 
-<<<<<<< HEAD
-	if all(frappe.get_all("Installed Application", {"has_setup_wizard": 1}, pluck="is_setup_complete")):
-		setup_complete = True
-=======
 	if all(
 		frappe.get_all(
 			"Installed Application",
@@ -1523,7 +1519,6 @@ def is_setup_complete():
 		)
 	):
 		is_setup_complete = True
->>>>>>> d5e1bf06b2 (fix: only consider the Frappe and ERPNext apps for setup completion checks)
 
 	return setup_complete
 
