@@ -9,6 +9,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.setup_app_switcher();
 		this.set_hover();
 		this.populate_apps_menu();
+		this.setup_select_app();
 	}
 
 	make() {
@@ -45,6 +46,8 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		}
 	}
 	populate_apps_menu() {
+		this.add_desktop();
+		this.add_edit_sidebar();
 		this.add_website_select();
 		this.add_settings_select();
 	}
@@ -54,11 +57,15 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 			data-app-route="${app.app_route}">
 			<a>
 				<div class="sidebar-item-icon">
-					<img
-						class="app-logo"
-						src="${app.app_logo_url}"
-						alt="${__("App Logo")}"
-					>
+					${
+						app.app_logo_icon
+							? frappe.utils.icon(app.app_logo_icon)
+							: `<img
+							class="app-logo"
+							src="${app.app_logo_url}"
+							alt="${__("App Logo")}"
+						>`
+					}
 				</div>
 				<span class="app-item-title">${app.app_title}</span>
 			</a>
@@ -101,8 +108,16 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 			this.app_switcher_menu.toggleClass("hidden");
 			this.toggle_active();
 
+			if (item.attr("data-app-name") == "desktop") {
+				frappe.set_route("desktop");
+				return;
+			}
 			if (item.attr("data-app-name") == "settings") {
 				frappe.quick_edit("Workspace Settings");
+				return;
+			}
+			if (item.attr("data-app-name") == "edit-sidebar") {
+				frappe.set_route("Form", "Workspace Sidebar", this.workspace_title);
 				return;
 			}
 			if (route.startsWith("/app/private")) {
@@ -139,9 +154,23 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 			app_title: __("Settings"),
 			app_logo_url: "/assets/frappe/images/settings-gear.svg",
 		});
-		let settings_item = this.app_switcher_menu.children().last();
 	}
-
+	add_edit_sidebar() {
+		if (frappe.boot.workspaces.has_create_access) {
+			this.add_app_item({
+				app_name: "edit-sidebar",
+				app_title: __("Edit Sidebar"),
+				app_logo_icon: "edit",
+			});
+		}
+	}
+	add_desktop() {
+		this.add_app_item({
+			app_name: "desktop",
+			app_title: __("Desktop"),
+			app_logo_icon: "layout-grid",
+		});
+	}
 	set_current_app(app) {
 		if (!app) {
 			console.warn("set_current_app: app not defined");
