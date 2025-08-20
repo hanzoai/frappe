@@ -1518,7 +1518,7 @@ def is_setup_complete():
 			pluck="is_setup_complete",
 		)
 	):
-		is_setup_complete = True
+		setup_complete = True
 
 	return setup_complete
 
