@@ -214,6 +214,11 @@ scheduler_events = {
 		"0/10 * * * *": [
 			"frappe.email.doctype.email_account.email_account.pull",
 		],
+		# 6 hours
+		"0 */6 * * *": [
+			"frappe.pulse.app_activity_event.send",
+		],
+
 		# Hourly but offset by 30 minutes
 		"30 * * * *": [],
 		# Daily but offset by 45 minutes
