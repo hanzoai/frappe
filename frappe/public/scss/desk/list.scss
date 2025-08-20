@@ -532,6 +532,17 @@ input.list-header-checkbox {
 	z-index: 0;
 }
 
+.list-view {
+	.frappe-list {
+		.result-container {
+			overflow-x: auto;
+			.result {
+				overflow: auto;
+			}
+		}
+	}
+}
+
 @media (max-width: map-get($grid-breakpoints, "lg")) {
 	.layout-main-section-wrapper {
 		width: 100%;
