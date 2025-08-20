@@ -152,7 +152,6 @@ def load_desktop_data(bootinfo):
 	bootinfo.desktop_icons = get_desktop_icons()
 	bootinfo.workspaces = get_workspace_sidebar_items()
 	bootinfo.workspace_sidebar_item = get_sidebar_items()
-	print(bootinfo.workspace_sidebar_item)
 	allowed_pages = [d.name for d in bootinfo.workspaces.get("pages")]
 	bootinfo.module_wise_workspaces = get_controller("Workspace").get_module_wise_workspaces()
 	bootinfo.dashboards = frappe.get_all("Dashboard")
@@ -542,6 +541,14 @@ def get_sidebar_items():
 				"icon": si.icon,
 				"child": si.child,
 			}
+			if si.link_type == "Report":
+				report_type, ref_doctype = frappe.db.get_value(
+					"Report", si.link_to, ["report_type", "ref_doctype"]
+				)
+				workspace_sidebar["report"] = {
+					"report_type": report_type,
+					"ref_doctype": ref_doctype,
+				}
 			sidebar_items[desktop_icon].append(workspace_sidebar)
 
 	return sidebar_items

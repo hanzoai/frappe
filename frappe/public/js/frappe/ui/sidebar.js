@@ -36,6 +36,7 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 	setup(workspace_title) {
 		if (!this.setup_complete) {
+			this.workspace_title = workspace_title;
 			this.make_dom();
 			this.apps_switcher = new frappe.ui.SidebarHeader(this, workspace_title);
 			this.make_sidebar(workspace_title.toLowerCase());
@@ -54,8 +55,6 @@ frappe.ui.Sidebar = class Sidebar {
 		this.wrapper.find(".overlay").on("click", () => {
 			this.close_sidebar();
 		});
-		this.apps_switcher = new frappe.ui.SidebarHeader(this);
-		this.apps_switcher.create_app_data_map();
 	}
 
 	set_hover() {
@@ -72,7 +71,18 @@ frappe.ui.Sidebar = class Sidebar {
 	set_all_pages() {
 		this.sidebar_items = frappe.boot.workspace_sidebar_item;
 	}
-
+	async set_report_items() {
+		for (let f of this.workspace_sidebar_items) {
+			if (f.link_type === "Report") {
+				const { message } = await frappe.db.get_value("Report", f.link_to, [
+					"report_type",
+					"ref_doctype",
+				]);
+				f.report = message;
+			}
+		}
+		console.log(this.workspace_sidebar_items);
+	}
 	set_default_app() {
 		// sort apps based on # of workspaces
 		frappe.boot.app_data.sort((a, b) => (a.workspaces.length < b.workspaces.length ? 1 : -1));
@@ -177,7 +187,6 @@ frappe.ui.Sidebar = class Sidebar {
 			this.wrapper.find(".standard-sidebar-section").remove();
 		}
 		this.workspace_sidebar_items = frappe.boot.workspace_sidebar_item[workspace_title];
-		let parent_pages = this.workspace_sidebar_items;
 		if (this.workspace_sidebar_items && this.workspace_sidebar_items.length > 0) {
 			this.workspace_sidebar_items.unshift({
 				label: "Home",
@@ -194,7 +203,7 @@ frappe.ui.Sidebar = class Sidebar {
 				route: `/app/${workspace_title}`,
 			};
 		}
-
+		this.set_report_items();
 		// this.build_sidebar_section("All", parent_pages);
 		this.create_sidebar();
 
@@ -209,6 +218,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.set_sidebar_state();
 	}
 	create_sidebar() {
+		this.set_report_items();
 		if (this.workspace_sidebar_items && this.workspace_sidebar_items.length > 0) {
 			let parent_links = this.workspace_sidebar_items.filter((f) => f.child !== 1);
 			parent_links.forEach((w) => {
@@ -305,9 +315,14 @@ frappe.ui.Sidebar = class Sidebar {
 
 		if (item.type == "Section Break") {
 			let current_index = this.workspace_sidebar_items.indexOf(item);
-			let child_items = this.workspace_sidebar_items
-				.slice(current_index)
-				.filter((page) => page.child == 1);
+			let sidebar_items = this.workspace_sidebar_items.slice(current_index + 1);
+			let next_section_break = sidebar_items.findIndex((f) => f.type == "Section Break");
+			let child_items;
+			if (next_section_break == -1) {
+				child_items = sidebar_items;
+			} else {
+				child_items = sidebar_items.slice(0, next_section_break);
+			}
 			if (child_items.length > 0) {
 				let child_container = $item_container.find(".sidebar-child-item");
 				child_container.addClass("hidden");
@@ -350,7 +365,6 @@ frappe.ui.Sidebar = class Sidebar {
 				path = item.route;
 			}
 		}
-		console.log(item);
 		return $(
 			frappe.render_template("sidebar_item", {
 				item: item,
