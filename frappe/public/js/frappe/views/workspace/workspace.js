@@ -54,7 +54,6 @@ frappe.views.Workspace = class Workspace {
 		this.setup();
 		this.show();
 		this.register_awesomebar_shortcut();
-		this.setup_sidebar();
 	}
 	setup() {
 		const me = this;

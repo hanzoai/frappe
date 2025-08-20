@@ -4,6 +4,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.parent_items = [];
 		this.sidebar_expanded = false;
 		this.workspace_sidebar_items = [];
+		this.setup_complete = false;
 		if (!frappe.boot.setup_complete) {
 			// no sidebar if setup is not complete
 			return;
@@ -34,9 +35,12 @@ frappe.ui.Sidebar = class Sidebar {
 		this.handle_outside_click();
 	}
 	setup(workspace_title) {
-		this.make_dom();
-		this.apps_switcher = new frappe.ui.SidebarHeader(this, workspace_title);
-		this.make_sidebar(workspace_title.toLowerCase());
+		if (!this.setup_complete) {
+			this.make_dom();
+			this.apps_switcher = new frappe.ui.SidebarHeader(this, workspace_title);
+			this.make_sidebar(workspace_title.toLowerCase());
+			this.setup_complete = true;
+		}
 	}
 	make_dom() {
 		this.wrapper = $(frappe.render_template("sidebar")).prependTo("body");

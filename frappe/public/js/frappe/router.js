@@ -144,6 +144,7 @@ frappe.router = {
 
 		this.current_sub_path = sub_path;
 		this.current_route = await this.parse();
+		this.setup_workspace_sidebar();
 		this.set_history(sub_path);
 		this.set_active_sidebar_item();
 		this.render();
