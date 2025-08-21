@@ -1011,7 +1011,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	apply_column_widths() {
 		if (this.list_view_settings?.disable_scrolling) return;
 		Object.entries(this.column_max_widths).forEach(([fieldname, width]) => {
-			$(`.${fieldname}`).css({
+			$(`.list-view .frappe-list .result .level-left .list-row-col.${fieldname}`).css({
 				width: width,
 				flex: `1 0 ${width}px`,
 			});
