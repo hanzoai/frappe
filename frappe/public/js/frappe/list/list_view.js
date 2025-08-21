@@ -791,7 +791,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		for (let i = 0; i < this.columns.length; i++) {
 			let col = this.columns[i];
 
-			if (i == 4 && !doc[col.df.fieldname]) {
+			if (i == 4 && !doc[col.df.fieldname] && doc[col.df.fieldname] != 0) {
 				has_value_in_second_column = false;
 			}
 
@@ -1011,7 +1011,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	apply_column_widths() {
 		if (this.list_view_settings?.disable_scrolling) return;
 		Object.entries(this.column_max_widths).forEach(([fieldname, width]) => {
-			$(`.${fieldname}`).css({
+			$(`.list-view .frappe-list .result .level-left .list-row-col.${fieldname}`).css({
 				width: width,
 				flex: `1 0 ${width}px`,
 			});
