@@ -633,6 +633,9 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		// clear rows
 		this.$result.find(".list-row-container").remove();
 		this.parent.page.main.parent().addClass("list-view");
+		if (this.list_view_settings?.disable_scrolling && !frappe.is_mobile()) {
+			this.parent.page.main.parent().addClass("disable-scrolling");
+		}
 		this.render_header();
 
 		let has_assignto = false;
@@ -1006,6 +1009,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	 * The width for each column is applied as both a fixed `width` and a flexible `flex` property.
 	 */
 	apply_column_widths() {
+		if (this.list_view_settings?.disable_scrolling) return;
 		Object.entries(this.column_max_widths).forEach(([fieldname, width]) => {
 			$(`.${fieldname}`).css({
 				width: width,
