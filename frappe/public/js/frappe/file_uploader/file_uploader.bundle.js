@@ -2,7 +2,6 @@ import { createApp } from "vue";
 import FileUploaderComponent from "./FileUploader.vue";
 import { watch } from "vue";
 
-
 class FileUploader {
 	static ExtraOptions = []
 	constructor({
@@ -47,7 +46,6 @@ class FileUploader {
 			}
 		}
 
-		const other_options = frappe.ui.FileUploaderOthers || [];
 		let app = createApp(FileUploaderComponent, {
 			show_upload_button: !Boolean(this.dialog),
 			doctype,
@@ -137,15 +135,6 @@ class FileUploader {
 
 	upload_files() {
 		return this.uploader.upload_files(this.dialog);
-	}
-
-	get_extra_options() {
-		// Defaults to empty list, can be overriden externally
-		return [];
-	}
-
-	add_upload_button() {
-		this.options.push;
 	}
 
 	make_dialog(title) {

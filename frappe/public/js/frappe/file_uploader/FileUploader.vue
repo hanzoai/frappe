@@ -298,7 +298,7 @@ const props = defineProps({
 		default: true,
 	},
 	other_options: {
-		default: () => [],
+		default: [],
 	},
 });
 
