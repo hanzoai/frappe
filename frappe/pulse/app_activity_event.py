@@ -8,7 +8,7 @@ KEY = "pulse:active_apps"
 EXPIRY = 60 * 60 * 12  # 12 hours
 
 
-def log_app_activity(args):
+def log_app_activity(req_params):
 	if not is_enabled() or frappe.session.user in ("Guest", "Administrator"):
 		return
 
@@ -16,8 +16,8 @@ def log_app_activity(args):
 	if status_code and not (200 <= status_code < 300):
 		return
 
-	method = args.get("method") or frappe.form_dict.get("method")
-	doctype = args.get("doctype") or frappe.form_dict.get("doctype")
+	method = req_params.get("method") or frappe.form_dict.get("method")
+	doctype = req_params.get("doctype") or frappe.form_dict.get("doctype")
 
 	if not method and not doctype:
 		return
