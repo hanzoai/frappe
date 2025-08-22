@@ -45,6 +45,7 @@ class FileUploader {
 			}
 		}
 
+		const other_options = frappe.ui.FileUploaderOthers || [];
 		let app = createApp(FileUploaderComponent, {
 			show_upload_button: !Boolean(this.dialog),
 			doctype,
@@ -65,7 +66,16 @@ class FileUploader {
 			allow_toggle_private,
 			allow_toggle_optimize,
 			allow_google_drive,
-			other_options: this.get_extra_options(),
+			other_options: other_options.map((k) => ({
+				...k,
+				wrappedAction: () =>
+					k.action({
+						dialog: this.dialog,
+						doctype,
+						docname,
+						fieldname,
+					}),
+			})),
 		});
 		SetVueGlobals(app);
 		this.uploader = app.mount(this.wrapper);
@@ -130,6 +140,10 @@ class FileUploader {
 	get_extra_options() {
 		// Defaults to empty list, can be overriden externally
 		return [];
+	}
+
+	add_upload_button() {
+		this.options.push;
 	}
 
 	make_dialog(title) {

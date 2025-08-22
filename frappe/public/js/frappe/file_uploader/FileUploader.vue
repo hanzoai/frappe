@@ -164,7 +164,7 @@
 						<div class="mt-1">{{ __("Google Drive") }}</div>
 					</button>
 					<template v-for="option in other_options">
-						<button class="btn btn-file-upload" @click="option.action">
+						<button class="btn btn-file-upload" @click="option.wrappedAction">
 							<svg v-if="option.icon" v-html="option.icon" width="30" height="30" />
 							<div class="mt-1">{{ option.label }}</div>
 						</button>
