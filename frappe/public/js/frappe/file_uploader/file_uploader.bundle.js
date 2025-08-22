@@ -71,6 +71,7 @@ class FileUploader {
 				wrappedAction: () =>
 					k.action({
 						dialog: this.dialog,
+						uploader: this.uploader,
 						doctype,
 						docname,
 						fieldname,
