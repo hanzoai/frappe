@@ -214,7 +214,6 @@ scheduler_events = {
 		"0 */6 * * *": [
 			"frappe.pulse.app_activity_event.send",
 		],
-
 		# Hourly but offset by 30 minutes
 		"30 * * * *": [],
 		# Daily but offset by 45 minutes
