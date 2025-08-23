@@ -262,10 +262,13 @@ def import_file(doctype, file_path, import_type, submit_after_import=False, cons
 	"""
 
 	data_import = frappe.new_doc("Data Import")
+	data_import.reference_doctype = doctype
+	data_import.import_file = file_path
 	data_import.submit_after_import = submit_after_import
 	data_import.import_type = (
 		"Insert New Records" if import_type.lower() == "insert" else "Update Existing Records"
 	)
+	data_import.set_payload_count()
 
 	i = Importer(doctype=doctype, file_path=file_path, data_import=data_import, console=console)
 	i.import_data()
