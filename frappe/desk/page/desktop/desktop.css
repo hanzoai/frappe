@@ -10,9 +10,6 @@
     margin-top: 50px;
     grid-template-columns: repeat(5, 1fr);
 }
-.d-icon{
-    stroke: white;
-}
 .desktop-icon{
     display: flex;
     height: 100px;
@@ -22,7 +19,7 @@
 }
 .icon-container{
     padding: 10px;
-    border: black solid 0px;
+    border: black solid 1px;
     border-radius: 10px;
 }
 .icon-container:hover{

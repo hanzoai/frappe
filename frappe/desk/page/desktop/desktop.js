@@ -13,12 +13,12 @@ function setup() {
 	$(".desktop-icon").each((i, el) => {
 		let icon_name = $(el).attr("data-icon");
 		let icon_container = $(el.children[0]);
-		const svg = frappe.utils.icon(icon_name, "xl d-icon");
+		const svg = frappe.utils.icon(icon_name, "xl");
 		if (svg) {
 			icon_container.html(svg);
 		}
-		let color_name = icon_container.attr("data-color");
-		icon_container.css("background-color", color_name);
+		// let color_name = icon_container.attr("data-color");
+		// icon_container.css("background-color", color_name);
 	});
 	setup_click();
 }
