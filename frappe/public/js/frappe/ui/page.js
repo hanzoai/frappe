@@ -188,8 +188,14 @@ frappe.ui.Page = class Page {
 				);
 			})
 			.appendTo(this.sidebar);
+		this.hide_main_sidebar();
 	}
-
+	hide_main_sidebar() {
+		if (this.hide_sidebar) {
+			frappe.app.sidebar.hide_sidebar = true;
+			frappe.app.sidebar.hide();
+		}
+	}
 	setup_sidebar_toggle() {
 		let sidebar_toggle = $(".page-head").find(".sidebar-toggle-btn");
 		let sidebar_wrapper = this.wrapper.find(".layout-side-section");

@@ -144,9 +144,8 @@ frappe.router = {
 
 		this.current_sub_path = sub_path;
 		this.current_route = await this.parse();
-		this.setup_workspace_sidebar();
+
 		this.set_history(sub_path);
-		this.set_active_sidebar_item();
 		this.render();
 		this.set_title(sub_path);
 		this.trigger("change");
@@ -290,10 +289,6 @@ frappe.router = {
 		frappe.ui.hide_open_dialog();
 	},
 
-	async set_active_sidebar_item() {
-		frappe.app.sidebar.set_active_workspace_item();
-	},
-
 	render() {
 		if (this.current_route[0]) {
 			this.render_page();
@@ -309,7 +304,6 @@ frappe.router = {
 
 		const route = this.current_route;
 		const factory = frappe.utils.to_title_case(route[0]);
-
 		if (route[1] && frappe.views[factory + "Factory"]) {
 			route[0] = factory;
 			// has a view generator, generate!

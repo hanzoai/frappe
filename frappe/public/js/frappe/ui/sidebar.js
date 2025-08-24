@@ -33,7 +33,9 @@ frappe.ui.Sidebar = class Sidebar {
 
 		this.setup_pages();
 		this.handle_outside_click();
+		this.hide_sidebar = false;
 	}
+
 	setup(workspace_title) {
 		if (!this.setup_complete) {
 			this.workspace_title = workspace_title;
@@ -483,6 +485,45 @@ frappe.ui.Sidebar = class Sidebar {
 			main_section.css("overflow", "hidden");
 		} else {
 			main_section.css("overflow", "");
+		}
+	}
+	set_workspace_sidebar() {
+		if (frappe.get_route()[0] == "setup-wizard") return;
+		let route = frappe.get_route();
+		let module_name;
+		if (route[0] == "Workspaces") {
+			let workspace = route[1] || "Build";
+			frappe.app.sidebar.setup(workspace);
+		} else if (route[0] == "List" || route[0] == "Form") {
+			let doctype = route[1];
+			let meta = frappe.get_meta(doctype);
+			try {
+				module_name = frappe.boot.module_wise_workspaces[meta.module][0] || "Build";
+			} catch (error) {
+				module_name = "Build";
+			}
+
+			if (doctype && doctype.includes("Setting")) {
+				module_name = "Settings";
+			}
+			frappe.app.sidebar.setup(module_name);
+		} else if (route[0] == "query-report") {
+			frappe.model.with_doc("Report", route[1], () => {
+				let test = frappe.get_doc("Report", route[1]);
+				module_name = frappe.boot.module_wise_workspaces[test.module][0] || "Build";
+				frappe.app.sidebar.setup(module_name);
+			});
+		} else {
+			let workspace_title =
+				frappe.boot.module_wise_workspaces[locals["Page"][route[0]].module];
+			module_name = workspace_title ? workspace_title[0] : "Build";
+			frappe.app.sidebar.setup(module_name);
+		}
+		this.set_active_workspace_item();
+	}
+	hide() {
+		if (this.wrapper) {
+			this.wrapper.hide();
 		}
 	}
 };
