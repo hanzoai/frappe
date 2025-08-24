@@ -226,15 +226,28 @@ function get_version_timeline_content(version_doc, frm) {
 				return p;
 			});
 			if (parts.length) {
-				let message = "";
+				let messages = [];
 
-				if (key === "added") {
-					message = __("added rows for {0}", [parts.join(", ")]);
-				} else if (key === "removed") {
-					message = __("removed rows for {0}", [parts.join(", ")]);
+				const count_map = parts.reduce((acc, item) => {
+					acc[item] = (acc[item] || 0) + 1;
+					return acc;
+				}, {});
+
+				for (const item in count_map) {
+					messages.push(
+						__("{0} row{1} {2} {3}", [
+							count_map[item],
+							count_map[item] > 1 ? "s" : "",
+							key === "added" ? "to" : "from",
+							item,
+						])
+					);
 				}
 
-				let version_comment = get_version_comment(version_doc, message);
+				let version_comment = get_version_comment(
+					version_doc,
+					key + " " + messages.join(", ")
+				);
 				let user_link = get_user_link(version_doc.owner);
 				out.push(`${user_link} ${version_comment}`);
 			}
