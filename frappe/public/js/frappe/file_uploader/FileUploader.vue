@@ -163,7 +163,7 @@
 						</svg>
 						<div class="mt-1">{{ __("Google Drive") }}</div>
 					</button>
-					<template v-for="option in other_options">
+					<template v-for="option in additional_upload_handlers">
 						<button class="btn btn-file-upload" @click="option.wrappedAction">
 							<svg
 								v-if="typeof option.icon === 'string'"
@@ -308,7 +308,7 @@ const props = defineProps({
 	allow_google_drive: {
 		default: true,
 	},
-	other_options: {
+	additional_upload_handlers: {
 		default: [],
 	},
 });
