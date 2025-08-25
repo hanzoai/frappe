@@ -20,7 +20,7 @@ from frappe.permissions import SYSTEM_USER_ROLE, get_doctypes_with_read
 from frappe.utils import call_hook_method, cint, get_files_path, get_hook_method, get_url
 from frappe.utils.file_manager import is_safe_path
 from frappe.utils.image import optimize_image, strip_exif_data
-from frappe.utils.pdf import is_pdf_safe
+from frappe.utils.pdf import pdf_contains_js
 
 from .exceptions import (
 	AttachmentLimitReached,
@@ -376,7 +376,7 @@ class File(Document):
 			frappe.throw(_("File type of {0} is not allowed").format(self.file_type), exc=FileTypeNotAllowed)
 
 	def check_content(self):
-		if self.file_type == "PDF" and not is_pdf_safe(self._content):
+		if self.file_type == "PDF" and not pdf_contains_js(self._content):
 			frappe.throw(_("PDF cannot be uploaded, It contains unsafe content"))
 
 	def validate_duplicate_entry(self):
