@@ -49,7 +49,6 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.add_desktop();
 		this.add_edit_sidebar();
 		this.add_website_select();
-		this.add_settings_select();
 	}
 
 	add_app_item(app) {

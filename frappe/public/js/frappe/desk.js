@@ -43,7 +43,6 @@ frappe.Application = class Application {
 		this.add_browser_class();
 		this.setup_copy_doc_listener();
 		this.setup_broadcast_listeners();
-		this.setup_sidebar();
 
 		frappe.ui.keys.setup();
 
@@ -137,13 +136,7 @@ frappe.Application = class Application {
 			}
 		}
 	}
-	setup_sidebar() {
-		$(document).on("page-change", function () {
-			if (!frappe.app.sidebar.hide_sidebar) {
-				frappe.app.sidebar.set_workspace_sidebar();
-			}
-		});
-	}
+
 	show_notices() {
 		if (frappe.boot.messages) {
 			frappe.msgprint(frappe.boot.messages);

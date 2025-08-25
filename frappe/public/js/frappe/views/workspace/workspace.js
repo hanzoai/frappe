@@ -9,6 +9,7 @@ frappe.standard_pages["Workspaces"] = function () {
 		name: "Workspaces",
 		title: __("Workspace"),
 		single_column: true,
+		hide_sidebar: false,
 	});
 
 	frappe.workspace = new frappe.views.Workspace(wrapper);

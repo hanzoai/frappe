@@ -36,6 +36,7 @@ frappe.ui.Page = class Page {
 		this.views = {};
 
 		this.make();
+		if (!Object.keys(opts).includes("hide_sidebar")) this.hide_sidebar = false;
 		frappe.ui.pages[frappe.get_route_str()] = this;
 	}
 
@@ -188,14 +189,8 @@ frappe.ui.Page = class Page {
 				);
 			})
 			.appendTo(this.sidebar);
-		this.hide_main_sidebar();
 	}
-	hide_main_sidebar() {
-		if (this.hide_sidebar) {
-			frappe.app.sidebar.hide_sidebar = true;
-			frappe.app.sidebar.hide();
-		}
-	}
+
 	setup_sidebar_toggle() {
 		let sidebar_toggle = $(".page-head").find(".sidebar-toggle-btn");
 		let sidebar_wrapper = this.wrapper.find(".layout-side-section");
