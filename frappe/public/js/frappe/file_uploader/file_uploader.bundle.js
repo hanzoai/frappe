@@ -3,7 +3,7 @@ import FileUploaderComponent from "./FileUploader.vue";
 import { watch } from "vue";
 
 class FileUploader {
-	static UploadOptions = []
+	static UploadOptions = [];
 	constructor({
 		wrapper,
 		method,
