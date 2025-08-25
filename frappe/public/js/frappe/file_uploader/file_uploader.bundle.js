@@ -3,7 +3,7 @@ import FileUploaderComponent from "./FileUploader.vue";
 import { watch } from "vue";
 
 class FileUploader {
-	static ExtraOptions = []
+	static UploadOptions = []
 	constructor({
 		wrapper,
 		method,
@@ -66,7 +66,7 @@ class FileUploader {
 			allow_toggle_private,
 			allow_toggle_optimize,
 			allow_google_drive,
-			other_options: this.constructor.ExtraOptions.map((k) => ({
+			other_options: this.constructor.UploadOptions.map((k) => ({
 				...k,
 				wrappedAction: () =>
 					k.action({
