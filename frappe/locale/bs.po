@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-08-24 09:34+0000\n"
-"PO-Revision-Date: 2025-08-24 13:41\n"
+"PO-Revision-Date: 2025-08-25 13:51\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Bosnian\n"
 "MIME-Version: 1.0\n"
@@ -7284,7 +7284,7 @@ msgstr "Onemogući autentifikaciju SMTP servera"
 #. Label of the disable_scrolling (Check) field in DocType 'List View Settings'
 #: frappe/desk/doctype/list_view_settings/list_view_settings.json
 msgid "Disable Scrolling"
-msgstr ""
+msgstr "Onemogući Pomicanje"
 
 #. Label of the disable_sidebar_stats (Check) field in DocType 'List View
 #. Settings'
@@ -9100,7 +9100,7 @@ msgstr "Datum Završetka ne može biti prije datuma početka!"
 
 #: frappe/automation/doctype/auto_repeat/auto_repeat.py:146
 msgid "End Date cannot be today."
-msgstr ""
+msgstr "Datum završetka ne može biti danas."
 
 #. Label of the ended_at (Datetime) field in DocType 'RQ Job'
 #. Label of the ended_at (Datetime) field in DocType 'Submission Queue'
@@ -14355,7 +14355,7 @@ msgstr "Prošli Kvartal"
 #. Label of the last_received_at (Datetime) field in DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
 msgid "Last Received At"
-msgstr ""
+msgstr "Posljednji put primljeno u"
 
 #. Label of the last_reset_password_key_generated_on (Datetime) field in
 #. DocType 'User'
@@ -18689,7 +18689,7 @@ msgstr "Lozinka je obavezna ili odaberi Čekam Lozinku"
 
 #: frappe/www/update-password.html:94
 msgid "Password is valid. 👍"
-msgstr ""
+msgstr "Lozinka je važeća. 👍"
 
 #: frappe/public/js/frappe/desk.js:212
 msgid "Password missing in Email Account"
