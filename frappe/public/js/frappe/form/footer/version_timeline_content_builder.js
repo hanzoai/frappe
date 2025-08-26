@@ -228,28 +228,108 @@ function get_version_timeline_content(version_doc, frm) {
 			if (parts.length) {
 				let messages = [];
 
-				const count_map = parts.reduce((acc, item) => {
+				const countMap = parts.reduce((acc, item) => {
 					acc[item] = (acc[item] || 0) + 1;
 					return acc;
 				}, {});
 
-				for (const item in count_map) {
-					messages.push(
-						__("{0} row{1} {2} {3}", [
-							count_map[item],
-							count_map[item] > 1 ? "s" : "",
-							key === "added" ? "to" : "from",
-							item,
-						])
-					);
+				let isFirst = true;
+				for (const [table_name, count] of Object.entries(countMap)) {
+					if (key === "added") {
+						if (count > 1) {
+							if (isFirst) {
+								messages.push(
+									get_user_message(
+										version_doc.owner,
+										__("You added {0} rows to {1}", [count, table_name]),
+										__("{0} added {1} rows to {2}", [
+											get_user_link(version_doc.owner),
+											count,
+											table_name,
+										])
+									)
+								);
+							} else {
+								messages.push(
+									__(
+										"{0} rows to {1}",
+										[count, table_name],
+										"User added rows to child table"
+									)
+								);
+							}
+						} else {
+							if (isFirst) {
+								messages.push(
+									get_user_message(
+										version_doc.owner,
+										__("You added 1 row to {0}", [table_name]),
+										__("{0} added 1 row to {1}", [
+											get_user_link(version_doc.owner),
+											table_name,
+										])
+									)
+								);
+							} else {
+								messages.push(
+									__(
+										"1 row to {0}",
+										[table_name],
+										"User added row to child table"
+									)
+								);
+							}
+						}
+					} else {
+						if (count > 1) {
+							if (isFirst) {
+								messages.push(
+									get_user_message(
+										version_doc.owner,
+										__("You removed {0} rows from {1}", [count, table_name]),
+										__("{0} removed {1} rows from {2}", [
+											get_user_link(version_doc.owner),
+											count,
+											table_name,
+										])
+									)
+								);
+							} else {
+								messages.push(
+									__(
+										"{0} rows from {1}",
+										[count, table_name],
+										"User removed rows from child table"
+									)
+								);
+							}
+						} else {
+							if (isFirst) {
+								messages.push(
+									get_user_message(
+										version_doc.owner,
+										__("You removed 1 row from {0}", [table_name]),
+										__("{0} removed 1 row from {1}", [
+											get_user_link(version_doc.owner),
+											table_name,
+										])
+									)
+								);
+							} else {
+								messages.push(
+									__(
+										"1 row from {0}",
+										[table_name],
+										"User removed row from child table"
+									)
+								);
+							}
+						}
+					}
+					isFirst = false;
 				}
 
-				let version_comment = get_version_comment(
-					version_doc,
-					key + " " + messages.join(", ")
-				);
-				let user_link = get_user_link(version_doc.owner);
-				out.push(`${user_link} ${version_comment}`);
+				out.push(get_version_comment(version_doc, frappe.utils.comma_and(messages)));
 			}
 		}
 	});
