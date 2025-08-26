@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-08-24 09:34+0000\n"
-"PO-Revision-Date: 2025-08-24 13:40\n"
+"PO-Revision-Date: 2025-08-25 13:51\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -7283,7 +7283,7 @@ msgstr "Inaktivera SMTP Server Verifiering"
 #. Label of the disable_scrolling (Check) field in DocType 'List View Settings'
 #: frappe/desk/doctype/list_view_settings/list_view_settings.json
 msgid "Disable Scrolling"
-msgstr ""
+msgstr "Inaktivera Rullning"
 
 #. Label of the disable_sidebar_stats (Check) field in DocType 'List View
 #. Settings'
@@ -9099,7 +9099,7 @@ msgstr "Slut Datum kan inte vara före Start Datum!"
 
 #: frappe/automation/doctype/auto_repeat/auto_repeat.py:146
 msgid "End Date cannot be today."
-msgstr ""
+msgstr "Slutdatum kan inte vara idag."
 
 #. Label of the ended_at (Datetime) field in DocType 'RQ Job'
 #. Label of the ended_at (Datetime) field in DocType 'Submission Queue'
@@ -14353,7 +14353,7 @@ msgstr "Förra Kvartal"
 #. Label of the last_received_at (Datetime) field in DocType 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
 msgid "Last Received At"
-msgstr ""
+msgstr "Senast Mottagen"
 
 #. Label of the last_reset_password_key_generated_on (Datetime) field in
 #. DocType 'User'
@@ -18687,7 +18687,7 @@ msgstr "Lösenord erfordras eller välj Väntar på Lösenord"
 
 #: frappe/www/update-password.html:94
 msgid "Password is valid. 👍"
-msgstr ""
+msgstr "Lösenord är giltigt. 👍"
 
 #: frappe/public/js/frappe/desk.js:212
 msgid "Password missing in Email Account"
