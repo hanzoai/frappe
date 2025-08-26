@@ -3,6 +3,9 @@
     padding-left: 400px;
     padding-right: 400px;
 }
+.icon-stroke{
+    stroke-width: 1px;
+}
 .icons{
 	gap: 30px;
 	display: grid;
@@ -19,7 +22,7 @@
 }
 .icon-container{
     padding: 10px;
-    border: black solid 1px;
+    border: var(--gray-400) solid 1px;
     border-radius: 10px;
 }
 .icon-container:hover{

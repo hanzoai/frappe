@@ -17,7 +17,7 @@ function setup() {
 			href: get_route($(el)),
 		});
 
-		const svg = frappe.utils.icon(icon_name, "xl");
+		const svg = frappe.utils.icon(icon_name, "xl icon-stroke");
 		if (svg) {
 			link.html(svg);
 		}
