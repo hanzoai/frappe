@@ -1791,9 +1791,12 @@ class Document(BaseDocument):
 		if date_diff(to_date, from_date) < 0:
 			table_row = ""
 			if self.meta.istable:
-				table_row = _("{0} row #{1}: ").format(
-					_(frappe.unscrub(self.parentfield)),
-					self.idx,
+				table_row = (
+					_("{0} row #{1}:").format(
+						_(frappe.unscrub(self.parentfield)),
+						self.idx,
+					)
+					+ " "
 				)
 
 			frappe.throw(
