@@ -115,14 +115,6 @@ body {
 		// position: relative;
 		// top:10px;
 	}
-	.app-title {
-		font-weight: 500;
-		line-height: 16.1px;
-	}
-	.app-logo {
-		width: 32px;
-		height: 32px;
-	}
 
 	.divider {
 		margin: var(--margin-xs) 0;
@@ -244,11 +236,6 @@ body {
 		// make it an overlay on hover
 		position: absolute;
 		width: var(--left-sidebar-width);
-		.app-switcher-dropdown {
-			width: 100%;
-			left: 0px;
-			padding: 3px;
-		}
 		.body-sidebar-top {
 			width: 100%;
 			overflow-y: hidden;
@@ -328,72 +315,6 @@ body {
 	}
 }
 
-// Sidebar Header
-.app-switcher-dropdown {
-	position: relative;
-	text-decoration: none;
-	width: 38px;
-	height: 38px;
-	padding: 3px;
-	margin-left: -2px;
-	.standard-sidebar-item {
-		padding-top: 1px;
-		padding-bottom: 1px;
-		.d-flex {
-			width: 161px;
-		}
-		gap: 30px;
-	}
-	.sidebar-item-control {
-		margin: 2px;
-		margin-right: 0px;
-	}
-}
-
-.app-switcher-menu {
-	position: absolute;
-	top: 50px;
-	left: 9px;
-	width: 208px;
-	padding: 6px;
-	border-radius: var(--border-radius-lg);
-	background: var(--surface-modal);
-	box-shadow: var(--shadow-xl);
-	z-index: 1;
-}
-
-.app-item {
-	// padding: var(--padding-xs);
-	border-radius: var(--border-radius-tiny);
-	opacity: 0px;
-	&:hover {
-		background-color: var(--sidebar-hover-color);
-	}
-
-	a {
-		width: 208px;
-		height: 28px;
-		padding: 6px 8px 6px 8px;
-		gap: 8px;
-		text-decoration: none;
-		display: flex;
-		align-items: center;
-		gap: var(--margin-sm);
-		.sidebar-item-icon {
-			line-height: 0px;
-			.app-logo {
-				width: 16px;
-				height: 16px;
-			}
-		}
-	}
-
-	.app-item-title {
-		text-overflow: ellipsis;
-		text-wrap: nowrap;
-		overflow: hidden;
-	}
-}
 // sidebar-item states
 @mixin hover-mixin {
 	background-color: var(--sidebar-hover-color);
