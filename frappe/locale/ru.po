@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-08-24 09:34+0000\n"
-"PO-Revision-Date: 2025-08-24 13:40\n"
+"PO-Revision-Date: 2025-08-27 14:03\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -30007,7 +30007,7 @@ msgstr ""
 
 #: frappe/public/js/frappe/form/footer/version_timeline_content_builder.js:265
 msgid "[Action taken by {0}]"
-msgstr ""
+msgstr "[Действие выполнил {0}]"
 
 #. Label of the _doctype (Link) field in DocType 'Desktop Icon'
 #: frappe/desk/doctype/desktop_icon/desktop_icon.json
