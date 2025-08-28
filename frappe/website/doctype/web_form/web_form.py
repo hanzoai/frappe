@@ -152,6 +152,9 @@ def get_context(context):
 		else:
 			context.template = "website/doctype/web_form/templates/web_form.html"
 
+		# By default, assume no delete permissions
+		context.has_delete_permission = False
+
 		# check permissions
 		if frappe.form_dict.name:
 			assert isinstance(frappe.form_dict.name, str | int)
@@ -171,6 +174,10 @@ def get_context(context):
 				frappe.throw(
 					_("You don't have the permissions to access this document"), frappe.PermissionError
 				)
+
+			context.has_delete_permission = frappe.has_permission(
+				self.doc_type, "delete", frappe.form_dict.name
+			)
 
 		if frappe.local.path == self.route:
 			path = f"/{self.route}/list" if self.show_list else f"/{self.route}/new"
