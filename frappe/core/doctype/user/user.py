@@ -476,6 +476,7 @@ class User(Document):
 
 		# set email
 		frappe.db.update("User", new_name, "email", new_name)
+		frappe.cache().delete_key("users_for_mentions")
 
 	def append_roles(self, *roles):
 		"""Add roles to user"""
