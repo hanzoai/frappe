@@ -441,7 +441,9 @@ def get_context(context):
 			context.reference_doc = frappe.get_doc(self.doc_type, context.doc_name)
 			context.web_form_title = context.title
 			context.title = (
-				strip_html(context.reference_doc.get(context.reference_doc.meta.get_title_field()))
+				strip_html(
+					frappe.cstr(context.reference_doc.get(context.reference_doc.meta.get_title_field()))
+				)
 				or context.doc_name
 			)
 			context.reference_doc.add_seen()
