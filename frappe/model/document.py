@@ -787,7 +787,7 @@ class Document(BaseDocument):
 				)
 
 		for df in self.meta.get(
-			"fields", {"non_negative": ("=", 1), "fieldtype": ("in", ["Int", "Float", "Currency"])}
+			"fields", {"non_negative": ("=", 1), "fieldtype": ("in", ["Int", "Float", "Currency", "Percent"])}
 		):
 			if flt(self.get(df.fieldname)) < 0:
 				msg = get_msg(df)
