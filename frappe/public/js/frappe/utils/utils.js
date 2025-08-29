@@ -1143,7 +1143,7 @@ Object.assign(frappe.utils, {
 	},
 
 	get_formatted_iban(value) {
-		if (!value) {
+		if (!value || ["BI", "SV", "EG", "LY"].some((country) => value.startsWith(country))) {
 			return value;
 		}
 
