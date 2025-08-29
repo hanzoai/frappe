@@ -314,12 +314,7 @@
    "select": 1
   }
  ],
-<<<<<<< HEAD
- "sort_field": "modified",
-=======
- "row_format": "Dynamic",
- "sort_field": "creation",
->>>>>>> 924ca85e59 (feat: print format for Reports)
+"sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
  "track_changes": 1
