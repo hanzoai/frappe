@@ -96,7 +96,21 @@
 .grid-body .data-row {
 	@include get_textstyle("sm", "regular");
 	color: var(--text-muted);
+<<<<<<< HEAD
 	button.col:focus {
+=======
+	.row-check,
+	.row-index {
+		position: sticky;
+		left: 0;
+		background-color: var(--fg-color);
+		z-index: 1;
+	}
+	.row-index {
+		left: 31px;
+	}
+	button.col:focus-visible {
+>>>>>>> c82531fbd5 (fix(minor): show border on focus when navigating via keyboard)
 		outline: 1px solid #c9c9c9;
 	}
 }
