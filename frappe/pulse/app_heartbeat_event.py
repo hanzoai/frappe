@@ -8,7 +8,7 @@ KEY = "pulse:active_apps"
 EXPIRY = 60 * 60 * 12  # 12 hours
 
 
-def log_app_activity(req_params):
+def log_app_heartbeat(req_params):
 	if not is_enabled() or frappe.session.user in ("Guest", "Administrator"):
 		return
 
@@ -46,7 +46,7 @@ def send():
 	for app in active_apps:
 		events.append(
 			{
-				"name": "app_activity",
+				"name": "app_heartbeat",
 				"app": app,
 				"app_version": _get_app_version(app),
 			}
@@ -56,7 +56,7 @@ def send():
 		if post_events(events):
 			frappe.cache.delete_value(KEY)
 	except Exception:
-		frappe.log_error(title="Failed to send app activity events")
+		frappe.log_error(title="Failed to send app heartbeat events")
 
 
 def _mark_active(app):

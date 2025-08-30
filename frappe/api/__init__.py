@@ -8,9 +8,8 @@ from werkzeug.routing import Map, Submount
 from werkzeug.wrappers import Request, Response
 
 import frappe
-import frappe.client
 from frappe import _
-from frappe.pulse.app_activity_event import log_app_activity
+from frappe.pulse.app_heartbeat_event import log_app_heartbeat
 from frappe.utils.response import build_response
 
 
@@ -68,7 +67,7 @@ def handle(request: Request):
 	data = build_response("json")
 
 	with suppress(Exception):
-		log_app_activity(arguments)
+		log_app_heartbeat(arguments)
 
 	return data
 
