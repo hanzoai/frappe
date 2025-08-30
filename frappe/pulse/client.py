@@ -50,7 +50,7 @@ def _is_ratelimited(event_key, interval):
 		return False
 
 	interval_seconds = parse_interval(interval)
-	last_sent_key = f"pulse:last_sent:{event_key}"
+	last_sent_key = f"pulse-client:last_sent:{event_key}"
 	last_sent = frappe.cache.get_value(last_sent_key)
 
 	if last_sent and time.monotonic() - float(last_sent) < interval_seconds:
@@ -62,13 +62,13 @@ def _is_ratelimited(event_key, interval):
 def _update_ratelimit(event_key, interval):
 	if not interval:
 		return
-	last_sent_key = f"pulse:last_sent:{event_key}"
+	last_sent_key = f"pulse-client:last_sent:{event_key}"
 	frappe.cache.set_value(last_sent_key, time.monotonic(), expires_in_sec=86400)  # 24h TTL
 
 
 def _queue_event(event):
-	frappe.cache.lpush("pulse:events", frappe.as_json(event))
-	frappe.cache.ltrim("pulse:events", 0, 4999)
+	frappe.cache.lpush("pulse-client:events", frappe.as_json(event))
+	frappe.cache.ltrim("pulse-client:events", 0, 4999)
 
 
 def send_queued_events():
@@ -89,7 +89,7 @@ def get_next_batch(batch_size=100):
 	"""Get batch of events from the queue"""
 	events = []
 	for _ in range(batch_size):
-		event_json = frappe.cache.rpop("pulse:events")
+		event_json = frappe.cache.rpop("pulse-client:events")
 		if not event_json:
 			break
 		event_json = event_json.decode()
