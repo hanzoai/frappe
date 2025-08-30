@@ -1,27 +1,54 @@
 import frappe
 from frappe.modules import get_doctype_module
+from frappe.pulse.utils import get_app_version, get_frappe_version
 from frappe.utils.caching import site_cache
 
-from .client import is_enabled, post_events
+from .client import capture, is_enabled
 
 KEY = "pulse:active_apps"
 EXPIRY = 60 * 60 * 12  # 12 hours
 
 
-def log_app_heartbeat(req_params):
-	if not is_enabled() or frappe.session.user in ("Guest", "Administrator"):
+def capture_app_heartbeat(req_params):
+	if not should_capture():
 		return
 
-	status_code = frappe.response.http_status_code or 0
-	if status_code and not (200 <= status_code < 300):
-		return
-
-	method = req_params.get("method") or frappe.form_dict.get("method")
-	doctype = req_params.get("doctype") or frappe.form_dict.get("doctype")
-
+	method, doctype = get_method_and_doctype(req_params)
 	if not method and not doctype:
 		return
 
+	app_name = get_app_name(method, doctype)
+	if app_name and app_name != "frappe":
+		capture(
+			event_name="app_heartbeat",
+			site=frappe.local.site,
+			app=app_name,
+			properties={
+				"app_version": get_app_version(app_name),
+				"frappe_version": get_frappe_version(),
+			},
+			interval="6h",
+		)
+
+
+def should_capture():
+	if not is_enabled() or frappe.session.user in frappe.STANDARD_USERS:
+		return False
+
+	status_code = frappe.response.http_status_code or 0
+	if status_code and not (200 <= status_code < 300):
+		return False
+
+	return True
+
+
+def get_method_and_doctype(req_params):
+	method = req_params.get("method") or frappe.form_dict.get("method")
+	doctype = req_params.get("doctype") or frappe.form_dict.get("doctype")
+	return method, doctype
+
+
+def get_app_name(method, doctype):
 	app_name = None
 	if method and "." in method and not method.startswith("frappe."):
 		app_name = method.split(".", 1)[0]
@@ -30,50 +57,7 @@ def log_app_heartbeat(req_params):
 		module = get_doctype_module(doctype)
 		app_name = app_module_map().get(module)
 
-	if app_name and app_name != "frappe":
-		_mark_active(app_name)
-
-
-def send():
-	if not is_enabled():
-		return
-
-	active_apps = frappe.cache.get_value(KEY) or set()
-	if not active_apps:
-		return
-
-	events = []
-	for app in active_apps:
-		events.append(
-			{
-				"name": "app_heartbeat",
-				"app": app,
-				"app_version": _get_app_version(app),
-			}
-		)
-
-	try:
-		if post_events(events):
-			frappe.cache.delete_value(KEY)
-	except Exception:
-		frappe.log_error(title="Failed to send app heartbeat events")
-
-
-def _mark_active(app):
-	active_apps = frappe.cache.get_value(KEY) or set()
-	if app not in active_apps:
-		active_apps.add(app)
-		frappe.cache.set_value(KEY, active_apps)
-		ttl = frappe.cache.ttl(KEY)
-		if ttl in (-1, None):
-			frappe.cache.expire(KEY, EXPIRY)
-
-
-def _get_app_version(app_name: str) -> str:
-	try:
-		return frappe.get_attr(app_name + ".__version__")
-	except Exception:
-		return "0.0.1"
+	return app_name
 
 
 @site_cache()

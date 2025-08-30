@@ -9,7 +9,7 @@ from werkzeug.wrappers import Request, Response
 
 import frappe
 from frappe import _
-from frappe.pulse.app_heartbeat_event import log_app_heartbeat
+from frappe.pulse.app_heartbeat_event import capture_app_heartbeat
 from frappe.utils.response import build_response
 
 
@@ -56,7 +56,7 @@ def handle(request: Request):
 	data = build_response("json")
 
 	with suppress(Exception):
-		log_app_heartbeat(arguments)
+		capture_app_heartbeat(arguments)
 
 	return data
 
