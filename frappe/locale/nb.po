@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-08-24 09:34+0000\n"
-"PO-Revision-Date: 2025-08-29 15:17\n"
+"PO-Revision-Date: 2025-08-30 15:32\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Norwegian Bokmal\n"
 "MIME-Version: 1.0\n"
@@ -31840,7 +31840,7 @@ msgstr "{} ikke funnet i PATH! Dette er påkrevd for å få tilgang til konsolle
 
 #: frappe/database/db_manager.py:99
 msgid "{} not found in PATH! This is required to restore the database."
-msgstr "{} ikke funnet i PATH! Dette er nødvendig for å gjenopprette databasen."
+msgstr "{} ikke funnet i PATH! Dette er påkrevd for å gjenopprette databasen."
 
 #: frappe/utils/backups.py:466
 msgid "{} not found in PATH! This is required to take a backup."
