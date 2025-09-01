@@ -1124,6 +1124,10 @@ class DatabaseQuery:
 			"version",
 			"substr",
 			"substring",
+			"updatexml",
+			"load_file",
+			"session_user",
+			"system_user",
 		}
 
 		for field in parameters.split(","):
