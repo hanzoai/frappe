@@ -713,14 +713,14 @@ Object.assign(frappe.utils, {
 		var objPattern = new RegExp(
 			// Delimiters.
 			"(\\" +
-			strDelimiter +
-			"|\\r?\\n|\\r|^)" +
-			// Quoted fields.
-			'(?:"([^"]*(?:""[^"]*)*)"|' +
-			// Standard fields.
-			'([^"\\' +
-			strDelimiter +
-			"\\r\\n]*))",
+				strDelimiter +
+				"|\\r?\\n|\\r|^)" +
+				// Quoted fields.
+				'(?:"([^"]*(?:""[^"]*)*)"|' +
+				// Standard fields.
+				'([^"\\' +
+				strDelimiter +
+				"\\r\\n]*))",
 			"gi"
 		);
 
@@ -1186,30 +1186,33 @@ Object.assign(frappe.utils, {
 		center: [19.08, 72.8961],
 		zoom: 13,
 		tiles: {
-			defaultTile: {
+			default_tile: {
 				url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
 				options: {
-					attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-				}
+					attribution:
+						'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+				},
 			},
-			sattelliteTail: {
-				url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+			satellite_tile: {
+				url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
 				options: {
-					attribution: '© Esri © OpenStreetMap Contributors',
-				}
+					attribution: "© Esri © OpenStreetMap Contributors",
+				},
 			},
-			labelsTail: {
-				url: 'https://tiles.stadiamaps.com/tiles/stamen_toner_labels/{z}/{x}/{y}{r}.png',
+			labels_tail: {
+				url: "https://tiles.stadiamaps.com/tiles/stamen_toner_labels/{z}/{x}/{y}{r}.png",
 				options: {
-					attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>',
-				}
+					attribution:
+						'&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>',
+				},
 			},
-			terrainLinesTail: {
-				url: 'https://tiles.stadiamaps.com/tiles/stamen_terrain_lines/{z}/{x}/{y}{r}.png',
+			terrain_lines_tail: {
+				url: "https://tiles.stadiamaps.com/tiles/stamen_terrain_lines/{z}/{x}/{y}{r}.png",
 				options: {
-					attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>',
-				}
-			}
+					attribution:
+						'&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>',
+				},
+			},
 		},
 		image_path: "/assets/frappe/images/leaflet/",
 	},
@@ -1224,12 +1227,13 @@ Object.assign(frappe.utils, {
 		} else {
 			size_class = `icon-${size}`;
 		}
-		return `<svg class="${is_espresso
-			? icon_name.startsWith("es-solid")
-				? "es-icon es-solid"
-				: "es-icon es-line"
-			: "icon"
-			} ${svg_class} ${size_class}" style="${icon_style}" aria-hidden="true">
+		return `<svg class="${
+			is_espresso
+				? icon_name.startsWith("es-solid")
+					? "es-icon es-solid"
+					: "es-icon es-line"
+				: "icon"
+		} ${svg_class} ${size_class}" style="${icon_style}" aria-hidden="true">
 			<use class="${icon_class}" href="${icon_name}"></use>
 		</svg>`;
 	},
@@ -1404,8 +1408,9 @@ Object.assign(frappe.utils, {
 	build_summary_item(summary) {
 		if (summary.type == "separator") {
 			return $(`<div class="summary-separator">
-				<div class="summary-value ${summary.color ? summary.color.toLowerCase() : "text-muted"}">${summary.value
-				}</div>
+				<div class="summary-value ${summary.color ? summary.color.toLowerCase() : "text-muted"}">${
+				summary.value
+			}</div>
 			</div>`);
 		}
 		let df = { fieldtype: summary.datatype };
@@ -1419,8 +1424,8 @@ Object.assign(frappe.utils, {
 		let color = summary.indicator
 			? summary.indicator.toLowerCase()
 			: summary.color
-				? summary.color.toLowerCase()
-				: "";
+			? summary.color.toLowerCase()
+			: "";
 
 		return $(`<div class="summary-item">
 			<span class="summary-label">${__(summary.label)}</span>
@@ -1432,17 +1437,17 @@ Object.assign(frappe.utils, {
 		let w = window.open(
 			frappe.urllib.get_full_url(
 				"/printview?doctype=" +
-				encodeURIComponent(doctype) +
-				"&name=" +
-				encodeURIComponent(docname) +
-				"&trigger_print=1" +
-				"&format=" +
-				encodeURIComponent(print_format) +
-				"&no_letterhead=" +
-				(letterhead ? "0" : "1") +
-				"&letterhead=" +
-				encodeURIComponent(letterhead) +
-				(lang_code ? "&_lang=" + lang_code : "")
+					encodeURIComponent(doctype) +
+					"&name=" +
+					encodeURIComponent(docname) +
+					"&trigger_print=1" +
+					"&format=" +
+					encodeURIComponent(print_format) +
+					"&no_letterhead=" +
+					(letterhead ? "0" : "1") +
+					"&letterhead=" +
+					encodeURIComponent(letterhead) +
+					(lang_code ? "&_lang=" + lang_code : "")
 			)
 		);
 
@@ -1798,8 +1803,8 @@ Object.assign(frappe.utils, {
 
 				frappe.msgprint(
 					__("Tracking URL generated and copied to clipboard") +
-					": <br>" +
-					`<a href="${url}">${url.bold()}</a>`,
+						": <br>" +
+						`<a href="${url}">${url.bold()}</a>`,
 					__("Here's your tracking URL")
 				);
 			},
