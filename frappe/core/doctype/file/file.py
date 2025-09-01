@@ -17,7 +17,13 @@ from frappe.database.schema import SPECIAL_CHAR_PATTERN
 from frappe.exceptions import DoesNotExistError
 from frappe.model.document import Document
 from frappe.permissions import SYSTEM_USER_ROLE, get_doctypes_with_read
-from frappe.utils import call_hook_method, cint, get_files_path, get_hook_method, get_url
+from frappe.utils import (
+	call_hook_method,
+	cint,
+	get_files_path,
+	get_hook_method,
+	get_url,
+)
 from frappe.utils.file_manager import is_safe_path
 from frappe.utils.image import optimize_image, strip_exif_data
 
@@ -31,7 +37,7 @@ from .utils import *
 
 exclude_from_linked_with = True
 ImageFile.LOAD_TRUNCATED_IMAGES = True
-URL_PREFIXES = ("http://", "https://")
+URL_PREFIXES = ("http://", "https://", "/api/method/")
 FILE_ENCODING_OPTIONS = ("utf-8-sig", "utf-8", "windows-1250", "windows-1252")
 
 
@@ -139,7 +145,10 @@ class File(Document):
 			return
 
 		if not self.attached_to_name or not isinstance(self.attached_to_name, str | int):
-			frappe.throw(_("Attached To Name must be a string or an integer"), frappe.ValidationError)
+			frappe.throw(
+				_("Attached To Name must be a string or an integer"),
+				frappe.ValidationError,
+			)
 
 		if self.attached_to_field and SPECIAL_CHAR_PATTERN.search(self.attached_to_field):
 			frappe.throw(_("The fieldname you've specified in Attached To Field is invalid"))
@@ -213,8 +222,8 @@ class File(Document):
 		if self.is_remote_file or not self.file_url:
 			return
 
-		if not self.file_url.startswith(("/files/", "/private/files/")):
-			# Probably an invalid URL since it doesn't start with http either
+		if not self.file_url.startswith(("/files/", "/private/files/", "/api/method/")):
+			# Probably an invalid URL since it doesn't start with http and isn't an internal URL either
 			frappe.throw(
 				_("URL must start with http:// or https://"),
 				title=_("Invalid URL"),
@@ -318,7 +327,9 @@ class File(Document):
 			if current_attachment_count >= attachment_limit:
 				frappe.throw(
 					_("Maximum Attachment Limit of {0} has been reached for {1} {2}.").format(
-						frappe.bold(attachment_limit), self.attached_to_doctype, self.attached_to_name
+						frappe.bold(attachment_limit),
+						self.attached_to_doctype,
+						self.attached_to_name,
 					),
 					exc=AttachmentLimitReached,
 					title=_("Attachment Limit Reached"),
@@ -372,7 +383,10 @@ class File(Document):
 			return
 
 		if self.file_type not in allowed_extensions.splitlines():
-			frappe.throw(_("File type of {0} is not allowed").format(self.file_type), exc=FileTypeNotAllowed)
+			frappe.throw(
+				_("File type of {0} is not allowed").format(self.file_type),
+				exc=FileTypeNotAllowed,
+			)
 
 	def validate_duplicate_entry(self):
 		if not self.flags.ignore_duplicate_entry_error and not self.is_folder:
@@ -407,7 +421,8 @@ class File(Document):
 	def set_file_name(self):
 		if not self.file_name and not self.file_url:
 			frappe.throw(
-				_("Fields `file_name` or `file_url` must be set for File"), exc=frappe.MandatoryError
+				_("Fields `file_name` or `file_url` must be set for File"),
+				exc=frappe.MandatoryError,
 			)
 		elif not self.file_name and self.file_url:
 			self.file_name = self.file_url.split("/")[-1]
@@ -779,6 +794,9 @@ class File(Document):
 				frappe.clear_messages()
 
 	def set_is_private(self):
+		if self.is_private:
+			return
+
 		if self.file_url:
 			self.is_private = cint(self.file_url.startswith("/private"))
 

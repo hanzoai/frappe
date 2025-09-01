@@ -67,8 +67,9 @@ def get_count() -> int | None:
 
 	# args.limit is specified to avoid getting accurate count.
 	if not args.limit:
-		args.fields = [f"count({fieldname}) as total_count"]
-		return execute(**args)[0].get("total_count")
+		args.fields = [fieldname]
+		partial_query = execute(**args, run=0)
+		return frappe.db.sql(f"select count(*) from ( {partial_query} ) p")[0][0]
 
 	args.fields = [fieldname]
 	partial_query = execute(**args, run=0)
@@ -315,7 +316,7 @@ def compress(data, args=None):
 	return {"keys": keys, "values": values, "user_info": user_info}
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST", "PUT"])
 def save_report(name, doctype, report_settings):
 	"""Save reports of type Report Builder from Report View"""
 
@@ -345,7 +346,7 @@ def save_report(name, doctype, report_settings):
 	return report.name
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST", "DELETE"])
 def delete_report(name):
 	"""Delete reports of type Report Builder from Report View"""
 
@@ -555,7 +556,7 @@ def parse_field(field: str) -> tuple[str | None, str]:
 	return None, key.strip("`")
 
 
-@frappe.whitelist()
+@frappe.whitelist(methods=["POST", "DELETE"])
 def delete_items():
 	"""delete selected items"""
 	import json

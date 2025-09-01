@@ -65,7 +65,7 @@ export default class Grid {
 	make() {
 		let template = `
 			<div class="grid-field">
-				<label class="control-label">${__(this.df.label || "")}</label>
+				<label class="control-label">${__(this.df.label || "", null, this.df.parent)}</label>
 				<span class="help"></span>
 				<p class="text-muted small grid-description"></p>
 				<div class="grid-custom-buttons"></div>
@@ -86,6 +86,10 @@ export default class Grid {
 							<button type="button" class="btn btn-xs btn-danger grid-remove-rows hidden"
 								data-action="delete_rows">
 								${__("Delete")}
+							</button>
+							<button type="button" class="btn btn-xs btn-secondary grid-remove-rows hidden"
+								data-action="duplicate_rows">
+								${__("Duplicate Row")}
 							</button>
 							<button type="button" class="btn btn-xs btn-danger grid-remove-all-rows hidden"
 								data-action="delete_all_rows">
@@ -154,9 +158,13 @@ export default class Grid {
 				d.idx = ri + 1;
 			}
 			if (d.name === undefined) {
-				d.name = "row " + d.idx;
+				d.name = this.get_random_name();
 			}
 		});
+	}
+
+	get_random_name() {
+		return Math.random().toString(36).slice(2, 10);
 	}
 
 	set_doc_url() {
@@ -232,6 +240,14 @@ export default class Grid {
 			row.select(checked);
 			row.row_check?.find(".grid-row-check").prop("checked", checked);
 		}
+	}
+
+	duplicate_rows() {
+		let selected_children = this.get_selected_children();
+		selected_children.forEach((doc) => {
+			this.add_new_row(null, null, false, doc, false);
+			this.check_range(doc.name, doc.name, false);
+		});
 	}
 
 	delete_rows() {
@@ -366,6 +382,7 @@ export default class Grid {
 			frm: this.frm,
 			grid: this,
 			configure_columns: true,
+			header_row: true,
 		});
 
 		this.header_search = new GridRow({
@@ -484,7 +501,7 @@ export default class Grid {
 				d.idx = ri + 1;
 			}
 			if (d.name === undefined) {
-				d.name = "row " + d.idx;
+				d.name = this.get_random_name();
 			}
 			let grid_row;
 			if (this.grid_rows[ri] && !append_row) {
@@ -923,7 +940,7 @@ export default class Grid {
 
 		setTimeout(() => {
 			this.grid_rows[idx].row
-				.find('input[type="Text"],textarea,select')
+				.find('input[type="checkbox"],input[type="Text"],textarea,select')
 				.filter(":visible:first")
 				.focus();
 		}, 100);

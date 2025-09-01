@@ -235,7 +235,7 @@ def disable_saving_as_public():
 		frappe.flags.in_install
 		or frappe.flags.in_uninstall
 		or frappe.flags.in_patch
-		or frappe.flags.in_test
+		or frappe.in_test
 		or frappe.flags.in_fixtures
 		or frappe.flags.in_migrate
 	)
@@ -302,6 +302,9 @@ def save_page(name, public, new_widgets, blocks):
 	public = frappe.parse_json(public)
 
 	doc = frappe.get_doc("Workspace", name)
+	if not doc.type:
+		doc.type = "Workspace"
+
 	doc.content = blocks
 
 	save_new_widget(doc, name, blocks, new_widgets)
