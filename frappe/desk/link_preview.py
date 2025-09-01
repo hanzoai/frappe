@@ -1,15 +1,16 @@
 import frappe
 from frappe.model import no_value_fields, table_fields
 from frappe.utils.caching import http_cache
-from frappe.www.printview import set_link_titles
+from frappe.www.printview import set_title_values_for_link_and_dynamic_link_fields
 
 
 @frappe.whitelist()
 @http_cache(max_age=60 * 10)
 def get_preview_data(doctype, docname):
+	if not frappe.has_permission(doctype, "read", doc=docname):
+		frappe.throw(frappe._("You don't have permission to view this document"), PermissionError)
 	preview_fields = []
-	doc = frappe.get_doc(doctype, docname)
-	meta = doc.meta
+	meta = frappe.get_meta(doctype)
 	if not meta.show_preview_popup:
 		return
 
@@ -44,8 +45,9 @@ def get_preview_data(doctype, docname):
 		"preview_title": preview_data.get(title_field),
 		"name": preview_data.get("name"),
 	}
-
-	set_link_titles(doc)
+	if meta.show_title_field_in_link and meta.title_field:
+		doc = frappe.get_doc(doctype, docname)
+		set_title_values_for_link_and_dynamic_link_fields(meta, doc)
 
 	for key, val in preview_data.items():
 		if val and meta.has_field(key) and key not in [image_field, title_field, "name"]:
