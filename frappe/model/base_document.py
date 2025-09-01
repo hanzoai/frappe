@@ -948,7 +948,7 @@ class BaseDocument:
 
 				frappe.utils.validate_url(data, throw=True)
 
-			if data_field_options == "IBAN":
+			if data_field_options == "IBAN" and data:
 				frappe.utils.validate_iban(data, throw=True)
 
 	def _validate_constants(self):
