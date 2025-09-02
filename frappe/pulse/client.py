@@ -10,6 +10,7 @@ from frappe.utils.caching import site_cache
 from frappe.utils.frappecloud import on_frappecloud
 
 
+@frappe.whitelist()
 @site_cache()
 def is_enabled() -> bool:
 	return (
@@ -70,6 +71,9 @@ def _queue_event(event):
 	frappe.cache.lpush("pulse-client:events", frappe.as_json(event))
 	frappe.cache.ltrim("pulse-client:events", 0, 4999)
 
+
+def queue_length():
+	return frappe.cache.llen("pulse-client:events")
 
 def send_queued_events():
 	batch_size = 100
