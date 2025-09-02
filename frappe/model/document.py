@@ -801,7 +801,7 @@ class Document(BaseDocument):
 				)
 
 		for df in self.meta.get(
-			"fields", {"non_negative": ("=", 1), "fieldtype": ("in", ["Int", "Float", "Currency"])}
+			"fields", {"non_negative": ("=", 1), "fieldtype": ("in", ["Int", "Float", "Currency", "Percent"])}
 		):
 			if flt(self.get(df.fieldname)) < 0:
 				msg = get_msg(df)
@@ -1805,9 +1805,12 @@ class Document(BaseDocument):
 		if date_diff(to_date, from_date) < 0:
 			table_row = ""
 			if self.meta.istable:
-				table_row = _("{0} row #{1}: ").format(
-					_(frappe.unscrub(self.parentfield)),
-					self.idx,
+				table_row = (
+					_("{0} row #{1}:").format(
+						_(frappe.unscrub(self.parentfield)),
+						self.idx,
+					)
+					+ " "
 				)
 
 			frappe.throw(
