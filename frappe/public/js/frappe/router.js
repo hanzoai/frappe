@@ -148,7 +148,7 @@ frappe.router = {
 		this.set_history(sub_path);
 		this.render();
 		this.set_title(sub_path);
-		this.trigger("change");
+		this.trigger("change", this);
 	},
 
 	async parse(route) {
@@ -202,7 +202,6 @@ frappe.router = {
 		return frappe.model.with_doctype(doctype_route.doctype).then(() => {
 			// doctype route
 			let meta = frappe.get_meta(doctype_route.doctype);
-
 			if (route[1] && route[1] === "view" && route[2]) {
 				route = this.get_standard_route_for_list(
 					route,

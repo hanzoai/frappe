@@ -1,17 +1,22 @@
 // Sidebar Header
+@mixin truncate {
+	overflow: hidden;
+}
 .sidebar-header {
-	width: 100%;
 	position: relative;
-	height: 38px;
-	padding: 3px 0px 3px 3px;
 	display: flex;
 	align-items: center;
+	padding: 8px;
+	height: 48px;
 	button {
-		padding: 6px;
 		margin-left: 12px;
+		@include truncate();
 	}
 }
-
+.header-logo {
+	width: 32px;
+	height: 32px;
+}
 .header-logo > * {
 	background-color: var(--gray-200);
 	color: var(--gray-500);
@@ -21,19 +26,15 @@
 .title-container {
 	flex: 1 1 0%;
 	margin-left: 8px;
+	@include truncate();
 }
 .header-title {
 	font-weight: 500;
 }
-.collapse-header {
-	overflow: hidden;
-	width: 0px;
-	margin-left: 0px !important;
-	opacity: 0;
-}
+
 .sidebar-header-menu {
 	position: absolute;
-	top: 50px;
+	top: 60px;
 	left: 9px;
 	width: 208px;
 	padding: 6px;

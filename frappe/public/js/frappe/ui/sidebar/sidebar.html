@@ -7,8 +7,9 @@
 			</div>
 			<div class="body-sidebar-bottom">
 				<a class="collapse-sidebar-link">
-					<svg class="icon" style="margin-top: -2px">
-						<use href="#icon-arrow-right-to-line"></use></svg> {%= __("Collapse") %}</a>
+					{%= frappe.utils.icon("arrow-left-to-line" , "sm", "", "", "text-ink-gray-7 current-color", true)%}
+		 			<span> {%= __("Collapse") %} </span>
+				</a>
 			</div>
 		</div>
 		<div class="overlay" style="z-index: 1021;"></div>

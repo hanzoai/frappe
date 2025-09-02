@@ -39,16 +39,19 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		];
 		this.make();
 		this.setup_app_switcher();
-		this.populate_apps_menu();
+		this.populate_dropdown_menu();
 		this.setup_select_options();
 	}
 
 	make() {
+		$(".sidebar-header").remove();
+		$(".sidebar-header-menu").remove();
 		$(
 			frappe.render_template("sidebar_header", {
 				workspace_title: this.workspace_title,
 			})
 		).prependTo(this.sidebar_wrapper);
+
 		this.wrapper = $(".sidebar-header");
 		this.dropdown_menu = this.wrapper.find(".sidebar-header-menu");
 		this.$header_title = this.wrapper.find(".header-title");
@@ -58,17 +61,17 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 	setup_app_switcher() {
 		this.dropdown_menu = $(".sidebar-header-menu");
 		$(".sidebar-header").on("click", (e) => {
-			this.toggle_app_menu();
+			this.toggle_dropdown_menu();
 			e.stopImmediatePropagation();
 		});
 	}
 
-	toggle_app_menu() {
+	toggle_dropdown_menu() {
 		this.toggle_active();
 		this.dropdown_menu.toggleClass("hidden");
 	}
 
-	populate_apps_menu() {
+	populate_dropdown_menu() {
 		const me = this;
 		this.dropdown_items.forEach((d) => {
 			me.add_app_item(d);
@@ -84,7 +87,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 						item.icon
 							? frappe.utils.icon(item.icon)
 							: `<img
-							class="app-logo"
+							class="logo"
 							src="${item.icon_url}"
 						>`
 					}
@@ -134,18 +137,15 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 	}
 
 	toggle_width(expand) {
-		let class_name = "collapse-header";
 		if (!expand) {
-			$(this.wrapper[0]).css("width", "auto");
-			this.$drop_icon.addClass(class_name);
-			this.$header_title.addClass(class_name);
 			$(this.wrapper[0]).off("mouseleave");
 			$(this.wrapper[0]).off("mouseover");
+			this.wrapper.css("padding-left", "0px");
+			this.wrapper.css("padding-right", "0px");
 		} else {
-			$(this.wrapper[0]).css("width", "100%");
-			this.$drop_icon.removeClass(class_name);
-			this.$header_title.removeClass(class_name);
 			this.setup_hover();
+			this.wrapper.css("padding-left", "8px");
+			this.wrapper.css("padding-right", "8px");
 		}
 	}
 };

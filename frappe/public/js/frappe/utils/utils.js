@@ -1233,7 +1233,14 @@ Object.assign(frappe.utils, {
 		image_path: "/assets/frappe/images/leaflet/",
 	},
 
-	icon(icon_name, size = "sm", icon_class = "", icon_style = "", svg_class = "") {
+	icon(
+		icon_name,
+		size = "sm",
+		icon_class = "",
+		icon_style = "",
+		svg_class = "",
+		currentColor = false
+	) {
 		let size_class = "";
 		let is_espresso = icon_name.startsWith("es-");
 
@@ -1249,7 +1256,9 @@ Object.assign(frappe.utils, {
 					? "es-icon es-solid"
 					: "es-icon es-line"
 				: "icon"
-		} ${svg_class} ${size_class}" style="${icon_style}" aria-hidden="true">
+		} ${svg_class} ${size_class}"
+			${currentColor ? 'stroke="currentColor"' : ""}
+			style="${icon_style}" aria-hidden="true">
 			<use class="${icon_class}" href="${icon_name}"></use>
 		</svg>`;
 	},

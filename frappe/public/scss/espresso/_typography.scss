@@ -50,8 +50,14 @@
 	--text-muted: var(--gray-700);
 	--text-light: var(--gray-600);
 	--text-dark: var(--fg-color);
+
+	--ink-gray-5: #7c7c7c;
+	--ink-gray-7: #525252;
 }
 
+.text-ink-gray-7 {
+	color: var(--ink-gray-7);
+}
 $weight-list: "regular", "medium", "semibold", "bold", "black";
 
 $letter-space: (

@@ -1,5 +1,5 @@
 <div
-    class="sidebar-item-container {%= item.is_editable ? 'is-draggable' : '' %}"
+    class="sidebar-item-container {%= item.is_editable ? 'is-draggable' : '' %} {% if (item.type == 'Section Break') { %}section-item{% } %}"
     item-name="{{ item.label }}"
     item-title="{{ item.label }}"
 			>
@@ -7,17 +7,16 @@
 					<a
 						href="{{ path }}"
 						target="{%= item.type === "URL" ? "_blank" : "" %}"
-						class="item-anchor {% item.is_editable ? "" : "block-click" %}"
+						class="item-anchor
+								{% if (!item.is_editable) { %}block-click {% } %}
+								{% if (item.type == 'Section Break') { %}section-break{% } %}"
                         title="{{ item.label }}"
 					>
-                        {% if (item.icon) { %}
-						<span class="sidebar-item-icon" item-icon="{{ item.icon }}">
-                            {%= frappe.utils.icon(item.icon, "md")%}
+						{% if (item.type != "Section Break") { %}
+						<span class="sidebar-item-icon text-ink-gray-7" item-icon="{{ item.icon }}">
+							{%= frappe.utils.icon(item.icon || "list-alt" , "sm", "", "", "text-ink-gray-7 current-color", true)%}
 						</span>
-                        {% } else { %}
-                        <span class="sidebar-item-icon" item-icon="{{ item.icon }}">
-						</span>
-                        {% } %}
+						{% } %}
 						<span class="sidebar-item-label">{{ item.label }}<span>
 					</a>
 					<div class="sidebar-item-control"></div>
