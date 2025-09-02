@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-08-31 09:33+0000\n"
-"PO-Revision-Date: 2025-09-01 16:29\n"
+"PO-Revision-Date: 2025-09-02 16:45\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Danish\n"
 "MIME-Version: 1.0\n"
@@ -2476,7 +2476,7 @@ msgstr ""
 #: frappe/public/js/frappe/model/model.js:136
 #: frappe/public/js/frappe/views/interaction.js:82
 msgid "Assigned To"
-msgstr ""
+msgstr "Tildelt Til"
 
 #: frappe/desk/report/todo/todo.py:40
 msgid "Assigned To/Owner"
@@ -3243,7 +3243,7 @@ msgstr ""
 #: frappe/printing/page/print/print.js:286
 #: frappe/printing/page/print/print.js:340
 msgid "Based On"
-msgstr ""
+msgstr "Baseret På"
 
 #. Option for the 'Rule' (Select) field in DocType 'Assignment Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
@@ -3455,7 +3455,7 @@ msgstr ""
 #. Label of the brand (Section Break) field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Brand"
-msgstr ""
+msgstr "Mærke"
 
 #. Label of the brand_html (Code) field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
@@ -3778,7 +3778,7 @@ msgstr ""
 #: frappe/website/doctype/web_page_view/web_page_view.json
 #: frappe/website/report/website_analytics/website_analytics.js:39
 msgid "Campaign"
-msgstr ""
+msgstr "Kampagne"
 
 #. Label of the campaign_description (Small Text) field in DocType 'UTM
 #. Campaign'
@@ -4419,7 +4419,7 @@ msgstr ""
 #. Label of the city (Data) field in DocType 'Contact Us Settings'
 #: frappe/website/doctype/contact_us_settings/contact_us_settings.json
 msgid "City"
-msgstr ""
+msgstr "By"
 
 #. Label of the city (Data) field in DocType 'Address'
 #: frappe/contacts/doctype/address/address.json
@@ -4647,7 +4647,7 @@ msgstr ""
 #: frappe/public/js/frappe/ui/messages.js:251
 #: frappe/website/js/bootstrap-4.js:24
 msgid "Close"
-msgstr ""
+msgstr "Luk"
 
 #. Label of the close_condition (Code) field in DocType 'Assignment Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
@@ -4666,7 +4666,7 @@ msgstr ""
 #: frappe/core/doctype/communication/communication.json
 #: frappe/desk/doctype/event/event.json frappe/desk/doctype/todo/todo.json
 msgid "Closed"
-msgstr ""
+msgstr "Lukket"
 
 #: frappe/templates/discussions/comment_box.html:25
 #: frappe/templates/discussions/reply_section.html:53
@@ -4908,7 +4908,7 @@ msgstr ""
 #: frappe/public/js/frappe/model/model.js:135
 #: frappe/website/doctype/web_form/templates/web_form.html:129
 msgid "Comments"
-msgstr ""
+msgstr "Kommentarer"
 
 #. Description of the 'Timeline Field' (Data) field in DocType 'DocType'
 #: frappe/core/doctype/doctype/doctype.json
@@ -4948,7 +4948,7 @@ msgstr ""
 #: frappe/email/doctype/email_queue/email_queue.json
 #: frappe/tests/test_translate.py:35 frappe/tests/test_translate.py:119
 msgid "Communication"
-msgstr ""
+msgstr "Kommunikation"
 
 #. Name of a DocType
 #: frappe/core/doctype/communication_link/communication_link.json
@@ -5033,7 +5033,7 @@ msgstr ""
 #: frappe/utils/goal.py:117
 #: frappe/workflow/doctype/workflow_action/workflow_action.json
 msgid "Completed"
-msgstr ""
+msgstr "Udført"
 
 #. Label of the completed_by_role (Link) field in DocType 'Workflow Action'
 #: frappe/workflow/doctype/workflow_action/workflow_action.json
@@ -5306,7 +5306,7 @@ msgstr ""
 #. Label of the contacts (Small Text) field in DocType 'OAuth Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
 msgid "Contacts"
-msgstr ""
+msgstr "Kontakter"
 
 #: frappe/utils/change_log.py:362
 msgid "Contains {0} security fix"
