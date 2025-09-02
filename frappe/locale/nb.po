@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-08-31 09:33+0000\n"
-"PO-Revision-Date: 2025-09-01 16:29\n"
+"PO-Revision-Date: 2025-09-02 16:45\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Norwegian Bokmal\n"
 "MIME-Version: 1.0\n"
@@ -7504,7 +7504,7 @@ msgid "DocStatus of the following states have changed:<br><strong>{0}</strong><b
 "\t\t\t\tDo you want to update the docstatus of existing documents in those states?<br>\n"
 "\t\t\t\tThis does not undo any effect bought in by the document's existing docstatus.\n"
 "\t\t\t\t"
-msgstr "Dokumentstatusen for følgende tilstander er endret:<br><strong>{0}</strong><br>\n"
+msgstr "\t\t\t\t\t\t\t\tDokumentstatusen for følgende tilstander er endret:<br><strong>{0}</strong><br>\n"
 "\t\t\t\tVil du oppdatere dokumentstatusen til eksisterende dokumenter i disse tilstandene?<br>\n"
 "\t\t\t\tDette angrer ikke noen effekt som er kjøpt inn av dokumentets eksisterende dokumentstatus.\n"
 "\t\t\t\t"
@@ -9344,17 +9344,17 @@ msgstr "Feil"
 #: frappe/core/doctype/communication/communication.json
 #: frappe/desk/doctype/event/event.json
 msgid "Event"
-msgstr "Hendelse"
+msgstr "Event"
 
 #. Label of the event_category (Select) field in DocType 'Event'
 #: frappe/desk/doctype/event/event.json
 msgid "Event Category"
-msgstr "Hendelseskategori"
+msgstr "Eventkategori"
 
 #. Label of the event_frequency (Select) field in DocType 'Server Script'
 #: frappe/core/doctype/server_script/server_script.json
 msgid "Event Frequency"
-msgstr "Hendelsesfrekvens"
+msgstr "Eventfrekvens"
 
 #. Label of the event_participants (Table) field in DocType 'Event'
 #. Name of a DocType
@@ -9701,7 +9701,7 @@ msgstr "Facebook"
 #. Health Report'
 #: frappe/desk/doctype/system_health_report/system_health_report.json
 msgid "Fail"
-msgstr "Mislykkes"
+msgstr "Ikke bestått"
 
 #. Option for the 'Status' (Select) field in DocType 'Activity Log'
 #. Option for the 'Status' (Select) field in DocType 'Scheduled Job Log'
@@ -9712,87 +9712,87 @@ msgstr "Mislykkes"
 #: frappe/core/doctype/submission_queue/submission_queue.json
 #: frappe/integrations/doctype/integration_request/integration_request.json
 msgid "Failed"
-msgstr "Mislyktes"
+msgstr "Feilet"
 
 #. Label of the failed_emails (Int) field in DocType 'System Health Report'
 #: frappe/desk/doctype/system_health_report/system_health_report.json
 msgid "Failed Emails"
-msgstr ""
+msgstr "Mislykkede utsendelser av e-post"
 
 #. Label of the failed_job_count (Int) field in DocType 'RQ Worker'
 #: frappe/core/doctype/rq_worker/rq_worker.json
 msgid "Failed Job Count"
-msgstr ""
+msgstr "Antall feilede jobb"
 
 #. Label of the failed_jobs (Int) field in DocType 'System Health Report
 #. Workers'
 #: frappe/desk/doctype/system_health_report_workers/system_health_report_workers.json
 msgid "Failed Jobs"
-msgstr ""
+msgstr "Mislykkede jobber"
 
 #. Label of the failed_logins (Int) field in DocType 'System Health Report'
 #: frappe/desk/doctype/system_health_report/system_health_report.json
 msgid "Failed Logins (Last 30 days)"
-msgstr ""
+msgstr "Mislykkede pålogginger (siste 30 dager)"
 
 #: frappe/model/workflow.py:362
 msgid "Failed Transactions"
-msgstr ""
+msgstr "Mislykkede transaksjoner"
 
 #: frappe/utils/synchronization.py:46
 msgid "Failed to aquire lock: {}. Lock may be held by another process."
-msgstr ""
+msgstr "Mislyktes med å hente lås: {}. Låsen kan være oppbevart av en annen prosess."
 
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.py:359
 msgid "Failed to change password."
-msgstr ""
+msgstr "Endrig av passord mislyktes"
 
 #: frappe/desk/page/setup_wizard/setup_wizard.js:232
 #: frappe/desk/page/setup_wizard/setup_wizard.py:42
 msgid "Failed to complete setup"
-msgstr ""
+msgstr "Fullføring av oppsettet mislyktes"
 
 #: frappe/integrations/doctype/webhook/webhook.py:141
 msgid "Failed to compute request body: {}"
-msgstr "Kunne ikke beregne forespørselsteksten: {}"
+msgstr "Mislyktes med å beregne forespørselsteksten: {}"
 
 #: frappe/printing/doctype/network_printer_settings/network_printer_settings.py:46
 #: frappe/printing/doctype/network_printer_settings/network_printer_settings.py:48
 msgid "Failed to connect to server"
-msgstr "Klarte ikke å koble til serveren"
+msgstr "Mislyktes med å koble til serveren"
 
 #: frappe/auth.py:698
 msgid "Failed to decode token, please provide a valid base64-encoded token."
-msgstr "Kunne ikke dekode tokenet. Vennligst oppgi et gyldig base64-kodet token."
+msgstr "Mislyktes med å dekode tokenet. Vennligst oppgi et gyldig base64-kodet token."
 
 #: frappe/utils/password.py:210
 msgid "Failed to decrypt key {0}"
-msgstr ""
+msgstr "Mislyktes med å dekryptere nøkkelen {0}"
 
 #: frappe/desk/reportview.py:600
 msgid "Failed to delete {0} documents: {1}"
-msgstr "Kunne ikke slette {0} dokumenter: {1}"
+msgstr "Mislyktes med å slette {0} dokumenter: {1}"
 
 #: frappe/core/doctype/rq_job/rq_job_list.js:33
 msgid "Failed to enable scheduler: {0}"
-msgstr ""
+msgstr "Mislyktes med å aktivere planleggeren: {0}"
 
 #: frappe/email/doctype/notification/notification.py:105
 #: frappe/integrations/doctype/webhook/webhook.py:131
 msgid "Failed to evaluate conditions: {}"
-msgstr "Kunne ikke evaluere betingelser: {}"
+msgstr "Mislyktes med å evaluere betingelser: {}"
 
 #: frappe/types/exporter.py:205
 msgid "Failed to export python type hints"
-msgstr ""
+msgstr "Mislyktes med å eksportere hint for python-typen"
 
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.py:249
 msgid "Failed to generate names from the series"
-msgstr ""
+msgstr "Mislyktes med å generere navn fra serien"
 
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.js:75
 msgid "Failed to generate preview of series"
-msgstr ""
+msgstr "Mislyktes med å generere forhåndsvisning av serien"
 
 #: frappe/handler.py:76
 msgid "Failed to get method for command {0} with {1}"
@@ -10057,16 +10057,16 @@ msgstr ""
 
 #: frappe/database/schema.py:394
 msgid "Fieldname {0} cannot have special characters like {1}"
-msgstr ""
+msgstr "Feltnavn {0} kan ikke inneholde spesialtegn som {1}"
 
 #: frappe/core/doctype/doctype/doctype.py:1908
 msgid "Fieldname {0} conflicting with meta object"
-msgstr ""
+msgstr "Feltnavn {0} konflikterer med metaobjekt"
 
 #: frappe/core/doctype/doctype/doctype.py:497
 #: frappe/public/js/form_builder/utils.js:302
 msgid "Fieldname {0} is restricted"
-msgstr ""
+msgstr "Feltnavnet {0} er opptatt (reservert av systemet)"
 
 #. Label of the fields (Table) field in DocType 'DocType'
 #. Label of the fields_section (Section Break) field in DocType 'DocType'
@@ -10097,19 +10097,19 @@ msgstr "Felt"
 #. Label of the fields_multicheck (HTML) field in DocType 'Data Export'
 #: frappe/core/doctype/data_export/data_export.json
 msgid "Fields Multicheck"
-msgstr ""
+msgstr "Skjekk av flere felt"
 
 #: frappe/core/doctype/file/file.py:410
 msgid "Fields `file_name` or `file_url` must be set for File"
-msgstr ""
+msgstr "Feltene `file_name` eller `file_url` må angis for fil"
 
 #: frappe/model/db_query.py:146
 msgid "Fields must be a list or tuple when as_list is enabled"
-msgstr ""
+msgstr "Felt må være en liste eller tuple når as_list er aktivert"
 
 #: frappe/database/query.py:611
 msgid "Fields must be a string, list, tuple, pypika Field, or pypika Function"
-msgstr ""
+msgstr "Feltene må være en streng, liste, tupel, pypika Field eller pypika Function"
 
 #. Description of the 'Search Fields' (Data) field in DocType 'Customize Form'
 #: frappe/custom/doctype/customize_form/customize_form.json
@@ -10133,11 +10133,11 @@ msgstr "Felttype"
 
 #: frappe/custom/doctype/custom_field/custom_field.py:193
 msgid "Fieldtype cannot be changed from {0} to {1}"
-msgstr ""
+msgstr "Felttypen kan ikke endres fra {0} til {1}"
 
 #: frappe/custom/doctype/customize_form/customize_form.py:589
 msgid "Fieldtype cannot be changed from {0} to {1} in row {2}"
-msgstr ""
+msgstr "Felttypen kan ikke endres fra {0} til {1} i rad {2}"
 
 #. Label of a shortcut in the Tools Workspace
 #. Name of a DocType
@@ -10154,7 +10154,7 @@ msgstr "Filen «{0}» ble hoppet over på grunn av ugyldig filtype"
 
 #: frappe/core/doctype/file/utils.py:128
 msgid "File '{0}' not found"
-msgstr ""
+msgstr "Filen '{0}' ble ikke funnet"
 
 #. Label of the private_file_section (Section Break) field in DocType 'Access
 #. Log'
@@ -10164,23 +10164,23 @@ msgstr "Filinformasjon"
 
 #: frappe/public/js/frappe/views/file/file_view.js:74
 msgid "File Manager"
-msgstr ""
+msgstr "Filbehandler"
 
 #. Label of the file_name (Data) field in DocType 'File'
 #: frappe/core/doctype/file/file.json
 msgid "File Name"
-msgstr ""
+msgstr "Filnavn"
 
 #. Label of the file_size (Int) field in DocType 'File'
 #: frappe/core/doctype/file/file.json
 msgid "File Size"
-msgstr ""
+msgstr "Filstørrelse"
 
 #. Label of the section_break_ryki (Section Break) field in DocType 'System
 #. Health Report'
 #: frappe/desk/doctype/system_health_report/system_health_report.json
 msgid "File Storage"
-msgstr ""
+msgstr "Fillagring"
 
 #. Label of the file_type (Data) field in DocType 'Access Log'
 #. Label of the file_type (Select) field in DocType 'Data Export'
@@ -10195,7 +10195,7 @@ msgstr "Filtype"
 #. Label of the file_url (Code) field in DocType 'File'
 #: frappe/core/doctype/file/file.json
 msgid "File URL"
-msgstr ""
+msgstr "Filens URL"
 
 #: frappe/desk/page/backups/backups.py:107
 msgid "File backup is ready"
@@ -10203,35 +10203,35 @@ msgstr "Sikkerhetskopiering av filer er klar"
 
 #: frappe/core/doctype/file/file.py:624
 msgid "File name cannot have {0}"
-msgstr ""
+msgstr "Filnavnet kan ikke ha {0}"
 
 #: frappe/utils/csvutils.py:28
 msgid "File not attached"
-msgstr ""
+msgstr "Fil ikke vedlagt"
 
 #: frappe/core/doctype/file/file.py:734 frappe/public/js/frappe/request.js:200
 #: frappe/utils/file_manager.py:221
 msgid "File size exceeded the maximum allowed size of {0} MB"
-msgstr ""
+msgstr "Filstørrelsen oversteg den maksimalt tillatte størrelsen på {0} MB"
 
 #: frappe/public/js/frappe/request.js:198
 msgid "File too big"
-msgstr ""
+msgstr "Filen er for stor"
 
 #: frappe/core/doctype/file/file.py:375
 msgid "File type of {0} is not allowed"
-msgstr ""
+msgstr "Filtypen {0} er ikke tillatt"
 
 #: frappe/core/doctype/file/file.py:363 frappe/core/doctype/file/file.py:426
 msgid "File {0} does not exist"
-msgstr ""
+msgstr "DocType {0} finnes ikke"
 
 #. Label of a Link in the Tools Workspace
 #. Label of the files_tab (Tab Break) field in DocType 'System Settings'
 #: frappe/automation/workspace/tools/tools.json
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Files"
-msgstr ""
+msgstr "Filer"
 
 #: frappe/core/doctype/prepared_report/prepared_report.js:8
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.js:305
@@ -10393,7 +10393,7 @@ msgstr "Fullført"
 #. Label of the report_end_time (Datetime) field in DocType 'Prepared Report'
 #: frappe/core/doctype/prepared_report/prepared_report.json
 msgid "Finished At"
-msgstr ""
+msgstr "Fullført den"
 
 #. Label of the first_day_of_the_week (Select) field in DocType 'Language'
 #. Label of the first_day_of_the_week (Select) field in DocType 'System
@@ -10408,20 +10408,20 @@ msgstr "Første dagen i uken"
 #: frappe/contacts/doctype/contact/contact.json
 #: frappe/core/doctype/user/user.json frappe/www/complete_signup.html:15
 msgid "First Name"
-msgstr ""
+msgstr "Fornavn"
 
 #. Label of the first_success_message (Data) field in DocType 'Success Action'
 #: frappe/core/doctype/success_action/success_action.json
 msgid "First Success Message"
-msgstr ""
+msgstr "Første suksessmelding"
 
 #: frappe/core/report/transaction_log_report/transaction_log_report.py:49
 msgid "First Transaction"
-msgstr ""
+msgstr "Første transaksjon"
 
 #: frappe/core/doctype/data_export/exporter.py:185
 msgid "First data column must be blank."
-msgstr ""
+msgstr "Første datakolonne må være tom."
 
 #: frappe/website/doctype/website_slideshow/website_slideshow.js:7
 msgid "First set the name and save the record."
@@ -10434,7 +10434,7 @@ msgstr "Tilpass"
 #. Label of the flag (Data) field in DocType 'Language'
 #: frappe/core/doctype/language/language.json
 msgid "Flag"
-msgstr ""
+msgstr "Flagg"
 
 #. Option for the 'Type' (Select) field in DocType 'DocField'
 #. Option for the 'Fieldtype' (Select) field in DocType 'Report Column'
@@ -10471,29 +10471,29 @@ msgstr "Fold"
 
 #: frappe/core/doctype/doctype/doctype.py:1451
 msgid "Fold can not be at the end of the form"
-msgstr ""
+msgstr "Fold kan ikke være på slutten av skjemaet"
 
 #: frappe/core/doctype/doctype/doctype.py:1449
 msgid "Fold must come before a Section Break"
-msgstr ""
+msgstr "Fold må komme før et seksjonsskift"
 
 #. Label of the folder (Link) field in DocType 'File'
 #: frappe/core/doctype/file/file.json
 msgid "Folder"
-msgstr ""
+msgstr "Mappe"
 
 #. Label of the folder_name (Data) field in DocType 'IMAP Folder'
 #: frappe/email/doctype/imap_folder/imap_folder.json
 msgid "Folder Name"
-msgstr ""
+msgstr "Mappenavn"
 
 #: frappe/public/js/frappe/views/file/file_view.js:100
 msgid "Folder name should not include '/' (slash)"
-msgstr ""
+msgstr "Mappenavnet skal ikke inneholde '/' (skråstrek)"
 
 #: frappe/core/doctype/file/file.py:472
 msgid "Folder {0} is not empty"
-msgstr ""
+msgstr "Mappen {0} er ikke tom"
 
 #. Option for the 'PDF Page Size' (Select) field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
@@ -10503,11 +10503,11 @@ msgstr "Folio"
 #: frappe/public/js/frappe/form/templates/form_sidebar.html:106
 #: frappe/public/js/frappe/form/toolbar.js:879
 msgid "Follow"
-msgstr ""
+msgstr "Følg"
 
 #: frappe/public/js/frappe/form/templates/form_sidebar.html:101
 msgid "Followed by"
-msgstr ""
+msgstr "Fulgt av"
 
 #: frappe/email/doctype/auto_email_report/auto_email_report.py:132
 msgid "Following Report Filters have missing values:"
@@ -10515,23 +10515,23 @@ msgstr "Følgende rapportfiltre mangler verdier:"
 
 #: frappe/desk/form/document_follow.py:63
 msgid "Following document {0}"
-msgstr ""
+msgstr "Følgende dokument {0}"
 
 #: frappe/website/doctype/web_form/web_form.py:108
 msgid "Following fields are missing:"
-msgstr ""
+msgstr "Følgende felt mangler:"
 
 #: frappe/public/js/frappe/ui/field_group.js:139
 msgid "Following fields have invalid values:"
-msgstr ""
+msgstr "Følgende felt har ugyldige verdier:"
 
 #: frappe/public/js/frappe/widgets/widget_dialog.js:358
 msgid "Following fields have missing values"
-msgstr ""
+msgstr "Følgende felt mangler verdier"
 
 #: frappe/public/js/frappe/ui/field_group.js:126
 msgid "Following fields have missing values:"
-msgstr ""
+msgstr "Følgende felt mangler verdier:"
 
 #. Label of the font (Select) field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
@@ -10541,7 +10541,7 @@ msgstr "Font"
 #. Label of the font_properties (Data) field in DocType 'Website Theme'
 #: frappe/website/doctype/website_theme/website_theme.json
 msgid "Font Properties"
-msgstr ""
+msgstr "Egenskaper for fonter"
 
 #. Label of the font_size (Int) field in DocType 'Print Format'
 #. Label of the font_size (Float) field in DocType 'Print Settings'
