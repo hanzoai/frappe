@@ -386,42 +386,30 @@ def get_wkhtmltopdf_version():
 	return wkhtmltopdf_version or "0"
 
 
-def pdf_contains_js(file_content: bytes) -> bool:
-	"""
-	Robustly checks if a PDF's content contains embedded JavaScript.
-	Returns True if JS is found, False otherwise.
-	"""
-	from pypdf.generic import ArrayObject, DictionaryObject, IndirectObject
+def pdf_contains_js(file_content):
+	from io import BytesIO
 
-	try:
-		reader = PdfReader(io.BytesIO(file_content))
+	reader = PdfReader(BytesIO(file_content))
 
-		def has_javascript_deep(obj):
-			"""
-			Recursively search for JavaScript actions in the PDF object tree,
-			handling indirect objects and various PDF data structures.
-			"""
-			if isinstance(obj, IndirectObject):
-				obj = obj.get_object()
-
-			if isinstance(obj, DictionaryObject):
-				if obj.get("/S") == "/JavaScript" or "/JS" in obj:
+	def has_javascript(obj):
+		if isinstance(obj, dict):
+			for key, value in obj.items():
+				if key in ("/JS", "/JavaScript"):
 					return True
-				for value in obj.values():
-					if has_javascript_deep(value):
-						return True
-			elif isinstance(obj, ArrayObject):
-				for item in obj:
-					if has_javascript_deep(item):
-						return True
-			return False
-
-		if has_javascript_deep(reader.trailer):
-			return True
-
-	except Exception as e:
-		print(f"An error occurred during PDF parsing: {e}")
-		# If parsing fails, it could be a malformed/malicious file.
+				if has_javascript(value):
+					return True
+		elif isinstance(obj, list):
+			for item in obj:
+				if has_javascript(item):
+					return True
 		return False
 
-	return False
+	root = reader.trailer.get("/Root", {})
+	if has_javascript(root):
+		return False
+
+	for page in reader.pages:
+		if has_javascript(page):
+			return False
+
+	return True
