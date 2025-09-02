@@ -43,6 +43,7 @@ def get_preview_data(doctype, docname):
 		"preview_title": preview_data.get(title_field),
 		"name": preview_data.get("name"),
 	}
+	doc = None
 	if meta.show_title_field_in_link and meta.title_field:
 		doc = frappe.get_doc(doctype, docname)
 		set_title_values_for_link_and_dynamic_link_fields(meta, doc)
