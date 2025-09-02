@@ -53,7 +53,7 @@ def get_meta(doctype, cached=True) -> "FormMeta":
 
 def mask_protected_fields(meta):
 	for df in meta.fields:
-		if df.mask and not meta.has_permlevel_access_to(
+		if df.get("mask") and not meta.has_permlevel_access_to(
 			fieldname=df.fieldname, df=df, permission_type="mask"
 		):
 			# store orignal fieldtype and change fieldtype to Data
