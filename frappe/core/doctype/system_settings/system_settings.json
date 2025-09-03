@@ -37,7 +37,7 @@
   "column_break_txqh",
   "deny_multiple_sessions",
   "disable_user_pass_login",
-  "max_signups_per_hour",
+  "max_signups_allowed_per_hour",
   "login_methods_section",
   "allow_login_using_mobile_number",
   "allow_login_using_user_name",
@@ -731,16 +731,16 @@
   },
   {
    "default": "300",
-   "fieldname": "max_signups_per_hour",
+   "fieldname": "max_signups_allowed_per_hour",
    "fieldtype": "Int",
-   "label": "Max Signups Per Hour",
+   "label": "Max signups allowed per hour",
    "non_negative": 1
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
- "modified": "2025-09-03 10:23:09.830755",
+ "modified": "2025-09-03 10:52:38.096662",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
