@@ -36,6 +36,7 @@
   "column_break_txqh",
   "deny_multiple_sessions",
   "disable_user_pass_login",
+  "max_signups_per_hour",
   "login_methods_section",
   "allow_login_using_mobile_number",
   "allow_login_using_user_name",
@@ -700,12 +701,43 @@
    "fieldname": "max_report_rows",
    "fieldtype": "Int",
    "label": "Max Report Rows"
+<<<<<<< HEAD
+=======
+  },
+  {
+   "default": "0",
+   "fieldname": "show_absolute_datetime_in_timeline",
+   "fieldtype": "Check",
+   "label": "Show Absolute Datetime in Timeline"
+  },
+  {
+   "fieldname": "api_logging_section",
+   "fieldtype": "Section Break",
+   "label": "API Logging"
+  },
+  {
+   "default": "0",
+   "fieldname": "log_api_requests",
+   "fieldtype": "Check",
+   "label": "Log API Requests"
+  },
+  {
+   "default": "300",
+   "fieldname": "max_signups_per_hour",
+   "fieldtype": "Int",
+   "label": "Max Signups Per Hour",
+   "non_negative": 1
+>>>>>>> 4829b50a8b (feat: allow users to define max signups per hour)
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2025-05-19 14:17:40.748786",
+=======
+ "modified": "2025-09-03 10:23:09.830755",
+>>>>>>> 4829b50a8b (feat: allow users to define max signups per hour)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",

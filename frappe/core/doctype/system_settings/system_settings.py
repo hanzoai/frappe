@@ -72,6 +72,11 @@ class SystemSettings(Document):
 		max_file_size: DF.Int
 		minimum_password_score: DF.Literal["2", "3", "4"]
 		max_report_rows: DF.Int
+<<<<<<< HEAD
+=======
+		max_signups_per_hour: DF.Int
+		minimum_password_score: DF.Literal["1", "2", "3", "4"]
+>>>>>>> 4829b50a8b (feat: allow users to define max signups per hour)
 		number_format: DF.Literal[
 			"#,###.##",
 			"#.###,##",
