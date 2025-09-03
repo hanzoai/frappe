@@ -701,25 +701,6 @@
    "fieldname": "max_report_rows",
    "fieldtype": "Int",
    "label": "Max Report Rows"
-<<<<<<< HEAD
-=======
-  },
-  {
-   "default": "0",
-   "fieldname": "show_absolute_datetime_in_timeline",
-   "fieldtype": "Check",
-   "label": "Show Absolute Datetime in Timeline"
-  },
-  {
-   "fieldname": "api_logging_section",
-   "fieldtype": "Section Break",
-   "label": "API Logging"
-  },
-  {
-   "default": "0",
-   "fieldname": "log_api_requests",
-   "fieldtype": "Check",
-   "label": "Log API Requests"
   },
   {
    "default": "300",
@@ -727,21 +708,12 @@
    "fieldtype": "Int",
    "label": "Max signups allowed per hour",
    "non_negative": 1
->>>>>>> 4829b50a8b (feat: allow users to define max signups per hour)
   }
  ],
  "icon": "fa fa-cog",
  "issingle": 1,
  "links": [],
-<<<<<<< HEAD
-<<<<<<< HEAD
- "modified": "2025-05-19 14:17:40.748786",
-=======
- "modified": "2025-09-03 10:23:09.830755",
->>>>>>> 4829b50a8b (feat: allow users to define max signups per hour)
-=======
  "modified": "2025-09-03 10:52:38.096662",
->>>>>>> c4c151ed9b (chore: update field name)
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System Settings",
