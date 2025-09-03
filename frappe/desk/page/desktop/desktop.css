@@ -1,7 +1,7 @@
 .desktop-container{
-    width: 500px;
-    padding-left: 400px;
-    padding-right: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .icon-stroke{
     stroke-width: 1px;

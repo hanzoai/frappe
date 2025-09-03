@@ -17,7 +17,7 @@ class WorkspaceSidebarItem(Document):
 		child: DF.Check
 		label: DF.Data | None
 		link_to: DF.DynamicLink | None
-		link_type: DF.Literal["DocType", "Page", "Report", "Workspace"]
+		link_type: DF.Literal["DocType", "Page", "Report", "Workspace", "Dashboard"]
 		parent: DF.Data
 		parentfield: DF.Data
 		parenttype: DF.Data

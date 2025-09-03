@@ -26,6 +26,8 @@ frappe.ui.form.on("Desktop Icon", {
 			});
 		} else if (frm.doc.type == "link") {
 			frm.doc.route = frm.doc.link;
+		} else if (frm.doc.type == "list") {
+			frm.doc.route = `/app/${frappe.router.slug(frm.doc._doctype)}`;
 		}
 	},
 });

@@ -1,9 +1,9 @@
 frappe.ui.SidebarHeader = class SidebarHeader {
-	constructor(sidebar, workspace_title) {
+	constructor(sidebar) {
 		this.sidebar = sidebar;
 		this.sidebar_wrapper = $(".body-sidebar");
 		this.drop_down_expanded = false;
-		this.workspace_title = workspace_title;
+		this.workspace_title = this.sidebar.workspace_title;
 		const me = this;
 		this.dropdown_items = [
 			{
