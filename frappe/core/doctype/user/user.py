@@ -975,7 +975,8 @@ def sign_up(email: str, full_name: str, redirect_to: str) -> tuple[int, str]:
 			return 0, _("Registered but disabled")
 	else:
 		max_signups_allowed_per_hour = cint(frappe.get_system_settings("max_signups_allowed_per_hour") or 300)
-		if frappe.db.get_creation_count("User", 60) > max_signups_allowed_per_hour:
+		users_created_past_hour = frappe.db.get_creation_count("User", 60)
+		if users_created_past_hour > max_signups_allowed_per_hour:
 			frappe.respond_as_web_page(
 				_("Temporarily Disabled"),
 				_(
