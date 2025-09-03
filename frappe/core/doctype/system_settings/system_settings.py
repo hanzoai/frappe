@@ -73,6 +73,7 @@ class SystemSettings(Document):
 		max_auto_email_report_per_user: DF.Int
 		max_file_size: DF.Int
 		max_report_rows: DF.Int
+		max_signups_allowed_per_hour: DF.Int
 		minimum_password_score: DF.Literal["1", "2", "3", "4"]
 		number_format: DF.Literal[
 			"#,###.##",
