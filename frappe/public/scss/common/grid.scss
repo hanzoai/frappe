@@ -24,9 +24,11 @@
 		border-top-left-radius: var(--border-radius-md);
 		border-top-right-radius: var(--border-radius-md);
 
-		.row-check,
+		.row-check {
+			border-top-left-radius: var(--border-radius-md);
+		}
 		.row .col:last-child {
-			border-radius: var(--border-radius-md);
+			border-top-right-radius: var(--border-radius-md);
 		}
 	}
 
@@ -45,6 +47,7 @@
 		.search {
 			// TODO: Align with table grid without overwriting padding if possible
 			padding: 4px 7px 4px 7px !important;
+			background-color: var(--fg-color);
 		}
 	}
 
@@ -133,6 +136,9 @@
 	.row-index {
 		left: 31px;
 	}
+	button.col:focus-visible {
+		outline: 1px solid #c9c9c9;
+	}
 }
 
 .grid-empty,
@@ -162,7 +168,7 @@
 		padding: 7px !important;
 
 		input {
-			height: -webkit-fill-available;
+			height: 100%;
 			padding: 3px 7px;
 		}
 	}
@@ -337,8 +343,8 @@
 	}
 
 	.grid-static-col[data-fieldtype="Rating"] .field-area {
-		margin-top: 1rem;
-		margin-left: 1rem;
+		margin-top: 0.6rem;
+		margin-left: 0.5rem;
 	}
 
 	.grid-static-col[data-fieldtype="Code"],
@@ -412,11 +418,6 @@
 	background-color: var(--fg-color);
 
 	@include transition(0.2s);
-	// REDESIGN TODO: Fix border bottom for last item
-	&:last-child {
-		border-bottom-left-radius: var(--border-radius);
-		border-bottom-right-radius: var(--border-radius);
-	}
 
 	td {
 		vertical-align: top;
@@ -508,10 +509,19 @@
 .grid-row-open .form-in-grid {
 	opacity: 1;
 	height: auto;
-	overflow: visible;
-	margin: 0px calc(-1 * var(--margin-md));
+	overflow: auto;
+	margin: auto;
 	padding: var(--padding-sm) var(--padding-md);
 	max-width: 865px;
+	position: fixed;
+	top: 5%;
+	left: 50%;
+	transform: translate(-50%, 0%);
+	width: 100%;
+	.grid-form-body {
+		max-height: 80vh;
+		overflow: scroll;
+	}
 }
 
 .grid-form-heading {
@@ -567,11 +577,16 @@
 
 .grid-pagination {
 	padding: 0;
+	display: flex;
+	.last-page {
+		margin-left: 5px;
+	}
 }
 
 .page-text {
 	display: inline-block;
 	cursor: default;
+	margin-right: 6px;
 }
 
 .current-page-number {

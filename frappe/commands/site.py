@@ -22,8 +22,8 @@ from frappe.utils.bench_helper import CliCtxObj
 @click.option(
 	"--db-type",
 	default="mariadb",
-	type=click.Choice(["mariadb", "postgres"]),
-	help='Optional "postgres" or "mariadb". Default is "mariadb"',
+	type=click.Choice(["mariadb", "postgres", "sqlite"]),
+	help='Optional "sqlite", "postgres" or "mariadb". Default is "mariadb"',
 )
 @click.option("--db-host", help="Database Host")
 @click.option("--db-port", type=int, help="Database Port")
@@ -225,7 +225,7 @@ def _restore(
 		click.secho("Failed to detect type of backup file", fg="red")
 		sys.exit(1)
 
-	if "cipher" in out.decode().split(":")[-1].strip():
+	if "AES" in out.decode().split(":")[-1].strip():
 		if encryption_key:
 			click.secho("Encrypted backup file detected. Decrypting using provided key.", fg="yellow")
 
@@ -379,6 +379,11 @@ def partial_restore(context: CliCtxObj, sql_file_path, verbose, encryption_key=N
 	verbose = context.verbose or verbose
 	frappe.init(site)
 	frappe.connect()
+
+	if frappe.conf.db_type == "sqlite":
+		click.secho("Partial restore is not supported for SQLite databases", fg="red")
+		sys.exit(1)
+
 	err, out = frappe.utils.execute_in_shell(f"file {sql_file_path}", check_exit_code=True)
 	if err:
 		click.secho("Failed to detect type of backup file", fg="red")
@@ -686,8 +691,9 @@ def disable_user(context: CliCtxObj, email):
 @click.command("migrate")
 @click.option("--skip-failing", is_flag=True, help="Skip patches that fail to run")
 @click.option("--skip-search-index", is_flag=True, help="Skip search indexing for web documents")
+@click.option("--skip-fixtures", is_flag=True, help="Skip loading fixtures")
 @pass_context
-def migrate(context: CliCtxObj, skip_failing=False, skip_search_index=False):
+def migrate(context: CliCtxObj, skip_failing=False, skip_search_index=False, skip_fixtures=False):
 	"Run patches, sync schema and rebuild files/translations"
 
 	from frappe.migrate import SiteMigration
@@ -696,8 +702,7 @@ def migrate(context: CliCtxObj, skip_failing=False, skip_search_index=False):
 		click.secho(f"Migrating {site}", fg="green")
 		try:
 			SiteMigration(
-				skip_failing=skip_failing,
-				skip_search_index=skip_search_index,
+				skip_failing=skip_failing, skip_search_index=skip_search_index, skip_fixtures=skip_fixtures
 			).run(site=site)
 		finally:
 			print()

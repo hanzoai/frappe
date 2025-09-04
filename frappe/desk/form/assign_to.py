@@ -72,7 +72,7 @@ def add(args=None, *, ignore_permissions=False):
 		else:
 			from frappe.utils import nowdate
 
-			description = str(args.get("description", ""))
+			description = args.get("description") or ""
 			has_content = strip_html(description) or "<img" in description
 			if not has_content:
 				args["description"] = _("Assignment for {0} {1}").format(args["doctype"], args["name"])
@@ -82,7 +82,7 @@ def add(args=None, *, ignore_permissions=False):
 					"doctype": "ToDo",
 					"allocated_to": assign_to,
 					"reference_type": args["doctype"],
-					"reference_name": args["name"],
+					"reference_name": str(args["name"]),
 					"description": args.get("description"),
 					"priority": args.get("priority", "Medium"),
 					"status": "Open",

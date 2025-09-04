@@ -1,14 +1,14 @@
 # Copyright (c) 2018, Frappe Technologies and Contributors
 # License: MIT. See LICENSE
 
+import json
 from contextlib import contextmanager
-from datetime import timedelta
 
 import frappe
 import frappe.utils
 import frappe.utils.scheduler
 from frappe.desk.form import assign_to
-from frappe.tests import IntegrationTestCase, UnitTestCase
+from frappe.tests import IntegrationTestCase
 
 from .notification import trigger_notifications
 
@@ -23,15 +23,6 @@ def get_test_notification(config):
 	finally:
 		notification.delete()
 		frappe.db.commit()
-
-
-class UnitTestNotification(UnitTestCase):
-	"""
-	Unit tests for Notification.
-	Use this class for testing individual functions and methods.
-	"""
-
-	pass
 
 
 class TestNotification(IntegrationTestCase):
@@ -466,7 +457,7 @@ class TestNotification(IntegrationTestCase):
 			frappe.db.delete("Notification Log", {"subject": n.subject})
 
 			user = frappe.get_doc("User", "test@example.com")
-			user.birth_date = frappe.utils.add_days(user.birth_date, 1)
+			user.birth_date = frappe.utils.add_days(user.birth_date, 1).date()
 			user.save()
 
 			user.reload()
@@ -509,7 +500,38 @@ class TestNotification(IntegrationTestCase):
 		self.assertTrue("test1@example.com" in recipients)
 		self.assertEqual(notification.enabled, 1)
 
+	def test_filters_condition(self):
+		"""Test Notification with Condition Type 'Filters'."""
+		frappe.delete_doc_if_exists("Notification", "Test Filters Condition")
 
+		notification = frappe.new_doc("Notification")
+		notification.name = "Test Filters Condition"
+		notification.subject = "Test Filters Condition"
+		notification.document_type = "ToDo"
+		notification.event = "Save"
+		notification.condition_type = "Filters"
+		notification.filters = json.dumps([["status", "=", "Open"]])
+		notification.message = "Test message"
+		notification.channel = "Email"
+		notification.append("recipients", {"receiver_by_document_field": "allocated_to"})
+		notification.save()
+
+		todo = frappe.new_doc("ToDo")
+		todo.description = "Checking email notification with filters condition"
+		todo.allocated_to = "test1@example.com"
+		todo.save()
+
+		email_queue = frappe.get_doc(
+			"Email Queue", {"reference_doctype": "ToDo", "reference_name": todo.name}
+		)
+		self.assertTrue(email_queue)
+
+		recipients = [d.recipient for d in email_queue.recipients]
+		self.assertTrue("test1@example.com" in recipients)
+		self.assertEqual(notification.enabled, 1)
+
+
+# ruff: noqa: RUF001
 """
 PROOF OF TEST for TestNotificationOffsetRange below.
 
@@ -528,7 +550,7 @@ Ran 3 tests in 2.677s
 OK
 """
 
-
+# from datetime import timedelta
 # from frappe.utils import add_to_date, now_datetime
 # class TestNotificationOffsetRange(IntegrationTestCase):
 # 	def setUp(self):

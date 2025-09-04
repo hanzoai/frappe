@@ -1,7 +1,6 @@
 import "./assign_to";
 import "./attachments";
 import "./share";
-import "./review";
 import "./document_follow";
 import "./user_image";
 import "./form_sidebar_users";
@@ -28,7 +27,6 @@ frappe.ui.form.Sidebar = class {
 		this.image_wrapper = this.image_section.find(".sidebar-image-wrapper");
 		this.make_assignments();
 		this.make_attachments();
-		this.make_review();
 		this.make_shared();
 
 		this.make_tags();
@@ -96,17 +94,22 @@ frappe.ui.form.Sidebar = class {
 				__("You created this", null),
 				__("{0} created this", [get_user_link(this.frm.doc.owner)])
 			) +
-			" · " +
-			comment_when(this.frm.doc.creation);
-
+				" · " +
+				cint(frappe.boot.user.show_absolute_datetime_in_timeline) ||
+			cint(frappe.boot.sysdefaults.show_absolute_datetime_in_timeline)
+				? frappe.datetime.str_to_user(this.frm.doc.creation)
+				: comment_when(this.frm.doc.creation);
 		let modified_message =
 			get_user_message(
 				this.frm.doc.modified_by,
 				__("You last edited this", null),
 				__("{0} last edited this", [get_user_link(this.frm.doc.modified_by)])
 			) +
-			" · " +
-			comment_when(this.frm.doc.modified);
+				" · " +
+				cint(frappe.boot.user.show_absolute_datetime_in_timeline) ||
+			cint(frappe.boot.sysdefaults.show_absolute_datetime_in_timeline)
+				? frappe.datetime.str_to_user(this.frm.doc.modified)
+				: comment_when(this.frm.doc.modified);
 
 		if (user_list.length === 1) {
 			// same user created and edited
@@ -213,18 +216,6 @@ frappe.ui.form.Sidebar = class {
 	}
 
 	refresh_image() {}
-
-	make_review() {
-		const review_wrapper = this.sidebar.find(".form-reviews");
-		if (frappe.boot.energy_points_enabled && !this.frm.is_new()) {
-			this.frm.reviews = new frappe.ui.form.Review({
-				parent: review_wrapper,
-				frm: this.frm,
-			});
-		} else {
-			review_wrapper.remove();
-		}
-	}
 
 	reload_docinfo(callback) {
 		frappe.call({

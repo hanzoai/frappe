@@ -199,8 +199,6 @@ def rename_doc(
 
 	rename_versions(doctype, old, new)
 
-	rename_eps_records(doctype, old, new)
-
 	# call after_rename
 	new_doc = frappe.get_doc(doctype, new)
 
@@ -326,14 +324,6 @@ def rename_versions(doctype: str, old: str, new: str) -> None:
 
 	frappe.qb.update(Version).set(Version.docname, new).where(
 		(Version.docname == old) & (Version.ref_doctype == doctype)
-	).run()
-
-
-def rename_eps_records(doctype: str, old: str, new: str) -> None:
-	EPL = frappe.qb.DocType("Energy Point Log")
-
-	frappe.qb.update(EPL).set(EPL.reference_name, new).where(
-		(EPL.reference_doctype == doctype) & (EPL.reference_name == old)
 	).run()
 
 
@@ -488,16 +478,15 @@ def get_link_fields(doctype: str) -> list[dict]:
 			.inner_join(dt)
 			.on(df.parent == dt.name)
 			.select(df.parent, df.fieldname, dt.issingle.as_("issingle"))
-			.where((df.options == doctype) & (df.fieldtype == "Link"))
+			.where(
+				(df.options == doctype)
+				& (df.fieldtype == "Link")
+				& (dt.is_virtual == 0)
+				& (df.is_virtual == 0)
+			)
 		)
 
-		if frappe.db.has_column("DocField", "is_virtual"):
-			standard_fields_query = standard_fields_query.where(df.is_virtual == 0)
-
-		virtual_doctypes = []
-		if frappe.db.has_column("DocType", "is_virtual"):
-			virtual_doctypes = frappe.get_all("DocType", {"is_virtual": 1}, pluck="name")
-			standard_fields_query = standard_fields_query.where(dt.is_virtual == 0)
+		virtual_doctypes = frappe.get_all("DocType", {"is_virtual": 1}, pluck="name")
 
 		standard_fields = standard_fields_query.run(as_dict=True)
 
@@ -505,7 +494,7 @@ def get_link_fields(doctype: str) -> list[dict]:
 		custom_fields = (
 			frappe.qb.from_(cf)
 			.select(cf.dt.as_("parent"), cf.fieldname, cf_issingle)
-			.where((cf.options == doctype) & (cf.fieldtype == "Link"))
+			.where((cf.options == doctype) & (cf.fieldtype == "Link") & (cf.is_virtual == 0))
 		)
 		if virtual_doctypes:
 			custom_fields = custom_fields.where(cf.dt.notin(virtual_doctypes))

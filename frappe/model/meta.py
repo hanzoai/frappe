@@ -19,8 +19,6 @@ import json
 import os
 import typing
 from datetime import datetime
-from functools import cached_property, singledispatchmethod
-from types import NoneType
 
 import click
 
@@ -40,11 +38,15 @@ from frappe.model.base_document import (
 	BaseDocument,
 )
 from frappe.model.document import Document
+from frappe.model.utils import is_single_doctype
 from frappe.model.workflow import get_workflow_name
 from frappe.modules import load_doctype_module
-from frappe.types import DocRef
-from frappe.utils import cast, cint, cstr
+from frappe.utils import cached_property, cast, cint, cstr
+from frappe.utils.caching import site_cache
 from frappe.utils.data import add_to_date, get_datetime
+
+ListOrTuple = list | tuple
+SerializableTypes = str | int | float | datetime
 
 DEFAULT_FIELD_LABELS = {
 	"name": _lt("ID"),
@@ -67,24 +69,22 @@ LARGE_TABLE_SIZE_THRESHOLD = 100_000
 LARGE_TABLE_RECENCY_THRESHOLD = 30  # days
 
 
-def get_meta(doctype: str | dict | DocRef, cached=True) -> "_Meta":
+def get_meta(doctype: "str | DocType", cached: bool = True) -> "_Meta":
 	"""Get metadata for a doctype.
 
 	Args:
-	    doctype: The doctype as a string, dict, DocRef (also: Document) object.
+	    doctype: The doctype as a string object.
 	    cached: Whether to use cached metadata (default: True).
 
 	Returns:
 	    Meta object for the given doctype.
 	"""
-	if cached and (
-		doctype_name := getattr(doctype, "doctype", doctype)
-		if not isinstance(doctype, dict)
-		else doctype.get("doctype")
+	if (
+		cached
+		and isinstance(doctype, str)
+		and (meta := frappe.client_cache.get_value(f"doctype_meta::{doctype}"))
 	):
-		key = f"doctype_meta::{doctype_name}"
-		if meta := frappe.client_cache.get_value(key):
-			return meta
+		return meta
 
 	meta = Meta(doctype)
 	key = f"doctype_meta::{meta.name}"
@@ -145,28 +145,12 @@ class Meta(Document):
 		frappe._dict(fieldname="owner", fieldtype="Data"),
 	)
 
-	@singledispatchmethod
-	def __init__(self, arg, bootstrap: Document = None):
-		raise TypeError(f"Unsupported argument type: {type(arg)}")
+	def __init__(self, doctype: "str | DocType"):
+		if isinstance(doctype, Document):
+			super().__init__(doctype.as_dict())
+		else:
+			super().__init__("DocType", doctype)
 
-	@__init__.register(str)
-	def _(self, doctype):
-		super().__init__("DocType", doctype)
-		self.process()
-
-	@__init__.register(DocRef)
-	def _(self, doc_ref):
-		super().__init__("DocType", doc_ref.doctype)
-		self.process()
-
-	@__init__.register(dict)
-	def _(self, doc_ref):
-		super().__init__("DocType", doc_ref.get("doctype"))
-		self.process()
-
-	@__init__.register(NoneType)
-	def _(self, _args, bootstrap):
-		super().__init__(bootstrap.as_dict())
 		self.process()
 
 	def load_from_db(self):
@@ -195,31 +179,7 @@ class Meta(Document):
 		self.check_if_large_table()
 
 	def as_dict(self, no_nulls=False):
-		def serialize(doc):
-			if isinstance(doc, dict):
-				return doc.copy()
-			out = {}
-			for key, value in doc.__dict__.items():
-				if isinstance(value, list | tuple):
-					if not value or not isinstance(value[0], BaseDocument):
-						# non standard list object, skip
-						continue
-
-					value = [serialize(d) for d in value]
-
-				if (not no_nulls and value is None) or isinstance(
-					value, str | int | float | datetime | list | tuple
-				):
-					out[key] = value
-
-			# set empty lists for unset table fields
-			for fieldname in TABLE_DOCTYPES_FOR_DOCTYPE.keys():
-				if out.get(fieldname) is None:
-					out[fieldname] = []
-
-			return out
-
-		return serialize(self)
+		return _serialize(self, no_nulls=no_nulls)
 
 	def get_link_fields(self):
 		return self.get("fields", {"fieldtype": "Link", "options": ["!=", "[Select]"]})
@@ -826,13 +786,6 @@ class Meta(Document):
 #######
 
 
-def is_single(doctype):
-	try:
-		return frappe.db.get_value("DocType", doctype, "issingle")
-	except IndexError:
-		raise Exception("Cannot determine whether {} is single".format(doctype))
-
-
 def get_parent_dt(dt):
 	if not frappe.is_table(dt):
 		return ""
@@ -1003,6 +956,41 @@ def _update_field_order_based_on_insert_after(field_order, insert_after_map):
 			field_order.extend(fields)
 
 
+CACHE_PROPERTIES = frozenset(
+	(
+		"_fields",
+		"_table_fields",
+		"_table_doctypes",
+		*(prop for prop, value in vars(Meta).items() if isinstance(value, cached_property)),
+	)
+)
+
+
+def _serialize(doc, no_nulls=False, *, is_child=False):
+	out = {}
+	for key, value in doc.__dict__.items():
+		if not is_child:
+			if key in CACHE_PROPERTIES:
+				continue
+
+			if isinstance(value, ListOrTuple):
+				if value and isinstance(value[0], BaseDocument):
+					out[key] = [_serialize(d, no_nulls=no_nulls, is_child=True) for d in value]
+
+				continue
+
+		if (not no_nulls and value is None) or isinstance(value, SerializableTypes):
+			out[key] = value
+
+	if not is_child:
+		# set empty lists for unset table fields
+		for fieldname in TABLE_DOCTYPES_FOR_DOCTYPE:
+			if out.get(fieldname) is None:
+				out[fieldname] = []
+
+	return out
+
+
 if typing.TYPE_CHECKING:
 	# This is DX hack to add all fields from DocType to meta for autocompletions.
 	# Meta is technically doctype + special fields on meta.
@@ -1010,3 +998,7 @@ if typing.TYPE_CHECKING:
 
 	class _Meta(Meta, DocType):
 		pass
+
+
+# backward compatibility
+is_single = is_single_doctype

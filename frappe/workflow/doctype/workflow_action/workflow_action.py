@@ -111,14 +111,18 @@ def process_workflow_actions(doc, state):
 	roles = {t.allowed for t in next_possible_transitions}
 	create_workflow_actions_for_roles(roles, doc)
 
-	if send_email_alert(workflow):
+	if send_email_alert(workflow) and frappe.db.get_value(
+		"Workflow Document State",
+		filters={"parent": workflow, "state": get_doc_workflow_state(doc)},
+		fieldname="send_email",
+	):
 		enqueue(
 			send_workflow_action_email,
 			queue="short",
 			doc=doc,
 			transitions=next_possible_transitions,
 			enqueue_after_commit=True,
-			now=frappe.flags.in_test,
+			now=frappe.in_test,
 		)
 
 

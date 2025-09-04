@@ -94,7 +94,7 @@ def get_comment_list(doctype, name):
 
 
 def get_home_page():
-	if frappe.local.flags.home_page and not frappe.flags.in_test:
+	if frappe.local.flags.home_page and not frappe.in_test:
 		return frappe.local.flags.home_page
 
 	def _get_home_page():
@@ -127,7 +127,7 @@ def get_home_page():
 
 		return home_page
 
-	if frappe.local.dev_server:
+	if frappe._dev_server:
 		# dont return cached homepage in development
 		return _get_home_page()
 
@@ -166,11 +166,13 @@ def get_boot_data():
 	from frappe.integrations.frappe_providers.frappecloud_billing import is_fc_site
 	from frappe.locale import get_date_format, get_first_day_of_the_week, get_number_format, get_time_format
 
+	apps = get_apps()
+
 	return {
 		"lang": frappe.local.lang or "en",
 		"apps_data": {
-			"apps": get_apps() or [],
-			"is_desk_apps": 1 if bool(is_desk_apps(get_apps())) else 0,
+			"apps": apps or [],
+			"is_desk_apps": 1 if bool(is_desk_apps(apps)) else 0,
 			"default_path": get_default_path() or "",
 		},
 		"sysdefaults": {
@@ -387,7 +389,6 @@ def clear_cache(path=None):
 		frappe.cache.hdel("website_redirects", path)
 		delete_page_cache(path)
 	else:
-		clear_sitemap()
 		frappe.clear_cache("Guest")
 		delete_page_cache()
 		keys += [
@@ -406,10 +407,6 @@ def clear_cache(path=None):
 
 def clear_website_cache(path=None):
 	clear_cache(path)
-
-
-def clear_sitemap():
-	delete_page_cache("*")
 
 
 def get_frontmatter(string):
