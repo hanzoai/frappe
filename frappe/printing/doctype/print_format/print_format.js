@@ -23,11 +23,7 @@ frappe.ui.form.on("Print Format", {
 	},
 	render_buttons: function (frm) {
 		frm.page.clear_inner_toolbar();
-<<<<<<< HEAD
-		if (!frm.is_new()) {
-=======
 		if (!frm.is_new() && frm.doc.print_format_for === "DocType") {
->>>>>>> a812021809 (fix(print-format): typo in doctype (#33761))
 			if (!frm.doc.custom_format) {
 				frm.add_custom_button(__("Edit Format"), function () {
 					if (!frm.doc.doc_type) {
