@@ -69,13 +69,9 @@ class Event(Document):
 		links: DF.Table[DynamicLink]
 		monday: DF.Check
 		pulled_from_google_calendar: DF.Check
-<<<<<<< HEAD
-		repeat_on: DF.Literal["", "Daily", "Weekly", "Monthly", "Yearly"]
-=======
 		reference_docname: DF.DynamicLink | None
 		reference_doctype: DF.Link | None
-		repeat_on: DF.Literal["", "Daily", "Weekly", "Monthly", "Quarterly", "Half Yearly", "Yearly"]
->>>>>>> d26503cb60 (fix: enhance event document with dynamic links and reference fields)
+		repeat_on: DF.Literal["", "Daily", "Weekly", "Monthly", "Yearly"]
 		repeat_this_event: DF.Check
 		repeat_till: DF.Date | None
 		saturday: DF.Check
