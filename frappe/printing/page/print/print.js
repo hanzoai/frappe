@@ -362,6 +362,14 @@ frappe.ui.form.PrintView = class {
 		this.wrapper.find(".print-toolbar a.btn-default").each((i, el) => {
 			frappe.ui.keys.get_shortcut_group(this.frm.page).add($(el));
 		});
+
+		frappe.ui.keys.add_shortcut({
+			shortcut: "shift+r",
+			action: (e) => {
+				this.refresh_print_format();
+			},
+			description: __("Refresh Print Preview"),
+		});
 	}
 
 	set_default_letterhead() {
@@ -480,6 +488,17 @@ frappe.ui.form.PrintView = class {
 
 		setTimeout(() => {
 			$print_format.height(this.$print_format_body.find(".print-format").outerHeight());
+
+			let iframe = this.print_wrapper.find("iframe.print-format-container")[0];
+
+			let iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+			iframeDoc.addEventListener("keydown", (e) => {
+				if (e.shiftKey && e.key.toLowerCase() === "r") {
+					e.preventDefault();
+					this.refresh_print_format();
+				}
+			});
 		}, 500);
 	}
 
