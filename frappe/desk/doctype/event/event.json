@@ -333,11 +333,7 @@
  "icon": "fa fa-calendar",
  "idx": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2025-06-17 15:31:01.945146",
-=======
  "modified": "2025-08-12 13:37:36.319985",
->>>>>>> d26503cb60 (fix: enhance event document with dynamic links and reference fields)
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Event",
