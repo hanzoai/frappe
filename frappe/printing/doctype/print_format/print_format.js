@@ -71,6 +71,11 @@ frappe.ui.form.on("Print Format", {
 	doc_type: function (frm) {
 		frm.trigger("hide_absolute_value_field");
 	},
+	print_format_for: function (frm) {
+		if (frm.doc.print_format_for === "Report") {
+			frm.set_value("print_format_type", "JS");
+		}
+	},
 	hide_absolute_value_field: function (frm) {
 		// TODO: make it work with frm.doc.doc_type
 		// Problem: frm isn't updated in some random cases
