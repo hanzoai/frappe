@@ -489,16 +489,24 @@ frappe.ui.form.PrintView = class {
 		setTimeout(() => {
 			$print_format.height(this.$print_format_body.find(".print-format").outerHeight());
 
-			let iframe = this.print_wrapper.find("iframe.print-format-container")[0];
+			// Add keyboard shortcut to refresh the print preview inside the iframe,
+			// since Frappe's default shortcuts don't work within iframes.
 
-			let iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+			const iframe = this.print_wrapper.find("iframe.print-format-container")[0];
+			const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
-			iframeDoc.addEventListener("keydown", (e) => {
-				if (e.shiftKey && e.key.toLowerCase() === "r") {
-					e.preventDefault();
-					this.refresh_print_format();
-				}
-			});
+			// Add a flag on the iframe document to avoid duplicate listeners
+			if (!iframeDoc._refreshShortcutAttached) {
+				iframeDoc.addEventListener("keydown", (e) => {
+					if (e.shiftKey && e.key.toLowerCase() === "r") {
+						e.preventDefault();
+						this.refresh_print_format();
+					}
+				});
+
+				// Set the flag so this block won't run again
+				iframeDoc._refreshShortcutAttached = true;
+			}
 		}, 500);
 	}
 
