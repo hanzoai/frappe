@@ -221,6 +221,14 @@ scheduler_events = {
 		"frappe.integrations.doctype.google_calendar.google_calendar.sync",
 		"frappe.email.doctype.newsletter.newsletter.send_scheduled_email",
 		"frappe.website.doctype.personal_data_deletion_request.personal_data_deletion_request.process_data_deletion_request",
+<<<<<<< HEAD
+=======
+		"frappe.core.doctype.prepared_report.prepared_report.expire_stalled_report",
+		"frappe.twofactor.delete_all_barcodes_for_users",
+		"frappe.oauth.delete_oauth2_data",
+		"frappe.website.doctype.web_page.web_page.check_publish_status",
+		"frappe.desk.utils.delete_old_exported_report_files",
+>>>>>>> c52e5157b4 (feat: allow users to export report in background (#33861))
 	],
 	"daily": [
 		"frappe.email.queue.set_expiry_for_email_queue",

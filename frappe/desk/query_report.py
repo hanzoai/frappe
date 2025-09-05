@@ -323,7 +323,7 @@ def get_prepared_report_result(report, filters, dn=None, user=None):
 @frappe.whitelist()
 def export_query():
 	"""export from query reports"""
-	from frappe.desk.utils import get_csv_bytes, pop_csv_params, provide_binary_file
+	from frappe.desk.utils import pop_csv_params
 
 	form_params = frappe._dict(frappe.local.form_dict)
 	csv_params = pop_csv_params(form_params)
@@ -336,6 +336,43 @@ def export_query():
 		raise_exception=True,
 	)
 
+	export_in_background = int(form_params.export_in_background or 0)
+	if export_in_background:
+		user = frappe.session.user
+		user_email = frappe.get_cached_value("User", user, "email")
+		frappe.enqueue(
+			"frappe.desk.query_report.run_export_query_job",
+			user_email=user_email,
+			form_params=form_params,
+			csv_params=csv_params,
+			queue="long",
+			now=frappe.flags.in_test,
+		)
+		frappe.msgprint(
+			_(
+				"Your report is being generated in the background. "
+				f"You will receive an email on {user_email} with a download link once it is ready."
+			)
+		)
+		return
+
+	return _export_query(form_params, csv_params)
+
+
+def run_export_query_job(user_email: str, form_params, csv_params):
+	from frappe.desk.utils import send_report_email
+
+	report_name, file_extension, content = _export_query(form_params, csv_params, populate_response=False)
+	send_report_email(
+		user_email, report_name, file_extension, content, attached_to_name=form_params.report_name
+	)
+
+
+def _export_query(form_params, csv_params, populate_response=True):
+	from frappe.desk.utils import get_csv_bytes, provide_binary_file
+	from frappe.utils.xlsxutils import handle_html, make_xlsx
+
+	report_name = form_params.report_name
 	file_format_type = form_params.file_format_type
 	custom_columns = frappe.parse_json(form_params.custom_columns or "[]")
 	include_indentation = form_params.include_indentation
@@ -357,14 +394,36 @@ def export_query():
 	xlsx_data, column_widths = build_xlsx_data(data, visible_idx, include_indentation)
 
 	if file_format_type == "CSV":
+<<<<<<< HEAD
 		content = get_csv_bytes(xlsx_data, csv_params)
+=======
+		content = get_csv_bytes(
+			[[handle_html(frappe.as_unicode(v)) if isinstance(v, str) else v for v in r] for r in xlsx_data],
+			csv_params,
+		)
+>>>>>>> c52e5157b4 (feat: allow users to export report in background (#33861))
 		file_extension = "csv"
 	elif file_format_type == "Excel":
-		from frappe.utils.xlsxutils import make_xlsx
-
 		file_extension = "xlsx"
 		content = make_xlsx(xlsx_data, "Query Report", column_widths=column_widths).getvalue()
 
+<<<<<<< HEAD
+=======
+	if include_filters:
+		for value in (data.filters or {}).values():
+			suffix = ""
+			if isinstance(value, list):
+				suffix = "_" + ",".join(value)
+			elif isinstance(value, str) and value not in {"Yes", "No"}:
+				suffix = f"_{value}"
+
+			if valid_report_name(report_name, suffix):
+				report_name += suffix
+
+	if not populate_response:
+		return report_name, file_extension, content
+
+>>>>>>> c52e5157b4 (feat: allow users to export report in background (#33861))
 	provide_binary_file(report_name, file_extension, content)
 
 
