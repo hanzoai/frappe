@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-08-31 09:33+0000\n"
-"PO-Revision-Date: 2025-09-01 16:28\n"
+"PO-Revision-Date: 2025-09-05 16:58\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -28,11 +28,11 @@ msgstr "!="
 #. Settings'
 #: frappe/website/doctype/about_us_settings/about_us_settings.json
 msgid "\"Company History\""
-msgstr ""
+msgstr "\"História da Empresa\""
 
 #: frappe/core/doctype/data_export/exporter.py:202
 msgid "\"Parent\" signifies the parent table in which this row must be added"
-msgstr ""
+msgstr "\"Principal\" diz respeito à tabela principal na qual deve ser acrescentada esta linha"
 
 #. Description of the 'Team Members Heading' (Data) field in DocType 'About Us
 #. Settings'
@@ -142,30 +142,30 @@ msgstr ""
 
 #: frappe/tests/test_utils.py:716
 msgid "1 day ago"
-msgstr ""
+msgstr "há 1 dia"
 
 #: frappe/public/js/frappe/form/reminders.js:17
 msgid "1 hour"
-msgstr ""
+msgstr "1 hora"
 
 #: frappe/public/js/frappe/utils/pretty_date.js:52
 #: frappe/tests/test_utils.py:714
 msgid "1 hour ago"
-msgstr ""
+msgstr "há 1 hora atrás"
 
 #: frappe/public/js/frappe/utils/pretty_date.js:48
 #: frappe/tests/test_utils.py:712
 msgid "1 minute ago"
-msgstr ""
+msgstr "há 1 minuto atrás"
 
 #: frappe/public/js/frappe/utils/pretty_date.js:66
 #: frappe/tests/test_utils.py:720
 msgid "1 month ago"
-msgstr ""
+msgstr "1 mês atrás"
 
 #: frappe/public/js/print_format_builder/PrintFormat.vue:3
 msgid "1 of 2"
-msgstr ""
+msgstr "1 de 2"
 
 #: frappe/public/js/frappe/data_import/data_exporter.js:227
 msgid "1 record will be exported"
@@ -183,19 +183,19 @@ msgstr ""
 #: frappe/public/js/frappe/utils/pretty_date.js:70
 #: frappe/tests/test_utils.py:722
 msgid "1 year ago"
-msgstr ""
+msgstr "1 ano atrás"
 
 #: frappe/tests/test_utils.py:715
 msgid "2 hours ago"
-msgstr ""
+msgstr "há 2 horas"
 
 #: frappe/tests/test_utils.py:721
 msgid "2 months ago"
-msgstr ""
+msgstr "há 2 meses"
 
 #: frappe/tests/test_utils.py:719
 msgid "2 weeks ago"
-msgstr ""
+msgstr "há 2 semanas"
 
 #: frappe/tests/test_utils.py:723
 msgid "2 years ago"
@@ -215,11 +215,11 @@ msgstr ""
 
 #: frappe/public/js/frappe/data_import/data_exporter.js:37
 msgid "5 Records"
-msgstr ""
+msgstr "5 registos"
 
 #: frappe/tests/test_utils.py:717
 msgid "5 days ago"
-msgstr ""
+msgstr "há 5 dias"
 
 #: frappe/desk/doctype/bulk_update/bulk_update.py:36
 msgid "; not allowed in condition"
@@ -229,13 +229,13 @@ msgstr ""
 #. Condition'
 #: frappe/core/doctype/document_naming_rule_condition/document_naming_rule_condition.json
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #. Option for the 'Condition' (Select) field in DocType 'Document Naming Rule
 #. Condition'
 #: frappe/core/doctype/document_naming_rule_condition/document_naming_rule_condition.json
 msgid "<="
-msgstr ""
+msgstr "<="
 
 #. Description of the 'Generate Keys' (Button) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
@@ -531,19 +531,19 @@ msgstr ""
 #. Condition'
 #: frappe/core/doctype/document_naming_rule_condition/document_naming_rule_condition.json
 msgid "="
-msgstr ""
+msgstr "="
 
 #. Option for the 'Condition' (Select) field in DocType 'Document Naming Rule
 #. Condition'
 #: frappe/core/doctype/document_naming_rule_condition/document_naming_rule_condition.json
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #. Option for the 'Condition' (Select) field in DocType 'Document Naming Rule
 #. Condition'
 #: frappe/core/doctype/document_naming_rule_condition/document_naming_rule_condition.json
 msgid ">="
-msgstr ""
+msgstr ">="
 
 #: frappe/core/doctype/doctype/doctype.py:1035
 msgid "A DocType's name should start with a letter and can only consist of letters, numbers, spaces, underscores and hyphens"
@@ -653,12 +653,12 @@ msgstr ""
 #. Option for the 'Script Type' (Select) field in DocType 'Server Script'
 #: frappe/core/doctype/server_script/server_script.json
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #. Label of the api_access (Section Break) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "API Access"
-msgstr ""
+msgstr "Acesso à API"
 
 #. Label of the api_endpoint (Data) field in DocType 'Social Login Key'
 #: frappe/integrations/doctype/social_login_key/social_login_key.json
