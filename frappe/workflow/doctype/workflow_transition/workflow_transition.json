@@ -12,7 +12,6 @@
   "allowed",
   "allow_self_approval",
   "send_email_to_creator",
-  "enable_action_confirmation",
   "transition_tasks",
   "conditions",
   "condition",
@@ -103,17 +102,10 @@
    "label": "Send Email To Creator"
   },
   {
-    "default": "0",
-    "description": "If checked, a confirmation will be required before performing workflow actions.",
-    "fieldname": "enable_action_confirmation",
-    "fieldtype": "Check",
-    "label": "Enable Action Confirmation"
-   },
-   {
-    "fieldname": "transition_tasks",
-    "fieldtype": "Link",
-    "label": "Transition Tasks",
-    "options": "Workflow Transition Tasks"
+   "fieldname": "transition_tasks",
+   "fieldtype": "Link",
+   "label": "Transition Tasks",
+   "options": "Workflow Transition Tasks"
   }
  ],
  "idx": 1,
