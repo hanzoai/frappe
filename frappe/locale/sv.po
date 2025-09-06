@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-08-31 09:33+0000\n"
-"PO-Revision-Date: 2025-09-01 16:28\n"
+"PO-Revision-Date: 2025-09-05 16:58\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -2164,13 +2164,13 @@ msgstr "'Utkast' Rubrik för Utkast Dokument"
 #. 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
 msgid "Always use this email address as sender address"
-msgstr "Använd alltid denna E-post som Avsändare Adress"
+msgstr "Använd alltid som Avsändare Adress"
 
 #. Label of the always_use_account_name_as_sender_name (Check) field in DocType
 #. 'Email Account'
 #: frappe/email/doctype/email_account/email_account.json
 msgid "Always use this name as sender name"
-msgstr "Använd alltid detta Namn som Avsändarens Namn"
+msgstr "Använd alltid som Avsändare Namn"
 
 #. Label of the amend (Check) field in DocType 'Custom DocPerm'
 #. Label of the amend (Check) field in DocType 'DocPerm'
@@ -3699,7 +3699,7 @@ msgstr "Bufferpool Storlek"
 #. Name of a Workspace
 #: frappe/core/workspace/build/build.json
 msgid "Build"
-msgstr "Utveckla"
+msgstr "Skapa"
 
 #. Description of a Card Break in the Build Workspace
 #: frappe/core/workspace/build/build.json
@@ -28344,7 +28344,7 @@ msgstr "Användare erfordras för Delad Mapp"
 #. Naming Settings'
 #: frappe/core/doctype/document_naming_settings/document_naming_settings.json
 msgid "User must always select"
-msgstr "Användare måste altid välja"
+msgstr "Användare måste alltid välja"
 
 #: frappe/core/doctype/user_permission/user_permission.py:60
 msgid "User permission already exists"
