@@ -10,7 +10,7 @@ frappe.pages["desktop"].on_page_load = function (wrapper) {
 	setup();
 };
 function setup() {
-	let desktop_icon_theme = frappe.boot.desktop_icon_theme;
+	let desktop_icon_style = frappe.boot.desktop_icon_style;
 	$(".desktop-icon").each((i, el) => {
 		let icon_name = $(el).attr("data-icon");
 		let icon_container = $(el.children[0]);
@@ -29,15 +29,15 @@ function setup() {
 				const $svg = $(svg);
 
 				// Apply stroke via CSS
-				if (desktop_icon_theme !== "Monochrome") {
+				if (desktop_icon_style !== "Monochrome") {
 					let bg_color, text_color;
-					if (desktop_icon_theme === "Subtle") {
+					if (desktop_icon_style === "Subtle") {
 						bg_color = `var(${color_scheme[0]})`;
 						text_color = color_scheme[1];
-					} else if (desktop_icon_theme === "Subtle Reverse") {
+					} else if (desktop_icon_style === "Subtle Reverse") {
 						bg_color = `var(${color_scheme[1]})`;
 						text_color = color_scheme[0];
-					} else if (desktop_icon_theme === "Subtle Reverse w Opacity") {
+					} else if (desktop_icon_style === "Subtle Reverse w Opacity") {
 						// #0289f7bd
 						var style = window.getComputedStyle(document.body);
 						console.log(style.getPropertyValue(color_scheme[1]));
