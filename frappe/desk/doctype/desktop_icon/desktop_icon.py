@@ -31,6 +31,7 @@ class DesktopIcon(Document):
 		idx: DF.Int
 		label: DF.Data | None
 		link: DF.SmallText | None
+		logo_url: DF.Data | None
 		module_name: DF.Data | None
 		reverse: DF.Check
 		route: DF.Data | None
@@ -82,6 +83,7 @@ def get_desktop_icons(user=None):
 			"blocked",
 			"workspace",
 			"route",
+			"logo_url",
 		]
 
 		active_domains = frappe.get_active_domains()

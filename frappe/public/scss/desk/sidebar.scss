@@ -238,12 +238,8 @@
 }
 .section-break {
 	flex: 0 0 auto !important;
-	color: var(--ink-gray-5);
+	color: var(--ink-gray-5) !important;
 	margin-left: 7px;
-	&:hover {
-		color: var(--ink-gray-5);
-		text-decoration: none;
-	}
 }
 .section-item {
 	margin-top: 5px;

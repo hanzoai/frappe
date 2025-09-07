@@ -35,7 +35,7 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	setup(workspace_title) {
-		this.workspace_title = workspace_title.charAt(0).toUpperCase() + workspace_title.slice(1);
+		this.workspace_title = frappe.utils.to_title_case(workspace_title);
 		this.sidebar_header = new frappe.ui.SidebarHeader(this);
 		this.make_sidebar();
 		this.setup_complete = true;
@@ -59,6 +59,7 @@ frappe.ui.Sidebar = class Sidebar {
 			this.wrapper.hide();
 		} else {
 			this.wrapper.show();
+			this.set_sidebar_for_page();
 		}
 	}
 	make_dom() {
@@ -545,15 +546,18 @@ frappe.ui.Sidebar = class Sidebar {
 				module_name = frappe.boot.module_wise_workspaces[test.module][0] || "Build";
 				frappe.app.sidebar.setup(module_name);
 			});
-		} else {
-			let workspace_title =
-				frappe.boot.module_wise_workspaces[locals["Page"][route[0]].module];
-			module_name = workspace_title ? workspace_title[0] : "Build";
-			frappe.app.sidebar.setup(module_name);
 		}
+
 		this.set_active_workspace_item();
 	}
 
+	set_sidebar_for_page() {
+		let route = frappe.get_route();
+		if (route.length >= 2) return;
+		let workspace_title = frappe.boot.module_wise_workspaces[locals["Page"][route[0]].module];
+		let module_name = workspace_title ? workspace_title[0] : "Build";
+		frappe.app.sidebar.setup(module_name);
+	}
 	get_correct_workspace_sidebars(link_to) {
 		let sidebars = [];
 		Object.entries(this.sidebar_items).forEach(([name, items]) => {

@@ -25,6 +25,7 @@
   "column_break_10",
   "color",
   "icon",
+  "logo_url",
   "reverse",
   "idx"
  ],
@@ -157,10 +158,15 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Route"
+  },
+  {
+   "fieldname": "logo_url",
+   "fieldtype": "Data",
+   "label": "Logo URL"
   }
  ],
  "links": [],
- "modified": "2025-08-12 12:22:16.735640",
+ "modified": "2025-09-04 00:30:45.311189",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Desktop Icon",

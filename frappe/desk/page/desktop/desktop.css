@@ -19,11 +19,22 @@
     width: 100px;
     flex-direction: column;
     align-items: center;
+
+}
+.icon-container:has(img) {
+    padding: 0;
+}
+.icon-container img{
+    width: 60px;
+    height: 60px;
 }
 .icon-container{
     padding: 10px;
     border: var(--gray-400) solid 1px;
     border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .icon-container:hover{
 	transform: scale(1.05);

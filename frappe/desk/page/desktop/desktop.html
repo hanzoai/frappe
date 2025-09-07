@@ -3,7 +3,7 @@
     <div class="desktop-container">
         <div class="icons">
             {% for icon in icons %}
-                <a class="desktop-icon" data-icon="{{ icon.icon }}" data-type="{{ icon.type }}" href="{{ icon.route }}" style="text-decoration:none">
+                <a class="desktop-icon" data-logo="{{ icon.logo_url }}" data-icon="{{ icon.icon }}" data-type="{{ icon.type }}" href="{{ icon.route }}" style="text-decoration:none">
                     <div class="icon-container" data-color="{{ icon.color }}"> </div>
                     <div class="icon-label">{{ icon.label }}</div>
                 </a>

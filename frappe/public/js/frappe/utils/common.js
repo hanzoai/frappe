@@ -152,7 +152,7 @@ frappe.palette = [
 	["--red-avatar-bg", "--red-avatar-color"],
 	["--yellow-avatar-bg", "--yellow-avatar-color"],
 	["--purple-avatar-bg", "--purple-avatar-color"],
-	["--gray-avatar-bg", "--gray-avatar-color0"],
+	["--gray-avatar-bg", "--gray-avatar-color"],
 ];
 
 frappe.get_palette = function (txt) {
