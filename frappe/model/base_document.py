@@ -127,7 +127,42 @@ def import_controller(doctype):
 	if not issubclass(class_, BaseDocument):
 		raise ImportError(f"{doctype}: {classname} is not a subclass of BaseDocument")
 
-	return class_
+	return get_extended_class(class_, doctype)
+
+
+def get_extended_class(base_class, doctype):
+	"""Create an extended class by mixing extension classes with the base class.
+
+	Args:
+		base_class: The base document class
+		doctype: The doctype name
+
+	Returns:
+		Extended class that combines all extension classes with the base class
+	"""
+
+	extensions = frappe.get_hooks("extend_doctype_class", {}).get(doctype)
+	if not extensions:
+		return base_class
+
+	# Get extension classes in reverse order using frappe.get_attr
+	extension_classes = []
+	for extension_path in reversed(extensions):
+		try:
+			extension_class = frappe.get_attr(extension_path)
+		except Exception:
+			frappe.throw(
+				_("Error retrieving extension class from path:<br><code>{0}</code>").format(extension_path)
+			)
+
+		extension_classes.append(extension_class)
+
+	# Create the extended class by combining extension classes with base class
+	# Extension classes come first in MRO, then base class
+	class_name = f"Extended{base_class.__name__}"
+	extended_class = type(class_name, (*extension_classes, base_class), {})
+
+	return extended_class
 
 
 RESERVED_KEYWORDS = frozenset(
