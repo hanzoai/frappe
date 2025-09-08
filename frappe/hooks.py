@@ -576,5 +576,7 @@ persistent_cache_keys = [
 ]
 
 user_invitation = {
-	"only_for": ["System Manager"],
+	"allowed_roles": {
+		"System Manager": [],
+	},
 }
