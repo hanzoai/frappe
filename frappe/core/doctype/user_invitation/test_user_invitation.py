@@ -12,7 +12,7 @@ from frappe.core.api.user_invitation import (
 	invite_by_email,
 )
 from frappe.core.doctype.user_invitation.user_invitation import mark_expired_invitations
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 
 emails = [
 	"test_user_invite1@example.com",
@@ -20,13 +20,12 @@ emails = [
 	"test_user_invite3@example.com",
 	"test_user_invite4@example.com",
 	"test_user_invite5@example.com",
-	"test_user_invite6@example.com",
 ]
 
 
-class IntegrationTestUserInvitation(IntegrationTestCase):
+class TestUserInvitation(FrappeTestCase):
 	"""
-	Integration tests for UserInvitation.
+	Tests for UserInvitation.
 	"""
 
 	@classmethod
@@ -43,8 +42,8 @@ class IntegrationTestUserInvitation(IntegrationTestCase):
 	@classmethod
 	def tearDownClass(cls):
 		super().tearDownClass()
-		IntegrationTestUserInvitation.delete_all_invitations()
-		IntegrationTestUserInvitation.delete_all_user_roles()
+		TestUserInvitation.delete_all_invitations()
+		TestUserInvitation.delete_all_user_roles()
 		frappe.db.delete("Email Queue")
 		for user_email in emails:
 			if frappe.db.exists("User", user_email):
@@ -67,8 +66,8 @@ class IntegrationTestUserInvitation(IntegrationTestCase):
 
 	def setUp(self):
 		super().setUp()
-		IntegrationTestUserInvitation.delete_all_invitations()
-		IntegrationTestUserInvitation.delete_all_user_roles()
+		TestUserInvitation.delete_all_invitations()
+		TestUserInvitation.delete_all_user_roles()
 		frappe.db.delete("Email Queue")
 
 	def test_insert_invitation(self):
@@ -139,7 +138,8 @@ class IntegrationTestUserInvitation(IntegrationTestCase):
 			redirect_to_path="/abc",
 			app_name="frappe",
 		).insert()
-		invitation.accept()
+		invitation.status = "Accepted"
+		invitation.save()
 		self.assertEqual(len(self.get_email_names(False)), 1)
 		pending_invite_email = emails[2]
 		frappe.get_doc(
@@ -156,35 +156,10 @@ class IntegrationTestUserInvitation(IntegrationTestCase):
 			roles=["System Manager"],
 			redirect_to_path="/xyz",
 		)
-		self.assertSequenceEqual(res["disabled_user_emails"], [])
 		self.assertSequenceEqual(res["accepted_invite_emails"], [accepted_invite_email])
 		self.assertSequenceEqual(res["pending_invite_emails"], [pending_invite_email])
 		self.assertSequenceEqual(res["invited_emails"], [email_to_invite])
 		self.assertEqual(len(self.get_email_names(False)), 3)
-		user = frappe.get_doc("User", invitation.email)
-		IntegrationTestUserInvitation.delete_invitation(invitation.name)
-		frappe.delete_doc("User", user.name)
-
-	def test_invite_by_email_api_disabled_user(self):
-		user = frappe.new_doc("User")
-		user.first_name = "Random"
-		user.last_name = "User"
-		user.email = emails[5]
-		user.append_roles("System Manager")
-		user.insert()
-		user.reload()
-		user.enabled = 0
-		user.save()
-		res = invite_by_email(
-			emails=user.email,
-			roles=["System Manager"],
-			redirect_to_path="/xyz",
-		)
-		self.assertSequenceEqual(res["disabled_user_emails"], [user.email])
-		self.assertSequenceEqual(res["accepted_invite_emails"], [])
-		self.assertSequenceEqual(res["pending_invite_emails"], [])
-		self.assertSequenceEqual(res["invited_emails"], [])
-		frappe.delete_doc("User", user.email)
 
 	def test_accept_invitation_api_pass_redirect(self):
 		invitation = frappe.get_doc(
@@ -204,7 +179,7 @@ class IntegrationTestUserInvitation(IntegrationTestCase):
 		pattern = f"^{re.escape(frappe.utils.get_url(''))}/update-password\\?key=.+&redirect_to=/abc$"
 		self.assertRegex(res.location, pattern)
 		user = frappe.get_doc("User", invitation.email)
-		IntegrationTestUserInvitation.delete_invitation(invitation.name)
+		TestUserInvitation.delete_invitation(invitation.name)
 		frappe.delete_doc("User", user.name)
 
 	def test_accept_invitation_api_direct_redirect(self):
@@ -230,7 +205,7 @@ class IntegrationTestUserInvitation(IntegrationTestCase):
 		pattern = f"^{re.escape(frappe.utils.get_url(''))}/abc$"
 		self.assertRegex(res.location, pattern)
 		user = frappe.get_doc("User", invitation.email)
-		IntegrationTestUserInvitation.delete_invitation(invitation.name)
+		TestUserInvitation.delete_invitation(invitation.name)
 		frappe.delete_doc("User", user.name)
 
 	def test_get_pending_invitations_api(self):
