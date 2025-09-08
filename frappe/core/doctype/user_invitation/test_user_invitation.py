@@ -20,7 +20,6 @@ emails = [
 	"test_user_invite3@example.com",
 	"test_user_invite4@example.com",
 	"test_user_invite5@example.com",
-	"test_user_invite6@example.com",
 ]
 
 
@@ -139,7 +138,8 @@ class TestUserInvitation(FrappeTestCase):
 			redirect_to_path="/abc",
 			app_name="frappe",
 		).insert()
-		invitation.accept()
+		invitation.status = "Accepted"
+		invitation.save()
 		self.assertEqual(len(self.get_email_names(False)), 1)
 		pending_invite_email = emails[2]
 		frappe.get_doc(
@@ -156,11 +156,11 @@ class TestUserInvitation(FrappeTestCase):
 			roles=["System Manager"],
 			redirect_to_path="/xyz",
 		)
-		self.assertSequenceEqual(res["disabled_user_emails"], [])
 		self.assertSequenceEqual(res["accepted_invite_emails"], [accepted_invite_email])
 		self.assertSequenceEqual(res["pending_invite_emails"], [pending_invite_email])
 		self.assertSequenceEqual(res["invited_emails"], [email_to_invite])
 		self.assertEqual(len(self.get_email_names(False)), 3)
+<<<<<<< HEAD
 		user = frappe.get_doc("User", invitation.email)
 		TestUserInvitation.delete_invitation(invitation.name)
 		frappe.delete_doc("User", user.name)
@@ -185,6 +185,8 @@ class TestUserInvitation(FrappeTestCase):
 		self.assertSequenceEqual(res["pending_invite_emails"], [])
 		self.assertSequenceEqual(res["invited_emails"], [])
 		frappe.delete_doc("User", user.email)
+=======
+>>>>>>> c3873fc699 (fix: wrong default vaue for print format in reports)
 
 	def test_accept_invitation_api_pass_redirect(self):
 		invitation = frappe.get_doc(
