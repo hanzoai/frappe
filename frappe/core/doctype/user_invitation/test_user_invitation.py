@@ -12,7 +12,7 @@ from frappe.core.api.user_invitation import (
 	invite_by_email,
 )
 from frappe.core.doctype.user_invitation.user_invitation import mark_expired_invitations
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 
 emails = [
 	"test_user_invite1@example.com",
@@ -23,9 +23,9 @@ emails = [
 ]
 
 
-class IntegrationTestUserInvitation(IntegrationTestCase):
+class TestUserInvitation(FrappeTestCase):
 	"""
-	Integration tests for UserInvitation.
+	Tests for UserInvitation.
 	"""
 
 	@classmethod
