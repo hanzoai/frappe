@@ -162,7 +162,7 @@ class TestUserInvitation(FrappeTestCase):
 		self.assertSequenceEqual(res["invited_emails"], [email_to_invite])
 		self.assertEqual(len(self.get_email_names(False)), 3)
 		user = frappe.get_doc("User", invitation.email)
-		IntegrationTestUserInvitation.delete_invitation(invitation.name)
+		TestUserInvitation.delete_invitation(invitation.name)
 		frappe.delete_doc("User", user.name)
 
 	def test_invite_by_email_api_disabled_user(self):
