@@ -1,3 +1,5 @@
+import pickle
+
 import frappe
 from frappe.desk.doctype.todo.todo import ToDo
 from frappe.model.base_document import BaseDocument, get_extended_class
@@ -141,3 +143,65 @@ class TestBaseDocument(IntegrationTestCase):
 			# Check that the error message mentions the invalid path
 			error_message = str(context.exception)
 			self.assertIn(path_to_invalid_extension, error_message)
+
+	def test_extended_class_is_pickleable(self):
+		"""Test that extended class instances can be pickled and unpickled correctly"""
+		from frappe.desk.doctype.todo.todo import ToDo
+
+		# Mock the hooks to include extensions
+		extensions = ["frappe.tests.test_base_document.TestToDoExtension"]
+
+		with self.patch_hooks({"extend_doctype_class": {"ToDo": extensions}}):
+			extended_class = get_extended_class(ToDo, "ToDo")
+
+			# Create an instance with some data
+			original_instance = extended_class(
+				{"doctype": "ToDo", "description": "Test ToDo for pickling", "status": "Open"}
+			)
+
+			# Set a custom attribute from extension
+			original_instance.validate()  # This sets custom_validation_called = True
+			original_instance.custom_attribute = "test_value"
+
+			# Test that __getstate__ properly excludes unpicklable values
+			state = original_instance.__getstate__()
+			# These should be excluded by BaseDocument's __getstate__
+			for unpicklable_key in ["meta", "permitted_fieldnames", "_weakref"]:
+				self.assertNotIn(unpicklable_key, state)
+
+			# Pickle the instance
+			pickled_data = pickle.dumps(original_instance)
+
+			# Clear the controller cache to ensure we're not using cached classes
+			clear_todo_controller_cache()
+
+			try:
+				# Unpickle the instance (this should recreate the extended class)
+				unpickled_instance = pickle.loads(pickled_data)
+			finally:
+				# Always clean up the controller cache to prevent test pollution
+				clear_todo_controller_cache()
+
+			# Test that the unpickled instance is of the extended class type
+			self.assertEqual(unpickled_instance.__class__.__name__, f"Extended{ToDo.__name__}")
+
+			# Test that the instance data is preserved
+			self.assertEqual(unpickled_instance.doctype, "ToDo")
+			self.assertEqual(unpickled_instance.description, "Test ToDo for pickling")
+			self.assertEqual(unpickled_instance.status, "Open")
+			self.assertEqual(unpickled_instance.custom_attribute, "test_value")
+			self.assertTrue(getattr(unpickled_instance, "custom_validation_called", False))
+
+			# Test that extension methods are still available
+			self.assertTrue(hasattr(unpickled_instance, "extension_method"))
+			self.assertEqual(unpickled_instance.extension_method(), "extension_method_called")
+
+			# Test that original ToDo methods are still available
+			self.assertTrue(hasattr(unpickled_instance, "on_update"))
+			self.assertTrue(hasattr(unpickled_instance, "validate"))
+
+
+def clear_todo_controller_cache():
+	"""Helper method to clear controller cache for ToDo"""
+	if hasattr(frappe, "controllers") and frappe.local.site in frappe.controllers:
+		frappe.controllers[frappe.local.site].pop("ToDo", None)

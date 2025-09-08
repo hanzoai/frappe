@@ -70,6 +70,25 @@ UNPICKLABLE_KEYS = (
 )
 
 
+def _reconstruct_extended_instance(doctype, state):
+	"""Helper function to reconstruct an extended class instance during unpickling.
+
+	This function is called during unpickling to recreate the extended class
+	based on current hooks and restore the instance state.
+	"""
+	# Get the current extended class (uses caching from get_controller)
+	extended_class = get_controller(doctype)
+	instance = extended_class.__new__(extended_class)
+
+	# Use __setstate__ if available, otherwise directly update __dict__
+	if hasattr(instance, "__setstate__"):
+		instance.__setstate__(state)
+	else:
+		instance.__dict__.update(state)
+
+	return instance
+
+
 def get_controller(doctype):
 	"""Return the locally cached **class** object of the given DocType.
 
@@ -160,7 +179,24 @@ def get_extended_class(base_class, doctype):
 	# Create the extended class by combining extension classes with base class
 	# Extension classes come first in MRO, then base class
 	class_name = f"Extended{base_class.__name__}"
-	extended_class = type(class_name, (*extension_classes, base_class), {})
+
+	def __reduce__(self):
+		"""Make extended class instances pickle-able.
+
+		When unpickling, this will use get_controller() to recreate the extended class
+		based on current hooks, ensuring the instance respects the current environment.
+		Respects the BaseDocument's __getstate__ method for proper state handling.
+		"""
+
+		return (_reconstruct_extended_instance, (self.doctype, self.__getstate__()))
+
+	extended_class = type(
+		class_name,
+		(*extension_classes, base_class),
+		{
+			"__reduce__": __reduce__,
+		},
+	)
 
 	return extended_class
 
