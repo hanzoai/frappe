@@ -255,11 +255,8 @@ scheduler_events = {
 		"frappe.integrations.doctype.google_contacts.google_contacts.sync",
 		"frappe.automation.doctype.auto_repeat.auto_repeat.make_auto_repeat_entry",
 		"frappe.core.doctype.log_settings.log_settings.run_log_clean_up",
-<<<<<<< HEAD
 		"frappe.social.doctype.energy_point_settings.energy_point_settings.allocate_review_points",
-=======
 		"frappe.core.doctype.user_invitation.user_invitation.mark_expired_invitations",
->>>>>>> 6d1008933f (feat: add user invitation doctype & related public methods (#33308))
 	],
 	"weekly_long": [
 		"frappe.integrations.doctype.dropbox_settings.dropbox_settings.take_backups_weekly",
