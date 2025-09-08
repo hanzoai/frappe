@@ -12,7 +12,7 @@ from frappe.core.api.user_invitation import (
 	invite_by_email,
 )
 from frappe.core.doctype.user_invitation.user_invitation import mark_expired_invitations
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests import IntegrationTestCase
 
 emails = [
 	"test_user_invite1@example.com",
@@ -20,12 +20,13 @@ emails = [
 	"test_user_invite3@example.com",
 	"test_user_invite4@example.com",
 	"test_user_invite5@example.com",
+	"test_user_invite6@example.com",
 ]
 
 
-class TestUserInvitation(FrappeTestCase):
+class IntegrationTestUserInvitation(IntegrationTestCase):
 	"""
-	Tests for UserInvitation.
+	Integration tests for UserInvitation.
 	"""
 
 	@classmethod
@@ -42,8 +43,8 @@ class TestUserInvitation(FrappeTestCase):
 	@classmethod
 	def tearDownClass(cls):
 		super().tearDownClass()
-		TestUserInvitation.delete_all_invitations()
-		TestUserInvitation.delete_all_user_roles()
+		IntegrationTestUserInvitation.delete_all_invitations()
+		IntegrationTestUserInvitation.delete_all_user_roles()
 		frappe.db.delete("Email Queue")
 		for user_email in emails:
 			if frappe.db.exists("User", user_email):
@@ -66,8 +67,8 @@ class TestUserInvitation(FrappeTestCase):
 
 	def setUp(self):
 		super().setUp()
-		TestUserInvitation.delete_all_invitations()
-		TestUserInvitation.delete_all_user_roles()
+		IntegrationTestUserInvitation.delete_all_invitations()
+		IntegrationTestUserInvitation.delete_all_user_roles()
 		frappe.db.delete("Email Queue")
 
 	def test_insert_invitation(self):
@@ -138,8 +139,7 @@ class TestUserInvitation(FrappeTestCase):
 			redirect_to_path="/abc",
 			app_name="frappe",
 		).insert()
-		invitation.status = "Accepted"
-		invitation.save()
+		invitation.accept()
 		self.assertEqual(len(self.get_email_names(False)), 1)
 		pending_invite_email = emails[2]
 		frappe.get_doc(
@@ -156,13 +156,19 @@ class TestUserInvitation(FrappeTestCase):
 			roles=["System Manager"],
 			redirect_to_path="/xyz",
 		)
+		self.assertSequenceEqual(res["disabled_user_emails"], [])
 		self.assertSequenceEqual(res["accepted_invite_emails"], [accepted_invite_email])
 		self.assertSequenceEqual(res["pending_invite_emails"], [pending_invite_email])
 		self.assertSequenceEqual(res["invited_emails"], [email_to_invite])
 		self.assertEqual(len(self.get_email_names(False)), 3)
 <<<<<<< HEAD
+<<<<<<< HEAD
 		user = frappe.get_doc("User", invitation.email)
 		TestUserInvitation.delete_invitation(invitation.name)
+=======
+		user = frappe.get_doc("User", invitation.email)
+		IntegrationTestUserInvitation.delete_invitation(invitation.name)
+>>>>>>> 7e6f1966b7 (chore: revert user invitation change)
 		frappe.delete_doc("User", user.name)
 
 	def test_invite_by_email_api_disabled_user(self):
@@ -185,8 +191,11 @@ class TestUserInvitation(FrappeTestCase):
 		self.assertSequenceEqual(res["pending_invite_emails"], [])
 		self.assertSequenceEqual(res["invited_emails"], [])
 		frappe.delete_doc("User", user.email)
+<<<<<<< HEAD
 =======
 >>>>>>> c3873fc699 (fix: wrong default vaue for print format in reports)
+=======
+>>>>>>> 7e6f1966b7 (chore: revert user invitation change)
 
 	def test_accept_invitation_api_pass_redirect(self):
 		invitation = frappe.get_doc(
@@ -206,7 +215,7 @@ class TestUserInvitation(FrappeTestCase):
 		pattern = f"^{re.escape(frappe.utils.get_url(''))}/update-password\\?key=.+&redirect_to=/abc$"
 		self.assertRegex(res.location, pattern)
 		user = frappe.get_doc("User", invitation.email)
-		TestUserInvitation.delete_invitation(invitation.name)
+		IntegrationTestUserInvitation.delete_invitation(invitation.name)
 		frappe.delete_doc("User", user.name)
 
 	def test_accept_invitation_api_direct_redirect(self):
@@ -232,7 +241,7 @@ class TestUserInvitation(FrappeTestCase):
 		pattern = f"^{re.escape(frappe.utils.get_url(''))}/abc$"
 		self.assertRegex(res.location, pattern)
 		user = frappe.get_doc("User", invitation.email)
-		TestUserInvitation.delete_invitation(invitation.name)
+		IntegrationTestUserInvitation.delete_invitation(invitation.name)
 		frappe.delete_doc("User", user.name)
 
 	def test_get_pending_invitations_api(self):
