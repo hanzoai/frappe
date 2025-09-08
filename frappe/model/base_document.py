@@ -195,6 +195,7 @@ def get_extended_class(base_class, doctype):
 		(*extension_classes, base_class),
 		{
 			"__reduce__": __reduce__,
+			"__module__": base_class.__module__,
 		},
 	)
 
