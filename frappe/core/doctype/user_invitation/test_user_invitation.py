@@ -42,8 +42,8 @@ class TestUserInvitation(FrappeTestCase):
 	@classmethod
 	def tearDownClass(cls):
 		super().tearDownClass()
-		IntegrationTestUserInvitation.delete_all_invitations()
-		IntegrationTestUserInvitation.delete_all_user_roles()
+		TestUserInvitation.delete_all_invitations()
+		TestUserInvitation.delete_all_user_roles()
 		frappe.db.delete("Email Queue")
 		for user_email in emails:
 			if frappe.db.exists("User", user_email):
@@ -66,8 +66,8 @@ class TestUserInvitation(FrappeTestCase):
 
 	def setUp(self):
 		super().setUp()
-		IntegrationTestUserInvitation.delete_all_invitations()
-		IntegrationTestUserInvitation.delete_all_user_roles()
+		TestUserInvitation.delete_all_invitations()
+		TestUserInvitation.delete_all_user_roles()
 		frappe.db.delete("Email Queue")
 
 	def test_insert_invitation(self):
@@ -179,7 +179,7 @@ class TestUserInvitation(FrappeTestCase):
 		pattern = f"^{re.escape(frappe.utils.get_url(''))}/update-password\\?key=.+&redirect_to=/abc$"
 		self.assertRegex(res.location, pattern)
 		user = frappe.get_doc("User", invitation.email)
-		IntegrationTestUserInvitation.delete_invitation(invitation.name)
+		TestUserInvitation.delete_invitation(invitation.name)
 		frappe.delete_doc("User", user.name)
 
 	def test_accept_invitation_api_direct_redirect(self):
@@ -205,7 +205,7 @@ class TestUserInvitation(FrappeTestCase):
 		pattern = f"^{re.escape(frappe.utils.get_url(''))}/abc$"
 		self.assertRegex(res.location, pattern)
 		user = frappe.get_doc("User", invitation.email)
-		IntegrationTestUserInvitation.delete_invitation(invitation.name)
+		TestUserInvitation.delete_invitation(invitation.name)
 		frappe.delete_doc("User", user.name)
 
 	def test_get_pending_invitations_api(self):
