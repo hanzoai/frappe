@@ -70,23 +70,22 @@ UNPICKLABLE_KEYS = (
 )
 
 
-def _reconstruct_extended_instance(doctype, state):
-	"""Helper function to reconstruct an extended class instance during unpickling.
+def _reduce_extended_instance(doc):
+	"""Make extended class instances pickle-able.
 
-	This function is called during unpickling to recreate the extended class
-	based on current hooks and restore the instance state.
+	When unpickling, this will use get_controller() to recreate the extended class.
+	Respects the __getstate__ method for proper state handling.
+	"""
+	return (_reconstruct_extended_instance, (doc.doctype,), doc.__getstate__())
+
+
+def _reconstruct_extended_instance(doctype):
+	"""
+	Helper function to reconstruct an extended class instance during unpickling.
 	"""
 	# Get the current extended class (uses caching from get_controller)
 	extended_class = get_controller(doctype)
-	instance = extended_class.__new__(extended_class)
-
-	# Use __setstate__ if available, otherwise directly update __dict__
-	if hasattr(instance, "__setstate__"):
-		instance.__setstate__(state)
-	else:
-		instance.__dict__.update(state)
-
-	return instance
+	return extended_class.__new__(extended_class)
 
 
 def get_controller(doctype):
@@ -146,10 +145,10 @@ def import_controller(doctype):
 	if not issubclass(class_, BaseDocument):
 		raise ImportError(f"{doctype}: {classname} is not a subclass of BaseDocument")
 
-	return get_extended_class(class_, doctype)
+	return _get_extended_class(class_, doctype)
 
 
-def get_extended_class(base_class, doctype):
+def _get_extended_class(base_class, doctype):
 	"""Create an extended class by mixing extension classes with the base class.
 
 	Args:
@@ -169,37 +168,23 @@ def get_extended_class(base_class, doctype):
 	for extension_path in reversed(extensions):
 		try:
 			extension_class = frappe.get_attr(extension_path)
-		except Exception:
-			frappe.throw(
-				_("Error retrieving extension class from path:<br><code>{0}</code>").format(extension_path)
-			)
+		except Exception as e:
+			raise ImportError(
+				"Error retrieving extension class from path:\n{0}".format(extension_path)
+			) from e
 
 		extension_classes.append(extension_class)
 
 	# Create the extended class by combining extension classes with base class
 	# Extension classes come first in MRO, then base class
-	class_name = f"Extended{base_class.__name__}"
-
-	def __reduce__(self):
-		"""Make extended class instances pickle-able.
-
-		When unpickling, this will use get_controller() to recreate the extended class
-		based on current hooks, ensuring the instance respects the current environment.
-		Respects the BaseDocument's __getstate__ method for proper state handling.
-		"""
-
-		return (_reconstruct_extended_instance, (self.doctype, self.__getstate__()))
-
-	extended_class = type(
-		class_name,
+	return type(
+		f"Extended{base_class.__name__}",
 		(*extension_classes, base_class),
 		{
-			"__reduce__": __reduce__,
+			"__reduce__": _reduce_extended_instance,
 			"__module__": base_class.__module__,
 		},
 	)
-
-	return extended_class
 
 
 RESERVED_KEYWORDS = frozenset(

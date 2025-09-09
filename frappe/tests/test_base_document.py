@@ -2,7 +2,7 @@ import pickle
 
 import frappe
 from frappe.desk.doctype.todo.todo import ToDo
-from frappe.model.base_document import BaseDocument, get_extended_class
+from frappe.model.base_document import BaseDocument, _get_extended_class
 from frappe.tests import IntegrationTestCase
 
 
@@ -42,18 +42,18 @@ class TestBaseDocument(IntegrationTestCase):
 		self.assertEqual(doc.docstatus, 2)
 
 	def test_get_extended_class_with_no_extensions(self):
-		"""Test that get_extended_class returns the base class when no extensions are provided."""
+		"""Test that _get_extended_class returns the base class when no extensions are provided."""
 
 		with self.patch_hooks({"extend_doctype_class": {}}):
-			result = get_extended_class(ToDo, "ToDo")
+			result = _get_extended_class(ToDo, "ToDo")
 			self.assertEqual(result, ToDo)
 
 		with self.patch_hooks({"extend_doctype_class": {"ToDo": []}}):
-			result = get_extended_class(ToDo, "ToDo")
+			result = _get_extended_class(ToDo, "ToDo")
 			self.assertEqual(result, ToDo)
 
 	def test_get_extended_class_with_extensions(self):
-		"""Test that get_extended_class properly combines extension classes with base class."""
+		"""Test that _get_extended_class properly combines extension classes with base class."""
 		# Mock frappe.get_hooks to return extension paths
 		extensions = [
 			"frappe.tests.test_base_document.TestExtensionA",
@@ -61,7 +61,7 @@ class TestBaseDocument(IntegrationTestCase):
 		]
 
 		with self.patch_hooks({"extend_doctype_class": {"ToDo": extensions}}):
-			extended_class = get_extended_class(ToDo, "ToDo")
+			extended_class = _get_extended_class(ToDo, "ToDo")
 
 			# Test that the extended class is different from base class
 			self.assertNotEqual(extended_class, ToDo)
@@ -96,7 +96,7 @@ class TestBaseDocument(IntegrationTestCase):
 		extensions = ["frappe.tests.test_base_document.TestToDoExtension"]
 
 		with self.patch_hooks({"extend_doctype_class": {"ToDo": extensions}}):
-			extended_class = get_extended_class(ToDo, "ToDo")
+			extended_class = _get_extended_class(ToDo, "ToDo")
 
 			# Test that the extended class is different from base ToDo
 			self.assertNotEqual(extended_class, ToDo)
@@ -136,9 +136,9 @@ class TestBaseDocument(IntegrationTestCase):
 		]
 
 		with self.patch_hooks({"extend_doctype_class": {"ToDo": extensions}}):
-			# Test that frappe.ValidationError is raised for invalid extension path
-			with self.assertRaises(frappe.ValidationError) as context:
-				get_extended_class(ToDo, "ToDo")
+			# Test that ImportError is raised for invalid extension path
+			with self.assertRaises(ImportError) as context:
+				_get_extended_class(ToDo, "ToDo")
 
 			# Check that the error message mentions the invalid path
 			error_message = str(context.exception)
@@ -152,7 +152,7 @@ class TestBaseDocument(IntegrationTestCase):
 		extensions = ["frappe.tests.test_base_document.TestToDoExtension"]
 
 		with self.patch_hooks({"extend_doctype_class": {"ToDo": extensions}}):
-			extended_class = get_extended_class(ToDo, "ToDo")
+			extended_class = _get_extended_class(ToDo, "ToDo")
 
 			# Create an instance with some data
 			original_instance = extended_class(
