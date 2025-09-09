@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-09-07 09:32+0000\n"
-"PO-Revision-Date: 2025-09-08 17:14\n"
+"PO-Revision-Date: 2025-09-09 17:28\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Norwegian Bokmal\n"
 "MIME-Version: 1.0\n"
@@ -21245,17 +21245,17 @@ msgstr "Gjenta til"
 #. Label of the repeat_on_day (Int) field in DocType 'Auto Repeat'
 #: frappe/automation/doctype/auto_repeat/auto_repeat.json
 msgid "Repeat on Day"
-msgstr ""
+msgstr "Gjenta på dag"
 
 #. Label of the repeat_on_days (Table) field in DocType 'Auto Repeat'
 #: frappe/automation/doctype/auto_repeat/auto_repeat.json
 msgid "Repeat on Days"
-msgstr ""
+msgstr "Gjenta på dagene"
 
 #. Label of the repeat_on_last_day (Check) field in DocType 'Auto Repeat'
 #: frappe/automation/doctype/auto_repeat/auto_repeat.json
 msgid "Repeat on Last Day of the Month"
-msgstr ""
+msgstr "Gjenta den siste dagen i måneden"
 
 #. Label of the repeat_this_event (Check) field in DocType 'Event'
 #: frappe/desk/doctype/event/event.json
@@ -21264,28 +21264,28 @@ msgstr "Gjenta denne hendelsen"
 
 #: frappe/utils/password_strength.py:110
 msgid "Repeats like \"aaa\" are easy to guess"
-msgstr ""
+msgstr "Gjentakelser som «aaa» er lette å gjette"
 
 #: frappe/utils/password_strength.py:105
 msgid "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\""
-msgstr ""
+msgstr "Gjentakelser som «abcabcabc» er bare litt vanskeligere å gjette enn «abc»"
 
 #: frappe/public/js/frappe/form/sidebar/form_sidebar.js:151
 msgid "Repeats {0}"
-msgstr ""
+msgstr "Gjentar {0}"
 
 #: frappe/core/doctype/role_replication/role_replication.js:7
 #: frappe/core/doctype/role_replication/role_replication.js:14
 msgid "Replicate"
-msgstr ""
+msgstr "Repliker"
 
 #: frappe/core/doctype/role_replication/role_replication.js:8
 msgid "Replicating..."
-msgstr ""
+msgstr "Replikerer..."
 
 #: frappe/core/doctype/role_replication/role_replication.js:13
 msgid "Replication completed."
-msgstr ""
+msgstr "Replikasjon fullført."
 
 #. Option for the 'Status' (Select) field in DocType 'Contact'
 #. Option for the 'Status' (Select) field in DocType 'Communication'
@@ -21299,11 +21299,11 @@ msgstr "Svarte"
 #: frappe/public/js/frappe/form/footer/form_timeline.js:563
 #: frappe/website/doctype/discussion_reply/discussion_reply.json
 msgid "Reply"
-msgstr ""
+msgstr "Svar"
 
 #: frappe/core/doctype/communication/communication.js:62
 msgid "Reply All"
-msgstr ""
+msgstr "Svar alle"
 
 #. Label of the report (Check) field in DocType 'Custom DocPerm'
 #. Label of the report (Link) field in DocType 'Custom Role'
@@ -21359,7 +21359,7 @@ msgstr "Rapportbygger"
 #. Name of a DocType
 #: frappe/core/doctype/report_column/report_column.json
 msgid "Report Column"
-msgstr ""
+msgstr "Rapportkolonne"
 
 #. Label of the report_description (Data) field in DocType 'Onboarding Step'
 #: frappe/desk/doctype/onboarding_step/onboarding_step.json
@@ -21388,7 +21388,7 @@ msgstr "Rapportfiltere"
 #: frappe/custom/doctype/custom_field/custom_field.json
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
 msgid "Report Hide"
-msgstr ""
+msgstr "Skjul i rapporter"
 
 #. Label of the report_information_section (Section Break) field in DocType
 #. 'Access Log'
@@ -21400,7 +21400,7 @@ msgstr "Rapportinformasjon"
 #: frappe/core/doctype/report/report.json
 #: frappe/email/doctype/auto_email_report/auto_email_report.json
 msgid "Report Manager"
-msgstr ""
+msgstr "Rapportansvarlig"
 
 #. Label of the report_name (Data) field in DocType 'Access Log'
 #. Label of the report_name (Data) field in DocType 'Prepared Report'
@@ -21426,7 +21426,7 @@ msgstr "Rapportnavn, rapportfelt og -fusjon er påkrevd for å opprette et numme
 #: frappe/desk/doctype/workspace_link/workspace_link.json
 #: frappe/desk/doctype/workspace_shortcut/workspace_shortcut.json
 msgid "Report Ref DocType"
-msgstr ""
+msgstr "Rapport-ref. DocType"
 
 #. Label of the report_reference_doctype (Data) field in DocType 'Onboarding
 #. Step'
@@ -21445,15 +21445,15 @@ msgstr "Rapporttype"
 
 #: frappe/public/js/frappe/list/base_list.js:203
 msgid "Report View"
-msgstr ""
+msgstr "Rapportvisning"
 
 #: frappe/public/js/frappe/form/templates/form_sidebar.html:26
 msgid "Report bug"
-msgstr ""
+msgstr "Rapporter feil"
 
 #: frappe/core/doctype/doctype/doctype.py:1810
 msgid "Report cannot be set for Single types"
-msgstr ""
+msgstr "Rapport kan ikke settes for DocType-er av typen Single."
 
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.js:208
 #: frappe/desk/doctype/number_card/number_card.js:191
@@ -21467,19 +21467,19 @@ msgstr "Rapporten har ingen numeriske felt. Vennligst endre rapportnavnet."
 
 #: frappe/public/js/frappe/views/reports/query_report.js:1012
 msgid "Report initiated, click to view status"
-msgstr ""
+msgstr "Rapport påbegynt, klikk for å se status"
 
 #: frappe/email/doctype/auto_email_report/auto_email_report.py:110
 msgid "Report limit reached"
-msgstr ""
+msgstr "Rapportgrensen er nådd"
 
 #: frappe/core/doctype/prepared_report/prepared_report.py:223
 msgid "Report timed out."
-msgstr ""
+msgstr "Rapporten ble tidsavbrutt."
 
 #: frappe/desk/query_report.py:651
 msgid "Report updated successfully"
-msgstr ""
+msgstr "Arbeidsflyten ble vellykket oppdatert"
 
 #: frappe/public/js/frappe/views/reports/report_view.js:1359
 msgid "Report was not saved (there were errors)"
@@ -21496,19 +21496,19 @@ msgstr "Rapport {0}"
 
 #: frappe/desk/reportview.py:365
 msgid "Report {0} deleted"
-msgstr ""
+msgstr "Rapport {0} er slettet"
 
 #: frappe/desk/query_report.py:54
 msgid "Report {0} is disabled"
-msgstr ""
+msgstr "Rapport {0} er deaktivert"
 
 #: frappe/desk/reportview.py:342
 msgid "Report {0} saved"
-msgstr "Rapport {0} lagret"
+msgstr "Rapport {0} er lagret"
 
 #: frappe/public/js/frappe/views/reports/report_view.js:20
 msgid "Report:"
-msgstr ""
+msgstr "Rapport:"
 
 #. Label of the prepared_report_section (Section Break) field in DocType
 #. 'System Settings'
@@ -21519,21 +21519,21 @@ msgstr "Rapporter"
 
 #: frappe/patches/v14_0/update_workspace2.py:50
 msgid "Reports & Masters"
-msgstr ""
+msgstr "Rapporter og stamdata"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:928
 msgid "Reports already in Queue"
-msgstr ""
+msgstr "Det ligger allerede rapporter i køen"
 
 #. Description of a DocType
 #: frappe/core/doctype/user/user.json
 msgid "Represents a User in the system."
-msgstr ""
+msgstr "Representerer en bruker i systemet"
 
 #. Description of a DocType
 #: frappe/workflow/doctype/workflow_document_state/workflow_document_state.json
 msgid "Represents the states allowed in one document and role assigned to change the state."
-msgstr ""
+msgstr "Representerer tilstandene som er tillatt i et dokument, og rollen som er tilordnet for å endre tilstanden."
 
 #: frappe/integrations/doctype/webhook/webhook.js:101
 msgid "Request Body"
@@ -21542,30 +21542,30 @@ msgstr "Request Body"
 #. Label of the data (Code) field in DocType 'Integration Request'
 #: frappe/integrations/doctype/integration_request/integration_request.json
 msgid "Request Data"
-msgstr ""
+msgstr "Forespørselsdata"
 
 #. Label of the request_description (Data) field in DocType 'Integration
 #. Request'
 #: frappe/integrations/doctype/integration_request/integration_request.json
 msgid "Request Description"
-msgstr ""
+msgstr "Beskrivelse av forespørsel"
 
 #. Label of the request_headers (Code) field in DocType 'Recorder'
 #. Label of the request_headers (Code) field in DocType 'Integration Request'
 #: frappe/core/doctype/recorder/recorder.json
 #: frappe/integrations/doctype/integration_request/integration_request.json
 msgid "Request Headers"
-msgstr ""
+msgstr "Overskrifter i forespørsel"
 
 #. Label of the request_id (Data) field in DocType 'Integration Request'
 #: frappe/integrations/doctype/integration_request/integration_request.json
 msgid "Request ID"
-msgstr ""
+msgstr "Forespørsels-ID"
 
 #. Label of the rate_limit_count (Int) field in DocType 'Server Script'
 #: frappe/core/doctype/server_script/server_script.json
 msgid "Request Limit"
-msgstr ""
+msgstr "Grense for antall forespørsler"
 
 #. Label of the request_method (Select) field in DocType 'Webhook'
 #: frappe/integrations/doctype/webhook/webhook.json
@@ -21579,13 +21579,13 @@ msgstr "Forespørselsstruktur"
 
 #: frappe/public/js/frappe/request.js:231
 msgid "Request Timed Out"
-msgstr ""
+msgstr "Forespørselen ble tidsavbrutt"
 
 #. Label of the timeout (Int) field in DocType 'Webhook'
 #: frappe/integrations/doctype/webhook/webhook.json
 #: frappe/public/js/frappe/request.js:244
 msgid "Request Timeout"
-msgstr "Request Timeout"
+msgstr "Tidsavbrudd for forespørsel"
 
 #. Label of the request_url (Small Text) field in DocType 'Webhook'
 #: frappe/integrations/doctype/webhook/webhook.json
@@ -21595,7 +21595,7 @@ msgstr "Forespørsels-URL"
 #. Label of the requested_numbers (Code) field in DocType 'SMS Log'
 #: frappe/core/doctype/sms_log/sms_log.json
 msgid "Requested Numbers"
-msgstr ""
+msgstr "Forespurte nummere"
 
 #. Label of the require_trusted_certificate (Select) field in DocType 'LDAP
 #. Settings'
@@ -21617,7 +21617,7 @@ msgstr "Krever en gyldig fdn-sti. f.eks. ou=brukere,dc=eksempel,dc=com"
 
 #: frappe/core/doctype/communication/communication.js:279
 msgid "Res: {0}"
-msgstr ""
+msgstr "Respons: {0}"
 
 #: frappe/desk/doctype/form_tour/form_tour.js:101
 #: frappe/desk/doctype/global_search_settings/global_search_settings.js:19
@@ -21628,16 +21628,16 @@ msgstr "Nullstill"
 
 #: frappe/custom/doctype/customize_form/customize_form.js:136
 msgid "Reset All Customizations"
-msgstr ""
+msgstr "Tilbakestill alle egendefinisjoner"
 
 #: frappe/public/js/print_format_builder/print_format_builder.bundle.js:21
 #: frappe/public/js/workflow_builder/workflow_builder.bundle.js:37
 msgid "Reset Changes"
-msgstr "Nullstill endringer"
+msgstr "Tilbakestill endringer"
 
 #: frappe/public/js/frappe/widgets/chart_widget.js:306
 msgid "Reset Chart"
-msgstr ""
+msgstr "Tilbakestill diagram"
 
 #: frappe/public/js/frappe/views/dashboard/dashboard_view.js:39
 msgid "Reset Dashboard Customizations"
@@ -21645,91 +21645,91 @@ msgstr "Tilbakestill tilpasninger av oversiktspanelet"
 
 #: frappe/public/js/frappe/list/list_settings.js:228
 msgid "Reset Fields"
-msgstr ""
+msgstr "Tilbakestill felt"
 
 #: frappe/core/doctype/user/user.js:184 frappe/core/doctype/user/user.js:187
 msgid "Reset LDAP Password"
-msgstr ""
+msgstr "Tilbakestill LDAP-passord"
 
 #: frappe/custom/doctype/customize_form/customize_form.js:128
 msgid "Reset Layout"
-msgstr ""
+msgstr "Tilbakestill oppsett"
 
 #: frappe/core/doctype/user/user.js:235
 msgid "Reset OTP Secret"
-msgstr ""
+msgstr "Tilbakestill OTP-hemmelighet"
 
 #: frappe/core/doctype/user/user.js:168 frappe/www/login.html:199
 #: frappe/www/me.html:48 frappe/www/update-password.html:3
 #: frappe/www/update-password.html:32
 msgid "Reset Password"
-msgstr ""
+msgstr "Tilbakestill passordet"
 
 #. Label of the reset_password_key (Data) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "Reset Password Key"
-msgstr ""
+msgstr "Tilbakestill passordnøkkel"
 
 #. Label of the reset_password_link_expiry_duration (Duration) field in DocType
 #. 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Reset Password Link Expiry Duration"
-msgstr ""
+msgstr "Utløpstid for lenke til tilbakestilling av passord"
 
 #. Label of the reset_password_template (Link) field in DocType 'System
 #. Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Reset Password Template"
-msgstr ""
+msgstr "Mal for tilbakestilling av passord"
 
 #: frappe/core/page/permission_manager/permission_manager.js:116
 msgid "Reset Permissions for {0}?"
-msgstr ""
+msgstr "Tilbakestille tillatelser for {0}?"
 
 #: frappe/public/js/form_builder/components/Field.vue:114
 msgid "Reset To Default"
-msgstr ""
+msgstr "Tilbakestill til standard"
 
 #: frappe/public/js/frappe/utils/datatable.js:8
 msgid "Reset sorting"
-msgstr ""
+msgstr "Tilbakestill sortering"
 
 #: frappe/public/js/frappe/form/grid_row.js:433
 msgid "Reset to default"
-msgstr ""
+msgstr "Tilbakestill til standardinnstilling"
 
 #: frappe/core/doctype/role_permission_for_page_and_report/role_permission_for_page_and_report.js:19
 msgid "Reset to defaults"
-msgstr ""
+msgstr "Tilbakestill til standardinnstillinger"
 
 #: frappe/templates/emails/password_reset.html:3
 msgid "Reset your password"
-msgstr ""
+msgstr "Tilbakestill passordet ditt"
 
 #. Label of the resource_tab (Tab Break) field in DocType 'OAuth Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Resource"
-msgstr ""
+msgstr "Ressurs"
 
 #. Label of the resource_documentation (Data) field in DocType 'OAuth Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Resource Documentation"
-msgstr ""
+msgstr "Ressursdokumentasjon"
 
 #. Label of the resource_name (Data) field in DocType 'OAuth Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Resource Name"
-msgstr ""
+msgstr "Ressursnavn"
 
 #. Label of the resource_policy_uri (Data) field in DocType 'OAuth Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Resource Policy URI"
-msgstr ""
+msgstr "URI for ressursens retningslinjer"
 
 #. Label of the resource_tos_uri (Data) field in DocType 'OAuth Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
 msgid "Resource TOS URI"
-msgstr ""
+msgstr "URI for ressursens bruksvilkår"
 
 #. Label of the response (Text Editor) field in DocType 'Email Template'
 #. Label of the response_html (Code) field in DocType 'Email Template'
@@ -21749,34 +21749,34 @@ msgstr "Responstype"
 
 #: frappe/public/js/frappe/ui/notifications/notifications.js:414
 msgid "Rest of the day"
-msgstr ""
+msgstr "Resten av dagen"
 
 #: frappe/core/doctype/deleted_document/deleted_document.js:11
 #: frappe/core/doctype/deleted_document/deleted_document_list.js:48
 msgid "Restore"
-msgstr ""
+msgstr "Gjenopprett"
 
 #: frappe/core/page/permission_manager/permission_manager.js:509
 msgid "Restore Original Permissions"
-msgstr ""
+msgstr "Gjenopprett opprinnelige tillatelser"
 
 #: frappe/website/doctype/portal_settings/portal_settings.js:20
 msgid "Restore to default settings?"
-msgstr ""
+msgstr "Gjenopprette til standardinnstillinger?"
 
 #. Label of the restored (Check) field in DocType 'Deleted Document'
 #: frappe/core/doctype/deleted_document/deleted_document.json
 msgid "Restored"
-msgstr ""
+msgstr "Gjenopprettet"
 
 #: frappe/core/doctype/deleted_document/deleted_document.py:74
 msgid "Restoring Deleted Document"
-msgstr ""
+msgstr "Gjenoppretter slettet dokument"
 
 #. Label of the restrict_ip (Small Text) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "Restrict IP"
-msgstr ""
+msgstr "Begrens IP-adresse"
 
 #. Label of the restrict_to_domain (Link) field in DocType 'DocType'
 #. Label of the restrict_to_domain (Link) field in DocType 'Module Def'
@@ -21786,62 +21786,62 @@ msgstr ""
 #: frappe/core/doctype/module_def/module_def.json
 #: frappe/core/doctype/page/page.json frappe/core/doctype/role/role.json
 msgid "Restrict To Domain"
-msgstr ""
+msgstr "Begrens til domene"
 
 #. Label of the restrict_to_domain (Link) field in DocType 'Workspace'
 #. Label of the restrict_to_domain (Link) field in DocType 'Workspace Shortcut'
 #: frappe/desk/doctype/workspace/workspace.json
 #: frappe/desk/doctype/workspace_shortcut/workspace_shortcut.json
 msgid "Restrict to Domain"
-msgstr ""
+msgstr "Begrens til domene"
 
 #. Description of the 'Restrict IP' (Small Text) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "Restrict user from this IP address only. Multiple IP addresses can be added by separating with commas. Also accepts partial IP addresses like (111.111.111)"
-msgstr ""
+msgstr "Begrens brukeren kun fra denne IP-adressen. Flere IP-adresser kan legges til ved å skille dem med komma. Godtar også delvise IP-adresser som (111.111.111)"
 
 #: frappe/public/js/frappe/list/list_view.js:199
 msgctxt "Title of message showing restrictions in list view"
 msgid "Restrictions"
-msgstr ""
+msgstr "Restriksjoner"
 
 #: frappe/public/js/frappe/ui/toolbar/awesome_bar.js:382
 #: frappe/public/js/frappe/ui/toolbar/awesome_bar.js:397
 msgid "Result"
-msgstr ""
+msgstr "Resultat"
 
 #: frappe/email/doctype/email_queue/email_queue_list.js:27
 msgid "Resume Sending"
-msgstr ""
+msgstr "Gjenoppta sending"
 
 #. Label of the retry (Int) field in DocType 'Email Queue'
 #: frappe/core/doctype/data_import/data_import.js:110
 #: frappe/desk/page/setup_wizard/setup_wizard.js:297
 #: frappe/email/doctype/email_queue/email_queue.json
 msgid "Retry"
-msgstr ""
+msgstr "Prøv på nytt"
 
 #: frappe/email/doctype/email_queue/email_queue_list.js:47
 msgid "Retry Sending"
-msgstr ""
+msgstr "Prøv å sende på nytt"
 
 #: frappe/www/qrcode.html:15
 msgid "Return to the Verification screen and enter the code displayed by your authentication app"
-msgstr ""
+msgstr "Gå tilbake til bekreftelsesskjermen og skriv inn koden som vises av autentiseringsappen din."
 
 #. Label of the reverse (Check) field in DocType 'Desktop Icon'
 #: frappe/desk/doctype/desktop_icon/desktop_icon.json
 msgid "Reverse Icon Color"
-msgstr ""
+msgstr "Omvendt ikonfarge"
 
 #: frappe/database/schema.py:161
 msgid "Reverting length to {0} for '{1}' in '{2}'. Setting the length as {3} will cause truncation of data."
-msgstr ""
+msgstr "Tilbakestiller lengden til {0} for '{1}' i '{2}'. Hvis lengden settes til {3} , vil dataene bli avkortet."
 
 #. Label of the revocation_uri (Data) field in DocType 'Connected App'
 #: frappe/integrations/doctype/connected_app/connected_app.json
 msgid "Revocation URI"
-msgstr ""
+msgstr "Tilbakekallings-URI"
 
 #: frappe/www/third_party_apps.html:47
 msgid "Revoke"
@@ -21886,7 +21886,7 @@ msgstr "Høyre senter"
 #. Label of the robots_txt (Code) field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Robots.txt"
-msgstr ""
+msgstr "Robots.txt"
 
 #. Label of the role (Link) field in DocType 'Custom DocPerm'
 #. Label of the roles (Table) field in DocType 'Custom Role'
@@ -21923,43 +21923,43 @@ msgstr "Rolle"
 
 #: frappe/core/doctype/role/role.js:8
 msgid "Role 'All' will be given to all system + website users."
-msgstr ""
+msgstr "Rollen «Alle» vil bli gitt til alle system- og nettstedbrukere."
 
 #: frappe/core/doctype/role/role.js:13
 msgid "Role 'Desk User' will be given to all system users."
-msgstr ""
+msgstr "Rollen ‘Desk User’ gis til alle systembrukere."
 
 #. Label of the role_name (Data) field in DocType 'Role'
 #. Label of the role_profile (Data) field in DocType 'Role Profile'
 #: frappe/core/doctype/role/role.json
 #: frappe/core/doctype/role_profile/role_profile.json
 msgid "Role Name"
-msgstr ""
+msgstr "Rollenavn"
 
 #. Name of a DocType
 #. Label of a Link in the Users Workspace
 #: frappe/core/doctype/role_permission_for_page_and_report/role_permission_for_page_and_report.json
 #: frappe/core/workspace/users/users.json
 msgid "Role Permission for Page and Report"
-msgstr ""
+msgstr "Rolletillatelse for side og rapport"
 
 #. Label of the permissions_section (Section Break) field in DocType 'User
 #. Document Type'
 #: frappe/core/doctype/user_document_type/user_document_type.json
 #: frappe/public/js/frappe/roles_editor.js:103
 msgid "Role Permissions"
-msgstr ""
+msgstr "Rolletillatelser"
 
 #. Label of a Link in the Users Workspace
 #: frappe/core/page/permission_manager/permission_manager.js:4
 #: frappe/core/workspace/users/users.json
 msgid "Role Permissions Manager"
-msgstr ""
+msgstr "Ansvarlig for rolletillatelser"
 
 #: frappe/public/js/frappe/list/list_view.js:1929
 msgctxt "Button in list view menu"
 msgid "Role Permissions Manager"
-msgstr ""
+msgstr "Ansvarlig for rolletillatelser"
 
 #. Name of a DocType
 #. Label of the role_profile_name (Link) field in DocType 'User'
@@ -21970,7 +21970,7 @@ msgstr ""
 #: frappe/core/doctype/user_role_profile/user_role_profile.json
 #: frappe/core/workspace/users/users.json
 msgid "Role Profile"
-msgstr ""
+msgstr "Modulprofil"
 
 #. Label of the role_profiles (Table MultiSelect) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
@@ -21980,7 +21980,7 @@ msgstr "Rolleprofiler"
 #. Name of a DocType
 #: frappe/core/doctype/role_replication/role_replication.json
 msgid "Role Replication"
-msgstr ""
+msgstr "Replikering av roller"
 
 #. Label of the role_and_level (Section Break) field in DocType 'Custom
 #. DocPerm'
@@ -21988,11 +21988,11 @@ msgstr ""
 #: frappe/core/doctype/custom_docperm/custom_docperm.json
 #: frappe/core/doctype/docperm/docperm.json
 msgid "Role and Level"
-msgstr ""
+msgstr "Rolle og nivå"
 
 #: frappe/core/doctype/user/user.py:365
 msgid "Role has been set as per the user type {0}"
-msgstr ""
+msgstr "Rollen er angitt i henhold til brukertypen {0}"
 
 #. Label of the roles (Table) field in DocType 'Page'
 #. Label of the roles (Table) field in DocType 'Report'
@@ -22020,35 +22020,35 @@ msgstr "Roller"
 #. Label of the roles_permissions_tab (Tab Break) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "Roles & Permissions"
-msgstr ""
+msgstr "Roller og tillatelser"
 
 #. Label of the roles (Table) field in DocType 'Role Profile'
 #. Label of the roles (Table) field in DocType 'User'
 #: frappe/core/doctype/role_profile/role_profile.json
 #: frappe/core/doctype/user/user.json
 msgid "Roles Assigned"
-msgstr ""
+msgstr "Tildelte roller"
 
 #. Label of the roles_html (HTML) field in DocType 'Role Profile'
 #. Label of the roles_html (HTML) field in DocType 'User'
 #: frappe/core/doctype/role_profile/role_profile.json
 #: frappe/core/doctype/user/user.json
 msgid "Roles HTML"
-msgstr ""
+msgstr "Roller HTML"
 
 #. Label of the roles_html (HTML) field in DocType 'Role Permission for Page
 #. and Report'
 #: frappe/core/doctype/role_permission_for_page_and_report/role_permission_for_page_and_report.json
 msgid "Roles Html"
-msgstr ""
+msgstr "Roller HTML"
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:7
 msgid "Roles can be set for users from their User page."
-msgstr ""
+msgstr "Roller kan angis for brukere fra brukersiden deres."
 
 #: frappe/utils/nestedset.py:293
 msgid "Root {0} cannot be deleted"
-msgstr ""
+msgstr "Root {0} kan ikke slettes"
 
 #. Option for the 'Rule' (Select) field in DocType 'Assignment Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
@@ -22089,34 +22089,34 @@ msgstr "Rute"
 #. Name of a DocType
 #: frappe/desk/doctype/route_history/route_history.json
 msgid "Route History"
-msgstr ""
+msgstr "Navigasjonshistorikk"
 
 #. Label of the route_redirects (Table) field in DocType 'Website Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Route Redirects"
-msgstr ""
+msgstr "Omdirigeringer av stier"
 
 #. Description of the 'Home Page' (Data) field in DocType 'Role'
 #: frappe/core/doctype/role/role.json
 msgid "Route: Example \"/app\""
-msgstr ""
+msgstr "Sti: for eksempel \"/app\""
 
 #: frappe/model/base_document.py:852 frappe/model/document.py:779
 msgid "Row"
-msgstr ""
+msgstr "Rad"
 
 #: frappe/core/doctype/version/version_view.html:74
 msgid "Row #"
-msgstr ""
+msgstr "Rad #"
 
 #: frappe/core/doctype/doctype/doctype.py:1832
 #: frappe/core/doctype/doctype/doctype.py:1842
 msgid "Row # {0}: Non administrator user can not set the role {1} to the custom doctype"
-msgstr ""
+msgstr "Rad # {0}: En bruker som ikke er administrator kan ikke angi rollen {1} til den egendefinerte dokumenttypen"
 
 #: frappe/model/base_document.py:982
 msgid "Row #{0}:"
-msgstr ""
+msgstr "Rad #{0}:"
 
 #: frappe/core/doctype/doctype/doctype.py:492
 msgid "Row #{}: Fieldname is required"
@@ -22130,24 +22130,24 @@ msgstr "Radformat"
 #. Label of the row_indexes (Code) field in DocType 'Data Import Log'
 #: frappe/core/doctype/data_import_log/data_import_log.json
 msgid "Row Indexes"
-msgstr ""
+msgstr "Radindekser"
 
 #. Label of the row_name (Data) field in DocType 'Property Setter'
 #: frappe/custom/doctype/property_setter/property_setter.json
 msgid "Row Name"
-msgstr ""
+msgstr "Radnavn"
 
 #: frappe/core/doctype/data_import/data_import.js:483
 msgid "Row Number"
-msgstr ""
+msgstr "Radnummer"
 
 #: frappe/core/doctype/version/version_view.html:69
 msgid "Row Values Changed"
-msgstr ""
+msgstr "Radverdier endret"
 
 #: frappe/core/doctype/data_import/data_import.js:367
 msgid "Row {0}"
-msgstr ""
+msgstr "Rad {0}"
 
 #: frappe/custom/doctype/customize_form/customize_form.py:353
 msgid "Row {0}: Not allowed to disable Mandatory for standard fields"
@@ -22162,14 +22162,14 @@ msgstr "Rad {0}: Å aktivere \"Tillat ved registrering\" er sperret for standard
 #: frappe/core/doctype/audit_trail/audit_trail.json
 #: frappe/core/doctype/version/version_view.html:33
 msgid "Rows Added"
-msgstr ""
+msgstr "Rader lagt til"
 
 #. Label of the rows_removed_section (Section Break) field in DocType 'Audit
 #. Trail'
 #: frappe/core/doctype/audit_trail/audit_trail.json
 #: frappe/core/doctype/version/version_view.html:33
 msgid "Rows Removed"
-msgstr ""
+msgstr "Rader fjernet"
 
 #. Label of the rows_threshold_for_grid_search (Int) field in DocType 'DocType'
 #: frappe/core/doctype/doctype/doctype.json
@@ -22185,21 +22185,21 @@ msgstr "Regel"
 #. Naming Rule'
 #: frappe/core/doctype/document_naming_rule/document_naming_rule.json
 msgid "Rule Conditions"
-msgstr ""
+msgstr "Regelbetingelser"
 
 #: frappe/permissions.py:675
 msgid "Rule for this doctype, role, permlevel and if-owner combination already exists."
-msgstr ""
+msgstr "Regelen finnes allerede for denne kombinasjonen av DocType/rolle/rettighetsnivå/‘hvis eier’."
 
 #. Group in DocType's connections
 #: frappe/core/doctype/doctype/doctype.json
 msgid "Rules"
-msgstr ""
+msgstr "Regler"
 
 #. Description of the 'Transitions' (Table) field in DocType 'Workflow'
 #: frappe/workflow/doctype/workflow/workflow.json
 msgid "Rules defining transition of state in the workflow."
-msgstr ""
+msgstr "Regler som definerer overgang av tilstand i arbeidsflyten."
 
 #. Description of the 'Transition Rules' (Section Break) field in DocType
 #. 'Workflow'
@@ -22210,26 +22210,26 @@ msgstr "Regler for hvordan dokumenter skifter status, f.eks. neste status og hvi
 #. Description of the 'Priority' (Int) field in DocType 'Document Naming Rule'
 #: frappe/core/doctype/document_naming_rule/document_naming_rule.json
 msgid "Rules with higher priority number will be applied first."
-msgstr ""
+msgstr "Regler med høyere prioritetsnummer vil bli brukt først."
 
 #. Label of the dormant_days (Int) field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Run Jobs only Daily if Inactive For (Days)"
-msgstr ""
+msgstr "Kjør bare jobber daglig hvis inaktiv i (dager)"
 
 #. Description of the 'Enable Scheduled Jobs' (Check) field in DocType 'System
 #. Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Run scheduled jobs only if checked"
-msgstr ""
+msgstr "Kjør planlagte jobber kun hvis avmerket"
 
 #: frappe/core/report/prepared_report_analytics/prepared_report_analytics.py:57
 msgid "Runtime in Minutes"
-msgstr ""
+msgstr "Kjøretid i minutter"
 
 #: frappe/core/report/prepared_report_analytics/prepared_report_analytics.py:57
 msgid "Runtime in Seconds"
-msgstr ""
+msgstr "Kjøretid i sekunder"
 
 #. Option for the 'Type' (Select) field in DocType 'Communication'
 #. Option for the 'Two Factor Authentication method' (Select) field in DocType
@@ -22244,32 +22244,32 @@ msgstr "SMS"
 #. Label of the sms_gateway_url (Small Text) field in DocType 'SMS Settings'
 #: frappe/core/doctype/sms_settings/sms_settings.json
 msgid "SMS Gateway URL"
-msgstr ""
+msgstr "URL til SMS-gateway"
 
 #. Name of a DocType
 #: frappe/core/doctype/sms_log/sms_log.json
 msgid "SMS Log"
-msgstr ""
+msgstr "SMS-logg"
 
 #. Name of a DocType
 #: frappe/core/doctype/sms_parameter/sms_parameter.json
 msgid "SMS Parameter"
-msgstr ""
+msgstr "SMS-parameter"
 
 #. Name of a DocType
 #. Label of a Link in the Integrations Workspace
 #: frappe/core/doctype/sms_settings/sms_settings.json
 #: frappe/integrations/workspace/integrations/integrations.json
 msgid "SMS Settings"
-msgstr ""
+msgstr "SMS-innstillinger"
 
 #: frappe/core/doctype/sms_settings/sms_settings.py:114
 msgid "SMS sent successfully"
-msgstr ""
+msgstr "SMS vellykket sendt"
 
 #: frappe/templates/includes/login/login.js:369
 msgid "SMS was not sent. Please contact Administrator."
-msgstr ""
+msgstr "SMS-en ble ikke sendt. Ta kontakt med administratoren."
 
 #: frappe/email/doctype/email_account/email_account.py:212
 msgid "SMTP Server is required"
