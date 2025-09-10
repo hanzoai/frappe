@@ -41,6 +41,7 @@
    "label": "Last Updated"
   },
   {
+   "depends_on": "eval:!doc.current",
    "fieldname": "sign_out",
    "fieldtype": "Button",
    "label": "Sign Out"
@@ -72,7 +73,7 @@
  "is_virtual": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-25 14:34:28.765780",
+ "modified": "2025-09-10 11:38:09.491850",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User Session Display",
