@@ -6,7 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "id",
-  "current",
+  "is_current",
   "ip_address",
   "user_agent",
   "column_break_cjgl",
@@ -41,7 +41,7 @@
    "label": "Last Updated"
   },
   {
-   "depends_on": "eval:!doc.current",
+   "depends_on": "eval:!doc.is_current",
    "fieldname": "sign_out",
    "fieldtype": "Button",
    "label": "Sign Out"
@@ -56,16 +56,16 @@
    "label": "Actions"
   },
   {
-   "default": "0",
-   "fieldname": "current",
-   "fieldtype": "Check",
-   "in_list_view": 1,
-   "label": "Current?"
-  },
-  {
    "fieldname": "user_agent",
    "fieldtype": "Small Text",
    "label": "User Agent"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_current",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Current"
   }
  ],
  "grid_page_length": 50,
@@ -73,7 +73,7 @@
  "is_virtual": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-09-10 11:38:09.491850",
+ "modified": "2025-09-10 11:43:47.325045",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User Session Display",

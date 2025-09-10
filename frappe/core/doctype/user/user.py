@@ -174,7 +174,7 @@ class User(Document):
 					"modified_by": session.user,
 					"ip_address": data.session_ip,
 					"last_updated": data.last_updated,
-					"current": session.sid == frappe.session.sid,
+					"is_current": session.sid == frappe.session.sid,
 					"session_created": data.creation,
 					"user_agent": data.user_agent,
 				}

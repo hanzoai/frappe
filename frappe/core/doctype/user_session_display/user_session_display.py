@@ -14,9 +14,9 @@ class UserSessionDisplay(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		current: DF.Check
 		id: DF.Data | None
 		ip_address: DF.Data | None
+		is_current: DF.Check
 		last_updated: DF.Datetime | None
 		parent: DF.Data
 		parentfield: DF.Data
