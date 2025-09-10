@@ -1983,10 +1983,8 @@ def get_lazy_controller(doctype):
 
 		# Dynamically construct a class that subclasses LazyDocument and original controller.
 		lazy_controller = type(f"Lazy{original_controller.__name__}", (LazyDocument, original_controller), {})
-		for fieldname, child_doctype in meta._table_doctypes.items():
-			if meta.get_field(fieldname).is_virtual:
-				continue
-			setattr(lazy_controller, fieldname, LazyChildTable(fieldname, child_doctype))
+		for df in meta.get_table_fields(include_virtual=False):
+			setattr(lazy_controller, df.fieldname, LazyChildTable(df.fieldname, df.options))
 
 		lazy_controllers[doctype] = lazy_controller
 	return lazy_controllers[doctype]

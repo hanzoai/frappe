@@ -221,8 +221,8 @@ class Meta(Document):
 
 		return set_only_once_fields
 
-	def get_table_fields(self):
-		return self._table_fields
+	def get_table_fields(self, include_virtual=True):
+		return self._table_fields if include_virtual else self._non_virtual_table_fields
 
 	def get_global_search_fields(self):
 		"""Return list of fields with `in_global_search` set and `name` if set."""
@@ -491,6 +491,11 @@ class Meta(Document):
 			self._table_fields = DOCTYPE_TABLE_FIELDS
 		else:
 			self._table_fields = self.get("fields", {"fieldtype": ["in", table_fields]})
+			self._non_virtual_table_fields = (
+				[]
+				if self.is_virtual
+				else self.get("fields", {"fieldtype": ["in", table_fields], "is_virtual": 0})
+			)
 
 		# table fieldname: doctype map
 		self._table_doctypes = {field.fieldname: field.options for field in self._table_fields}
