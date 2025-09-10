@@ -145,7 +145,44 @@ def import_controller(doctype):
 	if not issubclass(class_, BaseDocument):
 		raise ImportError(f"{doctype}: {classname} is not a subclass of BaseDocument")
 
-	return _get_extended_class(class_, doctype)
+	class_ = _get_extended_class(class_, doctype)
+	return _update_virtual_ct_props(class_, doctype)
+
+
+def _update_virtual_ct_props(class_, doctype):
+	if doctype in DOCTYPES_FOR_DOCTYPE or getattr(class_, "_virtual_ct_props_updated", False):
+		return class_
+
+	meta = frappe.get_meta(doctype)
+	for df in meta.get_table_fields():
+		if df.is_virtual:
+			_update_virtual_ct_prop(class_, df)
+
+	class_._virtual_ct_props_updated = True
+	return class_
+
+
+def _update_virtual_ct_prop(class_, df):
+	fieldname = df.fieldname
+	original_prop = getattr(class_, fieldname, None)
+
+	def virtual_ct_prop(self):
+		if original_prop and is_a_property(original_prop):
+			value = original_prop.__get__(self, type(self))
+
+		elif options := getattr(df, "options", None):
+			value = self._evaluate_virtual_field_options(options)
+
+		else:
+			# no property or options found
+			# to compare, default value is None for non-child table virtual fields
+			value = []
+
+		# converting to document objects + caching
+		self.set(fieldname, value)
+		return self.__dict__[fieldname]
+
+	setattr(class_, fieldname, property(virtual_ct_prop))
 
 
 def _get_extended_class(base_class, doctype):
@@ -462,6 +499,15 @@ class BaseDocument:
 
 		return self.meta.get_table_fields()
 
+	def _evaluate_virtual_field_options(self, options):
+		from frappe.utils.safe_exec import get_safe_globals
+
+		return frappe.safe_eval(
+			code=options,
+			eval_globals=get_safe_globals(),
+			eval_locals={"doc": self},
+		)
+
 	def get_valid_dict(
 		self, sanitize=True, convert_dates_to_str=False, ignore_nulls=False, ignore_virtual=False
 	) -> _dict:
@@ -489,13 +535,7 @@ class BaseDocument:
 						value = getattr(self, fieldname)
 
 					elif options := getattr(df, "options", None):
-						from frappe.utils.safe_exec import get_safe_globals
-
-						value = frappe.safe_eval(
-							code=options,
-							eval_globals=get_safe_globals(),
-							eval_locals={"doc": self},
-						)
+						value = self._evaluate_virtual_field_options(options)
 
 				fieldtype = df.fieldtype
 				if isinstance(value, list) and fieldtype not in table_fields:
@@ -610,7 +650,7 @@ class BaseDocument:
 		doc["doctype"] = self.doctype
 
 		for fieldname in self._table_fieldnames:
-			children = self.get(fieldname) or []
+			children = getattr(self, fieldname) or []
 			doc[fieldname] = [
 				d.as_dict(
 					convert_dates_to_str=convert_dates_to_str,

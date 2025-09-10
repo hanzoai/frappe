@@ -493,7 +493,7 @@ class Meta(Document):
 			self._table_fields = self.get("fields", {"fieldtype": ["in", table_fields]})
 			self._non_virtual_table_fields = (
 				[]
-				if self.is_virtual
+				if self.get("is_virtual")
 				else self.get("fields", {"fieldtype": ["in", table_fields], "is_virtual": 0})
 			)
 
