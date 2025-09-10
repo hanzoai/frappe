@@ -399,6 +399,7 @@ class DatabaseQuery:
 			"user",
 			"version",
 			"global",
+			"sleep",
 		]
 
 		def _raise_exception():
@@ -1111,7 +1112,7 @@ class DatabaseQuery:
 			r"select\b.*\bfrom",
 		}
 
-		if any(re.search("\b" + pattern + "\b", _lower) for pattern in subquery_indicators):
+		if any(re.search(r"\b" + pattern + r"\b", _lower) for pattern in subquery_indicators):
 			frappe.throw(_("Cannot use sub-query here."))
 
 		blacklisted_sql_functions = {
