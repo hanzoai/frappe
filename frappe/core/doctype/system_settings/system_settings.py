@@ -39,6 +39,7 @@ class SystemSettings(Document):
 			"yyyy-mm-dd", "dd-mm-yyyy", "dd/mm/yyyy", "dd.mm.yyyy", "mm/dd/yyyy", "mm-dd-yyyy"
 		]
 		default_app: DF.Literal[None]
+		delete_background_exported_reports_after: DF.Int
 		deny_multiple_sessions: DF.Check
 		disable_change_log_notification: DF.Check
 		disable_document_sharing: DF.Check
@@ -72,6 +73,7 @@ class SystemSettings(Document):
 		max_file_size: DF.Int
 		minimum_password_score: DF.Literal["2", "3", "4"]
 		max_report_rows: DF.Int
+		max_signups_allowed_per_hour: DF.Int
 		number_format: DF.Literal[
 			"#,###.##",
 			"#.###,##",

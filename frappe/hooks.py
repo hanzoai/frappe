@@ -114,6 +114,7 @@ permission_query_conditions = {
 	"Workflow Action": "frappe.workflow.doctype.workflow_action.workflow_action.get_permission_query_conditions",
 	"Prepared Report": "frappe.core.doctype.prepared_report.prepared_report.get_permission_query_condition",
 	"File": "frappe.core.doctype.file.file.get_permission_query_conditions",
+	"User Invitation": "frappe.core.doctype.user_invitation.user_invitation.get_permission_query_conditions",
 }
 
 has_permission = {
@@ -131,6 +132,7 @@ has_permission = {
 	"File": "frappe.core.doctype.file.file.has_permission",
 	"Prepared Report": "frappe.core.doctype.prepared_report.prepared_report.has_permission",
 	"Notification Settings": "frappe.desk.doctype.notification_settings.notification_settings.has_permission",
+	"User Invitation": "frappe.core.doctype.user_invitation.user_invitation.has_permission",
 }
 
 has_website_permission = {"Address": "frappe.contacts.doctype.address.address.has_website_permission"}
@@ -234,6 +236,7 @@ scheduler_events = {
 		"frappe.twofactor.delete_all_barcodes_for_users",
 		"frappe.oauth.delete_oauth2_data",
 		"frappe.website.doctype.web_page.web_page.check_publish_status",
+		"frappe.desk.utils.delete_old_exported_report_files",
 	],
 	"daily": [
 		"frappe.desk.doctype.event.event.send_event_digest",
@@ -253,6 +256,7 @@ scheduler_events = {
 		"frappe.automation.doctype.auto_repeat.auto_repeat.make_auto_repeat_entry",
 		"frappe.core.doctype.log_settings.log_settings.run_log_clean_up",
 		"frappe.social.doctype.energy_point_settings.energy_point_settings.allocate_review_points",
+		"frappe.core.doctype.user_invitation.user_invitation.mark_expired_invitations",
 	],
 	"weekly_long": [
 		"frappe.integrations.doctype.dropbox_settings.dropbox_settings.take_backups_weekly",
@@ -570,3 +574,9 @@ persistent_cache_keys = [
 	"rate-limit-counter-*",
 	"rl:*",
 ]
+
+user_invitation = {
+	"allowed_roles": {
+		"System Manager": [],
+	},
+}
