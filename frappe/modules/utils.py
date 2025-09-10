@@ -308,7 +308,7 @@ def make_boilerplate(
 		base_class = "NestedSet"
 		base_class_import = "from frappe.utils.nestedset import NestedSet"
 
-	if doc.get("is_virtual"):
+	if doc.get("is_virtual") and not doc.get("istable"):
 		controller_body = indent(
 			dedent(
 				"""
