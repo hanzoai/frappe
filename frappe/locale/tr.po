@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-09-07 09:32+0000\n"
-"PO-Revision-Date: 2025-09-07 17:01\n"
+"PO-Revision-Date: 2025-09-11 17:58\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -971,7 +971,7 @@ msgstr "Yaklaşık {0} saniye kaldı"
 
 #: frappe/templates/emails/user_invitation.html:16
 msgid "Accept Invitation"
-msgstr ""
+msgstr "Daveti Kabul Et"
 
 #. Option for the 'Status' (Select) field in DocType 'User Invitation'
 #: frappe/core/doctype/user_invitation/user_invitation.json
@@ -981,7 +981,7 @@ msgstr "Kabul Edildi"
 #. Label of the accepted_at (Datetime) field in DocType 'User Invitation'
 #: frappe/core/doctype/user_invitation/user_invitation.json
 msgid "Accepted At"
-msgstr ""
+msgstr "Kabul Edilme Tarihi"
 
 #. Label of the access_control_section (Section Break) field in DocType 'Web
 #. Form'
@@ -21840,7 +21840,7 @@ msgstr "İptal Et"
 #. Option for the 'Status' (Select) field in DocType 'OAuth Bearer Token'
 #: frappe/integrations/doctype/oauth_bearer_token/oauth_bearer_token.json
 msgid "Revoked"
-msgstr ""
+msgstr "İptal Edildi"
 
 #. Option for the 'Content Type' (Select) field in DocType 'Web Page'
 #: frappe/website/doctype/web_page/web_page.js:92
