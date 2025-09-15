@@ -24,6 +24,7 @@
   "column_break_7",
   "float_precision",
   "currency_precision",
+  "db_decimal_precision",
   "rounding_method",
   "show_absolute_datetime_in_timeline",
   "permissions",
@@ -192,6 +193,13 @@
    "fieldtype": "Select",
    "label": "Currency Precision",
    "options": "\n0\n1\n2\n3\n4\n5\n6\n7\n8\n9"
+  },
+  {
+   "default": "21,9",
+   "description": "Database decimal precision for Float, Currency, and Percent fields with high precision (e.g., 21,9). This controls the database column definition decimal(total_digits, decimal_places).",
+   "fieldname": "db_decimal_precision",
+   "fieldtype": "Data",
+   "label": "Database Decimal Precision"
   },
   {
    "fieldname": "sec_backup_limit",

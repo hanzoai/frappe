@@ -5,6 +5,12 @@ from frappe import _
 from frappe.utils import cint, cstr, flt
 from frappe.utils.defaults import get_not_null_defaults
 
+
+def get_db_decimal_precision():
+	"""Get database decimal precision from System Settings, defaults to '21,9'"""
+	precision = frappe.db.get_single_value("System Settings", "db_decimal_precision")
+	return precision.strip() if precision else "21,9"
+
 # This matches anything that isn't [a-zA-Z0-9_]
 SPECIAL_CHAR_PATTERN = re.compile(r"[\W]", flags=re.UNICODE)
 
@@ -432,7 +438,7 @@ def get_definition(fieldtype, precision=None, length=None, *, options=None):
 		# This check needs to exist for backward compatibility.
 		# Till V13, default size used for float, currency and percent are (18, 6).
 		if fieldtype in ["Float", "Currency", "Percent"] and cint(precision) > 6:
-			size = "21,9"
+			size = get_db_decimal_precision()
 
 		if length:
 			if coltype == "varchar":

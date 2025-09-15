@@ -35,6 +35,7 @@ class SystemSettings(Document):
 		country: DF.Link | None
 		currency: DF.Link | None
 		currency_precision: DF.Literal["", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+		db_decimal_precision: DF.Data | None
 		date_format: DF.Literal[
 			"yyyy-mm-dd", "dd-mm-yyyy", "dd/mm/yyyy", "dd.mm.yyyy", "mm/dd/yyyy", "mm-dd-yyyy"
 		]
@@ -141,6 +142,7 @@ class SystemSettings(Document):
 		self.validate_user_pass_login()
 		self.validate_backup_limit()
 		self.validate_file_extensions()
+		self.validate_db_decimal_precision()
 
 		if not self.link_field_results_limit:
 			self.link_field_results_limit = 10
@@ -178,6 +180,24 @@ class SystemSettings(Document):
 		self.allowed_file_extensions = "\n".join(
 			ext.strip().upper() for ext in self.allowed_file_extensions.strip().splitlines()
 		)
+
+	def validate_db_decimal_precision(self):
+		if not self.db_decimal_precision:
+			return
+		
+		import re
+		# Validate format: digits,digits (e.g., 21,9)
+		pattern = r'^\d{1,2},\d{1,2}$'
+		if not re.match(pattern, self.db_decimal_precision.strip()):
+			frappe.throw(_("Database Decimal Precision must be in format 'total,decimal' (e.g., '21,9')"))
+		
+		total, decimal = map(int, self.db_decimal_precision.split(','))
+		if total < decimal:
+			frappe.throw(_("Total digits must be greater than or equal to decimal digits"))
+		if total > 65 or decimal > 30:
+			frappe.throw(_("Total digits cannot exceed 65 and decimal digits cannot exceed 30"))
+		if total < 1 or decimal < 0:
+			frappe.throw(_("Total digits must be at least 1 and decimal digits must be non-negative"))
 
 	def on_update(self):
 		self.set_defaults()
