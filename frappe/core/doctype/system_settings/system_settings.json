@@ -80,6 +80,7 @@
   "store_attached_pdf_document",
   "prepared_report_section",
   "max_auto_email_report_per_user",
+  "delete_background_exported_reports_after",
   "system_updates_section",
   "disable_system_update_notification",
   "disable_change_log_notification",
@@ -623,6 +624,14 @@
    "fieldname": "max_report_rows",
    "fieldtype": "Int",
    "label": "Max Report Rows"
+  },
+  {
+   "default": "48",
+   "description": "Defines how long exported reports sent via email are kept in the system. Older files will be automatically deleted.",
+   "fieldname": "delete_background_exported_reports_after",
+   "fieldtype": "Int",
+   "label": "Delete Background Exported Reports After (Hours)",
+   "non_negative": 1
   }
  ],
  "icon": "fa fa-cog",

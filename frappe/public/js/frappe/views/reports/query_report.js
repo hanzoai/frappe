@@ -1501,7 +1501,14 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		this.export_dialog = frappe.report_utils.get_export_dialog(
 			__(this.report_name),
 			extra_fields,
-			({ file_format, include_indentation, csv_delimiter, csv_quoting }) => {
+
+			({
+				file_format,
+				include_indentation,
+				csv_delimiter,
+				csv_quoting,
+				export_in_background,
+			}) => {
 				this.make_access_log("Export", file_format);
 
 				let filters = this.get_filter_values(true);
@@ -1524,7 +1531,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				if (visible_idx.length + 1 === this.data?.length) {
 					visible_idx.push(visible_idx.length);
 				}
-
 				const args = {
 					cmd: "frappe.desk.query_report.export_query",
 					report_name: this.report_name,
@@ -1535,10 +1541,16 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 					csv_delimiter,
 					csv_quoting,
 					include_indentation,
+					export_in_background,
 				};
-
-				open_url_post(frappe.request.url, args);
-
+				if (export_in_background) {
+					frappe.call({
+						method: args.cmd,
+						args,
+					});
+				} else {
+					open_url_post(frappe.request.url, args);
+				}
 				this.export_dialog.hide();
 			}
 		);
