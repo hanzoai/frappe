@@ -78,25 +78,9 @@
   "hide_footer_in_auto_email_reports",
   "attach_view_link",
   "store_attached_pdf_document",
-<<<<<<< HEAD
   "prepared_report_section",
   "max_auto_email_report_per_user",
-=======
-  "welcome_email_template",
-  "reset_password_template",
-  "files_tab",
-  "files_section",
-  "max_file_size",
-  "allow_guests_to_upload_files",
-  "force_web_capture_mode_for_uploads",
-  "strip_exif_metadata_from_uploaded_images",
   "delete_background_exported_reports_after",
-  "column_break_uqma",
-  "allowed_file_extensions",
-  "app_tab",
-  "default_app",
-  "updates_tab",
->>>>>>> c52e5157b4 (feat: allow users to export report in background (#33861))
   "system_updates_section",
   "disable_system_update_notification",
   "disable_change_log_notification",
@@ -640,25 +624,6 @@
    "fieldname": "max_report_rows",
    "fieldtype": "Int",
    "label": "Max Report Rows"
-<<<<<<< HEAD
-=======
-  },
-  {
-   "default": "0",
-   "fieldname": "show_absolute_datetime_in_timeline",
-   "fieldtype": "Check",
-   "label": "Show Absolute Datetime in Timeline"
-  },
-  {
-   "fieldname": "api_logging_section",
-   "fieldtype": "Section Break",
-   "label": "API Logging"
-  },
-  {
-   "default": "0",
-   "fieldname": "log_api_requests",
-   "fieldtype": "Check",
-   "label": "Log API Requests"
   },
   {
    "default": "48",
@@ -667,14 +632,6 @@
    "fieldtype": "Int",
    "label": "Delete Background Exported Reports After (Hours)",
    "non_negative": 1
-  },
-  {
-   "default": "300",
-   "fieldname": "max_signups_allowed_per_hour",
-   "fieldtype": "Int",
-   "label": "Max signups allowed per hour",
-   "non_negative": 1
->>>>>>> c52e5157b4 (feat: allow users to export report in background (#33861))
   }
  ],
  "icon": "fa fa-cog",
