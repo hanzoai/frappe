@@ -1,9 +1,16 @@
+@mixin grid-focus() {
+	outline: none;
+	border: 1px solid var(--gray-400) !important;
+}
 .form-grid {
 	border: 1px solid var(--table-border-color);
 	border-radius: var(--border-radius-md);
 	color: var(--text-color);
 	min-height: 150px;
 	background-color: var(--subtle-accent);
+	&:focus-visible {
+		@include grid-focus();
+	}
 }
 
 .form-grid.error {
@@ -687,6 +694,9 @@
 		display: grid;
 		grid-auto-rows: min-content;
 		border: unset;
+		&:focus-visible {
+			@include grid-focus();
+		}
 		.grid-static-col.col-xs-1 {
 			flex: 1 0 60px;
 			width: 60px;
