@@ -57,10 +57,7 @@ def provide_binary_file(filename: str, extension: str, content: bytes) -> None:
 	"""Provide a binary file to the client."""
 	frappe.response["type"] = "binary"
 	frappe.response["filecontent"] = content
-<<<<<<< HEAD
 	frappe.response["filename"] = f"{filename}.{extension}"
-=======
-	frappe.response["filename"] = f"{_(filename)}.{extension}"
 
 
 def send_report_email(
@@ -129,4 +126,3 @@ def create_exported_report_folder_if_not_exists():
 		}
 	)
 	folder.insert(ignore_permissions=True, ignore_if_duplicate=True)
->>>>>>> c52e5157b4 (feat: allow users to export report in background (#33861))

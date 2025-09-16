@@ -189,50 +189,9 @@ data = columns, result
 			raise e
 			frappe.db.rollback()
 
-<<<<<<< HEAD
 	def test_csv(self):
 		from csv import QUOTE_ALL, QUOTE_MINIMAL, QUOTE_NONE, QUOTE_NONNUMERIC, DictReader
 		from io import StringIO
-=======
-	def test_export_report_via_email(self):
-		REPORT_NAME = "Test CSV Report"
-		REF_DOCTYPE = "DocType"
-		REPORT_COLUMNS = ["name", "module", "issingle"]
-
-		if not frappe.db.exists("Report", REPORT_NAME):
-			report = frappe.new_doc("Report")
-			report.report_name = REPORT_NAME
-			report.ref_doctype = "User"
-			report.report_type = "Query Report"
-			report.query = frappe.qb.from_(REF_DOCTYPE).select(*REPORT_COLUMNS).limit(10).get_sql()
-			report.is_standard = "No"
-			report.save()
-
-		frappe.local.form_dict = frappe._dict(
-			{
-				"report_name": REPORT_NAME,
-				"file_format_type": "CSV",
-				"include_indentation": 0,
-				"visible_idx": [0, 1, 2],
-				"export_in_background": 1,
-			}
-		)
-		frappe.db.delete("Email Queue")
-		export_query()
-
-		jobs = frappe.get_all(
-			"RQ Job",
-			filters={"job_name": "frappe.desk.query_report.run_export_query_job"},
-			fields=["name", "status"],
-		)
-		email_queue = frappe.get_all("Email Queue")
-
-		self.assertTrue(jobs, "Background job was not enqueued")
-		self.assertTrue(email_queue, "Email was not enqueued")
-
-		frappe.delete_doc("Report", REPORT_NAME, delete_permanently=True)
-
->>>>>>> c52e5157b4 (feat: allow users to export report in background (#33861))
 
 		REPORT_NAME = "Test CSV Report"
 		REF_DOCTYPE = "DocType"

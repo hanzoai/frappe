@@ -394,36 +394,15 @@ def _export_query(form_params, csv_params, populate_response=True):
 	xlsx_data, column_widths = build_xlsx_data(data, visible_idx, include_indentation)
 
 	if file_format_type == "CSV":
-<<<<<<< HEAD
 		content = get_csv_bytes(xlsx_data, csv_params)
-=======
-		content = get_csv_bytes(
-			[[handle_html(frappe.as_unicode(v)) if isinstance(v, str) else v for v in r] for r in xlsx_data],
-			csv_params,
-		)
->>>>>>> c52e5157b4 (feat: allow users to export report in background (#33861))
 		file_extension = "csv"
 	elif file_format_type == "Excel":
 		file_extension = "xlsx"
 		content = make_xlsx(xlsx_data, "Query Report", column_widths=column_widths).getvalue()
 
-<<<<<<< HEAD
-=======
-	if include_filters:
-		for value in (data.filters or {}).values():
-			suffix = ""
-			if isinstance(value, list):
-				suffix = "_" + ",".join(value)
-			elif isinstance(value, str) and value not in {"Yes", "No"}:
-				suffix = f"_{value}"
-
-			if valid_report_name(report_name, suffix):
-				report_name += suffix
-
 	if not populate_response:
 		return report_name, file_extension, content
 
->>>>>>> c52e5157b4 (feat: allow users to export report in background (#33861))
 	provide_binary_file(report_name, file_extension, content)
 
 
