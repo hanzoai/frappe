@@ -13,14 +13,13 @@
 		@include truncate();
 	}
 }
+.header-logo-container {
+	border-radius: 8px;
+}
 .header-logo {
 	width: 32px;
 	height: 32px;
-}
-.header-logo > * {
-	background-color: var(--gray-200);
-	color: var(--gray-500);
-	border-radius: 20% !important;
+	padding: 4px;
 }
 
 .title-container {

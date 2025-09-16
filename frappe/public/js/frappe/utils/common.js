@@ -155,6 +155,15 @@ frappe.palette = [
 	["--gray-avatar-bg", "--gray-avatar-color"],
 ];
 
+function process_palette() {
+	frappe.palette.forEach((color, index) => {
+		let color_name = color[0].split("-")[2];
+		frappe.palette_map[color_name] = index;
+	});
+}
+frappe.palette_map = {};
+process_palette();
+
 frappe.get_palette = function (txt) {
 	if (!txt) return frappe.palette[8]; // breaks when undefined
 	var idx = cint((parseInt(md5(txt).substr(4, 2), 16) + 1) / 5.33);

@@ -1,7 +1,9 @@
 
 <a class="sidebar-header" style="text-decoration: none; width: auto;">
-<div class="sidebar-item-icon header-logo-container">
-        {%= frappe.avatar(workspace_title, "avatar-medium header-logo" , workspace_title, "", true) %}
+<div class="sidebar-item-icon header-logo-container" style="background-color: var({{ header_bg_color }});">
+    <div class="header-logo">
+        {%= header_icon %}
+    </div>
 </div>
 <div class="title-container">
     <div class="sidebar-item-label header-title">

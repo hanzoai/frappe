@@ -1,6 +1,17 @@
 <!-- jinja -->
 <div class="container">
     <div class="desktop-container">
+        <!-- <div class="search-bar text-muted">
+            <input
+                id="navbar-search"
+                type="text"
+                class="form-control"
+                aria-haspopup="true"
+            >
+            <span class="search-icon">
+                <svg class="icon icon-sm"><use href="#icon-search"></use></svg>
+            </span>
+        </div> -->
         <div class="icons">
             {% for icon in icons %}
                 <a class="desktop-icon" data-logo="{{ icon.logo_url }}" data-icon="{{ icon.icon }}" data-type="{{ icon.type }}" href="{{ icon.route }}" style="text-decoration:none">

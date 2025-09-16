@@ -2,7 +2,9 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Desktop Icon", {
-	refresh: function (frm) {},
+	refresh: function (frm) {
+		frm.fields_dict.color.set_data(Object.keys(frappe.palette_map));
+	},
 	before_save: function (frm) {
 		if (frm.doc.type == "workspace") {
 			frappe.call({

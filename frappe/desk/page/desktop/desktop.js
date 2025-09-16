@@ -9,12 +9,12 @@ frappe.pages["desktop"].on_page_load = function (wrapper) {
 	$(frappe.render_template("desktop")).appendTo(page.body);
 	setup();
 };
+frappe.pages["desktop"].on_page_show = function (wrapper) {};
 function setup() {
 	let desktop_icon_style = frappe.boot.desktop_icon_style;
 	$(".desktop-icon").each((i, el) => {
 		let icon_name = $(el).attr("data-icon");
 		let icon_container = $(el.children[0]);
-		let color_scheme = frappe.palette[i % frappe.palette.length];
 
 		if ($(el).attr("data-logo") != "None") {
 			// create a img tag
@@ -31,6 +31,8 @@ function setup() {
 				// Apply stroke via CSS
 				if (desktop_icon_style !== "Monochrome") {
 					let bg_color, text_color;
+					let color_scheme =
+						frappe.palette[frappe.palette_map[icon_container.attr("data-color")]];
 					if (desktop_icon_style === "Subtle") {
 						bg_color = `var(${color_scheme[0]})`;
 						text_color = color_scheme[1];
@@ -41,13 +43,13 @@ function setup() {
 						// #0289f7bd
 						var style = window.getComputedStyle(document.body);
 						console.log(style.getPropertyValue(color_scheme[1]));
-						bg_color = style.getPropertyValue(color_scheme[1]) + "bd";
+						bg_color = style.getPropertyValue(color_scheme[1]) + "e6";
 						text_color = color_scheme[0];
 					}
 					icon_container.css("background-color", `${bg_color}`);
 					$svg.find("*").css("stroke", `var(${text_color})`);
 
-					// Also apply to the root <svg> just in case
+					// Apply to svg root
 					$svg.css("stroke", `var(${bg_color})`);
 					icon_container.css("border", "none");
 				}

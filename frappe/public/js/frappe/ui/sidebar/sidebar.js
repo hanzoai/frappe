@@ -152,8 +152,7 @@ frappe.ui.Sidebar = class Sidebar {
 		let match = false;
 		const that = this;
 		$(".item-anchor").each(function () {
-			console.log($(this).attr("href"));
-			if ($(this).attr("href") == window.location.pathname) {
+			if ($(this).attr("href") == decodeURIComponent(window.location.pathname)) {
 				match = true;
 				if (that.active_item) that.active_item.removeClass("active-sidebar");
 				that.active_item = $(this).parent();
@@ -375,7 +374,6 @@ frappe.ui.Sidebar = class Sidebar {
 		} else if (item.type === "URL") {
 			path = item.external_link;
 		}
-		console.log(path);
 		return $(
 			frappe.render_template("sidebar_item", {
 				item: item,
@@ -528,7 +526,6 @@ frappe.ui.Sidebar = class Sidebar {
 		let route = frappe.get_route();
 		if (frappe.get_route()[0] == "setup-wizard") return;
 		let module_name;
-
 		if (route[0] == "Workspaces") {
 			let workspace = route[1] || "Build";
 			frappe.app.sidebar.setup(workspace);
@@ -541,11 +538,15 @@ frappe.ui.Sidebar = class Sidebar {
 				frappe.app.sidebar.setup(sidebars[0] || "Build");
 			}
 		} else if (route[0] == "query-report") {
-			frappe.model.with_doc("Report", route[1], () => {
-				let test = frappe.get_doc("Report", route[1]);
-				module_name = frappe.boot.module_wise_workspaces[test.module][0] || "Build";
-				frappe.app.sidebar.setup(module_name);
-			});
+			let doctype = route[1];
+			let sidebars = this.get_correct_workspace_sidebars(doctype);
+			if (this.workspace_title && sidebars.includes(this.workspace_title.toLowerCase())) {
+				frappe.app.sidebar.setup(this.workspace_title.toLowerCase());
+			} else {
+				frappe.app.sidebar.setup(sidebars[0] || "Build");
+			}
+		} else {
+			this.set_sidebar_for_page();
 		}
 
 		this.set_active_workspace_item();
@@ -553,10 +554,17 @@ frappe.ui.Sidebar = class Sidebar {
 
 	set_sidebar_for_page() {
 		let route = frappe.get_route();
-		if (route.length >= 2) return;
-		let workspace_title = frappe.boot.module_wise_workspaces[locals["Page"][route[0]].module];
+		let views = ["List", "Form", "Workspaces", "query-report"];
+		let matches = views.some((view) => route.includes(view));
+		if (matches) return;
+		let workspace_title;
+		if (route.length == 2) {
+			workspace_title = this.get_correct_workspace_sidebars(route[1]);
+		} else {
+			workspace_title = this.get_correct_workspace_sidebars(route);
+		}
 		let module_name = workspace_title ? workspace_title[0] : "Build";
-		frappe.app.sidebar.setup(module_name);
+		frappe.app.sidebar.setup(module_name || this.workspace_title || "Build");
 	}
 	get_correct_workspace_sidebars(link_to) {
 		let sidebars = [];

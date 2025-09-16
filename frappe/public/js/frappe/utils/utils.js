@@ -1239,7 +1239,8 @@ Object.assign(frappe.utils, {
 		icon_class = "",
 		icon_style = "",
 		svg_class = "",
-		currentColor = false
+		current_color = false,
+		stroke_color = null
 	) {
 		let size_class = "";
 		let is_espresso = icon_name.startsWith("es-");
@@ -1250,17 +1251,23 @@ Object.assign(frappe.utils, {
 		} else {
 			size_class = `icon-${size}`;
 		}
-		return `<svg class="${
+		let $svg = `<svg class="${
 			is_espresso
 				? icon_name.startsWith("es-solid")
 					? "es-icon es-solid"
 					: "es-icon es-line"
 				: "icon"
 		} ${svg_class} ${size_class}"
-			${currentColor ? 'stroke="currentColor"' : ""}
+			${current_color ? 'stroke="currentColor"' : ""}
+			${stroke_color ? `stroke="${stroke_color}"` : ""}
 			style="${icon_style}" aria-hidden="true">
-			<use class="${icon_class}" href="${icon_name}"></use>
+			<use class="${icon_class}" href="${icon_name}"
+				${stroke_color ? `stroke="${stroke_color}"` : ""}
+			>
+			</use>
 		</svg>`;
+
+		return $svg;
 	},
 
 	flag(country_code) {

@@ -2,9 +2,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    margin-top: 20px;
 }
 .icon-stroke{
-    stroke-width: 1px;
+    stroke-width: 1.5px;
 }
 .icons{
 	gap: 30px;

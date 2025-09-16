@@ -23,7 +23,7 @@ class DesktopIcon(Document):
 		app: DF.Data | None
 		blocked: DF.Check
 		category: DF.Data | None
-		color: DF.Color | None
+		color: DF.Autocomplete | None
 		custom: DF.Check
 		description: DF.SmallText | None
 		force_show: DF.Check
@@ -601,3 +601,20 @@ def generate_color():
 		return random.randint(0, 255)
 
 	return "#%02X%02X%02X" % (hex(), hex(), hex())
+
+
+def create_desktop_icons_from_installed_apps():
+	from frappe.apps import is_desk_apps
+
+	apps = frappe.get_installed_apps()
+	for a in apps:
+		app_details = frappe.get_hooks("add_to_apps_screen", app_name=a)
+		if len(app_details) != 0:
+			if not is_desk_apps(app_details):
+				icon = frappe.new_doc("Desktop Icon")
+				icon.route = app_details[0]["route"]
+				icon.label = app_details[0]["title"]
+				icon.type = "link"
+				icon.link = app_details[0]["route"]
+				icon.logo_url = app_details[0]["logo"]
+				icon.save()

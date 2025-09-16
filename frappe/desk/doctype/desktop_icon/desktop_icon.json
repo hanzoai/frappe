@@ -128,7 +128,7 @@
   },
   {
    "fieldname": "color",
-   "fieldtype": "Color",
+   "fieldtype": "Autocomplete",
    "label": "Color"
   },
   {
@@ -166,7 +166,7 @@
   }
  ],
  "links": [],
- "modified": "2025-09-04 00:30:45.311189",
+ "modified": "2025-09-08 02:43:09.997790",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Desktop Icon",

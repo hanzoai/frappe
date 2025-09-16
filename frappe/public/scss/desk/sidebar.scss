@@ -126,6 +126,7 @@
 			flex: 1;
 			height: 30px;
 			color: var(--ink-gray-7);
+			text-decoration: none;
 			@include transition(all, 0.3s, cubic-bezier(0.4, 0, 0.2, 1));
 			.sidebar-item-icon {
 				padding: 7px;

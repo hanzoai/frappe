@@ -46,9 +46,20 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 	make() {
 		$(".sidebar-header").remove();
 		$(".sidebar-header-menu").remove();
+		this.set_header_icon_and_color();
 		$(
 			frappe.render_template("sidebar_header", {
 				workspace_title: this.workspace_title,
+				header_icon: frappe.utils.icon(
+					this.header_icon,
+					"lg",
+					"",
+					"",
+					"",
+					false,
+					`var(${this.header_bg_color})`
+				),
+				header_bg_color: this.header_stroke_color,
 			})
 		).prependTo(this.sidebar_wrapper);
 
@@ -57,7 +68,16 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.$header_title = this.wrapper.find(".header-title");
 		this.$drop_icon = this.wrapper.find(".drop-icon");
 	}
-
+	set_header_icon_and_color() {
+		let icon = frappe.boot.desktop_icons.filter((f) => f.label == this.workspace_title);
+		if (icon.length > 0) {
+			this.header_icon = icon[0].icon;
+			this.header_logo_color = icon[0].color;
+			this.header_bg_color = frappe.palette[frappe.palette_map[this.header_logo_color]][0];
+			this.header_stroke_color =
+				frappe.palette[frappe.palette_map[this.header_logo_color]][1];
+		}
+	}
 	setup_app_switcher() {
 		this.dropdown_menu = $(".sidebar-header-menu");
 		$(".sidebar-header").on("click", (e) => {
