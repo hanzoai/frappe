@@ -205,11 +205,7 @@ scheduler_events = {
 			"frappe.deferred_insert.save_to_db",
 			"frappe.automation.doctype.reminder.reminder.send_reminders",
 			"frappe.model.utils.link_count.update_link_count",
-<<<<<<< HEAD
-=======
-			"frappe.search.sqlite_search.build_index_if_not_exists",
 			"frappe.pulse.client.send_queued_events",
->>>>>>> 6ebe7fc26e (refactor: pulse client)
 		],
 		# 10 minutes
 		"0/10 * * * *": [
