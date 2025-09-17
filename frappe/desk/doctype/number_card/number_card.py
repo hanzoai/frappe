@@ -11,12 +11,7 @@ from frappe.modules.export_file import export_to_files
 from frappe.permissions import get_doctypes_with_read
 from frappe.query_builder import Criterion
 from frappe.query_builder.utils import DocType
-<<<<<<< HEAD
-from frappe.utils import cint, flt
-=======
 from frappe.utils import flt
-from frappe.utils.modules import get_modules_from_all_apps_for_user
->>>>>>> 6746ce9043 (fix(Number Card): permission query and frontend perms (#34023))
 
 
 class NumberCard(Document):
