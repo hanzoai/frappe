@@ -221,6 +221,7 @@ scheduler_events = {
 		"frappe.integrations.doctype.google_calendar.google_calendar.sync",
 		"frappe.email.doctype.newsletter.newsletter.send_scheduled_email",
 		"frappe.website.doctype.personal_data_deletion_request.personal_data_deletion_request.process_data_deletion_request",
+		"frappe.desk.utils.delete_old_exported_report_files",
 	],
 	"daily": [
 		"frappe.email.queue.set_expiry_for_email_queue",
