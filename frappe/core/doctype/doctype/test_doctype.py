@@ -775,7 +775,24 @@ class TestDocType(FrappeTestCase):
 		decimal_field_type = frappe.db.get_column_type(doctype.name, "decimal_field")
 		self.assertIn("(30,3)", decimal_field_type.lower())
 
+<<<<<<< HEAD
 >>>>>>> de6195e12f (test: length and precision for decimal based fields)
+=======
+	def test_decimal_field_precision_exceeds_length(self):
+		doctype = new_doctype(
+			"Test Decimal Config 2",
+			fields=[
+				{
+					"fieldname": "decimal_field",
+					"fieldtype": "Currency",
+					"length": 10,
+					"precision": 11,
+				}
+			],
+		)
+		self.assertRaises(frappe.ValidationError, doctype.insert)
+
+>>>>>>> f74c665cc2 (test: precision exceeds length)
 
 def new_doctype(
 	name: str | None = None,
