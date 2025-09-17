@@ -24,10 +24,11 @@ frappe.ui.get_print_settings = function (pdf, callback, letter_head, pick_column
 			fieldname: "report",
 			label: __("Report"),
 			options: "Print Format",
-			default: letter_head || default_letter_head,
 			get_query: () => ({
 				filters: {
 					print_format_for: "Report",
+					print_format_type: "JS",
+					report: frappe.query_report ? frappe.query_report.report_name : "",
 					disabled: 0,
 				},
 			}),

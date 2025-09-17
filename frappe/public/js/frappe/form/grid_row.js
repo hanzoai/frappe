@@ -12,7 +12,7 @@ export default class GridRow {
 			mandatory: [],
 			read_only: [],
 		};
-		this.row_check_html = '<input type="checkbox" class="grid-row-check">';
+		this.row_check_html = '<input type="checkbox" class="grid-row-check" tabIndex="-1">';
 		this.make();
 	}
 	make() {
@@ -343,7 +343,7 @@ export default class GridRow {
 		if (this.doc && !this.grid.df.in_place_edit) {
 			// remove row
 			if (!this.open_form_button) {
-				this.open_form_button = $('<button class="col"></button>').appendTo(this.row);
+				this.open_form_button = $('<div class="col"></div>').appendTo(this.row);
 
 				if (!this.configure_columns) {
 					const edit_msg = __("Edit", "", "Edit grid row");
@@ -1257,7 +1257,24 @@ export default class GridRow {
 				}
 
 				// TAB
-				if (e.which === UP_ARROW) {
+				if (e.which === TAB && !e.shiftKey) {
+					var last_column = me.wrapper.find("input:enabled:last").get(0);
+					var is_last_column = $(this).attr("data-last-input") || last_column === this;
+
+					if (is_last_column) {
+						// last row
+						if (me.doc.idx === values.length) {
+							me.grid.add_new_row(null, null, true);
+							me.grid.grid_rows[me.grid.grid_rows.length - 1].toggle_editable_row();
+							me.grid.set_focus_on_row();
+						} else {
+							// last column before last row
+							me.grid.grid_rows[me.doc.idx].toggle_editable_row();
+							me.grid.set_focus_on_row(me.doc.idx);
+							return false;
+						}
+					}
+				} else if (e.which === UP_ARROW) {
 					if (me.doc.idx > 1) {
 						var prev = me.grid.grid_rows[me.doc.idx - 2];
 						if (move_up_down(prev)) {

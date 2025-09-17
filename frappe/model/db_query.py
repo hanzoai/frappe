@@ -455,6 +455,7 @@ from {tables}
 			"user",
 			"version",
 			"global",
+			"sleep",
 		]
 
 		def _raise_exception():
@@ -1175,7 +1176,7 @@ from {tables}
 			r"select\b.*\bfrom",
 		}
 
-		if any(re.search("\b" + pattern + "\b", _lower) for pattern in subquery_indicators):
+		if any(re.search(r"\b" + pattern + r"\b", _lower) for pattern in subquery_indicators):
 			frappe.throw(_("Cannot use sub-query here."))
 
 		blacklisted_sql_functions = {
@@ -1188,6 +1189,10 @@ from {tables}
 			"version",
 			"substr",
 			"substring",
+			"updatexml",
+			"load_file",
+			"session_user",
+			"system_user",
 		}
 
 		for field in parameters.split(","):
