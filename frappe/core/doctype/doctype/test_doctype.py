@@ -724,6 +724,58 @@ class TestDocType(FrappeTestCase):
 		)
 		self.assertRaises(frappe.ValidationError, recursive_dt.insert)
 
+<<<<<<< HEAD
+=======
+	def test_meta_serialization(self):
+		doctype = new_doctype(
+			fields=[{"fieldname": "some_fieldname", "fieldtype": "Data", "set_only_once": 1}],
+			is_submittable=1,
+		).insert()
+		doc = frappe.new_doc(doctype.name, some_fieldname="something").insert()
+		doc.save()
+		doc.submit()
+		frappe.get_meta(doctype.name).as_dict()
+
+	def test_row_compression(self):
+		if frappe.db.db_type != "mariadb":
+			return
+
+		compressed_dt = new_doctype(row_format="Compressed").insert().name
+		dynamic_dt = new_doctype().insert().name
+
+		information_schema = frappe.qb.Schema("information_schema")
+
+		def get_format(dt):
+			return (
+				frappe.qb.from_(information_schema.tables)
+				.select("row_format")
+				.where(
+					(information_schema.tables.table_schema == frappe.conf.db_name)
+					& (information_schema.tables.table_name == get_table_name(dt))
+				)
+				.run()[0][0]
+				.upper()
+			)
+
+		self.assertEqual(get_format(compressed_dt), "COMPRESSED")
+		self.assertEqual(get_format(dynamic_dt), "DYNAMIC")
+
+	def test_decimal_field_configuration(self):
+		doctype = new_doctype(
+			"Test Decimal Config",
+			fields=[
+				{
+					"fieldname": "decimal_field",
+					"fieldtype": "Currency",
+					"length": 30,
+					"precision": 3,
+				}
+			],
+		).insert(ignore_if_duplicate=True)
+		decimal_field_type = frappe.db.get_column_type(doctype.name, "decimal_field")
+		self.assertIn("(30,3)", decimal_field_type.lower())
+
+>>>>>>> de6195e12f (test: length and precision for decimal based fields)
 
 def new_doctype(
 	name: str | None = None,
