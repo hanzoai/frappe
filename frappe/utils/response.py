@@ -295,19 +295,17 @@ def send_private_file(path: str) -> Response:
 		if not os.path.exists(filepath):
 			raise NotFound
 
-		mimetype = mimetypes.guess_type(filename)[0] or "application/octet-stream"
-
 		extension = os.path.splitext(path)[1]
 		blacklist = [".svg", ".html", ".htm", ".xml"]
 		as_attachment = extension.lower() in blacklist
 
-		send_kwargs = dict(mimetype=mimetype, conditional=True, as_attachment=as_attachment)
-		environ = frappe.local.request.environ
-
-		if as_attachment:
-			response = werkzeug.utils.send_file(filepath, environ, download_name=filename, **send_kwargs)
-		else:
-			response = werkzeug.utils.send_file(filepath, environ, **send_kwargs)
+		response = werkzeug.utils.send_file(
+			filepath,
+			environ=frappe.local.request.environ,
+			conditional=True,
+			as_attachment=as_attachment,
+			download_name=filename if as_attachment else None,
+		)
 
 	return response
 
