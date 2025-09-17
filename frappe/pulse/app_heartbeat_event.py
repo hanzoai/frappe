@@ -5,9 +5,6 @@ from frappe.utils.caching import site_cache
 
 from .client import capture, is_enabled
 
-KEY = "pulse:active_apps"
-EXPIRY = 60 * 60 * 12  # 12 hours
-
 
 def capture_app_heartbeat(req_params):
 	if not should_capture():
