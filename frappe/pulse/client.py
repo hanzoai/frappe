@@ -75,6 +75,7 @@ def _queue_event(event):
 def queue_length():
 	return frappe.cache.llen("pulse-client:events")
 
+
 def send_queued_events():
 	batch_size = 100
 	max_batches = 10
