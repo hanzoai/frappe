@@ -1030,6 +1030,10 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		let data = this.data;
 		let columns = this.columns.filter((col) => !col.hidden);
 
+		if (this.report_doc?.ref_doctype) {
+			columns = this.update_masked_fields_in_columns(columns, this.report_doc?.ref_doctype);
+		}
+
 		if (data.length > (cint(frappe.boot.sysdefaults.max_report_rows) || 100000)) {
 			let msg = __(
 				"This report contains {0} rows and is too big to display in browser, you can {1} this report instead.",
@@ -1082,6 +1086,29 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		if (this.report_settings.after_datatable_render) {
 			this.report_settings.after_datatable_render(this.datatable);
 		}
+	}
+
+	update_masked_fields_in_columns(columns) {
+		const meta_fields = frappe.get_meta(this.report_doc?.ref_doctype).fields;
+
+		const masked_field_map = Object.fromEntries(
+			meta_fields
+				.filter((field) => field.mask && field.mask_readonly)
+				.map((field) => [field.fieldname, field])
+		);
+
+		// return updated columns with masked field metadata applied
+		return columns.map((col) => {
+			const masked_field = masked_field_map[col.fieldname];
+			if (masked_field) {
+				return {
+					...col,
+					fieldtype: "Data",
+					options: masked_field.options,
+				};
+			}
+			return col;
+		});
 	}
 
 	show_loading_screen() {
