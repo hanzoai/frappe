@@ -25,8 +25,16 @@ from .exceptions import AttachmentLimitReached, FolderNotEmpty, MaxFileSizeReach
 from .utils import *
 
 exclude_from_linked_with = True
+
+# nosemgrep
 ImageFile.LOAD_TRUNCATED_IMAGES = True
+<<<<<<< HEAD
 URL_PREFIXES = ("http://", "https://")
+=======
+
+URL_PREFIXES = ("http://", "https://", "/api/method/")
+FILE_ENCODING_OPTIONS = ("utf-8-sig", "utf-8", "windows-1250", "windows-1252")
+>>>>>>> 7373d90691 (fix: no semgrep on PIL monkey patch)
 
 
 class File(Document):
