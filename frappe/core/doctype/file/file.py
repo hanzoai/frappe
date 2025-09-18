@@ -26,11 +26,15 @@ from .utils import *
 
 exclude_from_linked_with = True
 
+<<<<<<< HEAD
 # nosemgrep
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 <<<<<<< HEAD
 URL_PREFIXES = ("http://", "https://")
 =======
+=======
+ImageFile.LOAD_TRUNCATED_IMAGES = True  # nosemgrep
+>>>>>>> 5c280c1596 (refactor: move to inline comment)
 
 URL_PREFIXES = ("http://", "https://", "/api/method/")
 FILE_ENCODING_OPTIONS = ("utf-8-sig", "utf-8", "windows-1250", "windows-1252")
