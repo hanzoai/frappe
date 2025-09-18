@@ -1472,10 +1472,6 @@ def validate_fields(meta):
 					)
 				)
 
-		precision_not_set = docfield.precision in (None, "")
-		if docfield.length and precision_not_set and cint(docfield.length) < 9:  # default is 9
-			docfield.precision = docfield.length
-
 	fields = meta.get("fields")
 	fieldname_list = [d.fieldname for d in fields]
 
