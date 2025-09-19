@@ -1399,7 +1399,7 @@ class BaseDocument:
 		else:
 			return True
 
-	def reset_values_if_no_permlevel_access(self, has_access_to, high_permlevel_fields, mask_fields):
+	def reset_values_if_no_permlevel_access(self, has_access_to, high_permlevel_fields, mask_fields=None):
 		"""If the user does not have permissions at permlevel > 0, then reset the values to original / default"""
 		to_reset = [
 			df
@@ -1410,6 +1410,9 @@ class BaseDocument:
 				and df.fieldname not in self.flags.get("ignore_permlevel_for_fields", [])
 			)
 		]
+
+		if not mask_fields:
+			mask_fields = []
 
 		to_reset = to_reset + mask_fields
 
