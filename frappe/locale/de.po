@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-09-14 09:32+0000\n"
-"PO-Revision-Date: 2025-09-15 18:13\n"
+"PO-Revision-Date: 2025-09-18 19:07\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -9622,7 +9622,7 @@ msgstr "Import-Log exportieren"
 #: frappe/public/js/frappe/views/reports/report_utils.js:245
 msgctxt "Export report"
 msgid "Export Report: {0}"
-msgstr "Exportbericht: {0}"
+msgstr "Bericht exportieren: {0}"
 
 #: frappe/public/js/frappe/data_import/data_exporter.js:26
 msgid "Export Type"
@@ -21076,7 +21076,7 @@ msgstr "Neu verknüpfen"
 
 #: frappe/core/doctype/communication/communication.js:138
 msgid "Relink Communication"
-msgstr "Relink Kommunikation"
+msgstr "Kommunikation neu verknüpfen"
 
 #. Option for the 'Comment Type' (Select) field in DocType 'Comment'
 #: frappe/core/doctype/comment/comment.json

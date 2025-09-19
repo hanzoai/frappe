@@ -730,6 +730,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 					is_tree: this.report_settings.tree,
 					parent_field: this.report_settings.parent_field,
 					are_default_filters: are_default_filters,
+					js_filters: frappe.query_reports[this.report_name]?.filters,
 				},
 				callback: resolve,
 				always: () => this.page.btn_secondary.prop("disabled", false),
@@ -1522,7 +1523,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		frappe.render_grid({
 			template: print_settings.columns ? "print_grid" : custom_format,
 			title: __(this.report_name),
-			subtitle: filters_html,
+			subtitle: print_settings?.include_filters ? filters_html : null,
 			print_settings: print_settings,
 			landscape: landscape,
 			filters: this.get_filter_values(),
@@ -1552,7 +1553,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		const template = print_settings.columns || !custom_format ? "print_grid" : custom_format;
 		const content = frappe.render_template(template, {
 			title: __(this.report_name),
-			subtitle: filters_html,
+			subtitle: print_settings?.include_filters ? filters_html : null,
 			filters: applied_filters,
 			data: data,
 			original_data: this.data,
@@ -1818,7 +1819,8 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 						false,
 						(print_settings) => this.print_report(print_settings),
 						this.report_doc.letter_head,
-						this.get_visible_columns()
+						this.get_visible_columns(),
+						true
 					);
 					this.add_portrait_warning(dialog);
 				},
@@ -1832,7 +1834,8 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 						false,
 						(print_settings) => this.pdf_report(print_settings),
 						this.report_doc.letter_head,
-						this.get_visible_columns()
+						this.get_visible_columns(),
+						true
 					);
 
 					this.add_portrait_warning(dialog);

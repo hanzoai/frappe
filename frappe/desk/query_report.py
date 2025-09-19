@@ -199,10 +199,11 @@ def run(
 	is_tree=False,
 	parent_field=None,
 	are_default_filters=True,
+	js_filters=None,
 ):
 	if not user:
 		user = frappe.session.user
-	validate_filters_permissions(report_name, filters, user)
+	validate_filters_permissions(report_name, filters, user, js_filters)
 	report = get_report_doc(report_name)
 	if not frappe.has_permission(report.ref_doctype, "report"):
 		frappe.msgprint(
@@ -339,9 +340,8 @@ def export_query():
 		)
 		frappe.msgprint(
 			_(
-				"Your report is being generated in the background. "
-				"You will receive an email on {0} with a download link once it is ready.".format(user_email)
-			)
+				"Your report is being generated in the background. You will receive an email on {0} with a download link once it is ready."
+			).format(user_email)
 		)
 		return
 
@@ -416,7 +416,7 @@ def _export_query(form_params, csv_params, populate_response=True):
 	if not populate_response:
 		return report_name, file_extension, content
 
-	provide_binary_file(report_name, file_extension, content)
+	provide_binary_file(_(report_name), file_extension, content)
 
 
 def valid_report_name(report_name, suffix):
@@ -905,25 +905,34 @@ def get_user_match_filters(doctypes, user):
 	return match_filters
 
 
-def validate_filters_permissions(report_name, filters=None, user=None):
+def validate_filters_permissions(report_name, filters=None, user=None, js_filters=None):
 	if not filters:
 		return
+
+	if js_filters is None:
+		js_filters = []
+
+	if isinstance(js_filters, str):
+		js_filters = json.loads(js_filters)
 
 	if isinstance(filters, str):
 		filters = json.loads(filters)
 
 	report = frappe.get_doc("Report", report_name)
-	for field in report.filters:
-		if field.fieldname in filters and field.fieldtype == "Link":
-			linked_doctype = field.options
+
+	for field in report.filters + js_filters:
+		if hasattr(field, "as_dict"):
+			field = field.as_dict()
+		if field.get("fieldname") in filters and field.get("fieldtype") == "Link":
+			linked_doctype = field.get("options")
 			if not has_permission(
-				doctype=linked_doctype, ptype="read", doc=filters[field.fieldname], user=user
+				doctype=linked_doctype, ptype="read", doc=filters[field.get("fieldname")], user=user
 			) and not has_permission(
-				doctype=linked_doctype, ptype="select", doc=filters[field.fieldname], user=user
+				doctype=linked_doctype, ptype="select", doc=filters[field.get("fieldname")], user=user
 			):
 				frappe.throw(
 					_("You do not have permission to access {0}: {1}.").format(
-						linked_doctype, filters[field.fieldname]
+						linked_doctype, filters[field.get("fieldname")]
 					)
 				)
 
