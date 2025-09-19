@@ -465,9 +465,7 @@ frappe.ui.form.Form = class FrappeForm {
 			this.show_conflict_message();
 			this.show_submission_queue_banner();
 
-			if (!this.is_new()) {
-				this.mark_mask_fields_readonly();
-			}
+			this.mark_mask_fields_readonly();
 
 			if (frappe.boot.read_only) {
 				this.disable_form();

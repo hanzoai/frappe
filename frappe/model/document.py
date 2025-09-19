@@ -923,8 +923,10 @@ class Document(BaseDocument):
 		has_access_to = self.get_permlevel_access()
 		high_permlevel_fields = self.meta.get_high_permlevel_fields()
 
-		if high_permlevel_fields:
-			self.reset_values_if_no_permlevel_access(has_access_to, high_permlevel_fields)
+		mask_fields = self.meta.get_masked_fields()
+
+		if high_permlevel_fields or mask_fields:
+			self.reset_values_if_no_permlevel_access(has_access_to, high_permlevel_fields, mask_fields)
 
 		# If new record then don't reset the values for child table
 		if self.is_new():
