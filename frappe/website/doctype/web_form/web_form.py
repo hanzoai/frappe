@@ -288,7 +288,7 @@ def get_context(context):
 			"Are you sure you want to discard the changes?",
 			"Mandatory fields required::Error message in web form",
 			"Invalid values for fields::Error message in web form",
-			"Error:Title of error message in web form",
+			"Error::Title of error message in web form",
 			"Page {0} of {1}",
 			"Couldn't save, please check the data you have entered",
 			"Validation Error",
