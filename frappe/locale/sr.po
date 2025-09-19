@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2025-09-14 09:32+0000\n"
-"PO-Revision-Date: 2025-09-15 18:13\n"
+"PO-Revision-Date: 2025-09-18 19:07\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Serbian (Cyrillic)\n"
 "MIME-Version: 1.0\n"
@@ -5453,7 +5453,7 @@ msgstr "Контакт"
 
 #: frappe/integrations/doctype/google_calendar/google_calendar.py:812
 msgid "Contact / email not found. Did not add attendee for -<br>{0}"
-msgstr ""
+msgstr "Контакт / имејл није пронађен. Учесник није додат за -<br>{0}"
 
 #. Label of the sb_01 (Section Break) field in DocType 'Contact'
 #: frappe/contacts/doctype/contact/contact.json
@@ -13678,7 +13678,7 @@ msgstr "Примарно"
 
 #: frappe/contacts/report/addresses_and_contacts/addresses_and_contacts.py:43
 msgid "Is Primary Address"
-msgstr ""
+msgstr "Примарна адреса"
 
 #. Label of the is_primary_contact (Check) field in DocType 'Contact'
 #: frappe/contacts/doctype/contact/contact.json
@@ -26297,7 +26297,7 @@ msgstr "Овај месец"
 
 #: frappe/core/doctype/file/file.py:394
 msgid "This PDF cannot be uploaded as it contains unsafe content."
-msgstr ""
+msgstr "Овај PDF не може бити отпремљен јер садржи небезбедан садржај."
 
 #: frappe/public/js/frappe/ui/filters/filter.js:670
 msgid "This Quarter"
