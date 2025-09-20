@@ -991,6 +991,10 @@ class BaseDocument:
 			):
 				cancelled_links.append((df.fieldname, docname, get_msg(df, docname)))
 
+			elif values.name and not df.get("ignore_user_permissions"):
+				if not frappe.has_permission(doctype, "read", doc=values.name):
+					invalid_links.append((df.fieldname, docname, get_msg(df, docname)))
+
 		return invalid_links, cancelled_links
 
 	def set_fetch_from_value(self, doctype, df, values):
