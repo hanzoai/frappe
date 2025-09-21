@@ -5,7 +5,8 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "icon_style"
+  "icon_style",
+  "navbar_style"
  ],
  "fields": [
   {
@@ -13,13 +14,19 @@
    "fieldtype": "Select",
    "label": "Icon Style",
    "options": "Monochrome\nSubtle\nSubtle Reverse\nSubtle Reverse w Opacity"
+  },
+  {
+   "fieldname": "navbar_style",
+   "fieldtype": "Select",
+   "label": "Navbar Style",
+   "options": "Awesomebar\nmacOS Launchpad\nBrand Logo\nBrand Logo with Search\nTimeless Launchpad\nApps with Search"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-09-07 20:33:40.024916",
+ "modified": "2025-09-19 15:46:39.877729",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Desktop Settings",

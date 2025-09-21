@@ -150,7 +150,6 @@ def load_desktop_data(bootinfo):
 	from frappe.desk.desktop import get_workspace_sidebar_items
 
 	bootinfo.desktop_icons = get_desktop_icons()
-	bootinfo.desktop_icon_style = frappe.get_single_value("Desktop Settings", "icon_style")
 	bootinfo.workspaces = get_workspace_sidebar_items()
 	bootinfo.workspace_sidebar_item = get_sidebar_items()
 	allowed_pages = [d.name for d in bootinfo.workspaces.get("pages")]

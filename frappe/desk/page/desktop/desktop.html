@@ -1,18 +1,84 @@
 <!-- jinja -->
 <div class="container">
+    {% if navbar_style == "Brand Logo" or navbar_style == "Brand Logo with Search" %}
+        <header class="navbar navbar-expand" role="navigation" style="justify-content: center;">
+            <div class="navbar-container">
+                <a class="navbar-home" href="/app">
+                    <img
+                        class="brand-logo"
+                        src="{{ brand_logo }}"
+                        alt="{{ _("App Logo") }}"
+                    >
+                </a>
+                {% if navbar_style == "Brand Logo with Search" %}
+                <div style="display: flex;">
+
+                <div class="search-container">
+                    <div class="desktop-search-wrapper text-muted">
+                        <input
+                            id="navbar-search"
+                            type="text"
+                            class="form-control"
+                            aria-haspopup="true"
+                            placeholder="Search Desktop Icons"
+                        >
+                        <span class="desktop-search-icon">
+                            <svg class="icon icon-sm"><use href="#icon-search"></use></svg>
+                        </span>
+                    </div>
+                </div>
+                <span class="desktop-avatar" style="margin-left: -10px;">
+
+			    </span>
+                </div>
+                {% endif %}
+                {% if navbar_style == "Brand Logo" %}
+                <span class="desktop-avatar">
+
+			    </span>
+                {% endif %}
+            </div>
+        </header>
+    {% endif %}
+    <div id="icon-style" style="display: none;" data-icon-style="{{ desktop_icon_style }}" data-navbar-style="{{ navbar_style }}"></div>
     <div class="desktop-container">
-        <!-- <div class="search-bar text-muted">
-            <input
-                id="navbar-search"
-                type="text"
-                class="form-control"
-                aria-haspopup="true"
-            >
-            <span class="search-icon">
-                <svg class="icon icon-sm"><use href="#icon-search"></use></svg>
-            </span>
-        </div> -->
-        <div class="icons">
+        {% if navbar_style == "macOS Launchpad" or navbar_style == "Timeless Launchpad" %}
+        <div class="search-container">
+            <div class="desktop-search-wrapper text-muted
+                {% if navbar_style == 'Timeless Launchpad' %} timeless-style
+            {% endif %}">
+                <input
+                    id="navbar-search"
+                    type="text"
+                    class="form-control"
+                    aria-haspopup="true"
+                    placeholder="Search Desktop Icons"
+                >
+                <span class="desktop-search-icon">
+                    <svg class="icon icon-sm"><use href="#icon-search"></use></svg>
+                </span>
+            </div>
+        </div>
+        {% elif navbar_style == "Apps with Search" %}
+            <div class="search-container timeless-style apps-search">
+                <h4 style="margin: 0px; font-size: 30px;">Apps</h4>
+                <div class="desktop-search-wrapper text-muted">
+                    <input
+                        id="navbar-search"
+                        type="text"
+                        class="form-control"
+                        aria-haspopup="true"
+                        placeholder="Search Apps"
+                    >
+                    <span class="desktop-search-icon">
+                        <svg class="icon icon-sm"><use href="#icon-search"></use></svg>
+                    </span>
+                </div>
+            </div>
+        {% endif %}
+        <div class="icons
+            {% if navbar_style == 'Apps with Search' %} small-margin
+            {% endif %}">
             {% for icon in icons %}
                 <a class="desktop-icon" data-logo="{{ icon.logo_url }}" data-icon="{{ icon.icon }}" data-type="{{ icon.type }}" href="{{ icon.route }}" style="text-decoration:none">
                     <div class="icon-container" data-color="{{ icon.color }}"> </div>

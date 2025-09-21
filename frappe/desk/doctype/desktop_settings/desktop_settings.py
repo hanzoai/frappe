@@ -15,6 +15,14 @@ class DesktopSettings(Document):
 		from frappe.types import DF
 
 		icon_style: DF.Literal["Monochrome", "Subtle", "Subtle Reverse", "Subtle Reverse w Opacity"]
+		navbar_style: DF.Literal[
+			"Awesomebar",
+			"macOS Launchpad",
+			"Brand Logo",
+			"Brand Logo with Search",
+			"Timeless Launchpad",
+			"Apps with Search",
+		]
 	# end: auto-generated types
 
 	pass

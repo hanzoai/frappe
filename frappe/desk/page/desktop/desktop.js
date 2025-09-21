@@ -11,7 +11,9 @@ frappe.pages["desktop"].on_page_load = function (wrapper) {
 };
 frappe.pages["desktop"].on_page_show = function (wrapper) {};
 function setup() {
-	let desktop_icon_style = frappe.boot.desktop_icon_style;
+	let desktop_icon_style = $("#icon-style").attr("data-icon-style");
+	let navbar_style = $("#icon-style").attr("data-navbar-style");
+
 	$(".desktop-icon").each((i, el) => {
 		let icon_name = $(el).attr("data-icon");
 		let icon_container = $(el.children[0]);
@@ -61,6 +63,7 @@ function setup() {
 		// let color_name = icon_container.attr("data-color");
 		// icon_container.css("background-color", color_name);
 	});
+	setup_navbar(navbar_style);
 }
 
 function get_route(element) {
@@ -71,4 +74,31 @@ function get_route(element) {
 		route = element.attr("data-route");
 	}
 	return route;
+}
+
+function setup_navbar(navbar_style) {
+	if (navbar_style != "Awesomebar") {
+		$(".sticky-top > .navbar").hide();
+	} else {
+		$(".navbar").show();
+	}
+}
+
+frappe.router.on("change", function () {
+	if (frappe.get_route()[0] == "desktop") setup_navbar();
+	else $(".navbar").show();
+});
+
+frappe.pages["desktop"].on_page_show = function () {
+	let desktop_icon_style = $("#icon-style").attr("data-icon-style");
+	let navbar_style = $("#icon-style").attr("data-navbar-style");
+	setup_avatar();
+	if (navbar_style != "Awesomebar") {
+		if (navbar_style == "macOS Launchpad")
+			$(".desktop-container").css("align-items", "normal");
+		setup_avatar();
+	}
+};
+function setup_avatar() {
+	$(".desktop-avatar").html(frappe.avatar(frappe.session.user, "avatar-medium"));
 }

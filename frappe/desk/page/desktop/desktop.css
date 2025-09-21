@@ -1,9 +1,39 @@
+.container{
+    padding: 0px;
+}
 .desktop-container{
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     margin-top: 20px;
+}
+#navbar-search{
+    padding-left: 32px;
+}
+.desktop-search-icon{
+    position: absolute;
+    left: 6px;
+    top: 2px;
+}
+.navbar-container{
+    display: flex;
+    align-items: center;
+    width: 50%;
+    justify-content: space-between;
+    width: 100%; /* Allow it to span the full container */
+    max-width: 600px; /* Match icon grid width if needed */
+    padding: 0 15px; /* Add padding if needed */
+    box-sizing: border-box;
+}
+.search-container{
+    display: flex;
+    justify-content: center;
+}
+.desktop-search-wrapper{
+    max-width: 300px;
+	margin: 0 var(--margin-md);
+    position: relative;
 }
 .icon-stroke{
     stroke-width: 1.5px;
@@ -46,4 +76,19 @@
     text-align: center;
     text-wrap: nowrap;
     margin-top: 5px;
+}
+.timeless-style{
+    width: 100vw;
+    max-width: 600px;
+}
+.timeless-style input::placeholder{
+    text-align: center;
+}
+.apps-search{
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 20px;
+}
+.small-margin{
+    margin-top: 30px;
 }
