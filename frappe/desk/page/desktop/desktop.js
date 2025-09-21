@@ -98,7 +98,31 @@ frappe.pages["desktop"].on_page_show = function () {
 			$(".desktop-container").css("align-items", "normal");
 		setup_avatar();
 	}
+	setup_search();
 };
 function setup_avatar() {
 	$(".desktop-avatar").html(frappe.avatar(frappe.session.user, "avatar-medium"));
+}
+
+function setup_search() {
+	let all_icons = $(".icon-label");
+	let icons_to_show = [];
+	$(".desktop-search-wrapper > #navbar-search").on("input", function (e) {
+		let search_query = $(e.target).val().toLowerCase();
+		icons_to_show = [];
+		all_icons.each(function (index, element) {
+			$(element).parent().hide();
+			let label = $(element).text().toLowerCase();
+			if (label.includes(search_query)) {
+				icons_to_show.push(element);
+			}
+		});
+		toggle_icons(icons_to_show);
+	});
+}
+
+function toggle_icons(icons) {
+	icons.forEach((i) => {
+		$(i).parent().show();
+	});
 }
