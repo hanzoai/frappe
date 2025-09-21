@@ -922,7 +922,10 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 				_value = _value * out_of_ratings;
 			}
 
-			let filterable = df?.mask_readonly ? "no-underline" : " filterable";
+			let masked_fields = frappe.get_meta(this.doctype).masked_fields || [];
+			let is_masked = masked_fields.includes(df.fieldname);
+
+			let filterable = is_masked ? "no-underline" : " filterable";
 
 			if (df.fieldtype === "Image") {
 				html = df.options

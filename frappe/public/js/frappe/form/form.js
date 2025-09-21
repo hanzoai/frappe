@@ -1174,11 +1174,11 @@ frappe.ui.form.Form = class FrappeForm {
 	}
 
 	mark_mask_fields_readonly() {
-		this.fields.forEach((field) => {
-			if (field.df.mask && field.df.mask_readonly) {
-				this.set_df_property(field.df.fieldname, "disabled", "1");
-				this.set_df_property(field.df.fieldname, "fieldtype", "Data");
-			}
+		const masked_fields = this.meta.masked_fields || [];
+
+		masked_fields.forEach((fieldname) => {
+			this.set_df_property(fieldname, "read_only", 1);
+			this.set_df_property(fieldname, "fieldtype", "Data");
 		});
 	}
 

@@ -245,12 +245,6 @@ frappe.ui.form.Layout = class Layout {
 	}
 
 	init_field(df, parent, render = false) {
-		if (df.mask && df.mask_readonly) {
-			if (df.fieldtype !== "Data") {
-				df.read_only = 1;
-				df.fieldtype = "Data";
-			}
-		}
 		const fieldobj = frappe.ui.form.make_control({
 			df: df,
 			doctype: this.doctype,

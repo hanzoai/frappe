@@ -1090,22 +1090,14 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 	}
 
 	update_masked_fields_in_columns(columns) {
-		const meta_fields = frappe.get_meta(this.report_doc?.ref_doctype).fields;
+		const masked_fields = frappe.get_meta(this.report_doc?.ref_doctype).masked_fields;
 
-		const masked_field_map = Object.fromEntries(
-			meta_fields
-				.filter((field) => field.mask && field.mask_readonly)
-				.map((field) => [field.fieldname, field])
-		);
-
-		// return updated columns with masked field metadata applied
 		return columns.map((col) => {
-			const masked_field = masked_field_map[col.fieldname];
-			if (masked_field) {
+			if (masked_fields.includes(col.fieldname)) {
 				return {
 					...col,
 					fieldtype: "Data",
-					options: masked_field.options,
+					options: [],
 				};
 			}
 			return col;

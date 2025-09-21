@@ -45,19 +45,6 @@ def get_meta(doctype, cached=True) -> "FormMeta":
 		#       In prod don't use cached meta when explicitly requesting from DB.
 		meta = FormMeta(doctype, cached=frappe.conf.developer_mode)
 
-	if meta.name not in meta.special_doctypes:
-		meta = mask_protected_fields(meta)
-
-	return meta
-
-
-def mask_protected_fields(meta):
-	for df in meta.fields:
-		if df.get("mask") and not meta.has_permlevel_access_to(
-			fieldname=df.fieldname, df=df, permission_type="mask"
-		):
-			# store orignal fieldtype and change fieldtype to Data
-			df.mask_readonly = 1
 	return meta
 
 
@@ -88,6 +75,9 @@ class FormMeta(Meta):
 
 		for k in ASSET_KEYS:
 			d[k] = __dict.get(k)
+
+		# add masked fields (per-user, per-meta)
+		d["masked_fields"] = [df.fieldname for df in self.get_masked_fields()]
 
 		return d
 
