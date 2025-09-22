@@ -439,7 +439,9 @@ def validate_link(doctype: str, docname: str, fields=None):
 
 	if not frappe.has_permission(doctype, "read", doc=values.name):
 		frappe.throw(
-			_("You do not have permission to access {0} {1}").format(frappe.bold(doctype), frappe.bold(docname)),
+			_("You do not have permission to access {0} {1}").format(
+				frappe.bold(doctype), frappe.bold(docname)
+			),
 			frappe.PermissionError,
 		)
 
