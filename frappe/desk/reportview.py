@@ -369,9 +369,8 @@ def export_query():
 
 		frappe.msgprint(
 			_(
-				"Your report is being generated in the background. "
-				"You will receive an email on {0} with a download link once it is ready.".format(user_email)
-			)
+				"Your report is being generated in the background. You will receive an email on {0} with a download link once it is ready."
+			).format(user_email)
 		)
 		return
 
@@ -441,7 +440,7 @@ def _export_query(form_params, csv_params, populate_response=True):
 	if not populate_response:
 		return title, file_extension, content
 
-	provide_binary_file(title, file_extension, content)
+	provide_binary_file(_(title), file_extension, content)
 
 
 def append_totals_row(data):
