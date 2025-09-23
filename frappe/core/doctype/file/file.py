@@ -32,7 +32,11 @@ from .utils import *
 
 exclude_from_linked_with = True
 ImageFile.LOAD_TRUNCATED_IMAGES = True
-URL_PREFIXES = ("http://", "https://")
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True  # nosemgrep
+
+
+URL_PREFIXES = ("http://", "https://", "/api/method/")
 
 
 class File(Document):
