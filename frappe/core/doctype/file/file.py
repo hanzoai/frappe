@@ -37,8 +37,6 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True  # nosemgrep
 
 
 URL_PREFIXES = ("http://", "https://", "/api/method/")
-FILE_ENCODING_OPTIONS = ("utf-8-sig", "utf-8", "windows-1250", "windows-1252")
-
 
 
 class File(Document):
