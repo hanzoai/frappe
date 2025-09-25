@@ -96,9 +96,9 @@ class SQLiteSearch(ABC):
 		included in the scoring pipeline.
 
 		Usage:
-			@SQLiteSearch.scoring_function
-			def custom_boost(self, row, query, query_words):
-				return 1.5
+		        @SQLiteSearch.scoring_function
+		        def custom_boost(self, row, query, query_words):
+		                return 1.5
 		"""
 		func._is_scoring_function = True
 		return func
@@ -219,11 +219,11 @@ class SQLiteSearch(ABC):
 		Return filters to apply to search results.
 
 		Returns:
-			dict: Permission filters in format:
-				{
-					"field_name": value,  # Single value: field = value
-					"field_name": [val1, val2]  # List: field IN (val1, val2)
-				}
+		        dict: Permission filters in format:
+		                {
+		                        "field_name": value,  # Single value: field = value
+		                        "field_name": [val1, val2]  # List: field IN (val1, val2)
+		                }
 		"""
 		pass
 
@@ -234,12 +234,12 @@ class SQLiteSearch(ABC):
 		Main search method with advanced filtering support.
 
 		Args:
-			query (str): Search query text
-			title_only (bool): Whether to search only in titles
-			filters (dict): Optional filters by field names
+		        query (str): Search query text
+		        title_only (bool): Whether to search only in titles
+		        filters (dict): Optional filters by field names
 
 		Returns:
-			dict: Search results with summary statistics
+		        dict: Search results with summary statistics
 		"""
 		if not self.is_search_enabled():
 			return self._empty_search_result(title_only, filters)
@@ -861,36 +861,44 @@ class SQLiteSearch(ABC):
 			cursor = conn.cursor()
 
 			# Create the FTS table with dynamic columns
-			cursor.execute(f"""
+			cursor.execute(
+				f"""
 				CREATE VIRTUAL TABLE IF NOT EXISTS search_fts USING fts5(
 					doc_id UNINDEXED,
 					{", ".join([f"{field}" for field in text_fields])},
 					{", ".join([f"{field} UNINDEXED" for field in metadata_fields])},
 					tokenize="{tokenizer}"
 				)
-			""")
+			"""
+			)
 
 			# Create the vocabulary and trigram tables
-			cursor.execute("""
+			cursor.execute(
+				"""
 				CREATE TABLE IF NOT EXISTS search_vocabulary (
 					word TEXT PRIMARY KEY,
 					frequency INTEGER DEFAULT 1,
 					length INTEGER
 				)
-			""")
+			"""
+			)
 
-			cursor.execute("""
+			cursor.execute(
+				"""
 				CREATE TABLE IF NOT EXISTS search_trigrams (
 					trigram TEXT,
 					word TEXT,
 					PRIMARY KEY (trigram, word)
 				)
-			""")
+			"""
+			)
 
 			# Index for fast trigram lookups
-			cursor.execute("""
+			cursor.execute(
+				"""
 				CREATE INDEX IF NOT EXISTS idx_trigram_lookup ON search_trigrams(trigram)
-			""")
+			"""
+			)
 
 			conn.commit()
 		finally:
