@@ -13,6 +13,7 @@ from frappe.coverage import CodeCoverage
 from frappe.exceptions import SiteNotSpecifiedError
 from frappe.utils import cint, update_progress_bar
 from frappe.utils.bench_helper import CliCtxObj
+from frappe.utils.print_utils import setup_chromium
 
 EXTRA_ARGS_CTX = {"ignore_unknown_options": True, "allow_extra_args": True}
 
@@ -1027,6 +1028,11 @@ def list_sites(context: CliCtxObj, output_json=False):
 		click.echo("No sites found")
 
 
+@click.command("setup-chrome")
+def setup_chrome():
+	setup_chromium()
+
+
 commands = [
 	build,
 	clear_cache,
@@ -1059,4 +1065,5 @@ commands = [
 	add_to_email_queue,
 	rebuild_global_search,
 	list_sites,
+	setup_chrome,
 ]
