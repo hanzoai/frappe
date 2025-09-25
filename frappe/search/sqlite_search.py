@@ -96,9 +96,9 @@ class SQLiteSearch(ABC):
 		included in the scoring pipeline.
 
 		Usage:
-		    @SQLiteSearch.scoring_function
-		    def custom_boost(self, row, query, query_words):
-		        return 1.5
+			@SQLiteSearch.scoring_function
+			def custom_boost(self, row, query, query_words):
+				return 1.5
 		"""
 		func._is_scoring_function = True
 		return func
@@ -219,11 +219,11 @@ class SQLiteSearch(ABC):
 		Return filters to apply to search results.
 
 		Returns:
-		    dict: Permission filters in format:
-		        {
-		            "field_name": value,  # Single value: field = value
-		            "field_name": [val1, val2]  # List: field IN (val1, val2)
-		        }
+			dict: Permission filters in format:
+				{
+					"field_name": value,  # Single value: field = value
+					"field_name": [val1, val2]  # List: field IN (val1, val2)
+				}
 		"""
 		pass
 
@@ -234,12 +234,12 @@ class SQLiteSearch(ABC):
 		Main search method with advanced filtering support.
 
 		Args:
-		    query (str): Search query text
-		    title_only (bool): Whether to search only in titles
-		    filters (dict): Optional filters by field names
+			query (str): Search query text
+			title_only (bool): Whether to search only in titles
+			filters (dict): Optional filters by field names
 
 		Returns:
-		    dict: Search results with summary statistics
+			dict: Search results with summary statistics
 		"""
 		if not self.is_search_enabled():
 			return self._empty_search_result(title_only, filters)
@@ -480,16 +480,16 @@ class SQLiteSearch(ABC):
 
 		if title_only:
 			sql = f"""
-                SELECT
-                    doc_id,
-                    {select_clause}
-                FROM search_fts
-                WHERE search_fts MATCH ?
-                AND {title_field} MATCH ?
-                {filter_clause}
-                ORDER BY bm25_score
-                LIMIT ?
-            """
+				SELECT
+					doc_id,
+					{select_clause}
+				FROM search_fts
+				WHERE search_fts MATCH ?
+				AND {title_field} MATCH ?
+				{filter_clause}
+				ORDER BY bm25_score
+				LIMIT ?
+			"""
 			return self.sql(sql, (fts_query, fts_query, *filter_params, MAX_SEARCH_RESULTS), read_only=True)
 		else:
 			params = []
@@ -498,15 +498,15 @@ class SQLiteSearch(ABC):
 			params.extend([fts_query, *filter_params, MAX_SEARCH_RESULTS])
 
 			sql = f"""
-                SELECT
-                    doc_id,
-                    {select_clause}
-                FROM search_fts
-                WHERE search_fts MATCH ?
-                {filter_clause}
-                ORDER BY bm25_score
-                LIMIT ?
-            """
+				SELECT
+					doc_id,
+					{select_clause}
+				FROM search_fts
+				WHERE search_fts MATCH ?
+				{filter_clause}
+				ORDER BY bm25_score
+				LIMIT ?
+			"""
 			return self.sql(sql, params, read_only=True)
 
 	def _process_search_results(self, raw_results, query):
@@ -693,15 +693,15 @@ class SQLiteSearch(ABC):
 			placeholders = ",".join("?" * len(word_trigrams))
 			candidates = self.sql(
 				f"""
-                SELECT t.word, v.frequency, v.length, COUNT(*) as shared_trigrams
-                FROM search_trigrams t
-                JOIN search_vocabulary v ON t.word = v.word
-                WHERE t.trigram IN ({placeholders})
-                    AND ABS(v.length - ?) <= ?  -- Length filter for efficiency
-                GROUP BY t.word, v.frequency, v.length
-                HAVING shared_trigrams >= 1  -- Must share at least 1 trigram
-                ORDER BY shared_trigrams DESC, v.frequency DESC
-            """,
+				SELECT t.word, v.frequency, v.length, COUNT(*) as shared_trigrams
+				FROM search_trigrams t
+				JOIN search_vocabulary v ON t.word = v.word
+				WHERE t.trigram IN ({placeholders})
+					AND ABS(v.length - ?) <= ?  -- Length filter for efficiency
+				GROUP BY t.word, v.frequency, v.length
+				HAVING shared_trigrams >= 1  -- Must share at least 1 trigram
+				ORDER BY shared_trigrams DESC, v.frequency DESC
+			""",
 				(*word_trigrams, word_length, MAX_EDIT_DISTANCE),
 				read_only=True,
 			)
@@ -862,35 +862,35 @@ class SQLiteSearch(ABC):
 
 			# Create the FTS table with dynamic columns
 			cursor.execute(f"""
-                CREATE VIRTUAL TABLE IF NOT EXISTS search_fts USING fts5(
-                    doc_id UNINDEXED,
-                    {", ".join([f"{field}" for field in text_fields])},
-                    {", ".join([f"{field} UNINDEXED" for field in metadata_fields])},
-                    tokenize="{tokenizer}"
-                )
-            """)
+				CREATE VIRTUAL TABLE IF NOT EXISTS search_fts USING fts5(
+					doc_id UNINDEXED,
+					{", ".join([f"{field}" for field in text_fields])},
+					{", ".join([f"{field} UNINDEXED" for field in metadata_fields])},
+					tokenize="{tokenizer}"
+				)
+			""")
 
 			# Create the vocabulary and trigram tables
 			cursor.execute("""
-                CREATE TABLE IF NOT EXISTS search_vocabulary (
-                    word TEXT PRIMARY KEY,
-                    frequency INTEGER DEFAULT 1,
-                    length INTEGER
-                )
-            """)
+				CREATE TABLE IF NOT EXISTS search_vocabulary (
+					word TEXT PRIMARY KEY,
+					frequency INTEGER DEFAULT 1,
+					length INTEGER
+				)
+			""")
 
 			cursor.execute("""
-                CREATE TABLE IF NOT EXISTS search_trigrams (
-                    trigram TEXT,
-                    word TEXT,
-                    PRIMARY KEY (trigram, word)
-                )
-            """)
+				CREATE TABLE IF NOT EXISTS search_trigrams (
+					trigram TEXT,
+					word TEXT,
+					PRIMARY KEY (trigram, word)
+				)
+			""")
 
 			# Index for fast trigram lookups
 			cursor.execute("""
-                CREATE INDEX IF NOT EXISTS idx_trigram_lookup ON search_trigrams(trigram)
-            """)
+				CREATE INDEX IF NOT EXISTS idx_trigram_lookup ON search_trigrams(trigram)
+			""")
 
 			conn.commit()
 		finally:
@@ -911,9 +911,9 @@ class SQLiteSearch(ABC):
 		field_names = ",".join(all_fields)
 
 		insert_sql = f"""
-            INSERT INTO search_fts ({field_names})
-            VALUES ({placeholders})
-        """
+			INSERT INTO search_fts ({field_names})
+			VALUES ({placeholders})
+		"""
 
 		# Process documents in chunks to prevent memory issues with large datasets
 		chunk_size = 1000
