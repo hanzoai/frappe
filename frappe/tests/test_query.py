@@ -419,6 +419,158 @@ class TestQuery(IntegrationTestCase):
 			"SELECT `name` FROM `tabDocType`",
 		)
 
+	def test_or_filters(self):
+		"""Test OR filter conditions."""
+		# Test 1: Basic dict or_filters
+		self.assertEqual(
+			frappe.qb.get_query(
+				"DocType",
+				fields=["name"],
+				or_filters={"name": "User", "module": "Core"},
+			).get_sql(),
+			"SELECT `name` FROM `tabDocType` WHERE `name`='User' OR `module`='Core'".replace(
+				"`", '"' if frappe.db.db_type == "postgres" else "`"
+			),
+		)
+
+		# Test 2: List format or_filters
+		self.assertEqual(
+			frappe.qb.get_query(
+				"DocType",
+				fields=["name"],
+				or_filters=[["name", "=", "User"], ["module", "=", "Core"]],
+			).get_sql(),
+			"SELECT `name` FROM `tabDocType` WHERE `name`='User' OR `module`='Core'".replace(
+				"`", '"' if frappe.db.db_type == "postgres" else "`"
+			),
+		)
+
+		# Test 3: OR filters with operators
+		self.assertEqual(
+			frappe.qb.get_query(
+				"DocType",
+				fields=["name"],
+				or_filters={"name": ("like", "User%"), "module": ("in", ["Core", "Custom"])},
+			).get_sql(),
+			"SELECT `name` FROM `tabDocType` WHERE `name` LIKE 'User%' OR `module` IN ('Core','Custom')".replace(
+				"`", '"' if frappe.db.db_type == "postgres" else "`"
+			),
+		)
+
+		# Test 4: Combining filters (AND) with or_filters (OR)
+		self.assertEqual(
+			frappe.qb.get_query(
+				"DocType",
+				fields=["name"],
+				filters={"issingle": 0},
+				or_filters={"name": "User", "module": "Core"},
+			).get_sql(),
+			"SELECT `name` FROM `tabDocType` WHERE `issingle`=0 AND (`name`='User' OR `module`='Core')".replace(
+				"`", '"' if frappe.db.db_type == "postgres" else "`"
+			),
+		)
+
+		# Test 5: Multiple AND filters with OR filters
+		self.assertEqual(
+			frappe.qb.get_query(
+				"DocType",
+				fields=["name"],
+				filters={"issingle": 0, "custom": 0},
+				or_filters={"name": "User", "module": "Core"},
+			).get_sql(),
+			"SELECT `name` FROM `tabDocType` WHERE `issingle`=0 AND `custom`=0 AND (`name`='User' OR `module`='Core')".replace(
+				"`", '"' if frappe.db.db_type == "postgres" else "`"
+			),
+		)
+
+		# Test 6: OR filters with simple list (name IN)
+		self.assertEqual(
+			frappe.qb.get_query(
+				"DocType",
+				or_filters=["User", "Role", "Note"],
+			).get_sql(),
+			"SELECT `name` FROM `tabDocType` WHERE `name` IN ('User','Role','Note')".replace(
+				"`", '"' if frappe.db.db_type == "postgres" else "`"
+			),
+		)
+
+		# Test 7: OR filters with greater than and less than
+		self.assertEqual(
+			frappe.qb.get_query(
+				"DocType",
+				fields=["name"],
+				or_filters={"idx": (">", 5), "issingle": ("=", 1)},
+			).get_sql(),
+			"SELECT `name` FROM `tabDocType` WHERE `idx`>5 OR `issingle`=1".replace(
+				"`", '"' if frappe.db.db_type == "postgres" else "`"
+			),
+		)
+
+		# Test 8: OR filters with list including doctype
+		self.assertEqual(
+			frappe.qb.get_query(
+				"DocType",
+				fields=["name"],
+				or_filters=[["DocType", "name", "=", "User"], ["DocType", "name", "=", "Role"]],
+			).get_sql(),
+			"SELECT `name` FROM `tabDocType` WHERE `name`='User' OR `name`='Role'".replace(
+				"`", '"' if frappe.db.db_type == "postgres" else "`"
+			),
+		)
+
+		# Test 9: OR filters with != operator
+		self.assertEqual(
+			frappe.qb.get_query(
+				"DocType",
+				fields=["name"],
+				or_filters={"name": ("!=", "User"), "module": ("!=", "Core")},
+			).get_sql(),
+			"SELECT `name` FROM `tabDocType` WHERE `name`<>'User' OR `module`<>'Core'".replace(
+				"`", '"' if frappe.db.db_type == "postgres" else "`"
+			),
+		)
+
+		# Test 10: Empty or_filters should return query without OR conditions
+		self.assertEqual(
+			frappe.qb.get_query(
+				"DocType",
+				fields=["name"],
+				filters={"custom": 0},
+				or_filters={},
+			).get_sql(),
+			"SELECT `name` FROM `tabDocType` WHERE `custom`=0".replace(
+				"`", '"' if frappe.db.db_type == "postgres" else "`"
+			),
+		)
+
+		# Test 11: OR filters with not in operator
+		self.assertEqual(
+			frappe.qb.get_query(
+				"DocType",
+				fields=["name"],
+				or_filters={"name": ("not in", ["User", "Role"]), "module": ("=", "Core")},
+			).get_sql(),
+			"SELECT `name` FROM `tabDocType` WHERE `name` NOT IN ('User','Role') OR `module`='Core'".replace(
+				"`", '"' if frappe.db.db_type == "postgres" else "`"
+			),
+		)
+
+		# Test 12: OR filters with mixed field types
+		self.assertEqual(
+			frappe.qb.get_query(
+				"DocType",
+				fields=["name", "module"],
+				or_filters=[
+					["name", "like", "User%"],
+					["issingle", "=", 1],
+					["custom", "=", 0],
+				],
+			).get_sql(),
+			"SELECT `name`,`module` FROM `tabDocType` WHERE `name` LIKE 'User%' OR `issingle`=1 OR `custom`=0".replace(
+				"`", '"' if frappe.db.db_type == "postgres" else "`"
+			),
+		)
+
 	def test_nested_filters(self):
 		"""Test nested filter conditions with AND/OR logic."""
 		User = frappe.qb.DocType("User")
@@ -1585,17 +1737,137 @@ class TestQuery(IntegrationTestCase):
 		# Test unsupported function validation
 		with self.assertRaises(frappe.ValidationError) as cm:
 			frappe.qb.get_query("User", fields=[{"UNSUPPORTED_FUNC": "name"}]).get_sql()
-		self.assertIn("Unsupported function or invalid field name: UNSUPPORTED_FUNC", str(cm.exception))
+		self.assertIn("Unsupported function or operator: UNSUPPORTED_FUNC", str(cm.exception))
 
 		# Test unsupported function that might be confused with child field
 		with self.assertRaises(frappe.ValidationError) as cm:
 			frappe.qb.get_query("User", fields=[{"UPPER": ["first_name"]}]).get_sql()
-		self.assertIn("Unsupported function or invalid field name: UPPER", str(cm.exception))
+		self.assertIn("Unsupported function or operator: UPPER", str(cm.exception))
 
 		# Test SQL injection attempt
 		with self.assertRaises(frappe.ValidationError) as cm:
 			frappe.qb.get_query("User", fields=[{"DROP": "TABLE users"}]).get_sql()
-		self.assertIn("Unsupported function or invalid field name: DROP", str(cm.exception))
+		self.assertIn("Unsupported function or operator: DROP", str(cm.exception))
+
+	def test_arithmetic_operators_in_fields(self):
+		"""Test arithmetic operator support in fields."""
+
+		# Test simple addition
+		query = frappe.qb.get_query("User", fields=[{"ADD": [1, 2], "as": "sum_result"}])
+		sql = query.get_sql()
+		self.assertIn("1+2 `sum_result`", sql)
+
+		# Test simple subtraction
+		query = frappe.qb.get_query("User", fields=[{"SUB": [10, 5], "as": "diff_result"}])
+		sql = query.get_sql()
+		self.assertIn("10-5 `diff_result`", sql)
+
+		# Test simple multiplication
+		query = frappe.qb.get_query("User", fields=[{"MUL": [3, 4], "as": "prod_result"}])
+		sql = query.get_sql()
+		self.assertIn("3*4 `prod_result`", sql)
+
+		# Test simple division
+		query = frappe.qb.get_query("User", fields=[{"DIV": [10, 2], "as": "div_result"}])
+		sql = query.get_sql()
+		self.assertIn("10/2 `div_result`", sql)
+
+		# Test operator with field names
+		query = frappe.qb.get_query("User", fields=[{"ADD": ["enabled", "login_after"], "as": "field_sum"}])
+		sql = query.get_sql()
+		self.assertIn("`enabled`+`login_after` `field_sum`", sql)
+
+		# Test nested operators
+		query = frappe.qb.get_query("User", fields=[{"ADD": [{"MUL": [2, 3]}, 4], "as": "nested_result"}])
+		sql = query.get_sql()
+		self.assertIn("2*3+4 `nested_result`", sql)
+
+		# Test operator with function - NULLIF
+		query = frappe.qb.get_query(
+			"User", fields=[{"DIV": [1, {"NULLIF": ["enabled", 0]}], "as": "safe_div"}]
+		)
+		sql = query.get_sql()
+		self.assertIn("1/NULLIF(`enabled`,0) `safe_div`", sql)
+
+		# Test complex nested expression: (1 / NULLIF(value, 0))
+		query = frappe.qb.get_query(
+			"User",
+			fields=[
+				"name",
+				{"DIV": [1, {"NULLIF": ["enabled", 0]}], "as": "inverse"},
+			],
+		)
+		sql = query.get_sql()
+		self.assertIn("`name`", sql)
+		self.assertIn("1/NULLIF(`enabled`,0) `inverse`", sql)
+
+		# Test operator with LOCATE function (search relevance pattern)
+		query = frappe.qb.get_query(
+			"User",
+			fields=[
+				"name",
+				{"DIV": [1, {"NULLIF": [{"LOCATE": ["'test'", "name"]}, 0]}], "as": "relevance"},
+			],
+		)
+		sql = query.get_sql()
+		self.assertIn("1/NULLIF(LOCATE('test',`name`),0) `relevance`", sql)
+
+		# Test multiple operators in fields
+		query = frappe.qb.get_query(
+			"User",
+			fields=[
+				"name",
+				{"ADD": ["enabled", 1], "as": "enabled_plus_one"},
+				{"MUL": ["enabled", 2], "as": "enabled_times_two"},
+			],
+		)
+		sql = query.get_sql()
+		self.assertIn("`name`", sql)
+		self.assertIn("`enabled`+1 `enabled_plus_one`", sql)
+		self.assertIn("`enabled`*2 `enabled_times_two`", sql)
+
+		# Test operator without alias
+		query = frappe.qb.get_query("User", fields=[{"ADD": [1, 1]}])
+		sql = query.get_sql()
+		self.assertIn("1+1", sql)
+
+		# Test validation: operator requires exactly 2 arguments
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", fields=[{"ADD": [1, 2, 3]}]).get_sql()
+		self.assertIn("requires exactly 2 arguments", str(cm.exception))
+
+		# Test validation: operator with only 1 argument
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", fields=[{"DIV": [10]}]).get_sql()
+		self.assertIn("requires exactly 2 arguments", str(cm.exception))
+
+		# Test validation: operator with non-list arguments
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", fields=[{"MUL": "invalid"}]).get_sql()
+		self.assertIn("requires exactly 2 arguments", str(cm.exception))
+
+		# Test validation: unsupported operator
+		with self.assertRaises(frappe.ValidationError) as cm:
+			frappe.qb.get_query("User", fields=[{"XOR": [1, 2]}]).get_sql()
+		self.assertIn("Unsupported function or operator: XOR", str(cm.exception))
+
+		# Test deeply nested expression
+		query = frappe.qb.get_query(
+			"User",
+			fields=[
+				{
+					"DIV": [
+						{"ADD": [{"MUL": [2, 3]}, 4]},
+						{"SUB": [10, 5]},
+					],
+					"as": "complex_expr",
+				}
+			],
+		)
+		sql = query.get_sql()
+		# PyPika adds parentheses for clarity in complex expressions
+		self.assertIn("complex_expr", sql)
+		self.assertIn("/", sql)
 
 	def test_not_equal_condition_on_none(self):
 		self.assertQueryEqual(

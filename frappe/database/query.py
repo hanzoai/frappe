@@ -3,8 +3,9 @@ from functools import lru_cache
 from typing import TYPE_CHECKING, Any
 
 import sqlparse
-from pypika.queries import QueryBuilder, Table
-from pypika.terms import AggregateFunction, Term
+from pypika.enums import Arithmetic
+from pypika.queries import Column, QueryBuilder, Table
+from pypika.terms import AggregateFunction, ArithmeticExpression, Term, ValueWrapper
 
 import frappe
 from frappe import _
@@ -53,6 +54,17 @@ FUNCTION_MAPPING = {
 	"NOW": functions.Now,
 }
 
+# Mapping from operator names to pypika Arithmetic enum values
+# Operators use dict format: {"ADD": [left, right], "as": "alias"}
+# Supported: ADD (+), SUB (-), MUL (*), DIV (/)
+# Can be nested with functions: {"DIV": [1, {"NULLIF": ["value", 0]}]}
+OPERATOR_MAPPING = {
+	"ADD": Arithmetic.add,
+	"SUB": Arithmetic.sub,
+	"MUL": Arithmetic.mul,
+	"DIV": Arithmetic.div,
+}
+
 
 class Engine:
 	def get_query(
@@ -60,6 +72,7 @@ class Engine:
 		table: str | Table,
 		fields: str | list | tuple | None = None,
 		filters: dict[str, FilterValue] | FilterValue | list[list | FilterValue] | None = None,
+		or_filters: dict[str, FilterValue] | FilterValue | list[list | FilterValue] | None = None,
 		order_by: str | None = None,
 		group_by: str | None = None,
 		limit: int | None = None,
@@ -76,6 +89,7 @@ class Engine:
 		ignore_permissions: bool = True,
 		user: str | None = None,
 		parent_doctype: str | None = None,
+		reference_doctype: str | None = None,
 	) -> QueryBuilder:
 		qb = frappe.local.qb
 		db_type = frappe.local.db.db_type
@@ -86,6 +100,7 @@ class Engine:
 		self.validate_filters = validate_filters
 		self.user = user or frappe.session.user
 		self.parent_doctype = parent_doctype
+		self.reference_doctype = reference_doctype
 		self.apply_permissions = not ignore_permissions
 
 		if isinstance(table, Table):
@@ -110,6 +125,7 @@ class Engine:
 			self.apply_fields(fields)
 
 		self.apply_filters(filters)
+		self.apply_or_filters(or_filters)
 
 		if limit:
 			if not isinstance(limit, int) or limit < 0:
@@ -163,6 +179,7 @@ class Engine:
 	def apply_filters(
 		self,
 		filters: dict[str, FilterValue] | FilterValue | list[list | FilterValue] | None = None,
+		collect: list | None = None,
 	):
 		if filters is None:
 			return
@@ -175,7 +192,7 @@ class Engine:
 			return
 
 		if isinstance(filters, dict):
-			self.apply_dict_filters(filters)
+			self.apply_dict_filters(filters, collect=collect)
 			return
 
 		if isinstance(filters, list | tuple):
@@ -184,7 +201,9 @@ class Engine:
 
 			# 1. Handle special case: list of names -> name IN (...)
 			if all(isinstance(d, FilterValue) for d in filters):
-				self.apply_dict_filters({"name": ("in", tuple(convert_to_value(f) for f in filters))})
+				self.apply_dict_filters(
+					{"name": ("in", tuple(convert_to_value(f) for f in filters))}, collect=collect
+				)
 				return
 
 			# 2. Check for nested logic format [cond, op, cond, ...] or [[cond, op, cond]]
@@ -233,9 +252,11 @@ class Engine:
 			else:  # Not a nested structure, assume it's a list of simple filters (implicitly ANDed)
 				for filter_item in filters:
 					if isinstance(filter_item, list | tuple):
-						self.apply_list_filters(filter_item)  # Handles simple [field, op, value] lists
+						self.apply_list_filters(
+							filter_item, collect=collect
+						)  # Handles simple [field, op, value] lists
 					elif isinstance(filter_item, dict | Criterion):
-						self.apply_filters(filter_item)  # Recursive call for dict/criterion
+						self.apply_filters(filter_item, collect=collect)  # Recursive call for dict/criterion
 					else:
 						# Disallow single values (strings, numbers, etc.) directly in the list
 						# unless it's the name IN (...) case handled above.
@@ -247,26 +268,53 @@ class Engine:
 		# If filters type is none of the above
 		raise ValueError(f"Unsupported filters type: {type(filters).__name__}")
 
-	def apply_list_filters(self, filter: list):
+	def apply_or_filters(
+		self,
+		or_filters: dict[str, FilterValue] | FilterValue | list[list | FilterValue] | None = None,
+	):
+		"""Apply OR filters - all conditions are combined with OR operator.
+
+		Example:
+			or_filters={"name": "User", "module": "Core"}
+			→ Collects: [Criterion(name='User'), Criterion(module='Core')]
+			→ Combines: Criterion(name='User') | Criterion(module='Core')
+			→ Result: WHERE name='User' OR module='Core'
+		"""
+		if or_filters is None:
+			return
+
+		# Collect criteria instead of applying immediately
+		criteria = []
+		self.apply_filters(or_filters, collect=criteria)
+
+		# Combine all criteria with OR operator (|)
+		if criteria:
+			from functools import reduce
+
+			# Reduce combines: [Criterion(name='User'), Criterion(module='Core')] → Criterion(name='User') | Criterion(module='Core')
+			combined = reduce(lambda a, b: a | b, criteria)
+			self.query = self.query.where(combined)
+
+	def apply_list_filters(self, filter: list, collect: list | None = None):
 		if len(filter) == 2:
 			field, value = filter
-			self._apply_filter(field, value)
+			self._apply_filter(field, value, collect=collect)
 		elif len(filter) == 3:
 			field, operator, value = filter
-			self._apply_filter(field, value, operator)
+			self._apply_filter(field, value, operator, collect=collect)
 		elif len(filter) == 4:
 			doctype, field, operator, value = filter
-			self._apply_filter(field, value, operator, doctype)
+			self._apply_filter(field, value, operator, doctype, collect=collect)
 		else:
 			raise ValueError(f"Unknown filter format: {filter}")
 
-	def apply_dict_filters(self, filters: dict[str, FilterValue | list]):
+	def apply_dict_filters(self, filters: dict[str, FilterValue | list], collect: list | None = None):
 		for field, value in filters.items():
 			operator = "="
 			if isinstance(value, list | tuple):
 				operator, value = value
 
-			self._apply_filter(field, value, operator)
+			self._apply_filter(field, value, operator, collect=collect)
 
 	def _apply_filter(
 		self,
@@ -274,16 +322,20 @@ class Engine:
 		value: FilterValue | list | set | None,
 		operator: str = "=",
 		doctype: str | None = None,
+		collect: list | None = None,
 	):
 		"""Applies a simple filter condition to the query."""
 		criterion = self._build_criterion_for_simple_filter(field, value, operator, doctype)
 		if criterion:
-			self.query = self.query.where(criterion)
+			if collect is not None:
+				collect.append(criterion)
+			else:
+				self.query = self.query.where(criterion)
 
 	def _build_criterion_for_simple_filter(
 		self,
 		field: str | Field,
-		value: FilterValue | list | set | None,
+		value: FilterValue | Column | list | set | None,
 		operator: str = "=",
 		doctype: str | None = None,
 	) -> "Criterion | None":
@@ -291,7 +343,12 @@ class Engine:
 		import operator as builtin_operator
 
 		_field = self._validate_and_prepare_filter_field(field, doctype)
-		_value = convert_to_value(value)
+
+		if isinstance(value, Column):
+			_value = self._validate_and_prepare_filter_field(value.name, doctype)
+		else:
+			# Regular value processing for literal comparisons like: table.field = 'value'
+			_value = convert_to_value(value)
 		_operator = operator
 
 		if not _value and isinstance(_value, list | tuple | set):
@@ -641,18 +698,20 @@ class Engine:
 		if isinstance(field, Criterion | Field):
 			return field
 		elif isinstance(field, dict):
-			# Check if it's a SQL function dictionary
+			# Check if it's a SQL function or operator dictionary
 			function_parser = SQLFunctionParser(engine=self)
 			if function_parser.is_function_dict(field):
 				return function_parser.parse_function(field)
+			elif function_parser.is_operator_dict(field):
+				return function_parser.parse_operator(field)
 			else:
 				# Handle child queries defined as dicts {fieldname: [child_fields]}
 				_parsed_fields = []
 				for child_field, child_fields_list in field.items():
-					# Skip uppercase keys as they might be unsupported SQL functions
+					# Skip uppercase keys as they might be unsupported SQL functions or operators
 					if child_field.isupper():
 						frappe.throw(
-							_("Unsupported function or invalid field name: {0}").format(child_field),
+							_("Unsupported function or operator: {0}").format(child_field),
 							frappe.ValidationError,
 						)
 
@@ -1368,37 +1427,45 @@ class SQLFunctionParser:
 		function_keys = [k for k in field_dict.keys() if k != "as"]
 		return len(function_keys) == 1 and function_keys[0] in FUNCTION_MAPPING
 
-	def parse_function(self, function_dict: dict) -> Field:
-		"""Parse a SQL function dictionary into a pypika function call."""
-		function_name = None
-		alias = None
-		function_args = None
+	def is_operator_dict(self, field_dict: dict) -> bool:
+		"""Check if a dictionary represents an arithmetic operator expression.
 
-		for key, value in function_dict.items():
+		Example: {"ADD": [1, 2], "as": "sum"} or {"DIV": ["total", "count"]}
+		"""
+		operator_keys = [k for k in field_dict.keys() if k != "as"]
+		return len(operator_keys) == 1 and operator_keys[0] in OPERATOR_MAPPING
+
+	def _extract_dict_components(self, d: dict, valid_keys: dict, error_msg: str) -> tuple:
+		"""Extract name, alias, and args from function/operator dict."""
+		name = None
+		alias = None
+		args = None
+
+		for key, value in d.items():
 			if key == "as":
 				alias = value
 			else:
-				function_name = key
-				function_args = value
+				name = key
+				args = value
 
-		if not function_name:
-			frappe.throw(_("Invalid function dictionary format"), frappe.ValidationError)
+		if not name:
+			frappe.throw(_("Invalid {0} dictionary format").format(error_msg), frappe.ValidationError)
 
-		if function_name not in FUNCTION_MAPPING:
-			frappe.throw(
-				_("Unsupported function or invalid field name: {0}").format(function_name),
-				frappe.ValidationError,
-			)
+		if name not in valid_keys:
+			frappe.throw(_("Unsupported {0}: {1}").format(error_msg, name), frappe.ValidationError)
 
 		if alias:
 			self._validate_alias(alias)
 
-		func_class = FUNCTION_MAPPING.get(function_name)
-		if not func_class:
-			frappe.throw(
-				_("Unsupported function or invalid field name: {0}").format(function_name),
-				frappe.ValidationError,
-			)
+		return name, alias, args
+
+	def parse_function(self, function_dict: dict) -> Field:
+		"""Parse a SQL function dictionary into a pypika function call."""
+		function_name, alias, function_args = self._extract_dict_components(
+			function_dict, FUNCTION_MAPPING, "function or invalid field name"
+		)
+
+		func_class = FUNCTION_MAPPING[function_name]
 
 		if isinstance(function_args, str):
 			parsed_arg = self._parse_and_validate_argument(function_args)
@@ -1432,18 +1499,74 @@ class SQLFunctionParser:
 		else:
 			return function_call
 
+	def parse_operator(self, operator_dict: dict) -> ArithmeticExpression:
+		"""Parse an arithmetic operator dictionary into a pypika ArithmeticExpression.
+
+		Operators require exactly 2 arguments (left and right operands).
+		Arguments can be: numbers, field names, nested functions, or nested operators.
+		Example: {"DIV": [1, {"NULLIF": [{"LOCATE": ["'test'", "name"]}, 0]}]}
+		"""
+		operator_name, alias, operator_args = self._extract_dict_components(
+			operator_dict, OPERATOR_MAPPING, "operator"
+		)
+
+		operator = OPERATOR_MAPPING[operator_name]
+
+		# Operators require exactly 2 arguments (left and right operands)
+		if not isinstance(operator_args, list) or len(operator_args) != 2:
+			frappe.throw(
+				_("Operator {0} requires exactly 2 arguments (left and right operands)").format(
+					operator_name
+				),
+				frappe.ValidationError,
+			)
+
+		# Parse and validate both operands (supports nested functions/operators)
+		left = self._parse_and_validate_argument(operator_args[0])
+		right = self._parse_and_validate_argument(operator_args[1])
+
+		# Wrap raw values (numbers, strings) in ValueWrapper so pypika can process them
+		if not isinstance(left, Term):
+			left = ValueWrapper(left)
+		if not isinstance(right, Term):
+			right = ValueWrapper(right)
+
+		expression = ArithmeticExpression(operator=operator, left=left, right=right)
+
+		if alias:
+			return expression.as_(alias)
+		else:
+			return expression
+
 	def _parse_and_validate_argument(self, arg):
-		"""Parse and validate a single function argument against SQL injection."""
+		"""Parse and validate a single function/operator argument against SQL injection.
+
+		Supports:
+		- Numbers: 1, 2.5, etc.
+		- Strings: field names or quoted literals
+		- Nested dicts: functions {"COUNT": "name"} or operators {"ADD": [1, 2]}
+		"""
 		if isinstance(arg, (int | float)):
 			return arg
 		elif isinstance(arg, str):
 			return self._validate_string_argument(arg)
+		elif isinstance(arg, dict):
+			# Recursively handle nested functions and operators
+			if self.is_function_dict(arg):
+				return self.parse_function(arg)
+			elif self.is_operator_dict(arg):
+				return self.parse_operator(arg)
+			else:
+				frappe.throw(
+					_("Invalid nested expression: dictionary must represent a function or operator"),
+					frappe.ValidationError,
+				)
 		elif arg is None:
 			# None is allowed for some functions
 			return arg
 		else:
 			frappe.throw(
-				_("Invalid argument type: {0}. Only strings, numbers, and None are allowed.").format(
+				_("Invalid argument type: {0}. Only strings, numbers, dicts, and None are allowed.").format(
 					type(arg).__name__
 				),
 				frappe.ValidationError,

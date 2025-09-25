@@ -31,6 +31,10 @@ QUERY_TYPE_PATTERN = re.compile(r"\s*([A-Za-z]*)")
 def convert_to_value(o: FilterValue):
 	if isinstance(o, bool):
 		return int(o)
+	elif isinstance(o, dict):
+		return frappe.as_json(o)
+	elif isinstance(o, (list, tuple, set)):
+		return tuple(convert_to_value(item) for item in o)
 	return o
 
 
