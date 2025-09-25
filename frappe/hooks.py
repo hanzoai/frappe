@@ -157,11 +157,8 @@ doc_events = {
 			"frappe.automation.doctype.assignment_rule.assignment_rule.apply",
 			"frappe.automation.doctype.assignment_rule.assignment_rule.update_due_date",
 			"frappe.core.doctype.user_type.user_type.apply_permissions_for_non_standard_user_type",
-<<<<<<< HEAD
-=======
 			"frappe.core.doctype.permission_log.permission_log.make_perm_log",
 			"frappe.search.sqlite_search.update_doc_index",
->>>>>>> 2676c9c2ec (feat: SQLite FTS5 search framework for Frappe apps (#33359))
 		],
 		"after_rename": "frappe.desk.notifications.clear_doctype_notifications",
 		"on_cancel": [
@@ -211,11 +208,8 @@ scheduler_events = {
 			"frappe.deferred_insert.save_to_db",
 			"frappe.automation.doctype.reminder.reminder.send_reminders",
 			"frappe.model.utils.link_count.update_link_count",
-<<<<<<< HEAD
 			"frappe.pulse.client.send_queued_events",
-=======
 			"frappe.search.sqlite_search.build_index_if_not_exists",
->>>>>>> 2676c9c2ec (feat: SQLite FTS5 search framework for Frappe apps (#33359))
 		],
 		# 10 minutes
 		"0/10 * * * *": [
