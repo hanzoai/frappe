@@ -51,6 +51,7 @@ class CustomizeForm(Document):
 		email_append_to: DF.Check
 		fields: DF.Table[CustomizeFormField]
 		force_re_route_to_default_view: DF.Check
+		grid_page_length: DF.Int
 		image_field: DF.Data | None
 		is_calendar_and_gantt: DF.Check
 		istable: DF.Check
@@ -745,6 +746,7 @@ doctype_properties = {
 	"default_view": "Select",
 	"force_re_route_to_default_view": "Check",
 	"translated_doctype": "Check",
+	"grid_page_length": "Int",
 }
 
 docfield_properties = {
