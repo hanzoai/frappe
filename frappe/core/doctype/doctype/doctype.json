@@ -21,6 +21,7 @@
   "editable_grid",
   "quick_entry",
   "grid_page_length",
+  "rows_threshold_for_grid_search",
   "cb01",
   "track_changes",
   "track_seen",
@@ -711,6 +712,7 @@
    "label": "Recipient Account Field"
   }
  ],
+ "grid_page_length": 50,
  "icon": "fa fa-bolt",
  "idx": 6,
  "index_web_pages_for_search": 1,
