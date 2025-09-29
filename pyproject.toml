@@ -49,12 +49,21 @@ dependencies = [
     "html5lib~=1.1",
     "ipython~=8.15.0",
     "ldap3~=2.9",
+<<<<<<< HEAD
     "markdown2~=2.4.8",
     "MarkupSafe>=2.1.0,<3",
     "maxminddb-geolite2==2018.703",
     "num2words~=0.5.12",
     "oauthlib~=3.3.1",
     "openpyxl~=3.1.2",
+=======
+    "markdown2~=2.5.3",
+    "MarkupSafe~=3.0.2",
+    "num2words~=0.5.14",
+    "oauthlib~=3.2.2",
+    "openpyxl~=3.1.5",
+    "orjson~=3.11.3",
+>>>>>>> 9d45a931d1 (build(deps): bump orjson)
     "passlib~=1.7.4",
     "pdfkit~=1.0.0",
     "phonenumbers==8.13.55",
