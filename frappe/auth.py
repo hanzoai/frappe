@@ -102,7 +102,7 @@ class HTTPRequest:
 
 
 class LoginManager:
-	__slots__ = ("user", "info", "full_name", "user_type", "resume")
+	__slots__ = ("full_name", "info", "resume", "user", "user_type")
 
 	def __init__(self):
 		self.user = None
@@ -658,7 +658,7 @@ def validate_oauth(authorization_header):
 		required_scopes = frappe.db.get_value("OAuth Bearer Token", token, "scopes").split(
 			get_url_delimiter()
 		)
-		valid, oauthlib_request = get_oauth_server().verify_request(
+		valid, _oauthlib_request = get_oauth_server().verify_request(
 			uri, http_method, body, headers, required_scopes
 		)
 		if valid:
