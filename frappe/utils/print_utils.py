@@ -1,13 +1,8 @@
 import os
-import platform
 import re
-import shutil
-import zipfile
-from pathlib import Path
 from typing import Literal
 
 import click
-import requests
 
 import frappe
 from frappe.utils.data import cint, cstr
@@ -176,6 +171,9 @@ def setup_chromium():
 
 def find_or_download_chromium_executable():
 	"""Finds the Chromium executable or downloads if not found."""
+	import platform
+	from pathlib import Path
+
 	bench_path = frappe.utils.get_bench_path()
 	"""Determine the path to the Chromium executable."""
 	chromium_dir = os.path.join(bench_path, "chromium")
@@ -200,6 +198,12 @@ def find_or_download_chromium_executable():
 
 
 def download_chromium():
+	import platform
+	import shutil
+	import zipfile
+
+	import requests
+
 	bench_path = frappe.utils.get_bench_path()
 	"""Download and extract Chromium for the specific version at the bench level."""
 	chromium_dir = os.path.join(bench_path, "chromium")
@@ -367,6 +371,8 @@ def calculate_platform():
 	Returns:
 	        str: The detected platform string (e.g., 'linux64', 'mac-arm64', etc.).
 	"""
+	import platform
+
 	system = platform.system().lower()
 	arch = platform.machine().lower()
 

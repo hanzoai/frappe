@@ -1,8 +1,3 @@
-from io import BytesIO
-
-from pypdf import PdfWriter, Transformation
-
-
 class PDFTransformer:
 	def __init__(self, browser):
 		self.browser = browser
@@ -29,6 +24,8 @@ class PDFTransformer:
 			self.is_footer_dynamic = self.browser.is_footer_dynamic
 
 	def transform_pdf(self, output=None):
+		from pypdf import PdfWriter
+
 		header = self.header_pdf
 		body = self.body_pdf
 		footer = self.footer_pdf
@@ -99,12 +96,16 @@ class PDFTransformer:
 		return self.get_file_data_from_writer(writer)
 
 	def _transform(self, page, page_top, ty):
+		from pypdf import PdfWriter, Transformation
+
 		transform = Transformation().translate(ty=ty)
 		page.mediabox.upper_right = (page.mediabox.right, page_top)
 		page.add_transformation(transform)
 		return page
 
 	def get_file_data_from_writer(self, writer_obj):
+		from io import BytesIO
+
 		# https://docs.python.org/3/library/io.html
 		stream = BytesIO()
 		writer_obj.write(stream)

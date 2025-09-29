@@ -3,8 +3,6 @@ from typing import ClassVar
 from bs4 import BeautifulSoup
 
 import frappe
-from frappe.utils.pdf_generator.cdp_connection import CDPSocketClient
-from frappe.utils.pdf_generator.page import Page
 from frappe.utils.print_utils import convert_uom, parse_float_and_unit
 
 
@@ -54,6 +52,8 @@ class Browser:
 		generator.remove_browser(self.browserID)
 
 	def open(self, generator):
+		from frappe.utils.pdf_generator.cdp_connection import CDPSocketClient
+
 		# checking because if we share browser accross request _devtools_url will already be set for subsequent requests.
 		if not generator._devtools_url:
 			generator._set_devtools_url()
@@ -85,6 +85,8 @@ class Browser:
 
 		NOTE: In theory this will make it faster but more importantly use less cpu, ram etc.
 		"""
+
+		from frappe.utils.pdf_generator.page import Page
 
 		page = Page(self.session, self.browser_context_id, page_type)
 		page.is_print_designer = self.is_print_designer

@@ -1,9 +1,6 @@
 import base64
 import time
 import urllib
-from io import BytesIO
-
-from pypdf import PdfReader
 
 import frappe
 
@@ -75,13 +72,13 @@ class Page:
 				"domain": domain,
 				"sameSite": "Strict",
 			}
-			result, error = self.send("Network.enable")
+			_result, error = self.send("Network.enable")
 			if error:
 				raise RuntimeError(f"Error enabling network: {error}")
-			result, error = self.send("Network.setCookie", cookie)
+			_result, error = self.send("Network.setCookie", cookie)
 			if error:
 				raise RuntimeError(f"Error setting cookie: {error}")
-			result, error = self.send("Network.disable")
+			_result, error = self.send("Network.disable")
 			if error:
 				raise RuntimeError(f"Error disabling network: {error}")
 
@@ -324,6 +321,10 @@ class Page:
 		return stream_id
 
 	def get_pdf_from_stream(self, stream_id, raw=False):
+		from io import BytesIO
+
+		from pypdf import PdfReader
+
 		pdf_data = b""
 		offset = 0
 		while True:
