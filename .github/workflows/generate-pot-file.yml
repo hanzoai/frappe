@@ -28,7 +28,11 @@ jobs:
         - name: Setup Python
           uses: actions/setup-python@v5
           with:
+<<<<<<< HEAD
             python-version: "3.12"
+=======
+            python-version: "3.14"
+>>>>>>> 9f2dba7bef (chore(ci): bump python version)
 
         - name: Run script to update POT file
           run: |

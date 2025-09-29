@@ -26,7 +26,11 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
+<<<<<<< HEAD
           python-version: '3.10'
+=======
+          python-version: '3.14'
+>>>>>>> 9f2dba7bef (chore(ci): bump python version)
       - name: Set up bench and build assets
         run: |
           npm install -g yarn
