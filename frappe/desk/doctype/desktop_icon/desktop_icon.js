@@ -2,7 +2,8 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Desktop Icon", {
-	refresh: function (frm) {
+	setup: function (frm) {
+		load_installed_apps();
 		frm.fields_dict.color.set_data(Object.keys(frappe.palette_map));
 	},
 	before_save: function (frm) {
@@ -33,3 +34,14 @@ frappe.ui.form.on("Desktop Icon", {
 		}
 	},
 });
+
+async function load_installed_apps(frm) {
+	await frappe.call({
+		method: "frappe.desk.desktop.get_installed_apps",
+		callback: function (r) {
+			if (r.message) {
+				cur_frm.fields_dict["app"].set_data(r.message);
+			}
+		},
+	});
+}

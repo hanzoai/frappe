@@ -1,8 +1,11 @@
 # Copyright (c) 2025, Frappe Technologies and contributors
 # For license information, please see license.txt
 
-# import frappe
+import frappe
+from frappe import _
+from frappe.desk.doctype.workspace.workspace import is_workspace_manager
 from frappe.model.document import Document
+from frappe.modules.export_file import delete_folder, export_to_files
 
 
 class WorkspaceSidebar(Document):
@@ -17,7 +20,18 @@ class WorkspaceSidebar(Document):
 
 		desktop_icon: DF.Link | None
 		items: DF.Table[WorkspaceSidebarItem]
+		module: DF.Link | None
 		title: DF.Data | None
 	# end: auto-generated types
 
-	pass
+	def on_update(self):
+		if self.module and frappe.conf.developer_mode:
+			export_to_files(record_list=[["Workspace Sidebar", self.name]], record_module=self.module)
+
+	def on_trash(self):
+		if not is_workspace_manager():
+			frappe.throw(_("You need to be Workspace Manager to delete a public workspace."))
+
+	def after_delete(self):
+		if self.module and frappe.conf.developer_mode:
+			delete_folder(self.module, "Workspace Sidebar", self.name)

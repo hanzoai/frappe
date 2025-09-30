@@ -529,26 +529,27 @@ def get_sidebar_items():
 
 	for s in sidebars:
 		w = frappe.get_doc("Workspace Sidebar", s)
-		desktop_icon = frappe.db.get_value("Desktop Icon", w.desktop_icon, "label").lower()
-		sidebar_items[desktop_icon] = []
+		if frappe.db.get_value("Desktop Icon", w.desktop_icon, "label"):
+			desktop_icon = frappe.db.get_value("Desktop Icon", w.desktop_icon, "label").lower()
+			sidebar_items[desktop_icon] = []
 
-		for si in w.items:
-			workspace_sidebar = {
-				"label": si.label,
-				"link_to": si.link_to,
-				"link_type": si.link_type,
-				"type": si.type,
-				"icon": si.icon,
-				"child": si.child,
-			}
-			if si.link_type == "Report":
-				report_type, ref_doctype = frappe.db.get_value(
-					"Report", si.link_to, ["report_type", "ref_doctype"]
-				)
-				workspace_sidebar["report"] = {
-					"report_type": report_type,
-					"ref_doctype": ref_doctype,
+			for si in w.items:
+				workspace_sidebar = {
+					"label": si.label,
+					"link_to": si.link_to,
+					"link_type": si.link_type,
+					"type": si.type,
+					"icon": si.icon,
+					"child": si.child,
 				}
-			sidebar_items[desktop_icon].append(workspace_sidebar)
+				if si.link_type == "Report":
+					report_type, ref_doctype = frappe.db.get_value(
+						"Report", si.link_to, ["report_type", "ref_doctype"]
+					)
+					workspace_sidebar["report"] = {
+						"report_type": report_type,
+						"ref_doctype": ref_doctype,
+					}
+				sidebar_items[desktop_icon].append(workspace_sidebar)
 
 	return sidebar_items

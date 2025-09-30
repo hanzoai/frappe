@@ -60,9 +60,8 @@
   },
   {
    "fieldname": "app",
-   "fieldtype": "Data",
-   "label": "App",
-   "read_only": 1
+   "fieldtype": "Autocomplete",
+   "label": "App"
   },
   {
    "fieldname": "description",
@@ -166,7 +165,7 @@
   }
  ],
  "links": [],
- "modified": "2025-09-08 02:43:09.997790",
+ "modified": "2025-09-29 01:47:25.718356",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Desktop Icon",

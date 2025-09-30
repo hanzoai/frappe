@@ -2,11 +2,14 @@
 # License: MIT. See LICENSE
 
 import json
+import os
 import random
 
 import frappe
 from frappe import _
 from frappe.model.document import Document
+from frappe.modules.export_file import write_document_file
+from frappe.modules.import_file import import_file_by_path
 
 
 class DesktopIcon(Document):
@@ -20,7 +23,7 @@ class DesktopIcon(Document):
 
 		_doctype: DF.Link | None
 		_report: DF.Link | None
-		app: DF.Data | None
+		app: DF.Autocomplete | None
 		blocked: DF.Check
 		category: DF.Data | None
 		color: DF.Autocomplete | None
@@ -46,9 +49,47 @@ class DesktopIcon(Document):
 
 	def on_trash(self):
 		clear_desktop_icons_cache()
+		if frappe.conf.developer_mode:
+			if self.standard == 1 and self.app:
+				self.delete_desktop_icon_file()
+
+	def on_update(self):
+		if frappe.conf.developer_mode:
+			if self.standard == 1 and self.app:
+				self.export_desktop_icon()
+
+	def export_desktop_icon(self):
+		folder_path = create_directory_if_not_exists(self.app)
+		file_path = os.path.join(folder_path, f"{frappe.scrub(self.label)}.json")
+		doc_export = self.as_dict(no_nulls=True, no_private_properties=True)
+
+		with open(file_path, "w+") as icon_file_doc:
+			icon_file_doc.write(frappe.as_json(doc_export) + "\n")
+
+	def delete_desktop_icon_file(self):
+		folder_path = create_directory_if_not_exists(self.app)
+		file_path = os.path.join(folder_path, f"{frappe.scrub(self.label)}.json")
+		if not os.path.exists(file_path):
+			os.remove(file_path)
 
 	def after_insert(self):
 		clear_desktop_icons_cache()
+
+
+def create_directory_if_not_exists(app_name):
+	app_path = frappe.get_app_path(app_name)
+	desktop_icon_path = os.path.join(app_path, "desktop_icon")
+
+	if not os.path.exists(desktop_icon_path):
+		frappe.create_folder(desktop_icon_path)
+
+	return desktop_icon_path
+
+
+def get_desktop_icon_directory(app_name):
+	app_path = frappe.get_app_path(app_name)
+	desktop_icon_path = os.path.join(app_path, "desktop_icon")
+	return desktop_icon_path
 
 
 def after_doctype_insert():
@@ -401,7 +442,19 @@ def make_user_copy(module_name, user):
 def sync_desktop_icons():
 	"""Sync desktop icons from all apps"""
 	for app in frappe.get_installed_apps():
-		sync_from_app(app)
+		sync_icons(app)
+		# sync_from_app(app)
+
+
+def sync_icons(app_name):
+	icon_directory = get_desktop_icon_directory(app_name)
+	if os.path.exists(icon_directory):
+		icon_files = [os.path.join(icon_directory, filename) for filename in os.listdir(icon_directory)]
+		for doc_path in icon_files:
+			imported = import_file_by_path(doc_path)
+			if imported:
+				frappe.db.commit(chain=True)
+		# print(icon_directory)
 
 
 def sync_from_app(app):

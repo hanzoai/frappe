@@ -8,6 +8,7 @@
  "field_order": [
   "desktop_icon",
   "title",
+  "module",
   "items"
  ],
  "fields": [
@@ -30,12 +31,18 @@
    "fieldtype": "Table",
    "label": "Items",
    "options": "Workspace Sidebar Item"
+  },
+  {
+   "fieldname": "module",
+   "fieldtype": "Link",
+   "label": "Module",
+   "options": "Module Def"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-12 12:48:17.192321",
+ "modified": "2025-09-26 02:16:29.097807",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Workspace Sidebar",

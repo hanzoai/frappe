@@ -9,6 +9,7 @@ import os
 
 import frappe
 from frappe.cache_manager import clear_controller_cache
+from frappe.desk.doctype.desktop_icon.desktop_icon import sync_desktop_icons
 from frappe.model.base_document import get_controller
 from frappe.modules.import_file import import_file_by_path
 from frappe.modules.patch_handler import _patch_mode
@@ -27,6 +28,7 @@ IMPORTABLE_DOCTYPES = [
 	("email", "notification"),
 	("printing", "print_style"),
 	("desk", "workspace"),
+	("desk", "workspace_sidebar"),
 	("desk", "onboarding_step"),
 	("desk", "module_onboarding"),
 	("desk", "form_tour"),
@@ -39,7 +41,6 @@ IMPORTABLE_DOCTYPES = [
 
 def sync_all(force=0, reset_permissions=False):
 	_patch_mode(True)
-
 	for app in frappe.get_installed_apps():
 		sync_for(app, force, reset_permissions=reset_permissions)
 
@@ -93,6 +94,8 @@ def sync_for(app_name, force=0, reset_permissions=False):
 			"workspace_number_card",
 			"workspace_custom_block",
 			"workspace",
+			"workspace_sidebar",
+			"workspace_sidebar_item",
 		]:
 			files.append(os.path.join(FRAPPE_PATH, "desk", "doctype", desk_module, f"{desk_module}.json"))
 

@@ -85,7 +85,8 @@ function setup_navbar(navbar_style) {
 }
 
 frappe.router.on("change", function () {
-	if (frappe.get_route()[0] == "desktop") setup_navbar();
+	let navbar_style = $("#icon-style").attr("data-navbar-style");
+	if (frappe.get_route()[0] == "desktop") setup_navbar(navbar_style);
 	else $(".navbar").show();
 });
 
