@@ -1460,6 +1460,18 @@ def validate_fields(meta):
 			if docfield.options and (int(docfield.options) > 10 or int(docfield.options) < 3):
 				frappe.throw(_("Options for Rating field can range from 3 to 10"))
 
+	def check_decimal_config(docfield):
+		if docfield.fieldtype not in ("Currency", "Float", "Percent"):
+			return
+
+		if docfield.length and docfield.precision:
+			if cint(docfield.precision) > cint(docfield.length):
+				frappe.throw(
+					_("Precision ({0}) for {1} cannot be greater than its length ({2}).").format(
+						docfield.precision, frappe.bold(docfield.label), docfield.length
+					)
+				)
+
 	fields = meta.get("fields")
 	fieldname_list = [d.fieldname for d in fields]
 
@@ -1482,6 +1494,7 @@ def validate_fields(meta):
 		scrub_options_in_select(d)
 		validate_fetch_from(d)
 		validate_data_field_type(d)
+		check_decimal_config(d)
 
 		if not frappe.flags.in_migrate:
 			check_unique_fieldname(meta.get("name"), d.fieldname)
