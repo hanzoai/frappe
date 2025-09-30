@@ -1249,7 +1249,10 @@ def mask_field_value(field, val):
 		return val
 
 	if field.fieldtype == "Data" and field.options == "Phone":
-		return val[:3] + "XXXXXX"
+		if len(val) > 3:
+			return val[:3] + "XXXXXX"
+		else:
+			return "X" * len(val)
 	elif field.fieldtype == "Data" and field.options == "Email":
 		email = val.split("@")
 		return "XXXXXX@" + email[1] if len(email) > 1 else "XXXXXX"
