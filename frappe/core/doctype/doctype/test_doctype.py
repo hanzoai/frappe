@@ -753,6 +753,7 @@ class TestDocType(FrappeTestCase):
 		)
 		self.assertRaises(frappe.ValidationError, doctype.insert)
 
+
 def new_doctype(
 	name: str | None = None,
 	unique: bool = False,
