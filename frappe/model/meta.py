@@ -221,8 +221,8 @@ class Meta(Document):
 
 		return set_only_once_fields
 
-	def get_table_fields(self, include_virtual=True):
-		return self._table_fields if include_virtual else self._non_virtual_table_fields
+	def get_table_fields(self, ignore_virtual=True):
+		return self._non_virtual_table_fields if ignore_virtual else self._table_fields
 
 	def get_global_search_fields(self):
 		"""Return list of fields with `in_global_search` set and `name` if set."""
@@ -482,23 +482,40 @@ class Meta(Document):
 			if get_datetime(recent_change) > add_to_date(None, days=-1 * LARGE_TABLE_RECENCY_THRESHOLD):
 				self.is_large_table = True
 
-	def init_field_caches(self):
-		# field map
-		self._fields = {field.fieldname: field for field in self.fields}
+	@cached_property
+	def _fields(self):
+		return {field.fieldname: field for field in self.fields}
 
-		# table fields
+	@cached_property
+	def _table_fields(self):
 		if self.name == "DocType":
-			self._table_fields = DOCTYPE_TABLE_FIELDS
-		else:
-			self._table_fields = self.get("fields", {"fieldtype": ["in", table_fields]})
-			self._non_virtual_table_fields = (
-				[]
-				if self.get("is_virtual")
-				else self.get("fields", {"fieldtype": ["in", table_fields], "is_virtual": 0})
-			)
+			return DOCTYPE_TABLE_FIELDS
+		return self.get("fields", {"fieldtype": ["in", table_fields]})
 
-		# table fieldname: doctype map
-		self._table_doctypes = {field.fieldname: field.options for field in self._table_fields}
+	@cached_property
+	def _non_virtual_table_fields(self):
+		if self.name == "DocType":
+			return self._table_fields
+
+		if self.get("is_virtual"):
+			return []
+
+		return self.get("fields", {"fieldtype": ["in", table_fields], "is_virtual": 0})
+
+	@cached_property
+	def _table_doctypes(self):
+		return {field.fieldname: field.options for field in self._table_fields}
+
+	@cached_property
+	def _non_virtual_table_doctypes(self):
+		return {field.fieldname: field.options for field in self._non_virtual_table_fields}
+
+	def init_field_caches(self):
+		self._fields
+		self._table_fields
+		self._non_virtual_table_fields
+		self._table_doctypes
+		self._non_virtual_table_doctypes
 
 	def sort_fields(self):
 		"""
@@ -961,14 +978,7 @@ def _update_field_order_based_on_insert_after(field_order, insert_after_map):
 			field_order.extend(fields)
 
 
-CACHE_PROPERTIES = frozenset(
-	(
-		"_fields",
-		"_table_fields",
-		"_table_doctypes",
-		*(prop for prop, value in vars(Meta).items() if isinstance(value, cached_property)),
-	)
-)
+CACHE_PROPERTIES = frozenset(prop for prop, value in vars(Meta).items() if isinstance(value, cached_property))
 
 
 def _serialize(doc, no_nulls=False, *, is_child=False):

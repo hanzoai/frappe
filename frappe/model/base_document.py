@@ -61,14 +61,6 @@ TABLE_DOCTYPES_FOR_CHILD_TABLES = MappingProxyType({})
 
 DOCTYPES_FOR_DOCTYPE = {"DocType", *TABLE_DOCTYPES_FOR_DOCTYPE.values()}
 
-UNPICKLABLE_KEYS = (
-	"meta",
-	"permitted_fieldnames",
-	"_parent_doc",
-	"_weakref",
-	"_table_fieldnames",
-)
-
 
 def _reduce_extended_instance(doc):
 	"""Make extended class instances pickle-able.
@@ -458,6 +450,7 @@ class BaseDocument:
 			controller = get_controller(doctype)
 			child = controller.__new__(controller)
 			child._table_fieldnames = TABLE_DOCTYPES_FOR_CHILD_TABLES
+			child._non_virtual_table_fieldnames = TABLE_DOCTYPES_FOR_CHILD_TABLES
 			child.__init__(value)
 
 		__dict = child.__dict__
@@ -484,7 +477,14 @@ class BaseDocument:
 
 		return self.meta._table_doctypes
 
-	def _get_table_fields(self):
+	@cached_property
+	def _non_virtual_table_fieldnames(self) -> dict:
+		if self.doctype in DOCTYPES_FOR_DOCTYPE:
+			return self._table_fieldnames
+
+		return self.meta._non_virtual_table_doctypes
+
+	def _get_table_fields(self, ignore_virtual=True):
 		"""
 		To get table fields during Document init
 		Meta.get_table_fields goes into recursion for special doctypes
@@ -497,7 +497,7 @@ class BaseDocument:
 		if self.doctype in DOCTYPES_FOR_DOCTYPE:
 			return ()
 
-		return self.meta.get_table_fields()
+		return self.meta.get_table_fields(ignore_virtual=ignore_virtual)
 
 	def _evaluate_virtual_field_options(self, options):
 		from frappe.utils.safe_exec import get_safe_globals
@@ -581,12 +581,12 @@ class BaseDocument:
 		without worrying about whether or not they have values
 		"""
 
-		if not self._table_fieldnames:
+		if not self._non_virtual_table_fieldnames:
 			return
 
 		__dict = self.__dict__
 
-		for fieldname in self._table_fieldnames:
+		for fieldname in self._non_virtual_table_fieldnames:
 			if __dict.get(fieldname) is None:
 				__dict[fieldname] = []
 
@@ -645,11 +645,16 @@ class BaseDocument:
 		convert_dates_to_str=False,
 		no_child_table_fields=False,
 		no_private_properties=False,
+		*,
+		ignore_virtual_child_tables=False,
 	) -> dict:
 		doc = self.get_valid_dict(convert_dates_to_str=convert_dates_to_str, ignore_nulls=no_nulls)
 		doc["doctype"] = self.doctype
 
-		for fieldname in self._table_fieldnames:
+		table_fieldnames = (
+			self._non_virtual_table_fieldnames if ignore_virtual_child_tables else self._table_fieldnames
+		)
+		for fieldname in table_fieldnames:
 			children = getattr(self, fieldname) or []
 			doc[fieldname] = [
 				d.as_dict(
@@ -806,7 +811,7 @@ class BaseDocument:
 		"""Raw update parent + children
 		DOES NOT VALIDATE AND CALL TRIGGERS"""
 		self.db_update()
-		for fieldname in self._table_fieldnames:
+		for fieldname in self._non_virtual_table_fieldnames:
 			for doc in self.get(fieldname):
 				doc.db_update()
 
@@ -1524,3 +1529,8 @@ def _filter(data, filters, limit=None):
 				break
 
 	return out
+
+
+UNPICKLABLE_KEYS = frozenset(
+	prop for prop, value in vars(BaseDocument).items() if isinstance(value, cached_property)
+)

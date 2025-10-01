@@ -149,9 +149,17 @@ $.extend(frappe.meta, {
 		return docfield_map && docfield_map[fn];
 	},
 
-	get_table_fields: function (dt) {
+	get_table_fields: function (dt, ignore_virtual = true) {
 		return $.map(frappe.meta.docfield_list[dt], function (d) {
-			return frappe.model.table_fields.includes(d.fieldtype) ? d : null;
+			if (!frappe.model.table_fields.includes(d.fieldtype)) {
+				return null;
+			}
+
+			if (ignore_virtual && d.is_virtual) {
+				return null;
+			}
+
+			return d;
 		});
 	},
 

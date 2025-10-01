@@ -276,6 +276,8 @@ class Document(BaseDocument):
 		for fieldname, child_doctype in self._table_fieldnames.items():
 			# Make sure not to query the DB for a child table, if it is a virtual one.
 			if not is_doctype and is_virtual_doctype(child_doctype):
+				# Remove cache so that the virtual field loads again
+				self.__dict__.pop(fieldname, None)
 				continue
 
 			if is_doctype:
@@ -876,7 +878,7 @@ class Document(BaseDocument):
 			return
 
 		all_fields = self.meta.fields.copy()
-		for table_field in self.meta.get_table_fields():
+		for table_field in self.meta.get_table_fields(ignore_virtual=False):
 			all_fields += frappe.get_meta(table_field.options).fields or []
 
 		if all(df.permlevel == 0 for df in all_fields):
@@ -892,7 +894,7 @@ class Document(BaseDocument):
 					# hasattr might return True for class attribute which can't be delattr-ed.
 					continue
 
-		for table_field in self.meta.get_table_fields():
+		for table_field in self.meta.get_table_fields(ignore_virtual=False):
 			for df in frappe.get_meta(table_field.options).fields or []:
 				if df.permlevel and df.permlevel not in has_access_to:
 					for child in self.get(table_field.fieldname) or []:
@@ -1105,12 +1107,13 @@ class Document(BaseDocument):
 			msg = ", ".join(each[2] for each in cancelled_links)
 			frappe.throw(_("Cannot link cancelled document: {0}").format(msg), frappe.CancelledLinkError)
 
-	def get_all_children(self, parenttype=None) -> list["Document"]:
+	def get_all_children(self, parenttype=None, *, ignore_virtual=True) -> list["Document"]:
 		"""Return all children documents from **Table** type fields in a list."""
 
 		children = []
+		table_fieldnames = self._non_virtual_table_fieldnames if ignore_virtual else self._table_fieldnames
 
-		for fieldname, child_doctype in self._table_fieldnames.items():
+		for fieldname, child_doctype in table_fieldnames.items():
 			if parenttype and child_doctype != parenttype:
 				continue
 
@@ -1310,7 +1313,7 @@ class Document(BaseDocument):
 
 			return frappe.clear_last_message()
 
-		for fieldname in self._table_fieldnames:
+		for fieldname in self._non_virtual_table_fieldnames:
 			for row in self.get(fieldname):
 				row._doc_before_save = next(
 					(d for d in (self._doc_before_save.get(fieldname) or []) if d.name == row.name), None
@@ -1972,7 +1975,7 @@ def get_lazy_controller(doctype):
 
 		# Dynamically construct a class that subclasses LazyDocument and original controller.
 		lazy_controller = type(f"Lazy{original_controller.__name__}", (LazyDocument, original_controller), {})
-		for df in meta.get_table_fields(include_virtual=False):
+		for df in meta.get_table_fields():
 			setattr(lazy_controller, df.fieldname, LazyChildTable(df.fieldname, df.options))
 
 		lazy_controllers[doctype] = lazy_controller
