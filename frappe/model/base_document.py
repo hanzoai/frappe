@@ -146,7 +146,7 @@ def _update_virtual_ct_props(class_, doctype):
 		return class_
 
 	meta = frappe.get_meta(doctype)
-	for df in meta.get_table_fields():
+	for df in meta.get_table_fields(ignore_virtual=False):
 		if df.is_virtual:
 			_update_virtual_ct_prop(class_, df)
 
