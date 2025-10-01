@@ -216,6 +216,7 @@ class DocType(Document):
 		self.validate_website()
 		self.validate_virtual_doctype_methods()
 		self.ensure_minimum_max_attachment_limit()
+		self.set_title_field_if_applicable()
 		validate_links_table_fieldnames(self)
 
 		if not self.is_new():
@@ -446,6 +447,28 @@ class DocType(Document):
 				title=_("Insufficient attachment limit"),
 				alert=True,
 			)
+
+	def set_title_field_if_applicable(self):
+		if self.title_field:
+			return
+
+		if self.istable or self.issingle:
+			return
+
+		has_field_named_title = any(d.fieldname == "title" for d in self.fields)
+		if has_field_named_title and self.is_new():
+			self.title_field = "title"
+			self.show_title_field_in_link = True
+			return
+
+		if has_field_named_title and not self.is_new():
+			old_doc = self.get_doc_before_save()
+			old_has_field_named_title = any(d.fieldname == "title" for d in old_doc.fields)
+
+			if not old_has_field_named_title:
+				self.title_field = "title"
+				self.show_title_field_in_link = True
+				return
 
 	def change_modified_of_parent(self):
 		"""Change the timestamp of parent DocType if the current one is a child to clear caches."""

@@ -856,6 +856,26 @@ class TestDocType(IntegrationTestCase):
 		)
 		self.assertRaises(frappe.ValidationError, doctype.insert)
 
+	def test_title_field_defaults_to_title_if_present(self):
+		doctype = new_doctype(
+			"Test Title Field",
+			custom=True,
+			fields=[
+				{
+					"fieldname": "title",
+					"fieldtype": "Data",
+				},
+				{
+					"fieldname": "some_fieldname_1",
+					"fieldtype": "Data",
+				},
+			],
+		).insert(ignore_if_duplicate=True)
+
+		self.assertEqual(doctype.title_field, "title")
+
+		frappe.delete_doc("DocType", doctype.name)
+
 
 def new_doctype(
 	name: str | None = None,
