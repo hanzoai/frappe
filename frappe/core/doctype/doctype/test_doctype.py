@@ -916,7 +916,6 @@ class TestDocType(IntegrationTestCase):
 		).insert()
 
 		doctype.title_field = ""
-		doctype.show_title_field_in_link = 0
 		doctype.save()
 
 		self.assertEqual(doctype.title_field, "")  # should not revert back to title

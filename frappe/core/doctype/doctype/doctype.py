@@ -216,6 +216,7 @@ class DocType(Document):
 		self.validate_website()
 		self.validate_virtual_doctype_methods()
 		self.ensure_minimum_max_attachment_limit()
+		self.validate_show_title_in_link_field()
 		self.set_title_field_if_applicable()
 		validate_links_table_fieldnames(self)
 
@@ -447,6 +448,10 @@ class DocType(Document):
 				title=_("Insufficient attachment limit"),
 				alert=True,
 			)
+
+	def validate_show_title_in_link_field(self):
+		if self.show_title_field_in_link and not self.title_field:
+			self.show_title_field_in_link = False
 
 	def set_title_field_if_applicable(self):
 		if self.title_field:
