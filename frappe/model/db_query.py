@@ -1128,17 +1128,17 @@ from {tables}
 		if ORDER_GROUP_PATTERN.match(_lower):
 			frappe.throw(_("Illegal SQL Query"))
 
-		# NEW: strip backticked identifiers so words inside table/field names
-		# (e.g. `tabTrade Union`) don't trigger 'union' / 'select ... from' checks
-		sanitized = re.sub(r"`[^`]*`", "", _lower)
-
 		subquery_indicators = {
 			r"union",
 			r"intersect",
 			r"select\b.*\bfrom",
 		}
 
-		# run the subquery checks against the sanitized string
+		# Replace doctype names with a hardcoded string "doc"
+		# This is to avoid false positives based on doctype name
+		sanitized = re.sub(r"`tab[^`]*`", " doc ", _lower)
+
+		# Run the subquery checks against the sanitized string
 		if any(re.search(r"\b" + pattern + r"\b", sanitized) for pattern in subquery_indicators):
 			frappe.throw(_("Cannot use sub-query here."))
 
