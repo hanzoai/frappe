@@ -21,6 +21,7 @@
   "autoname",
   "column_break_nexu",
   "title_field",
+  "show_title_field_in_link",
   "allow_rename",
   "settings_tab",
   "sb0",
@@ -57,7 +58,6 @@
   "allow_auto_repeat",
   "make_attachments_public",
   "view_settings",
-  "show_title_field_in_link",
   "translated_doctype",
   "search_fields",
   "default_print_format",
@@ -792,7 +792,7 @@
    "link_fieldname": "document_type"
   }
  ],
- "modified": "2025-09-23 06:48:13.555017",
+ "modified": "2025-10-01 11:17:23.023212",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "DocType",
