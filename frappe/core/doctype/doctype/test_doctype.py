@@ -857,9 +857,12 @@ class TestDocType(IntegrationTestCase):
 		self.assertRaises(frappe.ValidationError, doctype.insert)
 
 	def test_title_field_defaults_to_title_if_present(self):
+		frappe.delete_doc_if_exists("DocType", "Test Title Field")
+		frappe.delete_doc_if_exists("DocType", "Test Title Field 2")
+		frappe.delete_doc_if_exists("DocType", "Test Title Field 3")
+
 		doctype = new_doctype(
 			"Test Title Field",
-			custom=True,
 			fields=[
 				{
 					"fieldname": "title",
@@ -870,10 +873,53 @@ class TestDocType(IntegrationTestCase):
 					"fieldtype": "Data",
 				},
 			],
-		).insert(ignore_if_duplicate=True)
+		).insert()
 
 		self.assertEqual(doctype.title_field, "title")
+		frappe.delete_doc("DocType", doctype.name)
 
+		# Title field is added later
+		doctype = new_doctype(
+			"Test Title Field 2",
+			fields=[
+				{
+					"fieldname": "some_fieldname_1",
+					"fieldtype": "Data",
+				}
+			],
+		).insert()
+
+		doctype.append(
+			"fields",
+			{
+				"fieldname": "title",
+				"fieldtype": "Data",
+			},
+		)
+		doctype.save()
+
+		self.assertEqual(doctype.title_field, "title")
+		frappe.delete_doc("DocType", doctype.name)
+
+		doctype = new_doctype(
+			"Test Title Field 3",
+			fields=[
+				{
+					"fieldname": "some_fieldname_1",
+					"fieldtype": "Data",
+				},
+				{
+					"fieldname": "title",
+					"fieldtype": "Data",
+				},
+			],
+		).insert()
+
+		doctype.title_field = ""
+		doctype.show_title_field_in_link = 0
+		doctype.save()
+
+		self.assertEqual(doctype.title_field, "")  # should not revert back to title
 		frappe.delete_doc("DocType", doctype.name)
 
 
