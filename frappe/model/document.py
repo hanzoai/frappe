@@ -431,6 +431,7 @@ class Document(BaseDocument):
 			for d in self.get_all_children():
 				d.db_insert()
 
+		self.reset_virtual_child_tables()
 		self.run_method("after_insert")
 		self.flags.in_insert = True
 
@@ -536,6 +537,7 @@ class Document(BaseDocument):
 			self.db_update()
 
 		self.update_children()
+		self.reset_virtual_child_tables()
 		self.run_post_save_methods()
 
 		# clear unsaved flag
@@ -613,6 +615,12 @@ class Document(BaseDocument):
 		for d in all_rows:
 			d: Document
 			d.db_update()
+
+	def reset_virtual_child_tables(self):
+		"""Reset virtual child tables so that they are reloaded next time"""
+		for df in self.meta.get_table_fields():
+			if df.is_virtual:
+				self.__dict__.pop(df.fieldname, None)
 
 	def get_doc_before_save(self) -> "Self":
 		return getattr(self, "_doc_before_save", None)
