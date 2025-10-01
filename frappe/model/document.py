@@ -618,7 +618,7 @@ class Document(BaseDocument):
 
 	def reset_virtual_child_tables(self):
 		"""Reset virtual child tables so that they are reloaded next time"""
-		for df in self.meta.get_table_fields():
+		for df in self.meta.get_table_fields(ignore_virtual=False):
 			if df.is_virtual:
 				self.__dict__.pop(df.fieldname, None)
 
