@@ -1532,5 +1532,8 @@ def _filter(data, filters, limit=None):
 
 
 UNPICKLABLE_KEYS = frozenset(
-	prop for prop, value in vars(BaseDocument).items() if isinstance(value, cached_property)
+	(
+		"_parent_doc",
+		*(prop for prop, value in vars(BaseDocument).items() if isinstance(value, cached_property)),
+	)
 )
