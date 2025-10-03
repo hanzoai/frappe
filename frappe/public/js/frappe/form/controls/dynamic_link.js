@@ -10,12 +10,10 @@ frappe.ui.form.ControlDynamicLink = class ControlDynamicLink extends frappe.ui.f
 			if (cur_list) {
 				// for list page
 				options = cur_list.page.fields_dict[this.df.options].get_input_value();
-			}
-			else if (cur_page) {
+			} else if (cur_page) {
 				const selector = `input[data-fieldname="${this.df.options}"]`;
-				let input = null;
-				input = $(cur_page.page).find(selector);
-				options = input.val();
+				let input = $(cur_page.page).find(selector);
+				options = input.length ? input.val() : null;
 			}
 		} else {
 			options = frappe.model.get_value(this.df.parent, this.docname, this.df.options);
