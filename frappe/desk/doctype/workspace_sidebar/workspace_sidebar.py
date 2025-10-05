@@ -18,9 +18,7 @@ class WorkspaceSidebar(Document):
 		from frappe.desk.doctype.workspace_sidebar_item.workspace_sidebar_item import WorkspaceSidebarItem
 		from frappe.types import DF
 
-		desktop_icon: DF.Link | None
 		items: DF.Table[WorkspaceSidebarItem]
-		module: DF.Link | None
 		title: DF.Data | None
 	# end: auto-generated types
 

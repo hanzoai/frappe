@@ -69,7 +69,9 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.$drop_icon = this.wrapper.find(".drop-icon");
 	}
 	set_header_icon_and_color() {
-		let icon = frappe.boot.desktop_icons.filter((f) => f.label == this.workspace_title);
+		let icon = frappe.boot.desktop_icons.filter(
+			(f) => f.label.toLowerCase() == this.workspace_title.toLowerCase()
+		);
 		if (icon.length > 0) {
 			this.header_icon = icon[0].icon;
 			this.header_logo_color = icon[0].color;

@@ -6,21 +6,12 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "desktop_icon",
   "title",
   "module",
   "items"
  ],
  "fields": [
   {
-   "fieldname": "desktop_icon",
-   "fieldtype": "Link",
-   "label": "Desktop Icon",
-   "options": "Desktop Icon",
-   "unique": 1
-  },
-  {
-   "fetch_from": "desktop_icon.label",
    "fieldname": "title",
    "fieldtype": "Data",
    "label": "Title",
@@ -42,7 +33,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-26 02:16:29.097807",
+ "modified": "2025-10-01 07:52:51.149158",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Workspace Sidebar",
