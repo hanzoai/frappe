@@ -59,7 +59,6 @@ class Event(Document):
 
 		add_video_conferencing: DF.Check
 		all_day: DF.Check
-		attending: DF.Literal["Yes", "No", "Maybe"]
 		color: DF.Color | None
 		description: DF.TextEditor | None
 		ends_on: DF.Datetime | None
