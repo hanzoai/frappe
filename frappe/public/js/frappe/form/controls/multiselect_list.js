@@ -250,15 +250,15 @@ frappe.ui.form.ControlMultiSelectList = class ControlMultiSelectList extends (
 	adjust_dropdown_right_position() {
 		const $dropdown = $(this.$list_wrapper).find("ul.dropdown-menu");
 
-		const dropdownEl = $dropdown[0];
-		const parentEl = dropdownEl.parentElement;
+		const dropdown_el = $dropdown[0];
+		const parent_el = dropdown_el.parentElement;
 
-		const dropdownRect = dropdownEl.getBoundingClientRect();
-		const parentRect = parentEl.getBoundingClientRect();
-		const rightDiff = parentRect.right - dropdownRect.right;
+		const dropdown_rect = dropdown_el.getBoundingClientRect();
+		const parent_rect = parent_el.getBoundingClientRect();
+		const right_diff = parent_rect.right - dropdown_rect.right;
 
 		setTimeout(() => {
-			dropdownEl.style.left = `${rightDiff}px`;
+			dropdown_el.style.left = `${right_diff}px`;
 		}, 10);
 	}
 
