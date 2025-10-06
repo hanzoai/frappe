@@ -19,6 +19,7 @@
   "starts_on",
   "ends_on",
   "status",
+  "attending",
   "sender",
   "all_day",
   "sync_with_google_calendar",
@@ -351,13 +352,21 @@
    "fieldname": "links_tab",
    "fieldtype": "Tab Break",
    "label": "Links"
+  },
+  {
+   "fieldname": "attending",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Attending",
+   "options": "Yes\nNo\nMaybe"
   }
  ],
  "grid_page_length": 50,
  "icon": "fa fa-calendar",
  "idx": 1,
  "links": [],
- "modified": "2025-10-01 14:36:42.780094",
+ "modified": "2025-10-06 14:11:20.433505",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Event",
