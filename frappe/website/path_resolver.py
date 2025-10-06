@@ -128,7 +128,12 @@ def resolve_redirect(path, query_string=None):
 
 	redirects = frappe.get_hooks("website_redirects")
 	redirects += [
-		{"source": r.source, "target": r.target, "redirect_http_status": r.redirect_http_status}
+		{
+			"source": r.source,
+			"target": r.target,
+			"redirect_http_status": r.redirect_http_status,
+			"forward_query_parameters": r.get("forward_query_parameters"),
+		}
 		for r in (frappe.get_website_settings("route_redirects") or [])
 	]
 
@@ -148,6 +153,10 @@ def resolve_redirect(path, query_string=None):
 
 		if match:
 			redirect_to = re.sub(pattern, rule["target"], path_to_match)
+			if rule.get("forward_query_parameters") and query_string:
+				separator = "&" if "?" in redirect_to else "?"
+				redirect_to += separator + frappe.safe_decode(query_string)
+
 			frappe.flags.redirect_location = redirect_to
 			status_code = rule.get("redirect_http_status") or 301
 			frappe.cache.hset(
