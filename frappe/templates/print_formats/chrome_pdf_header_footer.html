@@ -21,7 +21,7 @@
 				/* padding is added to simulate old wkhtmltopdf format prints */
 				.wrapper {
 					box-sizing: border-box;
-					padding: 17mm 0 1mm !important;
+					padding: 1mm 0 1mm !important;
 					page-break-after: always !important;
 				}
 				[document-status] {
@@ -32,6 +32,10 @@
 				}
 			}
 		</style>
+		{% for tag in styles -%}
+			{{ tag | string }}
+		{%- endfor %}
+
 	</head>
 	<body>
 		<div class="print-format">
