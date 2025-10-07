@@ -6,14 +6,9 @@
 	border: 1px solid var(--table-border-color);
 	border-radius: var(--border-radius-md);
 	color: var(--text-color);
-<<<<<<< HEAD
 	&:focus-visible {
 		@include grid-focus();
 	}
-=======
-	min-height: 150px;
-	background-color: var(--subtle-accent);
->>>>>>> a0e4386c7a (fix: let focus jump directly inside the first input of the first row)
 }
 
 .form-grid.error {
@@ -124,18 +119,9 @@
 	}
 }
 
-<<<<<<< HEAD
-=======
-.grid-empty {
-	height: 110px;
-	background-color: var(--subtle-accent);
-	display: flex;
-	vertical-align: middle;
-}
 .grid-static-col:focus-visible {
 	@include grid-focus();
 }
->>>>>>> a0e4386c7a (fix: let focus jump directly inside the first input of the first row)
 .grid-static-col,
 .row-index {
 	height: 38px;
