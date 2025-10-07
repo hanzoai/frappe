@@ -162,6 +162,7 @@ class TestDBUpdate(FrappeTestCase):
 		)[0][0]
 		self.assertEqual(length, 64)
 
+
 def get_fieldtype_from_def(field_def):
 	fieldtuple = frappe.db.type_map.get(field_def.fieldtype, ("", 0))
 	fieldtype = fieldtuple[0]
