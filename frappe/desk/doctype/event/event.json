@@ -20,6 +20,7 @@
   "ends_on",
   "status",
   "sender",
+  "attending",
   "all_day",
   "sync_with_google_calendar",
   "add_video_conferencing",
@@ -351,14 +352,20 @@
    "fieldname": "links_tab",
    "fieldtype": "Tab Break",
    "label": "Links"
+  },
+  {
+   "fieldname": "attending",
+   "fieldtype": "Select",
+   "label": "Attending",
+   "options": "\nYes\nNo\nMaybe"
   }
  ],
  "grid_page_length": 50,
  "icon": "fa fa-calendar",
  "idx": 1,
  "links": [],
- "modified": "2025-10-06 14:52:09.583526",
- "modified_by": "Administrator",
+ "modified": "2025-10-07 08:53:24.732646",
+ "modified_by": "shariq@frappe.io",
  "module": "Desk",
  "name": "Event",
  "naming_rule": "Expression (old style)",
