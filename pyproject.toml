@@ -30,10 +30,17 @@ dependencies = [
 >>>>>>> 4ff5297d9e (build(deps): bump pypika)
     "PyQRCode~=1.2.1",
     "PyYAML~=6.0.2",
+<<<<<<< HEAD
     "RestrictedPython~=8.0",
     "WeasyPrint==68.0",
     "pydyf==0.12.1",
     "Werkzeug==3.1.6",
+=======
+    "RestrictedPython~=8.1",
+    "WeasyPrint==66.0",
+    "pydyf==0.11.0",
+    "Werkzeug==3.1.3",
+>>>>>>> 0c3be512db (build(deps): bump RestrictedPython version [change to non-alpha before merging])
     "Whoosh~=2.7.4",
     "beautifulsoup4~=4.12.2",
     "bleach-allowlist~=1.0.3",
