@@ -463,7 +463,6 @@ class DocType(Document):
 		has_field_named_title = any(d.fieldname == "title" for d in self.fields)
 		if has_field_named_title and self.is_new():
 			self.title_field = "title"
-			self.show_title_field_in_link = True
 			return
 
 		if has_field_named_title and not self.is_new():
@@ -472,7 +471,6 @@ class DocType(Document):
 
 			if not old_has_field_named_title:
 				self.title_field = "title"
-				self.show_title_field_in_link = True
 				return
 
 	def change_modified_of_parent(self):
