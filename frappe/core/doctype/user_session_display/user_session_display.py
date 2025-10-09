@@ -24,3 +24,15 @@ class UserSessionDisplay(Document):
 		session_created: DF.Datetime | None
 		user_agent: DF.SmallText | None
 	# end: auto-generated types
+
+	def db_insert(self, *args, **kwargs):
+		raise NotImplementedError
+
+	def load_from_db(self, *args, **kwargs):
+		raise NotImplementedError
+
+	def db_update(self, *args, **kwargs):
+		raise NotImplementedError
+
+	def delete(self, *args, **kwargs):
+		raise NotImplementedError
