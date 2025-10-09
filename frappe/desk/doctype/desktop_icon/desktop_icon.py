@@ -21,25 +21,16 @@ class DesktopIcon(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		_doctype: DF.Link | None
-		_report: DF.Link | None
 		app: DF.Autocomplete | None
-		blocked: DF.Check
-		category: DF.Data | None
-		color: DF.Autocomplete | None
-		custom: DF.Check
-		description: DF.SmallText | None
-		force_show: DF.Check
-		hidden: DF.Check
+		icon_type: DF.Literal["Folder", "App", "Link"]
 		idx: DF.Int
 		label: DF.Data | None
 		link: DF.SmallText | None
+		link_to: DF.DynamicLink | None
 		logo_url: DF.Data | None
-		module_name: DF.Data | None
-		reverse: DF.Check
-		route: DF.Data | None
+		parent_icon: DF.Link | None
 		standard: DF.Check
-		type: DF.Literal["module", "list", "link", "page", "query-report", "workspace"]
+		type: DF.Literal["DocType", "Workspace", "External"]
 		workspace: DF.Link | None
 	# end: auto-generated types
 
@@ -93,7 +84,10 @@ def get_desktop_icon_directory(app_name):
 
 
 def after_doctype_insert():
-	frappe.db.add_unique("Desktop Icon", ("module_name", "owner", "standard"))
+	pass
+
+
+# frappe.db.add_unique("Desktop Icon", ("owner", "standard"))
 
 
 def get_desktop_icons(user=None):
@@ -105,25 +99,16 @@ def get_desktop_icons(user=None):
 
 	if not user_icons:
 		fields = [
-			"module_name",
-			"hidden",
 			"label",
 			"link",
 			"type",
+			"icon_type",
+			"parent_icon",
 			"icon",
-			"color",
-			"description",
-			"category",
-			"_doctype",
-			"_report",
+			"link_to",
 			"idx",
-			"force_show",
-			"reverse",
-			"custom",
 			"standard",
-			"blocked",
 			"workspace",
-			"route",
 			"logo_url",
 		]
 
@@ -140,6 +125,7 @@ def get_desktop_icons(user=None):
 		standard_icons = frappe.get_all("Desktop Icon", fields=fields, filters={"standard": 1})
 
 		standard_map = {}
+
 		for icon in standard_icons:
 			if icon._doctype in blocked_doctypes:
 				icon.blocked = 1
@@ -192,7 +178,11 @@ def get_desktop_icons(user=None):
 		for d in user_icons:
 			if d.label:
 				d.label = _(d.label, context=d.parent)
+		# includes
 
+		for s in user_icons:
+			if s.parent_icon:
+				s.parent_icon = frappe.db.get_value("Desktop Icon", s.parent_icon, "label")
 		frappe.cache.hset("desktop_icons", user, user_icons)
 
 	return user_icons
@@ -635,39 +625,75 @@ def hide(name, user=None):
 
 
 def create_desktop_icons_from_workspace():
-	all_workspaces = frappe.get_all("Workspace", filters={"public": 1}, pluck="name")
+	from frappe.query_builder import DocType
+
+	workspace = DocType("Workspace")
+
+	all_workspaces = (
+		frappe.qb.from_(workspace)
+		.select(workspace.name)
+		.where((workspace.public == 1) & (workspace.name != "Welcome Workspace"))
+	).run(pluck=True)
+
 	for w in all_workspaces:
-		icon = frappe.new_doc("Desktop Icon")
-		icon.type = "workspace"
-		icon.workspace = w
-		icon.route = "/app/" + w.lower()
-		icon.label = w
-		icon.color = generate_color()
-		icon.icon = frappe.db.get_value("Workspace", w, "icon")
-		icon.insert(ignore_if_duplicate=True)
+		if not frappe.db.exists("Desktop Icon", {"label": w}):
+			icon = frappe.new_doc("Desktop Icon")
+			icon.type = "Workspace"
+			icon.workspace = w
+			icon.route = "/app/" + w.lower()
+			icon.label = w
+			icon.icon_type = "Link"
+			icon.standard = 1
+			icon.color = generate_color()
+			icon.icon = frappe.db.get_value("Workspace", w, "icon")
+			icon.app = frappe.db.get_value("Workspace", w, "app")
+			module = frappe.db.get_value("Workspace", w, "module")
+
+			icon_app = frappe.db.get_value("Module Def", module, "app_name")
+			icon_app = frappe.get_hooks("app_title", app_name=icon_app)
+
+			parent_icon = frappe.db.exists("Desktop Icon", {"label": icon_app[0]})
+			if parent_icon:
+				icon.parent_icon = parent_icon
+
+			icon.insert(ignore_if_duplicate=True)
 
 
 def generate_color():
-	import random
-
-	def hex():
-		return random.randint(0, 255)
-
-	return "#%02X%02X%02X" % (hex(), hex(), hex())
+	colors = ["orange", "pink", "blue", "green", "dark", "red", "yellow", "purple", "gray"]
+	return random.choice(colors)
 
 
 def create_desktop_icons_from_installed_apps():
-	from frappe.apps import is_desk_apps
-
 	apps = frappe.get_installed_apps()
 	for a in apps:
 		app_details = frappe.get_hooks("add_to_apps_screen", app_name=a)
 		if len(app_details) != 0:
-			if not is_desk_apps(app_details):
-				icon = frappe.new_doc("Desktop Icon")
-				icon.route = app_details[0]["route"]
-				icon.label = app_details[0]["title"]
-				icon.type = "link"
-				icon.link = app_details[0]["route"]
-				icon.logo_url = app_details[0]["logo"]
-				icon.save()
+			icon = frappe.new_doc("Desktop Icon")
+			icon.route = app_details[0]["route"]
+			icon.label = app_details[0]["title"]
+			icon.type = "External"
+			icon.standard = 1
+			icon.icon_type = "App"
+			icon.link = app_details[0]["route"]
+			icon.logo_url = app_details[0]["logo"]
+			icon.save()
+
+
+@frappe.whitelist()
+def set_sequence(desktop_icons):
+	cnt = 1
+	for item in json.loads(desktop_icons):
+		frappe.db.set_value("Workspace", item.get("name"), "sequence_id", cnt)
+		frappe.db.set_value("Workspace", item.get("name"), "parent_page", item.get("parent") or "")
+		cnt += 1
+
+	frappe.clear_cache()
+	frappe.toast(frappe._("Updated"))
+
+
+def create_desktop_icon():
+	create_desktop_icons_from_installed_apps()
+	frappe.db.commit()
+	create_desktop_icons_from_workspace()
+	frappe.db.commit()

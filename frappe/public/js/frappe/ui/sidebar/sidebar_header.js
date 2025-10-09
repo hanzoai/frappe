@@ -74,10 +74,6 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		);
 		if (icon.length > 0) {
 			this.header_icon = icon[0].icon;
-			this.header_logo_color = icon[0].color;
-			this.header_bg_color = frappe.palette[frappe.palette_map[this.header_logo_color]][0];
-			this.header_stroke_color =
-				frappe.palette[frappe.palette_map[this.header_logo_color]][1];
 		}
 	}
 	setup_app_switcher() {

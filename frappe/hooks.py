@@ -416,6 +416,7 @@ ignore_links_on_delete = [
 	"Route History",
 	"Access Log",
 	"Permission Log",
+	"Desktop Icon",
 ]
 
 # Request Hooks
@@ -581,3 +582,13 @@ user_invitation = {
 		"System Manager": [],
 	},
 }
+
+
+add_to_apps_screen = [
+	{
+		"name": app_name,
+		"logo": app_logo_url,
+		"title": app_title,
+		"route": app_home,
+	}
+]

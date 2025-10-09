@@ -530,7 +530,7 @@ def get_sidebar_items():
 	for s in sidebars:
 		w = frappe.get_doc("Workspace Sidebar", s)
 		sidebar_items[s.lower()] = []
-
+		print(s)
 		for si in w.items:
 			workspace_sidebar = {
 				"label": si.label,
@@ -539,8 +539,8 @@ def get_sidebar_items():
 				"type": si.type,
 				"icon": si.icon,
 				"child": si.child,
-				"collapsible": si.collapsible,
-				"collapsed_by_default": si.collapsed_by_default,
+				# "collapsible": si.collapsible,
+				# "collapsed_by_default": si.collapsed_by_default,
 			}
 			if si.link_type == "Report":
 				report_type, ref_doctype = frappe.db.get_value(

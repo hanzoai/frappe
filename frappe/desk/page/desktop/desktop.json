@@ -5,7 +5,7 @@
  "doctype": "Page",
  "icon": "",
  "idx": 0,
- "modified": "2025-08-18 16:17:19.559412",
+ "modified": "2025-10-08 13:31:06.525425",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "desktop",
@@ -13,7 +13,7 @@
  "page_name": "desktop",
  "roles": [
   {
-   "role": "System Manager"
+   "role": "All"
   }
  ],
  "script": null,

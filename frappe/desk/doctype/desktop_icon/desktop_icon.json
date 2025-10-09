@@ -4,41 +4,26 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "module_name",
   "label",
   "standard",
-  "custom",
+  "icon_type",
   "type",
   "workspace",
-  "route",
+  "link_to",
+  "parent_icon",
   "column_break_3",
   "app",
-  "description",
-  "category",
-  "hidden",
-  "blocked",
-  "force_show",
-  "section_break_7",
-  "_doctype",
-  "_report",
-  "link",
-  "column_break_10",
-  "color",
   "icon",
   "logo_url",
-  "reverse",
-  "idx"
+  "idx",
+  "link"
  ],
  "fields": [
   {
-   "fieldname": "module_name",
-   "fieldtype": "Data",
-   "label": "Module Name"
-  },
-  {
    "fieldname": "label",
    "fieldtype": "Data",
-   "label": "Label"
+   "label": "Label",
+   "unique": 1
   },
   {
    "default": "0",
@@ -48,73 +33,16 @@
    "label": "Standard"
   },
   {
-   "default": "0",
-   "fieldname": "custom",
-   "fieldtype": "Check",
-   "label": "Custom",
-   "read_only": 1
-  },
-  {
    "fieldname": "column_break_3",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "app",
-   "fieldtype": "Autocomplete",
-   "label": "App"
-  },
-  {
-   "fieldname": "description",
-   "fieldtype": "Small Text",
-   "label": "Description"
-  },
-  {
-   "fieldname": "category",
-   "fieldtype": "Data",
-   "label": "Category"
-  },
-  {
-   "default": "0",
-   "fieldname": "hidden",
-   "fieldtype": "Check",
-   "label": "Hidden"
-  },
-  {
-   "default": "0",
-   "fieldname": "blocked",
-   "fieldtype": "Check",
-   "label": "Blocked"
-  },
-  {
-   "default": "0",
-   "fieldname": "force_show",
-   "fieldtype": "Check",
-   "label": "Force Show",
-   "read_only": 1
-  },
-  {
-   "fieldname": "section_break_7",
-   "fieldtype": "Section Break"
   },
   {
    "fieldname": "type",
    "fieldtype": "Select",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Type",
-   "options": "module\nlist\nlink\npage\nquery-report\nworkspace"
-  },
-  {
-   "fieldname": "_doctype",
-   "fieldtype": "Link",
-   "label": "_doctype",
-   "options": "DocType"
-  },
-  {
-   "fieldname": "_report",
-   "fieldtype": "Link",
-   "label": "_report",
-   "options": "Report"
+   "label": "Link Type",
+   "options": "DocType\nWorkspace\nExternal"
   },
   {
    "fieldname": "link",
@@ -122,24 +50,9 @@
    "label": "Link"
   },
   {
-   "fieldname": "column_break_10",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "color",
-   "fieldtype": "Autocomplete",
-   "label": "Color"
-  },
-  {
    "fieldname": "icon",
    "fieldtype": "Icon",
    "label": "Icon"
-  },
-  {
-   "default": "0",
-   "fieldname": "reverse",
-   "fieldtype": "Check",
-   "label": "Reverse Icon Color"
   },
   {
    "fieldname": "idx",
@@ -153,19 +66,37 @@
    "options": "Workspace"
   },
   {
-   "fieldname": "route",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Route"
-  },
-  {
    "fieldname": "logo_url",
    "fieldtype": "Data",
    "label": "Logo URL"
+  },
+  {
+   "fieldname": "icon_type",
+   "fieldtype": "Select",
+   "label": "Icon Type",
+   "options": "Folder\nApp\nLink"
+  },
+  {
+   "depends_on": "eval: doc.standard == 1",
+   "fieldname": "app",
+   "fieldtype": "Autocomplete",
+   "label": "App"
+  },
+  {
+   "fieldname": "link_to",
+   "fieldtype": "Dynamic Link",
+   "label": "Link To",
+   "options": "type"
+  },
+  {
+   "fieldname": "parent_icon",
+   "fieldtype": "Link",
+   "label": "Parent Icon",
+   "options": "Desktop Icon"
   }
  ],
  "links": [],
- "modified": "2025-09-29 01:47:25.718356",
+ "modified": "2025-10-08 23:40:31.716144",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Desktop Icon",

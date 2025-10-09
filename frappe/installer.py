@@ -17,7 +17,7 @@ from semantic_version import Version
 
 import frappe
 from frappe.defaults import _clear_cache
-from frappe.desk.doctype.desktop_icon.desktop_icon import sync_desktop_icons
+from frappe.desk.doctype.desktop_icon.desktop_icon import create_desktop_icon, sync_desktop_icons
 from frappe.utils import cint, is_git_url
 from frappe.utils.dashboard import sync_dashboards
 from frappe.utils.synchronization import filelock

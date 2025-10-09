@@ -33,3 +33,13 @@ class WorkspaceSidebar(Document):
 	def after_delete(self):
 		if self.module and frappe.conf.developer_mode:
 			delete_folder(self.module, "Workspace Sidebar", self.name)
+
+
+def create_workspace_sidebar_for_workspaces():
+	all_workspaces = frappe.get_all("Workspace", pluck="name")
+	existing_sidebars = frappe.get_all("Workspace Sidebar", pluck="title")
+	for workspace in all_workspaces:
+		if workspace not in existing_sidebars:
+			sidebar = frappe.new_doc("Workspace Sidebar")
+			sidebar.title = workspace
+			sidebar.save()

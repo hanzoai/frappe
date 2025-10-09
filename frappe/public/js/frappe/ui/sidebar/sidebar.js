@@ -35,7 +35,7 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	setup(workspace_title) {
-		this.workspace_title = frappe.utils.to_title_case(workspace_title);
+		this.workspace_title = workspace_title;
 		this.sidebar_header = new frappe.ui.SidebarHeader(this);
 		this.make_sidebar();
 		this.setup_complete = true;
@@ -545,8 +545,6 @@ frappe.ui.Sidebar = class Sidebar {
 			} else {
 				frappe.app.sidebar.setup(sidebars[0] || "Build");
 			}
-		} else {
-			this.set_sidebar_for_page();
 		}
 
 		this.set_active_workspace_item();

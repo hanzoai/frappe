@@ -109,3 +109,4 @@ import "./frappe/ui/driver.js";
 import "./frappe/scanner";
 
 import "./frappe/ui/address_autocomplete/autocomplete_dialog.js";
+import "./frappe/ui/desktop_icon.html";
