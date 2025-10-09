@@ -493,7 +493,6 @@ function show_api_key_dialog(api_key, api_secret) {
 	);
 }
 
-
 frappe.ui.form.on("User Session Display", {
 	sign_out(frm, doctype, name) {
 		frappe
