@@ -932,7 +932,6 @@ class TestDocType(IntegrationTestCase):
 			frappe.get_meta(dt.name)
 
 
-
 def new_doctype(
 	name: str | None = None,
 	unique: bool = False,
