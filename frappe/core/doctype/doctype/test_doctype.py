@@ -921,6 +921,17 @@ class TestDocType(IntegrationTestCase):
 		self.assertEqual(doctype.title_field, "")  # should not revert back to title
 		frappe.delete_doc("DocType", doctype.name)
 
+	def test_delete_doc_clears_cache(self):
+		dt = new_doctype(
+			fields=[{"fieldname": "test_fdname", "fieldtype": "Data", "label": "Test Field"}],
+		).insert()
+		frappe.get_meta(dt.name)
+		frappe.delete_doc("DocType", dt.name, force=1, delete_permanently=False)
+		frappe.db.commit()
+		with self.assertRaises(frappe.DoesNotExistError):
+			frappe.get_meta(dt.name)
+
+
 
 def new_doctype(
 	name: str | None = None,
