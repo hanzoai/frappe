@@ -435,8 +435,7 @@ def import_doc(context: CliCtxObj, path, force=False):
 	type=click.Path(exists=True, dir_okay=False, resolve_path=True),
 	required=True,
 	help=(
-		"Path to import file (.csv, .xlsx)."
-		"Consider that relative paths will resolve from 'sites' directory"
+		"Path to import file (.csv, .xlsx). Consider that relative paths will resolve from 'sites' directory"
 	),
 )
 @click.option("--doctype", type=str, required=True)
@@ -914,7 +913,7 @@ def set_config(context: CliCtxObj, key, value, global_=False, parse=False):
 	"output",
 	type=click.Choice(["plain", "table", "json", "legacy"]),
 	help="Output format",
-	default="legacy",
+	default="plain",
 )
 def get_version(output):
 	"""Show the versions of all the installed apps."""

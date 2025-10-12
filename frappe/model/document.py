@@ -268,7 +268,19 @@ class Document(BaseDocument):
 		if hasattr(self, "__setup__"):
 			self.__setup__()
 
+		if not is_doctype:
+			self.mask_fields()
+
 		return self
+
+	def mask_fields(self):
+		from frappe.model.db_query import mask_field_value
+
+		mask_fields = frappe.get_meta(self.doctype).get_masked_fields()
+
+		for field in mask_fields:
+			val = self.get(field.fieldname)
+			self.set(field.fieldname, mask_field_value(field, val))
 
 	def load_children_from_db(self):
 		is_doctype = self.doctype == "DocType"
@@ -787,7 +799,7 @@ class Document(BaseDocument):
 				)
 
 		for df in self.meta.get(
-			"fields", {"non_negative": ("=", 1), "fieldtype": ("in", ["Int", "Float", "Currency"])}
+			"fields", {"non_negative": ("=", 1), "fieldtype": ("in", ["Int", "Float", "Currency", "Percent"])}
 		):
 			if flt(self.get(df.fieldname)) < 0:
 				msg = get_msg(df)
@@ -842,9 +854,13 @@ class Document(BaseDocument):
 
 	def is_child_table_same(self, fieldname):
 		"""Validate child table is same as original table before saving"""
+
+		if self.is_new():
+			return False
+
+		same = True
 		value = self.get(fieldname)
 		original_value = self._doc_before_save.get(fieldname)
-		same = True
 
 		if len(original_value) != len(value):
 			same = False
@@ -905,8 +921,10 @@ class Document(BaseDocument):
 		has_access_to = self.get_permlevel_access()
 		high_permlevel_fields = self.meta.get_high_permlevel_fields()
 
-		if high_permlevel_fields:
-			self.reset_values_if_no_permlevel_access(has_access_to, high_permlevel_fields)
+		mask_fields = self.meta.get_masked_fields()
+
+		if high_permlevel_fields or mask_fields:
+			self.reset_values_if_no_permlevel_access(has_access_to, high_permlevel_fields, mask_fields)
 
 		# If new record then don't reset the values for child table
 		if self.is_new():
@@ -1791,9 +1809,12 @@ class Document(BaseDocument):
 		if date_diff(to_date, from_date) < 0:
 			table_row = ""
 			if self.meta.istable:
-				table_row = _("{0} row #{1}: ").format(
-					_(frappe.unscrub(self.parentfield)),
-					self.idx,
+				table_row = (
+					_("{0} row #{1}:").format(
+						_(frappe.unscrub(self.parentfield)),
+						self.idx,
+					)
+					+ " "
 				)
 
 			frappe.throw(
