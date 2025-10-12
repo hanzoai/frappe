@@ -62,7 +62,7 @@ frappe.pages["desktop"].on_page_show = function () {
 
 function toggle_icons(icons) {
 	icons.forEach((i) => {
-		$(i).parent().show();
+		$(i).parent().parent().show();
 	});
 }
 
@@ -70,7 +70,6 @@ class DesktopPage {
 	constructor(page) {
 		this.prepare();
 		this.make(page);
-		this.setup();
 	}
 
 	prepare() {
@@ -113,17 +112,26 @@ class DesktopPage {
 	setup_icon_search() {
 		let all_icons = $(".icon-title");
 		let icons_to_show = [];
+		$(".desktop-container .icons").append(
+			"<div class='no-apps-message hidden'> No apps found </div>"
+		);
 		$(".desktop-search-wrapper > #navbar-search").on("input", function (e) {
 			let search_query = $(e.target).val().toLowerCase();
 			console.log(search_query);
 			icons_to_show = [];
 			all_icons.each(function (index, element) {
-				$(element).parent().hide();
+				$(element).parent().parent().hide();
 				let label = $(element).text().toLowerCase();
 				if (label.includes(search_query)) {
 					icons_to_show.push(element);
 				}
 			});
+
+			if (icons_to_show.length == 0) {
+				$(".desktop-container .icons").find(".no-apps-message").removeClass("hidden");
+			} else {
+				$(".desktop-container .icons").find(".no-apps-message").addClass("hidden");
+			}
 			toggle_icons(icons_to_show);
 		});
 	}
@@ -184,16 +192,36 @@ class DesktopIconGrid {
 				}
 			});
 		}
+		this.add_page_indicators();
 		this.setup_pagination();
 	}
+	add_page_indicators(tempplate) {
+		this.page_indicators = [];
+		if (this.total_pages > 1) {
+			this.pagination_indicator = $(`<div class='page-indicator-container'></div>`).appendTo(
+				this.wrapper
+			);
+			for (let i = 0; i < this.total_pages; i++) {
+				this.page_indicators.push(
+					$("<div class='page-indicator'></div>").appendTo(this.pagination_indicator)
+				);
+			}
+		}
+	}
 	setup_pagination() {
-		this.current_page = 0;
+		this.current_page = this.old_index = 0;
 		this.change_to_page(this.current_page);
 	}
 	change_to_page(index) {
 		this.grids.forEach((g) => $(g).css("display", "none"));
 		this.grids[index].css("display", "grid");
+
+		if (this.page_indicators.length) {
+			this.page_indicators[this.old_index].removeClass("active-page");
+			this.page_indicators[this.current_page].addClass("active-page");
+		}
 		this.current_page = index;
+		this.old_index = index;
 	}
 	split_data(icons, size) {
 		const result = [];
