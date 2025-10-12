@@ -660,6 +660,69 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	fetch_map_for_quick_entry() {
+		let me = this;
+		let fetch_map = {};
+		function add_fetch(link_field, source_field, target_field, target_doctype) {
+			if (!target_doctype) target_doctype = "*";
+
+			if (!me.layout.fetch_dict) {
+				me.layout.fetch_dict = {};
+			}
+
+			// Target field kept as key because source field could be non-unique
+			me.layout.fetch_dict.setDefault(target_doctype, {}).setDefault(link_field, {})[
+				target_field
+			] = source_field;
+		}
+
+		function setup_add_fetch(df) {
+			let is_read_only_field =
+				[
+					"Data",
+					"Read Only",
+					"Text",
+					"Small Text",
+					"Currency",
+					"Check",
+					"Text Editor",
+					"Attach Image",
+					"Code",
+					"Link",
+					"Float",
+					"Int",
+					"Date",
+					"Datetime",
+					"Select",
+					"Duration",
+					"Time",
+				].includes(df.fieldtype) ||
+				df.read_only == 1 ||
+				df.is_virtual == 1;
+
+			if (is_read_only_field && df.fetch_from && df.fetch_from.indexOf(".") != -1) {
+				var parts = df.fetch_from.split(".");
+				add_fetch(parts[0], parts[1], df.fieldname, df.parent);
+			}
+		}
+
+		$.each(this.layout.fields, (i, field) => setup_add_fetch(field));
+
+		for (const key of ["*", this.df.parent]) {
+			if (!this.layout.fetch_dict) {
+				this.layout.fetch_dict = {};
+			}
+			if (this.layout.fetch_dict[key] && this.layout.fetch_dict[key][this.df.fieldname]) {
+				Object.assign(fetch_map, this.layout.fetch_dict[key][this.df.fieldname]);
+			}
+		}
+
+		return fetch_map;
+	}
+
+>>>>>>> 80ac879a4a (fix: enable fetching datetime fields in Quick Entry dialogs)
 	get fetch_map() {
 		const fetch_map = {};
 		if (!this.frm) return fetch_map;
