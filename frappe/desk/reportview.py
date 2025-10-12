@@ -376,6 +376,7 @@ def export_query():
 
 	form_params = get_form_params()
 	form_params["limit_page_length"] = None
+
 	form_params["as_list"] = True
 	csv_params = pop_csv_params(form_params)
 	export_in_background = int(form_params.pop("export_in_background", 0))
@@ -547,7 +548,7 @@ def get_field_info(fields, doctype):
 			if parenttype != doctype:
 				# If the column is from a child table, append the child doctype.
 				# For example, "Item Code (Sales Invoice Item)".
-				label += f" ({ _(parenttype) })"
+				label += f" ({_(parenttype)})"
 
 		field_info.append(
 			{"name": name, "label": label, "fieldtype": fieldtype, "translatable": translatable}
