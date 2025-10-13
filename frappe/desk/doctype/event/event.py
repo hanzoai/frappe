@@ -215,6 +215,19 @@ class Event(Document):
 
 
 @frappe.whitelist()
+def update_attending_status(event_name, attendee, status):
+	event_doc = frappe.get_doc("Event", event_name)
+
+	for participant in event_doc.event_participants:
+		if participant.email == attendee:
+			frappe.db.set_value("Event Participants", participant.name, "attending", status)
+			return
+
+	if not has_permission(event_doc, user=attendee):
+		frappe.throw(_("You are not allowed to update the status of this event."))
+
+
+@frappe.whitelist()
 def delete_communication(event, reference_doctype, reference_docname):
 	if isinstance(event, str):
 		event = json.loads(event)
