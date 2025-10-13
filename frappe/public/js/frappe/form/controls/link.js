@@ -743,6 +743,7 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 					"Float",
 					"Int",
 					"Date",
+					"Datetime",
 					"Select",
 					"Duration",
 					"Time",
