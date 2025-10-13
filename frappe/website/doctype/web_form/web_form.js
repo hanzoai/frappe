@@ -118,6 +118,7 @@ frappe.ui.form.on("Web Form", {
 							read_only: df.read_only,
 							precision: df.precision,
 							depends_on: df.depends_on,
+							placeholder: df.placeholder,
 							mandatory_depends_on: df.mandatory_depends_on,
 							read_only_depends_on: df.read_only_depends_on,
 						});
@@ -337,6 +338,7 @@ frappe.ui.form.on("Web Form Field", {
 		doc.default = df.default;
 		doc.read_only = df.read_only;
 		doc.depends_on = df.depends_on;
+		doc.placeholder = df.placeholder;
 		doc.mandatory_depends_on = df.mandatory_depends_on;
 		doc.read_only_depends_on = df.read_only_depends_on;
 
