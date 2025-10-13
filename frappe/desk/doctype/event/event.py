@@ -242,12 +242,21 @@ def get_permission_query_conditions(user):
 	query = f"""(`tabEvent`.`event_type`='Public' or `tabEvent`.`owner`={frappe.db.escape(user)})"""
 	if shared_events := frappe.share.get_shared("Event", user=user):
 		query += f" or `tabEvent`.`name` in ({', '.join([frappe.db.escape(e) for e in shared_events])})"
+
+	query += f" or exists (select 'x' from `tabEvent Participants` ep where ep.parent=`tabEvent`.name and ep.email={frappe.db.escape(user)})"
+
 	return query
 
 
-def has_permission(doc, user):
+def has_permission(doc, ptype=None, user=None):
 	if doc.event_type == "Public" or doc.owner == user:
 		return True
+
+	for participant in doc.event_participants:
+		if participant.email == user:
+			if ptype in ["write", "create", "delete"]:
+				return False
+			return True
 
 	return False
 
