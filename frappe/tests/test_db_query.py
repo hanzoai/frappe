@@ -469,6 +469,23 @@ class TestReportview(FrappeTestCase):
 		)
 		self.assertTrue("_relevance" in data[0])
 
+		# Test that fields with keywords in strings are allowed
+		data = DatabaseQuery("DocType").execute(
+			fields=["name", "locate('select', name)"],
+			limit_start=0,
+			limit_page_length=1,
+		)
+		self.assertTrue(data)
+
+		# Test that subqueries with other DML are blocked
+		self.assertRaises(
+			frappe.DataError,
+			DatabaseQuery("DocType").execute,
+			fields=["name", "issingle", "(insert into tabUser values (1))"],
+			limit_start=0,
+			limit_page_length=1,
+		)
+
 		data = DatabaseQuery("DocType").execute(
 			fields=["name", "issingle", "date(creation) as creation"], limit_start=0, limit_page_length=1
 		)
