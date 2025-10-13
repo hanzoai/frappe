@@ -218,6 +218,11 @@ class Event(Document):
 def update_attending_status(event_name, attendee, status):
 	event_doc = frappe.get_doc("Event", event_name)
 
+	if frappe.session.user == attendee:
+		event_doc.attending = status
+		event_doc.save()
+		return
+
 	for participant in event_doc.event_participants:
 		if participant.email == attendee:
 			frappe.db.set_value("Event Participants", participant.name, "attending", status)
