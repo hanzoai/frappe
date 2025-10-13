@@ -19,34 +19,7 @@ class WebFormField(Document):
 		depends_on: DF.Code | None
 		description: DF.Text | None
 		fieldname: DF.Literal[None]
-		fieldtype: DF.Literal[
-			"Attach",
-			"Attach Image",
-			"Check",
-			"Currency",
-			"Color",
-			"Data",
-			"Date",
-			"Datetime",
-			"Duration",
-			"Float",
-			"HTML",
-			"Int",
-			"Link",
-			"Password",
-			"Phone",
-			"Rating",
-			"Select",
-			"Signature",
-			"Small Text",
-			"Text",
-			"Text Editor",
-			"Table",
-			"Time",
-			"Section Break",
-			"Column Break",
-			"Page Break",
-		]
+		fieldtype: DF.Literal["Attach", "Attach Image", "Check", "Currency", "Color", "Data", "Date", "Datetime", "Duration", "Float", "HTML", "Int", "Link", "Password", "Phone", "Rating", "Select", "Signature", "Small Text", "Text", "Text Editor", "Table", "Time", "Section Break", "Column Break", "Page Break"]
 		hidden: DF.Check
 		label: DF.Data | None
 		mandatory_depends_on: DF.Code | None
@@ -56,6 +29,7 @@ class WebFormField(Document):
 		parent: DF.Data
 		parentfield: DF.Data
 		parenttype: DF.Data
+		placeholder: DF.Data | None
 		precision: DF.Literal["", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 		read_only: DF.Check
 		read_only_depends_on: DF.Code | None
