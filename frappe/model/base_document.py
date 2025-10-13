@@ -655,7 +655,7 @@ class BaseDocument:
 			self._non_virtual_table_fieldnames if ignore_virtual_child_tables else self._table_fieldnames
 		)
 		for fieldname in table_fieldnames:
-			children = getattr(self, fieldname) or []
+			children = getattr(self, fieldname, None) or []
 			doc[fieldname] = [
 				d.as_dict(
 					convert_dates_to_str=convert_dates_to_str,
