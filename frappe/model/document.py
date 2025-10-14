@@ -431,7 +431,7 @@ class Document(BaseDocument):
 			for d in self.get_all_children():
 				d.db_insert()
 
-		self.reset_virtual_child_tables()
+		self.reset_computed_child_tables()
 		self.run_method("after_insert")
 		self.flags.in_insert = True
 
@@ -537,7 +537,7 @@ class Document(BaseDocument):
 			self.db_update()
 
 		self.update_children()
-		self.reset_virtual_child_tables()
+		self.reset_computed_child_tables()
 		self.run_post_save_methods()
 
 		# clear unsaved flag
@@ -616,9 +616,9 @@ class Document(BaseDocument):
 			d: Document
 			d.db_update()
 
-	def reset_virtual_child_tables(self):
-		"""Reset virtual child tables so that they are reloaded next time"""
-		for df in self.meta.get_table_fields(ignore_virtual=False):
+	def reset_computed_child_tables(self):
+		"""Reset computed child tables so that they are reloaded next time"""
+		for df in self.meta.get_table_fields(include_computed=True):
 			if df.is_virtual:
 				self.__dict__.pop(df.fieldname, None)
 
@@ -886,7 +886,7 @@ class Document(BaseDocument):
 			return
 
 		all_fields = self.meta.fields.copy()
-		for table_field in self.meta.get_table_fields(ignore_virtual=False):
+		for table_field in self.meta.get_table_fields(include_computed=True):
 			all_fields += frappe.get_meta(table_field.options).fields or []
 
 		if all(df.permlevel == 0 for df in all_fields):
@@ -902,7 +902,7 @@ class Document(BaseDocument):
 					# hasattr might return True for class attribute which can't be delattr-ed.
 					continue
 
-		for table_field in self.meta.get_table_fields(ignore_virtual=False):
+		for table_field in self.meta.get_table_fields(include_computed=True):
 			for df in frappe.get_meta(table_field.options).fields or []:
 				if df.permlevel and df.permlevel not in has_access_to:
 					for child in self.get(table_field.fieldname) or []:
@@ -1115,11 +1115,11 @@ class Document(BaseDocument):
 			msg = ", ".join(each[2] for each in cancelled_links)
 			frappe.throw(_("Cannot link cancelled document: {0}").format(msg), frappe.CancelledLinkError)
 
-	def get_all_children(self, parenttype=None, *, ignore_virtual=True) -> list["Document"]:
+	def get_all_children(self, parenttype=None, *, include_computed=False) -> list["Document"]:
 		"""Return all children documents from **Table** type fields in a list."""
 
 		children = []
-		table_fieldnames = self._non_virtual_table_fieldnames if ignore_virtual else self._table_fieldnames
+		table_fieldnames = self._table_fieldnames if include_computed else self._non_computed_table_fieldnames
 
 		for fieldname, child_doctype in table_fieldnames.items():
 			if parenttype and child_doctype != parenttype:
@@ -1321,7 +1321,7 @@ class Document(BaseDocument):
 
 			return frappe.clear_last_message()
 
-		for fieldname in self._non_virtual_table_fieldnames:
+		for fieldname in self._non_computed_table_fieldnames:
 			for row in self.get(fieldname):
 				row._doc_before_save = next(
 					(d for d in (self._doc_before_save.get(fieldname) or []) if d.name == row.name), None

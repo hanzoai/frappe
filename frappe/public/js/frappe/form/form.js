@@ -1866,7 +1866,7 @@ frappe.ui.form.Form = class FrappeForm {
 		// returns list of children that are selected. returns [parentfield, name] for each
 		var selected = {},
 			me = this;
-		frappe.meta.get_table_fields(this.doctype, false).forEach(function (df) {
+		frappe.meta.get_table_fields(this.doctype, true).forEach(function (df) {
 			// handle TableMultiselect child fields
 			let _selected = [];
 
@@ -1887,7 +1887,7 @@ frappe.ui.form.Form = class FrappeForm {
 		if (frappe.meta.docfield_map[this.doctype][fieldname]) {
 			doctype = this.doctype;
 		} else {
-			frappe.meta.get_table_fields(this.doctype, false).every(function (df) {
+			frappe.meta.get_table_fields(this.doctype, true).every(function (df) {
 				if (frappe.meta.docfield_map[df.options][fieldname]) {
 					doctype = df.options;
 					return false;

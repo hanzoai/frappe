@@ -221,8 +221,8 @@ class Meta(Document):
 
 		return set_only_once_fields
 
-	def get_table_fields(self, ignore_virtual=True):
-		return self._non_virtual_table_fields if ignore_virtual else self._table_fields
+	def get_table_fields(self, include_computed=False):
+		return self._table_fields if include_computed else self._non_computed_table_fields
 
 	def get_global_search_fields(self):
 		"""Return list of fields with `in_global_search` set and `name` if set."""
@@ -490,15 +490,13 @@ class Meta(Document):
 	def _table_fields(self):
 		if self.name == "DocType":
 			return DOCTYPE_TABLE_FIELDS
+
 		return self.get("fields", {"fieldtype": ["in", table_fields]})
 
 	@cached_property
-	def _non_virtual_table_fields(self):
+	def _non_computed_table_fields(self):
 		if self.name == "DocType":
 			return self._table_fields
-
-		if self.get("is_virtual"):
-			return []
 
 		return self.get("fields", {"fieldtype": ["in", table_fields], "is_virtual": 0})
 
@@ -507,15 +505,15 @@ class Meta(Document):
 		return {field.fieldname: field.options for field in self._table_fields}
 
 	@cached_property
-	def _non_virtual_table_doctypes(self):
-		return {field.fieldname: field.options for field in self._non_virtual_table_fields}
+	def _non_computed_table_doctypes(self):
+		return {field.fieldname: field.options for field in self._non_computed_table_fields}
 
 	def init_field_caches(self):
 		self._fields
 		self._table_fields
-		self._non_virtual_table_fields
+		self._non_computed_table_fields
 		self._table_doctypes
-		self._non_virtual_table_doctypes
+		self._non_computed_table_doctypes
 
 	def sort_fields(self):
 		"""

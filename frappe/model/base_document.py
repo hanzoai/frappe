@@ -138,27 +138,27 @@ def import_controller(doctype):
 		raise ImportError(f"{doctype}: {classname} is not a subclass of BaseDocument")
 
 	class_ = _get_extended_class(class_, doctype)
-	return _update_virtual_ct_props(class_, doctype)
+	return _update_computed_ct_props(class_, doctype)
 
 
-def _update_virtual_ct_props(class_, doctype):
-	if doctype in DOCTYPES_FOR_DOCTYPE or getattr(class_, "_virtual_ct_props_updated", False):
+def _update_computed_ct_props(class_, doctype):
+	if doctype in DOCTYPES_FOR_DOCTYPE or getattr(class_, "_computed_ct_props_updated", False):
 		return class_
 
 	meta = frappe.get_meta(doctype)
-	for df in meta.get_table_fields(ignore_virtual=False):
+	for df in meta.get_table_fields(include_computed=True):
 		if df.is_virtual:
-			_update_virtual_ct_prop(class_, df)
+			_update_computed_ct_prop(class_, df)
 
-	class_._virtual_ct_props_updated = True
+	class_._computed_ct_props_updated = True
 	return class_
 
 
-def _update_virtual_ct_prop(class_, df):
+def _update_computed_ct_prop(class_, df):
 	fieldname = df.fieldname
 	original_prop = getattr(class_, fieldname, None)
 
-	def virtual_ct_prop(self):
+	def computed_ct_prop(self):
 		if original_prop and is_a_property(original_prop):
 			value = original_prop.__get__(self, type(self))
 
@@ -174,7 +174,7 @@ def _update_virtual_ct_prop(class_, df):
 		self.set(fieldname, value)
 		return self.__dict__[fieldname]
 
-	setattr(class_, fieldname, property(virtual_ct_prop))
+	setattr(class_, fieldname, property(computed_ct_prop))
 
 
 def _get_extended_class(base_class, doctype):
@@ -214,22 +214,6 @@ def _get_extended_class(base_class, doctype):
 			"__module__": base_class.__module__,
 		},
 	)
-
-
-RESERVED_KEYWORDS = frozenset(
-	(
-		"doctype",
-		"meta",
-		"flags",
-		"_weakref",
-		"_parent_doc",
-		"_table_fields",
-		"_doc_before_save",
-		"_table_fieldnames",
-		"permitted_fieldnames",
-		"dont_update_if_missing",
-	)
-)
 
 
 class BaseDocument:
@@ -450,7 +434,7 @@ class BaseDocument:
 			controller = get_controller(doctype)
 			child = controller.__new__(controller)
 			child._table_fieldnames = TABLE_DOCTYPES_FOR_CHILD_TABLES
-			child._non_virtual_table_fieldnames = TABLE_DOCTYPES_FOR_CHILD_TABLES
+			child._non_computed_table_fieldnames = TABLE_DOCTYPES_FOR_CHILD_TABLES
 			child.__init__(value)
 
 		__dict = child.__dict__
@@ -478,13 +462,13 @@ class BaseDocument:
 		return self.meta._table_doctypes
 
 	@cached_property
-	def _non_virtual_table_fieldnames(self) -> dict:
+	def _non_computed_table_fieldnames(self) -> dict:
 		if self.doctype in DOCTYPES_FOR_DOCTYPE:
 			return self._table_fieldnames
 
-		return self.meta._non_virtual_table_doctypes
+		return self.meta._non_computed_table_doctypes
 
-	def _get_table_fields(self, ignore_virtual=True):
+	def _get_table_fields(self, include_computed=False):
 		"""
 		To get table fields during Document init
 		Meta.get_table_fields goes into recursion for special doctypes
@@ -497,7 +481,7 @@ class BaseDocument:
 		if self.doctype in DOCTYPES_FOR_DOCTYPE:
 			return ()
 
-		return self.meta.get_table_fields(ignore_virtual=ignore_virtual)
+		return self.meta.get_table_fields(include_computed=include_computed)
 
 	def _evaluate_virtual_field_options(self, options):
 		from frappe.utils.safe_exec import get_safe_globals
@@ -581,12 +565,12 @@ class BaseDocument:
 		without worrying about whether or not they have values
 		"""
 
-		if not self._non_virtual_table_fieldnames:
+		if not self._non_computed_table_fieldnames:
 			return
 
 		__dict = self.__dict__
 
-		for fieldname in self._non_virtual_table_fieldnames:
+		for fieldname in self._non_computed_table_fieldnames:
 			if __dict.get(fieldname) is None:
 				__dict[fieldname] = []
 
@@ -646,13 +630,13 @@ class BaseDocument:
 		no_child_table_fields=False,
 		no_private_properties=False,
 		*,
-		ignore_virtual_child_tables=False,
+		ignore_computed_child_tables=False,
 	) -> dict:
 		doc = self.get_valid_dict(convert_dates_to_str=convert_dates_to_str, ignore_nulls=no_nulls)
 		doc["doctype"] = self.doctype
 
 		table_fieldnames = (
-			self._non_virtual_table_fieldnames if ignore_virtual_child_tables else self._table_fieldnames
+			self._non_computed_table_fieldnames if ignore_computed_child_tables else self._table_fieldnames
 		)
 		for fieldname in table_fieldnames:
 			children = getattr(self, fieldname, None) or []
@@ -811,7 +795,7 @@ class BaseDocument:
 		"""Raw update parent + children
 		DOES NOT VALIDATE AND CALL TRIGGERS"""
 		self.db_update()
-		for fieldname in self._non_virtual_table_fieldnames:
+		for fieldname in self._non_computed_table_fieldnames:
 			for doc in self.get(fieldname):
 				doc.db_update()
 
@@ -1531,9 +1515,22 @@ def _filter(data, filters, limit=None):
 	return out
 
 
+CACHED_PROPERTIES = (prop for prop, value in vars(BaseDocument).items() if isinstance(value, cached_property))
+
 UNPICKLABLE_KEYS = frozenset(
 	(
 		"_parent_doc",
-		*(prop for prop, value in vars(BaseDocument).items() if isinstance(value, cached_property)),
+		*CACHED_PROPERTIES,
+	)
+)
+
+RESERVED_KEYWORDS = frozenset(
+	(
+		"doctype",
+		"flags",
+		"_parent_doc",
+		"_doc_before_save",
+		"dont_update_if_missing",
+		*CACHED_PROPERTIES,
 	)
 )
