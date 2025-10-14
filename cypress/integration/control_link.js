@@ -233,7 +233,7 @@ context("Control Link", () => {
 		);
 		cy.reload();
 		cy.new_form("ToDo");
-		cy.fill_field("description", "new", "Text Editor").wait(200);
+		cy.fill_field("description", "new", "Text Editor").blur().wait(200);
 		cy.save();
 		cy.get(".frappe-control[data-fieldname=assigned_by_full_name] .control-value").should(
 			"contain",
