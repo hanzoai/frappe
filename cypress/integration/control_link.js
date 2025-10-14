@@ -227,7 +227,7 @@ context("Control Link", () => {
 				field_name: "assigned_by",
 				property: "default",
 				property_type: "Text",
-				value: "Administrator",
+				value: cy.config("testUser"),
 			},
 			true
 		);
@@ -237,7 +237,7 @@ context("Control Link", () => {
 		cy.save();
 		cy.get(".frappe-control[data-fieldname=assigned_by_full_name] .control-value").should(
 			"contain",
-			"Administrator"
+			"Frappe"
 		);
 		// if user clears default value explicitly, system should not reset default again
 		cy.get_field("assigned_by").clear().blur();
