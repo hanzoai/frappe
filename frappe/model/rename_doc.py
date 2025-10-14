@@ -9,7 +9,6 @@ from frappe import _, bold
 from frappe.model.document import Document
 from frappe.model.dynamic_links import get_dynamic_link_map
 from frappe.model.naming import validate_name
-from frappe.model.utils import is_virtual_doctype
 from frappe.model.utils.user_settings import sync_user_settings, update_user_settings_data
 from frappe.query_builder import Field
 from frappe.utils.data import cint, cstr, sbool
