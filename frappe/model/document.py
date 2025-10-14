@@ -1116,7 +1116,10 @@ class Document(BaseDocument):
 			frappe.throw(_("Cannot link cancelled document: {0}").format(msg), frappe.CancelledLinkError)
 
 	def get_all_children(self, parenttype=None, *, include_computed=False) -> list["Document"]:
-		"""Return all children documents from **Table** type fields in a list."""
+		"""
+		Return all child documents from **Table** type fields in a list.
+		Excludes computed tables by default, unless `include_computed` is set to True.
+		"""
 
 		children = []
 		table_fieldnames = self._table_fieldnames if include_computed else self._non_computed_table_fieldnames
