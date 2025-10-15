@@ -259,12 +259,28 @@ frappe.ui.form.PrintView = class {
 			print_format.name &&
 			(print_format.print_format_builder || print_format.print_format_builder_beta) &&
 			print_format.standard === "No";
-		let is_standard_but_editable = print_format.name && print_format.custom_format;
 
-		if (is_standard_but_editable) {
+		let is_standard_jinja_custom =
+			print_format.standard === "Yes" &&
+			print_format.custom_format &&
+			print_format.print_format_type === "Jinja";
+
+		if (is_standard_jinja_custom) {
+			let doc = frappe.get_doc("Print Format", print_format.name);
+			frappe.model.with_doctype("Print Format", () => {
+				let newdoc = frappe.model.copy_doc(doc);
+				frappe.set_route("Form", "Print Format", newdoc.name);
+			});
+			return;
+		}
+
+		let is_editable = print_format.name && print_format.custom_format;
+
+		if (is_editable) {
 			frappe.set_route("Form", "Print Format", print_format.name);
 			return;
 		}
+
 		if (is_custom_format) {
 			if (print_format.print_format_builder_beta) {
 				frappe.set_route("print-format-builder-beta", print_format.name);
