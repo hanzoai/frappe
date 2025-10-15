@@ -273,6 +273,14 @@ frappe.ui.form.PrintView = class {
 			});
 			return;
 		}
+
+		let is_editable = print_format.name && print_format.custom_format;
+
+		if (is_editable) {
+			frappe.set_route("Form", "Print Format", print_format.name);
+			return;
+		}
+
 		if (is_custom_format) {
 			if (print_format.print_format_builder_beta) {
 				frappe.set_route("print-format-builder-beta", print_format.name);
