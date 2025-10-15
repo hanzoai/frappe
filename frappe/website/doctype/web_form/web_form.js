@@ -120,6 +120,7 @@ frappe.ui.form.on("Web Form", {
 							depends_on: df.depends_on,
 							placeholder: df.placeholder,
 							max_length: df.length,
+							description: df.description,
 							mandatory_depends_on: df.mandatory_depends_on,
 							read_only_depends_on: df.read_only_depends_on,
 						});
@@ -340,6 +341,7 @@ frappe.ui.form.on("Web Form Field", {
 		doc.read_only = df.read_only;
 		doc.depends_on = df.depends_on;
 		doc.placeholder = df.placeholder;
+		doc.description = df.description;
 		doc.mandatory_depends_on = df.mandatory_depends_on;
 		doc.max_length = df.length;
 		doc.read_only_depends_on = df.read_only_depends_on;

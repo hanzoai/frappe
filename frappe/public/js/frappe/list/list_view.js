@@ -332,7 +332,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		this.list_view_settings = list_view_settings;
 
 		this.setup_columns();
-		this.refresh(true);
+		this.refresh();
 	}
 
 	refresh(refresh_header = false) {
