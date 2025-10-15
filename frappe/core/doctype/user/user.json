@@ -844,6 +844,7 @@
    "label": "Sessions"
   },
   {
+   "depends_on": "eval:doc.name == frappe.session.user",
    "fieldname": "active_sessions",
    "fieldtype": "Table",
    "is_virtual": 1,
@@ -902,7 +903,7 @@
   }
  ],
  "make_attachments_public": 1,
- "modified": "2025-06-25 12:42:47.074515",
+ "modified": "2025-10-15 18:07:21.606511",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",

@@ -1655,7 +1655,7 @@ def validate_fields(meta: Meta):
 				_("Field {0} must be a virtual field to support virtual doctype.").format(
 					frappe.bold(docfield.fieldname)
 				),
-				title=_("Virtual tabels must be virtual fields"),
+				title=_("Virtual tables must be virtual fields"),
 			)
 
 	def check_max_height(docfield):
