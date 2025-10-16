@@ -804,11 +804,9 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			}
 
 			if (frappe.is_mobile() && col.type == "Field" && [3, 4].includes(i)) {
-				left_html += `<div class="mobile-layout">${this.get_column_html(
-					col,
-					doc,
-					true
-				)}</div>`;
+				left_html += `<div class="mobile-layout ${
+					i == 3 ? "mobile-layout-seperator" : ""
+				}">${this.get_column_html(col, doc, true)}</div>`;
 			} else {
 				left_html += this.get_column_html(col, doc, false);
 			}
