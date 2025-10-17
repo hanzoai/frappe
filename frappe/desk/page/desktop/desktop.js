@@ -44,10 +44,10 @@ function get_route(desktop_icon) {
 				type: desktop_icon.type,
 				link: frappe.router.slug(desktop_icon.workspace),
 			};
-		} else if (desktop_icon.type == "List") {
+		} else if (desktop_icon.type == "DocType") {
 			item = {
 				type: desktop_icon.type,
-				link: desktop_icon.__doctype,
+				name: desktop_icon.link_to,
 			};
 		}
 		route = frappe.utils.generate_route(item);
@@ -192,8 +192,12 @@ class DesktopIconGrid {
 				}
 			});
 		}
-		this.add_page_indicators();
-		this.setup_pagination();
+		if (!this.in_folder) {
+			this.add_page_indicators();
+			this.setup_pagination();
+		} else {
+			this.grids[0] && this.grids[0].css("display", "grid");
+		}
 	}
 	add_page_indicators(tempplate) {
 		this.page_indicators = [];
