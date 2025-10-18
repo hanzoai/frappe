@@ -2278,24 +2278,19 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 								is_child_field: false,
 							});
 						}
-					});
 
-					// Add child table fields
-					const table_fields = frappe.meta
-						.get_docfields(doctype)
-						.filter((df) => df.fieldtype === "Table");
-					table_fields.forEach((table_field) => {
-						if (table_field.options) {
-							const child_doctype = table_field.options;
+						// Add child table fields for Table fieldtype
+						if (field_doc.fieldtype === "Table" && field_doc.options) {
+							const child_doctype = field_doc.options;
 							const child_fields = frappe.meta.get_docfields(child_doctype);
 
 							child_fields.forEach((child_field) => {
 								if (is_field_editable(child_field)) {
-									const field_key = `${child_field.label} (${table_field.label})`;
+									const field_key = `${child_field.label} (${field_doc.label})`;
 									field_mappings[field_key] = Object.assign({}, child_field, {
 										is_child_field: true,
 										child_doctype: child_doctype,
-										parent_table_field: table_field.fieldname,
+										parent_table_field: field_doc.fieldname,
 									});
 								}
 							});

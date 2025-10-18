@@ -91,27 +91,26 @@ def _bulk_action(doctype, docnames, action, data, task_id=None):
 				message = _("Cancelling {0}").format(doctype)
 			elif action == "update" and not doc.docstatus.is_cancelled():
 				# Handle child table updates
-				if data and "child_table_updates" in data:
-					child_table_updates = data["child_table_updates"]
+				if child_table_updates := data.pop("child_table_updates", None):
+					table_fields = doc.meta.get_table_fields()
 					for child_doctype, field_updates in child_table_updates.items():
 						# Find the table field that contains this child doctype
-						table_fieldname = None
-						for field in doc.meta.get_table_fields():
-							if field.options == child_doctype:
-								table_fieldname = field.fieldname
-								break
+						table_fieldname = next(
+							(field.fieldname for field in table_fields if field.options == child_doctype),
+							None,
+						)
 
 						if table_fieldname and hasattr(doc, table_fieldname):
+							child_meta = frappe.get_meta(child_doctype)
 							child_docs = getattr(doc, table_fieldname)
 							for child_doc in child_docs:
 								for fieldname, value in field_updates.items():
-									if hasattr(child_doc, fieldname):
+									if child_meta.has_field(fieldname):
 										setattr(child_doc, fieldname, value)
 
 				# Handle regular field updates
-				regular_data = {k: v for k, v in data.items() if k != "child_table_updates"}
-				if regular_data:
-					doc.update(regular_data)
+				if data:
+					doc.update(data)
 
 				doc.save()
 				message = _("Updating {0}").format(doctype)

@@ -342,9 +342,7 @@ export default class BulkOperations {
 			],
 			primary_action: ({ value }) => {
 				const selected_field = field_mappings[dialog.get_value("field")];
-				const fieldname = selected_field.fieldname;
-				const is_child_field = selected_field.is_child_field;
-				const child_doctype = selected_field.child_doctype;
+				const { fieldname, is_child_field, child_doctype } = selected_field;
 				dialog.disable_primary_action();
 				let update_data = {};
 				if (is_child_field) {
