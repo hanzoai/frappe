@@ -1,6 +1,8 @@
 # Copyright (c) 2025, Frappe Technologies and contributors
 # For license information, please see license.txt
 
+from json import JSONDecodeError, dumps, loads
+
 import frappe
 from frappe import _
 from frappe.desk.doctype.workspace.workspace import is_workspace_manager
@@ -43,3 +45,24 @@ def create_workspace_sidebar_for_workspaces():
 			sidebar = frappe.new_doc("Workspace Sidebar")
 			sidebar.title = workspace
 			sidebar.save()
+
+
+@frappe.whitelist()
+def add_sidebar_items(sidebar_title, sidebar_items):
+	sidebar_items = loads(sidebar_items)
+	w = frappe.get_doc("Workspace Sidebar", sidebar_title)
+	items = []
+	for item in sidebar_items:
+		if item.get("nested_items", None):
+			for nested_item in item.get("nested_items"):
+				new_nested_item = frappe.new_doc("Workspace Sidebar Item")
+				new_nested_item.update(nested_item)
+				new_nested_item.child = 1
+				items.append(new_nested_item)
+		else:
+			si = frappe.new_doc("Workspace Sidebar Item")
+			si.update(item)
+			items.append(si)
+	w.items = items
+	w.save()
+	return w

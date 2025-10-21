@@ -23,6 +23,7 @@ class DesktopSettings(Document):
 			"Timeless Launchpad",
 			"Apps with Search",
 		]
+		show_app_name_in_header: DF.Literal["Default", "Title", "Subtitle"]
 	# end: auto-generated types
 
 	pass

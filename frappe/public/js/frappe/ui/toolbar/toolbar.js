@@ -48,7 +48,7 @@ frappe.ui.toolbar.Toolbar = class {
 	bind_click() {
 		$(".navbar-brand .app-logo").on("click", (event) => {
 			frappe.app.sidebar.set_height();
-			frappe.app.sidebar.toggle_sidebar();
+			frappe.app.sidebar.toggle_width();
 			frappe.app.sidebar.prevent_scroll();
 		});
 	}

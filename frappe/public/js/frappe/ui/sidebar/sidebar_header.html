@@ -1,14 +1,31 @@
 
 <a class="sidebar-header" style="text-decoration: none; width: auto;">
 <div class="sidebar-item-icon header-logo-container" style="background-color: var({{ header_bg_color }});">
+    {% if (frappe.boot.app_name_style != "Title") { %}
     <div class="header-logo">
         {%= header_icon %}
     </div>
+    {% } else { %}
+    <div class="header-logo" style="padding: 0px;">
+        <img style="width: 32px; height: 32px;" src="{%= frappe.app.sidebar.app_logo_url %}">
+    </div>
+    {% }  %}
 </div>
 <div class="title-container">
+
     <div class="sidebar-item-label header-title">
-        {%= workspace_title %}
+        {% if (frappe.boot.app_name_style == "Title") { %}
+            {%= frappe.app.sidebar.app_name %}
+        {% } else { %}
+            {%= workspace_title %}
+        {% }  %}
     </div>
+    {% if (frappe.boot.app_name_style == "Subtitle") { %}
+
+    <div class="sidebar-item-label header-subtitle">
+        {%= frappe.app.sidebar.app_name %}
+    </div>
+    {% } %}
 </div>
 <button class="btn-reset drop-icon show-in-edit-mode">
     <svg class="icon icon-sm" style="display: block;margin:auto;" aria-hidden="true">

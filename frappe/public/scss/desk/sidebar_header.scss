@@ -15,6 +15,7 @@
 }
 .header-logo-container {
 	border-radius: 8px;
+	background-color: var(--surface-gray-3);
 }
 .header-logo {
 	width: 32px;
@@ -29,6 +30,7 @@
 }
 .header-title {
 	font-weight: 500;
+	line-height: 1;
 }
 
 .sidebar-header-menu {
@@ -74,4 +76,9 @@
 		text-wrap: nowrap;
 		overflow: hidden;
 	}
+}
+
+.header-subtitle {
+	color: var(--ink-gray-6);
+	font-size: var(--text-sm);
 }

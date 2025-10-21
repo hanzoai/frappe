@@ -216,6 +216,17 @@ frappe.views.Workspace = class Workspace {
 
 			let current_page = this.workspaces.find((p) => p.name == page.name);
 			this._page = current_page;
+			if (frappe.boot.app_name_style == "Title") {
+				frappe.breadcrumbs.add({
+					type: "Custom",
+					label: __(this._page.name),
+				});
+				this.wrapper.find(".workspace-header").hide();
+				this.wrapper
+					.find(".editor-js-container")
+					.get(0)
+					.style.setProperty("margin-top", "var(--margin-sm)");
+			}
 
 			// set app
 			let app;

@@ -3,7 +3,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.sidebar = sidebar;
 		this.sidebar_wrapper = $(".body-sidebar");
 		this.drop_down_expanded = false;
-		this.workspace_title = this.sidebar.workspace_title;
+		this.workspace_title = frappe.utils.to_title_case(this.sidebar.workspace_title);
 		const me = this;
 		this.dropdown_items = [
 			{
@@ -19,15 +19,8 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 				label: __("Edit Sidebar"),
 				icon: "edit",
 				onClick: function () {
-					if (
-						Object.keys(frappe.boot.workspace_sidebar_item).includes(
-							me.workspace_title.toLowerCase()
-						)
-					) {
-						frappe.set_route("Form", "Workspace Sidebar", me.workspace_title);
-					} else {
-						frappe.set_route("List", "Workspace Sidebar");
-					}
+					me.sidebar.edit_mode = true;
+					me.sidebar.toggle_editing_mode();
 				},
 			},
 			{

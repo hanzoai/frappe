@@ -2,24 +2,43 @@
     class="sidebar-item-container {%= item.is_editable ? 'is-draggable' : '' %} {% if (item.type == 'Section Break') { %}section-item{% } %}"
     item-name="{{ item.label }}"
     item-title="{{ item.label }}"
-			>
-				<div class="standard-sidebar-item" >
-					<a
-						href="{{ path }}"
-						target="{%= item.type === "URL" ? "_blank" : "" %}"
-						class="item-anchor
-								{% if (!item.is_editable) { %}block-click {% } %}
-								{% if (item.type == 'Section Break') { %}section-break{% } %}"
-                        title="{{ item.label }}"
-					>
-						{% if (item.type != "Section Break") { %}
-						<span class="sidebar-item-icon text-ink-gray-7" item-icon="{{ item.icon }}">
-							{%= frappe.utils.icon(item.icon || "list-alt" , "sm", "", "", "text-ink-gray-7 current-color", true)%}
-						</span>
-						{% } %}
-						<span class="sidebar-item-label">{{ item.label }}<span>
-					</a>
-					<div class="sidebar-item-control"></div>
-				</div>
-				<div class="sidebar-child-item nested-container"></div>
+>
+    <div class="standard-sidebar-item {%= item.indent ? 'indent' : '' %}">
+        {% if (item.type == "Section Break" && item.indent != 1) { %}
+            <div class="divider hidden"></div>
+            <div class="item-anchor section-break" title="{{ item.label }}">
+                <span class="sidebar-item-label">{{ item.label }}</span>
+                <div class="sidebar-item-control"></div>
+            </div>
+        {% } else if (item.type == "Spacer") { %}
+			<div class="item-anchor" style="pointer-events: none;">
+
+			</div>
+		{% } else  { %}
+            <a
+                href="{{ path }}"
+                target="{%= item.type === "URL" ? "_blank" : "" %}"
+                class="item-anchor"
+                title="{{ item.label }}"
+            >
+				<span class="sidebar-item-icon text-ink-gray-7" item-icon="{{ item.icon }}">
+                    {%= frappe.utils.icon(item.icon || "list-alt", "sm", "", "", "text-ink-gray-7 current-color", true) %}
+                </span>
+                <span class="sidebar-item-label">{{ item.label }}</span>
+                <div class="sidebar-item-control"></div>
+            </a>
+        {% } %}
+
+        <div class="sidebar-item-edit-controls edit-mode {%= edit_mode ? '' : 'hidden' %}">
+            <button class="btn btn-secondary btn-sm drag-handle">
+                <svg class="es-icon es-line icon-xs" aria-hidden="true">
+                    <use href="#es-line-drag"></use>
+                </svg>
+            </button>
+            <button class="btn btn-secondary btn-xs setting-btn edit-menu" title="">
+                {%= frappe.utils.icon("dot-horizontal", "xs") %}
+            </button>
+        </div>
+    </div>
+    <div class="sidebar-child-item nested-container"></div>
 </div>

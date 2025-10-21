@@ -15,6 +15,10 @@ class WorkspaceSidebarItem(Document):
 		from frappe.types import DF
 
 		child: DF.Check
+		collapsible: DF.Check
+		display_depends_on: DF.Code | None
+		indent: DF.Check
+		keep_closed: DF.Check
 		label: DF.Data | None
 		link_to: DF.DynamicLink | None
 		link_type: DF.Literal["DocType", "Page", "Report", "Workspace", "Dashboard"]

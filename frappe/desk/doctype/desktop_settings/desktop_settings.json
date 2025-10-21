@@ -6,7 +6,9 @@
  "engine": "InnoDB",
  "field_order": [
   "icon_style",
-  "navbar_style"
+  "navbar_style",
+  "sidebar_section",
+  "show_app_name_in_header"
  ],
  "fields": [
   {
@@ -21,13 +23,24 @@
    "fieldtype": "Select",
    "label": "Navbar Style",
    "options": "Awesomebar\nmacOS Launchpad\nBrand Logo\nBrand Logo with Search\nTimeless Launchpad\nApps with Search"
+  },
+  {
+   "fieldname": "sidebar_section",
+   "fieldtype": "Section Break",
+   "label": "Sidebar"
+  },
+  {
+   "fieldname": "show_app_name_in_header",
+   "fieldtype": "Select",
+   "label": "Show App Name in Header",
+   "options": "Default\nTitle\nSubtitle"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-10-01 15:23:02.497302",
+ "modified": "2025-10-19 04:53:14.413040",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Desktop Settings",
