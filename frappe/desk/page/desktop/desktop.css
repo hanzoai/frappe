@@ -68,7 +68,7 @@
     align-items: center;
     gap: 12px;
 }
-.icon-container:has(img) {
+.icon-container:has(.app-logo) {
     padding: 0;
     background-color: unset;
 }
@@ -198,6 +198,10 @@
                 & .icon{
                     width: 5px;
                     height: 5px;
+                }
+                & img{
+                    width: 9px;
+                    height: 9px;
                 }
             }
 

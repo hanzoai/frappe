@@ -61,6 +61,10 @@ Tip: use lucide.svg in /icons for all downloaded icons
 		<path d="M18 16.98h-5.99c-1.1 0-1.95.94-2.48 1.9A4 4 0 0 1 2 17c.01-.7.2-1.4.57-2" />  <path d="m6 17 3.13-5.78c.53-.97.1-2.18-.5-3.1a4 4 0 1 1 6.89-4.06" />  <path d="m12 6 3.13 5.73C15.66 12.7 16.9 13 18 13a4 4 0 0 1 0 8" />
 	</symbol>
 
+	<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="icon-trash-2">
+		<path d="M3 6h18" />  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />  <line x1="10" x2="10" y1="11" y2="17" />  <line x1="14" x2="14" y1="11" y2="17" />
+	</symbol>
+
 	<symbol viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="icon-up-arrow">
 		<path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
 	</symbol>
