@@ -167,7 +167,7 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 
 	enable_collapsible(item, $item_container) {
 		let sidebar_control = this.$item_control;
-		let drop_icon = "chevron-right";
+		let drop_icon = "chevron-down";
 		if (item.collapsible) {
 			this.$drop_icon = $(`<button class="btn-reset drop-icon hidden">`)
 				.html(frappe.utils.icon(drop_icon, "sm"))

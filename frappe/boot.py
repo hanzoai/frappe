@@ -151,6 +151,7 @@ def load_desktop_data(bootinfo):
 
 	bootinfo.desktop_icons = get_desktop_icons()
 	bootinfo.workspaces = get_workspace_sidebar_items()
+	bootinfo.app_name_style = (frappe.db.get_single_value("Desktop Settings", "show_app_name_in_header"),)
 	bootinfo.workspace_sidebar_item = get_sidebar_items()
 	allowed_pages = [d.name for d in bootinfo.workspaces.get("pages")]
 	bootinfo.module_wise_workspaces = get_controller("Workspace").get_module_wise_workspaces()
@@ -539,8 +540,10 @@ def get_sidebar_items():
 				"type": si.type,
 				"icon": si.icon,
 				"child": si.child,
-				# "collapsible": si.collapsible,
-				# "collapsed_by_default": si.collapsed_by_default,
+				"collapsible": si.collapsible,
+				"indent": si.indent,
+				"keep_closed": si.keep_closed,
+				"display_depends_on": si.display_depends_on,
 			}
 			if si.link_type == "Report":
 				report_type, ref_doctype = frappe.db.get_value(

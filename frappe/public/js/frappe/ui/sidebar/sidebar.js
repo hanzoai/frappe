@@ -233,62 +233,6 @@ frappe.ui.Sidebar = class Sidebar {
 		});
 	}
 
-	add_toggle_children(item, sidebar_control, item_container) {
-		let $child_item_section = item_container.find(".sidebar-child-item");
-		let drop_icon = "chevron-right";
-		if ($child_item_section.children() > 0) {
-			drop_icon = "small-up";
-		}
-		let $drop_icon = $(`<button class="btn-reset drop-icon hidden">`)
-			.html(frappe.utils.icon(drop_icon, "sm"))
-			.appendTo(sidebar_control);
-
-		if (item.type == "Section Break") {
-			$drop_icon.removeClass("hidden");
-		}
-		this.setup_event_listner(item_container);
-	}
-	setup_event_listner(item_container) {
-		const me = this;
-		let $child_item_section = item_container.find(".sidebar-child-item");
-		let $drop_icon = item_container.find(".drop-icon");
-		$drop_icon.on("click", (e) => {
-			let opened = $drop_icon.find("use").attr("href") === "#icon-chevron-down";
-
-			if (!opened) {
-				$drop_icon
-					.attr("data-state", "closed")
-					.find("use")
-					.attr("href", "#icon-chevron-down");
-			} else {
-				$drop_icon
-					.attr("data-state", "opened")
-					.find("use")
-					.attr("href", "#icon-chevron-right");
-			}
-			$child_item_section.toggleClass("hidden");
-
-			if (e.originalEvent.isTrusted) {
-				if (opened) {
-					this.closed_section_breaks[me.workspace_title] = [];
-				} else {
-					const title = $drop_icon.parent().siblings().attr("title");
-					// Initialize the array if it doesn't exist
-					if (!this.closed_section_breaks[me.workspace_title]) {
-						this.closed_section_breaks[me.workspace_title] = [];
-					}
-
-					// Push the new title into the array
-					this.closed_section_breaks[me.workspace_title].push(title);
-				}
-				localStorage.setItem(
-					"closed-section-breaks",
-					JSON.stringify(this.closed_section_breaks)
-				);
-			}
-		});
-	}
-
 	close() {
 		this.sidebar_expanded = false;
 
