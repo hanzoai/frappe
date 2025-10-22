@@ -2,7 +2,6 @@ import "./sidebar_item";
 frappe.ui.Sidebar = class Sidebar {
 	constructor() {
 		this.make_dom();
-
 		if (!frappe.boot.setup_complete) {
 			// no sidebar if setup is not complete
 			return;
@@ -13,10 +12,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.sidebar_expanded = false;
 		this.all_sidebar_items = frappe.boot.workspace_sidebar_item;
 		this.$items = [];
-		// api to do crud
-		// add_item
-		// remove_item
-		// update_item
+		this.fields_for_dialog = [];
 		this.workspace_sidebar_items = [];
 		this.new_sidebar_items = [];
 		this.$items_container = this.wrapper.find(".sidebar-items");
@@ -29,16 +25,19 @@ frappe.ui.Sidebar = class Sidebar {
 			frappe.boot.workspace_sidebar_item[this.workspace_title.toLowerCase()];
 		this.choose_app_name();
 		this.find_nested_items();
-		this.fetch_sidebar();
 	}
 	async fetch_sidebar() {
 		const me = this;
+		if (me.fields_for_dialog.length > 0) return;
 		await frappe.model.with_doctype("Workspace Sidebar Item", () => {
 			// get all date and datetime fields
 			me.fields_for_dialog = frappe.get_meta("Workspace Sidebar Item").fields;
+			let field = me.fields_for_dialog.find((f) => f.label == "Child Item");
+			field.hidden = 1;
 		});
 	}
 	choose_app_name() {
+		if (frappe.boot.app_name_style == "Default") return;
 		frappe.boot.app_data.forEach((a) => {
 			if (a.workspaces.includes(frappe.utils.to_title_case(this.workspace_title))) {
 				this.app_name = a.app_title;
@@ -46,6 +45,7 @@ frappe.ui.Sidebar = class Sidebar {
 			}
 		});
 	}
+
 	find_nested_items() {
 		const me = this;
 		let currentSection = null;
@@ -135,9 +135,7 @@ frappe.ui.Sidebar = class Sidebar {
 		if (localStorage.getItem("sidebar-expanded") !== null) {
 			this.sidebar_expanded = JSON.parse(localStorage.getItem("sidebar-expanded"));
 		}
-		if (localStorage.getItem("closed-section-breaks") !== null) {
-			this.closed_section_breaks = JSON.parse(localStorage.getItem("closed-section-breaks"));
-		}
+
 		if (frappe.is_mobile()) {
 			this.sidebar_expanded = false;
 		}
@@ -145,8 +143,8 @@ frappe.ui.Sidebar = class Sidebar {
 		if (this.workspace_sidebar_items.length === 0) {
 			this.sidebar_expanded = true;
 		}
+
 		this.expand_sidebar();
-		this.sidebar_header;
 	}
 	empty() {
 		if (this.wrapper.find(".sidebar-items")[0]) {
@@ -275,6 +273,7 @@ frappe.ui.Sidebar = class Sidebar {
 			main_section.css("overflow", "");
 		}
 	}
+
 	set_workspace_sidebar() {
 		let route = frappe.get_route();
 		if (frappe.get_route()[0] == "setup-wizard") return;
@@ -316,6 +315,7 @@ frappe.ui.Sidebar = class Sidebar {
 		let module_name = workspace_title ? workspace_title[0] : "Build";
 		frappe.app.sidebar.setup(module_name || this.workspace_title || "Build");
 	}
+
 	get_correct_workspace_sidebars(link_to) {
 		let sidebars = [];
 		Object.entries(this.all_sidebar_items).forEach(([name, items]) => {
@@ -330,6 +330,7 @@ frappe.ui.Sidebar = class Sidebar {
 
 	toggle_editing_mode() {
 		const me = this;
+		this.fetch_sidebar();
 		if (this.edit_mode) {
 			this.wrapper.attr("data-mode", "edit");
 			this.new_sidebar_items = Array.from(me.workspace_sidebar_items);

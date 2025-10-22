@@ -138,19 +138,19 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 		this.toggle();
 	}
 	toggle() {
-		if (!this.collapsed) {
+		if (this.collapsed) {
 			this.$drop_icon
 				.attr("data-state", "closed")
 				.find("use")
-				.attr("href", "#icon-chevron-down");
+				.attr("href", "#icon-chevron-right");
+			$(this.$nested_items).addClass("hidden");
 		} else {
 			this.$drop_icon
 				.attr("data-state", "opened")
 				.find("use")
-				.attr("href", "#icon-chevron-right");
+				.attr("href", "#icon-chevron-down");
+			$(this.$nested_items).removeClass("hidden");
 		}
-
-		$(this.$nested_items).toggleClass("hidden");
 	}
 	toggle_on_collapse() {
 		const me = this;
@@ -192,17 +192,13 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 		let current_sidebar_state = this.section_breaks_state[this.workspace_title];
 		for (const [element_name, collapsed] of Object.entries(current_sidebar_state)) {
 			if ($(this.wrapper).attr("item-name") == element_name) {
-				if (collapsed) {
-					me.close();
-				} else {
-					me.open();
-				}
+				me.collapsed = collapsed;
+				me.toggle();
 			}
 		}
 	}
 	setup_event_listner() {
 		const me = this;
-		let $child_item_section = $(this.$nested_items);
 
 		this.$drop_icon.on("click", (e) => {
 			me.collapsed = me.$drop_icon.find("use").attr("href") === "#icon-chevron-down";
