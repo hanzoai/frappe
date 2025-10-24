@@ -87,23 +87,11 @@ def get_communication_doctype(doctype, txt, searchfield, start, page_len, filter
 			d[0] for d in frappe.db.get_values("DocType", {"issingle": 0, "istable": 0, "hide_toolbar": 0})
 		]
 
-<<<<<<< HEAD
 	out = []
-	for dt in com_doctypes:
+	for dt in list(set(com_doctypes)):
 		if txt.lower().replace("%", "") in dt.lower() and dt in can_read:
 			out.append([dt])
 	return out
-=======
-	results = []
-	txt_lower = txt.lower().replace("%", "")
-
-	for dt in list(set(com_doctypes)):
-		if dt in can_read:
-			if txt_lower in dt.lower() or txt_lower in _(dt).lower():
-				results.append([dt])
-
-	return results
->>>>>>> 4119ef7203 (fix: don't show stray `,` in communication relink dialog for some doctypes)
 
 
 def get_cached_contacts(txt):
