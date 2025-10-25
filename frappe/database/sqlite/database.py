@@ -110,6 +110,7 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 		pragmas = {
 			"journal_mode": "WAL",
 			"synchronous": "NORMAL",
+			"busy_timeout": 5000,  # in milliseconds
 		}
 		cursor = conn.cursor()
 		for pragma, value in pragmas.items():
