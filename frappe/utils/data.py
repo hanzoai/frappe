@@ -804,9 +804,9 @@ def format_duration(seconds: float | int, hide_days: bool = False) -> str:
 	convert 12885 to '3h 34m 45s' where 12885 = seconds in float
 	        -12885 to '-3h 34m 45s'
 	"""
-
+	seconds = cint(seconds)
 	negative = seconds < 0
-	seconds = abs(cint(seconds))
+	seconds = abs(seconds)
 
 	days = (seconds // (3600 * 24)) if not hide_days else 0
 	hours = ((seconds % (3600 * 24)) // 3600) if not hide_days else (seconds // 3600)
