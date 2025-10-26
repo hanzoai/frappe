@@ -1,13 +1,14 @@
 # Copyright (c) 2025, Frappe Technologies and contributors
 # For license information, please see license.txt
 
+import os
 from json import JSONDecodeError, dumps, loads
 
 import frappe
 from frappe import _
 from frappe.desk.doctype.workspace.workspace import is_workspace_manager
 from frappe.model.document import Document
-from frappe.modules.export_file import delete_folder, export_to_files
+from frappe.modules.utils import create_directory_on_app_path
 
 
 class WorkspaceSidebar(Document):
@@ -20,30 +21,54 @@ class WorkspaceSidebar(Document):
 		from frappe.desk.doctype.workspace_sidebar_item.workspace_sidebar_item import WorkspaceSidebarItem
 		from frappe.types import DF
 
+		app: DF.Autocomplete | None
 		items: DF.Table[WorkspaceSidebarItem]
 		title: DF.Data | None
 	# end: auto-generated types
 
 	def on_update(self):
-		if self.module and frappe.conf.developer_mode:
-			export_to_files(record_list=[["Workspace Sidebar", self.name]], record_module=self.module)
+		if frappe.conf.developer_mode:
+			if self.app:
+				self.export_sidebar()
+
+	def export_sidebar(self):
+		folder_path = create_directory_on_app_path("workspace_sidebar", self.app)
+		file_path = os.path.join(folder_path, f"{frappe.scrub(self.title)}.json")
+		doc_export = self.as_dict(no_nulls=True, no_private_properties=True)
+		with open(file_path, "w+") as doc_file:
+			doc_file.write(frappe.as_json(doc_export) + "\n")
+
+	def delete_desktop_icon_file(self):
+		folder_path = create_directory_on_app_path("workspace_sidebar", self.app)
+		file_path = os.path.join(folder_path, f"{frappe.scrub(self.title)}.json")
+		if not os.path.exists(file_path):
+			os.remove(file_path)
 
 	def on_trash(self):
-		if not is_workspace_manager():
+		if is_workspace_manager():
+			if frappe.conf.developer_mode and self.standard == 1 and self.app:
+				self.delete_desktop_icon_file()
+		else:
 			frappe.throw(_("You need to be Workspace Manager to delete a public workspace."))
-
-	def after_delete(self):
-		if self.module and frappe.conf.developer_mode:
-			delete_folder(self.module, "Workspace Sidebar", self.name)
 
 
 def create_workspace_sidebar_for_workspaces():
-	all_workspaces = frappe.get_all("Workspace", pluck="name")
+	from frappe.query_builder import DocType
+
+	workspace = DocType("Workspace")
+
+	all_workspaces = (
+		frappe.qb.from_(workspace)
+		.select(workspace.name)
+		.where((workspace.public == 1) & (workspace.name != "Welcome Workspace"))
+	).run(pluck=True)
+
 	existing_sidebars = frappe.get_all("Workspace Sidebar", pluck="title")
 	for workspace in all_workspaces:
 		if workspace not in existing_sidebars:
 			sidebar = frappe.new_doc("Workspace Sidebar")
 			sidebar.title = workspace
+			sidebar.header_icon = frappe.db.get_value("Workspace", workspace, "icon")
 			sidebar.save()
 
 

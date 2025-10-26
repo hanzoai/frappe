@@ -10,6 +10,7 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.modules.export_file import write_document_file
 from frappe.modules.import_file import import_file_by_path
+from frappe.modules.utils import create_directory_on_app_path, get_app_level_directory_path
 
 
 class DesktopIcon(Document):
@@ -51,7 +52,7 @@ class DesktopIcon(Document):
 				self.export_desktop_icon()
 
 	def export_desktop_icon(self):
-		folder_path = create_directory_if_not_exists(self.app)
+		folder_path = create_directory_on_app_path("desktop_icon", self.app)
 		file_path = os.path.join(folder_path, f"{frappe.scrub(self.label)}.json")
 		doc_export = self.as_dict(no_nulls=True, no_private_properties=True)
 
@@ -59,29 +60,13 @@ class DesktopIcon(Document):
 			icon_file_doc.write(frappe.as_json(doc_export) + "\n")
 
 	def delete_desktop_icon_file(self):
-		folder_path = create_directory_if_not_exists(self.app)
+		folder_path = create_directory_on_app_path("desktop_icon", self.app)
 		file_path = os.path.join(folder_path, f"{frappe.scrub(self.label)}.json")
 		if not os.path.exists(file_path):
 			os.remove(file_path)
 
 	def after_insert(self):
 		clear_desktop_icons_cache()
-
-
-def create_directory_if_not_exists(app_name):
-	app_path = frappe.get_app_path(app_name)
-	desktop_icon_path = os.path.join(app_path, "desktop_icon")
-
-	if not os.path.exists(desktop_icon_path):
-		frappe.create_folder(desktop_icon_path)
-
-	return desktop_icon_path
-
-
-def get_desktop_icon_directory(app_name):
-	app_path = frappe.get_app_path(app_name)
-	desktop_icon_path = os.path.join(app_path, "desktop_icon")
-	return desktop_icon_path
 
 
 def after_doctype_insert():
@@ -440,7 +425,7 @@ def sync_desktop_icons():
 
 
 def sync_icons(app_name):
-	icon_directory = get_desktop_icon_directory(app_name)
+	icon_directory = get_app_level_directory_path("desktop_icon", app_name)
 	if os.path.exists(icon_directory):
 		icon_files = [os.path.join(icon_directory, filename) for filename in os.listdir(icon_directory)]
 		for doc_path in icon_files:
@@ -671,8 +656,9 @@ def create_desktop_icons_from_workspace():
 		):
 			frappe.db.set_value("Desktop Icon", parent_icon, "icon", icon.icon)
 			insert = False
-		if insert:
+		if insert and not frappe.db.exists("Desktop Icon", [{"label": icon.label, "type": icon.type}]):
 			icon.insert(ignore_if_duplicate=True)
+	frappe.db.commit()
 
 
 def generate_color():
@@ -687,7 +673,6 @@ def create_desktop_icons_from_installed_apps():
 		app_details = frappe.get_hooks("add_to_apps_screen", app_name=a)
 		if len(app_details) != 0:
 			icon = frappe.new_doc("Desktop Icon")
-			icon.route = app_details[0]["route"]
 			icon.label = app_details[0]["title"]
 			icon.type = "External"
 			icon.standard = 1
@@ -695,8 +680,10 @@ def create_desktop_icons_from_installed_apps():
 			icon.icon_type = "App"
 			icon.link = app_details[0]["route"]
 			icon.logo_url = app_details[0]["logo"]
-			icon.save()
+			if not frappe.db.exists("Desktop Icon", [{"label": icon.label, "type": icon.type}]):
+				icon.save()
 			index += 1
+	frappe.db.commit()
 
 
 @frappe.whitelist()
@@ -713,6 +700,4 @@ def set_sequence(desktop_icons):
 
 def create_desktop_icon():
 	create_desktop_icons_from_installed_apps()
-	frappe.db.commit()
 	create_desktop_icons_from_workspace()
-	frappe.db.commit()

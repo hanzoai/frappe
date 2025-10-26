@@ -7,7 +7,8 @@
  "engine": "InnoDB",
  "field_order": [
   "title",
-  "module",
+  "header_icon",
+  "app",
   "items"
  ],
  "fields": [
@@ -24,16 +25,21 @@
    "options": "Workspace Sidebar Item"
   },
   {
-   "fieldname": "module",
-   "fieldtype": "Link",
-   "label": "Module",
-   "options": "Module Def"
+   "fieldname": "header_icon",
+   "fieldtype": "Icon",
+   "label": "Header Icon"
+  },
+  {
+   "fieldname": "app",
+   "fieldtype": "Autocomplete",
+   "label": "App",
+   "options": "Installed Applications"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-01 07:52:51.149158",
+ "modified": "2025-10-26 23:21:30.166695",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Workspace Sidebar",
