@@ -84,6 +84,8 @@
     justify-content: center;
     width: 54px;
     height: 54px;
+}
+.icon-container:has(.icon){
     background-color: var(--surface-gray-3);
 }
 .icon-container .icon{
@@ -179,7 +181,7 @@
 }
 
 .folder-icon{
-    background-color: var(--gray-50);
+    background-color: var(--gray-50) !important;
     box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.14);
     padding: 7px;
     align-items: normal;
@@ -190,6 +192,7 @@
         & .desktop-icon {
             width: fit-content;
             height: fit-content;
+            pointer-events: none;
             & .icon-container{
                 height: 9px;
                 width: 9px;
