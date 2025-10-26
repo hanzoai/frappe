@@ -3,7 +3,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.sidebar = sidebar;
 		this.sidebar_wrapper = $(".body-sidebar");
 		this.drop_down_expanded = false;
-		this.workspace_title = frappe.utils.to_title_case(this.sidebar.workspace_title);
+		this.workspace_title = this.sidebar.workspace_title;
 		const me = this;
 		this.dropdown_items = [
 			{
@@ -39,7 +39,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 	make() {
 		$(".sidebar-header").remove();
 		$(".sidebar-header-menu").remove();
-		this.set_header_icon_and_color();
+		this.set_header_icon();
 		$(
 			frappe.render_template("sidebar_header", {
 				workspace_title: this.workspace_title,
@@ -61,13 +61,8 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.$header_title = this.wrapper.find(".header-title");
 		this.$drop_icon = this.wrapper.find(".drop-icon");
 	}
-	set_header_icon_and_color() {
-		let icon = frappe.boot.desktop_icons.filter(
-			(f) => f.label.toLowerCase() == this.workspace_title.toLowerCase()
-		);
-		if (icon.length > 0) {
-			this.header_icon = icon[0].icon;
-		}
+	set_header_icon() {
+		this.header_icon = this.sidebar.sidebar_data.header_icon;
 	}
 	setup_app_switcher() {
 		this.dropdown_menu = $(".sidebar-header-menu");

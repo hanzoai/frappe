@@ -525,13 +525,12 @@ def get_sentry_dsn():
 
 
 def get_sidebar_items():
-	sidebars = frappe.get_all("Workspace Sidebar", pluck="name")
+	sidebars = frappe.get_all("Workspace Sidebar", fields=["name", "header_icon"])
 	sidebar_items = {}
 
 	for s in sidebars:
-		w = frappe.get_doc("Workspace Sidebar", s)
-		sidebar_items[s.lower()] = []
-		print(s)
+		w = frappe.get_doc("Workspace Sidebar", s["name"])
+		sidebar_items[s["name"].lower()] = {"label": s["name"], "items": [], "header_icon": s["header_icon"]}
 		for si in w.items:
 			workspace_sidebar = {
 				"label": si.label,
@@ -553,6 +552,6 @@ def get_sidebar_items():
 					"report_type": report_type,
 					"ref_doctype": ref_doctype,
 				}
-			sidebar_items[s.lower()].append(workspace_sidebar)
+			sidebar_items[s["name"].lower()]["items"].append(workspace_sidebar)
 
 	return sidebar_items

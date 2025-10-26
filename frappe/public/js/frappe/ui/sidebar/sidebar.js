@@ -21,8 +21,8 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	prepare() {
-		this.workspace_sidebar_items =
-			frappe.boot.workspace_sidebar_item[this.workspace_title.toLowerCase()];
+		this.sidebar_data = frappe.boot.workspace_sidebar_item[this.workspace_title.toLowerCase()];
+		this.workspace_sidebar_items = this.sidebar_data.items;
 		this.choose_app_name();
 		this.find_nested_items();
 	}
@@ -278,7 +278,7 @@ frappe.ui.Sidebar = class Sidebar {
 		let route = frappe.get_route();
 		if (frappe.get_route()[0] == "setup-wizard") return;
 		if (route[0] == "Workspaces") {
-			let workspace = route[1] || "Build";
+			let workspace = route[1];
 			frappe.app.sidebar.setup(workspace);
 		} else if (route[0] == "List" || route[0] == "Form") {
 			let doctype = route[1];
@@ -286,7 +286,7 @@ frappe.ui.Sidebar = class Sidebar {
 			if (this.workspace_title && sidebars.includes(this.workspace_title.toLowerCase())) {
 				frappe.app.sidebar.setup(this.workspace_title.toLowerCase());
 			} else {
-				frappe.app.sidebar.setup(sidebars[0] || "Build");
+				frappe.app.sidebar.setup(sidebars[0]);
 			}
 		} else if (route[0] == "query-report") {
 			let doctype = route[1];
@@ -318,10 +318,11 @@ frappe.ui.Sidebar = class Sidebar {
 
 	get_correct_workspace_sidebars(link_to) {
 		let sidebars = [];
-		Object.entries(this.all_sidebar_items).forEach(([name, items]) => {
+		Object.entries(this.all_sidebar_items).forEach(([name, sidebar]) => {
+			const { items, label } = sidebar;
 			items.forEach((item) => {
-				if (item.link_to == link_to) {
-					sidebars.push(name);
+				if (item.link_to === link_to) {
+					sidebars.push(label || name);
 				}
 			});
 		});
