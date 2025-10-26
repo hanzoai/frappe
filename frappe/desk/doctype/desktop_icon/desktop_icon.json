@@ -16,14 +16,14 @@
   "icon",
   "logo_url",
   "idx",
-  "link"
+  "link",
+  "hidden"
  ],
  "fields": [
   {
    "fieldname": "label",
    "fieldtype": "Data",
-   "label": "Label",
-   "unique": 1
+   "label": "Label"
   },
   {
    "default": "0",
@@ -93,10 +93,16 @@
    "fieldtype": "Link",
    "label": "Parent Icon",
    "options": "Desktop Icon"
+  },
+  {
+   "default": "0",
+   "fieldname": "hidden",
+   "fieldtype": "Check",
+   "label": "Hidden"
   }
  ],
  "links": [],
- "modified": "2025-10-08 23:40:31.716144",
+ "modified": "2025-10-24 01:21:38.915511",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Desktop Icon",

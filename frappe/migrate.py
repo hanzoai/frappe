@@ -21,7 +21,7 @@ from frappe.core.doctype.navbar_settings.navbar_settings import sync_standard_it
 from frappe.core.doctype.scheduled_job_type.scheduled_job_type import sync_jobs
 from frappe.database.schema import add_column
 from frappe.deferred_insert import save_to_db as flush_deferred_inserts
-from frappe.desk.doctype.desktop_icon.desktop_icon import sync_desktop_icons
+from frappe.desk.doctype.desktop_icon.desktop_icon import create_desktop_icon
 from frappe.desk.notifications import clear_notifications
 from frappe.modules.patch_handler import PatchType
 from frappe.modules.utils import sync_customizations
@@ -190,7 +190,7 @@ class SiteMigration:
 		frappe.get_single("Installed Applications").update_versions()
 
 		print("Syncing Desktop Icons...")
-		sync_desktop_icons()
+		create_desktop_icon()
 
 		print("Executing `after_migrate` hooks...")
 		for app in frappe.get_installed_apps():

@@ -39,9 +39,11 @@ frappe.ui.menu = class ContextMenu {
 		</div>`)
 			.on("click", function () {
 				item.onClick();
-				if (me.visible) {
-					me.hide();
-				}
+				setTimeout(function () {
+					if (me.visible) {
+						me.hide();
+					}
+				}, 1000);
 			})
 			.appendTo(this.template);
 	}
@@ -100,19 +102,35 @@ frappe.ui.menu = class ContextMenu {
 	}
 };
 
-frappe.ui.create_menu = function attachContextMenuToElement(elementSelector, menuItems) {
+frappe.ui.create_menu = function attachContextMenuToElement(
+	elementSelector,
+	menuItems,
+	right_click
+) {
 	const contextMenu = new frappe.ui.menu(menuItems);
-
-	// Show menu on right-click or click (choose what suits you)
-	$(elementSelector).on("click", function (event) {
-		event.preventDefault();
-		event.stopPropagation(); // Prevents bubbling up
-		if (contextMenu.visible) {
-			contextMenu.hide();
-		} else {
-			contextMenu.show(this);
-		}
-	});
+	if (right_click) {
+		// Show menu on right-click or click (choose what suits you)
+		$(elementSelector).on("contextmenu", function (event) {
+			event.preventDefault();
+			event.stopPropagation(); // Prevents bubbling up
+			if (contextMenu.visible) {
+				contextMenu.hide();
+			} else {
+				contextMenu.show(this);
+			}
+		});
+	} else {
+		// Show menu on right-click or click (choose what suits you)
+		$(elementSelector).on("click", function (event) {
+			event.preventDefault();
+			event.stopPropagation(); // Prevents bubbling up
+			if (contextMenu.visible) {
+				contextMenu.hide();
+			} else {
+				contextMenu.show(this);
+			}
+		});
+	}
 
 	// Hide menu on outside click
 	$(document).on("click", function () {
