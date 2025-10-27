@@ -30,14 +30,14 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 				if (this.item.route) {
 					path = this.item.route;
 				}
+			} else if (this.item.link_type === "URL") {
+				path = this.item.url;
 			} else {
 				path = frappe.utils.generate_route({
 					type: this.item.link_type,
 					name: this.item.link_to,
 				});
 			}
-		} else if (this.item.type === "URL") {
-			path = this.item.external_link;
 		}
 		return path;
 	}

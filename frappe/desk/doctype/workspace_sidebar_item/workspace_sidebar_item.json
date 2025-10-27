@@ -13,6 +13,7 @@
   "type",
   "link_to",
   "child",
+  "url",
   "display_section",
   "collapsible_column",
   "collapsible",
@@ -43,10 +44,10 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Link Type",
-   "options": "DocType\nPage\nReport\nWorkspace\nDashboard"
+   "options": "DocType\nPage\nReport\nWorkspace\nDashboard\nURL"
   },
   {
-   "depends_on": "eval: doc.type == 'Link' || doc.indent == 1",
+   "depends_on": "eval: doc.link_type != \"URL\" && doc.type == 'Link' || doc.indent == 1",
    "fieldname": "link_to",
    "fieldtype": "Dynamic Link",
    "in_list_view": 1,
@@ -119,13 +120,19 @@
    "label": "Display Depends On (JS)",
    "options": "JS",
    "width": "30"
+  },
+  {
+   "depends_on": "eval: doc.link_type == \"URL\"",
+   "fieldname": "url",
+   "fieldtype": "Data",
+   "label": "URL"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-27 23:53:14.138033",
+ "modified": "2025-10-28 02:05:07.887104",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Workspace Sidebar Item",

@@ -543,6 +543,7 @@ def get_sidebar_items():
 				"indent": si.indent,
 				"keep_closed": si.keep_closed,
 				"display_depends_on": si.display_depends_on,
+				"url": si.url,
 			}
 			if si.link_type == "Report":
 				report_type, ref_doctype = frappe.db.get_value(

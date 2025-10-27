@@ -21,11 +21,12 @@ class WorkspaceSidebarItem(Document):
 		keep_closed: DF.Check
 		label: DF.Data | None
 		link_to: DF.DynamicLink | None
-		link_type: DF.Literal["DocType", "Page", "Report", "Workspace", "Dashboard"]
+		link_type: DF.Literal["DocType", "Page", "Report", "Workspace", "Dashboard", "URL"]
 		parent: DF.Data
 		parentfield: DF.Data
 		parenttype: DF.Data
 		type: DF.Literal["Link", "Section Break", "Spacer"]
+		url: DF.Data | None
 	# end: auto-generated types
 
 	pass
