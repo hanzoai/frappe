@@ -23,6 +23,7 @@
  ],
  "fields": [
   {
+   "default": "Link",
    "fieldname": "type",
    "fieldtype": "Select",
    "in_list_view": 1,
@@ -36,6 +37,7 @@
    "label": "Label"
   },
   {
+   "default": "DocType",
    "depends_on": "eval: doc.type == 'Link' || doc.indent == 1",
    "fieldname": "link_type",
    "fieldtype": "Select",
@@ -124,7 +126,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-18 08:30:12.765287",
+ "modified": "2025-10-27 03:42:19.049623",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Workspace Sidebar Item",
