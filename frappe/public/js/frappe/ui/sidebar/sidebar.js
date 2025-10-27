@@ -39,7 +39,7 @@ frappe.ui.Sidebar = class Sidebar {
 	choose_app_name() {
 		if (frappe.boot.app_name_style == "Default") return;
 		frappe.boot.app_data.forEach((a) => {
-			if (a.workspaces.includes(frappe.utils.to_title_case(this.workspace_title))) {
+			if (a.workspaces.includes(this.workspace_title)) {
 				this.app_name = a.app_title;
 				this.app_logo_url = a.app_logo_url;
 			}
@@ -340,6 +340,7 @@ frappe.ui.Sidebar = class Sidebar {
 			this.wrapper.find(".edit-mode").removeClass("hidden");
 			this.add_new_item_button = this.wrapper.find("[data-name='add-sidebar-item']");
 			this.setup_sorting();
+
 			this.setup_editing_controls();
 			this.add_new_item_button.on("click", function () {
 				me.show_new_dialog();
@@ -367,40 +368,32 @@ frappe.ui.Sidebar = class Sidebar {
 				me.new_sidebar_items[new_index] = b;
 			},
 		});
+		$(".nested-container").each(function (index, el) {
+			Sortable.create(el, {
+				handle: ".drag-handle",
+			});
+		});
 	}
-	make_dialog(item = {}, index) {
+	make_dialog(opts) {
 		this.fields_for_dialog;
 		const fields = this.fields_for_dialog;
-		fields.splice(8, 0, {
-			fieldtype: "Section Break",
-			depends_on: 'eval: doc.type == "Section Break"',
-		});
-		fields.splice(9, 0, {
-			label: "Nested Sidebar Items",
-			fieldname: "nested_items",
-			fieldtype: "Table",
-			fields: this.make_fields_for_grids(fields),
-			data: [],
-			depends_on: 'eval: doc.type == "Section Break"',
-		});
 		let title = "New Sidebar Item";
-		if (item) {
-			if (item.nested_items && item.nested_items.length > 0) {
-				fields[-1].data = item.nested_items;
-			}
+
+		const me = this;
+		// Add Default values
+
+		if (opts && opts.item) {
 			fields.forEach((f) => {
 				if (
-					item[f.fieldname] !== undefined &&
+					opts.item[f.fieldname] !== undefined &&
 					f.fieldtype !== "Section Break" &&
 					f.fieldtype !== "Column Break"
 				) {
-					f.default = item[f.fieldname];
+					f.default = opts.item[f.fieldname];
 				}
 			});
 			title = "Edit Sidebar Item";
 		}
-
-		const me = this;
 		// Create the dialog
 		let d = new frappe.ui.Dialog({
 			title: title,
@@ -412,19 +405,20 @@ frappe.ui.Sidebar = class Sidebar {
 					me.new_sidebar_items = Array.from(me.workspace_sidebar_items);
 				}
 
-				if (typeof index === "number") {
-					me.new_sidebar_items.splice(index, 1, values);
-				} else {
-					if (values.length && values.nested_items.length > 0) {
-						let index = me.new_sidebar_items.findIndex((f) => {
-							return f.label == values.label;
-						});
-						me.new_sidebar_items[index].nested_items = values.nested_items;
-					} else {
-						me.new_sidebar_items.push(values);
-					}
-				}
+				if (opts && opts.nested) {
+					console.log("Add it as a nested item");
+					console.log(opts.parent_item);
+					let index = me.new_sidebar_items.findIndex((f) => {
+						return f.label == opts.parent_item.label;
+					});
 
+					if (!me.new_sidebar_items[index].nested_items) {
+						me.new_sidebar_items[index].nested_items = [];
+					}
+					me.new_sidebar_items[index].nested_items.push(values);
+				} else {
+					me.new_sidebar_items.push(values);
+				}
 				me.create_sidebar(me.new_sidebar_items);
 				d.hide();
 			},
@@ -442,10 +436,7 @@ frappe.ui.Sidebar = class Sidebar {
 				message: __("Saving Sidebar"),
 				indicator: "success",
 			});
-			me.new_sidebar_items = me.new_sidebar_items.map((item, idx) => ({
-				...item,
-				idx: idx,
-			}));
+
 			await frappe.call({
 				type: "POST",
 				method: "frappe.desk.doctype.workspace_sidebar.workspace_sidebar.add_sidebar_items",
@@ -471,9 +462,24 @@ frappe.ui.Sidebar = class Sidebar {
 		});
 	}
 
+	find_parent(sidebar_items, item) {
+		for (const f of sidebar_items) {
+			if (f.nested_items && f.nested_items.includes(item)) {
+				return f;
+			}
+		}
+	}
+
 	delete_item(item) {
-		let index = this.new_sidebar_items.indexOf(item);
-		this.new_sidebar_items.splice(index, 1);
+		let index;
+		if (item.child) {
+			let parent_icon = this.find_parent(this.new_sidebar_items, item);
+			index = parent_icon.nested_items.indexOf(item);
+			parent_icon.nested_items.splice(index, 1);
+		} else {
+			index = this.new_sidebar_items.indexOf(item);
+			this.new_sidebar_items.splice(index, 1);
+		}
 		this.create_sidebar(this.new_sidebar_items);
 	}
 
@@ -490,12 +496,14 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	edit_item(item) {
-		let d = this.make_dialog(item);
+		let d = this.make_dialog({
+			item: item,
+		});
 		d.show();
 	}
 
-	show_new_dialog(index) {
-		let d = this.make_dialog(index);
+	show_new_dialog(opts) {
+		let d = this.make_dialog(opts);
 		d.show();
 	}
 	make_fields_for_grids(fields) {

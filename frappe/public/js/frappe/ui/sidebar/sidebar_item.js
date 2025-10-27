@@ -15,14 +15,15 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 				let args = {
 					type: this.item.link_type,
 					name: this.item.link_to,
-					is_query_report:
-						this.item.report.report_type === "Query Report" ||
-						this.item.report.report_type == "Script Report",
-					report_ref_doctype: this.item.report.ref_doctype,
 				};
-				if (!this.item.report) {
-					delete args.is_query_report;
+
+				if (this.item.report || !frappe.app.sidebar.edit_mode) {
+					args.is_query_report =
+						this.item.report.report_type === "Query Report" ||
+						this.item.report.report_type == "Script Report";
+					args.report_ref_doctype = this.item.report.ref_doctype;
 				}
+
 				path = frappe.utils.generate_route(args);
 			} else if (this.item.link_type == "Workspace") {
 				path = "/app/" + frappe.router.slug(this.item.link_to);
@@ -89,11 +90,15 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 				},
 			},
 		];
+		this.add_menu_items(menu_items);
+
 		this.menu = new frappe.ui.menu(menu_items);
 		this.$edit_menu = this.wrapper.find(".edit-menu");
 		this.$sidebar_container = this.$edit_menu.parent();
 		frappe.ui.create_menu(this.$edit_menu, menu_items);
 	}
+
+	add_menu_items() {}
 };
 
 frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends (
@@ -219,6 +224,23 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 		this.section_breaks_state[this.workspace_title][title] = this.collapsed;
 
 		localStorage.setItem("section-breaks-state", JSON.stringify(this.section_breaks_state));
+	}
+	add_menu_items(menu_items) {
+		const me = this;
+		const index = menu_items.findIndex((f) => f.label === "Add Item Below");
+
+		if (index !== -1) {
+			menu_items[index] = {
+				label: "Add Nested Items",
+				icon: "add",
+				onClick: () => {
+					frappe.app.sidebar.show_new_dialog({
+						nested: true,
+						parent_item: me.item,
+					});
+				},
+			};
+		}
 	}
 };
 

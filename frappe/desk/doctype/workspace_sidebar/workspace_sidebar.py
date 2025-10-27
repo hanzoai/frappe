@@ -77,17 +77,24 @@ def add_sidebar_items(sidebar_title, sidebar_items):
 	sidebar_items = loads(sidebar_items)
 	w = frappe.get_doc("Workspace Sidebar", sidebar_title)
 	items = []
-	for item in sidebar_items:
-		if item.get("nested_items", None):
-			for nested_item in item.get("nested_items"):
+	current_idx = 0
+	for idx, item in enumerate(sidebar_items):
+		si = frappe.new_doc("Workspace Sidebar Item")
+		si.idx = idx + current_idx
+		current_idx = 0
+		si.update(item)
+		items.append(si)
+
+		nested_items = item.get("nested_items", [])
+		if nested_items:
+			for index, nested_item in enumerate(nested_items):
 				new_nested_item = frappe.new_doc("Workspace Sidebar Item")
 				new_nested_item.update(nested_item)
 				new_nested_item.child = 1
+				new_nested_item.idx = si.idx + (index + 1)
 				items.append(new_nested_item)
-		else:
-			si = frappe.new_doc("Workspace Sidebar Item")
-			si.update(item)
-			items.append(si)
+			current_idx = len(nested_items)
+
 	w.items = items
 	w.save()
 	return w
