@@ -2776,3 +2776,47 @@ def map_trackers(url_trackers: dict, create: bool = False):
 		frappe_trackers["utm_content"] = url_content
 
 	return frappe_trackers
+
+
+def attach_expanded_links(doctype: str, docs: list, fields_to_expand: list):
+	if not fields_to_expand:
+		return
+
+	meta = frappe.get_meta(doctype)
+
+	link_fields = {f.fieldname: f for f in meta.get_link_fields() + meta.get_dynamic_link_fields()}
+
+	doctype_values = defaultdict(set)
+	field_to_doctype = {}
+
+	for fieldname in fields_to_expand:
+		if fieldname not in link_fields:
+			continue
+		e = link_fields[fieldname]
+		link_doctype = e.options
+		field_to_doctype[fieldname] = link_doctype
+
+		for li in docs:
+			val = li.get(fieldname)
+			if val:
+				doctype_values[link_doctype].add(val)
+
+	doctype_title_maps = {}
+
+	for link_doctype, values in doctype_values.items():
+		records = frappe.get_all(
+			link_doctype,
+			filters={"name": ["in", list(values)]},
+			fields=["*"],
+		)
+		doctype_title_maps[link_doctype] = {r["name"]: r for r in records}
+
+	for li in docs:
+		for fieldname in fields_to_expand:
+			if fieldname not in field_to_doctype:
+				continue
+			link_doctype = field_to_doctype[fieldname]
+			val = li.get(fieldname)
+			val_title = doctype_title_maps.get(link_doctype, {}).get(val)
+			if val and val_title:
+				li[fieldname] = val_title
