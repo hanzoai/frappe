@@ -88,7 +88,7 @@ def get_communication_doctype(doctype, txt, searchfield, start, page_len, filter
 		]
 
 	out = []
-	for dt in com_doctypes:
+	for dt in list(set(com_doctypes)):
 		if txt.lower().replace("%", "") in dt.lower() and dt in can_read:
 			out.append([dt])
 	return out
