@@ -144,7 +144,7 @@
     padding-top: 23px !important;
     padding-bottom: 23px !important;
     & .icons{
-        gap: 20px 0px;
+        gap: 0px 0px;
     }
 }
 .modal-heading{
@@ -175,6 +175,12 @@
 }
 .modal-body .icons{
     margin-top: 0px;
+    place-self: start;
+    & .desktop-icon{
+        height: 127px;
+        width: 126px;
+        padding: 13px 16px 13px 16px;
+    }
 }
 .desktop-context-menu{
     position: absolute;
@@ -215,7 +221,6 @@
     display: flex;
     justify-content: center;
     gap: 5px;
-    margin-top: 25px;
 }
 .active-page{
     background: black !important;
