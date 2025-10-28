@@ -1,10 +1,12 @@
 frappe.desktop_utils = {};
 $.extend(frappe.desktop_utils, {
 	modal: null,
+	modal_stack: [],
 	create_desktop_modal: function (icon, icon_title, icons_data, grid) {
 		if (!this.modal) {
 			this.modal = new DesktopModal(icon);
 		}
+		this.modal_stack.push(icon);
 		return this.modal;
 	},
 	close_desktop_modal: function () {
@@ -155,30 +157,56 @@ class DesktopPage {
 	update() {
 		this.prepare();
 		this.make();
-		this.setup_avatar();
+		this.setup();
 	}
+	// prepare() {
+	// 	this.apps_icons = [];
+	// 	let all_icons =
+	// 		JSON.parse(localStorage.getItem(`${frappe.session.user}:desktop`)) ||
+	// 		frappe.boot.desktop_icons;
+	// 	let child_icons = all_icons.filter((d) => {
+	// 		return d.parent_icon != "" && d.parent_icon != null && d.hidden != 1;
+	// 	});
+	// 	let parent_icons = all_icons.filter((e, index) => {
+	// 		e.child_icons = [];
+	// 		return (e.parent_icon == null || e.parent_icon == "") && e.hidden != 1;
+	// 	});
+
+	// 	this.apps_icons = parent_icons;
+	// 	child_icons.forEach((f) => {
+	// 		let parent_icon = parent_icons.find((g) => g.label == f.parent_icon);
+	// 		if (parent_icon) {
+	// 			parent_icon.child_icons.push(f);
+	// 		}
+	// 	});
+	// }
+
 	prepare() {
 		this.apps_icons = [];
-		let all_icons =
+
+		const icon_map = {};
+		const all_icons = (
 			JSON.parse(localStorage.getItem(`${frappe.session.user}:desktop`)) ||
-			frappe.boot.desktop_icons;
-		let child_icons = all_icons.filter((d) => {
-			return d.parent_icon != "" && d.parent_icon != null && d.hidden != 1;
-		});
-		let parent_icons = all_icons.filter((e, index) => {
-			e.child_icons = [];
-			return (e.parent_icon == null || e.parent_icon == "") && e.hidden != 1;
+			frappe.boot.desktop_icons
+		).filter((icon) => {
+			if (icon.hidden != 1) {
+				icon.child_icons = [];
+				icon_map[icon.label] = icon;
+				return true;
+			}
+			return false;
 		});
 
-		this.apps_icons = parent_icons;
-		child_icons.forEach((f) => {
-			let parent_icon = parent_icons.find((g) => g.label == f.parent_icon);
-			if (parent_icon) {
-				parent_icon.child_icons.push(f);
+		all_icons.forEach((icon) => {
+			if (icon.parent_icon && icon_map[icon.parent_icon]) {
+				icon_map[icon.parent_icon].child_icons.push(icon);
+			}
+
+			if (!icon.parent_icon || !icon_map[icon.parent_icon]) {
+				this.apps_icons.push(icon);
 			}
 		});
 	}
-
 	make() {
 		this.page.page_head.hide();
 		$(this.page.body).empty();
@@ -568,13 +596,7 @@ class DesktopModal {
 	}
 	setup(icon_title, child_icons_data, grid_row_size) {
 		const me = this;
-		this.modal = new frappe.get_modal(icon_title, "");
-		this.modal.find(".modal-header").addClass("desktop-modal-heading");
-		this.modal.addClass("desktop-modal");
-		this.modal.attr("draggable", true);
-		this.modal.find(".modal-body").addClass("desktop-modal-body");
-		this.$child_icons_wrapper = this.modal.find(".desktop-modal-body");
-
+		this.make_modal(icon_title);
 		this.child_icon_grid = new DesktopIconGrid({
 			wrapper: this.$child_icons_wrapper,
 			icons_data: child_icons_data,
@@ -586,7 +608,44 @@ class DesktopModal {
 
 		this.modal.on("hidden.bs.modal", function () {
 			me.modal.remove();
+			frappe.desktop_utils.modal = null;
+			frappe.desktop_utils.modal_stack = [];
 		});
+	}
+	make_modal(icon_title) {
+		if ($(".desktop-modal").length == 0) {
+			this.modal = new frappe.get_modal(icon_title, "");
+			this.modal.find(".modal-header").addClass("desktop-modal-heading");
+			this.modal.addClass("desktop-modal");
+			this.modal.find(".modal-body").addClass("desktop-modal-body");
+			this.$child_icons_wrapper = this.modal.find(".desktop-modal-body");
+		} else {
+			this.modal.find(".modal-title").text(icon_title);
+			$(this.modal.find(".modal-body")).empty();
+			if (frappe.desktop_utils.modal_stack.length == 1) {
+				this.title_section.find(".icon").remove();
+			} else {
+				this.add_back_button();
+			}
+		}
+	}
+	add_back_button() {
+		const me = this;
+		this.title_section = this.modal.find(".title-section").find(".modal-title");
+		$(this.title_section).prepend(
+			frappe.utils.icon("chevron-left", "md", "", "", "", "", "white")
+		);
+		$(this.title_section)
+			.find(".icon")
+			.on("click", function () {
+				const [prev] = frappe.desktop_utils.modal_stack.splice(-1, 1);
+				let icon =
+					frappe.desktop_utils.modal_stack[frappe.desktop_utils.modal_stack.length - 1];
+				if (icon) {
+					me.setup(icon.icon_title, icon.child_icons, 4);
+					me.show();
+				}
+			});
 	}
 	show() {
 		this.modal.modal("show");

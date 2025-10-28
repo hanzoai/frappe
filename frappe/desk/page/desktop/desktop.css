@@ -167,6 +167,9 @@
         & .modal-title{
             color: var(--neutral-white);
             font-size: var(--text-2xl);
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
     }
     & .modal-actions {
