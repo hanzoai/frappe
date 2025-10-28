@@ -26,16 +26,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.choose_app_name();
 		this.find_nested_items();
 	}
-	async fetch_sidebar() {
-		const me = this;
-		if (me.fields_for_dialog.length > 0) return;
-		await frappe.model.with_doctype("Workspace Sidebar Item", () => {
-			// get all date and datetime fields
-			me.fields_for_dialog = frappe.get_meta("Workspace Sidebar Item").fields;
-			let field = me.fields_for_dialog.find((f) => f.label == "Child Item");
-			field.hidden = 1;
-		});
-	}
+
 	choose_app_name() {
 		if (frappe.boot.app_name_style == "Default") return;
 		frappe.boot.app_data.forEach((a) => {
@@ -331,12 +322,12 @@ frappe.ui.Sidebar = class Sidebar {
 
 	toggle_editing_mode() {
 		const me = this;
-		this.fetch_sidebar();
+
 		if (this.edit_mode) {
 			this.wrapper.attr("data-mode", "edit");
 			this.new_sidebar_items = Array.from(me.workspace_sidebar_items);
 			$(this.active_item).removeClass("active-sidebar");
-			$(".collapse-sidebar-link").hide();
+			$(".collapse-sidebar-link").addClass("hidden");
 			this.wrapper.find(".edit-mode").removeClass("hidden");
 			this.add_new_item_button = this.wrapper.find("[data-name='add-sidebar-item']");
 			this.setup_sorting();
@@ -347,7 +338,7 @@ frappe.ui.Sidebar = class Sidebar {
 			});
 		} else {
 			$(this.active_item).addClass("active-sidebar");
-			$(".collapse-sidebar-link").show();
+			$(".collapse-sidebar-link").removeClass("hidden");
 			this.wrapper.find(".edit-mode").addClass("hidden");
 			this.add_new_item_button = this.wrapper.find("[data-name='add-sidebar-item']");
 		}
@@ -375,29 +366,153 @@ frappe.ui.Sidebar = class Sidebar {
 		});
 	}
 	make_dialog(opts) {
-		this.fields_for_dialog;
-		const fields = this.fields_for_dialog;
 		let title = "New Sidebar Item";
 
 		const me = this;
-		// Add Default values
+		this.dialog_opts = opts;
 
-		if (opts && opts.item) {
-			fields.forEach((f) => {
-				if (
-					opts.item[f.fieldname] !== undefined &&
-					f.fieldtype !== "Section Break" &&
-					f.fieldtype !== "Column Break"
-				) {
-					f.default = opts.item[f.fieldname];
-				}
-			});
-			title = "Edit Sidebar Item";
-		}
 		// Create the dialog
 		let d = new frappe.ui.Dialog({
 			title: title,
-			fields: fields,
+			fields: [
+				{
+					fieldname: "label",
+					fieldtype: "Data",
+					in_list_view: 1,
+					label: "Label",
+					onchange: function (opts) {
+						let label = this.get_value();
+						switch (label) {
+							case "Home":
+								d.set_value("icon", "home");
+								d.set_value("link_type", "Workspace");
+								d.set_value("link_to", me.workspace_title);
+								break;
+
+							case "Reports":
+								d.set_value("type", "Section Break");
+								d.set_value("link_to", null);
+								break;
+
+							case "Dashboard":
+								d.set_value("link_type", "Dashboard");
+								d.set_value("link_to", me.workspace_title);
+								d.set_value("icon", "layout-dashboard");
+								break;
+
+							case "Learn":
+								d.set_value("icon", "graduation-cap");
+								d.set_value("link_type", "URL");
+								break;
+
+							case "Settings":
+								d.set_value("icon", "settings");
+								break;
+						}
+
+						if (d.get_value("type") == "Link" && d.get_value("link_type") !== "URL") {
+							d.set_value("link_to", label);
+						}
+
+						if (me.dialog_opts && me.dialog_opts.parent_item.label == "Reports") {
+							d.set_value("icon", "table");
+							d.set_value("link_type", "Report");
+						}
+					},
+				},
+				{
+					default: "Link",
+					fieldname: "type",
+					fieldtype: "Select",
+					in_list_view: 1,
+					label: "Type",
+					options: "Link\nSection Break\nSpacer",
+				},
+				{
+					default: "DocType",
+					depends_on: "eval: doc.type == 'Link' || doc.indent == 1",
+					fieldname: "link_type",
+					fieldtype: "Select",
+					in_list_view: 1,
+					label: "Link Type",
+					options: "DocType\nPage\nReport\nWorkspace\nDashboard\nURL",
+				},
+				{
+					depends_on:
+						"eval: doc.link_type != \"URL\" && doc.type == 'Link' || doc.indent == 1",
+					fieldname: "link_to",
+					fieldtype: "Dynamic Link",
+					in_list_view: 1,
+					label: "Link To",
+					options: "link_type",
+				},
+				{
+					depends_on: 'eval: doc.link_type == "URL"',
+					fieldname: "url",
+					fieldtype: "Data",
+					label: "URL",
+				},
+				{
+					depends_on: 'eval: doc.type == "Link"',
+					fieldname: "icon",
+					fieldtype: "Icon",
+					in_list_view: 1,
+					label: "Icon",
+				},
+				{
+					default: "0",
+					depends_on: 'eval: doc.type == "Section Break"',
+					fieldname: "indent",
+					fieldtype: "Check",
+					label: "Indent",
+				},
+				{
+					default: "1",
+					depends_on: 'eval: doc.type == "Section Break"',
+					fieldname: "collapsible",
+					fieldtype: "Check",
+					label: "Collapsible",
+				},
+				{
+					fieldname: "details_section",
+					fieldtype: "Section Break",
+					label: "Details",
+				},
+				{
+					fieldname: "column_break_krzu",
+					fieldtype: "Column Break",
+				},
+				{
+					depends_on: 'eval: doc.type == "Section Break"',
+					fieldname: "display_section",
+					fieldtype: "Section Break",
+					label: "Display",
+				},
+				{
+					depends_on: 'eval: doc.type == "Section Break"',
+					fieldname: "collapsible_column",
+					fieldtype: "Column Break",
+					label: "Collapsible",
+				},
+				{
+					default: "0",
+					depends_on: 'eval: doc.type == "Section Break"',
+					fieldname: "keep_closed",
+					fieldtype: "Check",
+					label: "Keep Closed",
+				},
+				{
+					fieldname: "column_break_jexf",
+					fieldtype: "Column Break",
+				},
+				{
+					fieldname: "display_depends_on",
+					fieldtype: "Code",
+					label: "Display Depends On (JS)",
+					options: "JS",
+					width: "30",
+				},
+			],
 			primary_action_label: "Save",
 			size: "small",
 			primary_action(values) {
@@ -423,7 +538,18 @@ frappe.ui.Sidebar = class Sidebar {
 				d.hide();
 			},
 		});
-
+		if (opts && opts.item) {
+			d.fields.forEach((f) => {
+				if (
+					opts.item[f.fieldname] !== undefined &&
+					f.fieldtype !== "Section Break" &&
+					f.fieldtype !== "Column Break"
+				) {
+					f.default = opts.item[f.fieldname];
+				}
+			});
+			d.title = "Edit Sidebar Item";
+		}
 		return d;
 	}
 
@@ -448,6 +574,7 @@ frappe.ui.Sidebar = class Sidebar {
 					frappe.boot.workspace_sidebar_item[me.workspace_title.toLowerCase()] = [
 						...me.new_sidebar_items,
 					];
+					frappe.ui.toolbar.clear_cache();
 					me.edit_mode = false;
 					me.toggle_editing_mode();
 					me.make_sidebar(me);

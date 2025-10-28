@@ -262,9 +262,6 @@
 	}
 }
 .body-sidebar-container[data-mode="edit"] {
-	.collapse-sidebar-link {
-		display: none;
-	}
 	.standard-sidebar-item:hover {
 		& .sidebar-item-edit-controls {
 			visibility: visible;
