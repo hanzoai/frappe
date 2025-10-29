@@ -230,6 +230,20 @@ class DesktopPage {
 	}
 	setup_avatar() {
 		$(".desktop-avatar").html(frappe.avatar(frappe.session.user, "avatar-medium"));
+		let menu_items = [
+			{
+				icon: "edit",
+				label: "Edit Profile",
+				url: `/update-profile/${frappe.session.user}`,
+			},
+			{
+				icon: "lock",
+				label: "Reset Password",
+				url: "/update-password",
+			},
+		];
+		frappe.ui.create_menu($(".desktop-avatar"), menu_items, null, true);
+		$(".desktop-avatar").on("click");
 	}
 	setup_navbar() {
 		$(".sticky-top > .navbar").hide();
