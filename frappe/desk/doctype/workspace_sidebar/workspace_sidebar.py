@@ -38,7 +38,7 @@ class WorkspaceSidebar(Document):
 		with open(file_path, "w+") as doc_file:
 			doc_file.write(frappe.as_json(doc_export) + "\n")
 
-	def delete_desktop_icon_file(self):
+	def delete_file(self):
 		folder_path = create_directory_on_app_path("workspace_sidebar", self.app)
 		file_path = os.path.join(folder_path, f"{frappe.scrub(self.title)}.json")
 		if not os.path.exists(file_path):
@@ -46,8 +46,8 @@ class WorkspaceSidebar(Document):
 
 	def on_trash(self):
 		if is_workspace_manager():
-			if frappe.conf.developer_mode and self.standard == 1 and self.app:
-				self.delete_desktop_icon_file()
+			if frappe.conf.developer_mode and self.app:
+				self.file()
 		else:
 			frappe.throw(_("You need to be Workspace Manager to delete a public workspace."))
 
