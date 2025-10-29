@@ -93,19 +93,18 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 		const date_format = "YYYY-MM-DD";
 
 		this.$result.empty();
-		this.$result.addClass("gantt-modern");
 
 		this.gantt = new Gantt(this.$result[0], this.tasks, {
 			bar_height: 35,
 			bar_corner_radius: 4,
-			resize_handle_width: 8,
-			resize_handle_height: 28,
-			resize_handle_corner_radius: 3,
-			resize_handle_offset: 4,
+			hover_on_date: true,
 			view_mode: gantt_view_mode,
 			date_format: "YYYY-MM-DD",
-			on_click: (task) => {
+			on_double_click: (task) => {
 				frappe.set_route("Form", task.doctype, task.id);
+			},
+			on_date_click: (date) => {
+				if (date) frappe.new_doc("ToDo", { date: new Date(date) });
 			},
 			on_date_change: (task, start, end) => {
 				if (!me.can_write) return;
@@ -170,9 +169,9 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 				${view_modes
 					.map(
 						(value) => `<button type="button"
-						class="btn btn-default btn-sm btn-view-mode ${active_class(value)}"
-						data-value="${value}">
-						${__(value)}
+						class="btn btn-default btn-sm btn-view-mode ${active_class(value.name)}"
+						data-value="${value.name}">
+						${__(value.name)}
 					</button>`
 					)
 					.join("")}
