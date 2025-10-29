@@ -133,7 +133,7 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 			on_view_change: (mode) => {
 				// save view mode
 				me.save_view_user_settings({
-					gantt_view_mode: mode,
+					gantt_view_mode: mode.name,
 				});
 			},
 			custom_popup_html: (task) => {
@@ -226,7 +226,7 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 	get required_libs() {
 		return [
 			"assets/frappe/node_modules/frappe-gantt/dist/frappe-gantt.css",
-			"assets/frappe/node_modules/frappe-gantt/dist/frappe-gantt.min.js",
+			"assets/frappe/node_modules/frappe-gantt/dist/frappe-gantt.umd.js",
 		];
 	}
 };
