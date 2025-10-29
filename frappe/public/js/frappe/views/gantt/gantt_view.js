@@ -135,11 +135,10 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 					gantt_view_mode: mode.name,
 				});
 			},
-			custom_popup_html: (task) => {
+			popup: ({ task }) => {
 				var item = me.get_item(task.id);
-
 				var html = `<div class="title">${task.name}</div>
-					<div class="subtitle">${moment(task._start).format("MMM D")} - ${moment(task._end).format(
+					<div class="subtitle">${moment(task.start).format("MMM D")} - ${moment(task.end).format(
 					"MMM D"
 				)}</div>`;
 
