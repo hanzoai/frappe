@@ -634,19 +634,12 @@ def format_datetime(datetime_string: DateTimeLikeObject, format_string: str | No
 	return formatted_datetime
 
 
-<<<<<<< HEAD
-def format_duration(seconds, hide_days=False):
-	"""Converts the given duration value in float(seconds) to duration format
-
-	example: converts 12885 to '3h 34m 45s' where 12885 = seconds in float
-=======
 def format_duration(seconds: float | int, hide_days: bool = False) -> str:
 	"""Convert the given duration value in seconds to duration format.
 
 	example:
 	convert 12885 to '3h 34m 45s' where 12885 = seconds in float
 	        -12885 to '-3h 34m 45s'
->>>>>>> 4908b926c0 (fix(utils): format_duration for negative values)
 	"""
 	seconds = cint(seconds)
 	negative = seconds < 0
