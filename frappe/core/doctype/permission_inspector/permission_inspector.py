@@ -37,6 +37,12 @@ class PermissionInspector(Document):
 		user: DF.Link
 	# end: auto-generated types
 
+	def onload(self):
+		self.set_onload("custom_perm_types", frappe.get_all(
+			"Permission Type",
+			fields=["name", "label", "applicable_for"],
+		))
+
 	@frappe.whitelist()
 	def debug(self):
 		if not (self.ref_doctype and self.user):

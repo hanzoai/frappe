@@ -6,6 +6,7 @@ import functools
 import frappe
 import frappe.share
 from frappe import _, msgprint
+from frappe.core.doctype.permission_type.permission_type import get_custom_ptype_map
 from frappe.query_builder import DocType
 from frappe.utils import cint, cstr
 
@@ -166,7 +167,10 @@ def has_permission(
 			)
 
 	def false_if_not_shared():
-		if ptype not in ("read", "write", "share", "submit", "email", "print"):
+		std_rights = ["read", "write", "share", "submit", "email", "print"]
+		custom_rights = get_custom_ptype_map().get(doctype, [])
+
+		if ptype not in std_rights + custom_rights:
 			debug and _debug_log(f"Permission type {ptype} can not be shared")
 			return False
 

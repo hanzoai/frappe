@@ -1,11 +1,17 @@
 # Copyright (c) 2025, Frappe Technologies and contributors
 # For license information, please see license.txt
 
+from collections import defaultdict
+
 import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.modules.export_file import delete_folder
 from frappe.modules.utils import get_doctype_module
+from frappe.utils.caching import site_cache
+
+# doctypes where custom fields for permission types will be created
+CUSTOM_FIELD_TARGET = ["Custom DocPerm", "DocPerm", "DocShare"]
 
 
 class PermissionType(Document):
@@ -30,20 +36,17 @@ class PermissionType(Document):
 		module = get_doctype_module(self.applicable_for)
 		export_to_files(record_list=[["Permission Type", self.name]], record_module=module)
 
-		doctypes = ["Custom DocPerm", "DocPerm"]
-		for doctype in doctypes:
-			self.create_custom_docperm(doctype)
+		for doctype in CUSTOM_FIELD_TARGET:
+			self.create_custom_field(doctype)
 
-	def create_custom_docperm(self, doctype):
+	def create_custom_field(self, doctype):
 		from frappe.custom.doctype.custom_field.custom_field import create_custom_field
 
-		if not frappe.db.exists(
-			doctype,
-			{
-				"fieldname": self.name,
-				"parent": self.applicable_for,
-			},
-		):
+		if not self.custom_field_exists(doctype):
+			depends_on = f"eval:doc.parent == '{self.applicable_for}'"
+			if doctype == "DocShare":
+				depends_on = f"eval:doc.share_doctype == '{self.applicable_for}'"
+
 			create_custom_field(
 				doctype,
 				{
@@ -51,7 +54,7 @@ class PermissionType(Document):
 					"label": self.name.replace("_", " ").title(),
 					"fieldtype": "Check",
 					"insert_after": "append",
-					"depends_on": f"eval:doc.parent == '{self.applicable_for}'",
+					"depends_on": depends_on,
 				},
 			)
 
@@ -59,18 +62,34 @@ class PermissionType(Document):
 		if not frappe.conf.developer_mode and not frappe.flags.in_migrate:
 			frappe.throw(_("Deletion of this document is only permitted in developer mode."))
 
-		for doctype in ["Custom DocPerm", "DocPerm"]:
-			self.delete_custom_docperm(doctype)
+		for doctype in CUSTOM_FIELD_TARGET:
+			self.delete_custom_field(doctype)
 
 		module = get_doctype_module(self.applicable_for)
 		delete_folder(module, "Permission Type", self.name)
 
-	def delete_custom_docperm(self, doctype):
-		if name := frappe.db.exists(
+	def delete_custom_field(self, doctype):
+		if name := self.custom_field_exists(doctype):
+			frappe.delete_doc("Custom Field", name)
+
+	def custom_field_exists(self, doctype):
+		return frappe.db.exists(
 			"Custom Field",
 			{
 				"fieldname": self.name,
 				"dt": doctype,
 			},
-		):
-			frappe.delete_doc("Custom Field", name)
+		)
+
+
+@site_cache
+def get_custom_ptype_map():
+	ptypes = frappe.get_all(
+		"Permission Type",
+		fields=["name", "label", "applicable_for"],
+		order_by="name",
+	)
+	custom_ptype_map = defaultdict(list)
+	for pt in ptypes:
+		custom_ptype_map[pt["applicable_for"]].append(pt["label"] or pt["name"])
+	return dict(custom_ptype_map)
