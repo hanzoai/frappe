@@ -1,0 +1,12 @@
+{
+ "applicable_for": "User",
+ "creation": "2025-10-30 19:17:39.833189",
+ "docstatus": 0,
+ "doctype": "Permission Type",
+ "idx": 0,
+ "label": "impersonate",
+ "modified": "2025-10-30 19:17:39.833189",
+ "modified_by": "Administrator",
+ "name": "impersonate",
+ "owner": "Administrator"
+}
