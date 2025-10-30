@@ -17,7 +17,8 @@ from semantic_version import Version
 
 import frappe
 from frappe.defaults import _clear_cache
-from frappe.desk.doctype.desktop_icon.desktop_icon import create_desktop_icon, sync_desktop_icons
+from frappe.desk.doctype.desktop_icon.desktop_icon import create_desktop_icons, sync_desktop_icons
+from frappe.desk.doctype.workspace_sidebar.workspace_sidebar import create_workspace_sidebar_for_workspaces
 from frappe.utils import cint, is_git_url
 from frappe.utils.dashboard import sync_dashboards
 from frappe.utils.synchronization import filelock
@@ -338,7 +339,8 @@ def install_app(name, verbose=False, set_as_patched=True, force=False):
 	sync_fixtures(name)
 	sync_customizations(name)
 	sync_dashboards(name)
-	sync_desktop_icons()
+	create_desktop_icons()
+	create_workspace_sidebar_for_workspaces()
 
 	for after_sync in app_hooks.after_sync or []:
 		frappe.get_attr(after_sync)()  #

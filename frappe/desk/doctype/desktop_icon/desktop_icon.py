@@ -690,6 +690,6 @@ def set_sequence(desktop_icons):
 	frappe.toast(frappe._("Updated"))
 
 
-def create_desktop_icon():
+def create_desktop_icons():
 	create_desktop_icons_from_installed_apps()
 	create_desktop_icons_from_workspace()
