@@ -92,56 +92,8 @@ function reset_to_default() {
 
 frappe.pages["desktop"].on_page_show = function () {
 	frappe.pages["desktop"].desktop_page.setup();
-	setup_context_menu();
 };
 
-function setup_context_menu() {
-	const me = this;
-	let menu_items = [
-		{
-			label: "Edit Item",
-			icon: "pen",
-			onClick: () => {
-				console.log("Start ediitng");
-				frappe.app.sidebar.edit_item(me.item);
-			},
-		},
-		{
-			label: "Add Item Below",
-			icon: "add",
-			onClick: () => {
-				frappe.app.sidebar.add_below(me.item);
-			},
-		},
-		{
-			label: "Duplicate",
-			icon: "copy",
-			onClick: () => {
-				console.log("Start Deleting");
-				frappe.app.sidebar.duplicate_item(me.item);
-			},
-		},
-		{
-			label: "Delete",
-			icon: "trash-2",
-			onClick: () => {
-				console.log(me.item);
-				frappe.app.sidebar.delete_item(me.item);
-				console.log("Start Deleting");
-			},
-		},
-		{
-			label: "Hide",
-			icon: "eye-off",
-			onClick: () => {
-				let icon = get_desktop_icon_by_label(this.icon_title);
-				icon.hidden = 1;
-				save_desktop();
-			},
-		},
-	];
-	frappe.ui.create_menu($(".desktop-wrapper").get(0), menu_items, true);
-}
 function toggle_icons(icons) {
 	icons.forEach((i) => {
 		$(i).parent().parent().show();
@@ -159,27 +111,6 @@ class DesktopPage {
 		this.make();
 		this.setup();
 	}
-	// prepare() {
-	// 	this.apps_icons = [];
-	// 	let all_icons =
-	// 		JSON.parse(localStorage.getItem(`${frappe.session.user}:desktop`)) ||
-	// 		frappe.boot.desktop_icons;
-	// 	let child_icons = all_icons.filter((d) => {
-	// 		return d.parent_icon != "" && d.parent_icon != null && d.hidden != 1;
-	// 	});
-	// 	let parent_icons = all_icons.filter((e, index) => {
-	// 		e.child_icons = [];
-	// 		return (e.parent_icon == null || e.parent_icon == "") && e.hidden != 1;
-	// 	});
-
-	// 	this.apps_icons = parent_icons;
-	// 	child_icons.forEach((f) => {
-	// 		let parent_icon = parent_icons.find((g) => g.label == f.parent_icon);
-	// 		if (parent_icon) {
-	// 			parent_icon.child_icons.push(f);
-	// 		}
-	// 	});
-	// }
 
 	prepare() {
 		this.apps_icons = [];
@@ -207,6 +138,7 @@ class DesktopPage {
 			}
 		});
 	}
+
 	make() {
 		this.page.page_head.hide();
 		$(this.page.body).empty();
@@ -230,6 +162,7 @@ class DesktopPage {
 	}
 	setup_avatar() {
 		$(".desktop-avatar").html(frappe.avatar(frappe.session.user, "avatar-medium"));
+		$(".desktop-avatar").data("menu", "user-menu");
 		let menu_items = [
 			{
 				icon: "edit",
@@ -243,7 +176,6 @@ class DesktopPage {
 			},
 		];
 		frappe.ui.create_menu($(".desktop-avatar"), menu_items, null, true);
-		$(".desktop-avatar").on("click");
 	}
 	setup_navbar() {
 		$(".sticky-top > .navbar").hide();
@@ -478,7 +410,6 @@ class DesktopIcon {
 		// this.child_icons_data = this.get_child_icons_data();
 		this.parent_icon = this.icon_data.icon;
 		this.setup_click();
-		this.setup_context_menu();
 		this.render_folder_thumbnail();
 		this.setup_dragging();
 		this.child_icons = this.get_child_icons_data();
@@ -506,65 +437,6 @@ class DesktopIcon {
 		} else {
 			this.icon.attr("href", this.icon_route);
 		}
-	}
-
-	setup_context_menu() {
-		const me = this;
-		this.context_menu_items = {
-			icon: [
-				{
-					label: "Add Children Icon",
-					icon: "add",
-					onClick: function () {
-						console.log("Open folder modal");
-					},
-				},
-			],
-		};
-		let menu_items = [
-			{
-				label: "Edit Item",
-				icon: "pen",
-				onClick: () => {
-					console.log("Start ediitng");
-					frappe.app.sidebar.edit_item(me.item);
-				},
-			},
-			{
-				label: "Add Item Below",
-				icon: "add",
-				onClick: () => {
-					frappe.app.sidebar.add_below(me.item);
-				},
-			},
-			{
-				label: "Duplicate",
-				icon: "copy",
-				onClick: () => {
-					console.log("Start Deleting");
-					frappe.app.sidebar.duplicate_item(me.item);
-				},
-			},
-			{
-				label: "Delete",
-				icon: "trash-2",
-				onClick: () => {
-					console.log(me.item);
-					frappe.app.sidebar.delete_item(me.item);
-					console.log("Start Deleting");
-				},
-			},
-			{
-				label: "Hide",
-				icon: "eye-off",
-				onClick: () => {
-					let icon = get_desktop_icon_by_label(this.icon_title);
-					icon.hidden = 1;
-					save_desktop();
-				},
-			},
-		];
-		frappe.ui.create_menu($(this.icon.find(".icon-container")), menu_items, true);
 	}
 
 	render_folder_thumbnail() {

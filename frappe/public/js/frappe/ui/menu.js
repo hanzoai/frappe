@@ -121,38 +121,39 @@ frappe.ui.create_menu = function attachContextMenuToElement(
 	open_on_left
 ) {
 	let contextMenu = new frappe.ui.menu(menuItems, open_on_left);
-	frappe.menu_map[element] = contextMenu;
+
+	frappe.menu_map[$(element).data("menu")] = contextMenu;
 	if (right_click) {
 		$(element).on("contextmenu", function (event) {
 			event.preventDefault();
 			event.stopPropagation();
-			if (contextMenu.visible) {
-				frappe.menu_map[element].hide();
+			if (frappe.menu_map[$(element).data("menu")].visible) {
+				frappe.menu_map[$(element).data("menu")].hide();
 			} else {
-				frappe.menu_map[element].show(this);
+				frappe.menu_map[$(element).data("menu")].show(this);
 			}
 		});
 	} else {
 		$(element).on("click", function (event) {
 			event.preventDefault();
 			event.stopPropagation();
-			if (contextMenu.visible) {
-				frappe.menu_map[element].hide();
+			if (frappe.menu_map[$(element).data("menu")].visible) {
+				frappe.menu_map[$(element).data("menu")].hide();
 			} else {
-				frappe.menu_map[element].show(this);
+				frappe.menu_map[$(element).data("menu")].show(this);
 			}
 		});
 	}
 
 	$(document).on("click", function () {
-		if (contextMenu.visible) {
-			contextMenu.hide();
+		if (frappe.menu_map[$(element).data("menu")].visible) {
+			frappe.menu_map[$(element).data("menu")].hide();
 		}
 	});
 
 	$(document).on("keydown", function (e) {
-		if (e.key === "Escape" && contextMenu.visible) {
-			contextMenu.hide();
+		if (e.key === "Escape" && frappe.menu_map[$(element).data("menu")].visible) {
+			frappe.menu_map[$(element).data("menu")].hide();
 		}
 	});
 };

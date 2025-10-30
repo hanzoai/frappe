@@ -51,10 +51,16 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 				edit_mode: frappe.app.sidebar.edit_mode,
 			})
 		);
-		this.setup_editing_controls();
 		$(this.container).append(this.wrapper);
+		this.setup_editing_controls();
 	}
 	setup_editing_controls() {
+		this.menu_items = this.get_menu_items();
+		this.$edit_menu = this.wrapper.find(".edit-menu");
+		this.$sidebar_container = this.$edit_menu.parent();
+		frappe.ui.create_menu(this.$edit_menu, this.menu_items);
+	}
+	get_menu_items() {
 		let me = this;
 		let menu_items = [
 			{
@@ -90,14 +96,8 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 				},
 			},
 		];
-		this.add_menu_items(menu_items);
-
-		this.menu = new frappe.ui.menu(menu_items);
-		this.$edit_menu = this.wrapper.find(".edit-menu");
-		this.$sidebar_container = this.$edit_menu.parent();
-		frappe.ui.create_menu(this.$edit_menu, menu_items);
+		return menu_items;
 	}
-
 	add_menu_items() {}
 };
 
@@ -116,10 +116,12 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 		this.$item_control = this.wrapper.find(".sidebar-item-control");
 		this.$nested_items = this.wrapper.find(".nested-container").first();
 		this.nested_items.forEach((f) => {
-			frappe.app.sidebar.make_sidebar_item({
-				container: this.$nested_items,
-				item: f,
-			});
+			this.items.push(
+				frappe.app.sidebar.make_sidebar_item({
+					container: this.$nested_items,
+					item: f,
+				})
+			);
 		});
 		this.full_template = $(this.wrapper);
 	}
@@ -225,12 +227,20 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 
 		localStorage.setItem("section-breaks-state", JSON.stringify(this.section_breaks_state));
 	}
-	add_menu_items(menu_items) {
-		const me = this;
-		const index = menu_items.findIndex((f) => f.label === "Add Item Below");
 
-		if (index !== -1) {
-			menu_items[index] = {
+	get_menu_items() {
+		console.log(this.item.label);
+		let me = this;
+		let menu_items = [
+			{
+				label: "Edit Item",
+				icon: "pen",
+				onClick: () => {
+					console.log("Start ediitng");
+					frappe.app.sidebar.edit_item(me.item);
+				},
+			},
+			{
 				label: "Add Nested Items",
 				icon: "add",
 				onClick: () => {
@@ -239,14 +249,31 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 						parent_item: me.item,
 					});
 				},
-			};
-		}
+			},
+			{
+				label: "Duplicate",
+				icon: "copy",
+				onClick: () => {
+					console.log("Start Deleting");
+					frappe.app.sidebar.duplicate_item(me.item);
+				},
+			},
+			{
+				label: "Delete",
+				icon: "trash-2",
+				onClick: () => {
+					console.log(me.item);
+					frappe.app.sidebar.delete_item(me.item);
+					console.log("Start Deleting");
+				},
+			},
+		];
+		return menu_items;
 	}
 };
 
 frappe.ui.sidebar_item.TypeSpacer = class SpacerItem extends frappe.ui.sidebar_item.TypeLink {
 	constructor(item, items) {
 		super(item);
-		delete this.route;
 	}
 };
