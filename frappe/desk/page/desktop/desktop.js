@@ -38,17 +38,17 @@ function get_route(desktop_icon) {
 	let route;
 	if (!desktop_icon) return;
 	let item = {};
-	if (desktop_icon.type == "External" && desktop_icon.link) {
+	if (desktop_icon.link_type == "External" && desktop_icon.link) {
 		route = window.location.origin + desktop_icon.link;
 	} else {
-		if (desktop_icon.type == "Workspace") {
+		if (desktop_icon.link_type == "Workspace") {
 			item = {
-				type: desktop_icon.type,
-				link: frappe.router.slug(desktop_icon.workspace),
+				type: desktop_icon.link_type,
+				link: frappe.router.slug(desktop_icon.link_to),
 			};
-		} else if (desktop_icon.type == "DocType" || desktop_icon.type == "list") {
+		} else if (desktop_icon.link_type == "DocType" || desktop_icon.link_type == "list") {
 			item = {
-				type: desktop_icon.type,
+				type: desktop_icon.link_type,
 				name: desktop_icon.link_to,
 			};
 		}
@@ -465,7 +465,7 @@ class DesktopIcon {
 		this.icon_subtitle = "";
 		this.icon_type = this.icon_data.icon_type;
 		this.in_folder = in_folder;
-		this.type = this.icon_data.type;
+		this.link_type = this.icon_data.link_type;
 		if (this.icon_type != "Folder") {
 			this.icon_route = get_route(this.icon_data);
 		}
