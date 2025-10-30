@@ -140,7 +140,7 @@ frappe.PermissionEngine = class PermissionEngine {
 
 			this.options.custom_rights.forEach((r) => {
 				if (r.applicable_for !== doctype || !d[r.name]) return;
-				rights.push(__(toTitle(frappe.unscrub(r.name))));
+				rights.push(__(toTitle(frappe.unscrub(r.label || r.name))));
 			});
 
 			d.rights = rights.join(", ");

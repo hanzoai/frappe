@@ -2,7 +2,9 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
+from frappe.modules.export_file import delete_folder
 from frappe.modules.utils import get_doctype_module
 
 
@@ -15,15 +17,18 @@ class PermissionType(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		applicable_for: DF.Link | None
+		applicable_for: DF.Link
+		label: DF.Data | None
 	# end: auto-generated types
 
 	def on_update(self):
-		if frappe.conf.developer_mode:
-			from frappe.modules.export_file import export_to_files
+		if not frappe.conf.developer_mode and not frappe.flags.in_migrate:
+			frappe.throw(_("Creation of this document is only permitted in developer mode."))
 
-			module = get_doctype_module(self.applicable_for)
-			export_to_files(record_list=[["Permission Type", self.name]], record_module=module)
+		from frappe.modules.export_file import export_to_files
+
+		module = get_doctype_module(self.applicable_for)
+		export_to_files(record_list=[["Permission Type", self.name]], record_module=module)
 
 		doctypes = ["Custom DocPerm", "DocPerm"]
 		for doctype in doctypes:
@@ -51,8 +56,14 @@ class PermissionType(Document):
 			)
 
 	def on_trash(self):
+		if not frappe.conf.developer_mode and not frappe.flags.in_migrate:
+			frappe.throw(_("Deletion of this document is only permitted in developer mode."))
+
 		for doctype in ["Custom DocPerm", "DocPerm"]:
 			self.delete_custom_docperm(doctype)
+
+		module = get_doctype_module(self.applicable_for)
+		delete_folder(module, "Permission Type", self.name)
 
 	def delete_custom_docperm(self, doctype):
 		if name := frappe.db.exists(

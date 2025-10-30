@@ -59,7 +59,7 @@ def get_roles_and_doctypes():
 
 	custom_rights = frappe.get_all(
 		"Permission Type",
-		fields=["name", "applicable_for"],
+		fields=["name", "label", "applicable_for"],
 	)
 
 	doctypes_list = [{"label": _(d.get("name")), "value": d.get("name")} for d in doctypes]

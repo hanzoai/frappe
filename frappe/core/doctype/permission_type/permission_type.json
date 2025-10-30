@@ -1,25 +1,37 @@
 {
  "actions": [],
- "allow_rename": 1,
  "autoname": "prompt",
  "creation": "2025-07-28 13:12:03.573433",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "applicable_for"
+  "applicable_for",
+  "column_break_fyaj",
+  "label"
  ],
  "fields": [
   {
    "fieldname": "applicable_for",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Applicable for",
-   "options": "DocType"
+   "options": "DocType",
+   "reqd": 1
+  },
+  {
+   "fieldname": "label",
+   "fieldtype": "Data",
+   "label": "Label"
+  },
+  {
+   "fieldname": "column_break_fyaj",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-30 14:03:44.453713",
+ "modified": "2025-10-30 18:52:03.750433",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Permission Type",
