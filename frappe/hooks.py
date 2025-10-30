@@ -576,13 +576,6 @@ persistent_cache_keys = [
 	"rl:*",
 ]
 
-fixtures = [
-	{
-		"dt": "Permission Type",
-		"filters": {"name": "impersonate", "applicable_for": "User"},
-	},
-]
-
 user_invitation = {
 	"allowed_roles": {
 		"System Manager": [],

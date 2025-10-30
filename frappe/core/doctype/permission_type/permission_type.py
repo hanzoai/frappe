@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
+from frappe.modules.utils import get_doctype_module
 
 
 class PermissionType(Document):
@@ -18,6 +19,12 @@ class PermissionType(Document):
 	# end: auto-generated types
 
 	def on_update(self):
+		if frappe.conf.developer_mode:
+			from frappe.modules.export_file import export_to_files
+
+			module = get_doctype_module(self.applicable_for)
+			export_to_files(record_list=[["Permission Type", self.name]], record_module=module)
+
 		doctypes = ["Custom DocPerm", "DocPerm"]
 		for doctype in doctypes:
 			self.create_custom_docperm(doctype)

@@ -34,6 +34,7 @@ IMPORTABLE_DOCTYPES = [
 	("core", "server_script"),
 	("custom", "custom_field"),
 	("custom", "property_setter"),
+	("core", "permission_type"),
 ]
 
 
