@@ -93,13 +93,14 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 		const date_format = "YYYY-MM-DD";
 
 		this.$result.empty();
-
 		this.gantt = new Gantt(this.$result[0], this.tasks, {
 			bar_height: 35,
 			bar_corner_radius: 4,
 			hover_on_date: true,
 			view_mode: gantt_view_mode,
 			date_format: "YYYY-MM-DD",
+			readonly_progress: !field_map.progress,
+			fixed_duration: field_map.start == field_map.end,
 			on_double_click: (task) => {
 				frappe.set_route("Form", task.doctype, task.id);
 			},
