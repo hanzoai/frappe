@@ -1,12 +1,11 @@
 import "./sidebar_item";
 frappe.ui.Sidebar = class Sidebar {
 	constructor() {
-		this.make_dom();
 		if (!frappe.boot.setup_complete) {
 			// no sidebar if setup is not complete
 			return;
 		}
-
+		this.make_dom();
 		// states
 		this.edit_mode = false;
 		this.sidebar_expanded = false;
@@ -17,6 +16,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.new_sidebar_items = [];
 		this.$items_container = this.wrapper.find(".sidebar-items");
 		this.$sidebar = this.wrapper.find(".body-sidebar");
+		this.items = [];
 		this.setup_events();
 	}
 
@@ -87,8 +87,11 @@ frappe.ui.Sidebar = class Sidebar {
 		}
 	}
 	make_dom() {
-		this.wrapper = $(frappe.render_template("sidebar")).prependTo("body");
-
+		this.wrapper = $(
+			frappe.render_template("sidebar", {
+				expanded: this.sidebar_expanded,
+			})
+		).prependTo("body");
 		this.$sidebar = this.wrapper.find(".sidebar-items");
 
 		this.wrapper.find(".body-sidebar .collapse-sidebar-link").on("click", () => {
@@ -177,10 +180,12 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	add_item(item) {
-		this.make_sidebar_item({
-			container: this.$items_container,
-			item: item,
-		});
+		this.items.push(
+			this.make_sidebar_item({
+				container: this.$items_container,
+				item: item,
+			})
+		);
 	}
 	make_sidebar_item(opts) {
 		let class_name = `Type${frappe.utils.to_title_case(opts.item.type).replace(/ /g, "")}`;
@@ -279,6 +284,7 @@ frappe.ui.Sidebar = class Sidebar {
 			} else {
 				frappe.app.sidebar.setup(sidebars[0]);
 			}
+			this.sidebar_shown;
 		} else if (route[0] == "query-report") {
 			let doctype = route[1];
 			let sidebars = this.get_correct_workspace_sidebars(doctype);
@@ -322,7 +328,6 @@ frappe.ui.Sidebar = class Sidebar {
 
 	toggle_editing_mode() {
 		const me = this;
-
 		if (this.edit_mode) {
 			this.wrapper.attr("data-mode", "edit");
 			this.new_sidebar_items = Array.from(me.workspace_sidebar_items);
@@ -359,6 +364,8 @@ frappe.ui.Sidebar = class Sidebar {
 				me.new_sidebar_items[new_index] = b;
 			},
 		});
+	}
+	setup_sorting_for_nested_container() {
 		$(".nested-container").each(function (index, el) {
 			Sortable.create(el, {
 				handle: ".drag-handle",
@@ -372,155 +379,162 @@ frappe.ui.Sidebar = class Sidebar {
 		this.dialog_opts = opts;
 
 		// Create the dialog
+		let dialog_fields = [
+			{
+				fieldname: "label",
+				fieldtype: "Data",
+				in_list_view: 1,
+				label: "Label",
+				onchange: function (opts) {
+					let label = this.get_value();
+					switch (label) {
+						case "Home":
+							d.set_value("icon", "home");
+							d.set_value("link_type", "Workspace");
+							d.set_value("link_to", me.workspace_title);
+							break;
+
+						case "Reports":
+							d.set_value("type", "Section Break");
+							d.set_value("link_to", null);
+							break;
+
+						case "Dashboard":
+							d.set_value("link_type", "Dashboard");
+							d.set_value("link_to", me.workspace_title);
+							d.set_value("icon", "layout-dashboard");
+							break;
+
+						case "Learn":
+							d.set_value("icon", "graduation-cap");
+							d.set_value("link_type", "URL");
+							break;
+
+						case "Settings":
+							d.set_value("icon", "settings");
+							break;
+					}
+
+					if (d.get_value("type") == "Link" && d.get_value("link_type") !== "URL") {
+						d.set_value("link_to", label);
+					}
+
+					if (me.dialog_opts && me.dialog_opts.parent_item.label == "Reports") {
+						d.set_value("icon", "table");
+						d.set_value("link_type", "Report");
+					}
+				},
+			},
+			{
+				default: "Link",
+				fieldname: "type",
+				fieldtype: "Select",
+				in_list_view: 1,
+				label: "Type",
+				options: "Link\nSection Break\nSpacer",
+			},
+			{
+				default: "DocType",
+				depends_on: "eval: doc.type == 'Link' || doc.indent == 1",
+				fieldname: "link_type",
+				fieldtype: "Select",
+				in_list_view: 1,
+				label: "Link Type",
+				options: "DocType\nPage\nReport\nWorkspace\nDashboard\nURL",
+			},
+			{
+				depends_on:
+					"eval: doc.link_type != \"URL\" && doc.type == 'Link' || doc.indent == 1",
+				fieldname: "link_to",
+				fieldtype: "Dynamic Link",
+				in_list_view: 1,
+				label: "Link To",
+				options: "link_type",
+			},
+			{
+				depends_on: 'eval: doc.link_type == "URL"',
+				fieldname: "url",
+				fieldtype: "Data",
+				label: "URL",
+			},
+			{
+				depends_on: 'eval: doc.type == "Link"',
+				fieldname: "icon",
+				fieldtype: "Icon",
+				in_list_view: 1,
+				label: "Icon",
+			},
+			{
+				depends_on: 'eval: doc.type == "Section Break"',
+				fieldname: "display_section",
+				fieldtype: "Section Break",
+				label: "Options",
+			},
+			{
+				default: "0",
+				depends_on: 'eval: doc.type == "Section Break"',
+				fieldname: "indent",
+				fieldtype: "Check",
+				label: "Indent",
+			},
+			{
+				default: "1",
+				depends_on: 'eval: doc.type == "Section Break"',
+				fieldname: "collapsible",
+				fieldtype: "Check",
+				label: "Collapsible",
+			},
+			{
+				fieldname: "column_break_krzu",
+				fieldtype: "Column Break",
+			},
+			{
+				default: "0",
+				depends_on: 'eval: doc.type == "Section Break"',
+				fieldname: "keep_closed",
+				fieldtype: "Check",
+				label: "Keep Closed",
+			},
+			{
+				fieldname: "details_section",
+				fieldtype: "Section Break",
+				label: "Details",
+			},
+
+			{
+				fieldtype: "Section Break",
+			},
+			{
+				fieldname: "display_depends_on",
+				fieldtype: "Code",
+				label: "Display Depends On (JS)",
+				options: "JS",
+				max_height: "10px",
+			},
+		];
+		if (opts && opts.item) {
+			dialog_fields.forEach((f) => {
+				if (
+					opts.item[f.fieldname] !== undefined &&
+					f.fieldtype !== "Section Break" &&
+					f.fieldtype !== "Column Break"
+				) {
+					f.default = opts.item[f.fieldname];
+				}
+			});
+			title = "Edit Sidebar Item";
+		}
 		let d = new frappe.ui.Dialog({
 			title: title,
-			fields: [
-				{
-					fieldname: "label",
-					fieldtype: "Data",
-					in_list_view: 1,
-					label: "Label",
-					onchange: function (opts) {
-						let label = this.get_value();
-						switch (label) {
-							case "Home":
-								d.set_value("icon", "home");
-								d.set_value("link_type", "Workspace");
-								d.set_value("link_to", me.workspace_title);
-								break;
-
-							case "Reports":
-								d.set_value("type", "Section Break");
-								d.set_value("link_to", null);
-								break;
-
-							case "Dashboard":
-								d.set_value("link_type", "Dashboard");
-								d.set_value("link_to", me.workspace_title);
-								d.set_value("icon", "layout-dashboard");
-								break;
-
-							case "Learn":
-								d.set_value("icon", "graduation-cap");
-								d.set_value("link_type", "URL");
-								break;
-
-							case "Settings":
-								d.set_value("icon", "settings");
-								break;
-						}
-
-						if (d.get_value("type") == "Link" && d.get_value("link_type") !== "URL") {
-							d.set_value("link_to", label);
-						}
-
-						if (me.dialog_opts && me.dialog_opts.parent_item.label == "Reports") {
-							d.set_value("icon", "table");
-							d.set_value("link_type", "Report");
-						}
-					},
-				},
-				{
-					default: "Link",
-					fieldname: "type",
-					fieldtype: "Select",
-					in_list_view: 1,
-					label: "Type",
-					options: "Link\nSection Break\nSpacer",
-				},
-				{
-					default: "DocType",
-					depends_on: "eval: doc.type == 'Link' || doc.indent == 1",
-					fieldname: "link_type",
-					fieldtype: "Select",
-					in_list_view: 1,
-					label: "Link Type",
-					options: "DocType\nPage\nReport\nWorkspace\nDashboard\nURL",
-				},
-				{
-					depends_on:
-						"eval: doc.link_type != \"URL\" && doc.type == 'Link' || doc.indent == 1",
-					fieldname: "link_to",
-					fieldtype: "Dynamic Link",
-					in_list_view: 1,
-					label: "Link To",
-					options: "link_type",
-				},
-				{
-					depends_on: 'eval: doc.link_type == "URL"',
-					fieldname: "url",
-					fieldtype: "Data",
-					label: "URL",
-				},
-				{
-					depends_on: 'eval: doc.type == "Link"',
-					fieldname: "icon",
-					fieldtype: "Icon",
-					in_list_view: 1,
-					label: "Icon",
-				},
-				{
-					default: "0",
-					depends_on: 'eval: doc.type == "Section Break"',
-					fieldname: "indent",
-					fieldtype: "Check",
-					label: "Indent",
-				},
-				{
-					default: "1",
-					depends_on: 'eval: doc.type == "Section Break"',
-					fieldname: "collapsible",
-					fieldtype: "Check",
-					label: "Collapsible",
-				},
-				{
-					fieldname: "details_section",
-					fieldtype: "Section Break",
-					label: "Details",
-				},
-				{
-					fieldname: "column_break_krzu",
-					fieldtype: "Column Break",
-				},
-				{
-					depends_on: 'eval: doc.type == "Section Break"',
-					fieldname: "display_section",
-					fieldtype: "Section Break",
-					label: "Display",
-				},
-				{
-					depends_on: 'eval: doc.type == "Section Break"',
-					fieldname: "collapsible_column",
-					fieldtype: "Column Break",
-					label: "Collapsible",
-				},
-				{
-					default: "0",
-					depends_on: 'eval: doc.type == "Section Break"',
-					fieldname: "keep_closed",
-					fieldtype: "Check",
-					label: "Keep Closed",
-				},
-				{
-					fieldname: "column_break_jexf",
-					fieldtype: "Column Break",
-				},
-				{
-					fieldname: "display_depends_on",
-					fieldtype: "Code",
-					label: "Display Depends On (JS)",
-					options: "JS",
-					width: "30",
-				},
-			],
+			fields: dialog_fields,
 			primary_action_label: "Save",
 			size: "small",
 			primary_action(values) {
 				if (me.new_sidebar_items.length === 0) {
 					me.new_sidebar_items = Array.from(me.workspace_sidebar_items);
 				}
-
 				if (opts && opts.nested) {
+					values.child = 1;
 					console.log("Add it as a nested item");
 					console.log(opts.parent_item);
 					let index = me.new_sidebar_items.findIndex((f) => {
@@ -531,25 +545,18 @@ frappe.ui.Sidebar = class Sidebar {
 						me.new_sidebar_items[index].nested_items = [];
 					}
 					me.new_sidebar_items[index].nested_items.push(values);
+				} else if (opts && opts.item) {
+					let index = me.new_sidebar_items.indexOf(opts.item);
+					me.new_sidebar_items[index] = values;
 				} else {
 					me.new_sidebar_items.push(values);
 				}
 				me.create_sidebar(me.new_sidebar_items);
+				me.setup_sorting_for_nested_container();
 				d.hide();
 			},
 		});
-		if (opts && opts.item) {
-			d.fields.forEach((f) => {
-				if (
-					opts.item[f.fieldname] !== undefined &&
-					f.fieldtype !== "Section Break" &&
-					f.fieldtype !== "Column Break"
-				) {
-					f.default = opts.item[f.fieldname];
-				}
-			});
-			d.title = "Edit Sidebar Item";
-		}
+
 		return d;
 	}
 
@@ -587,8 +594,19 @@ frappe.ui.Sidebar = class Sidebar {
 			me.toggle_editing_mode();
 			me.make_sidebar(me);
 		});
+		// this.setup_editing_controls_on_item();
 	}
-
+	// setup_editing_controls_on_item(){
+	// 	debugger
+	// 	this.items.forEach(i => {
+	// 		i.setup_editing_controls()
+	// 		if(i.items.length > 0){
+	// 			i.items.forEach(j => {
+	// 				j.setup_editing_controls()
+	// 			})
+	// 		}
+	// 	})
+	// }
 	find_parent(sidebar_items, item) {
 		for (const f of sidebar_items) {
 			if (f.nested_items && f.nested_items.includes(item)) {

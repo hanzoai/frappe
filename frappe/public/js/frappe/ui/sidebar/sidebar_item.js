@@ -217,12 +217,11 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 		});
 	}
 	save_section_break_state() {
-		if (Object.keys(this.section_breaks_state).length == 0) {
+		if (!this.section_breaks_state[this.workspace_title]) {
 			this.section_breaks_state[this.workspace_title] = {};
 		}
 
 		const title = this.$drop_icon.parent().parent().attr("title");
-
 		this.section_breaks_state[this.workspace_title][title] = this.collapsed;
 
 		localStorage.setItem("section-breaks-state", JSON.stringify(this.section_breaks_state));
