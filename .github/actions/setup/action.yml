@@ -103,7 +103,7 @@ runs:
       curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | sudo bash
       sudo apt -qq update
       sudo apt -qq remove mysql-server mysql-client
-      sudo apt -qq install libcups2-dev redis-server mariadb-client libmariadb-dev
+      sudo apt -qq install libcups2-dev redis-server mariadb-client libmariadb-dev postgresql-client libpq-dev
 
       wget -q -O /tmp/wkhtmltox.deb https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.jammy_amd64.deb
       sudo apt install /tmp/wkhtmltox.deb
@@ -167,6 +167,14 @@ runs:
         mariadb --host 127.0.0.1 --port 3306 -u root -p${{ inputs.db-root-password }} -e "GRANT ALL PRIVILEGES ON \`test_frappe\`.* TO 'test_frappe'@'localhost'";
 
         mariadb --host 127.0.0.1 --port 3306 -u root -p${{ inputs.db-root-password }} -e "FLUSH PRIVILEGES";
+      fi
+
+      if [ "$DB" == "postgres" ]; then
+        export PGPASSWORD='travis'
+        psql -h 127.0.0.1 -p 5432 -c "CREATE DATABASE test_frappe" -U postgres
+        psql -h 127.0.0.1 -p 5432 -c "CREATE USER test_frappe WITH PASSWORD 'test_frappe'" -U postgres
+        psql -h 127.0.0.1 -p 5432 -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE test_frappe TO test_frappe;"
+        unset PGPASSWORD
       fi
 
   - shell: bash -e {0}
