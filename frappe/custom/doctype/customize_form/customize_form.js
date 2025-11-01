@@ -265,6 +265,15 @@ frappe.ui.form.on("Customize Form", {
 								),
 								default: 0,
 							},
+							{
+								fieldtype: "Check",
+								fieldname: "apply_module_export_filter",
+								label: __("Apply Module Export Filter"),
+								description: __(
+									"Apply Module (for export) filter while exporting customizations."
+								),
+								default: 0,
+							},
 						],
 						function (data) {
 							frappe.call({
@@ -274,6 +283,7 @@ frappe.ui.form.on("Customize Form", {
 									module: data.module,
 									sync_on_migrate: data.sync_on_migrate,
 									with_permissions: data.with_permissions,
+									apply_module_export_filter: data.apply_module_export_filter,
 								},
 							});
 						},
