@@ -645,8 +645,21 @@ def create_desktop_icons_from_workspace():
 			):
 				icon.hidden = 1
 				icon.parent_icon = None
-			if not frappe.db.exists("Desktop Icon", [{"label": icon.label, "link_type": icon.link_type}]):
-				icon.insert(ignore_if_duplicate=True)
+			print(f"Label {icon.label}")
+			print(f"Icon Type {icon.icon_type}")
+			print(f"Link Type {icon.link_type}")
+			try:
+				if not frappe.db.exists("Desktop Icon", [{"label": icon.label, "icon_type": icon.icon_type}]):
+					icon.insert(ignore_if_duplicate=True)
+			except Exception as e:
+				print(f"Error occurred while inserting icon: {e}")
+				existing_icon = frappe.db.exists("Desktop Icon", [{"label": icon.label}])
+				if existing_icon:
+					old_icon = frappe.get_doc("Desktop Icon", existing_icon)
+					print("Existing Icon Found:")
+					print(f"Label {old_icon.label}")
+					print(f"Icon Type {old_icon.icon_type}")
+					print(f"Link Type {old_icon.link_type}")
 
 
 def generate_color():
