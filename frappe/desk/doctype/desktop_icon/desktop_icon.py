@@ -647,7 +647,6 @@ def create_desktop_icons_from_workspace():
 				icon.parent_icon = None
 			if not frappe.db.exists("Desktop Icon", [{"label": icon.label, "link_type": icon.link_type}]):
 				icon.insert(ignore_if_duplicate=True)
-	frappe.db.commit()
 
 
 def generate_color():
@@ -670,12 +669,9 @@ def create_desktop_icons_from_installed_apps():
 			icon.icon_type = "App"
 			icon.link = app_details[0]["route"]
 			icon.logo_url = app_details[0]["logo"]
-			print(icon.label)
-			print(icon.icon_type)
 			if not frappe.db.exists("Desktop Icon", [{"label": icon.label, "icon_type": icon.icon_type}]):
 				icon.save()
 			index += 1
-	frappe.db.commit()
 
 
 @frappe.whitelist()

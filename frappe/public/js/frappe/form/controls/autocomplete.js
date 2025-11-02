@@ -246,11 +246,12 @@ frappe.ui.form.ControlAutocomplete = class ControlAutoComplete extends frappe.ui
 	}
 
 	async load_installed_apps(frm) {
+		const me = this;
 		await frappe.call({
 			method: "frappe.desk.desktop.get_installed_apps",
 			callback: function (r) {
 				if (r.message) {
-					cur_frm.fields_dict["app"].set_data(r.message);
+					me.set_data(r.message);
 				}
 			},
 		});

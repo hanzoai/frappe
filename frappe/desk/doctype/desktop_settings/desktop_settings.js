@@ -3,6 +3,6 @@
 
 frappe.ui.form.on("Desktop Settings", {
 	refresh(frm) {
-		frm.add_custom_button("Visit Desktop", () => frappe.set_route("desktop"));
+		frm.add_custom_button(__("Visit Desktop"), () => frappe.set_route("desktop"));
 	},
 });
