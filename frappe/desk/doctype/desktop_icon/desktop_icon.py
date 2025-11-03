@@ -650,7 +650,7 @@ def create_desktop_icons_from_workspace():
 				if not frappe.db.exists("Desktop Icon", [{"label": icon.label, "icon_type": icon.icon_type}]):
 					icon.insert(ignore_if_duplicate=True)
 			except Exception as e:
-				print(f"Error occurred while inserting icon: {e}")
+				raise e
 
 
 def generate_color():

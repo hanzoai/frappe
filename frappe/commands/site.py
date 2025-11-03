@@ -1601,10 +1601,10 @@ def create_icons_and_sidebar(context: CliCtxObj):
 		try:
 			print("Creating Desktop Icons")
 			create_desktop_icons()
-			frappe.db.commit()
 			print("Creating Workspace Sidebars")
 			create_workspace_sidebar_for_workspaces()
-			frappe.db.commit()
+		except Exception as e:
+			print(f"Error creating icons {site}: {e}")
 		finally:
 			frappe.destroy()
 
