@@ -550,6 +550,7 @@ frappe.views.Workspace = class Workspace {
 	}
 
 	create_page(new_page) {
+		const me = this;
 		return new Promise((resolve) => {
 			frappe.call({
 				method: "frappe.desk.doctype.workspace.workspace.new_page",
@@ -565,11 +566,18 @@ frappe.views.Workspace = class Workspace {
 								indicator: "green",
 							});
 						}
-						frappe.boot.sidebar_pages = r.message;
-
-						if (!frappe.boot.app_data_map["private"] && new_page.public === 0) {
-							this.sidebar.apps_switcher.add_private_app();
+						if (r.message) {
+							frappe.boot.sidebar_pages = r.message.workspace_pages;
+							frappe.boot.workspaces = r.message.workspace_pages;
+							me.workspaces = frappe.boot.workspaces.pages;
+							me.setup_pages(frappe.boot.sidebar_pages.pages);
+							frappe.boot.workspace_sidebar_item = r.message.sidebar_items;
 						}
+
+						if (new_page.public === 0) {
+							frappe.app.sidebar.setup("private");
+						}
+
 						resolve();
 					}
 				},
@@ -577,6 +585,31 @@ frappe.views.Workspace = class Workspace {
 		});
 	}
 
+	setup_pages(all_pages) {
+		all_pages.forEach((page) => {
+			page.is_editable = !page.public || this.has_access;
+			if (typeof page.content == "string") {
+				page.content = JSON.parse(page.content);
+			}
+		});
+
+		if (all_pages) {
+			frappe.workspaces = {};
+			frappe.workspace_list = [];
+			frappe.workspace_map = {};
+			for (let page of all_pages) {
+				frappe.workspaces[frappe.router.slug(page.name)] = {
+					name: page.name,
+					public: page.public,
+				};
+				if (!page.app && page.module) {
+					page.app = frappe.boot.module_app[frappe.slug(page.module)];
+				}
+				frappe.workspace_map[page.name] = page;
+				frappe.workspace_list.push(page);
+			}
+		}
+	}
 	initialize_editorjs(blocks) {
 		this.tools = {
 			header: {
@@ -722,7 +755,7 @@ frappe.views.Workspace = class Workspace {
 		this._page = null;
 		return this.get_pages().then((r) => {
 			frappe.boot.sidebar_pages = r;
-			this.sidebar.setup_pages();
+			this.setup_pages(frappe.boot.workspaces.pages);
 			this.show();
 			if (this.undo) this.undo.readOnly = true;
 		});

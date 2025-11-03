@@ -6,7 +6,9 @@ from json import loads
 
 import frappe
 from frappe import _
+from frappe.boot import get_sidebar_items
 from frappe.desk.desktop import get_workspace_sidebar_items, save_new_widget
+from frappe.desk.doctype.workspace_sidebar.workspace_sidebar import add_to_my_workspace
 from frappe.desk.utils import validate_route_conflict
 from frappe.model.document import Document
 from frappe.model.rename_doc import rename_doc
@@ -294,7 +296,10 @@ def new_page(new_page):
 	doc.sequence_id = last_sequence_id(doc) + 1
 	doc.save(ignore_permissions=True)
 
-	return get_workspace_sidebar_items()
+	# add to workspace sidebar items
+	if not doc.public:
+		add_to_my_workspace(doc)
+	return {"workspace_pages": get_workspace_sidebar_items(), "sidebar_items": get_sidebar_items()}
 
 
 @frappe.whitelist()

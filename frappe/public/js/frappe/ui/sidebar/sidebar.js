@@ -58,11 +58,17 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 	setup(workspace_title) {
 		this.workspace_title = workspace_title;
+		this.check_for_private_workspace(workspace_title);
 		this.prepare();
 		this.$sidebar.attr("data-title", this.workspace_title);
 		this.sidebar_header = new frappe.ui.SidebarHeader(this);
 		this.make_sidebar();
 		this.setup_complete = true;
+	}
+	check_for_private_workspace(workspace_title) {
+		if (workspace_title == "private") {
+			this.workspace_title = "My Workspaces";
+		}
 	}
 	setup_events() {
 		const me = this;
@@ -239,12 +245,6 @@ frappe.ui.Sidebar = class Sidebar {
 		this.set_active_workspace_item();
 	}
 
-	reload() {
-		return frappe.workspace.get_pages().then((r) => {
-			frappe.boot.sidebar_pages = r;
-			this.setup_pages();
-		});
-	}
 	set_height() {
 		$(".body-sidebar").css("height", window.innerHeight + "px");
 		$(".overlay").css("height", window.innerHeight + "px");
@@ -274,7 +274,13 @@ frappe.ui.Sidebar = class Sidebar {
 		let route = frappe.get_route();
 		if (frappe.get_route()[0] == "setup-wizard") return;
 		if (route[0] == "Workspaces") {
-			let workspace = route[1];
+			let workspace;
+			if (!route[1]) {
+				workspace = "My Workspaces";
+			} else {
+				workspace = route[1];
+			}
+
 			frappe.app.sidebar.setup(workspace);
 		} else if (route[0] == "List" || route[0] == "Form") {
 			let doctype = route[1];

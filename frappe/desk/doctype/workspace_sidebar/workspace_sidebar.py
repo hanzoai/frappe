@@ -6,7 +6,6 @@ from json import JSONDecodeError, dumps, loads
 
 import frappe
 from frappe import _
-from frappe.desk.doctype.workspace.workspace import is_workspace_manager
 from frappe.model.document import Document
 from frappe.modules.utils import create_directory_on_app_path
 
@@ -50,6 +49,10 @@ class WorkspaceSidebar(Document):
 				self.file()
 		else:
 			frappe.throw(_("You need to be Workspace Manager to delete a public workspace."))
+
+
+def is_workspace_manager():
+	return "Workspace Manager" in frappe.get_roles()
 
 
 def create_workspace_sidebar_for_workspaces():
@@ -98,3 +101,19 @@ def add_sidebar_items(sidebar_title, sidebar_items):
 	w.items = items
 	w.save()
 	return w
+
+
+def add_to_my_workspace(workspace):
+	private_sidebar = frappe.get_doc("Workspace Sidebar", "My Workspaces")
+
+	workspace_sidebar = {
+		"label": workspace.title,
+		"type": "Link",
+		"link_to": f"{workspace.title}-{workspace.for_user}",
+		"link_type": "Workspace",
+		"icon": workspace.icon,
+	}
+
+	private_sidebar.append("items", workspace_sidebar)
+
+	private_sidebar.save()
