@@ -9,6 +9,7 @@ from frappe.core.doctype.doctype.doctype import (
 	clear_permissions_cache,
 	validate_permissions_for_doctype,
 )
+from frappe.core.doctype.permission_type.permission_type import get_doctype_ptype_map
 from frappe.exceptions import DoesNotExistError
 from frappe.modules.import_file import get_file_path, read_doc_from_file
 from frappe.permissions import (
@@ -57,18 +58,13 @@ def get_roles_and_doctypes():
 		fields=["name"],
 	)
 
-	custom_rights = frappe.get_all(
-		"Permission Type",
-		fields=["name", "label", "applicable_for"],
-	)
-
 	doctypes_list = [{"label": _(d.get("name")), "value": d.get("name")} for d in doctypes]
 	roles_list = [{"label": _(d.get("name")), "value": d.get("name")} for d in roles]
 
 	return {
 		"doctypes": sorted(doctypes_list, key=lambda d: d["label"].casefold()),
 		"roles": sorted(roles_list, key=lambda d: d["label"].casefold()),
-		"custom_rights": custom_rights,
+		"doctype_ptype_map": get_doctype_ptype_map(),
 	}
 
 

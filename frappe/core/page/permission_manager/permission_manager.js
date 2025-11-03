@@ -132,18 +132,13 @@ frappe.PermissionEngine = class PermissionEngine {
 			.append(`<hr><h5>${__("Standard Permissions")}:</h5><br>`);
 		let $wrapper = $("<p></p>").appendTo($d);
 		data.message.forEach((d) => {
-			let rights = this.rights
+			let custom_rights = this.options.doctype_ptype_map[doctype] || [];
+			d.rights = this.rights
 				.filter((r) => d[r])
+				.concat(custom_rights)
 				.map((r) => {
 					return __(toTitle(frappe.unscrub(r)));
 				});
-
-			this.options.custom_rights.forEach((r) => {
-				if (r.applicable_for !== doctype || !d[r.name]) return;
-				rights.push(__(toTitle(frappe.unscrub(r.label || r.name))));
-			});
-
-			d.rights = rights.join(", ");
 
 			$wrapper.append(`<div class="row">\
 				<div class="col-xs-5"><b>${__(d.role)}</b>, ${__("Level")} ${d.permlevel || 0}</div>\
@@ -270,9 +265,8 @@ frappe.PermissionEngine = class PermissionEngine {
 				}
 			});
 
-			this.options.custom_rights.forEach((r) => {
-				if (r.applicable_for !== d.parent) return;
-				this.add_check(perm_container, d, r.name);
+			this.options.doctype_ptype_map[d.parent]?.forEach((r) => {
+				this.add_check(perm_container, d, r);
 			});
 
 			// buttons

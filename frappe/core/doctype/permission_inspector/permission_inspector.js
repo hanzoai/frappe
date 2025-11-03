@@ -23,18 +23,13 @@ frappe.ui.form.on("Permission Inspector", {
 		}
 	},
 	add_custom_perm_types(frm) {
-		const custom_perm_types = frm.doc.__onload.custom_perm_types
-		if (!custom_perm_types?.length) return
 		if (!frm.doc.ref_doctype) return
 
-		const standard_options = frm.meta.fields.find(f => f.fieldname === "permission_type").options;
+		const doctype_ptype_map = frm.doc.__onload.doctype_ptype_map
+		if (!Object.keys(doctype_ptype_map).length) return
 
-		const custom_options = (
-			custom_perm_types
-				.filter(pt => pt.applicable_doctype != frm.doc.ref_doctype)
-				.map(pt => pt.label || pt.name)
-				.join("\n")
-		);
+		const standard_options = frm.meta.fields.find(f => f.fieldname === "permission_type").options;
+		const custom_options = doctype_ptype_map[frm.doc.ref_doctype].join("\n");
 
 		frm.set_df_property("permission_type", "options", `${standard_options}\n${custom_options}`);
 	}

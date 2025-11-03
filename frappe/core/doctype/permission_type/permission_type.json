@@ -5,33 +5,30 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "applicable_for",
-  "column_break_fyaj",
-  "label"
+  "module",
+  "doc_types"
  ],
  "fields": [
   {
-   "fieldname": "applicable_for",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Applicable for",
-   "options": "DocType",
+   "fieldname": "doc_types",
+   "fieldtype": "Table MultiSelect",
+   "label": "Applies To",
+   "options": "Permission Type DocType",
    "reqd": 1
   },
   {
-   "fieldname": "label",
-   "fieldtype": "Data",
-   "label": "Label"
-  },
-  {
-   "fieldname": "column_break_fyaj",
-   "fieldtype": "Column Break"
+   "fieldname": "module",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Module",
+   "options": "Module Def",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-30 18:52:03.750433",
+ "modified": "2025-11-03 15:53:10.367326",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Permission Type",

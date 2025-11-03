@@ -38,10 +38,9 @@ class PermissionInspector(Document):
 	# end: auto-generated types
 
 	def onload(self):
-		self.set_onload("custom_perm_types", frappe.get_all(
-			"Permission Type",
-			fields=["name", "label", "applicable_for"],
-		))
+		from frappe.core.doctype.permission_type.permission_type import get_doctype_ptype_map
+
+		self.set_onload("doctype_ptype_map", get_doctype_ptype_map())
 
 	@frappe.whitelist()
 	def debug(self):
