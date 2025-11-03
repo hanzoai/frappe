@@ -160,7 +160,9 @@ class UserPermissions:
 						getattr(self, "can_" + key).append(dt)
 
 				if not dtp.get("istable"):
-					if not dtp.get("issingle") and not dtp.get("read_only"):
+					if frappe.session.user == "Administrator":
+						self.can_search.append(dt)
+					elif not dtp.get("issingle") and not dtp.get("read_only"):
 						self.can_search.append(dt)
 					if dtp.get("module") not in self.allow_modules:
 						if active_modules and dtp.get("module") not in active_modules:
