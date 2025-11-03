@@ -35,7 +35,7 @@ class PermissionType(Document):
 				_("Permission Type '{0}' is reserved. Please choose another name.").format(self.name)
 			)
 
-	def _can_write(self):
+	def can_write(self):
 		return (
 			frappe.conf.developer_mode
 			or frappe.flags.in_migrate
@@ -43,7 +43,7 @@ class PermissionType(Document):
 		)
 
 	def on_update(self):
-		if not self._can_write():
+		if not self.can_write():
 			frappe.throw(_("Creation of this document is only permitted in developer mode."))
 
 		from frappe.modules.export_file import export_to_files
@@ -74,7 +74,7 @@ class PermissionType(Document):
 			)
 
 	def on_trash(self):
-		if not self._can_write():
+		if not self.can_write():
 			frappe.throw(_("Deletion of this document is only permitted in developer mode."))
 
 		for doctype in CUSTOM_FIELD_TARGET:
