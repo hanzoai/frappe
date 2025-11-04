@@ -72,8 +72,10 @@ class TestQuery(IntegrationTestCase):
 	def setUp(self):
 		setup_for_tests()
 
-	@run_only_if(db_type_is.MARIADB)
 	def test_multiple_tables_in_filters(self):
+		expected_query = convert_identifier_quotes(
+			"SELECT `tabDocType`.* FROM `tabDocType` LEFT JOIN `tabDocField` ON `tabDocField`.`parent`=`tabDocType`.`name` AND `tabDocField`.`parenttype`='DocType' AND `tabDocField`.`parentfield`='fields' WHERE `tabDocField`.`name` LIKE 'f%' AND `tabDocType`.`parent`='something'"
+		)
 		self.assertEqual(
 			frappe.qb.get_query(
 				"DocType",
@@ -83,7 +85,7 @@ class TestQuery(IntegrationTestCase):
 					["DocType", "parent", "=", "something"],
 				],
 			).get_sql(),
-			"SELECT `tabDocType`.* FROM `tabDocType` LEFT JOIN `tabDocField` ON `tabDocField`.`parent`=`tabDocType`.`name` AND `tabDocField`.`parenttype`='DocType' AND `tabDocField`.`parentfield`='fields' WHERE `tabDocField`.`name` LIKE 'f%' AND `tabDocType`.`parent`='something'",
+			expected_query,
 		)
 
 	@run_only_if(db_type_is.MARIADB)
