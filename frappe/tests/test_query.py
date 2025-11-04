@@ -359,88 +359,89 @@ class TestQuery(IntegrationTestCase):
 			.get_sql(),
 		)
 
-	@run_only_if(db_type_is.MARIADB)
 	def test_filters(self):
+		expected_query = convert_identifier_quotes(
+			"SELECT `tabDocType`.`name` FROM `tabDocType` LEFT JOIN `tabModule Def` ON `tabModule Def`.`name`=`tabDocType`.`module` WHERE `tabModule Def`.`app_name`='frappe'"
+		)
 		self.assertEqual(
 			frappe.qb.get_query(
 				"DocType",
 				fields=["name"],
 				filters={"module.app_name": "frappe"},
 			).get_sql(),
-			"SELECT `tabDocType`.`name` FROM `tabDocType` LEFT JOIN `tabModule Def` ON `tabModule Def`.`name`=`tabDocType`.`module` WHERE `tabModule Def`.`app_name`='frappe'".replace(
-				"`", '"' if frappe.db.db_type == "postgres" else "`"
-			),
+			expected_query,
 		)
 
+		expected_query = convert_identifier_quotes(
+			"SELECT `tabDocType`.`name` FROM `tabDocType` LEFT JOIN `tabModule Def` ON `tabModule Def`.`name`=`tabDocType`.`module` WHERE `tabModule Def`.`app_name` LIKE 'frap%'"
+		)
 		self.assertEqual(
 			frappe.qb.get_query(
 				"DocType",
 				fields=["name"],
 				filters={"module.app_name": ("like", "frap%")},
 			).get_sql(),
-			"SELECT `tabDocType`.`name` FROM `tabDocType` LEFT JOIN `tabModule Def` ON `tabModule Def`.`name`=`tabDocType`.`module` WHERE `tabModule Def`.`app_name` LIKE 'frap%'".replace(
-				"`", '"' if frappe.db.db_type == "postgres" else "`"
-			),
+			expected_query,
 		)
 
+		expected_query = convert_identifier_quotes(
+			"SELECT `tabDocType`.`name` FROM `tabDocType` LEFT JOIN `tabDocPerm` ON `tabDocPerm`.`parent`=`tabDocType`.`name` AND `tabDocPerm`.`parenttype`='DocType' AND `tabDocPerm`.`parentfield`='permissions' WHERE `tabDocPerm`.`role`='System Manager'"
+		)
 		self.assertEqual(
 			frappe.qb.get_query(
 				"DocType",
 				fields=["name"],
 				filters={"permissions.role": "System Manager"},
 			).get_sql(),
-			"SELECT `tabDocType`.`name` FROM `tabDocType` LEFT JOIN `tabDocPerm` ON `tabDocPerm`.`parent`=`tabDocType`.`name` AND `tabDocPerm`.`parenttype`='DocType' AND `tabDocPerm`.`parentfield`='permissions' WHERE `tabDocPerm`.`role`='System Manager'".replace(
-				"`", '"' if frappe.db.db_type == "postgres" else "`"
-			),
+			expected_query,
 		)
 
+		expected_query = convert_identifier_quotes("SELECT `module` FROM `tabDocType` WHERE `name`=''")
 		self.assertEqual(
 			frappe.qb.get_query(
 				"DocType",
 				fields=["module"],
 				filters="",
 			).get_sql(),
-			"SELECT `module` FROM `tabDocType` WHERE `name`=''".replace(
-				"`", '"' if frappe.db.db_type == "postgres" else "`"
-			),
+			expected_query,
 		)
 
+		expected_query = convert_identifier_quotes(
+			"SELECT `name` FROM `tabDocType` WHERE `name` IN ('ToDo','Note')"
+		)
 		self.assertEqual(
 			frappe.qb.get_query(
 				"DocType",
 				filters=["ToDo", "Note"],
 			).get_sql(),
-			"SELECT `name` FROM `tabDocType` WHERE `name` IN ('ToDo','Note')".replace(
-				"`", '"' if frappe.db.db_type == "postgres" else "`"
-			),
+			expected_query,
 		)
 
+		expected_query = convert_identifier_quotes("SELECT `name` FROM `tabDocType` WHERE `name` IN ('')")
 		self.assertEqual(
 			frappe.qb.get_query(
 				"DocType",
 				filters={"name": ("in", [])},
 			).get_sql(),
-			"SELECT `name` FROM `tabDocType` WHERE `name` IN ('')".replace(
-				"`", '"' if frappe.db.db_type == "postgres" else "`"
-			),
+			expected_query,
 		)
 
+		expected_query = convert_identifier_quotes("SELECT `name` FROM `tabDocType` WHERE `name` IN (1,2,3)")
 		self.assertEqual(
 			frappe.qb.get_query(
 				"DocType",
 				filters=[1, 2, 3],
 			).get_sql(),
-			"SELECT `name` FROM `tabDocType` WHERE `name` IN (1,2,3)".replace(
-				"`", '"' if frappe.db.db_type == "postgres" else "`"
-			),
+			expected_query,
 		)
 
+		expected_query = convert_identifier_quotes("SELECT `name` FROM `tabDocType`")
 		self.assertEqual(
 			frappe.qb.get_query(
 				"DocType",
 				filters=[],
 			).get_sql(),
-			"SELECT `name` FROM `tabDocType`".replace("`", '"' if frappe.db.db_type == "postgres" else "`"),
+			expected_query,
 		)
 
 	def test_nested_filters(self):
