@@ -1520,7 +1520,7 @@ class TestQuery(IntegrationTestCase):
 		# Test simple function without alias
 		query = frappe.qb.get_query("User", fields=["user_type", {"COUNT": "name"}], group_by="user_type")
 		sql = query.get_sql()
-		self.assertIn("COUNT(`name`)", sql)
+		self.assertIn(convert_identifier_quotes("COUNT(`name`)"), sql)
 		self.assertIn("GROUP BY", sql)
 
 		# Test function with alias
@@ -1528,52 +1528,52 @@ class TestQuery(IntegrationTestCase):
 			"User", fields=[{"COUNT": "name", "as": "total_users"}], group_by="user_type"
 		)
 		sql = query.get_sql()
-		self.assertIn("COUNT(`name`) `total_users`", sql)
+		self.assertIn(convert_identifier_quotes("COUNT(`name`) `total_users`"), sql)
 
 		# Test SUM function with alias
 		query = frappe.qb.get_query(
 			"User", fields=[{"SUM": "enabled", "as": "total_enabled"}], group_by="user_type"
 		)
 		sql = query.get_sql()
-		self.assertIn("SUM(`enabled`) `total_enabled`", sql)
+		self.assertIn(convert_identifier_quotes("SUM(`enabled`) `total_enabled`"), sql)
 
 		# Test MAX function
 		query = frappe.qb.get_query(
 			"User", fields=[{"MAX": "creation", "as": "latest_user"}], group_by="user_type"
 		)
 		sql = query.get_sql()
-		self.assertIn("MAX(`creation`) `latest_user`", sql)
+		self.assertIn(convert_identifier_quotes("MAX(`creation`) `latest_user`"), sql)
 
 		# Test MIN function
 		query = frappe.qb.get_query(
 			"User", fields=[{"MIN": "creation", "as": "earliest_user"}], group_by="user_type"
 		)
 		sql = query.get_sql()
-		self.assertIn("MIN(`creation`) `earliest_user`", sql)
+		self.assertIn(convert_identifier_quotes("MIN(`creation`) `earliest_user`"), sql)
 
 		# Test AVG function
 		query = frappe.qb.get_query(
 			"User", fields=[{"AVG": "enabled", "as": "avg_enabled"}], group_by="user_type"
 		)
 		sql = query.get_sql()
-		self.assertIn("AVG(`enabled`) `avg_enabled`", sql)
+		self.assertIn(convert_identifier_quotes("AVG(`enabled`) `avg_enabled`"), sql)
 
 		# Test ABS function
 		query = frappe.qb.get_query("User", fields=[{"ABS": "enabled", "as": "abs_enabled"}])
 		sql = query.get_sql()
-		self.assertIn("ABS(`enabled`) `abs_enabled`", sql)
+		self.assertIn(convert_identifier_quotes("ABS(`enabled`) `abs_enabled`"), sql)
 
 		# Test IFNULL function with two parameters
 		query = frappe.qb.get_query(
 			"User", fields=[{"IFNULL": ["first_name", "'Unknown'"], "as": "safe_name"}]
 		)
 		sql = query.get_sql()
-		self.assertIn("IFNULL(`first_name`,'Unknown') `safe_name`", sql)
+		self.assertIn(convert_identifier_quotes("IFNULL(`first_name`,'Unknown') `safe_name`"), sql)
 
 		# Test TIMESTAMP function
 		query = frappe.qb.get_query("User", fields=[{"TIMESTAMP": "creation", "as": "ts"}])
 		sql = query.get_sql()
-		self.assertIn("TIMESTAMP(`creation`) `ts`", sql)
+		self.assertIn(convert_identifier_quotes("TIMESTAMP(`creation`) `ts`"), sql)
 
 		# Test mixed regular fields and function fields
 		query = frappe.qb.get_query(
@@ -1586,21 +1586,21 @@ class TestQuery(IntegrationTestCase):
 			group_by="user_type",
 		)
 		sql = query.get_sql()
-		self.assertIn("`user_type`", sql)
-		self.assertIn("COUNT(`name`) `total_users`", sql)
-		self.assertIn("MAX(`creation`) `latest_creation`", sql)
+		self.assertIn(convert_identifier_quotes("`user_type`"), sql)
+		self.assertIn(convert_identifier_quotes("COUNT(`name`) `total_users`"), sql)
+		self.assertIn(convert_identifier_quotes("MAX(`creation`) `latest_creation`"), sql)
 
 		# Test NOW function with no arguments
 		query = frappe.qb.get_query("User", fields=[{"NOW": None, "as": "current_time"}])
 		sql = query.get_sql()
-		self.assertIn("NOW() `current_time`", sql)
+		self.assertIn(convert_identifier_quotes("NOW() `current_time`"), sql)
 
 		# Test CONCAT function (which is supported)
 		query = frappe.qb.get_query(
 			"User", fields=[{"CONCAT": ["first_name", "last_name"], "as": "full_name"}]
 		)
 		sql = query.get_sql()
-		self.assertIn("CONCAT(`first_name`,`last_name`) `full_name`", sql)
+		self.assertIn(convert_identifier_quotes("CONCAT(`first_name`,`last_name`) `full_name`"), sql)
 
 		# Test unsupported function validation
 		with self.assertRaises(frappe.ValidationError) as cm:
