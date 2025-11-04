@@ -221,8 +221,8 @@ class TestDBQuery(IntegrationTestCase):
 		# get as conditions
 		if frappe.db.db_type == "mariadb":
 			assertion_string = """(((ifnull(`tabTest Blog Post`.`name`, '')='' or `tabTest Blog Post`.`name` in ('_Test Blog Post 1', '_Test Blog Post'))))"""
-		else:
-			assertion_string = """(((ifnull(cast(`tabBlog Post`.`name` as varchar), '')='' or cast(`tabBlog Post`.`name` as varchar) in ('_Test Blog Post 1', '_Test Blog Post'))))"""
+		elif frappe.db.db_type == "postgres":
+			assertion_string = """(((ifnull(cast(`tabTest Blog Post`.`name` as varchar), '')='' or cast(`tabTest Blog Post`.`name` as varchar) in ('_Test Blog Post 1', '_Test Blog Post'))))"""
 
 		self.assertEqual(build_match_conditions(as_condition=True), assertion_string)
 
