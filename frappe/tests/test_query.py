@@ -1275,7 +1275,7 @@ class TestQuery(IntegrationTestCase):
 			query = frappe.qb.get_query(
 				"DocType",
 				fields=["module", "module.app_name", "name"],
-				group_by="module, module.app_name",
+				group_by="module, module.app_name, name",
 				order_by="module.app_name",
 			)
 			result = query.run(as_dict=True)
