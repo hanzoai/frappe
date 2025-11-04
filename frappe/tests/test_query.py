@@ -63,6 +63,11 @@ def create_tree_docs():
 		d.insert()
 
 
+def convert_identifier_quotes(query):
+	"""util to replace mariadb query idenitfifiers with postgres ones"""
+	return query.replace("`", '"') if frappe.db.db_type == "postgres" else query
+
+
 class TestQuery(IntegrationTestCase):
 	def setUp(self):
 		setup_for_tests()
@@ -1611,6 +1616,9 @@ class TestQuery(IntegrationTestCase):
 		self.assertIn("Unsupported function or invalid field name: DROP", str(cm.exception))
 
 	def test_not_equal_condition_on_none(self):
+		expected_query = convert_identifier_quotes(
+			"SELECT `tabDocType`.* FROM `tabDocType` LEFT JOIN `tabDocField` ON `tabDocField`.`parent`=`tabDocType`.`name` AND `tabDocField`.`parenttype`='DocType' AND `tabDocField`.`parentfield`='fields' WHERE `tabDocField`.`name` IS NULL AND `tabDocType`.`parent` IS NOT NULL"
+		)
 		self.assertEqual(
 			frappe.qb.get_query(
 				"DocType",
@@ -1620,7 +1628,7 @@ class TestQuery(IntegrationTestCase):
 					["DocType", "parent", "!=", None],
 				],
 			).get_sql(),
-			"SELECT `tabDocType`.* FROM `tabDocType` LEFT JOIN `tabDocField` ON `tabDocField`.`parent`=`tabDocType`.`name` AND `tabDocField`.`parenttype`='DocType' AND `tabDocField`.`parentfield`='fields' WHERE `tabDocField`.`name` IS NULL AND `tabDocType`.`parent` IS NOT NULL",
+			expected_query,
 		)
 
 
