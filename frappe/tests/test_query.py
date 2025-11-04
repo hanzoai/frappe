@@ -1198,7 +1198,7 @@ class TestQuery(IntegrationTestCase):
 			query = frappe.qb.get_query(
 				"DocType",
 				fields=["module.app_name", "name"],
-				group_by="module.app_name",
+				group_by="module.app_name, name",
 			)
 			result = query.run(as_dict=True)
 			self.assertTrue(len(result) > 0)
@@ -1217,7 +1217,7 @@ class TestQuery(IntegrationTestCase):
 				"Note",
 				fields=["seen_by.user", "name"],
 				filters={"name": note.name},
-				group_by="seen_by.user",
+				group_by="seen_by.user, name",
 			)
 			result = query.run(as_dict=True)
 			self.assertTrue(len(result) >= 1)
