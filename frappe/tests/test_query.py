@@ -88,7 +88,6 @@ class TestQuery(IntegrationTestCase):
 			expected_query,
 		)
 
-	@run_only_if(db_type_is.MARIADB)
 	def test_string_fields(self):
 		self.assertEqual(
 			frappe.qb.get_query("User", fields="name, email", filters={"name": "Administrator"}).get_sql(),
