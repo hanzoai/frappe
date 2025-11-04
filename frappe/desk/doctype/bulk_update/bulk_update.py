@@ -91,7 +91,7 @@ def _bulk_action(doctype, docnames, action, data, task_id=None):
 				message = _("Cancelling {0}").format(doctype)
 			elif action == "update" and not doc.docstatus.is_cancelled():
 				# Handle child table updates
-				if child_table_updates := data.pop("child_table_updates", None):
+				if child_table_updates := data.get("child_table_updates", None):
 					table_fields = doc.meta.get_table_fields()
 					for child_doctype, field_updates in child_table_updates.items():
 						# Find the table field that contains this child doctype
