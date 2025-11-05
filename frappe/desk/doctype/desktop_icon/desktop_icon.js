@@ -3,14 +3,16 @@
 
 frappe.ui.form.on("Desktop Icon", {
 	refresh: function (frm) {
-		if (frm.doc.link_to && frm.doc.type) {
+		if (frm.doc.link_to && frm.doc.link_type) {
 			frm.add_custom_button(
 				__("Workspace Sidebar"),
 				function () {
 					frappe.new_doc("Workspace Sidebar", {}, (doc) => {
 						doc.title = frm.doc.label;
+						doc.header_icon = frm.doc.icon;
 						let sidebar_item = frappe.model.add_child(doc, "items");
 						sidebar_item.label = frm.doc.link_to;
+						sidebar_item.link_to = frm.doc.link_to;
 						sidebar_item.link_type = frm.doc.link_type;
 					});
 				},
