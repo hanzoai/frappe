@@ -39,7 +39,7 @@
 	position: absolute;
 	top: 60px;
 	left: 9px;
-	width: 208px;
+	width: 160px;
 	padding: 6px;
 	border-radius: var(--border-radius-lg);
 	background: var(--surface-modal);
@@ -49,14 +49,13 @@
 
 .dropdown-menu-item {
 	// padding: var(--padding-xs);
-	border-radius: var(--border-radius-tiny);
+	border-radius: var(--border-radius-sm);
 	opacity: 0px;
 	&:hover {
 		background-color: var(--sidebar-hover-color);
 	}
 
 	a {
-		width: 208px;
 		height: 28px;
 		padding: 6px 8px 6px 8px;
 		gap: 8px;
