@@ -133,6 +133,7 @@
     & .modal-dialog{
         & .modal-content {
             top: 120px;
+            border-radius: var(--border-radius-2xl);
         }
     }
 }
@@ -140,11 +141,7 @@
 .desktop-modal-body {
     width: var(--desktop-modal-width);
     height: var(--desktop-modal-height);
-    padding: 0px !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    padding: 23px 0px 23px 0px !important;
     & .icons{
         gap: 0px 0px;
     }
@@ -182,8 +179,9 @@
     margin-top: 0px;
     place-self: start;
     & .desktop-icon{
-        height: 127px;
-        width: 126px;
+        height: 126px;
+        width: 127px;
+        padding: 13px 16px 13px 16px;
         & .icon-caption {
             width: 80%;
             overflow: hidden;
