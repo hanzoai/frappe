@@ -13,6 +13,7 @@ from frappe.core.api.user_invitation import (
 )
 from frappe.core.doctype.user_invitation.user_invitation import mark_expired_invitations
 from frappe.tests import IntegrationTestCase
+from frappe.tests.test_query import convert_identifier_quotes
 
 emails = [
 	"test_user_invite1@example.com",
@@ -55,15 +56,18 @@ class IntegrationTestUserInvitation(IntegrationTestCase):
 
 	@classmethod
 	def delete_all_user_roles(cls):
-		frappe.db.sql("DELETE FROM `tabUser Role`")
+		frappe.db.sql(convert_identifier_quotes("DELETE FROM `tabUser Role`"))
 
 	@classmethod
 	def delete_all_invitations(cls):
-		frappe.db.sql("DELETE FROM `tabUser Invitation`")
+		frappe.db.sql(convert_identifier_quotes("DELETE FROM `tabUser Invitation`"))
 
 	@classmethod
 	def delete_invitation(cls, name: str):
-		frappe.db.sql(f'DELETE FROM `tabUser Invitation` WHERE name = "{name}"')
+		frappe.db.sql(
+			convert_identifier_quotes("DELETE FROM `tabUser Invitation` WHERE name = %s"),
+			name,
+		)
 
 	def setUp(self):
 		super().setUp()
