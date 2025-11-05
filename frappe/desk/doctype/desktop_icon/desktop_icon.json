@@ -17,7 +17,9 @@
   "logo_url",
   "idx",
   "link",
-  "hidden"
+  "hidden",
+  "roles_tab",
+  "roles"
  ],
  "fields": [
   {
@@ -95,10 +97,21 @@
    "in_standard_filter": 1,
    "label": "Link Type",
    "options": "DocType\nWorkspace\nExternal"
+  },
+  {
+   "fieldname": "roles_tab",
+   "fieldtype": "Tab Break",
+   "label": "Roles"
+  },
+  {
+   "fieldname": "roles",
+   "fieldtype": "Table",
+   "label": "Roles",
+   "options": "Has Role"
   }
  ],
  "links": [],
- "modified": "2025-10-30 19:12:21.357076",
+ "modified": "2025-11-04 11:49:36.734853",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Desktop Icon",

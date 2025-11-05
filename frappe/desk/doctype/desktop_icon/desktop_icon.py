@@ -20,6 +20,7 @@ class DesktopIcon(Document):
 	from typing import TYPE_CHECKING
 
 	if TYPE_CHECKING:
+		from frappe.core.doctype.has_role.has_role import HasRole
 		from frappe.types import DF
 
 		app: DF.Autocomplete | None
@@ -32,6 +33,7 @@ class DesktopIcon(Document):
 		link_type: DF.Literal["DocType", "Workspace", "External"]
 		logo_url: DF.Data | None
 		parent_icon: DF.Link | None
+		roles: DF.Table[HasRole]
 		standard: DF.Check
 	# end: auto-generated types
 
@@ -65,6 +67,20 @@ class DesktopIcon(Document):
 		file_path = os.path.join(folder_path, f"{frappe.scrub(self.label)}.json")
 		if os.path.exists(file_path):
 			os.remove(file_path)
+
+	def is_permitted(self):
+		"""Return True if `Has Role` is not set or the user is allowed."""
+		from frappe.utils import has_common
+
+		allowed = [d.role for d in frappe.get_all("Has Role", fields=["role"], filters={"parent": self.name})]
+
+		if not allowed:
+			return True
+
+		roles = frappe.get_roles()
+
+		if has_common(roles, allowed):
+			return True
 
 	def after_insert(self):
 		clear_desktop_icons_cache()
@@ -167,12 +183,22 @@ def get_desktop_icons(user=None):
 			if d.label:
 				d.label = _(d.label, context=d.parent)
 		# includes
+		permitted_icons = []
+		permitted_parent_labels = set()
 
 		for s in user_icons:
-			if s.parent_icon:
-				s.parent_icon = frappe.db.get_value("Desktop Icon", s.parent_icon, "label")
-		frappe.cache.hset("desktop_icons", user, user_icons)
+			icon = frappe.get_lazy_doc("Desktop Icon", s)
 
+			if icon.is_permitted():
+				permitted_icons.append(s)
+
+				if not s.parent_icon:
+					permitted_parent_labels.add(s.label)
+
+		user_icons = [
+			s for s in permitted_icons if not s.parent_icon or s.parent_icon in permitted_parent_labels
+		]
+		frappe.cache.hset("desktop_icons", user, user_icons)
 	return user_icons
 
 
