@@ -28,10 +28,13 @@ class PermissionType(Document):
 		module: DF.Link
 	# end: auto-generated types
 
-	def validate(self):
-		from frappe.permissions import rights
+	def before_insert(self):
+		self.name = frappe.scrub(self.name)
 
-		if self.name in rights:
+	def validate(self):
+		from frappe.permissions import std_rights
+
+		if self.name in std_rights:
 			frappe.throw(
 				_("Permission Type '{0}' is reserved. Please choose another name.").format(self.name)
 			)
@@ -107,5 +110,6 @@ def get_doctype_ptype_map():
 	doctype_ptype_map = defaultdict(list)
 	for pt in ptypes:
 		for dt in pt.doc_types:
-			doctype_ptype_map[dt.doc_type].append(pt.name)
+			if pt.name not in doctype_ptype_map[dt.doc_type]:
+				doctype_ptype_map[dt.doc_type].append(pt.name)
 	return dict(doctype_ptype_map)
