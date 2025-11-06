@@ -483,15 +483,13 @@ class TestDBQuery(IntegrationTestCase):
 		self.assertTrue("count" in data[0])
 
 		data = DatabaseQuery("DocType").execute(
-			fields=["name", "issingle", "locate('', name) as _relevance"],
-			limit_start=0,
-			limit_page_length=1,
+			fields=["name", "issingle", "locate('','name') as _relevance"], limit_start=0, limit_page_length=1
 		)
 		self.assertTrue("_relevance" in data[0])
 
 		# Test that fields with keywords in strings are allowed
 		data = DatabaseQuery("DocType").execute(
-			fields=["name", "locate('select', name)"],
+			fields=["name", "locate('select', 'name')"],
 			limit_start=0,
 			limit_page_length=1,
 		)
@@ -818,7 +816,7 @@ class TestDBQuery(IntegrationTestCase):
 		frappe.db.get_list(
 			"Web Form",
 			filters=[["Web Form Field", "reqd", "=", 1]],
-			fields=["count(*) as count"],
+			fields=[{"COUNT": "*", "as": "count"}],
 			order_by="count desc",
 			limit=50,
 		)
@@ -846,7 +844,7 @@ class TestDBQuery(IntegrationTestCase):
 			"DocType",
 			filters={"docstatus": 0, "document_type": ("!=", "")},
 			group_by="document_type",
-			fields=["document_type", "sum(is_submittable) as is_submittable"],
+			fields=["document_type", {"SUM": "is_submittable", "as": "is_submittable"}],
 			limit=1,
 			as_list=True,
 		)
@@ -1222,7 +1220,7 @@ class TestDBQuery(IntegrationTestCase):
 		self.assertEqual(len(data["values"]), 1)
 
 	def test_select_star_expansion(self):
-		count = frappe.get_list("Language", ["SUM(1)", "COUNT(*)"], as_list=1, order_by=None)[0]
+		count = frappe.get_list("Language", [{"SUM": 1}, {"COUNT": "*"}], as_list=1, order_by=None)[0]
 		self.assertEqual(count[0], frappe.db.count("Language"))
 		self.assertEqual(count[1], frappe.db.count("Language"))
 

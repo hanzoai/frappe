@@ -69,7 +69,7 @@ def get_group_by_count(doctype: str, current_filters: str, field: str) -> list[d
 		doctype,
 		filters=current_filters,
 		group_by=f"`tab{doctype}`.{field}",
-		fields=["count(*) as count", f"`{field}` as name"],
+		fields=[{"COUNT": "*", "as": "count"}, f"`{field}` as name"],
 		order_by="count desc",
 		limit=1000,
 	)

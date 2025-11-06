@@ -686,7 +686,7 @@ def get_stats(stats, doctype, filters=None):
 		try:
 			tag_count = frappe.get_list(
 				doctype,
-				fields=[column, "count(*)"],
+				fields=[column, {"COUNT": "*"}],
 				filters=[*filters, [column, "!=", ""]],
 				group_by=column,
 				as_list=True,
@@ -697,7 +697,7 @@ def get_stats(stats, doctype, filters=None):
 				results[column] = scrub_user_tags(tag_count)
 				no_tag_count = frappe.get_list(
 					doctype,
-					fields=[column, "count(*)"],
+					fields=[column, {"COUNT": "1"}],
 					filters=[*filters, [column, "in", ("", ",")]],
 					as_list=True,
 					group_by=column,
@@ -736,7 +736,7 @@ def get_filter_dashboard_data(stats, doctype, filters=None):
 		if tag["type"] not in ["Date", "Datetime"]:
 			tagcount = frappe.get_list(
 				doctype,
-				fields=[tag["name"], "count(*)"],
+				fields=[tag["name"], {"COUNT": "*"}],
 				filters=[*filters, "ifnull(`{}`,'')!=''".format(tag["name"])],
 				group_by=tag["name"],
 				as_list=True,
@@ -758,7 +758,7 @@ def get_filter_dashboard_data(stats, doctype, filters=None):
 					"No Data",
 					frappe.get_list(
 						doctype,
-						fields=[tag["name"], "count(*)"],
+						fields=[tag["name"], {"COUNT": "*"}],
 						filters=[*filters, "({0} = '' or {0} is null)".format(tag["name"])],
 						as_list=True,
 					)[0][1],

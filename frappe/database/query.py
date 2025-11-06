@@ -52,6 +52,7 @@ FUNCTION_MAPPING = {
 	"IFNULL": functions.IfNull,
 	"CONCAT": functions.Concat,
 	"NOW": functions.Now,
+	"NULLIF": functions.NullIf,
 }
 
 # Mapping from operator names to pypika Arithmetic enum values
@@ -1578,6 +1579,12 @@ class SQLFunctionParser:
 
 		if not arg:
 			frappe.throw(_("Empty string arguments are not allowed"), frappe.ValidationError)
+
+		# Special case: allow '*' for COUNT(*) and similar aggregate functions
+		if arg == "*":
+			# Return as-is for SQL star expansion (COUNT(*), etc.)
+			# pypika will handle this correctly when used with aggregate functions
+			return Column("*")
 
 		# Check for string literals (quoted strings)
 		if self._is_string_literal(arg):
