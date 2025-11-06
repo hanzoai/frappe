@@ -1,7 +1,7 @@
 <div
     class="sidebar-item-container {%= item.is_editable ? 'is-draggable' : '' %} {% if (item.type == 'Section Break') { %}section-item{% } %}"
     item-name="{{ item.label }}"
-    item-title="{{ item.label }}"
+    data-id="{{ item.label }}"
 >
     <div class="standard-sidebar-item {%= item.indent ? 'indent' : '' %}">
         {% if (item.type == "Section Break" && item.indent != 1) { %}

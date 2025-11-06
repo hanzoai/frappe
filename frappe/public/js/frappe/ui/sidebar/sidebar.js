@@ -23,6 +23,9 @@ frappe.ui.Sidebar = class Sidebar {
 	prepare() {
 		this.sidebar_data = frappe.boot.workspace_sidebar_item[this.workspace_title.toLowerCase()];
 		this.workspace_sidebar_items = this.sidebar_data.items;
+		if (this.edit_mode) {
+			this.workspace_sidebar_items = this.new_sidebar_items;
+		}
 		this.choose_app_name();
 		this.find_nested_items();
 	}
@@ -370,11 +373,30 @@ frappe.ui.Sidebar = class Sidebar {
 				me.new_sidebar_items[new_index] = b;
 			},
 		});
+		this.setup_sorting_for_nested_container();
 	}
 	setup_sorting_for_nested_container() {
+		const me = this;
 		$(".nested-container").each(function (index, el) {
 			Sortable.create(el, {
 				handle: ".drag-handle",
+				onEnd: function (event) {
+					let new_index = event.newIndex;
+					let old_index = event.oldIndex;
+					let item_label = $(event.item).data("id");
+					me.new_sidebar_items.forEach((item) => {
+						if (item.nested_items.length) {
+							let child = item.nested_items.find(
+								(child) => child.label === item_label
+							);
+							if (child) {
+								let b = item.nested_items[old_index];
+								item.nested_items[old_index] = item.nested_items[new_index];
+								item.nested_items[new_index] = b;
+							}
+						}
+					});
+				},
 			});
 		});
 	}
@@ -425,7 +447,11 @@ frappe.ui.Sidebar = class Sidebar {
 						d.set_value("link_to", label);
 					}
 
-					if (me.dialog_opts && me.dialog_opts.parent_item.label == "Reports") {
+					if (
+						me.dialog_opts &&
+						me.dialog_opts.parent_item &&
+						me.dialog_opts.parent_item.label == "Reports"
+					) {
 						d.set_value("icon", "table");
 						d.set_value("link_type", "Report");
 					}
@@ -438,19 +464,27 @@ frappe.ui.Sidebar = class Sidebar {
 				in_list_view: 1,
 				label: "Type",
 				options: "Link\nSection Break\nSpacer",
+				onchange: function () {
+					let type = this.get_value();
+					if (type == "Section Break") {
+						d.set_value("link_to", null);
+					}
+				},
 			},
 			{
 				default: "DocType",
-				depends_on: "eval: doc.type == 'Link' || doc.indent == 1",
+				depends_on: "eval: doc.type == 'Link'",
 				fieldname: "link_type",
 				fieldtype: "Select",
 				in_list_view: 1,
 				label: "Link Type",
 				options: "DocType\nPage\nReport\nWorkspace\nDashboard\nURL",
+				onchange: function () {
+					d.set_value("link_to", null);
+				},
 			},
 			{
-				depends_on:
-					"eval: doc.link_type != \"URL\" && doc.type == 'Link' || doc.indent == 1",
+				depends_on: "eval: doc.link_type != \"URL\" && doc.type == 'Link'",
 				fieldname: "link_to",
 				fieldtype: "Dynamic Link",
 				in_list_view: 1,
@@ -464,7 +498,8 @@ frappe.ui.Sidebar = class Sidebar {
 				label: "URL",
 			},
 			{
-				depends_on: 'eval: doc.type == "Link"',
+				depends_on:
+					'eval: doc.type == "Link" || (doc.indent == 1 && doc.type == "Section Break")',
 				fieldname: "icon",
 				fieldtype: "Icon",
 				in_list_view: 1,
@@ -552,8 +587,21 @@ frappe.ui.Sidebar = class Sidebar {
 					}
 					me.new_sidebar_items[index].nested_items.push(values);
 				} else if (opts && opts.item) {
-					let index = me.new_sidebar_items.indexOf(opts.item);
-					me.new_sidebar_items[index] = values;
+					if (opts.item.child) {
+						let parent_icon = me.find_parent(me.new_sidebar_items, opts.item);
+						if (parent_icon) {
+							let index = parent_icon.nested_items.indexOf(opts.item);
+							let parent_icon_index = me.new_sidebar_items.indexOf(parent_icon);
+							me.new_sidebar_items[parent_icon_index].nested_items[index] = values;
+						}
+					} else {
+						let index = me.new_sidebar_items.indexOf(opts.item);
+
+						me.new_sidebar_items[index] = {
+							...me.new_sidebar_items[index],
+							...values,
+						};
+					}
 				} else {
 					me.new_sidebar_items.push(values);
 				}
@@ -575,7 +623,6 @@ frappe.ui.Sidebar = class Sidebar {
 				message: __("Saving Sidebar"),
 				indicator: "success",
 			});
-
 			await frappe.call({
 				type: "POST",
 				method: "frappe.desk.doctype.workspace_sidebar.workspace_sidebar.add_sidebar_items",
@@ -600,19 +647,8 @@ frappe.ui.Sidebar = class Sidebar {
 			me.toggle_editing_mode();
 			me.make_sidebar(me);
 		});
-		// this.setup_editing_controls_on_item();
 	}
-	// setup_editing_controls_on_item(){
-	// 	debugger
-	// 	this.items.forEach(i => {
-	// 		i.setup_editing_controls()
-	// 		if(i.items.length > 0){
-	// 			i.items.forEach(j => {
-	// 				j.setup_editing_controls()
-	// 			})
-	// 		}
-	// 	})
-	// }
+
 	find_parent(sidebar_items, item) {
 		for (const f of sidebar_items) {
 			if (f.nested_items && f.nested_items.includes(item)) {

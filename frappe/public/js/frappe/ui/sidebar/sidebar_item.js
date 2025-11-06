@@ -67,7 +67,6 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 				label: "Edit Item",
 				icon: "pen",
 				onClick: () => {
-					console.log("Start ediitng");
 					frappe.app.sidebar.edit_item(me.item);
 				},
 			},
@@ -131,10 +130,6 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 		this.toggle_on_collapse();
 		this.enable_collapsible(this.item, this.full_template);
 		$(this.container).append(this.full_template);
-	}
-
-	setup_events() {
-		const me = this;
 	}
 	open() {
 		this.collapsed = false;
@@ -228,7 +223,6 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 	}
 
 	get_menu_items() {
-		console.log(this.item.label);
 		let me = this;
 		let menu_items = [
 			{
