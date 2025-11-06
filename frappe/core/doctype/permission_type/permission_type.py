@@ -39,6 +39,16 @@ class PermissionType(Document):
 				_("Permission Type '{0}' is reserved. Please choose another name.").format(self.name)
 			)
 
+		# remove duplicate doc types
+		seen = set()
+		unique_doc_types = []
+		for dt in self.doc_types:
+			if dt.doc_type not in seen:
+				seen.add(dt.doc_type)
+				unique_doc_types.append(dt)
+
+		self.doc_types = unique_doc_types
+
 	def can_write(self):
 		return frappe.conf.developer_mode or frappe.flags.in_migrate or frappe.flags.in_install
 
