@@ -183,8 +183,6 @@
         width: 127px;
         padding: 13px 16px 13px 16px;
         & .icon-caption {
-            width: 80%;
-            overflow: hidden;
             text-overflow: ellipsis;
             text-wrap: wrap;
         }

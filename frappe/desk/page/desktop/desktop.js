@@ -174,6 +174,14 @@ class DesktopPage {
 				label: "Reset Password",
 				url: "/update-password",
 			},
+			{
+				icon: "rotate-ccw",
+				label: "Reset to Default",
+				onClick: function () {
+					reset_to_default();
+					window.location.reload();
+				},
+			},
 		];
 		frappe.ui.create_menu($(".desktop-avatar"), menu_items, null, true);
 	}
