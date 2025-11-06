@@ -1244,7 +1244,6 @@ class TestDBQuery(IntegrationTestCase):
 
 
 class TestReportView(IntegrationTestCase):
-	@run_only_if(db_type_is.MARIADB)  # TODO: postgres name casting is messed up
 	def test_get_count(self):
 		frappe.local.request = frappe._dict()
 		frappe.local.request.method = "GET"
@@ -1282,7 +1281,7 @@ class TestReportView(IntegrationTestCase):
 		child_filter_response = execute_cmd("frappe.desk.reportview.get_count")
 		current_value = frappe.db.sql(
 			# the below query is equivalent to the one in reportview.get_count
-			"select distinct count(distinct `tabDocType`.name) as total_count"
+			"select count(distinct `tabDocType`.name) as total_count"
 			" from `tabDocType` left join `tabDocField`"
 			" on (`tabDocField`.parenttype = 'DocType' and `tabDocField`.parent = `tabDocType`.name)"
 			" where `tabDocField`.`fieldtype` = 'Data'"
