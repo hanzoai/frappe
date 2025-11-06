@@ -33,11 +33,15 @@ class IntegrationTestPermissionType(IntegrationTestCase):
 
 			self._verify_user_lacks_permission(doc_type, ptype_name, user.name)
 
-			update_permission_property(doctype=doc_type, role=user_role, permlevel=0, ptype=ptype_name, value=1)
+			update_permission_property(
+				doctype=doc_type, role=user_role, permlevel=0, ptype=ptype_name, value=1
+			)
 
 			self._verify_user_has_permission(doc_type, ptype_name, user.name)
 
-			update_permission_property(doctype=doc_type, role=user_role, permlevel=0, ptype=ptype_name, value=0)
+			update_permission_property(
+				doctype=doc_type, role=user_role, permlevel=0, ptype=ptype_name, value=0
+			)
 
 		finally:
 			frappe.delete_doc("User", user.name, force=True)
@@ -92,12 +96,8 @@ class IntegrationTestPermissionType(IntegrationTestCase):
 
 	def _verify_user_lacks_permission(self, doc_type, ptype_name, user_name):
 		"""Verify that user does not have the specified permission type."""
-		self.assertFalse(
-			frappe.has_permission(doc_type, ptype=ptype_name, user=user_name)
-		)
+		self.assertFalse(frappe.has_permission(doc_type, ptype=ptype_name, user=user_name))
 
 	def _verify_user_has_permission(self, doc_type, ptype_name, user_name):
 		"""Verify that user has the specified permission type."""
-		self.assertTrue(
-			frappe.has_permission(doc_type, ptype=ptype_name, user=user_name)
-		)
+		self.assertTrue(frappe.has_permission(doc_type, ptype=ptype_name, user=user_name))

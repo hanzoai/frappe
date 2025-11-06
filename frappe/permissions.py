@@ -742,13 +742,15 @@ def get_doc_name(doc):
 		return None
 	return doc if isinstance(doc, str) else str(doc.name)
 
-def get_rights(doctype = None):
+
+def get_rights(doctype=None):
 	if not doctype:
 		return std_rights
 	custom_rights = get_doctype_ptype_map().get(doctype, [])
 	return list(std_rights) + custom_rights
 
-def allow_everything(doctype = None):
+
+def allow_everything(doctype=None):
 	"""Return a dict with access to everything, eg. {"read": 1, "write": 1, ...}."""
 	return {ptype: 1 for ptype in get_rights(doctype)}
 

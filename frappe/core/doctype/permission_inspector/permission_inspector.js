@@ -38,5 +38,5 @@ frappe.ui.form.on("Permission Inspector", {
 			"options",
 			`${standard_options}\n${custom_options}`
 		);
-	}
+	},
 });
