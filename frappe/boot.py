@@ -545,7 +545,7 @@ def get_sidebar_items():
 				"display_depends_on": si.display_depends_on,
 				"url": si.url,
 			}
-			if si.link_type == "Report":
+			if si.link_type == "Report" and si.link_to:
 				report_type, ref_doctype = frappe.db.get_value(
 					"Report", si.link_to, ["report_type", "ref_doctype"]
 				)

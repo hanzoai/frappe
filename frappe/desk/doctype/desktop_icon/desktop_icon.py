@@ -661,7 +661,9 @@ def create_desktop_icons_from_workspace():
 				icon.parent_icon = app_icon
 
 			# Portal App With Desk Workspace
-			if not frappe.db.get_value("Desktop Icon", app_icon, "link").startswith("/app"):
+			if frappe.db.get_value("Desktop Icon", app_icon, "link") and not frappe.db.get_value(
+				"Desktop Icon", app_icon, "link"
+			).startswith("/app"):
 				icon.hidden = 1
 				icon.parent_icon = None
 
