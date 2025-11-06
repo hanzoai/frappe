@@ -14,6 +14,7 @@ from frappe.desk.doctype.notification_settings.notification_settings import (
 )
 from frappe.desk.reportview import get_filters_cond
 from frappe.model.document import Document
+from frappe.model.utils.user_settings import get_user_settings, sync_user_settings, update_user_settings
 from frappe.utils import (
 	add_days,
 	add_months,
@@ -128,6 +129,8 @@ class Event(Document):
 		for communication in communications:
 			frappe.delete_doc("Communication", communication, force=True)
 
+		self.remove_event_from_user_settings()
+
 	def sync_communication(self):
 		if not self.event_participants:
 			return
@@ -212,6 +215,23 @@ class Event(Document):
 			participant.email = (
 				frappe.get_value("Contact", participant_contact, "email_id") if participant_contact else None
 			)
+
+	def remove_event_from_user_settings(self):
+		user_settings = get_user_settings("Event", for_update=True)
+		if user_settings:
+			user_settings = json.loads(user_settings)
+
+			if "notifications" in user_settings:
+				notifications = user_settings.get("notifications")
+				completedEvents = notifications.get("completedEvents", [])
+				if self.name in completedEvents:
+					completedEvents.remove(self.name)
+					notifications["completedEvents"] = completedEvents
+				updated_notifications = notifications
+				user_settings["notifications"] = updated_notifications
+
+			update_user_settings("Event", json.dumps(user_settings), for_update=True)
+			sync_user_settings()
 
 
 @frappe.whitelist()
