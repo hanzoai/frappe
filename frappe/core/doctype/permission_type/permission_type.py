@@ -50,7 +50,12 @@ class PermissionType(Document):
 		self.doc_types = unique_doc_types
 
 	def can_write(self):
-		return frappe.conf.developer_mode or frappe.flags.in_migrate or frappe.flags.in_install
+		return (
+			frappe.conf.developer_mode
+			or frappe.flags.in_migrate
+			or frappe.flags.in_install
+			or frappe.flags.in_test
+		)
 
 	def on_update(self):
 		if not self.can_write():
