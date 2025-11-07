@@ -2,6 +2,15 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Desktop Icon", {
+	setup: function (frm) {
+		frm.set_query("parent_icon", function () {
+			return {
+				filters: {
+					icon_type: ["in", ["Folder", "App"]],
+				},
+			};
+		});
+	},
 	refresh: function (frm) {
 		if (frm.doc.link_to && frm.doc.link_type) {
 			frm.add_custom_button(
