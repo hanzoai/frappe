@@ -171,7 +171,7 @@ def search_widget(
 
 	order_by_based_on_meta = get_order_by(doctype, meta)
 	# `idx` is number of times a document is referred, check link_count.py
-	order_by = f"`tab{doctype}`.idx desc, {order_by_based_on_meta}"
+	order_by = f"idx desc, {order_by_based_on_meta}"
 
 	if not meta.translated_doctype:
 		_txt = frappe.db.escape((txt or "").replace("%", "").replace("@", ""))

@@ -370,11 +370,12 @@ class DataExporter:
 		order_by = None
 		table_columns = frappe.db.get_table_columns(self.parent_doctype)
 		if "lft" in table_columns and "rgt" in table_columns:
-			order_by = f"`tab{self.parent_doctype}`.`lft` asc"
+			order_by = DocType(self.parent_doctype).lft
+
 		# get permitted data only
-		self.data = frappe.get_list(
-			self.doctype, fields=["*"], filters=self.filters, limit_page_length=None, order_by=order_by
-		)
+		self.data = frappe.qb.get_query(
+			self.doctype, fields=["*"], filters=self.filters, order_by=order_by
+		).run(as_dict=True)
 
 		for doc in self.data:
 			op = self.docs_to_export.get("op")
