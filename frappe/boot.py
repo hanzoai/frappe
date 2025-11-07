@@ -364,7 +364,7 @@ def add_home_page(bootinfo, docs):
 		bootinfo["home_page"] = page.name
 	except (frappe.DoesNotExistError, frappe.PermissionError):
 		frappe.clear_last_message()
-		bootinfo["home_page"] = "Workspaces"
+		bootinfo["home_page"] = "desktop"
 
 
 def add_timezone_info(bootinfo):
@@ -544,6 +544,7 @@ def get_sidebar_items():
 				"keep_closed": si.keep_closed,
 				"display_depends_on": si.display_depends_on,
 				"url": si.url,
+				"show_arrow": si.show_arrow,
 			}
 			if si.link_type == "Report" and si.link_to:
 				report_type, ref_doctype = frappe.db.get_value(

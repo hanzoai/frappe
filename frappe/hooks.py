@@ -57,11 +57,11 @@ email_css = ["email.bundle.css"]
 website_route_rules = [
 	{"from_route": "/kb/<category>", "to_route": "Help Article"},
 	{"from_route": "/profile", "to_route": "me"},
-	{"from_route": "/app/<path:app_path>", "to_route": "app"},
+	{"from_route": "/desk/<path:app_path>", "to_route": "desk"},
 ]
 
 website_redirects = [
-	{"source": r"/desk(.*)", "target": r"/app\1"},
+	{"source": r"/app(.*)", "target": r"/desk\1"},
 ]
 
 base_template = "templates/base.html"
