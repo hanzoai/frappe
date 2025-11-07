@@ -7,7 +7,6 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.modules.export_file import delete_folder
-from frappe.modules.utils import get_doctype_module
 from frappe.utils.caching import site_cache
 
 # doctypes where custom fields for permission types will be created
