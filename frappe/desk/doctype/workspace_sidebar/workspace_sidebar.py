@@ -6,6 +6,7 @@ from json import JSONDecodeError, dumps, loads
 
 import frappe
 from frappe import _
+from frappe.boot import get_allowed_pages, get_allowed_reports
 from frappe.model.document import Document
 from frappe.modules.utils import create_directory_on_app_path
 
@@ -23,7 +24,20 @@ class WorkspaceSidebar(Document):
 		app: DF.Autocomplete | None
 		items: DF.Table[WorkspaceSidebarItem]
 		title: DF.Data | None
+
 	# end: auto-generated types
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.user = frappe.get_user()
+		self.can_read = self.get_cached("user_perm_can_read", self.get_can_read_items)
+
+		self.allowed_pages = get_allowed_pages(cache=True)
+		self.allowed_reports = get_allowed_reports(cache=True)
+		self.restricted_doctypes = frappe.cache.get_value("domain_restricted_doctypes")
+
+	def get_can_read_items(self):
+		if not self.user.can_read:
+			self.user.build_permissions()
 
 	def on_update(self):
 		if frappe.conf.developer_mode:
@@ -46,9 +60,39 @@ class WorkspaceSidebar(Document):
 	def on_trash(self):
 		if is_workspace_manager():
 			if frappe.conf.developer_mode and self.app:
-				self.file()
+				self.delete_file()
 		else:
 			frappe.throw(_("You need to be Workspace Manager to delete a public workspace."))
+
+	def is_item_allowed(self, name, item_type):
+		if frappe.session.user == "Administrator":
+			return True
+
+		item_type = item_type.lower()
+
+		if item_type == "doctype":
+			return name in (self.can_read or []) and name in (self.restricted_doctypes or [])
+		if item_type == "page":
+			return name in self.allowed_pages and name in self.restricted_pages
+		if item_type == "report":
+			return name in self.allowed_reports
+		if item_type == "help":
+			return True
+		if item_type == "dashboard":
+			return True
+		if item_type == "url":
+			return True
+
+	def get_cached(self, cache_key, fallback_fn):
+		value = frappe.cache.get_value(cache_key, user=frappe.session.user)
+		if value is not None:
+			return value
+
+		value = fallback_fn()
+
+		# Expire every six hour
+		frappe.cache.set_value(cache_key, value, frappe.session.user, 21600)
+		return value
 
 
 def is_workspace_manager():
