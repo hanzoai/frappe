@@ -31,7 +31,7 @@ frappe.ui.form.on("Permission Inspector", {
 		const standard_options = frm.meta.fields.find(
 			(f) => f.fieldname === "permission_type"
 		).options;
-		const custom_options = doctype_ptype_map[frm.doc.ref_doctype].join("\n");
+		const custom_options = doctype_ptype_map[frm.doc.ref_doctype]?.join("\n");
 
 		frm.set_df_property(
 			"permission_type",
