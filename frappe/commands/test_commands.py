@@ -659,6 +659,7 @@ class TestBackups(BaseTestCommands):
 	def test_backup_no_options(self):
 		"""Take a backup without any options"""
 		before_backup = fetch_latest_backups(partial=True)
+		time.sleep(1)
 		self.execute("bench --site {site} backup")
 		after_backup = fetch_latest_backups(partial=True)
 
