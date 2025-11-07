@@ -176,7 +176,6 @@ class TestDBUpdate(IntegrationTestCase):
 
 		self.assertEqual(frappe.db.get_column_type(referring_doctype.name, link), "uuid")
 
-	@run_only_if(db_type_is.MARIADB)
 	def test_varchar_length(self):
 		from frappe.database.schema import add_column
 
