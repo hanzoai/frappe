@@ -903,7 +903,7 @@
   }
  ],
  "make_attachments_public": 1,
- "modified": "2025-10-30 18:07:21.606511",
+ "modified": "2025-11-07 17:18:37.858564",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",
@@ -914,7 +914,6 @@
    "delete": 1,
    "email": 1,
    "export": 1,
-   "impersonate": 1,
    "import": 1,
    "print": 1,
    "read": 1,
