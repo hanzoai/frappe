@@ -1753,6 +1753,7 @@ class SQLFunctionParser:
 		expression = ArithmeticExpression(operator=operator, left=left, right=right)
 
 		if alias:
+			self.engine.function_aliases.add(alias)
 			return expression.as_(alias)
 		else:
 			return expression
