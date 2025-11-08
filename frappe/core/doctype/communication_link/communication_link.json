@@ -36,14 +36,14 @@
   },
   {
    "fieldname": "communication_date",
-   "fieldtype": "Date",
+   "fieldtype": "Datetime",
    "label": "Communication Date",
    "read_only": 1
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2025-11-08 10:59:03.629772",
+ "modified": "2025-11-08 11:07:13.960236",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Communication Link",
