@@ -188,6 +188,10 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 		) {
 			this.apply_section_break_state();
 		}
+		if (item.show_arrow) {
+			this.$drop_icon = this.wrapper.find('[item-icon="chevron-right"]');
+			this.setup_event_listner();
+		}
 	}
 	apply_section_break_state() {
 		const me = this;

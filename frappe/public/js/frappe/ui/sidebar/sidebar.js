@@ -519,6 +519,12 @@ frappe.ui.Sidebar = class Sidebar {
 				label: "Indent",
 			},
 			{
+				depends_on: "eval: doc.indent == 1",
+				fieldname: "show_arrow",
+				fieldtype: "Check",
+				label: "Show Arrow",
+			},
+			{
 				default: "1",
 				depends_on: 'eval: doc.type == "Section Break"',
 				fieldname: "collapsible",

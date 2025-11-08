@@ -19,6 +19,7 @@
   "collapsible",
   "indent",
   "keep_closed",
+  "show_arrow",
   "column_break_jexf",
   "display_depends_on"
  ],
@@ -126,13 +127,20 @@
    "fieldname": "url",
    "fieldtype": "Data",
    "label": "URL"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval: doc.indent == 1",
+   "fieldname": "show_arrow",
+   "fieldtype": "Check",
+   "label": "Show Arrow"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-10-28 02:05:07.887104",
+ "modified": "2025-11-07 10:47:58.882767",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Workspace Sidebar Item",

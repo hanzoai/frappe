@@ -25,6 +25,7 @@ class WorkspaceSidebarItem(Document):
 		parent: DF.Data
 		parentfield: DF.Data
 		parenttype: DF.Data
+		show_arrow: DF.Check
 		type: DF.Literal["Link", "Section Break", "Spacer"]
 		url: DF.Data | None
 	# end: auto-generated types
