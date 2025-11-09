@@ -469,11 +469,10 @@ class TestCommands(BaseTestCommands):
 		self.assertEqual(check_password("Administrator", original_password), "Administrator")
 
 	@skipIf(
-		not (frappe.conf.root_password and frappe.conf.admin_password and frappe.conf.db_type == "mariadb"),
+		not (frappe.conf.root_password and frappe.conf.admin_password and frappe.conf.db_type != "sqlite"),
 		"DB Root password and Admin password not set in config",
 	)
 	def test_bench_drop_site_should_archive_site(self):
-		# TODO: Make this test postgres compatible
 		site = TEST_SITE
 
 		self.execute(
