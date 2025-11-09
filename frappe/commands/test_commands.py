@@ -498,7 +498,7 @@ class TestCommands(BaseTestCommands):
 		self.assertTrue(os.path.exists(archive_directory))
 
 	@skipIf(
-		not (frappe.conf.root_password and frappe.conf.admin_password and frappe.conf.db_type == "mariadb"),
+		not (frappe.conf.root_password and frappe.conf.admin_password and frappe.conf.db_type != "sqlite"),
 		"DB Root password and Admin password not set in config",
 	)
 	def test_force_install_app(self):
