@@ -1,7 +1,7 @@
 context("Client Script", () => {
 	before(() => {
 		cy.login();
-		cy.visit("/app");
+		cy.visit("/desk");
 	});
 
 	it("should run form script in doctype form", () => {

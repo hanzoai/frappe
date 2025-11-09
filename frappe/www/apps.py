@@ -14,7 +14,7 @@ def get_context():
 	default_app = user_default_app if user_default_app else system_default_app
 
 	if len(all_apps) == 0:
-		frappe.local.flags.redirect_location = "/app"
+		frappe.local.flags.redirect_location = "/desk"
 		raise frappe.Redirect
 
 	for app in all_apps:
