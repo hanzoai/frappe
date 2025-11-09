@@ -16,7 +16,7 @@ context("Client Script", () => {
 			},
 			true
 		);
-		cy.visit("/app/todo/new", {
+		cy.visit("/desk/todo/new", {
 			onBeforeLoad(win) {
 				cy.spy(win.console, "log").as("consoleLog");
 			},
@@ -36,7 +36,7 @@ context("Client Script", () => {
 			},
 			true
 		);
-		cy.visit("/app/todo", {
+		cy.visit("/desk/todo", {
 			onBeforeLoad(win) {
 				cy.spy(win.console, "log").as("consoleLog");
 			},
@@ -56,7 +56,7 @@ context("Client Script", () => {
 			},
 			true
 		);
-		cy.visit("/app/todo", {
+		cy.visit("/desk/todo", {
 			onBeforeLoad(win) {
 				cy.spy(win.console, "log").as("consoleLog");
 			},
@@ -87,7 +87,7 @@ context("Client Script", () => {
 			},
 			true
 		);
-		cy.visit("/app/todo/new", {
+		cy.visit("/desk/todo/new", {
 			onBeforeLoad(win) {
 				cy.spy(win.console, "log").as("consoleLog");
 			},

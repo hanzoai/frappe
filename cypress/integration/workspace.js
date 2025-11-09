@@ -5,14 +5,14 @@ context("Workspace 2.0", () => {
 	});
 
 	it("Navigate to page from sidebar", () => {
-		cy.visit("/app/build");
+		cy.visit("/desk/build");
 		cy.get(".codex-editor__redactor .ce-block");
-		cy.get('.sidebar-item-container[item-title="Page"]').first().click();
-		cy.location("pathname").should("eq", "/app/page");
+		cy.get('.sidebar-item-container[item-name="Page"]').first().click();
+		cy.location("pathname").should("eq", "/desk/page");
 	});
 
 	it("Create Private Page", () => {
-		cy.visit("/app/build");
+		cy.visit("/desk/build");
 		cy.intercept({
 			method: "POST",
 			url: "api/method/frappe.desk.doctype.workspace.workspace.new_page",
@@ -28,11 +28,11 @@ context("Workspace 2.0", () => {
 		cy.get_open_dialog().find(".btn-primary").click();
 
 		// check if sidebar item is added in pubic section
-		cy.get('.sidebar-item-container[item-title="Test Private Page"]');
+		cy.get('.sidebar-item-container[item-name="Test Private Page"]');
 		cy.wait(300);
 		cy.get('.standard-actions .btn-primary[data-label="Save"]').click();
 		cy.wait(300);
-		cy.get('.sidebar-item-container[item-title="Test Private Page"]');
+		cy.get('.sidebar-item-container[item-name="Test Private Page"]');
 
 		cy.wait("@new_page");
 	});

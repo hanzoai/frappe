@@ -7,7 +7,7 @@ context("Grid Search", () => {
 	before(() => {
 		cy.visit("/login");
 		cy.login();
-		cy.visit("/app/website");
+		cy.visit("/desk/website");
 		cy.insert_doc("DocType", child_table_doctype, true);
 		cy.insert_doc("DocType", child_table_doctype_1, true);
 		cy.insert_doc("DocType", doctype_with_child_table, true);
