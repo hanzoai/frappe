@@ -6,8 +6,8 @@ Utilities for using modules
 
 import json
 import os
-from pathlib import Path
 import shutil
+from pathlib import Path
 from textwrap import dedent, indent
 from typing import TYPE_CHECKING, Union
 

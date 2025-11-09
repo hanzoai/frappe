@@ -28,8 +28,9 @@ class WorkspaceSidebar(Document):
 	# end: auto-generated types
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		self.user = frappe.get_user()
-		self.can_read = self.get_cached("user_perm_can_read", self.get_can_read_items)
+		if not frappe.flags.in_migrate:
+			self.user = frappe.get_user()
+			self.can_read = self.get_cached("user_perm_can_read", self.get_can_read_items)
 
 		self.allowed_pages = get_allowed_pages(cache=True)
 		self.allowed_reports = get_allowed_reports(cache=True)
