@@ -1245,6 +1245,9 @@ Object.assign(frappe.utils, {
 		current_color = false,
 		stroke_color = null
 	) {
+		if (frappe.utils.is_emoji(icon_name)) {
+			return `<span>${icon_name}</span>`;
+		}
 		let size_class = "";
 		let is_espresso = icon_name.startsWith("es-");
 
@@ -1275,6 +1278,10 @@ Object.assign(frappe.utils, {
 
 	flag(country_code) {
 		return `<img loading="lazy" src="https://flagcdn.com/${country_code}.svg" width="20" height="15">`;
+	},
+	is_emoji(emoji_name) {
+		let emojiList = gemoji.map((emoji) => emoji.emoji);
+		return emojiList.includes(emoji_name);
 	},
 
 	make_chart(wrapper, custom_options = {}) {
