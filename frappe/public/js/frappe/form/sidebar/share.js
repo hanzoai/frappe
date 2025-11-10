@@ -144,8 +144,12 @@ frappe.ui.form.Share = class Share {
 
 				// Add custom permissions
 				var custom_perm_types = me.frm.get_docinfo().custom_perm_types || [];
-				custom_perm_types.forEach(function(perm) {
-					args[perm] = $(d.body).find(".add-share-" + perm).prop("checked") ? 1 : 0;
+				custom_perm_types.forEach(function (perm) {
+					args[perm] = $(d.body)
+						.find(".add-share-" + perm)
+						.prop("checked")
+						? 1
+						: 0;
 				});
 
 				frappe.call({

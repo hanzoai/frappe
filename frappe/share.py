@@ -31,7 +31,7 @@ def add(doctype, name, user=None, read=1, write=0, submit=0, share=0, everyone=0
 		share=share,
 		everyone=everyone,
 		notify=notify,
-		**kwargs
+		**kwargs,
 	)
 
 
