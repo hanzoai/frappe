@@ -10,7 +10,13 @@ from pypika.terms import AggregateFunction, ArithmeticExpression, Term, ValueWra
 import frappe
 from frappe import _
 from frappe.database.operator_map import NESTED_SET_OPERATORS, OPERATOR_MAP
-from frappe.database.utils import DefaultOrderBy, FilterValue, convert_to_value, get_doctype_name
+from frappe.database.utils import (
+	DefaultOrderBy,
+	FilterValue,
+	convert_to_value,
+	get_doctype_name,
+	get_doctype_sort_info,
+)
 from frappe.model import get_permitted_fields
 from frappe.query_builder import Criterion, Field, Order, functions
 from frappe.query_builder.utils import PseudoColumnMapper
@@ -743,11 +749,32 @@ class Engine:
 
 	def apply_order_by(self, order_by: str | None):
 		if not order_by or order_by == DefaultOrderBy:
+			self._apply_default_order_by()
 			return
 
 		parsed_order_fields = self._validate_order_by(order_by)
 		for order_field, order_direction in parsed_order_fields:
 			self.query = self.query.orderby(order_field, order=order_direction)
+
+	def _apply_default_order_by(self):
+		"""Apply default ordering based on configured DocType metadata"""
+		from pypika.enums import Order
+
+		sort_field, sort_order = get_doctype_sort_info(self.doctype)
+
+		# Handle multiple sort fields
+		if "," in sort_field:
+			for sort_spec in sort_field.split(","):
+				if parts := sort_spec.strip().split(maxsplit=1):
+					field_name = parts[0]
+					spec_order = parts[1].lower() if len(parts) > 1 else sort_order.lower()
+					field = self.table[field_name]
+					order_direction = Order.desc if spec_order == "desc" else Order.asc
+					self.query = self.query.orderby(field, order=order_direction)
+		else:
+			field = self.table[sort_field]
+			order_direction = Order.desc if sort_order.lower() == "desc" else Order.asc
+			self.query = self.query.orderby(field, order=order_direction)
 
 	def _validate_and_parse_field_for_clause(self, field_name: str, clause_name: str) -> Field:
 		"""
@@ -839,7 +866,7 @@ class Engine:
 				if len(parts) > 1:
 					direction = parts[1].lower()
 
-				order_direction = Order.asc if direction == "asc" else Order.desc
+				order_direction = Order.desc if direction == "desc" else Order.asc
 
 				parsed_field = self._validate_and_parse_field_for_clause(field_name, "Order By")
 				parsed_order_fields.append((parsed_field, order_direction))
