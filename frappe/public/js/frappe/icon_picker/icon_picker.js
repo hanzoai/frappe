@@ -62,6 +62,37 @@ class Picker {
 			// 	}
 			// });
 		});
+		this.search_input.on("input", (e) => {
+			e.preventDefault();
+			this.filter_emojis();
+		});
+	}
+	filter_emojis() {
+		let value = this.search_input.val();
+		let filtered_emoji_names = [];
+		if (value) {
+			gemoji.forEach((g) => {
+				g.tags.forEach((t) => {
+					if (t.includes(value)) {
+						filtered_emoji_names.push(g);
+					}
+				});
+				g.names.forEach((t) => {
+					if (t.includes(value)) {
+						filtered_emoji_names.push(g);
+					}
+				});
+			});
+		}
+
+		if (filtered_emoji_names.length == 0) {
+			this.emoji_wrapper.find(".emoji-wrapper").removeClass("hidden");
+		} else {
+			this.emoji_wrapper.find(".emoji-wrapper").addClass("hidden");
+			filtered_emoji_names.forEach((g) => {
+				this.emoji_wrapper.find(`.emoji-wrapper[id*='${g.emoji}']`).removeClass("hidden");
+			});
+		}
 	}
 	setup_emoji_container() {
 		this.icon_picker_wrapper.find(".icon-section")
