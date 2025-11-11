@@ -1,0 +1,14 @@
+.reports-center-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 20px;
+}
+.reports-list-container{
+    width: 70%;
+}
+.report-details{
+    margin-top: 4px;
+    margin-bottom: 4px;
+}

@@ -32,6 +32,12 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 				}
 			} else if (this.item.link_type === "URL") {
 				path = this.item.url;
+			} else if (this.item.link_type == "Page" && this.item.route_options) {
+				path = frappe.utils.generate_route({
+					type: this.item.link_type,
+					name: this.item.link_to,
+					route_options: JSON.parse(this.item.route_options),
+				});
 			} else {
 				path = frappe.utils.generate_route({
 					type: this.item.link_type,
@@ -176,7 +182,6 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 				.appendTo(sidebar_control);
 
 			this.$drop_icon.removeClass("hidden");
-			this.setup_event_listner($item_container);
 		}
 
 		if (item.keep_closed) {
@@ -190,6 +195,8 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 		}
 		if (item.show_arrow) {
 			this.$drop_icon = this.wrapper.find('[item-icon="chevron-right"]');
+		}
+		if (item.collapsible || item.show_arrow) {
 			this.setup_event_listner();
 		}
 	}
@@ -207,6 +214,15 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 		const me = this;
 
 		this.$drop_icon.on("click", (e) => {
+			me.collapsed = me.$drop_icon.find("use").attr("href") === "#icon-chevron-down";
+			me.toggle();
+
+			if (e.originalEvent.isTrusted) {
+				me.save_section_break_state();
+			}
+		});
+
+		$(this.wrapper.find(".standard-sidebar-item")[0]).on("click", (e) => {
 			me.collapsed = me.$drop_icon.find("use").attr("href") === "#icon-chevron-down";
 			me.toggle();
 

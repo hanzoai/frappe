@@ -17,6 +17,7 @@ class WorkspaceSidebarItem(Document):
 		child: DF.Check
 		collapsible: DF.Check
 		display_depends_on: DF.Code | None
+		filters: DF.Code | None
 		indent: DF.Check
 		keep_closed: DF.Check
 		label: DF.Data | None
@@ -25,6 +26,7 @@ class WorkspaceSidebarItem(Document):
 		parent: DF.Data
 		parentfield: DF.Data
 		parenttype: DF.Data
+		route_options: DF.Code | None
 		show_arrow: DF.Check
 		type: DF.Literal["Link", "Section Break", "Spacer"]
 		url: DF.Data | None

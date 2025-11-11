@@ -31,13 +31,20 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	choose_app_name() {
-		if (frappe.boot.app_name_style == "Default") return;
-		frappe.boot.app_data.forEach((a) => {
-			if (a.workspaces.includes(this.workspace_title)) {
-				this.app_name = a.app_title;
-				this.app_logo_url = a.app_logo_url;
+		if (frappe.boot.app_name_style === "Default") return;
+
+		for (const app of frappe.boot.app_data) {
+			if (app.workspaces.includes(this.workspace_title)) {
+				this.app_name = app.app_title;
+				this.app_logo_url = app.app_logo_url;
+				return;
 			}
-		});
+		}
+
+		const icon = frappe.boot.desktop_icons.find((i) => i.label === this.workspace_title);
+		if (icon) {
+			this.app_name = icon.parent_icon;
+		}
 	}
 
 	find_nested_items() {
@@ -96,6 +103,7 @@ frappe.ui.Sidebar = class Sidebar {
 		}
 	}
 	make_dom() {
+		this.load_sidebar_state();
 		this.wrapper = $(
 			frappe.render_template("sidebar", {
 				expanded: this.sidebar_expanded,
@@ -122,7 +130,8 @@ frappe.ui.Sidebar = class Sidebar {
 		let match = false;
 		const that = this;
 		$(".item-anchor").each(function () {
-			if ($(this).attr("href") == decodeURIComponent(window.location.pathname)) {
+			let href = $(this).attr("href")?.split("?")[0];
+			if (href == decodeURIComponent(window.location.pathname)) {
 				match = true;
 				if (that.active_item) that.active_item.removeClass("active-sidebar");
 				that.active_item = $(this).parent();
@@ -134,6 +143,15 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	set_sidebar_state() {
+		this.load_sidebar_state();
+		if (this.workspace_sidebar_items.length === 0) {
+			this.sidebar_expanded = true;
+		}
+
+		this.expand_sidebar();
+	}
+
+	load_sidebar_state() {
 		this.sidebar_expanded = true;
 		if (localStorage.getItem("sidebar-expanded") !== null) {
 			this.sidebar_expanded = JSON.parse(localStorage.getItem("sidebar-expanded"));
@@ -142,12 +160,6 @@ frappe.ui.Sidebar = class Sidebar {
 		if (frappe.is_mobile()) {
 			this.sidebar_expanded = false;
 		}
-
-		if (this.workspace_sidebar_items.length === 0) {
-			this.sidebar_expanded = true;
-		}
-
-		this.expand_sidebar();
 	}
 	empty() {
 		if (this.wrapper.find(".sidebar-items")[0]) {
@@ -490,6 +502,14 @@ frappe.ui.Sidebar = class Sidebar {
 				in_list_view: 1,
 				label: "Link To",
 				options: "link_type",
+				onchange: function () {
+					if (d.get_value("link_type") == "DocType") {
+						let doctype = this.get_value();
+						if (doctype) {
+							me.setup_filter(d, doctype);
+						}
+					}
+				},
 			},
 			{
 				depends_on: 'eval: doc.link_type == "URL"',
@@ -502,8 +522,13 @@ frappe.ui.Sidebar = class Sidebar {
 					'eval: doc.type == "Link" || (doc.indent == 1 && doc.type == "Section Break")',
 				fieldname: "icon",
 				fieldtype: "Icon",
+				options: "Emojis",
 				in_list_view: 1,
 				label: "Icon",
+			},
+			{
+				fieldtype: "HTML",
+				fieldname: "filter_area",
 			},
 			{
 				depends_on: 'eval: doc.type == "Section Break"',
@@ -558,6 +583,17 @@ frappe.ui.Sidebar = class Sidebar {
 				options: "JS",
 				max_height: "10px",
 			},
+			{
+				fieldtype: "Section Break",
+			},
+			{
+				fieldname: "route_options",
+				fieldtype: "Code",
+				display_depends_on: "eval: doc.link_type == 'Page'",
+				label: "Route Options",
+				options: "JSON",
+				max_height: "50px",
+			},
 		];
 		if (opts && opts.item) {
 			dialog_fields.forEach((f) => {
@@ -571,12 +607,17 @@ frappe.ui.Sidebar = class Sidebar {
 			});
 			title = "Edit Sidebar Item";
 		}
-		let d = new frappe.ui.Dialog({
+		let d;
+		this.dialog = d = new frappe.ui.Dialog({
 			title: title,
 			fields: dialog_fields,
 			primary_action_label: "Save",
 			size: "small",
 			primary_action(values) {
+				if (me.filter_group) {
+					me.filter_group.get_filters();
+				}
+
 				if (me.new_sidebar_items.length === 0) {
 					me.new_sidebar_items = Array.from(me.workspace_sidebar_items);
 				}
@@ -619,7 +660,36 @@ frappe.ui.Sidebar = class Sidebar {
 
 		return d;
 	}
+	setup_filter(d, doctype) {
+		if (this.filter_group) {
+			this.filter_group.wrapper.empty();
+			delete this.filter_group;
+		}
 
+		// let $loading = this.dialog.get_field("filter_area_loading").$wrapper;
+		// $(`<span class="text-muted">${__("Loading Filters...")}</span>`).appendTo($loading);
+
+		this.filters = [];
+
+		this.generate_filter_from_json && this.generate_filter_from_json();
+
+		this.filter_group = new frappe.ui.FilterGroup({
+			parent: d.get_field("filter_area").$wrapper,
+			doctype: doctype,
+			on_change: () => {},
+		});
+
+		frappe.model.with_doctype(doctype, () => {
+			this.filter_group.add_filters_to_filter_group(this.filters);
+		});
+	}
+	hide_field(fieldname) {
+		this.dialog.set_df_property(fieldname, "hidden", true);
+	}
+
+	show_field(fieldname) {
+		this.dialog.set_df_property(fieldname, "hidden", false);
+	}
 	setup_editing_controls() {
 		const me = this;
 		this.save_sidebar_button = this.wrapper.find(".save-sidebar");
