@@ -157,7 +157,7 @@ class DesktopPage {
 	setup() {
 		this.setup_avatar();
 		this.setup_navbar();
-		this.setup_icon_search();
+		this.setup_awesomebar();
 		this.handke_route_change();
 	}
 	setup_avatar() {
@@ -182,6 +182,13 @@ class DesktopPage {
 					window.location.reload();
 				},
 			},
+			{
+				icon: "log-out",
+				label: "Logout",
+				onClick: function () {
+					frappe.app.logout();
+				},
+			},
 		];
 		frappe.ui.create_menu($(".desktop-avatar"), menu_items, null, true);
 	}
@@ -189,6 +196,30 @@ class DesktopPage {
 		$(".sticky-top > .navbar").hide();
 	}
 
+	setup_awesomebar() {
+		if (frappe.boot.desk_settings.search_bar) {
+			let awesome_bar = new frappe.search.AwesomeBar();
+			awesome_bar.setup(".desktop-search-wrapper #navbar-search");
+		}
+		frappe.ui.keys.add_shortcut({
+			shortcut: "ctrl+g",
+			action: function (e) {
+				$(".desktop-search-wrapper #navbar-search").focus();
+				e.preventDefault();
+				return false;
+			},
+			description: __("Open Awesomebar"),
+		});
+		frappe.ui.keys.add_shortcut({
+			shortcut: "ctrl+k",
+			action: function (e) {
+				$(".desktop-search-wrapper #navbar-search").focus();
+				e.preventDefault();
+				return false;
+			},
+			description: __("Open Awesomebar"),
+		});
+	}
 	handke_route_change() {
 		const me = this;
 		frappe.router.on("change", function () {
@@ -200,32 +231,32 @@ class DesktopPage {
 		});
 	}
 
-	setup_icon_search() {
-		let all_icons = $(".icon-title");
-		let icons_to_show = [];
-		$(".desktop-container .icons").append(
-			"<div class='no-apps-message hidden'> No apps found </div>"
-		);
-		$(".desktop-search-wrapper > #navbar-search").on("input", function (e) {
-			let search_query = $(e.target).val().toLowerCase();
-			console.log(search_query);
-			icons_to_show = [];
-			all_icons.each(function (index, element) {
-				$(element).parent().parent().hide();
-				let label = $(element).text().toLowerCase();
-				if (label.includes(search_query)) {
-					icons_to_show.push(element);
-				}
-			});
+	// setup_icon_search() {
+	// 	let all_icons = $(".icon-title");
+	// 	let icons_to_show = [];
+	// 	$(".desktop-container .icons").append(
+	// 		"<div class='no-apps-message hidden'> No apps found </div>"
+	// 	);
+	// 	$(".desktop-search-wrapper > #navbar-search").on("input", function (e) {
+	// 		let search_query = $(e.target).val().toLowerCase();
+	// 		console.log(search_query);
+	// 		icons_to_show = [];
+	// 		all_icons.each(function (index, element) {
+	// 			$(element).parent().parent().hide();
+	// 			let label = $(element).text().toLowerCase();
+	// 			if (label.includes(search_query)) {
+	// 				icons_to_show.push(element);
+	// 			}
+	// 		});
 
-			if (icons_to_show.length == 0) {
-				$(".desktop-container .icons").find(".no-apps-message").removeClass("hidden");
-			} else {
-				$(".desktop-container .icons").find(".no-apps-message").addClass("hidden");
-			}
-			toggle_icons(icons_to_show);
-		});
-	}
+	// 		if (icons_to_show.length == 0) {
+	// 			$(".desktop-container .icons").find(".no-apps-message").removeClass("hidden");
+	// 		} else {
+	// 			$(".desktop-container .icons").find(".no-apps-message").addClass("hidden");
+	// 		}
+	// 		toggle_icons(icons_to_show);
+	// 	});
+	// }
 }
 
 class DesktopIconGrid {
@@ -424,7 +455,7 @@ class DesktopIcon {
 	}
 
 	get_child_icons_data() {
-		return this.icon_data.child_icons;
+		return this.icon_data.child_icons.sort((a, b) => a.idx - b.idx);
 	}
 	get_desktop_icon_html() {
 		return this.icon;
@@ -448,7 +479,11 @@ class DesktopIcon {
 	}
 
 	render_folder_thumbnail() {
-		if (this.icon_type == "Folder") {
+		let condition =
+			frappe.boot.show_app_icons_as_folder &&
+			this.icon_type == "App" &&
+			this.child_icons.length > 0;
+		if (this.icon_type == "Folder" || condition) {
 			if (!this.folder_wrapper) this.folder_wrapper = this.icon.find(".icon-container");
 			this.folder_wrapper.html("");
 			this.folder_grid = new DesktopIconGrid({
@@ -459,6 +494,9 @@ class DesktopIcon {
 				in_modal: true,
 				no_dragging: true,
 			});
+			if (this.icon_type == "App") {
+				this.folder_wrapper.addClass("folder-icon");
+			}
 		}
 	}
 
@@ -511,6 +549,7 @@ class DesktopModal {
 			this.modal = new frappe.get_modal(icon_title, "");
 			this.modal.find(".modal-header").addClass("desktop-modal-heading");
 			this.modal.addClass("desktop-modal");
+			this.modal.find(".modal-dialog").attr("id", "desktop-modal");
 			this.modal.find(".modal-body").addClass("desktop-modal-body");
 			this.$child_icons_wrapper = this.modal.find(".desktop-modal-body");
 		} else {

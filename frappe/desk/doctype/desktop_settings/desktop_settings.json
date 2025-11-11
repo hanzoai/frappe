@@ -7,6 +7,7 @@
  "field_order": [
   "icon_style",
   "navbar_style",
+  "show_app_icons_as_folder",
   "sidebar_section",
   "show_app_name_in_header"
  ],
@@ -34,13 +35,19 @@
    "fieldtype": "Select",
    "label": "Show App Name in Header",
    "options": "Default\nTitle\nSubtitle"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_app_icons_as_folder",
+   "fieldtype": "Check",
+   "label": "Show App Icons As Folder"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-10-19 04:53:14.413040",
+ "modified": "2025-11-11 00:23:53.552669",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Desktop Settings",

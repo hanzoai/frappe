@@ -1,20 +1,20 @@
 <!-- jinja -->
 <div class="desktop-wrapper">
     <header class="navbar navbar-expand navbar-container" role="navigation">
-        <a class="navbar-home" href="/app">
+        <div class="navbar-home">
             <img
                 class="brand-logo"
                 src="{{ brand_logo }}"
                 alt="{{ _("App Logo") }}"
             >
-        </a>
+        </div>
         <div class="desktop-search-wrapper text-muted ">
                 <input
                     id="navbar-search"
                     type="text"
                     class="form-control"
                     aria-haspopup="true"
-                    placeholder="Search apps, workspaces"
+                    placeholder="Search for type a command"
                 >
                 <span class="desktop-search-icon">
                     <svg class="icon icon-sm"><use href="#icon-search"></use></svg>
@@ -25,17 +25,5 @@
         </span>
     </header>
     <div class="desktop-container">
-        <!-- <div class="icons">
-            {% for icon in icons %}
-                <a class="desktop-icon" data-logo="{{ icon.logo_url }}" data-icon="{{ icon.icon }}" data-type="{{ icon.type }}" style="text-decoration:none">
-                    <div class="icon-container"> </div>
-                    <div class="icon-caption">
-                        <div class="icon-title">{{ icon.label }}</div>
-                        <div class="icon-subtitle"></div>
-                    </div>
-                </a>
-
-            {% endfor %}
-        </div> -->
     </div>
 </div>

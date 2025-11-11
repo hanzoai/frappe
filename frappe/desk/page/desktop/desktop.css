@@ -138,6 +138,11 @@
     }
 }
 
+#desktop-modal{
+    transform: none;
+    transition: none;
+}
+
 .desktop-modal-body {
     width: var(--desktop-modal-width);
     height: var(--desktop-modal-height);
