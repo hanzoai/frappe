@@ -7,7 +7,8 @@
  "engine": "InnoDB",
  "field_order": [
   "sidebar",
-  "links"
+  "links",
+  "app"
  ],
  "fields": [
   {
@@ -22,12 +23,18 @@
    "fieldtype": "Table",
    "label": "Links",
    "options": "Report Center Link"
+  },
+  {
+   "fieldname": "app",
+   "fieldtype": "Autocomplete",
+   "label": "App",
+   "options": "Installed Applications"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-10 12:51:46.093654",
+ "modified": "2025-11-11 20:47:20.792274",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Report Center",
