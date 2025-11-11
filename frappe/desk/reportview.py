@@ -60,8 +60,10 @@ def get_count() -> int | None:
 		return frappe.call(controller.get_count, args=args, **args)
 
 	args.distinct = sbool(args.distinct)
+	distinct = "distinct " if args.distinct else ""
 	args.limit = cint(args.limit)
-	fieldname = f"`tab{args.doctype}`.name"
+	fieldname = f"{distinct}`tab{args.doctype}`.name"
+	args.pop("distinct")  # to avoid a double DISTINCT concat in db_query
 	args.order_by = None
 
 	# args.limit is specified to avoid getting accurate count.
