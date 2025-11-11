@@ -1622,6 +1622,10 @@ class SQLFunctionParser:
 			self._validate_function_field_arg(arg)
 			return self.engine.table[arg]
 
+		# Check if it's a numeric string like "1" (for COUNT(1), etc.)
+		elif arg.isdigit():
+			return int(arg)
+
 		else:
 			frappe.throw(
 				_(
