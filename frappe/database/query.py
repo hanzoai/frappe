@@ -1452,7 +1452,7 @@ class SQLFunctionParser:
 
 	def is_function_dict(self, field_dict: dict) -> bool:
 		"""Check if a dictionary represents a SQL function definition."""
-		function_keys = [k for k in field_dict.keys() if k != "as"]
+		function_keys = [k for k in field_dict.keys() if k.lower() != "as"]
 		return len(function_keys) == 1 and function_keys[0] in FUNCTION_MAPPING
 
 	def is_operator_dict(self, field_dict: dict) -> bool:
@@ -1460,7 +1460,7 @@ class SQLFunctionParser:
 
 		Example: {"ADD": [1, 2], "as": "sum"} or {"DIV": ["total", "count"]}
 		"""
-		operator_keys = [k for k in field_dict.keys() if k != "as"]
+		operator_keys = [k for k in field_dict.keys() if k.lower() != "as"]
 		return len(operator_keys) == 1 and operator_keys[0] in OPERATOR_MAPPING
 
 	def _extract_dict_components(self, d: dict, valid_keys: dict, error_msg: str) -> tuple:
@@ -1470,7 +1470,7 @@ class SQLFunctionParser:
 		args = None
 
 		for key, value in d.items():
-			if key == "as":
+			if key.lower() == "as":
 				alias = value
 			else:
 				name = key
