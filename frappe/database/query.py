@@ -973,7 +973,7 @@ class Engine:
 				elif hasattr(field, "alias") and field.alias and field.name in permitted_fields_set:
 					allowed_fields.append(field)
 
-			elif isinstance(field, PseudoColumnMapper):
+			elif isinstance(field, AggregateFunction | PseudoColumnMapper):
 				# Typically functions or complex terms
 				allowed_fields.append(field)
 
