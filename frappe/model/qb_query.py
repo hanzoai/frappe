@@ -100,16 +100,35 @@ class DatabaseQuery:
 			PermissionError: When user lacks required permissions.
 		"""
 
-		# Check if table exists before running query (matching db_query behavior)
-		from frappe.model.meta import get_table_columns
+		# filters and fields swappable
+		# its hard to remember what comes first
+		if isinstance(fields, dict) or (fields and isinstance(fields, list) and isinstance(fields[0], list)):
+			# if fields is given as dict/list of list, its probably filters
+			filters, fields = fields, filters
 
-		try:
-			get_table_columns(self.doctype)
-		except frappe.db.TableMissingError:
-			if ignore_ddl:
-				return []
-			else:
-				raise
+		elif fields and isinstance(filters, list) and len(filters) > 1 and isinstance(filters[0], str):
+			# if `filters` is a list of strings, its probably fields
+			filters, fields = fields, filters
+
+		# Handle virtual doctypes before any other processing
+		if is_virtual_doctype(self.doctype):
+			return self._handle_virtual_doctype(
+				filters,
+				or_filters,
+				start,
+				offset,
+				limit_start,
+				page_length,
+				limit,
+				limit_page_length,
+				order_by,
+				as_list,
+				with_comment_count,
+				save_user_settings,
+				save_user_settings_fields,
+				pluck,
+				parent_doctype,
+			)
 
 		# Handle deprecated parameters
 		if limit_start:
@@ -140,19 +159,20 @@ class DatabaseQuery:
 			if limit is None:
 				limit = page_length
 
-		# filters and fields swappable
-		# its hard to remember what comes first
-		if isinstance(fields, dict) or (fields and isinstance(fields, list) and isinstance(fields[0], list)):
-			# if fields is given as dict/list of list, its probably filters
-			filters, fields = fields, filters
-
-		elif fields and isinstance(filters, list) and len(filters) > 1 and isinstance(filters[0], str):
-			# if `filters` is a list of strings, its probably fields
-			filters, fields = fields, filters
-
 		# Set fields to the requested field or `name` if none specified
 		if not fields:
 			fields = [pluck or "name"]
+
+		# Check if table exists before running query
+		from frappe.model.meta import get_table_columns
+
+		try:
+			get_table_columns(self.doctype)
+		except frappe.db.TableMissingError:
+			if ignore_ddl:
+				return []
+			else:
+				raise
 
 		# Build query using QB engine with converted syntax
 		kwargs = {
@@ -257,3 +277,69 @@ class DatabaseQuery:
 		except Exception:
 			# Don't let user settings errors break the query
 			pass
+
+	def _handle_virtual_doctype(
+		self,
+		filters: dict[str, FilterValue] | FilterValue | list[list | FilterValue] | None,
+		or_filters: dict[str, FilterValue] | FilterValue | list[list | FilterValue] | None,
+		start: int | None,
+		offset: int | None,
+		limit_start: int,
+		page_length: int | None,
+		limit: int | None,
+		limit_page_length: int | None,
+		order_by: str,
+		as_list: bool,
+		with_comment_count: bool,
+		save_user_settings: bool,
+		save_user_settings_fields: bool,
+		pluck: str | None,
+		parent_doctype: str | None,
+	) -> list:
+		"""Handle virtual doctype queries by delegating to controller.get_list().
+
+		Virtual doctypes don't have database tables and use controller methods
+		to generate data dynamically. Converts filters to Filters objects and
+		calls the doctype controller's get_list method.
+
+		Returns:
+			List of results from controller.get_list()
+		"""
+		from frappe.model.base_document import get_controller
+		from frappe.types.filter import Filters
+
+		controller = get_controller(self.doctype)
+		if not hasattr(controller, "get_list"):
+			return []
+
+		filters = filters or Filters()
+		if isinstance(filters, str):
+			filters = json.loads(filters)
+		if not isinstance(filters, Filters):
+			filters = Filters(filters, doctype=self.doctype)
+
+		or_filters = or_filters or Filters()
+		if isinstance(or_filters, str):
+			or_filters = json.loads(or_filters)
+		if not isinstance(or_filters, Filters):
+			or_filters = Filters(or_filters, doctype=self.doctype)
+
+		_page_length = page_length or limit or limit_page_length or 20
+		kwargs = {
+			"filters": filters,
+			"or_filters": or_filters,
+			"start": start or offset or limit_start or 0,
+			"page_length": _page_length,
+			"limit_page_length": _page_length,
+			"order_by": order_by,
+			"as_list": as_list,
+			"with_comment_count": with_comment_count,
+			"save_user_settings": save_user_settings,
+			"save_user_settings_fields": save_user_settings_fields,
+			"pluck": pluck,
+			"parent_doctype": parent_doctype,
+			"doctype": self.doctype,
+		}
+
+		# Use frappe.call to filter kwargs and call controller
+		return frappe.call(controller.get_list, args=kwargs, **kwargs)
