@@ -1079,13 +1079,13 @@ class Engine:
 
 		for method in condition_methods:
 			if c := frappe.call(frappe.get_attr(method), self.user, doctype=self.doctype):
-				conditions.append(RawCriterion(c))
+				conditions.append(RawCriterion(f"({c})"))
 
 		# Get conditions from server scripts
 		if permission_script_name := get_server_script_map().get("permission_query", {}).get(self.doctype):
 			script = frappe.get_doc("Server Script", permission_script_name)
 			if condition := script.get_permission_query_conditions(self.user):
-				conditions.append(RawCriterion(condition))
+				conditions.append(RawCriterion(f"({condition})"))
 
 		return conditions
 
