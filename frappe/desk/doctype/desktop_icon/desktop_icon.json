@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_rename": 1,
  "autoname": "field:label",
  "creation": "2016-02-22 03:47:45.387068",
  "doctype": "DocType",
@@ -111,7 +112,7 @@
   }
  ],
  "links": [],
- "modified": "2025-11-04 11:49:36.734853",
+ "modified": "2025-11-12 23:33:08.338028",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Desktop Icon",
