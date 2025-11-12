@@ -28,3 +28,6 @@ class CommunicationLink(Document):
 
 def on_doctype_update():
 	frappe.db.add_index("Communication Link", ["link_doctype", "link_name"])
+	frappe.db.add_index(
+		"Communication Link", ["link_doctype", "link_name", "communication_date DESC", "parent"]
+	)
