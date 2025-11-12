@@ -283,18 +283,46 @@ class DesktopIconGrid {
 	}
 	make() {
 		const me = this;
+		this.icons_container = $(`<div class="icons-container"></div>`).appendTo(this.wrapper);
 		for (let i = 0; i < this.total_pages; i++) {
 			let template = `<div class="icons"></div>`;
 
 			if (this.row_size) {
 				template = `<div class="icons" style="display: none; grid-template-columns: repeat(${this.row_size}, 1fr)"></div>`;
 			}
-			this.grids.push($(template).appendTo(this.wrapper));
+			this.grids.push($(template).appendTo(this.icons_container));
 			this.make_icons(this.icons_data_by_page[i], this.grids[i]);
 			if (!this.no_dragging) {
 				this.setup_reordering(this.grids[i]);
 			}
-			this.grids[i].on("wheel", function (event) {
+		}
+		if (!this.in_folder && this.total_pages > 1) {
+			this.add_page_indicators();
+			this.setup_arrows();
+			this.setup_pagination();
+			this.setup_swipe_gesture();
+		} else {
+			this.grids[0] && this.grids[0].css("display", "grid");
+		}
+	}
+	setup_arrows() {
+		if (this.in_modal) {
+			const me = this;
+			this.wrapper
+				.parent()
+				.parent()
+				.parent()
+				.on("shown.bs.modal", function () {
+					me.add_arrows();
+				});
+		} else {
+			this.add_arrows(this.wrapper.find(".icons"));
+		}
+	}
+	setup_swipe_gesture() {
+		const me = this;
+		this.grids.forEach((grid) => {
+			$(grid).on("wheel", function (event) {
 				if (event.originalEvent) {
 					event = event.originalEvent; // for jQuery or wrapped events
 				}
@@ -310,30 +338,17 @@ class DesktopIconGrid {
 					}
 				}
 			});
-		}
-		if (!this.in_folder) {
-			this.add_page_indicators();
-			this.setup_arrows();
-			this.setup_pagination();
-		} else {
-			this.grids[0] && this.grids[0].css("display", "grid");
-		}
+		});
 	}
-	setup_arrows() {
-		if (this.in_modal) {
-			const me = this;
-			this.wrapper
-				.parent()
-				.parent()
-				.parent()
-				.on("shown.bs.modal", function () {
-					me.add_arrows();
-				});
-		}
-	}
-	add_arrows() {
+	add_arrows(element) {
+		if (!element) element = this.wrapper;
 		const me = this;
-		let stroke_color = "white";
+		let stroke_color = "black";
+		let horizontal_movement = 0;
+		if (this.in_modal) {
+			stroke_color = "white";
+			horizontal_movement = "-40px";
+		}
 		this.left_arrow = $(
 			frappe.utils.icon("chevron-left", "lg", "", "", "left-page-arrow", "", stroke_color)
 		);
@@ -341,14 +356,20 @@ class DesktopIconGrid {
 			frappe.utils.icon("chevron-right", "lg", "", "", "right-page-arrow", "", stroke_color)
 		);
 
-		this.wrapper.append(this.left_arrow);
-		this.wrapper.append(this.right_arrow);
+		this.icons_container.before(this.left_arrow);
+		this.icons_container.after(this.right_arrow);
 
-		let wrapper_style = getComputedStyle(this.wrapper.get(0));
+		let wrapper_style = getComputedStyle(element.get(0));
 		let total_height = parseInt(wrapper_style.height);
 
 		this.left_arrow.css("top", `${total_height / 2}px`);
 		this.right_arrow.css("top", `${total_height / 2}px`);
+		if (horizontal_movement) {
+			this.left_arrow.css("left", horizontal_movement);
+			this.right_arrow.css("right", horizontal_movement);
+			this.left_arrow.css("position", "absolute");
+			this.right_arrow.css("position", "absolute");
+		}
 		this.left_arrow.on("click", function () {
 			if (me.current_page != 0) me.current_page--;
 			me.change_to_page(me.current_page);
@@ -362,7 +383,7 @@ class DesktopIconGrid {
 		this.page_indicators = [];
 		if (this.total_pages > 1) {
 			this.pagination_indicator = $(`<div class='page-indicator-container'></div>`).appendTo(
-				this.wrapper
+				this.icons_container
 			);
 			for (let i = 0; i < this.total_pages; i++) {
 				this.page_indicators.push(

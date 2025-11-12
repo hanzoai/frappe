@@ -46,7 +46,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+    flex-direction: row;
     margin-top: 20px;
 }
 
@@ -248,11 +248,6 @@
       grid-column: 1 / -1;
       grid-row: 1 / -1;
 }
-.left-page-arrow{
-    position: absolute;
-    left: -40px;
-}
-.right-page-arrow{
-    position: absolute;
-    right: -40px;
+.right-page-arrow, .left-page-arrow{
+    margin: 0px;
 }
