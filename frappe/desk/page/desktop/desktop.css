@@ -2,6 +2,7 @@
     --desktop-blur: blur(10.2px);
     --desktop-modal-width: 508px;
     --desktop-modal-height: 448px;
+    --folder-thumbnail-icon-height: 12px;
 }
 .desktop-wrapper{
     max-width: 100%;
@@ -211,8 +212,8 @@
             height: fit-content;
             pointer-events: none;
             & .icon-container{
-                height: 9px;
-                width: 9px;
+                height: var(--folder-thumbnail-icon-height);
+                width: var(--folder-thumbnail-icon-height);
                 padding: 0px;
                 border-radius: 2px;
                 & .icon{
@@ -246,4 +247,12 @@
 .no-apps-message{
       grid-column: 1 / -1;
       grid-row: 1 / -1;
+}
+.left-page-arrow{
+    position: absolute;
+    left: -40px;
+}
+.right-page-arrow{
+    position: absolute;
+    right: -40px;
 }

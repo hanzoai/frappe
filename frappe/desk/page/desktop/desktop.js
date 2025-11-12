@@ -286,7 +286,7 @@ class DesktopIconGrid {
 		for (let i = 0; i < this.total_pages; i++) {
 			let template = `<div class="icons"></div>`;
 
-			if (this.row_size && this.in_modal) {
+			if (this.row_size) {
 				template = `<div class="icons" style="display: none; grid-template-columns: repeat(${this.row_size}, 1fr)"></div>`;
 			}
 			this.grids.push($(template).appendTo(this.wrapper));
@@ -313,10 +313,50 @@ class DesktopIconGrid {
 		}
 		if (!this.in_folder) {
 			this.add_page_indicators();
+			this.setup_arrows();
 			this.setup_pagination();
 		} else {
 			this.grids[0] && this.grids[0].css("display", "grid");
 		}
+	}
+	setup_arrows() {
+		if (this.in_modal) {
+			const me = this;
+			this.wrapper
+				.parent()
+				.parent()
+				.parent()
+				.on("shown.bs.modal", function () {
+					me.add_arrows();
+				});
+		}
+	}
+	add_arrows() {
+		const me = this;
+		let stroke_color = "white";
+		this.left_arrow = $(
+			frappe.utils.icon("chevron-left", "lg", "", "", "left-page-arrow", "", stroke_color)
+		);
+		this.right_arrow = $(
+			frappe.utils.icon("chevron-right", "lg", "", "", "right-page-arrow", "", stroke_color)
+		);
+
+		this.wrapper.append(this.left_arrow);
+		this.wrapper.append(this.right_arrow);
+
+		let wrapper_style = getComputedStyle(this.wrapper.get(0));
+		let total_height = parseInt(wrapper_style.height);
+
+		this.left_arrow.css("top", `${total_height / 2}px`);
+		this.right_arrow.css("top", `${total_height / 2}px`);
+		this.left_arrow.on("click", function () {
+			if (me.current_page != 0) me.current_page--;
+			me.change_to_page(me.current_page);
+		});
+		this.right_arrow.on("click", function () {
+			if (me.current_page != me.total_pages - 1) me.current_page++;
+			me.change_to_page(me.current_page);
+		});
 	}
 	add_page_indicators(tempplate) {
 		this.page_indicators = [];
@@ -346,6 +386,7 @@ class DesktopIconGrid {
 		this.current_page = index;
 		this.old_index = index;
 	}
+
 	split_data(icons, size) {
 		const result = [];
 
@@ -489,9 +530,13 @@ class DesktopIcon {
 			this.folder_grid = new DesktopIconGrid({
 				wrapper: this.folder_wrapper,
 				icons_data: this.child_icons,
-				row_size: 4,
+				row_size: 3,
+				page_size: {
+					row: 3,
+					col: 3,
+				},
 				in_folder: true,
-				in_modal: true,
+				in_modal: false,
 				no_dragging: true,
 			});
 			if (this.icon_type == "App") {
