@@ -26,7 +26,7 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 
 				path = frappe.utils.generate_route(args);
 			} else if (this.item.link_type == "Workspace") {
-				path = "/app/" + frappe.router.slug(this.item.link_to);
+				path = "/desk/" + frappe.router.slug(this.item.link_to);
 				if (this.item.route) {
 					path = this.item.route;
 				}
@@ -212,15 +212,6 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 	}
 	setup_event_listner() {
 		const me = this;
-
-		this.$drop_icon.on("click", (e) => {
-			me.collapsed = me.$drop_icon.find("use").attr("href") === "#icon-chevron-down";
-			me.toggle();
-
-			if (e.originalEvent.isTrusted) {
-				me.save_section_break_state();
-			}
-		});
 
 		$(this.wrapper.find(".standard-sidebar-item")[0]).on("click", (e) => {
 			me.collapsed = me.$drop_icon.find("use").attr("href") === "#icon-chevron-down";
