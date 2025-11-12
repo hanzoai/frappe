@@ -3,6 +3,7 @@
 
 import re
 import string
+from collections.abc import KeysView, ValuesView
 from functools import cached_property, wraps
 
 import frappe
@@ -33,7 +34,7 @@ def convert_to_value(o: FilterValue):
 		return int(o)
 	elif isinstance(o, dict):
 		return frappe.as_json(o)
-	elif isinstance(o, (list, tuple, set)):
+	elif isinstance(o, (list, tuple, set, KeysView, ValuesView)):
 		return tuple(convert_to_value(item) for item in o)
 	return o
 
