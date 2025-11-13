@@ -501,7 +501,7 @@ class TestQuery(IntegrationTestCase):
 				fields=["name"],
 				or_filters={"idx": (">", 5), "issingle": ("=", 1)},
 			).get_sql(),
-			"SELECT `name` FROM `tabDocType` WHERE `idx`>5 OR `issingle`=1".replace(
+			"SELECT `name` FROM `tabDocType` WHERE IFNULL(`idx`,'')>5 OR `issingle`=1".replace(
 				"`", '"' if frappe.db.db_type == "postgres" else "`"
 			),
 		)
@@ -525,7 +525,7 @@ class TestQuery(IntegrationTestCase):
 				fields=["name"],
 				or_filters={"name": ("!=", "User"), "module": ("!=", "Core")},
 			).get_sql(),
-			"SELECT `name` FROM `tabDocType` WHERE `name`<>'User' OR `module`<>'Core'".replace(
+			"SELECT `name` FROM `tabDocType` WHERE `name`<>'User' OR IFNULL(`module`,'')<>'Core'".replace(
 				"`", '"' if frappe.db.db_type == "postgres" else "`"
 			),
 		)
@@ -876,7 +876,7 @@ class TestQuery(IntegrationTestCase):
 
 		# Check for user permission condition in the query string
 		if frappe.db.db_type == "mariadb":
-			self.assertIn("`name` IS NULL OR `name` IN ('_Test Blog Post 1','_Test Blog Post')", query)
+			self.assertIn("IFNULL(`name`,'')='' OR `name` IN ('_Test Blog Post 1','_Test Blog Post')", query)
 		elif frappe.db.db_type == "postgres":
 			self.assertIn("\"name\" IS NULL OR \"name\" IN ('_Test Blog Post 1','_Test Blog Post')", query)
 
@@ -1879,7 +1879,7 @@ class TestQuery(IntegrationTestCase):
 					["DocType", "parent", "!=", None],
 				],
 			).get_sql(),
-			"SELECT `tabDocType`.* FROM `tabDocType` LEFT JOIN `tabDocField` ON `tabDocField`.`parent`=`tabDocType`.`name` AND `tabDocField`.`parenttype`='DocType' AND `tabDocField`.`parentfield`='fields' WHERE `tabDocField`.`name` IS NULL AND `tabDocType`.`parent` IS NOT NULL",
+			"SELECT `tabDocType`.* FROM `tabDocType` LEFT JOIN `tabDocField` ON `tabDocField`.`parent`=`tabDocType`.`name` AND `tabDocField`.`parenttype`='DocType' AND `tabDocField`.`parentfield`='fields' WHERE `tabDocField`.`name` IS NULL AND `tabDocType`.`parent`<>''",
 		)
 
 

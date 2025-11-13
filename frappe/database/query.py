@@ -389,8 +389,58 @@ class Engine:
 
 		operator_fn = OPERATOR_MAP[_operator.casefold()]
 		if _value is None and isinstance(_field, Field):
-			return _field.isnotnull() if operator_fn == builtin_operator.ne else _field.isnull()
+			if operator_fn == builtin_operator.ne:
+				filter_field_name = (
+					field
+					if isinstance(field, str)
+					else (_field.name if hasattr(_field, "name") else str(_field))
+				)
+				if "." in filter_field_name:
+					filter_field_name = filter_field_name.split(".")[-1]
+
+				target_doctype = doctype or self.doctype
+				fallback_sql = self._get_ifnull_fallback(target_doctype, filter_field_name)
+
+				if fallback_sql == "''":
+					fallback_value = ""
+				elif fallback_sql.startswith("'") and fallback_sql.endswith("'"):
+					fallback_value = fallback_sql[1:-1]
+				else:
+					try:
+						fallback_value = int(fallback_sql)
+					except (ValueError, TypeError):
+						fallback_value = fallback_sql
+
+				return operator_fn(_field, ValueWrapper(fallback_value))
+			else:
+				return _field.isnull()
 		else:
+			filter_field_name = (
+				field if isinstance(field, str) else (_field.name if hasattr(_field, "name") else str(_field))
+			)
+
+			if "." in filter_field_name:
+				filter_field_name = filter_field_name.split(".")[-1]
+
+			target_doctype = doctype or self.doctype
+
+			# Skip applying ifnull if field already has null-handling function
+			if isinstance(_field, functions.IfNull | functions.Coalesce):
+				return operator_fn(_field, _value)
+
+			if self._should_apply_ifnull(target_doctype, filter_field_name, _operator, _value):
+				fallback_sql = self._get_ifnull_fallback(target_doctype, filter_field_name)
+				if fallback_sql == "''":
+					fallback_value = ""
+				elif fallback_sql.startswith("'") and fallback_sql.endswith("'"):
+					fallback_value = fallback_sql[1:-1]
+				else:
+					try:
+						fallback_value = int(fallback_sql)
+					except (ValueError, TypeError):
+						fallback_value = fallback_sql
+				_field = functions.IfNull(_field, ValueWrapper(fallback_value))
+
 			return operator_fn(_field, _value)
 
 	def _parse_nested_filters(self, nested_list: list | tuple) -> "Criterion | None":
@@ -1022,7 +1072,7 @@ class Engine:
 					if strict_user_permissions:
 						conditions.append(self.table[field_name].isin(docs))
 					else:
-						empty_value_condition = self.table[field_name].isnull()
+						empty_value_condition = functions.IfNull(self.table[field_name], "") == ""
 						value_condition = self.table[field_name].isin(docs)
 						conditions.append(empty_value_condition | value_condition)
 
@@ -1111,6 +1161,123 @@ class Engine:
 
 		# not checking if either select or read if present in if_owner_perms
 		# because either of those is required to perform a query
+		return True
+
+	def _is_field_nullable(self, doctype: str, fieldname: str) -> bool:
+		"""Check if a field can contain NULL values."""
+		# primary key is never nullable, modified is usually indexed by default and always present
+		if fieldname in ("name", "modified", "creation"):
+			return False
+
+		try:
+			# Use cached meta to avoid recursion when loading meta
+			if (meta := frappe.client_cache.get_value(f"doctype_meta::{doctype}")) is None:
+				return True
+
+			if (df := meta.get_field(fieldname)) is None:
+				return True
+
+		except Exception:
+			return True
+
+		if df.fieldtype in ("Check", "Float", "Int", "Currency", "Percent"):
+			return False
+
+		if getattr(df, "not_nullable", False):
+			return False
+
+		return True
+
+	def _get_ifnull_fallback(self, doctype: str, fieldname: str) -> str:
+		"""Get type-appropriate fallback value for NULL comparisons."""
+		try:
+			meta = frappe.get_meta(doctype)
+			df = meta.get_field(fieldname)
+		except Exception:
+			return "''"
+
+		if df is None:
+			return "''"
+
+		fieldtype = df.fieldtype
+
+		if fieldtype in ("Link", "Data", "Dynamic Link"):
+			return "''"
+
+		if fieldtype in ("Date", "Datetime"):
+			return "'0001-01-01'"
+
+		if fieldtype == "Time":
+			return "'00:00:00'"
+
+		if fieldtype in ("Float", "Int", "Currency", "Percent"):
+			return "0"
+
+		try:
+			db_type_info = frappe.db.type_map.get(fieldtype, ("varchar",))
+			if db_type_info:
+				db_type = db_type_info[0] if isinstance(db_type_info, (tuple, list)) else db_type_info
+				if db_type in ("varchar", "text", "longtext", "smalltext", "json"):
+					return "''"
+		except Exception:
+			pass
+
+		return "''"
+
+	def _should_apply_ifnull(self, doctype: str, fieldname: str, operator: str, value: Any) -> bool:
+		"""Determine if IFNULL wrapping is needed for a filter condition."""
+		if not self._is_field_nullable(doctype, fieldname):
+			return False
+
+		if value is None:
+			return False
+
+		if operator.lower() in ("=", "like", "is"):
+			return False
+
+		try:
+			meta = frappe.get_meta(doctype)
+			df = meta.get_field(fieldname)
+		except Exception:
+			df = None
+
+		is_datetime_field = df and df.fieldtype in ("Date", "Datetime") if df else False
+		is_creation_or_modified = fieldname in ("creation", "modified")
+
+		if operator.lower() in (">", ">="):
+			# Null values can never be greater than any non-null value
+			if is_datetime_field or is_creation_or_modified:
+				return False
+
+		if operator.lower() == "between":
+			# Between operator never needs to check for null
+			# Explanation: Consider SQL -> `COLUMN between X and Y`
+			# Actual computation:
+			#     for row in rows:
+			#     if Y > row.COLUMN > X:
+			#         yield row
+
+			# Since Y and X can't be null, null value in column will never match filter, so
+			# coalesce is extra cost that prevents index usage
+			if is_datetime_field or is_creation_or_modified:
+				return False
+
+		if operator.lower() == "in":
+			if isinstance(value, (list, tuple)):
+				# if values contain '' or falsy values then only coalesce column
+				# for `in` query this is only required if values contain '' or values are empty.
+				has_null_or_empty = any(v is None or v == "" for v in value)
+				return has_null_or_empty
+			return False
+
+		# for `not in` queries we can't be sure as column values might contain null.
+		if operator.lower() == "not in":
+			return True
+
+		if operator.lower() == "<":
+			if is_datetime_field or is_creation_or_modified:
+				return True
+
 		return True
 
 
