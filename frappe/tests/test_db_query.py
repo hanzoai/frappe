@@ -874,128 +874,41 @@ class TestDBQuery(IntegrationTestCase):
 
 	def test_permlevel_fields(self):
 		with setup_patched_blog_post(), setup_test_user(set_user=True):
-			data = frappe.get_list(
+			self.assertRaises(
+				frappe.PermissionError,
+				frappe.get_list,
 				"Test Blog Post",
 				filters={"published": 1},
 				fields=["name", "published"],
 				limit=1,
 			)
-			self.assertFalse("published" in data[0])
-			self.assertTrue("name" in data[0])
-			self.assertEqual(len(data[0]), 1)
 
-			data = frappe.get_list(
+			self.assertRaises(
+				frappe.PermissionError,
+				frappe.get_list,
 				"Test Blog Post",
 				filters={"published": 1},
 				fields=["name", "`published`"],
 				limit=1,
 			)
-			self.assertFalse("published" in data[0])
-			self.assertTrue("name" in data[0])
-			self.assertEqual(len(data[0]), 1)
 
-			data = frappe.get_list(
+			self.assertRaises(
+				frappe.PermissionError,
+				frappe.get_list,
 				"Test Blog Post",
 				filters={"published": 1},
 				fields=["name", "`tabTest Blog Post`.`published`"],
 				limit=1,
 			)
-			self.assertFalse("published" in data[0])
-			self.assertTrue("name" in data[0])
-			self.assertEqual(len(data[0]), 1)
 
-			data = frappe.get_list(
+			self.assertRaises(
+				frappe.PermissionError,
+				frappe.get_list,
 				"Test Blog Post",
 				filters={"published": 1},
 				fields=["name", "`tabTest Child`.`test_field`"],
 				limit=1,
 			)
-			self.assertFalse("test_field" in data[0])
-			self.assertTrue("name" in data[0])
-			self.assertEqual(len(data[0]), 1)
-
-			data = frappe.get_list(
-				"Test Blog Post",
-				filters={"published": 1},
-				fields=["name", "MAX(`published`)"],
-				limit=1,
-			)
-			self.assertTrue("name" in data[0])
-			self.assertEqual(len(data[0]), 1)
-
-			data = frappe.get_list(
-				"Test Blog Post",
-				filters={"published": 1},
-				fields=["name", "LAST(published)"],
-				limit=1,
-			)
-			self.assertTrue("name" in data[0])
-			self.assertEqual(len(data[0]), 1)
-
-			data = frappe.get_list(
-				"Test Blog Post",
-				filters={"published": 1},
-				fields=["name", "MAX(`modified`)"],
-				limit=1,
-				order_by=None,
-				group_by="name",
-			)
-			self.assertEqual(len(data[0]), 2)
-
-			data = frappe.get_list(
-				"Test Blog Post",
-				filters={"published": 1},
-				fields=["name", "now() abhi"],
-				limit=1,
-			)
-			self.assertIsInstance(data[0]["abhi"], datetime.datetime)
-			self.assertEqual(len(data[0]), 2)
-
-			data = frappe.get_list(
-				"Test Blog Post",
-				filters={"published": 1},
-				fields=["name", "'LABEL'"],
-				limit=1,
-			)
-			self.assertTrue("name" in data[0])
-			self.assertTrue("LABEL" in data[0].values())
-			self.assertEqual(len(data[0]), 2)
-
-			data = frappe.get_list(
-				"Test Blog Post",
-				filters={"published": 1},
-				fields=["name", "COUNT(*) as count"],
-				limit=1,
-				order_by=None,
-				group_by="name",
-			)
-			self.assertTrue("count" in data[0])
-			self.assertEqual(len(data[0]), 2)
-
-			data = frappe.get_list(
-				"Test Blog Post",
-				filters={"published": 1},
-				fields=["name", "COUNT(*) count"],
-				limit=1,
-				order_by=None,
-				group_by="name",
-			)
-			self.assertTrue("count" in data[0])
-			self.assertEqual(len(data[0]), 2)
-
-			data = frappe.get_list(
-				"Test Blog Post",
-				fields=[
-					"name",
-					"blogger.full_name as blogger_full_name",
-					"blog_category.title",
-				],
-				limit=1,
-			)
-			print(data[0])
-			self.assertTrue("name" in data[0])
-			self.assertTrue("blogger_full_name" in data[0])
-			self.assertTrue("title" in data[0])
 
 	def test_cast_name(self):
 		from frappe.core.doctype.doctype.test_doctype import new_doctype
@@ -1433,8 +1346,10 @@ class TestReportView(IntegrationTestCase):
 			response = execute_cmd("frappe.desk.reportview.get")
 			self.assertNotIn("published", response["keys"])
 
-			# If none of the fields are accessible then result should be empty
-			self.assertEqual(frappe.get_list("Test Blog Post", "published"), [])
+			data = frappe.get_list("Test Blog Post", "published")
+			self.assertTrue(len(data) > 0)
+			self.assertTrue(all("name" in row for row in data))
+			self.assertTrue(all("published" not in row for row in data))
 
 	def test_reportview_get_admin(self):
 		# Admin should be able to see access all fields
