@@ -179,16 +179,15 @@ def get_desktop_icons(user=None):
 		user_icons.sort(key=lambda a: a.idx)
 
 		# translate
-		for d in user_icons:
-			if d.label:
-				d.label = _(d.label, context=d.parent)
+		# for d in user_icons:
+		# 	if d.label:
+		# 		d.label = _(d.label, context=d.parent)
 		# includes
 		permitted_icons = []
 		permitted_parent_labels = set()
 
 		for s in user_icons:
-			icon = frappe.get_lazy_doc("Desktop Icon", s)
-
+			icon = frappe.get_doc("Desktop Icon", s)
 			if icon.is_permitted():
 				permitted_icons.append(s)
 
