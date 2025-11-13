@@ -18,6 +18,12 @@ frappe.ui.Sidebar = class Sidebar {
 		this.$sidebar = this.wrapper.find(".body-sidebar");
 		this.items = [];
 		this.setup_events();
+		this.sidebar_module_map = {
+			Core: "System",
+			Desk: "Build",
+			Custom: "Build",
+			Accounts: "Accounting",
+		};
 	}
 
 	prepare() {
@@ -83,7 +89,7 @@ frappe.ui.Sidebar = class Sidebar {
 	setup_events() {
 		const me = this;
 		frappe.router.on("change", function (router) {
-			frappe.app.sidebar.set_workspace_sidebar();
+			frappe.app.sidebar.set_workspace_sidebar(router);
 		});
 		$(document).on("page-change", function () {
 			frappe.app.sidebar.toggle();
@@ -131,7 +137,11 @@ frappe.ui.Sidebar = class Sidebar {
 		const that = this;
 		$(".item-anchor").each(function () {
 			let href = $(this).attr("href")?.split("?")[0];
-			if (href == decodeURIComponent(window.location.pathname)) {
+			const path = decodeURIComponent(window.location.pathname);
+
+			// Match only if path equals href or starts with it followed by "/" or end of string
+			const isActive = new RegExp(`^${href}(?:/|$)`).test(path);
+			if (href && isActive) {
 				match = true;
 				if (that.active_item) that.active_item.removeClass("active-sidebar");
 				that.active_item = $(this).parent();
@@ -285,7 +295,7 @@ frappe.ui.Sidebar = class Sidebar {
 		}
 	}
 
-	set_workspace_sidebar() {
+	set_workspace_sidebar(router) {
 		let route = frappe.get_route();
 		if (frappe.get_route()[0] == "setup-wizard") return;
 		if (route[0] == "Workspaces") {
@@ -300,19 +310,28 @@ frappe.ui.Sidebar = class Sidebar {
 		} else if (route[0] == "List" || route[0] == "Form") {
 			let doctype = route[1];
 			let sidebars = this.get_correct_workspace_sidebars(doctype);
-			if (this.workspace_title && sidebars.includes(this.workspace_title.toLowerCase())) {
-				frappe.app.sidebar.setup(this.workspace_title.toLowerCase());
+			if (sidebars.length == 0) {
+				let module_name = router.meta?.module;
+				if (module_name) {
+					frappe.app.sidebar.setup(this.sidebar_module_map[module_name] || module_name);
+				}
 			} else {
-				frappe.app.sidebar.setup(sidebars[0]);
+				if (
+					this.workspace_title &&
+					sidebars.includes(this.workspace_title.toLowerCase())
+				) {
+					frappe.app.sidebar.setup(this.workspace_title.toLowerCase());
+				} else {
+					frappe.app.sidebar.setup(sidebars[0]);
+				}
 			}
-			this.sidebar_shown;
 		} else if (route[0] == "query-report") {
 			let doctype = route[1];
 			let sidebars = this.get_correct_workspace_sidebars(doctype);
 			if (this.workspace_title && sidebars.includes(this.workspace_title.toLowerCase())) {
 				frappe.app.sidebar.setup(this.workspace_title.toLowerCase());
 			} else {
-				frappe.app.sidebar.setup(sidebars[0] || "Build");
+				frappe.app.sidebar.setup(sidebars[0]);
 			}
 		}
 
@@ -330,8 +349,8 @@ frappe.ui.Sidebar = class Sidebar {
 		} else {
 			workspace_title = this.get_correct_workspace_sidebars(route);
 		}
-		let module_name = workspace_title ? workspace_title[0] : "Build";
-		frappe.app.sidebar.setup(module_name || this.workspace_title || "Build");
+		let module_name = workspace_title[0];
+		frappe.app.sidebar.setup(module_name || this.workspace_title);
 	}
 
 	get_correct_workspace_sidebars(link_to) {
@@ -475,7 +494,7 @@ frappe.ui.Sidebar = class Sidebar {
 				fieldtype: "Select",
 				in_list_view: 1,
 				label: "Type",
-				options: "Link\nSection Break\nSpace\nSidebar Item Group",
+				options: "Link\nSection Break\nSpacer\nSidebar Item Group",
 				onchange: function () {
 					let type = this.get_value();
 					if (type == "Section Break") {
@@ -703,7 +722,8 @@ frappe.ui.Sidebar = class Sidebar {
 				type: "POST",
 				method: "frappe.desk.doctype.workspace_sidebar.workspace_sidebar.add_sidebar_items",
 				args: {
-					sidebar_title: me.workspace_title,
+					sidebar_title:
+						me.workspace_title || frappe.app.sidebar.sidebar_header.workspace_title,
 					sidebar_items: me.new_sidebar_items,
 				},
 				callback: function (r) {

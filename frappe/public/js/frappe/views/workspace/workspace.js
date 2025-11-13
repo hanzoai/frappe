@@ -49,7 +49,7 @@ frappe.views.Workspace = class Workspace {
 
 		this.prepare_container();
 		this.sidebar = frappe.app.sidebar;
-		this.cached_pages = $.extend(true, {}, frappe.boot.sidebar_pages);
+		this.cached_pages = $.extend(true, {}, frappe.boot.workspaces);
 		this.has_access = frappe.boot.workspaces.has_access;
 		this.has_create_access = frappe.boot.workspaces.has_create_access;
 		this.setup();
@@ -376,7 +376,7 @@ frappe.views.Workspace = class Workspace {
 			this.clear_page_actions();
 			await this.editor.readOnly.toggle();
 			this.is_read_only = true;
-			frappe.boot.sidebar_pages = this.cached_pages;
+			frappe.boot.workspaces = this.cached_pages;
 			this.reload();
 			frappe.show_alert({ message: __("Customizations Discarded"), indicator: "info" });
 		});
@@ -567,10 +567,9 @@ frappe.views.Workspace = class Workspace {
 							});
 						}
 						if (r.message) {
-							frappe.boot.sidebar_pages = r.message.workspace_pages;
 							frappe.boot.workspaces = r.message.workspace_pages;
 							me.workspaces = frappe.boot.workspaces.pages;
-							me.setup_pages(frappe.boot.sidebar_pages.pages);
+							me.setup_pages(frappe.boot.workspaces.pages);
 							frappe.boot.workspace_sidebar_item = r.message.sidebar_items;
 						}
 
@@ -754,7 +753,7 @@ frappe.views.Workspace = class Workspace {
 		delete this.pages[this._page.name];
 		this._page = null;
 		return this.get_pages().then((r) => {
-			frappe.boot.sidebar_pages = r;
+			frappe.boot.workspaces = r;
 			this.setup_pages(frappe.boot.workspaces.pages);
 			this.show();
 			if (this.undo) this.undo.readOnly = true;
