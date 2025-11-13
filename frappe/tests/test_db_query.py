@@ -1126,6 +1126,17 @@ class TestDBQuery(IntegrationTestCase):
 		):
 			frappe.get_all("Virtual DocType", filters={"name": "test"}, fields=["name"], limit=1)
 
+	def test_function_alias_in_clauses(self):
+		result = frappe.get_list(
+			"ToDo",
+			fields=["status", {"COUNT": "1", "as": "count"}],
+			group_by="status",
+			order_by="count desc",
+			limit=1,
+		)
+		self.assertTrue(result)
+		self.assertIn("count", result[0])
+
 	def test_coalesce_with_in_ops(self):
 		self.assertNotIn("ifnull", frappe.get_all("User", {"first_name": ("in", ["a", "b"])}, run=0))
 		self.assertIn("ifnull", frappe.get_all("User", {"first_name": ("in", ["a", None])}, run=0))

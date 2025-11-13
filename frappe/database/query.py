@@ -109,6 +109,7 @@ class Engine:
 		self.parent_doctype = parent_doctype
 		self.reference_doctype = reference_doctype
 		self.apply_permissions = not ignore_permissions
+		self.function_aliases = set()
 
 		if isinstance(table, Table):
 			self.table = table
@@ -840,6 +841,10 @@ class Engine:
 		if field_name.isdigit():
 			# For numeric field references, return as-is (will be handled by caller)
 			return field_name
+
+		# Allow function aliases - return as Field (no table prefix)
+		if field_name in self.function_aliases:
+			return Field(field_name)
 
 		# Reject backticks
 		if "`" in field_name:
@@ -1690,6 +1695,7 @@ class SQLFunctionParser:
 			)
 
 		if alias:
+			self.engine.function_aliases.add(alias)
 			return function_call.as_(alias)
 		else:
 			return function_call
