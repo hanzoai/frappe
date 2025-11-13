@@ -1150,7 +1150,7 @@ class TestDBQuery(IntegrationTestCase):
 
 	def test_ifnull_none(self):
 		query = frappe.get_all("DocField", {"fieldname": None}, run=0)
-		self.assertIn("''", query)
+		self.assertIn("IS NULL", query)
 		self.assertNotIn("\\'", query)
 		self.assertNotIn("ifnull", query)
 		self.assertFalse(frappe.get_all("DocField", {"name": None}))
