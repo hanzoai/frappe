@@ -22,7 +22,7 @@
    "fieldname": "links",
    "fieldtype": "Table",
    "label": "Links",
-   "options": "Report Center Link"
+   "options": "Sidebar Item Group Link"
   },
   {
    "fieldname": "app",
@@ -34,10 +34,10 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-11 20:47:20.792274",
+ "modified": "2025-11-13 10:03:42.852599",
  "modified_by": "Administrator",
  "module": "Desk",
- "name": "Report Center",
+ "name": "Sidebar Item Group",
  "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [

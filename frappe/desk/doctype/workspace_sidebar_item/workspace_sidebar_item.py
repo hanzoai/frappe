@@ -28,7 +28,7 @@ class WorkspaceSidebarItem(Document):
 		parenttype: DF.Data
 		route_options: DF.Code | None
 		show_arrow: DF.Check
-		type: DF.Literal["Link", "Section Break", "Spacer"]
+		type: DF.Literal["Link", "Section Break", "Spacer", "Sidebar Item Group"]
 		url: DF.Data | None
 	# end: auto-generated types
 

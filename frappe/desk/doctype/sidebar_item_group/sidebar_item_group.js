@@ -1,7 +1,7 @@
 // Copyright (c) 2025, Frappe Technologies and contributors
 // For license information, please see license.txt
 
-// frappe.ui.form.on("Report Center", {
+// frappe.ui.form.on("Sidebar Item Group", {
 // 	refresh(frm) {
 
 // 	},

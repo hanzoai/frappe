@@ -281,3 +281,54 @@ frappe.ui.sidebar_item.TypeSpacer = class SpacerItem extends frappe.ui.sidebar_i
 		super(item);
 	}
 };
+
+frappe.ui.sidebar_item.TypeSidebarItemGroup = class SpacerItem extends (
+	frappe.ui.sidebar_item.TypeLink
+) {
+	constructor(item, items) {
+		super(item);
+		this.title = frappe.app.sidebar.workspace_title;
+		this.setup_click();
+	}
+
+	setup_click() {
+		const me = this;
+		this.wrapper.on("click", function () {
+			frappe.call({
+				method: "frappe.desk.doctype.sidebar_item_group.sidebar_item_group.get_reports",
+				args: { module_name: frappe.app.sidebar.workspace_title },
+				callback: function (r) {
+					if (r.message) {
+						let links_html = "";
+
+						r.message.forEach((report) => {
+							let args = {
+								type: "Report",
+								name: report.title,
+								is_query_report:
+									report.report_type === "Query Report" ||
+									report.report_type === "Script Report",
+								report_ref_doctype: report.ref_doctype,
+							};
+
+							links_html += `<a href="${encodeURI(
+								frappe.utils.generate_route(args)
+							)}">${report.title}</a><br>`;
+						});
+
+						var d = new frappe.ui.Dialog({
+							title: __(me.item.label),
+							fields: [
+								{
+									fieldtype: "HTML",
+									options: links_html,
+								},
+							],
+						});
+						d.show();
+					}
+				},
+			});
+		});
+	}
+};

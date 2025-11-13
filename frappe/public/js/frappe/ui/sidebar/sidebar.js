@@ -475,7 +475,7 @@ frappe.ui.Sidebar = class Sidebar {
 				fieldtype: "Select",
 				in_list_view: 1,
 				label: "Type",
-				options: "Link\nSection Break\nSpacer",
+				options: "Link\nSection Break\nSpace\nSidebar Item Group",
 				onchange: function () {
 					let type = this.get_value();
 					if (type == "Section Break") {
