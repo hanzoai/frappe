@@ -109,7 +109,7 @@ frappe.ui.TagEditor = class TagEditor {
 				},
 				callback: function (r) {
 					// Updates input to suggestion value (if any) on <enter>
-					if (r.message.length) $input.val(r.message[0])
+					if (r.message.length) $input.val(r.message[0]);
 					$input.trigger("input-selected");
 				},
 			});
