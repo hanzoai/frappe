@@ -126,6 +126,10 @@ def validate_fields(data):
 	wildcard = update_wildcard_field_param(data)
 
 	for field in list(data.fields or []):
+		# TODO: extract_fieldnames needs to handle dict fields for qb_query aggregations
+		if isinstance(field, dict):
+			continue
+
 		fieldname = extract_fieldnames(field)[0]
 		if not fieldname:
 			raise_invalid_field(fieldname)
