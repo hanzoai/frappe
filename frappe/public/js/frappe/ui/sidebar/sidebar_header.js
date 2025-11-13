@@ -79,11 +79,16 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 
 	populate_dropdown_menu() {
 		const me = this;
+		this.check_editing_access();
 		this.dropdown_items.forEach((d) => {
 			me.add_app_item(d);
 		});
 	}
-
+	check_editing_access() {
+		if (!frappe.boot.workspaces.has_access) {
+			this.dropdown_items.splice(1, 1);
+		}
+	}
 	add_app_item(item) {
 		$(`<div class="dropdown-menu-item" data-name="${item.name}"
 			data-app-route="${item.route}">
