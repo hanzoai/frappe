@@ -203,7 +203,7 @@ def load_desktop_data(bootinfo):
 					frappe.get_hooks("app_home", app_name=app_name)
 					and frappe.get_hooks("app_home", app_name=app_name)[0]
 				)
-				or (workspaces and "/app/" + frappe.utils.slug(workspaces[0]))
+				or (workspaces and "/desk/" + frappe.utils.slug(workspaces[0]))
 				or "",
 				app_logo_url=app_info.get("logo")
 				or frappe.get_hooks("app_logo_url", app_name=app_name)

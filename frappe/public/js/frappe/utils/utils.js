@@ -907,7 +907,9 @@ Object.assign(frappe.utils, {
 	) {
 		display_text = display_text || name;
 		name = encodeURIComponent(name);
-		let route = `/app/${encodeURIComponent(doctype.toLowerCase().replace(/ /g, "-"))}/${name}`;
+		let route = `/desk/${encodeURIComponent(
+			doctype.toLowerCase().replace(/ /g, "-")
+		)}/${name}`;
 		if (query_params_obj) {
 			route += frappe.utils.make_query_string(query_params_obj);
 		}
