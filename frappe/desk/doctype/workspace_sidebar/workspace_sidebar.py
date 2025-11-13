@@ -55,7 +55,7 @@ class WorkspaceSidebar(Document):
 	def delete_file(self):
 		folder_path = create_directory_on_app_path("workspace_sidebar", self.app)
 		file_path = os.path.join(folder_path, f"{frappe.scrub(self.title)}.json")
-		if not os.path.exists(file_path):
+		if os.path.exists(file_path):
 			os.remove(file_path)
 
 	def on_trash(self):
@@ -114,9 +114,30 @@ def create_workspace_sidebar_for_workspaces():
 	existing_sidebars = frappe.get_all("Workspace Sidebar", pluck="title")
 	for workspace in all_workspaces:
 		if workspace not in existing_sidebars:
+			workspace_doc = frappe.get_doc("Workspace", workspace)
 			sidebar = frappe.new_doc("Workspace Sidebar")
 			sidebar.title = workspace
 			sidebar.header_icon = frappe.db.get_value("Workspace", workspace, "icon")
+			print("Creating Sidebar Items for", workspace)
+			shortcuts = workspace_doc.shortcuts
+
+			items = []
+			idx = 1
+			# Adding the workspace itself as home
+			workspace_sidebar_item = frappe.new_doc("Workspace Sidebar Item")
+			workspace_sidebar_item.update(
+				{"label": "Home", "link_to": workspace, "link_type": "Workspace", "type": "Link", "idx": 0}
+			)
+			items.append(workspace_sidebar_item)
+			# Process Shortcuts
+			for s in shortcuts:
+				workspace_sidebar_item = frappe.new_doc("Workspace Sidebar Item")
+				workspace_sidebar_item.update(
+					{"label": s.label, "link_to": s.link_to, "link_type": s.type, "type": "Link", "idx": idx}
+				)
+				items.append(workspace_sidebar_item)
+				idx += 1
+			sidebar.items = items
 			sidebar.save()
 
 
