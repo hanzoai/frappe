@@ -101,6 +101,8 @@ def is_workspace_manager():
 
 
 def create_workspace_sidebar_for_workspaces():
+	import click
+
 	from frappe.query_builder import DocType
 
 	workspace = DocType("Workspace")
@@ -118,7 +120,7 @@ def create_workspace_sidebar_for_workspaces():
 			sidebar = frappe.new_doc("Workspace Sidebar")
 			sidebar.title = workspace
 			sidebar.header_icon = frappe.db.get_value("Workspace", workspace, "icon")
-			print("Creating Sidebar Items for", workspace)
+			click.echo("Creating Sidebar Items for", workspace)
 			shortcuts = workspace_doc.shortcuts
 
 			items = []
