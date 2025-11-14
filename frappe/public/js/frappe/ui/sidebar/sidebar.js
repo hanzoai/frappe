@@ -27,13 +27,18 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	prepare() {
-		this.sidebar_data = frappe.boot.workspace_sidebar_item[this.workspace_title.toLowerCase()];
-		this.workspace_sidebar_items = this.sidebar_data.items;
-		if (this.edit_mode) {
-			this.workspace_sidebar_items = this.new_sidebar_items;
+		try {
+			this.sidebar_data =
+				frappe.boot.workspace_sidebar_item[this.workspace_title.toLowerCase()];
+			this.workspace_sidebar_items = this.sidebar_data.items;
+			if (this.edit_mode) {
+				this.workspace_sidebar_items = this.new_sidebar_items;
+			}
+			this.choose_app_name();
+			this.find_nested_items();
+		} catch (e) {
+			console.log(e);
 		}
-		this.choose_app_name();
-		this.find_nested_items();
 	}
 
 	choose_app_name() {
@@ -350,7 +355,9 @@ frappe.ui.Sidebar = class Sidebar {
 			workspace_title = this.get_correct_workspace_sidebars(route);
 		}
 		let module_name = workspace_title[0];
-		frappe.app.sidebar.setup(module_name || this.workspace_title);
+		if (module_name) {
+			frappe.app.sidebar.setup(module_name || this.workspace_title);
+		}
 	}
 
 	get_correct_workspace_sidebars(link_to) {
@@ -718,6 +725,7 @@ frappe.ui.Sidebar = class Sidebar {
 				message: __("Saving Sidebar"),
 				indicator: "success",
 			});
+
 			await frappe.call({
 				type: "POST",
 				method: "frappe.desk.doctype.workspace_sidebar.workspace_sidebar.add_sidebar_items",

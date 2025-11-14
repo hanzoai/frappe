@@ -62,7 +62,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.$drop_icon = this.wrapper.find(".drop-icon");
 	}
 	set_header_icon() {
-		this.header_icon = this.sidebar.sidebar_data.header_icon;
+		if (this.sidebar.sidebar_data) this.header_icon = this.sidebar.sidebar_data.header_icon;
 	}
 	setup_app_switcher() {
 		this.dropdown_menu = $(".sidebar-header-menu");
