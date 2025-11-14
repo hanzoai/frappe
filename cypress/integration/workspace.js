@@ -12,7 +12,7 @@ context("Workspace 2.0", () => {
 	});
 
 	it("Create Private Page", () => {
-		cy.visit("/desk/build");
+		cy.visit("/desk/website");
 		cy.intercept({
 			method: "POST",
 			url: "api/method/frappe.desk.doctype.workspace.workspace.new_page",

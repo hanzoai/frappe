@@ -127,6 +127,14 @@ class Workspace(Document):
 	def on_trash(self):
 		if self.public and not is_workspace_manager():
 			frappe.throw(_("You need to be Workspace Manager to delete a public workspace."))
+		self.delete_from_my_workspaces()
+
+	def delete_from_my_workspaces(self):
+		if not self.public:
+			my_workspaces = frappe.get_doc("Workspace Sidebar", "My Workspaces")
+			for w in my_workspaces.items:
+				if self.name == w.link_to:
+					frappe.delete_doc("Workspace Sidebar Item", w.name)
 
 	def after_delete(self):
 		if disable_saving_as_public():
