@@ -55,7 +55,6 @@ frappe.search.AwesomeBar = class AwesomeBar {
 			"input",
 			frappe.utils.debounce(function (e) {
 				var value = e.target.value;
-				value = frappe.utils.xss_sanitise(value);
 				var txt = value.trim().replace(/\s\s+/g, " ");
 				var last_space = txt.lastIndexOf(" ");
 				me.global_results = [];
@@ -288,7 +287,7 @@ frappe.search.AwesomeBar = class AwesomeBar {
 					<kbd>↵</kbd>
 				</span>
 			`,
-			value: __("Search for {0}", [txt]),
+			value: __("Search for {0}", [frappe.utils.xss_sanitise(txt)]),
 			match: txt,
 			index: 100,
 			default: "Search",
@@ -313,7 +312,7 @@ frappe.search.AwesomeBar = class AwesomeBar {
 					frappe.utils.xss_sanitise(txt).bold(),
 					__(route[1]).bold(),
 				]),
-				value: __("Find {0} in {1}", [txt, __(route[1])]),
+				value: __("Find {0} in {1}", [frappe.utils.xss_sanitise(txt), __(route[1])]),
 				route_options: options,
 				onclick: function () {
 					cur_list.show();
@@ -333,11 +332,40 @@ frappe.search.AwesomeBar = class AwesomeBar {
 			}
 			try {
 				var val = eval(txt);
+<<<<<<< HEAD
 				var formatted_value = __("{0} = {1}", [txt, (val + "").bold()]);
 				this.options.push({
 					label: formatted_value,
 					value: __("{0} = {1}", [txt, val]),
 					match: val,
+=======
+
+				// Split the input to find the numbers and their decimal places
+				var numbers = txt.match(/[+-]?([0-9]*[.])?[0-9]+/g);
+				var maxDecimalPlaces = 0;
+				if (numbers) {
+					maxDecimalPlaces = Math.max(
+						...numbers.map((num) => getDecimalPlaces(parseFloat(num)))
+					);
+				}
+
+				// Use a default precision of 2 decimal places if no decimal places are found
+				if (maxDecimalPlaces === 0) {
+					maxDecimalPlaces = 2;
+				}
+
+				// Adjust the result to the maximum number of decimal places found or default precision
+				var rounded_val = parseFloat(val.toFixed(maxDecimalPlaces));
+
+				var formatted_value = __("{0} = {1}", [
+					frappe.utils.xss_sanitise(txt),
+					(rounded_val + "").bold(),
+				]);
+				this.options.push({
+					label: formatted_value,
+					value: __("{0} = {1}", [frappe.utils.xss_sanitise(txt), rounded_val]),
+					match: rounded_val,
+>>>>>>> d1f136b715 (fix: allow division in awesome bar)
 					index: 80,
 					default: "Calculator",
 					onclick: function () {
