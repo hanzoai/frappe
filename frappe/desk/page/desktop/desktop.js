@@ -223,7 +223,8 @@ class DesktopPage {
 	handke_route_change() {
 		const me = this;
 		frappe.router.on("change", function () {
-			if (frappe.get_route()[0] == "desktop") me.setup_navbar();
+			if (frappe.get_route()[0] == "desktop" || frappe.get_route()[0] == "")
+				me.setup_navbar();
 			else {
 				$(".navbar").show();
 				frappe.desktop_utils.close_desktop_modal();
@@ -462,7 +463,7 @@ class DesktopIconGrid {
 						let to = $(evt.to.parentElement);
 						let title = $(evt.item).find(".icon-title").text();
 						let selected_icon = get_desktop_icon_by_label(title);
-						if (to.hasClass("desktop-container")) {
+						if ($(to.get(0).parentElement)) {
 							me.reorder_icons(me.sortable.toArray());
 							me.reorder_icons(
 								frappe.pages["desktop"].desktop_page.icon_grid.sortable.toArray()
