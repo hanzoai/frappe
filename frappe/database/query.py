@@ -83,6 +83,43 @@ OPERATOR_MAPPING = {
 }
 
 
+def _get_table_fields(doctype: str) -> list[dict]:
+	"""Try to get table fields from cached meta, queries DB if not cached."""
+
+	# Don't use cache during install/migrate/tests
+	if not (frappe.flags.in_install or frappe.flags.in_migrate or frappe.flags.in_test):
+		if meta := frappe.client_cache.get_value(f"doctype_meta::{doctype}"):
+			return [
+				{"fieldname": df.fieldname, "options": df.options}
+				for df in meta.get_table_fields(include_computed=True)
+			]
+
+	return frappe.db.sql(
+		"""
+		SELECT fieldname, options
+		FROM tabDocField
+		WHERE parent = %s AND fieldtype = 'Table'
+		""",
+		doctype,
+		as_dict=True,
+	)
+
+
+def _field_exists_in_doctype(doctype: str, fieldname: str) -> bool:
+	"""Check if field exists in doctype, using cache if available."""
+	# Don't query client cache during install/migrate/tests
+	if not (frappe.flags.in_install or frappe.flags.in_migrate or frappe.flags.in_test):
+		if meta := frappe.client_cache.get_value(f"doctype_meta::{doctype}"):
+			return meta.has_field(fieldname)
+
+	from frappe.model.meta import get_table_columns
+
+	try:
+		return fieldname in get_table_columns(doctype)
+	except frappe.db.TableMissingError:
+		return False
+
+
 class Engine:
 	def get_query(
 		self,
@@ -633,6 +670,30 @@ class Engine:
 				return child_field_handler.field
 			else:
 				# Field belongs to the main doctype or doctype wasn't specified differently
+				# If doctype wasn't specified, and the field isn't a standard field and doesn't exist in main doctype, check child tables
+				from frappe.model import child_table_fields, default_fields, optional_fields
+
+				if (
+					not doctype
+					and target_fieldname not in default_fields + optional_fields + child_table_fields
+					and not _field_exists_in_doctype(self.doctype, target_fieldname)
+				):
+					for df in _get_table_fields(self.doctype):
+						if _field_exists_in_doctype(df["options"], target_fieldname):
+							# Found in child table, create handler for it
+							child_field_handler = ChildTableField(
+								doctype=df["options"],
+								fieldname=target_fieldname,
+								parent_doctype=self.doctype,
+								parent_fieldname=df["fieldname"],
+							)
+							parent_doctype_for_perm = self.doctype
+							self._check_field_permission(
+								df["options"], target_fieldname, parent_doctype_for_perm
+							)
+							self.query = child_field_handler.apply_join(self.query)
+							return child_field_handler.field
+
 				self._check_field_permission(target_doctype, target_fieldname, parent_doctype_for_perm)
 				# Convert string field name to pypika Field object for the specified/current doctype
 				return frappe.qb.DocType(target_doctype)[target_fieldname]
