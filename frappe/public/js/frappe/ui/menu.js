@@ -127,7 +127,10 @@ frappe.ui.create_menu = function attachContextMenuToElement(
 		$(element).on("contextmenu", function (event) {
 			event.preventDefault();
 			event.stopPropagation();
-			if (frappe.menu_map[$(element).data("menu")].visible) {
+			if (
+				frappe.menu_map[$(element).data("menu")] &&
+				frappe.menu_map[$(element).data("menu")].visible
+			) {
 				frappe.menu_map[$(element).data("menu")].hide();
 			} else {
 				frappe.menu_map[$(element).data("menu")].show(this);

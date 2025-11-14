@@ -177,8 +177,11 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 		let sidebar_control = this.$item_control;
 		let drop_icon = "chevron-down";
 		if (item.collapsible) {
+			let stroke_color = window
+				.getComputedStyle(document.body)
+				.getPropertyValue("--ink-gray-5");
 			this.$drop_icon = $(`<button class="btn-reset drop-icon hidden">`)
-				.html(frappe.utils.icon(drop_icon, "sm"))
+				.html(frappe.utils.icon(drop_icon, "sm", "", "", "", "", stroke_color))
 				.appendTo(sidebar_control);
 
 			this.$drop_icon.removeClass("hidden");
