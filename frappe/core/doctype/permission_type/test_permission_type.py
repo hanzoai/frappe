@@ -52,9 +52,9 @@ class IntegrationTestPermissionType(IntegrationTestCase):
 		doc = frappe.get_doc(
 			{
 				"doctype": "Permission Type",
-				"name": "read",
+				"perm_type": "read",
+				"doc_type": "ToDo",
 				"module": "Core",
-				"doc_types": [{"doc_type": "ToDo"}],
 			}
 		)
 
@@ -76,9 +76,9 @@ class IntegrationTestPermissionType(IntegrationTestCase):
 		ptype_doc = frappe.get_doc(
 			{
 				"doctype": "Permission Type",
-				"name": name,
+				"perm_type": name,
+				"doc_type": doc_type,
 				"module": "Core",
-				"doc_types": [{"doc_type": doc_type}],
 			}
 		)
 		ptype_doc.insert(ignore_if_duplicate=True)
@@ -88,9 +88,9 @@ class IntegrationTestPermissionType(IntegrationTestCase):
 	def _verify_custom_fields_created(self, ptype_doc, doc_type):
 		"""Verify that custom fields are created for the permission type."""
 		for target in ["Custom DocPerm", "DocPerm", "DocShare"]:
-			custom_field = frappe.get_doc("Custom Field", {"dt": target, "fieldname": ptype_doc.name})
+			custom_field = frappe.get_doc("Custom Field", {"dt": target, "fieldname": ptype_doc.perm_type})
 			self.assertEqual(custom_field.dt, target)
-			self.assertEqual(custom_field.fieldname, ptype_doc.name)
+			self.assertEqual(custom_field.fieldname, ptype_doc.perm_type)
 			self.assertEqual(custom_field.fieldtype, "Check")
 			self.assertIn(doc_type, custom_field.depends_on)
 

@@ -66,7 +66,6 @@ def sync_for(app_name, force=0, reset_permissions=False):
 			"role",
 			"has_role",
 			"doctype",
-			"permission_type_doctype",
 			"permission_type",
 		]:
 			files.append(os.path.join(FRAPPE_PATH, "core", "doctype", core_module, f"{core_module}.json"))

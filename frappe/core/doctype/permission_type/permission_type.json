@@ -1,27 +1,26 @@
 {
  "actions": [],
- "autoname": "prompt",
  "creation": "2025-07-28 13:12:03.573433",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "module",
-  "doc_types"
+  "perm_type",
+  "doc_type"
  ],
  "fields": [
   {
-   "fieldname": "doc_types",
-   "fieldtype": "Table MultiSelect",
-   "label": "Applies To",
-   "options": "Permission Type DocType",
+   "fieldname": "perm_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Permission Type",
    "reqd": 1
   },
   {
-   "fieldname": "module",
+   "fieldname": "doc_type",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "Module",
-   "options": "Module Def",
+   "label": "Applies To (DocType)",
+   "options": "DocType",
    "reqd": 1
   }
  ],
@@ -29,11 +28,10 @@
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-10 12:48:16.863229",
+ "modified": "2025-11-13 16:17:58.536849",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Permission Type",
- "naming_rule": "Set by user",
  "owner": "Administrator",
  "permissions": [
   {

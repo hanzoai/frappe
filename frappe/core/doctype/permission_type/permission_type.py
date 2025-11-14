@@ -20,33 +20,25 @@ class PermissionType(Document):
 	from typing import TYPE_CHECKING
 
 	if TYPE_CHECKING:
-		from frappe.core.doctype.permission_type_doctype.permission_type_doctype import PermissionTypeDocType
 		from frappe.types import DF
 
-		doc_types: DF.TableMultiSelect[PermissionTypeDocType]
-		module: DF.Link
+		doc_type: DF.Link
+		perm_type: DF.Data
 	# end: auto-generated types
 
+	def autoname(self):
+		self.name = f"{frappe.scrub(self.doc_type)}_{frappe.scrub(self.perm_type)}"
+
 	def before_insert(self):
-		self.name = frappe.scrub(self.name)
+		self.perm_type = frappe.scrub(self.perm_type)
 
 	def validate(self):
 		from frappe.permissions import std_rights
 
-		if self.name in std_rights:
+		if self.perm_type in std_rights:
 			frappe.throw(
-				_("Permission Type '{0}' is reserved. Please choose another name.").format(self.name)
+				_("Permission Type '{0}' is reserved. Please choose another name.").format(self.perm_type)
 			)
-
-		# remove duplicate doc types
-		seen = set()
-		unique_doc_types = []
-		for dt in self.doc_types:
-			if dt.doc_type not in seen:
-				seen.add(dt.doc_type)
-				unique_doc_types.append(dt)
-
-		self.doc_types = unique_doc_types
 
 	def can_write(self):
 		return (
@@ -56,30 +48,51 @@ class PermissionType(Document):
 			or frappe.flags.in_test
 		)
 
+	def should_export(self):
+		return (
+			frappe.conf.developer_mode
+			and not frappe.flags.in_migrate
+			and not frappe.flags.in_install
+			and not frappe.flags.in_test
+		)
+
+	def get_folder_path(self):
+		app = frappe.get_doctype_app(self.doc_type)
+		folder = frappe.get_app_source_path(app, app, "permission_types")
+		return folder
+
 	def on_update(self):
 		if not self.can_write():
 			frappe.throw(_("Creation of this document is only permitted in developer mode."))
 
-		from frappe.modules.export_file import export_to_files
-
-		export_to_files(record_list=[["Permission Type", self.name]], record_module=self.module)
-
 		for target in CUSTOM_FIELD_TARGET:
 			self.create_custom_field(target)
+
+		if self.should_export():
+			from frappe.modules.export_file import export_to_files
+
+			module = frappe.db.get_value("DocType", self.doc_type, "module")
+			export_to_files(record_list=[["Permission Type", self.name]], record_module=module)
+
+	def before_export(self, export_doc):
+		del export_doc["idx"]
+		del export_doc["docstatus"]
+		for key in list(export_doc.keys()):
+			if key.startswith("_"):
+				del export_doc[key]
 
 	def create_custom_field(self, target):
 		from frappe.custom.doctype.custom_field.custom_field import create_custom_field
 
 		if not self.custom_field_exists(target):
 			field = "share_doctype" if target == "DocShare" else "parent"
-			doc_types = [dt.doc_type for dt in self.doc_types if dt.doc_type]
-			depends_on = f"eval:{frappe.as_json(doc_types)}.includes(doc.{field})"
+			depends_on = f"eval:doc.{field} == '{self.doc_type}'"
 
 			create_custom_field(
 				target,
 				{
-					"fieldname": self.name,
-					"label": self.name.replace("_", " ").title(),
+					"fieldname": self.perm_type,
+					"label": frappe.unscrub(self.perm_type),
 					"fieldtype": "Check",
 					"insert_after": "append",
 					"depends_on": depends_on,
@@ -93,7 +106,9 @@ class PermissionType(Document):
 		for target in CUSTOM_FIELD_TARGET:
 			self.delete_custom_field(target)
 
-		delete_folder(self.module, "Permission Type", self.name)
+		if self.should_export():
+			module = frappe.db.get_value("DocType", self.doc_type, "module")
+			delete_folder(module, "Permission Type", self.name)
 
 	def delete_custom_field(self, target):
 		if name := self.custom_field_exists(target):
@@ -103,7 +118,7 @@ class PermissionType(Document):
 		return frappe.db.exists(
 			"Custom Field",
 			{
-				"fieldname": self.name,
+				"fieldname": self.perm_type,
 				"dt": target,
 			},
 		)
@@ -111,19 +126,10 @@ class PermissionType(Document):
 
 @site_cache
 def get_doctype_ptype_map():
-	ptypes = frappe.qb.get_query(
-		"Permission Type",
-		fields=[
-			"name",
-			{"doc_types": ["doc_type"]},
-		],
-		order_by="name",
-	)
-	ptypes = ptypes.run(as_dict=True)
+	ptypes = frappe.get_all("Permission Type", fields=["perm_type", "doc_type"], order_by="perm_type")
 
 	doctype_ptype_map = defaultdict(list)
 	for pt in ptypes:
-		for dt in pt.doc_types:
-			if pt.name not in doctype_ptype_map[dt.doc_type]:
-				doctype_ptype_map[dt.doc_type].append(pt.name)
+		if pt.perm_type not in doctype_ptype_map[pt.doc_type]:
+			doctype_ptype_map[pt.doc_type].append(pt.perm_type)
 	return dict(doctype_ptype_map)
