@@ -422,6 +422,7 @@ def sync_value_in_queue(value):
 		frappe.cache.lpush("global_search_queue", json.dumps(value))
 	except redis.exceptions.ConnectionError:
 		# not connected, sync directly
+		assert not frappe.flags.in_test, "Should not fail silently in tests"
 		sync_value(value)
 
 
