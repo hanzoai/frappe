@@ -332,40 +332,15 @@ frappe.search.AwesomeBar = class AwesomeBar {
 			}
 			try {
 				var val = eval(txt);
-<<<<<<< HEAD
-				var formatted_value = __("{0} = {1}", [txt, (val + "").bold()]);
-				this.options.push({
-					label: formatted_value,
-					value: __("{0} = {1}", [txt, val]),
-					match: val,
-=======
-
-				// Split the input to find the numbers and their decimal places
-				var numbers = txt.match(/[+-]?([0-9]*[.])?[0-9]+/g);
-				var maxDecimalPlaces = 0;
-				if (numbers) {
-					maxDecimalPlaces = Math.max(
-						...numbers.map((num) => getDecimalPlaces(parseFloat(num)))
-					);
-				}
-
-				// Use a default precision of 2 decimal places if no decimal places are found
-				if (maxDecimalPlaces === 0) {
-					maxDecimalPlaces = 2;
-				}
-
-				// Adjust the result to the maximum number of decimal places found or default precision
-				var rounded_val = parseFloat(val.toFixed(maxDecimalPlaces));
-
 				var formatted_value = __("{0} = {1}", [
 					frappe.utils.xss_sanitise(txt),
 					(rounded_val + "").bold(),
 				]);
 				this.options.push({
 					label: formatted_value,
-					value: __("{0} = {1}", [frappe.utils.xss_sanitise(txt), rounded_val]),
-					match: rounded_val,
->>>>>>> d1f136b715 (fix: allow division in awesome bar)
+					value: __("{0} = {1}", [txt, val]),
+					value: __("{0} = {1}", [frappe.utils.xss_sanitise(txt), val]),
+					match: val,
 					index: 80,
 					default: "Calculator",
 					onclick: function () {
