@@ -85,7 +85,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		});
 	}
 	check_editing_access() {
-		if (!frappe.boot.workspaces.has_access) {
+		if (!frappe.boot.developer_mode) {
 			this.dropdown_items.splice(1, 1);
 		}
 	}
