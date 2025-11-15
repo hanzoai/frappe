@@ -4,6 +4,8 @@
 import os
 from json import JSONDecodeError, dumps, loads
 
+import click
+
 import frappe
 from frappe import _
 from frappe.boot import get_allowed_pages, get_allowed_reports
@@ -101,8 +103,6 @@ def is_workspace_manager():
 
 
 def create_workspace_sidebar_for_workspaces():
-	import click
-
 	from frappe.query_builder import DocType
 
 	workspace = DocType("Workspace")
@@ -120,7 +120,7 @@ def create_workspace_sidebar_for_workspaces():
 			sidebar = frappe.new_doc("Workspace Sidebar")
 			sidebar.title = workspace
 			sidebar.header_icon = frappe.db.get_value("Workspace", workspace, "icon")
-			click.echo("Creating Sidebar Items for", workspace)
+			click.echo(f"Creating Sidebar Items for {workspace}")
 			shortcuts = workspace_doc.shortcuts
 
 			items = []
@@ -139,8 +139,11 @@ def create_workspace_sidebar_for_workspaces():
 				)
 				items.append(workspace_sidebar_item)
 				idx += 1
-			sidebar.items = items
-			sidebar.save()
+			try:
+				sidebar.items = items
+				sidebar.save()
+			except Exception as e:
+				frappe.log_error(title="Failed To Create Sidebar", message=e)
 
 
 @frappe.whitelist()

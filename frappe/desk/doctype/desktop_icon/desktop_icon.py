@@ -654,30 +654,34 @@ def create_desktop_icons_from_workspace():
 		icon.icon = w.icon
 		if w.module:
 			app_name = frappe.db.get_value("Module Def", w.module, "app_name")
-			app_title = frappe.get_hooks("app_title", app_name=app_name)[0]
-			app_icon = frappe.db.exists("Desktop Icon", {"label": app_title, "icon_type": "App"})
-			if app_icon:
-				icon.parent_icon = app_icon
+			if app_name in frappe.get_installed_apps():
+				app_title = frappe.get_hooks("app_title", app_name=app_name)[0]
+				app_icon = frappe.db.exists("Desktop Icon", {"label": app_title, "icon_type": "App"})
+				if app_icon:
+					icon.parent_icon = app_icon
 
-			# Portal App With Desk Workspace
-			if frappe.db.get_value("Desktop Icon", app_icon, "link") and not frappe.db.get_value(
-				"Desktop Icon", app_icon, "link"
-			).startswith("/app"):
-				icon.hidden = 1
-				icon.parent_icon = None
+				# Portal App With Desk Workspace
+				if frappe.db.get_value("Desktop Icon", app_icon, "link") and not frappe.db.get_value(
+					"Desktop Icon", app_icon, "link"
+				).startswith("/app"):
+					icon.hidden = 1
+					icon.parent_icon = None
 
-			# If Desk App has one workspace with the same name
-			if icon.label == app_title and frappe.db.get_value("Desktop Icon", app_icon, "link").startswith(
-				"/app"
-			):
-				icon.hidden = 1
-				icon.parent_icon = None
+				# If Desk App has one workspace with the same name
+				print(app_icon)
+				if icon.label == app_title and (
+					app_icon and frappe.db.get_value("Desktop Icon", app_icon, "link").startswith("/app")
+				):
+					icon.hidden = 1
+					icon.parent_icon = None
 
-			try:
-				if not frappe.db.exists("Desktop Icon", [{"label": icon.label, "icon_type": icon.icon_type}]):
-					icon.insert(ignore_if_duplicate=True)
-			except Exception as e:
-				raise e
+				try:
+					if not frappe.db.exists(
+						"Desktop Icon", [{"label": icon.label, "icon_type": icon.icon_type}]
+					):
+						icon.insert(ignore_if_duplicate=True)
+				except Exception as e:
+					print(e)
 
 
 def generate_color():

@@ -20,11 +20,6 @@
 	text-decoration: none;
 }
 
-@mixin truncate {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
 .body-sidebar-container {
 	display: flex;
 	flex-direction: column;
