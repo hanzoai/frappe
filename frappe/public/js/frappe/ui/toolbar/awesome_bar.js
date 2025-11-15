@@ -334,7 +334,7 @@ frappe.search.AwesomeBar = class AwesomeBar {
 				var val = eval(txt);
 				var formatted_value = __("{0} = {1}", [
 					frappe.utils.xss_sanitise(txt),
-					(rounded_val + "").bold(),
+					(val + "").bold(),
 				]);
 				this.options.push({
 					label: formatted_value,
