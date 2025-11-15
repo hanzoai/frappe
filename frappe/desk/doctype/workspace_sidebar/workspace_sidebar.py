@@ -37,6 +37,7 @@ class WorkspaceSidebar(Document):
 		self.allowed_pages = get_allowed_pages(cache=True)
 		self.allowed_reports = get_allowed_reports(cache=True)
 		self.restricted_doctypes = frappe.cache.get_value("domain_restricted_doctypes")
+		self.restricted_pages = frappe.cache.get_value("domain_restricted_pages")
 
 	def get_can_read_items(self):
 		if not self.user.can_read:
@@ -74,7 +75,11 @@ class WorkspaceSidebar(Document):
 		item_type = item_type.lower()
 
 		if item_type == "doctype":
-			return name in (self.can_read or []) and name in (self.restricted_doctypes or [])
+			return (
+				name in (self.can_read or [])
+				and name in (self.restricted_doctypes or [])
+				and frappe.has_permission(name)
+			)
 		if item_type == "page":
 			return name in self.allowed_pages and name in self.restricted_pages
 		if item_type == "report":

@@ -558,7 +558,7 @@ def get_sidebar_items():
 					"report_type": report_type,
 					"ref_doctype": ref_doctype,
 				}
-			if si.type == "Section Break" or w.is_item_allowed(si.label, si.link_type):
+			if si.type == "Section Break" or w.is_item_allowed(si.link_to, si.link_type):
 				sidebar_items[s["name"].lower()]["items"].append(workspace_sidebar)
 
 	return sidebar_items

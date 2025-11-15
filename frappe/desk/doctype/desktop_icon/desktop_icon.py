@@ -668,7 +668,6 @@ def create_desktop_icons_from_workspace():
 					icon.parent_icon = None
 
 				# If Desk App has one workspace with the same name
-				print(app_icon)
 				if icon.label == app_title and (
 					app_icon and frappe.db.get_value("Desktop Icon", app_icon, "link").startswith("/app")
 				):
