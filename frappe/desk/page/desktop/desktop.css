@@ -92,7 +92,6 @@
 .icon-container .icon{
     width: 27px;
     height: 27px;
-    stroke: var(--gray-900);
 }
 .icon-container:hover{
 	transform: scale(1.05);

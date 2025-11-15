@@ -3,7 +3,6 @@
 	--sidebar-hover-color: #f3f3f3;
 	--sidebar-active-color: rgba(255, 255, 255, 1);
 	--sidebar-border-color: #ededed;
-	--surface-modal: rgba(255, 255, 255, 1);
 	--divider-color: rgba(237, 237, 237, 1);
 	--sidebar-width: 220px;
 }
@@ -11,7 +10,6 @@
 	--sidebar-hover-color: rgba(43, 43, 43, 1);
 	--sidebar-active-color: rgba(66, 66, 66, 1);
 	--sidebar-border-color: #232323;
-	--surface-modal: rgb(0, 0, 0);
 	--divider-color: rgba(52, 52, 52, 1);
 }
 
@@ -42,7 +40,7 @@
 
 .body-sidebar {
 	width: 50px;
-	background: var(--subtle-accent);
+	background: var(--surface-menu-bar);
 	border-right: 1px solid var(--sidebar-border-color);
 	transition-property: all;
 	transition-duration: 0.3s;
@@ -126,7 +124,7 @@
 			// padding: 3px 0px 3px 11px;
 			flex: 1;
 			height: 30px;
-			color: var(--ink-gray-7);
+			color: var(--ink-gray-8);
 			text-decoration: none;
 			@include transition(all, 0.3s, cubic-bezier(0.4, 0, 0.2, 1));
 			.sidebar-item-icon {
