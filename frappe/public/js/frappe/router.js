@@ -465,6 +465,9 @@ frappe.router = {
 			return "/desk/" + path_string;
 		}
 
+		if (params.length == 0) {
+			return "/desk";
+		}
 		// Resolution order
 		// 1. User's default workspace in user doctype
 		// 2. Private home

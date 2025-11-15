@@ -11,7 +11,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 				label: __("Desktop"),
 				icon: "layout-grid",
 				onClick: function (el) {
-					frappe.set_route("desktop");
+					frappe.set_route("/desk");
 				},
 			},
 			{
@@ -26,8 +26,10 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 			{
 				name: "website",
 				label: __("Website"),
-				route: "/",
-				icon_url: "/assets/frappe/images/web.svg",
+				icon: "web",
+				onClick: function () {
+					window.open(window.location.origin);
+				},
 			},
 		];
 		this.make();
@@ -55,7 +57,6 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 				header_bg_color: this.header_stroke_color,
 			})
 		).prependTo(this.sidebar_wrapper);
-
 		this.wrapper = $(".sidebar-header");
 		this.dropdown_menu = this.wrapper.find(".sidebar-header-menu");
 		this.$header_title = this.wrapper.find(".header-title");
@@ -92,7 +93,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 	add_app_item(item) {
 		$(`<div class="dropdown-menu-item" data-name="${item.name}"
 			data-app-route="${item.route}">
-			<a>
+			<a ${item.href ? `href="${item.href}"` : ""}>
 				<div class="sidebar-item-icon">
 					${
 						item.icon
@@ -115,7 +116,6 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 			let current_item = this.dropdown_items.find((f) => f.name == name);
 			this.dropdown_menu.toggleClass("hidden");
 			this.toggle_active();
-			if (current_item.route) [window.open(current_item.route)];
 			current_item.onClick(item);
 		});
 	}

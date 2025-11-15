@@ -250,15 +250,7 @@
 }
 .bottom-edit-controls {
 	display: flex;
-	gap: 4px;
-	& button {
-		flex: 1 1 50%;
-		background-color: #232323;
-	}
-	& .discard-button {
-		background-color: var(--navbar-bg);
-		border: 1px solid;
-	}
+	gap: 35%;
 }
 .body-sidebar-container[data-mode="edit"] {
 	.standard-sidebar-item:hover {

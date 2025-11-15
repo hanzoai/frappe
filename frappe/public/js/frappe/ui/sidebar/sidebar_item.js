@@ -162,13 +162,20 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 	}
 	toggle_on_collapse() {
 		const me = this;
+		this.old_state;
 		$(document).on("sidebar-expand", function (event, expand) {
 			if (expand.sidebar_expand) {
 				$(me.wrapper.find(".section-break")).removeClass("hidden");
 				$(me.wrapper.find(".divider")).addClass("hidden");
+				if (me.old_state) {
+					me.collapsed = me.old_state;
+					me.toggle();
+				}
 			} else {
 				$(me.wrapper.find(".section-break")).addClass("hidden");
 				$(me.wrapper.find(".divider")).removeClass("hidden");
+				me.old_state = me.collapsed;
+				me.open();
 			}
 		});
 	}
