@@ -24,7 +24,6 @@ class DesktopSettings(Document):
 			"Apps with Search",
 		]
 		show_app_icons_as_folder: DF.Check
-		show_app_name_in_header: DF.Literal["Default", "Title", "Subtitle"]
 	# end: auto-generated types
 
 	pass

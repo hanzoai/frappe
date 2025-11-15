@@ -151,7 +151,6 @@ def load_desktop_data(bootinfo):
 
 	bootinfo.desktop_icons = get_desktop_icons()
 	bootinfo.workspaces = get_workspace_sidebar_items()
-	bootinfo.app_name_style = frappe.db.get_single_value("Desktop Settings", "show_app_name_in_header")
 	bootinfo.show_app_icons_as_folder = frappe.db.get_single_value(
 		"Desktop Settings", "show_app_icons_as_folder"
 	)

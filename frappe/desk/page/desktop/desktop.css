@@ -3,6 +3,7 @@
     --desktop-modal-width: 508px;
     --desktop-modal-height: 448px;
     --folder-thumbnail-icon-height: 12px;
+    --desktop-icon-dimension: 54px;
 }
 .desktop-wrapper{
     max-width: 100%;
@@ -74,8 +75,8 @@
     background-color: unset;
 }
 .icon-container img{
-    width: 54px;
-    height: 54px;
+    width: var(--desktop-icon-dimension);
+    height: var(--desktop-icon-dimension);
 }
 .icon-container{
     padding: 10px;
@@ -83,8 +84,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 54px;
-    height: 54px;
+    width: var(--desktop-icon-dimension);
+    height: var(--desktop-icon-dimension);
 }
 .icon-container:has(.icon){
     background-color: var(--surface-gray-3);
@@ -145,10 +146,12 @@
 
 .desktop-modal-body {
     width: var(--desktop-modal-width);
-    height: var(--desktop-modal-height);
     padding: 23px 0px 23px 0px !important;
     & .icons{
         gap: 0px 0px;
+    }
+    .icon-container{
+        min-height: var(--desktop-icon-dimension);
     }
 }
 .modal-heading{
