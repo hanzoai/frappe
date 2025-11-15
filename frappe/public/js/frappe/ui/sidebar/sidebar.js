@@ -315,6 +315,11 @@ frappe.ui.Sidebar = class Sidebar {
 		} else if (route[0] == "List" || route[0] == "Form") {
 			let doctype = route[1];
 			let sidebars = this.get_correct_workspace_sidebars(doctype);
+			// prevents switching of the sidebar if one item is linked in two sidebars
+			if (sidebars.includes(this.workspace_title)) {
+				frappe.app.sidebar.setup(this.workspace_title);
+				return;
+			}
 			if (sidebars.length == 0) {
 				let module_name = router.meta?.module;
 				if (module_name) {
