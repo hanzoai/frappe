@@ -15,6 +15,10 @@ from frappe.modules.patch_handler import _patch_mode
 from frappe.utils import update_progress_bar
 
 IMPORTABLE_DOCTYPES = [
+	# for a permission type "impersonate"
+	# its custom field should exists in DocPerm
+	# to ensure permissions defined in doctype.json are synced correctly
+	("core", "permission_type"),
 	("core", "doctype"),
 	("core", "page"),
 	("core", "report"),
@@ -34,7 +38,6 @@ IMPORTABLE_DOCTYPES = [
 	("core", "server_script"),
 	("custom", "custom_field"),
 	("custom", "property_setter"),
-	("core", "permission_type"),
 ]
 
 
@@ -66,9 +69,12 @@ def sync_for(app_name, force=0, reset_permissions=False):
 			"role",
 			"has_role",
 			"doctype",
-			"permission_type",
 		]:
 			files.append(os.path.join(FRAPPE_PATH, "core", "doctype", core_module, f"{core_module}.json"))
+
+		# sync permission type and its dependencies
+		for dt in ["user", "docshare", "custom_docperm", "docperm", "permission_type"]:
+			files.append(os.path.join(FRAPPE_PATH, "core", "doctype", dt, f"{dt}.json"))
 
 		for custom_module in ["custom_field", "property_setter"]:
 			files.append(
