@@ -46,7 +46,7 @@ frappe.ui.Sidebar = class Sidebar {
 
 		for (const app of frappe.boot.app_data) {
 			if (app.workspaces.includes(this.workspace_title)) {
-				this.app_name = app.app_title;
+				this.header_subtitle = app.app_title;
 				this.app_logo_url = app.app_logo_url;
 				return;
 			}
@@ -54,7 +54,11 @@ frappe.ui.Sidebar = class Sidebar {
 
 		const icon = frappe.boot.desktop_icons.find((i) => i.label === this.workspace_title);
 		if (icon) {
-			this.app_name = icon.parent_icon;
+			this.header_subtitle = icon.parent_icon;
+		}
+
+		if (this.workspace_title == "My Workspaces") {
+			this.header_subtitle = frappe.session.user;
 		}
 	}
 
@@ -87,7 +91,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.setup_complete = true;
 	}
 	check_for_private_workspace(workspace_title) {
-		if (workspace_title == "private") {
+		if (workspace_title == "private" || workspace_title == "Personal") {
 			this.workspace_title = "My Workspaces";
 		}
 	}

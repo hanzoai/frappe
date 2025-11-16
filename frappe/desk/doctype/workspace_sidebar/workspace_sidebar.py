@@ -24,10 +24,11 @@ class WorkspaceSidebar(Document):
 		from frappe.types import DF
 
 		app: DF.Autocomplete | None
+		for_user: DF.Link | None
 		items: DF.Table[WorkspaceSidebarItem]
 		title: DF.Data | None
-
 	# end: auto-generated types
+
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		if not frappe.flags.in_migrate:
@@ -181,16 +182,38 @@ def add_sidebar_items(sidebar_title, sidebar_items):
 
 
 def add_to_my_workspace(workspace):
-	private_sidebar = frappe.get_doc("Workspace Sidebar", "My Workspaces")
+	try:
+		if not workspace.for_user:
+			return
 
-	workspace_sidebar = {
-		"label": workspace.title,
-		"type": "Link",
-		"link_to": f"{workspace.title}-{workspace.for_user}",
-		"link_type": "Workspace",
-		"icon": workspace.icon,
-	}
+		sidebar_name = f"My Workspaces-{workspace.for_user}"
+		existing_sidebar = frappe.db.exists("Workspace Sidebar", sidebar_name)
 
-	private_sidebar.append("items", workspace_sidebar)
+		if existing_sidebar:
+			private_sidebar = frappe.get_doc("Workspace Sidebar", existing_sidebar)
+		else:
+			# clone sidebar
+			base_sidebar = frappe.get_doc("Workspace Sidebar", "My Workspaces")
+			private_sidebar = frappe.copy_doc(base_sidebar)
+			private_sidebar.title = sidebar_name
+			private_sidebar.for_user = workspace.for_user
+			private_sidebar.owner = workspace.for_user
+			private_sidebar.items = []
 
-	private_sidebar.save()
+		sidebar_item = {
+			"label": workspace.title,
+			"type": "Link",
+			"link_to": f"{workspace.title}-{workspace.for_user}",
+			"link_type": "Workspace",
+			"icon": workspace.icon,
+		}
+
+		private_sidebar.append("items", sidebar_item)
+
+		if existing_sidebar:
+			private_sidebar.save()
+		else:
+			private_sidebar.insert()
+
+	except Exception as e:
+		frappe.log_error(title="Error in Adding Private Workspaces", message=e)

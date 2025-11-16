@@ -9,6 +9,7 @@
   "title",
   "header_icon",
   "app",
+  "for_user",
   "items"
  ],
  "fields": [
@@ -34,12 +35,18 @@
    "fieldtype": "Autocomplete",
    "label": "App",
    "options": "Installed Applications"
+  },
+  {
+   "fieldname": "for_user",
+   "fieldtype": "Link",
+   "label": "For User",
+   "options": "User"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-26 23:21:30.166695",
+ "modified": "2025-11-16 10:54:04.080590",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Workspace Sidebar",
