@@ -127,6 +127,15 @@ frappe.views.CommunicationComposer = class {
 				fieldtype: "Text Editor",
 				fieldname: "content",
 				onchange: frappe.utils.debounce(this.save_as_draft.bind(this), 300),
+				depends_on: "eval:!doc.use_html",
+			},
+			{
+				label: __("HTML Message"),
+				fieldtype: "Code",
+				fieldname: "html_content",
+				onchange: frappe.utils.debounce(this.save_as_draft.bind(this), 300),
+				depends_on: "eval:doc.use_html",
+				options: "HTML",
 			},
 			{
 				label: __("Message"),
@@ -180,6 +189,19 @@ frappe.views.CommunicationComposer = class {
 				depends_on: "attach_document_print",
 			},
 			{ fieldtype: "Column Break" },
+			{
+				label: __("Use HTML"),
+				fieldtype: "Check",
+				fieldname: "use_html",
+				default: 0,
+				onchange: function (e) {
+					if (e.target.checked) {
+						me.dialog.set_value("html_content", me.dialog.get_value("content"));
+					} else {
+						me.dialog.set_value("content", me.dialog.get_value("html_content"));
+					}
+				},
+			},
 			{
 				label: __("Select Attachments"),
 				fieldtype: "HTML",
@@ -520,7 +542,7 @@ frappe.views.CommunicationComposer = class {
 		if (this.message) return;
 
 		const last_edited = this.get_last_edited_communication();
-		if (!last_edited.content && !last_edited.content_html) return;
+		if (!last_edited.content && !last_edited.html_content) return;
 
 		// prevent re-triggering of email template
 		if (last_edited.email_template) {
