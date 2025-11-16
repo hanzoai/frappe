@@ -18,12 +18,8 @@ frappe.ui.Sidebar = class Sidebar {
 		this.$sidebar = this.wrapper.find(".body-sidebar");
 		this.items = [];
 		this.setup_events();
-		this.sidebar_module_map = {
-			Core: "System",
-			Desk: "Build",
-			Custom: "Build",
-			Accounts: "Accounting",
-		};
+		this.sidebar_module_map = {};
+		this.build_sidebar_module_map();
 	}
 
 	prepare() {
@@ -40,7 +36,16 @@ frappe.ui.Sidebar = class Sidebar {
 			console.log(e);
 		}
 	}
-
+	build_sidebar_module_map() {
+		for (const [key, value] of Object.entries(frappe.boot.workspace_sidebar_item)) {
+			if (value.module) {
+				if (!this.sidebar_module_map[value.module]) {
+					this.sidebar_module_map[value.module] = [];
+				}
+				this.sidebar_module_map[value.module].push(value.label);
+			}
+		}
+	}
 	choose_app_name() {
 		if (frappe.boot.app_name_style === "Default") return;
 
@@ -327,7 +332,9 @@ frappe.ui.Sidebar = class Sidebar {
 			if (sidebars.length == 0) {
 				let module_name = router.meta?.module;
 				if (module_name) {
-					frappe.app.sidebar.setup(this.sidebar_module_map[module_name] || module_name);
+					frappe.app.sidebar.setup(
+						this.sidebar_module_map[module_name][0] || module_name
+					);
 				}
 			} else {
 				if (

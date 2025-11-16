@@ -535,7 +535,12 @@ def get_sidebar_items():
 
 	for s in sidebars:
 		w = frappe.get_doc("Workspace Sidebar", s["name"])
-		sidebar_items[s["name"].lower()] = {"label": s["name"], "items": [], "header_icon": s["header_icon"]}
+		sidebar_items[s["name"].lower()] = {
+			"label": s["name"],
+			"items": [],
+			"header_icon": s["header_icon"],
+			"module": w.module,
+		}
 		for si in w.items:
 			workspace_sidebar = {
 				"label": si.label,

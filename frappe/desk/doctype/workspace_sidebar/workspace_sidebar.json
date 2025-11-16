@@ -10,7 +10,8 @@
   "header_icon",
   "app",
   "for_user",
-  "items"
+  "items",
+  "module"
  ],
  "fields": [
   {
@@ -41,12 +42,18 @@
    "fieldtype": "Link",
    "label": "For User",
    "options": "User"
+  },
+  {
+   "fieldname": "module",
+   "fieldtype": "Text",
+   "hidden": 1,
+   "label": "Module"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-16 10:54:04.080590",
+ "modified": "2025-11-17 01:17:20.583501",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Workspace Sidebar",

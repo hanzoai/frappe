@@ -26,6 +26,7 @@ class WorkspaceSidebar(Document):
 		app: DF.Autocomplete | None
 		for_user: DF.Link | None
 		items: DF.Table[WorkspaceSidebarItem]
+		module: DF.Text | None
 		title: DF.Data | None
 	# end: auto-generated types
 
@@ -48,6 +49,7 @@ class WorkspaceSidebar(Document):
 		if frappe.conf.developer_mode:
 			if self.app:
 				self.export_sidebar()
+		self.set_module()
 
 	def export_sidebar(self):
 		folder_path = create_directory_on_app_path("workspace_sidebar", self.app)
@@ -102,6 +104,25 @@ class WorkspaceSidebar(Document):
 		# Expire every six hour
 		frappe.cache.set_value(cache_key, value, frappe.session.user, 21600)
 		return value
+
+	def set_module(self):
+		if not self.module:
+			self.module = self.get_module_from_items()
+
+	def get_module_from_items(self):
+		all_modules_in_sidebars = []
+
+		for item in self.items:
+			if item.type != "Section Break" and item.type != "Sidebar Item Group" and item.link_type != "URL":
+				try:
+					all_modules_in_sidebars.append(frappe.get_doc(item.link_type, item.link_to).module)
+				except frappe.DoesNotExistError as e:
+					print(e)
+		from collections import Counter
+
+		counts = Counter(all_modules_in_sidebars)
+		if counts and counts.most_common(1)[0]:
+			return counts.most_common(1)[0][0]
 
 
 def is_workspace_manager():
