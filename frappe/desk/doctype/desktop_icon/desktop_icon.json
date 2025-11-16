@@ -12,6 +12,7 @@
   "link_type",
   "link_to",
   "parent_icon",
+  "sidebar",
   "column_break_3",
   "app",
   "icon",
@@ -109,10 +110,16 @@
    "fieldtype": "Table",
    "label": "Roles",
    "options": "Has Role"
+  },
+  {
+   "fieldname": "sidebar",
+   "fieldtype": "Link",
+   "label": "Sidebar",
+   "options": "Workspace Sidebar"
   }
  ],
  "links": [],
- "modified": "2025-11-12 23:33:08.338028",
+ "modified": "2025-11-15 22:10:10.463829",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Desktop Icon",

@@ -361,7 +361,7 @@ class DesktopIconGrid {
 		this.icons_container.after(this.right_arrow);
 
 		let wrapper_style = getComputedStyle(element.get(0));
-		let total_height = parseInt(wrapper_style.height);
+		let total_height = parseInt(wrapper_style.height) - 2 * parseInt(wrapper_style.paddingTop);
 
 		this.left_arrow.css("top", `${total_height / 2}px`);
 		this.right_arrow.css("top", `${total_height / 2}px`);
@@ -500,12 +500,13 @@ class DesktopIcon {
 		this.icon_type = this.icon_data.icon_type;
 		this.in_folder = in_folder;
 		this.link_type = this.icon_data.link_type;
-		if (this.icon_type != "Folder") {
+		if (this.icon_type != "Folder" && !this.icon_data.sidebar) {
 			this.icon_route = get_route(this.icon_data);
 		}
 		this.icon = $(
 			frappe.render_template("desktop_icon", { icon: this.icon_data, in_folder: in_folder })
 		);
+
 		this.icon_caption_area = $(this.icon.get(0).children[1]);
 		this.child_icons = this.get_child_icons_data();
 		// this.child_icons = this.get_desktop_icon(this.icon_title).child_icons;
@@ -538,6 +539,21 @@ class DesktopIcon {
 			}
 		} else {
 			this.icon.attr("href", this.icon_route);
+		}
+		if (this.icon_data.sidebar) {
+			const me = this;
+			this.icon.on("click", function () {
+				if (me.icon_data.sidebar == "My Workspaces") {
+					let sidebar_name = me.icon_data.sidebar.toLowerCase();
+					if (frappe.boot.workspace_sidebar_item[sidebar_name].items.length == 0) {
+						frappe.toast("No Private Workspaces for user");
+					} else {
+						let workspace_name =
+							frappe.boot.workspace_sidebar_item[sidebar_name].items[0]["link_to"];
+						frappe.set_route("Workspaces", "private", workspace_name);
+					}
+				}
+			});
 		}
 	}
 

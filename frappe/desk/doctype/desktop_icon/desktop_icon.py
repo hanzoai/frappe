@@ -34,6 +34,7 @@ class DesktopIcon(Document):
 		logo_url: DF.Data | None
 		parent_icon: DF.Link | None
 		roles: DF.Table[HasRole]
+		sidebar: DF.Link | None
 		standard: DF.Check
 	# end: auto-generated types
 
@@ -114,6 +115,7 @@ def get_desktop_icons(user=None):
 			"logo_url",
 			"hidden",
 			"name",
+			"sidebar",
 		]
 
 		active_domains = frappe.get_active_domains()
