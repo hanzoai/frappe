@@ -45,7 +45,7 @@ class WorkspaceSidebar(Document):
 		if not self.user.can_read:
 			self.user.build_permissions()
 
-	def on_update(self):
+	def before_save(self):
 		if frappe.conf.developer_mode:
 			if self.app:
 				self.export_sidebar()
