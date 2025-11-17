@@ -1095,9 +1095,12 @@ class Engine:
 			)
 
 		if not has_permission("select") and not has_permission("read"):
-			frappe.throw(
-				_("Insufficient Permission for {0}").format(frappe.bold(self.doctype)), frappe.PermissionError
-			)
+			# Check for shared documents
+			if not frappe.share.get_shared(self.doctype, self.user):
+				frappe.throw(
+					_("Insufficient Permission for {0}").format(frappe.bold(self.doctype)),
+					frappe.PermissionError,
+				)
 
 	def apply_field_permissions(self):
 		"""Filter the list of fields based on permlevel."""
@@ -1253,6 +1256,17 @@ class Engine:
 			user_perm_conditions, fetch_shared = self.get_user_permission_conditions(role_permissions)
 			conditions.extend(user_perm_conditions)
 			fetch_shared_docs = fetch_shared_docs or fetch_shared
+		else:
+			# No role permissions - check if user has any user permissions
+			# If not, must check for shared documents (like db_query does)
+			user_permissions = frappe.permissions.get_user_permissions(self.user)
+			doctype_user_permissions = user_permissions.get(self.doctype, [])
+			has_user_perm = any(
+				not perm.get("applicable_for") or perm.get("applicable_for") == self.reference_doctype
+				for perm in doctype_user_permissions
+			)
+			if not has_user_perm:
+				fetch_shared_docs = True
 
 		permission_query_conditions = self.get_permission_query_conditions()
 		if permission_query_conditions:
