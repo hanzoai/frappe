@@ -686,7 +686,7 @@
 		&:focus-visible {
 			@include grid-focus();
 		}
-		.grid-static-col {
+		.grid-static-col .grid-body {
 			height: 40px;
 		}
 		.grid-static-col.col-xs-1 {
