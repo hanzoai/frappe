@@ -117,7 +117,7 @@ class WorkspaceSidebar(Document):
 				try:
 					all_modules_in_sidebars.append(frappe.get_doc(item.link_type, item.link_to).module)
 				except frappe.DoesNotExistError as e:
-					print(e)
+					frappe.logger().error(e)
 		from collections import Counter
 
 		counts = Counter(all_modules_in_sidebars)
