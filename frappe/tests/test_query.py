@@ -197,11 +197,10 @@ class TestQuery(IntegrationTestCase):
 
 	def test_field_validation_filters(self):
 		"""Test validation for fields used in filters (WHERE clause)."""
-		valid_fields = ["name", "creation", "language.name"]
+		valid_fields = ["name", "creation", "language.name", "`tabUser`.`name`"]
 		# Filters should not allow aliases or functions directly as field names
 		invalid_fields = [
 			"tabUser.name",
-			"`tabUser`.`name`",
 			"name as alias",
 			"`name` as alias",
 			"tabUser.name as alias",
@@ -248,6 +247,7 @@ class TestQuery(IntegrationTestCase):
 			"1",  # Allow numeric indices
 			"name, email",
 			"1, 2",
+			"`tabUser`.`name`",
 		]
 		# GROUP BY should not allow aliases or functions
 		invalid_fields = [
@@ -262,7 +262,6 @@ class TestQuery(IntegrationTestCase):
 			"table.invalid-field",
 			"tabUser.name",
 			"`name`",
-			"`tabUser`.`name`",
 			"`name`, `tabUser`.`email`",
 			"`table`.`invalid-field`",
 			"field with space",
@@ -293,6 +292,8 @@ class TestQuery(IntegrationTestCase):
 			"2 DESC",
 			"name, email",
 			"1 asc, 2 desc",
+			"`tabUser`.`name`",
+			"`tabUser`.`name` desc",
 		]
 		# ORDER BY should not allow aliases or functions, or invalid directions
 		invalid_fields = [
@@ -305,10 +306,8 @@ class TestQuery(IntegrationTestCase):
 			"name /* comment */",
 			"`name`",
 			"tabUser.name",
-			"`tabUser`.`name`",
 			"`name` DESC",
 			"tabUser.name Asc",
-			"`tabUser`.`name` desc",
 			"`name` asc, `tabUser`.`email` DESC",
 			"invalid-field-name",
 			"table.invalid-field",
@@ -1629,18 +1628,25 @@ class TestQuery(IntegrationTestCase):
 				frappe.qb.get_query("User", order_by=field).get_sql()
 
 	def test_backtick_rejection_group_order(self):
-		"""Test that backticks are properly rejected in GROUP BY and ORDER BY."""
+		"""Test that malformed backticks are properly rejected in GROUP BY and ORDER BY."""
+		# Test single backtick (invalid notation - should be `tabTable`.`field`)
 		with self.assertRaises(frappe.ValidationError) as cm:
 			frappe.qb.get_query("User", group_by="`name`").get_sql()
-		self.assertIn("cannot contain backticks", str(cm.exception))
+		self.assertIn("invalid backtick notation", str(cm.exception))
 
+		# Test single backtick with direction (invalid notation)
 		with self.assertRaises(frappe.ValidationError) as cm:
 			frappe.qb.get_query("User", order_by="`name` ASC").get_sql()
-		self.assertIn("cannot contain backticks", str(cm.exception))
+		self.assertIn("invalid backtick notation", str(cm.exception))
 
+		# Test multiple single backticks (invalid notation)
 		with self.assertRaises(frappe.ValidationError) as cm:
 			frappe.qb.get_query("User", group_by="`name`, `email`").get_sql()
-		self.assertIn("cannot contain backticks", str(cm.exception))
+		self.assertIn("invalid backtick notation", str(cm.exception))
+
+		# Valid backtick notation should work
+		frappe.qb.get_query("User", group_by="`tabUser`.`name`").get_sql()
+		frappe.qb.get_query("User", order_by="`tabUser`.`name` ASC").get_sql()
 
 	def test_sql_functions_in_fields(self):
 		"""Test SQL function support in fields with various syntaxes."""
