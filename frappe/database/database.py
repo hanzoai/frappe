@@ -11,9 +11,9 @@ import warnings
 from collections.abc import Iterable, Sequence
 from contextlib import contextmanager, suppress
 from time import time
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal
 
-from pypika.queries import QueryBuilder
+from pypika.queries import QueryBuilder, Table
 
 import frappe
 import frappe.defaults
@@ -583,10 +583,15 @@ class Database:
 		# single field is requested, send it without wrapping in containers
 		return row[0]
 
-	def _convert_default_order_by(self, doctype: str, order_by: str) -> str:
+	def _convert_default_order_by(
+		self, doctype: str | Table, order_by: str | Literal["KEEP_DEFAULT_ORDERING"]
+	) -> str:
 		"""Convert DefaultOrderBy sentinel to explicit order string to avoid meta loading."""
 		if order_by != DefaultOrderBy:
 			return order_by
+
+		if isinstance(doctype, Table):
+			doctype = doctype.get_table_name()[3:]
 
 		sort_field, sort_order = get_doctype_sort_info(doctype)
 		return f"{sort_field} {sort_order.lower()}"
@@ -1333,12 +1338,12 @@ class Database:
 
 		from frappe.utils import now_datetime
 
-		Table = frappe.qb.DocType(doctype)
+		dt = frappe.qb.DocType(doctype)
 
 		return (
-			frappe.qb.from_(Table)
-			.select(Count(Table.name))
-			.where(Table.creation >= now_datetime() - relativedelta(minutes=minutes))
+			frappe.qb.from_(dt)
+			.select(Count(dt.name))
+			.where(dt.creation >= now_datetime() - relativedelta(minutes=minutes))
 			.run()[0][0]
 		)
 

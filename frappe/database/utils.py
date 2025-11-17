@@ -60,10 +60,7 @@ def get_doctype_name(table_name: str) -> str:
 
 def get_doctype_sort_info(doctype: str) -> tuple[str, str]:
 	"""
-	Get sort_field and sort_order for a DocType from cache or database.
-
-	This is separate from regular meta to avoid recursive calls.
-	Caches for a day since sort order won't change often (invalidated on doctype update).
+	Get sort_field and sort_order for a DocType from meta.
 
 	Args:
 		doctype: The DocType name
@@ -71,26 +68,16 @@ def get_doctype_sort_info(doctype: str) -> tuple[str, str]:
 	Returns:
 		Tuple of (sort_field, sort_order) with defaults ("creation", "DESC") if not found
 	"""
+	from frappe.database.query import CORE_DOCTYPES
 
-	cache_key = f"doctype_sort_info::{doctype}"
+	if doctype in CORE_DOCTYPES:
+		return "creation", "DESC"
 
-	if cached := frappe.cache.get_value(cache_key):
-		sort_field, sort_order = cached
-	else:
-		sort_field, sort_order = None, None
-		if result := frappe.db.sql(
-			"SELECT sort_field, sort_order FROM tabDocType WHERE name = %s",
-			(doctype,),
-		):
-			sort_field, sort_order = result[0]
-
-	if not sort_field:
-		sort_field = "creation"
-	if not sort_order:
-		sort_order = "DESC"
-	frappe.cache.set_value(cache_key, (sort_field, sort_order), expires_in_sec=86400)
-
-	return sort_field, sort_order
+	try:
+		meta = frappe.get_meta(doctype)
+		return meta.sort_field or "creation", meta.sort_order or "DESC"
+	except frappe.DoesNotExistError:
+		return "creation", "DESC"
 
 
 class LazyString:

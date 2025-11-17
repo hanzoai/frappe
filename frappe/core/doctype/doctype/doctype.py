@@ -550,8 +550,6 @@ class DocType(Document):
 		self.sync_doctype_layouts()
 		delete_notification_count_for(doctype=self.name)
 
-		self._clear_sort_cache_if_needed()
-
 		frappe.clear_cache(doctype=self.name)
 
 		# clear user cache so that on the next reload this doctype is included in boot
@@ -561,13 +559,6 @@ class DocType(Document):
 			self.sync_global_search()
 
 		clear_linked_doctype_cache()
-
-	def _clear_sort_cache_if_needed(self):
-		"""Clear sort cache only if sort_field or sort_order changed."""
-		if self.has_value_changed("sort_field") or self.has_value_changed("sort_order"):
-			from frappe.model.meta import clear_doctype_sort_cache
-
-			clear_doctype_sort_cache(self.name)
 
 	@savepoint(catch=Exception)
 	def sync_doctype_layouts(self):

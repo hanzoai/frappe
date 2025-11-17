@@ -42,11 +42,9 @@ class PropertySetter(Document):
 		if self.is_new():
 			delete_property_setter(self.doc_type, self.property, self.field_name, self.row_name)
 
-		self._clear_sort_cache_if_needed()
 		frappe.clear_cache(doctype=self.doc_type)
 
 	def on_trash(self):
-		self._clear_sort_cache_if_needed()
 		frappe.clear_cache(doctype=self.doc_type)
 
 	def validate_fieldtype_change(self):
@@ -61,13 +59,6 @@ class PropertySetter(Document):
 			from frappe.core.doctype.doctype.doctype import validate_fields_for_doctype
 
 			validate_fields_for_doctype(self.doc_type)
-
-	def _clear_sort_cache_if_needed(self):
-		"""Clear sort cache if this property setter modifies sort_field or sort_order."""
-		if self.property in ("sort_field", "sort_order") and self.doctype_or_field == "DocType":
-			from frappe.model.meta import clear_doctype_sort_cache
-
-			clear_doctype_sort_cache(self.doc_type)
 
 	def get_permission_log_options(self, event=None):
 		if self.property in ("ignore_user_permissions", "permlevel"):
