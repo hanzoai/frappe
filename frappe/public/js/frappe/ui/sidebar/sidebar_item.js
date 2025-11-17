@@ -56,6 +56,9 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 	prepare() {}
 	make() {
 		this.path = this.get_path();
+		if (!(this.item.child && this.item.parent.indent)) {
+			this.item.icon = "list-alt";
+		}
 		this.wrapper = $(
 			frappe.render_template("sidebar_item", {
 				item: this.item,

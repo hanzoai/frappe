@@ -79,6 +79,7 @@ frappe.ui.Sidebar = class Sidebar {
 				currentSection = item;
 				updated_items.push(item);
 			} else if (currentSection && item.child) {
+				item.parent = currentSection;
 				currentSection.nested_items.push(item);
 			} else {
 				updated_items.push(item);

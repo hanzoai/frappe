@@ -26,8 +26,9 @@
                     {% icon = "chevron-right" %}
                 {% } %}
 				<span class="sidebar-item-icon text-ink-gray-7" item-icon="{{ icon }}">
-
-                    {%= frappe.utils.icon(icon || "list-alt", "sm", "", "", "text-ink-gray-7 current-color", true) %}
+                    {% if (icon) { %}
+                        {%= frappe.utils.icon(icon, "sm", "", "", "text-ink-gray-7 current-color", true) %}
+                    {% } %}
                 </span>
                 <span class="sidebar-item-label">{{ item.label }}</span>
                 {% if (!item.show_arrow) { %}
