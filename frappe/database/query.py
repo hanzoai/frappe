@@ -21,12 +21,14 @@ from frappe.model import get_permitted_fields
 from frappe.model.base_document import DOCTYPES_FOR_DOCTYPE
 from frappe.query_builder import Criterion, Field, Order, functions
 from frappe.query_builder.custom import Month, MonthName, Quarter
+from frappe.query_builder.utils import PseudoColumnMapper
+from frappe.utils.data import MARIADB_SPECIFIC_COMMENT
 
 CORE_DOCTYPES = DOCTYPES_FOR_DOCTYPE | frozenset(
 	("Custom Field", "Property Setter", "Module Def", "__Auth", "__global_search", "Singles")
 )
-from frappe.query_builder.utils import PseudoColumnMapper
-from frappe.utils.data import MARIADB_SPECIFIC_COMMENT
+
+OPTIONAL_COLUMNS = frozenset(["_user_tags", "_comments", "_assign", "_liked_by", "_seen"])
 
 if TYPE_CHECKING:
 	from frappe.query_builder import DocType
@@ -719,6 +721,9 @@ class Engine:
 			user=self.user,
 		)
 
+		if fieldname in OPTIONAL_COLUMNS:
+			return
+
 		if fieldname not in permitted_fields:
 			frappe.throw(
 				_("You do not have permission to access field: {0}").format(
@@ -1055,8 +1060,12 @@ class Engine:
 			if not field_name:
 				continue
 
-			parsed_field = self._validate_and_parse_field_for_clause(field_name, "Group By")
-			parsed_fields.append(parsed_field)
+			# Skip permission check for optional system columns in group_by
+			if field_name in OPTIONAL_COLUMNS:
+				parsed_fields.append(self.table[field_name])
+			else:
+				parsed_field = self._validate_and_parse_field_for_clause(field_name, "Group By")
+				parsed_fields.append(parsed_field)
 
 		return parsed_fields
 
