@@ -59,7 +59,8 @@ def _is_function_call(field_str: str) -> bool:
 #   - `tabTable-Field`.`field` (hyphens in table name)
 #   - Any of above with aliases: ... as alias
 ALLOWED_FIELD_PATTERN = re.compile(
-	r"^(?:(`[\w\s-]+`|\w+)\.)?(`[\w\s-]+`|\w+)(?:\s+as\s+\w+)?$", flags=re.ASCII | re.IGNORECASE
+	r"^(?:(`[\w\s-]+`|\w+)\.)?(`[\w\s-]+`|\w+)(?:\s+as\s+(?:`[\w\s-]+`|\w+))?$",
+	flags=re.ASCII | re.IGNORECASE,
 )
 
 # Regex to parse field names:
