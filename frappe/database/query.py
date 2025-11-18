@@ -1,3 +1,4 @@
+import datetime
 import re
 from functools import lru_cache
 from typing import TYPE_CHECKING, Any
@@ -27,6 +28,57 @@ from frappe.utils.data import MARIADB_SPECIFIC_COMMENT
 CORE_DOCTYPES = DOCTYPES_FOR_DOCTYPE | frozenset(
 	("Custom Field", "Property Setter", "Module Def", "__Auth", "__global_search", "Singles")
 )
+
+
+def _apply_date_field_filter_conversion(value, operator: str, doctype: str, field):
+	"""Apply datetime to date conversion for Date fieldtype filters.
+
+	This matches db_query behavior where datetime values are truncated to dates
+	when filtering on Date fields, for all operators (not just 'between').
+
+	Args:
+		value: The filter value (can be datetime, tuple of datetimes, or other)
+		operator: The operator being used (between, >, <, etc.)
+		doctype: The doctype to get field metadata from
+		field: The field name or pypika Field object
+
+	Returns:
+		The converted value with datetimes converted to dates if field is Date type
+	"""
+	try:
+		# Extract field name
+		if "." in str(field):
+			field = field.split(".")[-1]
+
+		# Skip querying meta for core doctypes to avoid recursion
+		if doctype in CORE_DOCTYPES:
+			meta = None
+		else:
+			meta = frappe.get_meta(doctype)
+
+		if meta is None:
+			return value
+
+		df = meta.get_field(field)
+		if df is None or df.fieldtype != "Date":
+			return value
+
+		# Convert datetime to date if the fieldtype is date
+		if operator.lower() == "between" and isinstance(value, list | tuple) and len(value) == 2:
+			from_val, to_val = value
+			if isinstance(from_val, datetime.datetime):
+				from_val = from_val.date()
+			if isinstance(to_val, datetime.datetime):
+				to_val = to_val.date()
+			return (from_val, to_val)
+		elif isinstance(value, datetime.datetime):
+			return value.date()
+
+	except (AttributeError, TypeError, KeyError):
+		pass
+
+	return value
+
 
 OPTIONAL_COLUMNS = frozenset(["_user_tags", "_comments", "_assign", "_liked_by", "_seen"])
 
@@ -396,6 +448,12 @@ class Engine:
 			# Regular value processing for literal comparisons like: table.field = 'value'
 			_value = convert_to_value(value)
 		_operator = operator
+
+		# For Date fields with datetime values, convert to date to match db_query behavior
+		if isinstance(_value, datetime.datetime) or (
+			isinstance(_value, list | tuple) and any(isinstance(v, datetime.datetime) for v in _value)
+		):
+			_value = _apply_date_field_filter_conversion(_value, _operator, doctype or self.doctype, field)
 
 		if not _value and isinstance(_value, list | tuple | set):
 			_value = ("",)
