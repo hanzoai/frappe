@@ -535,10 +535,12 @@ class Engine:
 			field, value, operator, doctype = None, None, None, None
 
 			# Determine structure based on length and types
-			if len(condition) == 3 and isinstance(condition[1], str) and condition[1] in OPERATOR_MAP:
+			if len(condition) == 3 and isinstance(condition[1], str) and condition[1].lower() in OPERATOR_MAP:
 				# [field, operator, value]
 				field, operator, value = condition
-			elif len(condition) == 4 and isinstance(condition[2], str) and condition[2] in OPERATOR_MAP:
+			elif (
+				len(condition) == 4 and isinstance(condition[2], str) and condition[2].lower() in OPERATOR_MAP
+			):
 				# [doctype, field, operator, value]
 				doctype, field, operator, value = condition
 			elif len(condition) == 2:
