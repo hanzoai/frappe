@@ -699,6 +699,11 @@ class Engine:
 		if not self.apply_permissions:
 			return
 
+		# Skip field permission check if doctype has no permissions defined
+		meta = frappe.get_meta(doctype)
+		if not meta.get_permissions(parenttype=parent_doctype):
+			return
+
 		permission_type = self.get_permission_type(doctype)
 		permitted_fields = get_permitted_fields(
 			doctype=doctype,
