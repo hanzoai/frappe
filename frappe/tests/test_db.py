@@ -93,12 +93,12 @@ class TestDB(IntegrationTestCase):
 			),
 		)
 		self.assertEqual(
-			frappe.db.sql("""SELECT name FROM `tabUser` WHERE name > 's' ORDER BY MODIFIED DESC""")[0][0],
+			frappe.db.sql("""SELECT name FROM `tabUser` WHERE name > 's' ORDER BY creation DESC""")[0][0],
 			frappe.db.get_value("User", {"name": [">", "s"]}),
 		)
 
 		self.assertEqual(
-			frappe.db.sql("""SELECT name FROM `tabUser` WHERE name >= 't' ORDER BY MODIFIED DESC""")[0][0],
+			frappe.db.sql("""SELECT name FROM `tabUser` WHERE name >= 't' ORDER BY creation DESC""")[0][0],
 			frappe.db.get_value("User", {"name": [">=", "t"]}),
 		)
 		self.assertEqual(
@@ -132,7 +132,7 @@ class TestDB(IntegrationTestCase):
 		# test multiple orderby's
 		delimiter = '"' if frappe.db.db_type == "postgres" else "`"
 		self.assertIn(
-			"ORDER BY {deli}creation{deli} DESC,{deli}modified{deli} ASC,{deli}name{deli} ASC".format(
+			"ORDER BY {deli}creation{deli} DESC,{deli}modified{deli} ASC,{deli}name{deli} DESC".format(
 				deli=delimiter
 			),
 			frappe.db.get_value("DocType", "DocField", order_by="creation desc, modified asc, name", run=0),

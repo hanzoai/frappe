@@ -583,19 +583,6 @@ class Database:
 		# single field is requested, send it without wrapping in containers
 		return row[0]
 
-	def _convert_default_order_by(
-		self, doctype: str | Table, order_by: str | Literal["KEEP_DEFAULT_ORDERING"]
-	) -> str:
-		"""Convert DefaultOrderBy sentinel to explicit order string to avoid meta loading."""
-		if order_by != DefaultOrderBy:
-			return order_by
-
-		if isinstance(doctype, Table):
-			doctype = doctype.get_table_name()[3:]
-
-		sort_field, sort_order = get_doctype_sort_info(doctype)
-		return f"{sort_field} {sort_order.lower()}"
-
 	def get_values(
 		self,
 		doctype: str,
@@ -644,8 +631,6 @@ class Database:
 
 		if isinstance(filters, list):
 			if filters := list(f for f in filters if f is not None):
-				order_by = self._convert_default_order_by(doctype, order_by)
-
 				out = frappe.qb.get_query(
 					table=doctype,
 					fields=fieldname,
@@ -663,8 +648,8 @@ class Database:
 		else:
 			if (filters is not None) and (filters != doctype or doctype == "DocType"):
 				try:
-					order_by = self._convert_default_order_by(doctype, order_by)
-
+					if order_by:
+						order_by = "creation" if order_by == DefaultOrderBy else order_by
 					query = frappe.qb.get_query(
 						table=doctype,
 						filters=filters,

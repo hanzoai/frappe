@@ -108,7 +108,6 @@ class Engine:
 		table: str | Table,
 		fields: str | list | tuple | None = None,
 		filters: dict[str, FilterValue] | FilterValue | list[list | FilterValue] | None = None,
-		or_filters: dict[str, FilterValue] | FilterValue | list[list | FilterValue] | None = None,
 		order_by: str | None = None,
 		group_by: str | None = None,
 		limit: int | None = None,
@@ -126,7 +125,16 @@ class Engine:
 		user: str | None = None,
 		parent_doctype: str | None = None,
 		reference_doctype: str | None = None,
+		or_filters: dict[str, FilterValue] | FilterValue | list[list | FilterValue] | None = None,
+		db_query_compat: bool = False,
 	) -> QueryBuilder:
+		"""Build a query with optional compatibility mode for legacy db_query behavior.
+
+		Args:
+			db_query_compat: When True, uses legacy db_query behavior for sorting and filtering.
+			This is kept optional to not break existing code that relies on the original query builder behaviour.
+		"""
+
 		qb = frappe.local.qb
 		db_type = frappe.local.db.db_type
 
@@ -139,6 +147,7 @@ class Engine:
 		self.reference_doctype = reference_doctype
 		self.apply_permissions = not ignore_permissions
 		self.function_aliases = set()
+		self.db_query_compat = db_query_compat
 
 		if isinstance(table, Table):
 			self.table = table
@@ -389,6 +398,11 @@ class Engine:
 		_operator = operator
 
 		if not _value and isinstance(_value, list | tuple | set):
+			_value = ("",)
+
+		# db_query compatibility: handle None values for 'in' and 'not in' operators
+		# In db_query, None values are converted to empty tuples for these operators
+		if self.db_query_compat and _value is None and _operator.casefold() in ("in", "not in"):
 			_value = ("",)
 
 		if _operator in NESTED_SET_OPERATORS:
@@ -906,11 +920,17 @@ class Engine:
 					field_name = parts[0]
 					spec_order = parts[1].lower() if len(parts) > 1 else sort_order.lower()
 					field = self.table[field_name]
-					order_direction = Order.desc if spec_order == "desc" else Order.asc
+					if self.db_query_compat:
+						order_direction = Order.desc if spec_order == "desc" else Order.asc
+					else:
+						order_direction = Order.asc if spec_order == "asc" else Order.desc
 					self.query = self.query.orderby(field, order=order_direction)
 		else:
 			field = self.table[sort_field]
-			order_direction = Order.desc if sort_order.lower() == "desc" else Order.asc
+			if self.db_query_compat:
+				order_direction = Order.desc if sort_order.lower() == "desc" else Order.asc
+			else:
+				order_direction = Order.asc if sort_order.lower() == "asc" else Order.desc
 			self.query = self.query.orderby(field, order=order_direction)
 
 	def _parse_backtick_field_notation(self, field_name: str) -> tuple[str, str] | None:
@@ -1091,7 +1111,10 @@ class Engine:
 					direction = parts[-1].lower()
 					field_name = " ".join(parts[:-1])
 
-				order_direction = Order.desc if direction == "desc" else Order.asc
+				if self.db_query_compat:
+					order_direction = Order.desc if direction == "desc" else Order.asc
+				else:
+					order_direction = Order.asc if direction == "asc" else Order.desc
 
 				parsed_field = self._validate_and_parse_field_for_clause(field_name, "Order By")
 				parsed_order_fields.append((parsed_field, order_direction))
@@ -1415,6 +1438,10 @@ class Engine:
 
 	def _should_apply_ifnull(self, doctype: str, fieldname: str, operator: str, value: Any) -> bool:
 		"""Determine if IFNULL wrapping is needed for a filter condition."""
+		# Skip this if we don't need db_query compatibility
+		if not self.db_query_compat:
+			return False
+
 		if not self._is_field_nullable(doctype, fieldname):
 			return False
 

@@ -501,7 +501,7 @@ class TestQuery(IntegrationTestCase):
 				fields=["name"],
 				or_filters={"idx": (">", 5), "issingle": ("=", 1)},
 			).get_sql(),
-			"SELECT `name` FROM `tabDocType` WHERE IFNULL(`idx`,'')>5 OR `issingle`=1".replace(
+			"SELECT `name` FROM `tabDocType` WHERE `idx`>5 OR `issingle`=1".replace(
 				"`", '"' if frappe.db.db_type == "postgres" else "`"
 			),
 		)
@@ -525,7 +525,7 @@ class TestQuery(IntegrationTestCase):
 				fields=["name"],
 				or_filters={"name": ("!=", "User"), "module": ("!=", "Core")},
 			).get_sql(),
-			"SELECT `name` FROM `tabDocType` WHERE `name`<>'User' OR IFNULL(`module`,'')<>'Core'".replace(
+			"SELECT `name` FROM `tabDocType` WHERE `name`<>'User' OR `module`<>'Core'".replace(
 				"`", '"' if frappe.db.db_type == "postgres" else "`"
 			),
 		)

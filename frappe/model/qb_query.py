@@ -189,6 +189,7 @@ class DatabaseQuery:
 			"user": user,
 			"parent_doctype": parent_doctype,
 			"reference_doctype": reference_doctype,
+			"db_query_compat": True,
 		}
 
 		query = frappe.qb.get_query(**kwargs)
