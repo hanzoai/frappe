@@ -20,6 +20,7 @@ from frappe.database.utils import (
 from frappe.model import get_permitted_fields
 from frappe.model.base_document import DOCTYPES_FOR_DOCTYPE
 from frappe.query_builder import Criterion, Field, Order, functions
+from frappe.query_builder.custom import Month, MonthName, Quarter
 
 CORE_DOCTYPES = DOCTYPES_FOR_DOCTYPE | frozenset(
 	("Custom Field", "Property Setter", "Module Def", "__Auth", "__global_search", "Singles")
@@ -81,6 +82,9 @@ FUNCTION_MAPPING = {
 	"CONCAT": functions.Concat,
 	"NOW": functions.Now,
 	"NULLIF": functions.NullIf,
+	"MONTHNAME": MonthName,
+	"QUARTER": Quarter,
+	"MONTH": Month,
 }
 
 # Mapping from operator names to pypika Arithmetic enum values
