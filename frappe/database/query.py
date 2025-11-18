@@ -1420,7 +1420,12 @@ class Engine:
 		if value is None:
 			return False
 
-		if operator.lower() in ("=", "like", "is"):
+		if operator.lower() in ("like", "is"):
+			return False
+
+		# For "=" operator, only skip IFNULL if value is truthy (non-empty string, non-zero, etc)
+		# When value is empty string "", we need to check for NULL values too
+		if operator.lower() == "=" and value:
 			return False
 
 		try:
