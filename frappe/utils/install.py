@@ -2,8 +2,6 @@
 # License: MIT. See LICENSE
 import getpass
 
-import click
-
 import frappe
 from frappe.geo.doctype.country.country import import_country_and_currency
 from frappe.utils import cint
@@ -214,4 +212,5 @@ def delete_desktop_icon(app_name):
 	print("Deleting Desktop Icons")
 	for icon in icons_to_be_deleted:
 		frappe.delete_doc_if_exists("Desktop Icon", icon)
-	frappe.db.commit()
+	# Delete icons
+	frappe.db.commit()  # nosemgrep
