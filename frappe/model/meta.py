@@ -101,10 +101,6 @@ def clear_meta_cache(doctype: str = "*"):
 		frappe.client_cache.delete_value(key)
 
 
-def clear_doctype_sort_cache(doctype: str):
-	frappe.cache.delete_value(f"doctype_sort_info::{doctype}")
-
-
 def load_meta(doctype):
 	return Meta(doctype)
 
