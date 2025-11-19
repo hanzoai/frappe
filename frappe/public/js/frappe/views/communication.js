@@ -450,6 +450,7 @@ frappe.views.CommunicationComposer = class {
 				args: {
 					template_name: email_template,
 					doc: me.doc,
+					sender: me.dialog.get_value("sender") || "",
 				},
 				callback(r) {
 					prepend_reply(r.message);
