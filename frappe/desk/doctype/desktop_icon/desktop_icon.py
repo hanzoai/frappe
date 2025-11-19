@@ -152,13 +152,19 @@ def get_desktop_icons(user=None, bootinfo=None):
 
 		active_domains = frappe.get_active_domains()
 
-		blocked_doctypes = frappe.get_all(
-			"DocType",
-			filters={"ifnull(restrict_to_domain, '')": ("not in", ",".join(active_domains))},
-			fields=["name"],
-		)
-
-		blocked_doctypes = [d.get("name") for d in blocked_doctypes]
+		DocType = frappe.qb.DocType("DocType")
+		if active_domains:
+			blocked_condition = (
+				(DocType.restrict_to_domain.isnull())
+				| (DocType.restrict_to_domain == "")
+				| (DocType.restrict_to_domain.notin(active_domains))
+			)
+		else:
+			blocked_condition = (DocType.restrict_to_domain.isnull()) | (DocType.restrict_to_domain == "")
+		blocked_doctypes = [
+			d.get("name")
+			for d in frappe.qb.from_(DocType).select(DocType.name).where(blocked_condition).run(as_dict=True)
+		]
 
 		standard_icons = frappe.get_all("Desktop Icon", fields=fields, filters={"standard": 1})
 
