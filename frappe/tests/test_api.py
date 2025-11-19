@@ -230,8 +230,7 @@ class TestResourceAPI(FrappeAPITestCase):
 
 	def test_get_list_debug(self):
 		# test 5: fetch response with debug
-		with suppress_stdout():
-			response = self.get(self.resource(self.DOCTYPE), {"sid": self.sid, "debug": True})
+		response = self.get(self.resource(self.DOCTYPE), {"sid": self.sid, "debug": True})
 		self.assertEqual(response.status_code, 200)
 		self.assertIn("_debug_messages", response.json)
 		self.assertIsInstance(response.json["_debug_messages"], str)
@@ -504,9 +503,9 @@ class TestResponse(FrappeAPITestCase):
 		expected_redirects = {
 			"/app/user": "http://localhost/app/user",
 			"/app/user?enabled=1": "http://localhost/app/user?enabled=1",
-			"http://example.com": "http://localhost/app",  # No external redirect
-			"https://google.com": "http://localhost/app",
-			"http://localhost:8000": "http://localhost/app",
+			"http://example.com": "http://localhost/desk",  # No external redirect
+			"https://google.com": "http://localhost/desk",
+			"http://localhost:8000": "http://localhost/desk",
 			"http://localhost/app": "http://localhost/app",
 			"////example.com": "http://localhost//example.com",  # malicious redirect attempt
 		}
