@@ -25,7 +25,8 @@
   "expose_recipients",
   "attachments",
   "retry",
-  "email_account"
+  "email_account",
+  "raw_html"
  ],
  "fields": [
   {
@@ -148,13 +149,20 @@
    "fieldtype": "Code",
    "label": "Unsubscribe Params",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "raw_html",
+   "fieldtype": "Check",
+   "label": "Send As Raw HTML",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-envelope",
  "idx": 1,
  "in_create": 1,
  "links": [],
- "modified": "2025-03-07 15:56:13.341958",
+ "modified": "2025-11-19 11:18:45.574190",
  "modified_by": "Administrator",
  "module": "Email",
  "name": "Email Queue",

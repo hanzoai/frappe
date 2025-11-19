@@ -50,6 +50,7 @@ def make(
 	send_after=None,
 	print_language=None,
 	now=False,
+	raw_html=False,
 	**kwargs,
 ) -> dict[str, str]:
 	"""Make a new communication. Checks for email permissions for specified Document.
@@ -69,6 +70,7 @@ def make(
 	:param send_me_a_copy: Send a copy to the sender (default **False**).
 	:param email_template: Template which is used to compose mail .
 	:param send_after: Send after the given datetime.
+	:param raw_html: Whether to use html version of email template
 	"""
 	if kwargs:
 		from frappe.utils.commands import warn
@@ -107,6 +109,7 @@ def make(
 		send_after=send_after,
 		print_language=print_language,
 		now=now,
+		raw_html=raw_html,
 	)
 
 
@@ -135,6 +138,7 @@ def _make(
 	send_after=None,
 	print_language=None,
 	now=False,
+	raw_html=False,
 ) -> dict[str, str]:
 	"""Internal method to make a new communication that ignores Permission checks."""
 
@@ -190,6 +194,7 @@ def _make(
 			print_letterhead=print_letterhead,
 			print_language=print_language,
 			now=now,
+			raw_html=raw_html,
 		)
 
 	emails_not_sent_to = comm.exclude_emails_list(include_sender=send_me_a_copy)

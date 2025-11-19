@@ -134,6 +134,7 @@ def render_template(template, context=None, is_path=None, safe_render=True):
 			title="Jinja Template Error",
 			msg=f"<pre>{template}</pre><pre>{html.escape(get_traceback())}</pre>",
 		)
+		return ""
 
 	import time
 
