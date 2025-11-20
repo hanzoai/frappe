@@ -41,7 +41,7 @@
 	font-weight: 500;
 	line-height: 1;
 	@include truncate();
-	overflow: auto;
+	overflow: unset;
 }
 
 .header-subtitle {

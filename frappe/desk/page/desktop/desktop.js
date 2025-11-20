@@ -265,13 +265,13 @@ class DesktopIconGrid {
 		$.extend(this, opts);
 		this.icons = [];
 		this.icons_html = [];
-		this.page_size = {
-			col: opts.page_size?.col || 4,
-			row: opts.page_size?.row || 3,
-			total: function () {
-				return this.col * this.row;
-			},
-		};
+		// this.page_size = {
+		// 	col: opts.page_size?.col || 4,
+		// 	row: opts.page_size?.row || 3,
+		// 	total: function () {
+		// 		return this.col * this.row;
+		// 	},
+		// };
 		this.grids = [];
 		this.prepare();
 		this.make();
@@ -279,8 +279,9 @@ class DesktopIconGrid {
 
 	prepare() {
 		this.icons_data = this.icons_data.sort((a, b) => a.idx - b.idx);
-		this.total_pages = Math.ceil(this.icons_data.length / this.page_size.total());
-		this.icons_data_by_page = this.split_data(this.icons_data, this.page_size.total());
+		this.total_pages = 1;
+		this.icons_data_by_page =
+			this.icons_data || this.split_data(this.icons_data, this.page_size.total());
 	}
 	make() {
 		const me = this;
@@ -291,8 +292,11 @@ class DesktopIconGrid {
 			if (this.row_size) {
 				template = `<div class="icons" style="display: none; grid-template-columns: repeat(${this.row_size}, 1fr)"></div>`;
 			}
+			if (frappe.is_mobile()) {
+				template = `<div class="icons" style="display: none; grid-template-columns: repeat(3, 1fr)"></div>`;
+			}
 			this.grids.push($(template).appendTo(this.icons_container));
-			this.make_icons(this.icons_data_by_page[i], this.grids[i]);
+			this.make_icons(this.icons_data_by_page, this.grids[i]);
 			if (!this.no_dragging) {
 				this.setup_reordering(this.grids[i]);
 			}
