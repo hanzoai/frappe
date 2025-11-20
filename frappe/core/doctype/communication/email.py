@@ -72,9 +72,9 @@ def make(
 	:param send_after: Send after the given datetime.
 	:param raw_html: Whether to use html version of email template
 	"""
-	if kwargs:
-		from frappe.utils.commands import warn
+	from frappe.utils.commands import warn
 
+	if kwargs:
 		warn(
 			f"Options {kwargs} used in frappe.core.doctype.communication.email.make "
 			"are deprecated or unsupported",
@@ -83,6 +83,16 @@ def make(
 
 	if doctype and name:
 		frappe.has_permission(doctype, doc=name, ptype="email", throw=True)
+
+	if raw_html and email_template and not frappe.get_value("Email Template", email_template, "use_html"):
+		warn(
+			_(
+				"Raw HTML can be used only with Email Templates having 'Use HTML' checked. "
+				"Proceeding with plain text email."
+			),
+			category=UserWarning,
+		)
+		raw_html = False
 
 	return _make(
 		doctype=doctype,
@@ -169,7 +179,9 @@ def _make(
 			"send_after": send_after,
 		}
 	)
-	comm.flags.skip_add_signature = not add_signature
+	comm.flags.skip_add_signature = not add_signature or (
+		raw_html and frappe.get_value("Email Template", email_template, "use_html")
+	)
 	comm.insert(ignore_permissions=True)
 
 	# if not committed, delayed task doesn't find the communication
