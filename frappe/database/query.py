@@ -875,6 +875,8 @@ class Engine:
 			initial_field_list.extend(f.strip() for f in COMMA_PATTERN.split(fields) if f.strip())
 		elif isinstance(fields, list | tuple):
 			for item in fields:
+				if item is None:
+					continue
 				if isinstance(item, str) and "," in item:
 					# Split comma-separated strings within the list
 					initial_field_list.extend(f.strip() for f in COMMA_PATTERN.split(item) if f.strip())
