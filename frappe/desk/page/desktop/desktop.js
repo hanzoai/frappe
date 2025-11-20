@@ -507,21 +507,37 @@ class DesktopIcon {
 		if (this.icon_type != "Folder" && !this.icon_data.sidebar) {
 			this.icon_route = get_route(this.icon_data);
 		}
-		this.icon = $(
-			frappe.render_template("desktop_icon", { icon: this.icon_data, in_folder: in_folder })
-		);
-
-		this.icon_caption_area = $(this.icon.get(0).children[1]);
 		this.child_icons = this.get_child_icons_data();
+		let render = this.validate_icon();
+		if (render) {
+			this.icon = $(
+				frappe.render_template("desktop_icon", {
+					icon: this.icon_data,
+					in_folder: in_folder,
+				})
+			);
+			this.icon_caption_area = $(this.icon.get(0).children[1]);
+			this.parent_icon = this.icon_data.icon;
+			this.setup_click();
+			this.render_folder_thumbnail();
+			this.setup_dragging();
+		}
+
 		// this.child_icons = this.get_desktop_icon(this.icon_title).child_icons;
 		// this.child_icons_data = this.get_child_icons_data();
-		this.parent_icon = this.icon_data.icon;
-		this.setup_click();
-		this.render_folder_thumbnail();
-		this.setup_dragging();
-		this.child_icons = this.get_child_icons_data();
 	}
-
+	validate_icon() {
+		// validate if my workspaces are empty
+		if (this.icon_data.label == "My Workspaces") {
+			if (frappe.boot.workspace_sidebar_item["my workspaces"].items.length == 0)
+				return false;
+		}
+		if (this.icon_type == "Folder") {
+			if (this.icon_data.child_icons.length == 0) return false;
+		}
+		return true;
+		// validate if folder has no child
+	}
 	get_child_icons_data() {
 		return this.icon_data.child_icons.sort((a, b) => a.idx - b.idx);
 	}
