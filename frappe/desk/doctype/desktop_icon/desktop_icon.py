@@ -44,16 +44,15 @@ class DesktopIcon(Document):
 
 	def on_trash(self):
 		clear_desktop_icons_cache()
+		if frappe.conf.developer_mode and self.standard and self.app:
+			self.delete_desktop_icon_file()
+
+	def on_update(self):
 		allow_export = (
 			self.standard and self.app and not frappe.flags.in_import and frappe.conf.developer_mode
 		)
 		if allow_export:
-			self.delete_desktop_icon_file()
-
-	def on_update(self):
-		if frappe.conf.developer_mode:
-			if self.standard == 1 and self.app:
-				self.export_desktop_icon()
+			self.export_desktop_icon()
 
 	def export_desktop_icon(self):
 		folder_path = create_directory_on_app_path("desktop_icon", self.app)
