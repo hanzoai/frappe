@@ -108,11 +108,47 @@ frappe.views.CommunicationComposer = class {
 				fieldtype: "Link",
 				options: "Email Template",
 				fieldname: "email_template",
+				onchange: function () {
+					const email_template = this.value;
+					if (!email_template) {
+						return me.hide_use_html_field();
+					}
+
+					frappe.db
+						.get_value("Email Template", email_template, "use_html")
+						.then((r) => {
+							// Show or hide "Use HTML" based on the Email Template's use_html value
+							if (r.message?.use_html === 1) {
+								// Show the field.
+								me.dialog.fields_dict.use_html.toggle(true);
+							} else {
+								me.hide_use_html_field();
+							}
+						})
+						.catch((e) => {
+							console.error("Failed to load template", e);
+							me.hide_use_html_field();
+						});
+				},
 			},
 			{
 				fieldtype: "HTML",
 				label: __("Clear & Add template"),
 				fieldname: "clear_and_add_template",
+			},
+			{
+				label: __("Use HTML"),
+				fieldtype: "Check",
+				fieldname: "use_html",
+				default: 0,
+				hidden: 1,
+				onchange: function (e) {
+					if (e.target.checked) {
+						me.dialog.set_value("html_content", me.dialog.get_value("content"));
+					} else {
+						me.dialog.set_value("content", me.dialog.get_value("html_content"));
+					}
+				},
 			},
 			{ fieldtype: "Section Break" },
 			{
@@ -190,19 +226,6 @@ frappe.views.CommunicationComposer = class {
 			},
 			{ fieldtype: "Column Break" },
 			{
-				label: __("Use HTML"),
-				fieldtype: "Check",
-				fieldname: "use_html",
-				default: 0,
-				onchange: function (e) {
-					if (e.target.checked) {
-						me.dialog.set_value("html_content", me.dialog.get_value("content"));
-					} else {
-						me.dialog.set_value("content", me.dialog.get_value("html_content"));
-					}
-				},
-			},
-			{
 				label: __("Select Attachments"),
 				fieldtype: "HTML",
 				fieldname: "select_attachments",
@@ -274,6 +297,11 @@ frappe.views.CommunicationComposer = class {
 
 		let lang = document_lang || print_format_lang || frappe.boot.lang;
 		this.dialog.set_value("print_language", lang);
+	}
+
+	hide_use_html_field() {
+		this.dialog.fields_dict.use_html.set_input(false); // reset the value
+		this.dialog.fields_dict.use_html.toggle(false); // hide the field
 	}
 
 	toggle_more_options(show_options) {
@@ -475,6 +503,7 @@ frappe.views.CommunicationComposer = class {
 		];
 
 		frappe.utils.add_select_group_button(clear_and_add_template, email_template_actions);
+		$(fields.use_html.wrapper).addClass("mt-2 text-center").appendTo(clear_and_add_template);
 	}
 
 	setup_last_edited_communication() {
