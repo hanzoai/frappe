@@ -180,7 +180,7 @@ frappe.search.AwesomeBar = class AwesomeBar {
 					<tr><td>" +
 					__("Open in new tab") +
 					"</td><td>" +
-					__("Ctrl+Enter or Cmd+Enter") +
+					(frappe.utils.is_mac() ? "⌘ + Enter" : "Ctrl + Enter") +
 					"</td></tr>\
 					<tr><td>" +
 					__("Calculate") +
