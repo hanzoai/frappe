@@ -25,7 +25,7 @@ def whitelist_for_tests(**whitelist_kwargs):
 		@wraps(fn)
 		def wrapper(*args, **kwargs):
 			if not (
-				frappe.in_test or (frappe._dev_server and (frappe.conf.allow_tests or os.environ.get("CI")))
+				frappe.in_test or (frappe._dev_server and frappe.conf.allow_tests) or os.environ.get("CI")
 			):
 				frappe.throw(  # nosemgrep: frappe-missing-translate-function-python
 					'Test endpoints are only available when running in test mode or running a development server ("bench start") with the "allow_tests" site config enabled'
