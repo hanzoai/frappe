@@ -262,6 +262,7 @@ class TestDocument(IntegrationTestCase):
 
 	def test_xss_filter(self):
 		d = self.test_insert()
+		subject = d.subject
 
 		# script
 		xss = '<script>alert("XSS")</script>'
@@ -271,7 +272,7 @@ class TestDocument(IntegrationTestCase):
 		d.reload()
 
 		self.assertTrue(xss not in d.subject)
-		self.assertTrue(escaped_xss in d.subject)
+		self.assertEqual(subject, d.subject)
 
 		# onload
 		xss = '<div onload="alert("XSS")">Test</div>'
