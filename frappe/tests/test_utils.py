@@ -91,7 +91,7 @@ from frappe.utils.image import optimize_image, strip_exif_data
 from frappe.utils.make_random import can_make, get_random, how_many
 from frappe.utils.response import json_handler
 from frappe.utils.synchronization import LockTimeoutError, filelock
-from frappe.utils.typing_validations import validate_argument_types
+from frappe.utils.typing_validations import FrappeTypeError, validate_argument_types
 
 
 class Capturing(list):
@@ -1464,7 +1464,6 @@ class TestArgumentTypingValidations(IntegrationTestCase):
 		from unittest.mock import AsyncMock, MagicMock, Mock
 
 		from frappe.core.doctype.doctype.doctype import DocType
-		from frappe.utils.typing_validations import FrappeTypeError
 
 		@validate_argument_types
 		def test_simple_types(a: int, b: float, c: bool):
