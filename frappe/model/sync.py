@@ -197,3 +197,37 @@ def remove_orphan_doctypes():
 		update_progress_bar("Deleting orphaned DocTypes", i, len(orphan_doctypes))
 	frappe.db.commit()
 	print()
+
+
+def remove_orphan_entities():
+	entites = ["Workspace", "Dashboard", "Page", "Report"]
+	entity_filter_map = {
+		"Workspace": {"public": 1},
+		"Page": {"standard": "Yes"},
+		"Report": {"is_standard": "Yes"},
+		"Dashboard": {"is_standard": False},
+	}
+	for entity in entites:
+		print(f"Removing orphan {entity}s")
+		all_enitities = frappe.get_all(
+			entity, filters=entity_filter_map.get(entity), fields=["name", "module"]
+		)
+		for i, w in enumerate(all_enitities):
+			if w.module:
+				try:
+					module_path = frappe.get_module_path(w.module)
+					if not check_if_record_exists(module_path, entity, w.module, w.name):
+						print(f"Deleting entity {entity} {w.name}")
+						frappe.delete_doc(entity, w.name, force=True, ignore_missing=True)
+						update_progress_bar(f"Deleting orphaned {entity}", i, len(all_enitities))
+						print()
+
+				except Exception as e:
+					print(e)
+			frappe.db.commit()
+
+
+def check_if_record_exists(module_path, entity_type, module_name, name):
+	name = frappe.scrub(name)
+	entity_path = os.path.join(module_path, entity_type.lower(), name.lower(), f"{name.lower()}.json")
+	return os.path.exists(entity_path)

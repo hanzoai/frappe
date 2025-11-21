@@ -182,6 +182,8 @@ class SiteMigration:
 		print("Removing orphan doctypes...")
 		frappe.model.sync.remove_orphan_doctypes()
 
+		frappe.model.sync.remove_orphan_entities()
+
 		print("Syncing portal menu...")
 		frappe.get_single("Portal Settings").sync_menu()
 
