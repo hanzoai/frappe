@@ -22,6 +22,7 @@ context("List View", () => {
 		const actions = [
 			"Approve",
 			"Reject",
+			"Copy to Clipboard",
 			"Export",
 			"Assign To",
 			"Clear Assignment",
