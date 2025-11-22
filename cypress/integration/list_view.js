@@ -34,7 +34,7 @@ context("List View", () => {
 		cy.get(".list-header-subject .list-subject .list-check-all").click();
 		cy.findByRole("button", { name: "Actions" }).click();
 		cy.get(".dropdown-menu li:visible .dropdown-item")
-			.should("have.length", 8)
+			.should("have.length", 9)
 			.each((el, index) => {
 				cy.wrap(el).contains(actions[index]);
 			})
