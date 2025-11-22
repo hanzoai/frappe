@@ -2396,18 +2396,6 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 												df.options,
 												item[col.fieldname]
 											);
-											console.log(
-												"Link field:",
-												col.fieldname,
-												"doctype:",
-												df.options,
-												"value:",
-												item[col.fieldname],
-												"cached title:",
-												link_title,
-												"cache key:",
-												df.options + "::" + item[col.fieldname]
-											);
 											value = link_title || item[col.fieldname];
 										} else {
 											value = item[col.fieldname];
@@ -2424,12 +2412,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 							.join("\t");
 					});
 					const clipboard_data = [headers, ...rows].join("\n"); // Copy to clipboard
-					frappe.utils.copy_to_clipboard(clipboard_data).then(() => {
-						frappe.show_alert({
-							message: `${selected_items.length} ${__("row(s) copied to clipboard")}`,
-							indicator: "green",
-						});
-					});
+					frappe.utils.copy_to_clipboard(clipboard_data);
 				},
 				standard: true,
 			};
