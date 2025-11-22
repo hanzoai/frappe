@@ -2358,10 +2358,10 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 					// Prepare data for clipboard
 					const headers = columns.map((col) => col.label).join("\t");
 					const rows = selected_items.map((item) => {
-				return columns
-					.map((col) => {
-						let value;
-						const df = col.df || col.docfield;								// Check if this is a Status column (by type) or docstatus field (in Report view)
+						return columns
+							.map((col) => {
+								let value;
+								const df = col.df || col.docfield; // Check if this is a Status column (by type) or docstatus field (in Report view)
 								if (col.type === "Status" || col.fieldname === "docstatus") {
 									// For Status columns, get the indicator text
 									const indicator = frappe.get_indicator(item, this.doctype);
@@ -2404,7 +2404,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 										value = item[col.fieldname];
 									}
 								}
-								// Handle null/undefined values
+								// Handle null or undefined values
 								if (value == null) return "";
 								// Convert to string and remove HTML tags if any
 								return String(value).replace(/<[^>]*>/g, "");
