@@ -2323,7 +2323,6 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 						}));
 					} else if (this.columns && this.columns.length && this.columns[0].type) {
 						// List View - has columns with type and df properties
-						console.log(this.columns);
 						columns = this.columns
 							.filter((col) => {
 								// Include columns with df.fieldname, or Subject/Status types
@@ -2359,13 +2358,10 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 					// Prepare data for clipboard
 					const headers = columns.map((col) => col.label).join("\t");
 					const rows = selected_items.map((item) => {
-						return columns
-							.map((col) => {
-								console.log("Processing column:", col.fieldname, "col:", col);
-								let value;
-								const df = col.df || col.docfield;
-
-								// Check if this is a Status column (by type) or docstatus field (in Report view)
+				return columns
+					.map((col) => {
+						let value;
+						const df = col.df || col.docfield;								// Check if this is a Status column (by type) or docstatus field (in Report view)
 								if (col.type === "Status" || col.fieldname === "docstatus") {
 									// For Status columns, get the indicator text
 									const indicator = frappe.get_indicator(item, this.doctype);
@@ -2384,14 +2380,6 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 										value =
 											item[col.fieldname + "_" + link_title_fieldname] ||
 											item[col.fieldname];
-										console.log(
-											"List view link:",
-											col.fieldname,
-											"title_field:",
-											link_title_fieldname,
-											"value:",
-											value
-										);
 									} else if (
 										df &&
 										df.fieldtype === "Link" &&
@@ -2399,16 +2387,6 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 										item[col.fieldname]
 									) {
 										// For Link fields, try to get the title
-										console.log(
-											"Processing link field:",
-											col.fieldname,
-											"doctype:",
-											df.options,
-											"item value:",
-											item[col.fieldname],
-											"item:",
-											item
-										);
 										// First check if the doctype has show_title_field_in_link enabled
 										if (
 											frappe.boot.link_title_doctypes?.includes(df.options)
@@ -2448,7 +2426,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 					const clipboard_data = [headers, ...rows].join("\n"); // Copy to clipboard
 					frappe.utils.copy_to_clipboard(clipboard_data).then(() => {
 						frappe.show_alert({
-							message: __("{0} row(s) copied to clipboard", [selected_items.length]),
+							message: `${selected_items.length} ${__("row(s) copied to clipboard")}`,
 							indicator: "green",
 						});
 					});
