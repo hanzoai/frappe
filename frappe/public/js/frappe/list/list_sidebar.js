@@ -294,6 +294,10 @@ frappe.views.ListSidebar = class ListSidebar {
 	}
 
 	add_insights_banner() {
+		if (frappe.boot.sysdefaults.disable_product_suggestion == "1") {
+			return;
+		}
+
 		if (this.list_view.view != "Report") {
 			return;
 		}
@@ -309,6 +313,10 @@ frappe.views.ListSidebar = class ListSidebar {
 	}
 
 	add_crm_banner() {
+		if (frappe.boot.sysdefaults.disable_product_suggestion == "1") {
+			return;
+		}
+
 		if (this.list_view.meta.module != "CRM" || this.list_view.view != "List") {
 			return;
 		}
@@ -321,6 +329,10 @@ frappe.views.ListSidebar = class ListSidebar {
 	}
 
 	add_helpdesk_banner() {
+		if (frappe.boot.sysdefaults.disable_product_suggestion == "1") {
+			return;
+		}
+
 		if (this.list_view.meta.module != "Support" || this.list_view.view != "List") {
 			return;
 		}
