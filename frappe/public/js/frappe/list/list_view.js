@@ -2412,7 +2412,8 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 							.join("\t");
 					});
 					const clipboard_data = [headers, ...rows].join("\n"); // Copy to clipboard
-					frappe.utils.copy_to_clipboard(clipboard_data);
+					const message = __("Copied {0} rows to clipboard", [selected_items.length]);
+					frappe.utils.copy_to_clipboard(clipboard_data, message);
 				},
 				standard: true,
 			};
