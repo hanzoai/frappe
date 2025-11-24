@@ -294,7 +294,7 @@ frappe.views.ListSidebar = class ListSidebar {
 	}
 
 	add_insights_banner() {
-		if (frappe.boot.sysdefaults.disable_product_suggestion == "1") {
+		if (cint(frappe.boot.sysdefaults.disable_product_suggestion)) {
 			return;
 		}
 
@@ -313,7 +313,7 @@ frappe.views.ListSidebar = class ListSidebar {
 	}
 
 	add_crm_banner() {
-		if (frappe.boot.sysdefaults.disable_product_suggestion == "1") {
+		if (cint(frappe.boot.sysdefaults.disable_product_suggestion)) {
 			return;
 		}
 
@@ -329,7 +329,7 @@ frappe.views.ListSidebar = class ListSidebar {
 	}
 
 	add_helpdesk_banner() {
-		if (frappe.boot.sysdefaults.disable_product_suggestion == "1") {
+		if (cint(frappe.boot.sysdefaults.disable_product_suggestion)) {
 			return;
 		}
 
