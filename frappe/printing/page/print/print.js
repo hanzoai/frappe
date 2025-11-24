@@ -198,7 +198,7 @@ frappe.ui.form.PrintView = class {
 		this.setup_customize_dialog();
 
 		// print designer link
-		if (frappe.boot.sysdefaults.disable_product_suggestion !== "1") {
+		if (!cint(frappe.boot.sysdefaults.disable_product_suggestion)) {
 			if (Object.keys(frappe.boot.versions).includes("print_designer")) {
 				this.page.add_inner_message(`
 				<a style="line-height: 2.4" href="/app/print-designer?doctype=${this.frm.doctype}">
