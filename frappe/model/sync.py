@@ -216,7 +216,7 @@ def remove_orphan_entities():
 			if w.module:
 				try:
 					module_path = frappe.get_module_path(w.module)
-					if not check_if_record_exists(module_path, entity, w.module, w.name):
+					if not check_if_record_exists(module_path, entity, w.module, name=w.name):
 						print(f"Deleting entity {entity} {w.name}")
 						frappe.delete_doc(entity, w.name, force=True, ignore_missing=True)
 						update_progress_bar(f"Deleting orphaned {entity}", i, len(all_enitities))
@@ -224,11 +224,29 @@ def remove_orphan_entities():
 
 				except Exception as e:
 					print(e)
-			# save the deleted ones
+			# save the deleted icons
 			frappe.db.commit()  # nosemgrep
 
 
-def check_if_record_exists(module_path, entity_type, module_name, name):
+def check_if_record_exists(type, module_path, entity_type, name=None):
 	name = frappe.scrub(name)
 	entity_path = os.path.join(module_path, entity_type.lower(), name.lower(), f"{name.lower()}.json")
+	if type == "app":
+		entity_path = os.path.join(module_path, frappe.scrub(entity_type.lower()), f"{name.lower()}.json")
 	return os.path.exists(entity_path)
+
+
+def delete_duplicate_icons():
+	# This handles rename for apps remove
+	for app in frappe.get_installed_apps():
+		icons = frappe.get_all("Desktop Icon", filters=[{"icon_type": "App"}, {"app": app}], pluck="name")
+
+		if len(icons) > 1:
+			for i in icons:
+				app_path = frappe.get_app_path(app)
+				if not check_if_record_exists("app", app_path, "Desktop Icon", name=i):
+					print(f"Deleting icon {i}")
+					frappe.delete_doc("Desktop Icon", i)
+
+	# save the deleted icons
+	frappe.db.commit()  # semgrep

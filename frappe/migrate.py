@@ -184,6 +184,7 @@ class SiteMigration:
 
 		frappe.model.sync.remove_orphan_entities()
 
+		frappe.model.sync.delete_duplicate_icons()
 		print("Syncing portal menu...")
 		frappe.get_single("Portal Settings").sync_menu()
 
