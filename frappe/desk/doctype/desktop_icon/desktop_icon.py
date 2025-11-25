@@ -8,7 +8,7 @@ import random
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.modules.export_file import write_document_file
+from frappe.modules.export_file import strip_default_fields
 from frappe.modules.import_file import import_file_by_path
 from frappe.modules.utils import create_directory_on_app_path, get_app_level_directory_path
 
@@ -58,6 +58,7 @@ class DesktopIcon(Document):
 		folder_path = create_directory_on_app_path("desktop_icon", self.app)
 		file_path = os.path.join(folder_path, f"{frappe.scrub(self.label)}.json")
 		doc_export = self.as_dict(no_nulls=True, no_private_properties=True)
+		strip_default_fields(self, doc_export)
 		# if self.parent_icon:
 		# 	print(self.parent_icon)
 		# 	doc_export["parent_icon"] = frappe.db.get_value("Desktop Icon", self.parent_icon, "label")

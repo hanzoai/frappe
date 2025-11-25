@@ -14,6 +14,7 @@
    "doctype": "Workspace Sidebar Item",
    "icon": "check-check",
    "idx": 1,
+   "icon": "list-alt",
    "indent": 0,
    "keep_closed": 0,
    "label": "Todo",
@@ -100,6 +101,7 @@
   }
  ],
  "modified": "2025-11-25 14:59:52.735360",
+ "modified": "2025-11-25 10:46:09.381662",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Productivity",
