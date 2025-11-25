@@ -224,7 +224,8 @@ def remove_orphan_entities():
 
 				except Exception as e:
 					print(e)
-			frappe.db.commit()
+			# save the deleted ones
+			frappe.db.commit()  # nosemgrep
 
 
 def check_if_record_exists(module_path, entity_type, module_name, name):
