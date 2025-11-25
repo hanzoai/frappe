@@ -736,18 +736,19 @@ def create_desktop_icons_from_installed_apps():
 	for a in apps:
 		app_title = frappe.get_hooks("app_title", app_name=a)[0]
 		app_details = frappe.get_hooks("add_to_apps_screen", app_name=a)
-		if len(app_details) != 0:
-			icon = frappe.new_doc("Desktop Icon")
-			icon.label = app_title
-			icon.link_type = "External"
-			icon.standard = 1
-			icon.idx = index
-			icon.icon_type = "App"
-			icon.link = app_details[0]["route"]
-			icon.logo_url = app_details[0]["logo"]
-			if not frappe.db.exists("Desktop Icon", [{"label": icon.label, "icon_type": icon.icon_type}]):
-				icon.save()
-			index += 1
+		if not frappe.db.exists("Desktop Icon", [{"icon_type": "App"}, {"app": a}]):
+			if len(app_details) != 0:
+				icon = frappe.new_doc("Desktop Icon")
+				icon.label = app_title
+				icon.link_type = "External"
+				icon.standard = 1
+				icon.idx = index
+				icon.icon_type = "App"
+				icon.link = app_details[0]["route"]
+				icon.logo_url = app_details[0]["logo"]
+				if not frappe.db.exists("Desktop Icon", [{"label": icon.label, "icon_type": icon.icon_type}]):
+					icon.save()
+				index += 1
 
 
 @frappe.whitelist()
