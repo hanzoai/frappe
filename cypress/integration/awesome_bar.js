@@ -13,13 +13,20 @@ context("Awesome Bar", () => {
 		let txt = `Search or type a command (${
 			window.navigator.platform === "MacIntel" ? "⌘" : "Ctrl"
 		} + K)`;
-		cy.findByPlaceholderText(txt).as("awesome_bar");
-		cy.get("@awesome_bar").type("{selectall}");
+		cy.contains(txt).as("awesome_bar_search");
+		cy.get("@awesome_bar_search").click();
+		cy.get("#navbar-search").as("awesome_bar");
+		cy.get("#navbar-search").type("{selectall}");
 	});
 
 	after(() => {
 		cy.visit("/desk/todo"); // Make sure we're not bleeding any filters to the next spec.
 		cy.clear_filters();
+	});
+
+	it("opens awesome bar on click", () => {
+		cy.get("@awesome_bar").should("be.visible");
+		cy.get("body").click(15, 40);
 	});
 
 	it("navigates to doctype list", () => {
