@@ -105,8 +105,8 @@ frappe.search.utils = {
 						break;
 				}
 
-				out.label = icon + __("{0} {1}", [__(view_name).bold(), labelSuffix]);
-				out.value = __("{0} {1}", [__(view_name), labelSuffix]);
+				out.label = icon + __("{0} {1}", [view_name.bold(), labelSuffix]);
+				out.value = __("{0} {1}", [view_name, labelSuffix]);
 			} else if (match[0]) {
 				out.label = frappe.utils.escape_html(match[0]).bold();
 				out.value = match[0];
