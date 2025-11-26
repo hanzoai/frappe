@@ -89,24 +89,24 @@ frappe.search.utils = {
 				switch (view_type) {
 					case "List":
 						icon = me.make_icon("list");
-						labelSuffix = "List";
+						labelSuffix = __("List");
 						break;
 					case "Tree":
 						icon = me.make_icon("list-tree");
-						labelSuffix = "Tree";
+						labelSuffix = __("Tree");
 						break;
 					case "Workspaces":
 						icon = me.make_icon("wallpaper");
-						labelSuffix = "Workspace";
+						labelSuffix = __("Workspace");
 						break;
 					case "query-report":
 						icon = me.make_icon("table");
-						labelSuffix = "Report";
+						labelSuffix = __("Report");
 						break;
 				}
 
-				out.label = icon + __("{0} {1}", [view_name.bold(), labelSuffix]);
-				out.value = __("{0} {1}", [view_name, labelSuffix]);
+				out.label = icon + __(view_name.bold()) + " " + labelSuffix;
+				out.value = __(view_name) + " " + labelSuffix;
 			} else if (match[0]) {
 				out.label = frappe.utils.escape_html(match[0]).bold();
 				out.value = match[0];
