@@ -108,27 +108,12 @@ frappe.views.CommunicationComposer = class {
 				fieldtype: "Link",
 				options: "Email Template",
 				fieldname: "email_template",
-				onchange: function () {
+				onchange: async function () {
 					const email_template = this.value;
 					if (!email_template) {
 						return me.hide_use_html_field();
 					}
-
-					frappe.db
-						.get_value("Email Template", email_template, "use_html")
-						.then((r) => {
-							// Show or hide "Use HTML" based on the Email Template's use_html value
-							if (r.message?.use_html === 1) {
-								// Show the field.
-								me.dialog.fields_dict.use_html.toggle(true);
-							} else {
-								me.hide_use_html_field();
-							}
-						})
-						.catch((e) => {
-							console.error("Failed to load template", e);
-							me.hide_use_html_field();
-						});
+					await me.check_email_template_html(email_template);
 				},
 			},
 			{
@@ -143,6 +128,7 @@ frappe.views.CommunicationComposer = class {
 				default: 0,
 				hidden: 1,
 				onchange: function (e) {
+					if (!e) return;
 					if (e.target.checked) {
 						me.dialog.set_value("html_content", me.dialog.get_value("content"));
 					} else {
@@ -297,6 +283,17 @@ frappe.views.CommunicationComposer = class {
 
 		let lang = document_lang || print_format_lang || frappe.boot.lang;
 		this.dialog.set_value("print_language", lang);
+	}
+
+	async check_email_template_html(email_template) {
+		const r = await frappe.db.get_value("Email Template", email_template, "use_html");
+		// Show or hide "Use HTML" based on the Email Template's use_html value
+		if (r.message?.use_html === 1) {
+			// Show the field.
+			this.dialog.fields_dict.use_html.toggle(true);
+		} else {
+			this.hide_use_html_field();
+		}
 	}
 
 	hide_use_html_field() {
@@ -469,7 +466,7 @@ frappe.views.CommunicationComposer = class {
 
 				let content = content_field.get_value() || "";
 
-				content_field.set_value(`${reply.message}<br>${content}`);
+				content_field.set_value(reply.message + content);
 				subject_field.set_value(reply.subject);
 			}
 
@@ -578,6 +575,7 @@ frappe.views.CommunicationComposer = class {
 		if (last_edited.email_template) {
 			const template_field = this.dialog.fields_dict.email_template;
 			await template_field.set_model_value(last_edited.email_template);
+			await this.check_email_template_html(last_edited.email_template);
 			delete last_edited.email_template;
 		}
 
