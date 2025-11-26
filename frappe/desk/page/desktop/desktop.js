@@ -210,15 +210,6 @@ class DesktopPage {
 			},
 			description: __("Open Awesomebar"),
 		});
-		frappe.ui.keys.add_shortcut({
-			shortcut: "ctrl+k",
-			action: function (e) {
-				$(".desktop-search-wrapper #navbar-modal-search").click();
-				e.preventDefault();
-				return false;
-			},
-			description: __("Open Awesomebar"),
-		});
 	}
 	handke_route_change() {
 		const me = this;

@@ -58,7 +58,7 @@ frappe.search.AwesomeBar = class AwesomeBar {
 		search_modal
 			.find(".modal-footer")
 			.removeClass("hide")
-			.addClass("cool-awesomebar-modal")
+			.addClass("cool-awesomebar-modal-footer")
 			.html(search_modal_footer);
 		search_modal.find(".pointer").on("click", () => {
 			this.show_help();
