@@ -109,6 +109,9 @@
 			box-shadow: none;
 			margin-top: 12px;
 		}
+		ul[hidden] {
+			display: block !important;
+		}
 	}
 
 	.modal-divider {
