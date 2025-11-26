@@ -105,7 +105,7 @@ frappe.search.utils = {
 						break;
 				}
 
-				out.label = __("{0} {1} {2}", [icon, __(view_name).bold(), labelSuffix]);
+				out.label = icon + __("{0} {1}", [__(view_name).bold(), labelSuffix]);
 				out.value = __("{0} {1}", [__(view_name), labelSuffix]);
 			} else if (match[0]) {
 				out.label = frappe.utils.escape_html(match[0]).bold();
@@ -184,10 +184,9 @@ frappe.search.utils = {
 				if (level) {
 					out.push({
 						type: "New",
-						label: __("{0} New {1}", [
-							me.make_icon("circle-plus"),
-							search_result.marked_string || __(item),
-						]),
+						label:
+							me.make_icon("circle-plus") +
+							__("New {0}", [search_result.marked_string || __(item)]),
 						value: __("New {0}", [__(item)]),
 						index: 1 + level,
 						match: item,
@@ -244,10 +243,9 @@ frappe.search.utils = {
 						var match = item;
 						out.push({
 							type: "New",
-							label: __("{0} New {1}", [
-								me.make_icon("circle-plus"),
-								search_result.marked_string || __(item),
-							]),
+							label:
+								me.make_icon("circle-plus") +
+								__("New {0}", [search_result.marked_string || __(item)]),
 							value: __("New {0}", [__(item)]),
 							index: score + 0.015,
 							match: item,
@@ -281,10 +279,9 @@ frappe.search.utils = {
 				else route = ["query-report", item];
 				out.push({
 					type: "Report",
-					label: __("{0} Report {1}", [
-						me.make_icon("grid-3x3"),
-						search_result.marked_string || __(item),
-					]),
+					label:
+						me.make_icon("grid-3x3") +
+						__("Report {0}", [search_result.marked_string || __(item)]),
 					value: __("Report {0}", [__(item)]),
 					index: level,
 					route: route,
@@ -310,10 +307,9 @@ frappe.search.utils = {
 				var page = me.pages[item];
 				out.push({
 					type: "Page",
-					label: __("{0} Open {1}", [
-						me.make_icon("file-text"),
-						search_result.marked_string || __(item),
-					]),
+					label:
+						me.make_icon("file-text") +
+						__("Open {0}", [search_result.marked_string || __(item)]),
 					value: __("Open {0}", [__(item)]),
 					match: item,
 					index: level,
@@ -325,7 +321,7 @@ frappe.search.utils = {
 		if (__("calendar").indexOf(keywords.toLowerCase()) === 0) {
 			out.push({
 				type: "Calendar",
-				label: __("{0} Open {1}", [me.make_icon("calendar"), __(target)]),
+				label: me.make_icon("calendar") + __("Open {0}", [__(target)]),
 				value: __("Open {0}", [__(target)]),
 				index: me.fuzzy_search(keywords, "Calendar"),
 				match: target,
@@ -336,7 +332,7 @@ frappe.search.utils = {
 		if (__("hub").indexOf(keywords.toLowerCase()) === 0) {
 			out.push({
 				type: "Hub",
-				label: __("{0} Open {1}", [me.make_icon("earth-lock"), __(target)]),
+				label: me.make_icon("earth-lock") + __("Open {0}", [__(target)]),
 				value: __("Open {0}", [__(target)]),
 				index: me.fuzzy_search(keywords, "Hub"),
 				match: target,
@@ -346,7 +342,7 @@ frappe.search.utils = {
 		if (__("email inbox").indexOf(keywords.toLowerCase()) === 0) {
 			out.push({
 				type: "Inbox",
-				label: __("{0} Open {1}", [me.make_icon("inbox"), __(target)]),
+				label: me.make_icon("inbox") + __("Open {0}", [__("Email Inbox")]),
 				value: __("Open {0}", [__("Email Inbox")]),
 				index: me.fuzzy_search(keywords, "email inbox"),
 				match: target,
@@ -365,10 +361,9 @@ frappe.search.utils = {
 			if (level > 0) {
 				var ret = {
 					type: "Workspace",
-					label: __("{0} Open {1}", [
-						me.make_icon("wallpaper"),
-						search_result.marked_string || __(item.name),
-					]),
+					label:
+						me.make_icon("wallpaper") +
+						__("Open {0}", [search_result.marked_string || __(item.name)]),
 					value: __("Open {0}", [__(item.name)]),
 					index: level,
 					route: [frappe.router.slug(item.name)],
@@ -389,10 +384,9 @@ frappe.search.utils = {
 			if (level > 0) {
 				var ret = {
 					type: "Dashboard",
-					label: __("{0} {1} Dashboard", [
-						me.make_icon("layout-dashboard"),
-						search_result.marked_string || __(item.name),
-					]),
+					label:
+						me.make_icon("layout-dashboard") +
+						__("{0} Dashboard", [search_result.marked_string || __(item.name)]),
 					value: __("{0} Dashboard", [__(item.name)]),
 					index: level,
 					route: ["dashboard-view", item.name],
@@ -714,10 +708,9 @@ frappe.search.utils = {
 			const search_result = me.fuzzy_search(keywords, item.title, true);
 			if (search_result.score > 0) {
 				var ret = {
-					label: __("{0} Install {1} from Marketplace", [
-						me.make_icon("arrow-down-from-line"),
-						search_result.marked_string,
-					]),
+					label:
+						me.make_icon("arrow-down-from-line") +
+						__("Install {0} from Marketplace", [search_result.marked_string]),
 					value: __("Install {0} from Marketplace", [__(item.title)]),
 					index: search_result.score * 0.8,
 					route: [

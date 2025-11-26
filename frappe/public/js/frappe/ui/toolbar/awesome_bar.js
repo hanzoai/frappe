@@ -358,10 +358,10 @@ frappe.search.AwesomeBar = class AwesomeBar {
 		this.options.push({
 			label: `
 				<span class="flex justify-between text-medium">
-					<span class="ellipsis">${__("{0} Search for {1}", [
-						frappe.search.utils.make_icon("search"),
-						frappe.utils.xss_sanitise(txt).bold(),
-					])}</span>
+					<span class="ellipsis">${
+						frappe.search.utils.make_icon("search") +
+						__("Search for {0}", [frappe.utils.xss_sanitise(txt).bold()])
+					}</span>
 					<kbd>↵</kbd>
 				</span>
 			`,
@@ -458,7 +458,7 @@ frappe.search.AwesomeBar = class AwesomeBar {
 	make_random(txt) {
 		if (txt.toLowerCase().includes("random")) {
 			this.options.push({
-				label: __("{0} Generate Random Password", [frappe.search.utils.make_icon("key")]),
+				label: frappe.search.utils.make_icon("key") + __("Generate Random Password"),
 				value: frappe.utils.get_random(16),
 				onclick: function () {
 					frappe.msgprint(frappe.utils.get_random(16), __("Result"));
