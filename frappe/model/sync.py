@@ -249,4 +249,4 @@ def delete_duplicate_icons():
 					frappe.delete_doc("Desktop Icon", i)
 
 	# save the deleted icons
-	frappe.db.commit()  # semgrep
+	frappe.db.commit()  # nosemgrep
