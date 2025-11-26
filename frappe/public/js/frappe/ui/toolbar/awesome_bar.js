@@ -20,13 +20,18 @@ frappe.search.AwesomeBar = class AwesomeBar {
 		let $search_element = $(element);
 
 		let search_modal = new frappe.get_modal("Search", "");
+
+		search_modal.on("shown.bs.modal", () => {
+			search_modal.find("#navbar-search").get(0).focus();
+		});
+
 		let search_modal_body = `<div class="align-baseline flex py-2 px-1 relative navbar-modal-wrapper">
 			<div class="modal-search-icon absolute pr-2 pl-3">${frappe.utils.icon("search")}</div>
 			<input
 				id="navbar-search"
 				type="text"
 				class="form-control bg-transparent shadow-none" aria-haspopup="true"
-				placeholder="${__("Search for type a command")}" autocomplete="off"
+				placeholder="${__("Search or type a command")}" autocomplete="off"
 			/>
 			<div class="modal-divider"></div>
 		</div>`;
@@ -56,17 +61,11 @@ frappe.search.AwesomeBar = class AwesomeBar {
 			.addClass("cool-awesomebar-modal")
 			.html(search_modal_footer);
 		search_modal.find(".pointer").on("click", () => {
-			console.log("click called");
-
 			this.show_help();
 		});
 
-		$search_element.click(() => {
+		$search_element.on("click", () => {
 			search_modal.modal("show");
-
-			setTimeout(() => {
-				search_modal.find("#navbar-search").get(0).focus();
-			}, 400);
 
 			if (is_event_listeners_added) return;
 			is_event_listeners_added = true;
