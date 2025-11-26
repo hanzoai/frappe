@@ -161,7 +161,7 @@ class DesktopPage {
 		this.handke_route_change();
 	}
 	setup_avatar() {
-		$(".desktop-avatar").html(frappe.avatar(frappe.session.user, "avatar-medium"));
+		$(".desktop-avatar").html(frappe.avatar(frappe.session.user, "avatar-medium")).css("cursor", "pointer");
 		$(".desktop-avatar").data("menu", "user-menu");
 		let menu_items = [
 			{
@@ -197,6 +197,7 @@ class DesktopPage {
 	}
 
 	setup_awesomebar() {
+		$(".desktop-search-wrapper #navbar-search").attr("placeholder",`Search or type a command (${frappe.utils.is_mac() ? "⌘ + K" : "Ctrl + K"})`);
 		if (frappe.boot.desk_settings.search_bar) {
 			let awesome_bar = new frappe.search.AwesomeBar();
 			awesome_bar.setup(".desktop-search-wrapper #navbar-modal-search");
