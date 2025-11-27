@@ -128,10 +128,10 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		this.set_input_value(translated_link_text);
 	}
 	parse_validate_and_set_in_model(value, e, label) {
-		if (this.parse) value = this.parse(value, label);
+		if (this.parse) value = this.parse(value);
 		if (label) {
 			this.label = this.get_translated(label);
-			frappe.utils.add_link_title(this.df.options, value, label);
+			frappe.utils.add_link_title(this.get_options(), value, label);
 		}
 
 		return this.validate_and_set_in_model(value, e);
