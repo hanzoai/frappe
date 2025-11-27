@@ -527,7 +527,20 @@ def get_sentry_dsn():
 	return os.getenv("FRAPPE_SENTRY_DSN")
 
 
+def add_user_specific_sidebar(sidebars):
+	try:
+		my_workspace_for_user = frappe.get_doc("Workspace Sidebar", f"My Workspaces-{frappe.session.user}")
+		sidebars.append(
+			{"name": my_workspace_for_user.name, "header_icon": my_workspace_for_user.header_icon}
+		)
+	except frappe.DoesNotExistError:
+		my_workspace = frappe.get_doc("Workspace Sidebar", "My Workspaces")
+		sidebars.append({"name": my_workspace.name, "header_icon": my_workspace.header_icon})
+
+
 def get_sidebar_items():
+	from frappe.desk.doctype.workspace_sidebar.workspace_sidebar import create_sidebars_for_modules
+
 	sidebars = frappe.get_all(
 		"Workspace Sidebar", fields=["name", "header_icon"], filters={"name": ["not like", "%My Workspaces%"]}
 	)
@@ -535,11 +548,12 @@ def get_sidebar_items():
 	sidebar_items = {}
 
 	for s in sidebars:
-		w = frappe.get_doc("Workspace Sidebar", s["name"])
+		print(s)
+		w = frappe.get_doc("Workspace Sidebar", s.get("name"))
 		sidebar_items[s["name"].lower()] = {
-			"label": s["name"],
+			"label": s.get("name"),
 			"items": [],
-			"header_icon": s["header_icon"],
+			"header_icon": s.get("header_icon"),
 			"module": w.module,
 			"app": w.app,
 		}
@@ -568,26 +582,14 @@ def get_sidebar_items():
 					"report_type": report_type,
 					"ref_doctype": ref_doctype,
 				}
-
 			if (
 				"My Workspaces" in s["name"]
 				or si.type == "Section Break"
 				or w.is_item_allowed(si.link_to, si.link_type)
 			):
-				sidebar_items[s["name"].lower()]["items"].append(workspace_sidebar)
+				sidebar_items[s.get("name").lower()]["items"].append(workspace_sidebar)
 
 	old_name = f"my workspaces-{frappe.session.user.lower()}"
 	if old_name in sidebar_items.keys():
 		sidebar_items["my workspaces"] = sidebar_items.pop(old_name)
 	return sidebar_items
-
-
-def add_user_specific_sidebar(sidebars):
-	try:
-		my_workspace_for_user = frappe.get_doc("Workspace Sidebar", f"My Workspaces-{frappe.session.user}")
-		sidebars.append(
-			{"name": my_workspace_for_user.name, "header_icon": my_workspace_for_user.header_icon}
-		)
-	except frappe.DoesNotExistError:
-		my_workspace = frappe.get_doc("Workspace Sidebar", "My Workspaces")
-		sidebars.append({"name": my_workspace.name, "header_icon": my_workspace.header_icon})
