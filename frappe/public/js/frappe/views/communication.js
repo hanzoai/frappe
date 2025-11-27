@@ -252,6 +252,13 @@ frappe.views.CommunicationComposer = class {
 		return fields;
 	}
 
+	get_content_field() {
+		const content_field = this.dialog.fields_dict.use_html.value
+			? this.dialog.fields_dict.html_content
+			: this.dialog.fields_dict.content;
+		return content_field;
+	}
+
 	get_default_recipients(fieldname) {
 		if (this.frm?.events.get_email_recipients) {
 			return (this.frm.events.get_email_recipients(this.frm, fieldname) || []).join(", ");
