@@ -77,39 +77,42 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 	}
 	get_menu_items() {
 		let me = this;
-		let menu_items = [
-			{
-				label: "Edit Item",
-				icon: "pen",
-				onClick: () => {
-					frappe.app.sidebar.edit_item(me.item);
+		let menu_items = {
+			name: "edit-item",
+			items: [
+				{
+					label: "Edit Item",
+					icon: "pen",
+					onClick: () => {
+						frappe.app.sidebar.edit_item(me.item);
+					},
 				},
-			},
-			{
-				label: "Add Item Below",
-				icon: "add",
-				onClick: () => {
-					frappe.app.sidebar.add_below(me.item);
+				{
+					label: "Add Item Below",
+					icon: "add",
+					onClick: () => {
+						frappe.app.sidebar.add_below(me.item);
+					},
 				},
-			},
-			{
-				label: "Duplicate",
-				icon: "copy",
-				onClick: () => {
-					console.log("Start Deleting");
-					frappe.app.sidebar.duplicate_item(me.item);
+				{
+					label: "Duplicate",
+					icon: "copy",
+					onClick: () => {
+						console.log("Start Deleting");
+						frappe.app.sidebar.duplicate_item(me.item);
+					},
 				},
-			},
-			{
-				label: "Delete",
-				icon: "trash-2",
-				onClick: () => {
-					console.log(me.item);
-					frappe.app.sidebar.delete_item(me.item);
-					console.log("Start Deleting");
+				{
+					label: "Delete",
+					icon: "trash-2",
+					onClick: () => {
+						console.log(me.item);
+						frappe.app.sidebar.delete_item(me.item);
+						console.log("Start Deleting");
+					},
 				},
-			},
-		];
+			],
+		};
 		return menu_items;
 	}
 	add_menu_items() {}
@@ -258,43 +261,46 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 
 	get_menu_items() {
 		let me = this;
-		let menu_items = [
-			{
-				label: "Edit Item",
-				icon: "pen",
-				onClick: () => {
-					console.log("Start ediitng");
-					frappe.app.sidebar.edit_item(me.item);
+		let menu_items = {
+			name: "edit-section-break",
+			items: [
+				{
+					label: "Edit Item",
+					icon: "pen",
+					onClick: () => {
+						console.log("Start ediitng");
+						frappe.app.sidebar.edit_item(me.item);
+					},
 				},
-			},
-			{
-				label: "Add Nested Items",
-				icon: "add",
-				onClick: () => {
-					frappe.app.sidebar.show_new_dialog({
-						nested: true,
-						parent_item: me.item,
-					});
+				{
+					label: "Add Nested Items",
+					icon: "add",
+					onClick: () => {
+						frappe.app.sidebar.show_new_dialog({
+							nested: true,
+							parent_item: me.item,
+						});
+					},
 				},
-			},
-			{
-				label: "Duplicate",
-				icon: "copy",
-				onClick: () => {
-					console.log("Start Deleting");
-					frappe.app.sidebar.duplicate_item(me.item);
+				{
+					label: "Duplicate",
+					icon: "copy",
+					onClick: () => {
+						console.log("Start Deleting");
+						frappe.app.sidebar.duplicate_item(me.item);
+					},
 				},
-			},
-			{
-				label: "Delete",
-				icon: "trash-2",
-				onClick: () => {
-					console.log(me.item);
-					frappe.app.sidebar.delete_item(me.item);
-					console.log("Start Deleting");
+				{
+					label: "Delete",
+					icon: "trash-2",
+					onClick: () => {
+						console.log(me.item);
+						frappe.app.sidebar.delete_item(me.item);
+						console.log("Start Deleting");
+					},
 				},
-			},
-		];
+			],
+		};
 		return menu_items;
 	}
 };

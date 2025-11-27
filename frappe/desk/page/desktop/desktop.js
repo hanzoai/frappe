@@ -162,34 +162,36 @@ class DesktopPage {
 	}
 	setup_avatar() {
 		$(".desktop-avatar").html(frappe.avatar(frappe.session.user, "avatar-medium"));
-		$(".desktop-avatar").data("menu", "user-menu");
-		let menu_items = [
-			{
-				icon: "edit",
-				label: "Edit Profile",
-				url: `/update-profile/${frappe.session.user}`,
-			},
-			{
-				icon: "lock",
-				label: "Reset Password",
-				url: "/update-password",
-			},
-			{
-				icon: "rotate-ccw",
-				label: "Reset to Default",
-				onClick: function () {
-					reset_to_default();
-					window.location.reload();
+		let menu_items = {
+			name: "user-menu",
+			items: [
+				{
+					icon: "edit",
+					label: "Edit Profile",
+					url: `/update-profile/${frappe.session.user}`,
 				},
-			},
-			{
-				icon: "log-out",
-				label: "Logout",
-				onClick: function () {
-					frappe.app.logout();
+				{
+					icon: "lock",
+					label: "Reset Password",
+					url: "/update-password",
 				},
-			},
-		];
+				{
+					icon: "rotate-ccw",
+					label: "Reset to Default",
+					onClick: function () {
+						reset_to_default();
+						window.location.reload();
+					},
+				},
+				{
+					icon: "log-out",
+					label: "Logout",
+					onClick: function () {
+						frappe.app.logout();
+					},
+				},
+			],
+		};
 		frappe.ui.create_menu($(".desktop-avatar"), menu_items, null, true);
 	}
 	setup_navbar() {
