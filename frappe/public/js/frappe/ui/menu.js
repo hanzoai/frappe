@@ -2,10 +2,10 @@ import "../dom";
 frappe.provide("frappe.ui");
 
 frappe.ui.menu = class ContextMenu {
-	constructor(opts, left) {
+	constructor(menu_items, left) {
 		this.template = $(`<div class="sidebar-header-menu context-menu" role="menu"></div>`);
-		this.menu_items = opts.items;
-		this.name = opts.name;
+		this.menu_items = menu_items;
+		this.name = frappe.utils.get_random(5);
 		this.open_on_left = left;
 	}
 
@@ -115,9 +115,9 @@ frappe.ui.menu = class ContextMenu {
 
 frappe.menu_map = {};
 
-frappe.ui.create_menu = function (element, opts, right_click, open_on_left) {
+frappe.ui.create_menu = function (element, menu_items, right_click, open_on_left) {
 	$(element).css("cursor", "pointer");
-	let context_menu = new frappe.ui.menu(opts, open_on_left);
+	let context_menu = new frappe.ui.menu(menu_items, open_on_left);
 
 	frappe.menu_map[context_menu.name] = context_menu;
 	if (right_click) {
