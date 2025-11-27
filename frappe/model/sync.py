@@ -205,7 +205,7 @@ def remove_orphan_entities():
 		"Workspace": {"public": 1},
 		"Page": {"standard": "Yes"},
 		"Report": {"is_standard": "Yes"},
-		"Dashboard": {"is_standard": False},
+		"Dashboard": {"is_standard": True},
 	}
 	for entity in entites:
 		print(f"Removing orphan {entity}s")
