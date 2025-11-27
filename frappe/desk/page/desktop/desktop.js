@@ -199,21 +199,12 @@ class DesktopPage {
 	setup_awesomebar() {
 		if (frappe.boot.desk_settings.search_bar) {
 			let awesome_bar = new frappe.search.AwesomeBar();
-			awesome_bar.setup(".desktop-search-wrapper #navbar-search");
+			awesome_bar.setup(".desktop-search-wrapper #navbar-modal-search");
 		}
 		frappe.ui.keys.add_shortcut({
 			shortcut: "ctrl+g",
 			action: function (e) {
-				$(".desktop-search-wrapper #navbar-search").focus();
-				e.preventDefault();
-				return false;
-			},
-			description: __("Open Awesomebar"),
-		});
-		frappe.ui.keys.add_shortcut({
-			shortcut: "ctrl+k",
-			action: function (e) {
-				$(".desktop-search-wrapper #navbar-search").focus();
+				$(".desktop-search-wrapper #navbar-modal-search").click();
 				e.preventDefault();
 				return false;
 			},
