@@ -162,7 +162,6 @@ class DesktopPage {
 	}
 	setup_avatar() {
 		$(".desktop-avatar").html(frappe.avatar(frappe.session.user, "avatar-medium"));
-		$(".desktop-avatar").data("menu", "user-menu");
 		let menu_items = [
 			{
 				icon: "edit",
@@ -190,7 +189,11 @@ class DesktopPage {
 				},
 			},
 		];
-		frappe.ui.create_menu($(".desktop-avatar"), menu_items, null, true);
+		frappe.ui.create_menu({
+			parent: $(".desktop-avatar"),
+			menu_items: menu_items,
+			open_on_left: true,
+		});
 	}
 	setup_navbar() {
 		$(".sticky-top > .navbar").hide();
