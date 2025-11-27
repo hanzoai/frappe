@@ -120,6 +120,7 @@ frappe.ui.create_menu = function attachContextMenuToElement(
 	right_click,
 	open_on_left
 ) {
+	$(element).css("cursor", "pointer");
 	let contextMenu = new frappe.ui.menu(menuItems, open_on_left);
 
 	frappe.menu_map[$(element).data("menu")] = contextMenu;
