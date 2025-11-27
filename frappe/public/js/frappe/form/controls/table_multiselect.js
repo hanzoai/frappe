@@ -12,7 +12,7 @@ frappe.ui.form.ControlTableMultiSelect = class ControlTableMultiSelect extends (
 		});
 
 		// used as an internal model to store values
-		this.rows = [];
+		this.rows = this.frm?.doc[this.df.fieldname] || [];
 		// used as an internal model to filter awesomplete values
 		this._rows_list = [];
 
@@ -75,86 +75,89 @@ frappe.ui.form.ControlTableMultiSelect = class ControlTableMultiSelect extends (
 	setup_buttons() {
 		this.$input_area.find(".link-btn").remove();
 	}
-	parse(value, label) {
+	parse(value) {
 		if (typeof value == "object" || !this.rows) {
 			return value;
 		}
 
 		const link_field = this.get_link_field();
+		value = value?.trim();
+		if (!value) return this.rows;
 
-		if (value) {
-			// Trim the value to remove spaces or only if space is only input
-			value = value.trim();
+		// clear input to prevent multiple additions
+		this.set_input_value("");
 
-			// Only create a pill if the value is a real item from the autocomplete list.
-			// This prevents creating a pill from raw text when the user clicks away.
-			if (this.awesomplete.get_item(value)) {
-				if (this.frm) {
-					const new_row = frappe.model.add_child(
-						this.frm.doc,
-						this.df.options,
-						this.df.fieldname
-					);
-					new_row[link_field.fieldname] = value;
-					this.rows = this.frm.doc[this.df.fieldname];
-
-					this.frm.script_manager.trigger(
-						`${this.df.fieldname}_add`,
-						this.df.options,
-						new_row.name
-					);
-				} else {
-					this.rows.push({
-						[link_field.fieldname]: value,
-					});
-				}
-				frappe.utils.add_link_title(link_field.options, value, label);
-			}
+		if (this.frm) {
+			// ⚠️ we are setting the model value earlier
+			// it will need to be removed if validation fails.
+			const new_row = frappe.model.add_child(
+				this.frm.doc,
+				this.df.options,
+				this.df.fieldname
+			);
+			new_row[link_field.fieldname] = value;
+			this.rows = this.frm.doc[this.df.fieldname];
+		} else {
+			this.rows.push({
+				[link_field.fieldname]: value,
+			});
 		}
-		this._rows_list = this.rows.map((row) => row[link_field.fieldname]);
+
 		return this.rows;
 	}
 	get_model_value() {
 		let value = super.get_model_value();
 		return value ? value.filter((d) => !d.__islocal) : value;
 	}
-	validate(value) {
+	_update_rows(rows) {
+		this.rows = this.frm?.doc[this.df.fieldname] || rows;
+
+		const link_fieldname = this.get_link_field().fieldname;
+		this._rows_list = this.rows.map((row) => row[link_fieldname]);
+
+		return rows;
+	}
+	async validate(value) {
 		const rows = (value || []).slice();
 
-		// validate the value just entered
-		if (this.df.ignore_link_validation) {
-			return rows;
-		}
-
-		const link_field = this.get_link_field();
 		if (rows.length === 0) {
-			return rows;
+			return this._update_rows(rows);
 		}
 
 		const all_rows_except_last = rows.slice(0, rows.length - 1);
 		const last_row = rows[rows.length - 1];
+		const link_field = this.get_link_field();
 
 		// validate the last value entered
 		const link_value = last_row[link_field.fieldname];
 
-		// falsy value
-		if (!link_value) {
-			return all_rows_except_last;
+		// falsy / duplicate value
+		if (
+			frappe.utils.is_empty(link_value) ||
+			all_rows_except_last.map((row) => row[link_field.fieldname]).includes(link_value)
+		) {
+			// model value may already be set in parse
+			frappe.model.clear_doc(last_row.doctype, last_row.name);
+			return this._update_rows(all_rows_except_last);
 		}
 
-		// duplicate value
-		if (all_rows_except_last.map((row) => row[link_field.fieldname]).includes(link_value)) {
-			return all_rows_except_last;
-		}
-
-		return this.validate_link_and_fetch(link_value).then((validated_value) => {
-			if (validated_value === link_value) {
-				return rows;
-			} else {
-				rows.pop();
-				return rows;
+		if (!this.df.ignore_link_validation) {
+			const validated_value = await this.validate_link_and_fetch(link_value);
+			if (frappe.utils.is_empty(validated_value)) {
+				// model value may already be set in parse
+				frappe.model.clear_doc(last_row.doctype, last_row.name);
+				return this._update_rows(all_rows_except_last);
 			}
-		});
+			last_row[link_field.fieldname] = validated_value;
+		}
+
+		// trigger row added event
+		this.frm?.script_manager.trigger(
+			`${this.df.fieldname}_add`,
+			this.df.options,
+			last_row.name
+		);
+		return this._update_rows(rows);
 	}
 	set_formatted_input(value) {
 		this.rows = value || [];
