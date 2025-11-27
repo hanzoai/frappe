@@ -189,7 +189,11 @@ class DesktopPage {
 				},
 			},
 		];
-		frappe.ui.create_menu($(".desktop-avatar"), menu_items, null, true);
+		frappe.ui.create_menu({
+			parent: $(".desktop-avatar"),
+			menu_items: menu_items,
+			open_on_left: true,
+		});
 	}
 	setup_navbar() {
 		$(".sticky-top > .navbar").hide();

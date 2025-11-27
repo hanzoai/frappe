@@ -1,8 +1,10 @@
+:root {
+	// can do sizes later on;
+	--menu-width: 200px;
+}
 .sidebar-header-menu {
 	position: absolute;
-	top: 60px;
-	left: 9px;
-	width: 200px;
+	width: var(--menu-width);
 	padding: 6px;
 	border-radius: var(--border-radius-lg);
 	background: var(--surface-modal);

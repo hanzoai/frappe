@@ -2,11 +2,12 @@ import "../dom";
 frappe.provide("frappe.ui");
 
 frappe.ui.menu = class ContextMenu {
-	constructor(menu_items, left) {
+	constructor(opts) {
 		this.template = $(`<div class="sidebar-header-menu context-menu" role="menu"></div>`);
-		this.menu_items = menu_items;
+		this.menu_items = opts.menu_items;
 		this.name = frappe.utils.get_random(5);
-		this.open_on_left = left;
+		this.open_on_left = opts.open_on_left;
+		this.opts = opts;
 	}
 
 	make() {
@@ -40,6 +41,7 @@ frappe.ui.menu = class ContextMenu {
 		if (!item.url) {
 			item_wrapper.on("click", function () {
 				item.onClick();
+				me.opts.onItemClick && me.opts.onItemClick(me.opts.parent);
 				me.hide();
 			});
 		} else {
@@ -47,23 +49,23 @@ frappe.ui.menu = class ContextMenu {
 		}
 		item_wrapper.appendTo(this.template);
 	}
-	show(element) {
+	show(parent) {
 		this.close_all_other_menu();
 
 		this.make();
 
-		const offset = $(element).offset();
-		const height = $(element).outerHeight();
+		const offset = $(parent).offset();
+		const height = $(parent).outerHeight();
 		this.left_offset = 0;
-
+		this.gap = 4;
 		this.template.css({
 			display: "block",
 			position: "absolute",
-			top: offset.top + height + "px",
+			top: offset.top + height + this.gap + "px",
 			left: offset.left,
 		});
 		if (this.open_on_left) {
-			this.left_offset = element.getBoundingClientRect().width;
+			this.left_offset = parent.getBoundingClientRect().width;
 			this.template.css({
 				left:
 					offset.left -
@@ -115,29 +117,33 @@ frappe.ui.menu = class ContextMenu {
 
 frappe.menu_map = {};
 
-frappe.ui.create_menu = function (element, menu_items, right_click, open_on_left) {
-	$(element).css("cursor", "pointer");
-	let context_menu = new frappe.ui.menu(menu_items, open_on_left);
+frappe.ui.create_menu = function (opts) {
+	$(opts.parent).css("cursor", "pointer");
+	let context_menu = new frappe.ui.menu(opts);
 
 	frappe.menu_map[context_menu.name] = context_menu;
-	if (right_click) {
-		$(element).on("contextmenu", function (event) {
+	if (opts.right_click) {
+		$(opts.parent).on("contextmenu", function (event) {
 			event.preventDefault();
 			event.stopPropagation();
 			if (frappe.menu_map[context_menu.name] && frappe.menu_map[context_menu.name].visible) {
 				frappe.menu_map[context_menu.name].hide();
+				opts.onHide && opts.onHide(this);
 			} else {
 				frappe.menu_map[context_menu.name].show(this);
+				opts.onShow && opts.onShow(this);
 			}
 		});
 	} else {
-		$(element).on("click", function (event) {
+		$(opts.parent).on("click", function (event) {
 			event.preventDefault();
 			event.stopPropagation();
 			if (frappe.menu_map[context_menu.name].visible) {
 				frappe.menu_map[context_menu.name].hide();
+				opts.onHide && opts.onHide(this);
 			} else {
 				frappe.menu_map[context_menu.name].show(this);
+				opts.onShow && opts.onShow(this);
 			}
 		});
 	}
