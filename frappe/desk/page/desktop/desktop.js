@@ -158,7 +158,7 @@ class DesktopPage {
 		this.setup_avatar();
 		this.setup_navbar();
 		this.setup_awesomebar();
-		this.handke_route_change();
+		this.handle_route_change();
 	}
 	setup_avatar() {
 		$(".desktop-avatar").html(frappe.avatar(frappe.session.user, "avatar-medium"));
@@ -197,6 +197,9 @@ class DesktopPage {
 	}
 
 	setup_awesomebar() {
+		if (this.awesomebar_setup) return;
+		this.awesomebar_setup = true;
+
 		$(".desktop-search-wrapper #navbar-search").attr(
 			"placeholder",
 			`Search or type a command (${frappe.utils.is_mac() ? "⌘ + K" : "Ctrl + K"})`
@@ -215,7 +218,7 @@ class DesktopPage {
 			description: __("Open Awesomebar"),
 		});
 	}
-	handke_route_change() {
+	handle_route_change() {
 		const me = this;
 		frappe.router.on("change", function () {
 			if (frappe.get_route()[0] == "desktop" || frappe.get_route()[0] == "")
