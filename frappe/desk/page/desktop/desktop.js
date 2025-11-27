@@ -197,6 +197,10 @@ class DesktopPage {
 	}
 
 	setup_awesomebar() {
+		$(".desktop-search-wrapper #navbar-search").attr(
+			"placeholder",
+			`Search or type a command (${frappe.utils.is_mac() ? "⌘ + K" : "Ctrl + K"})`
+		);
 		if (frappe.boot.desk_settings.search_bar) {
 			let awesome_bar = new frappe.search.AwesomeBar();
 			awesome_bar.setup(".desktop-search-wrapper #navbar-modal-search");
