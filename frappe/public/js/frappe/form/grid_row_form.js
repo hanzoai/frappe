@@ -52,7 +52,7 @@ export default class GridRowForm {
 			if (df?.fieldtype === "Tab Break") {
 				in_tab = df === tab?.df;
 			} else if (typeof field?.on_section_collapse === "function") {
-				field.on_section_collapse(!in_tab); // hide = !in_tab
+				field.on_section_collapse(!in_tab);
 			}
 		}
 	}
