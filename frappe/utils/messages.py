@@ -11,7 +11,7 @@ _strip_html_tags = functools.lru_cache(maxsize=1024)(strip_html_tags)
 
 
 def msgprint(
-	msg: str,
+	msg: str | list[str] | list[list[str]],
 	title: str | None = None,
 	raise_exception: bool | type[Exception] | Exception = False,
 	as_table: bool = False,
@@ -124,7 +124,7 @@ def clear_last_message():
 
 
 def throw(
-	msg: str,
+	msg: str | list[str] | list[list[str]],
 	exc: type[Exception] | Exception = frappe.ValidationError,
 	title: str | None = None,
 	is_minimizable: bool = False,
