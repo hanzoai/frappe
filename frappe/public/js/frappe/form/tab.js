@@ -121,7 +121,25 @@ export default class Tab {
 				// Activate this tab
 				this.tab_link.find(".nav-link").addClass("active");
 				this.wrapper.addClass("show active");
+
+				// Notify fields to update their display (fixes Geolocation/Signature fields)
+				this.update_fields_on_tab_change();
 			});
+		}
+	}
+
+	update_fields_on_tab_change() {
+		// When switching tabs in child tables, notify fields like Geolocation and Signature
+		// to update their display using the on_section_collapse method
+		if (!this.layout?.fields_list) return;
+
+		let in_tab = false;
+		for (const fieldobj of this.layout.fields_list) {
+			if (fieldobj.df?.fieldtype === "Tab Break") {
+				in_tab = fieldobj.df === this.df;
+			} else if (typeof fieldobj.on_section_collapse === "function") {
+				fieldobj.on_section_collapse(!in_tab); // hide = !in_tab
+			}
 		}
 	}
 }
