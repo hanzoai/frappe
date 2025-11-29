@@ -18,8 +18,9 @@ export default class Tab {
 			<li class="nav-item">
 				<button class="nav-link ${this.df.active ? "active" : ""}" id="${id}-tab"
 					data-toggle="tab"
+					data-target="#${id}"
 					data-fieldname="${this.df.fieldname}"
-					href="#${id}"
+					type="button"
 					role="tab"
 					aria-controls="${id}">
 						${__(this.label, null, this.doctype)}
@@ -45,11 +46,10 @@ export default class Tab {
 		if (!hide) {
 			// show only if there is at least one visible section or control
 			hide = true;
-			if (
-				this.wrapper.find(
-					".form-section:not(.hide-control, .empty-section), .form-dashboard-section:not(.hide-control, .empty-section)"
-				).length
-			) {
+			const visible_sections = this.wrapper.find(
+				".form-section:not(.hide-control, .empty-section), .form-dashboard-section:not(.hide-control, .empty-section)"
+			);
+			if (visible_sections.length) {
 				hide = false;
 			}
 		}
@@ -82,8 +82,12 @@ export default class Tab {
 	}
 
 	set_active() {
+		// Use Bootstrap's tab method to properly activate
 		this.tab_link.find(".nav-link").tab("show");
-		this.wrapper.addClass("show");
+
+		// Ensure the wrapper has the correct classes
+		this.wrapper.addClass("show active");
+
 		this.frm?.set_active_tab?.(this);
 	}
 
@@ -99,5 +103,25 @@ export default class Tab {
 		this.tab_link.find(".nav-link").on("shown.bs.tab", () => {
 			this.frm?.set_active_tab?.(this);
 		});
+
+		// For child tables, add explicit click handler to ensure tab switching works
+		if (this.layout?.is_child_table) {
+			this.tab_link.find(".nav-link").on("click", (e) => {
+				e.preventDefault();
+				e.stopPropagation();
+
+				// Deactivate all other tabs
+				this.layout.tabs.forEach((tab) => {
+					if (tab !== this) {
+						tab.tab_link.find(".nav-link").removeClass("active");
+						tab.wrapper.removeClass("show active");
+					}
+				});
+
+				// Activate this tab
+				this.tab_link.find(".nav-link").addClass("active");
+				this.wrapper.addClass("show active");
+			});
+		}
 	}
 }
