@@ -9,6 +9,9 @@ export default class GridRowForm {
 		this.form_area.empty();
 		frappe.utils.scroll_to(0, false, 0, this.wrapper.find(".grid-form-body"));
 
+		// Check if tabs exist in the docfields
+		const has_tabs = this.row.docfields.some((df) => df.fieldtype === "Tab Break");
+
 		this.layout = new frappe.ui.form.Layout({
 			fields: this.row.docfields,
 			body: this.form_area,
@@ -17,6 +20,9 @@ export default class GridRowForm {
 			grid: this.row.grid,
 			grid_row: this.row,
 			grid_row_form: this,
+			is_child_table: true,
+			doctype: this.row.grid.doctype,
+			doc: this.row.doc,
 		});
 		this.layout.make();
 

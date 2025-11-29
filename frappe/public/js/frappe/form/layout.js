@@ -37,7 +37,12 @@ frappe.ui.form.Layout = class Layout {
 		}
 
 		this.frm && this.setup_tooltip_events();
-		this.render();
+
+		// Only render once during make()
+		if (!this.rendered) {
+			this.render();
+			this.rendered = true;
+		}
 	}
 
 	setup_tabbed_layout() {
@@ -160,7 +165,10 @@ frappe.ui.form.Layout = class Layout {
 			let first_tab =
 				first_field_visible?.fieldtype === "Tab Break" ? first_field_visible : null;
 
-			if (!first_tab) {
+			// Check if default tab already exists to prevent duplicates
+			let has_default_tab = this.fields.find((df) => df.fieldname === "__details");
+
+			if (!first_tab && !has_default_tab) {
 				this.fields.splice(0, 0, default_tab);
 			} else {
 				// reshuffle __newname field to accomodate under 1st Tab Break
@@ -445,6 +453,18 @@ frappe.ui.form.Layout = class Layout {
 		const tab = this.tabs.find((tab) => tab.df.fieldname === tab_from_hash);
 		if (tab) {
 			tab.set_active();
+			return;
+		}
+
+		// For child tables (grid row forms), don't use parent frm's active tab
+		// Always activate the first visible tab
+		if (this.is_child_table) {
+			if (this.tabs.length) {
+				let first_visible_tab = this.tabs.find((tab) => !tab.is_hidden());
+				if (first_visible_tab) {
+					first_visible_tab.set_active();
+				}
+			}
 			return;
 		}
 
