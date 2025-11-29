@@ -43,6 +43,19 @@ export default class GridRowForm {
 
 		this.set_focus();
 	}
+	set_active_tab(tab) {
+		// When switching tabs in grid row forms, update field display for Geolocation/Signature fields
+		// This is similar to the fix in frappe/frappe#27441 for regular forms
+		let in_tab = false;
+		for (const df of this.layout.fields) {
+			const field = this.fields_dict[df.fieldname];
+			if (df?.fieldtype === "Tab Break") {
+				in_tab = df === tab?.df;
+			} else if (typeof field?.on_section_collapse === "function") {
+				field.on_section_collapse(!in_tab); // hide = !in_tab
+			}
+		}
+	}
 	make_form() {
 		if (!this.form_area) {
 			let template = `<div class="grid-form-heading">

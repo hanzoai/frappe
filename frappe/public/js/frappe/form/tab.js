@@ -88,7 +88,14 @@ export default class Tab {
 		// Ensure the wrapper has the correct classes
 		this.wrapper.addClass("show active");
 
-		this.frm?.set_active_tab?.(this);
+		// Call set_active_tab on the appropriate form object
+		if (this.layout?.grid_row_form) {
+			// For child tables, call grid_row_form's set_active_tab
+			this.layout.grid_row_form.set_active_tab?.(this);
+		} else {
+			// For regular forms, call frm's set_active_tab
+			this.frm?.set_active_tab?.(this);
+		}
 	}
 
 	is_active() {
@@ -101,7 +108,12 @@ export default class Tab {
 
 	setup_listeners() {
 		this.tab_link.find(".nav-link").on("shown.bs.tab", () => {
-			this.frm?.set_active_tab?.(this);
+			// Call set_active_tab on the appropriate form object
+			if (this.layout?.grid_row_form) {
+				this.layout.grid_row_form.set_active_tab?.(this);
+			} else {
+				this.frm?.set_active_tab?.(this);
+			}
 		});
 
 		// For child tables, add explicit click handler to ensure tab switching works
@@ -122,24 +134,11 @@ export default class Tab {
 				this.tab_link.find(".nav-link").addClass("active");
 				this.wrapper.addClass("show active");
 
-				// Notify fields to update their display (fixes Geolocation/Signature fields)
-				this.update_fields_on_tab_change();
+				// Notify grid_row_form about tab change
+				if (this.layout.grid_row_form) {
+					this.layout.grid_row_form.set_active_tab?.(this);
+				}
 			});
-		}
-	}
-
-	update_fields_on_tab_change() {
-		// When switching tabs in child tables, notify fields like Geolocation and Signature
-		// to update their display using the on_section_collapse method
-		if (!this.layout?.fields_list) return;
-
-		let in_tab = false;
-		for (const fieldobj of this.layout.fields_list) {
-			if (fieldobj.df?.fieldtype === "Tab Break") {
-				in_tab = fieldobj.df === this.df;
-			} else if (typeof fieldobj.on_section_collapse === "function") {
-				fieldobj.on_section_collapse(!in_tab); // hide = !in_tab
-			}
 		}
 	}
 }
