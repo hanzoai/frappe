@@ -82,7 +82,7 @@
 		background-color: var(--btn-default-hover-bg);
 		color: var(--text-color);
 	}
-	&:focus {
+	&:focus-visible {
 		box-shadow: var(--focus-default) !important;
 	}
 }
@@ -134,4 +134,15 @@
 		color: var(--gray-900) !important;
 		background-color: var(--invert-neutral) !important;
 	}
+}
+.btn-outline {
+	background-color: var(--surface-white);
+	font-size: 14px;
+	line-height: 1.15;
+	letter-spacing: 0.02em;
+	font-weight: 420;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+	border: 1px solid;
+	border-color: var(--outline-gray-2);
 }
