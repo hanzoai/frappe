@@ -48,7 +48,6 @@
     width: auto;
 }
 .desktop-search-icon > .icon {
-    stroke: var(--ink-gray-4);
     stroke-width: 1px;
 }
 
