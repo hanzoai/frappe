@@ -173,6 +173,7 @@ class Engine:
 		skip_locked: bool = False,
 		wait: bool = True,
 		ignore_permissions: bool = True,
+		ignore_user_permissions: bool = False,
 		user: str | None = None,
 		parent_doctype: str | None = None,
 		reference_doctype: str | None = None,
@@ -184,6 +185,8 @@ class Engine:
 		Args:
 			db_query_compat: When True, uses legacy db_query behavior for sorting and filtering.
 			This is kept optional to not break existing code that relies on the original query builder behaviour.
+			ignore_user_permissions: Ignore user permissions for the query.
+				Useful for link search queries when the link field has `ignore_user_permissions` set.
 		"""
 
 		qb = frappe.local.qb
@@ -197,6 +200,7 @@ class Engine:
 		self.parent_doctype = parent_doctype
 		self.reference_doctype = reference_doctype
 		self.apply_permissions = not ignore_permissions
+		self.ignore_user_permissions = ignore_user_permissions
 		self.function_aliases = set()
 		self.field_aliases = set()
 		self.db_query_compat = db_query_compat
@@ -1296,8 +1300,7 @@ class Engine:
 		conditions = []
 		fetch_shared_docs = False
 
-		# add user permission only if role has read perm
-		if not (role_permissions.get("read") or role_permissions.get("select")):
+		if self.ignore_user_permissions:
 			return conditions, fetch_shared_docs
 
 		user_permissions = frappe.permissions.get_user_permissions(self.user)
