@@ -80,6 +80,18 @@ def search_widget(
 	form_doctype: str | None = None,
 	link_fieldname: str | None = None,
 ):
+	if ignore_user_permissions:
+		if form_doctype and link_fieldname:
+			validate_ignore_user_permissions(form_doctype, link_fieldname, doctype)
+		else:
+			frappe.logger().error(
+				"setting ignore_user_permissions=True in search_link requires "
+				"form_doctype and link_fieldname to be set. "
+				f"Got form_doctype={form_doctype}, link_fieldname={link_fieldname}. "
+				"Ignoring flag."
+			)
+			ignore_user_permissions = False
+
 	start = cint(start)
 
 	if isinstance(filters, str):
@@ -198,18 +210,6 @@ def search_widget(
 			formatted_fields.append(_relevance)
 			# Since we are sorting by alias postgres needs to know number of column we are sorting
 			order_by = f"{len(formatted_fields)} desc nulls last, {order_by}"
-
-	if ignore_user_permissions:
-		if form_doctype and link_fieldname:
-			validate_ignore_user_permissions(form_doctype, link_fieldname, doctype)
-		else:
-			frappe.logger().error(
-				"setting ignore_user_permissions=True in search_link requires "
-				"form_doctype and link_fieldname to be set. "
-				f"Got form_doctype={form_doctype}, link_fieldname={link_fieldname}. "
-				"Ignoring flag."
-			)
-			ignore_user_permissions = False
 
 	values = frappe.get_list(
 		doctype,
