@@ -4,7 +4,7 @@ from functools import lru_cache
 from typing import TYPE_CHECKING, Any
 
 from pypika.enums import Arithmetic
-from pypika.queries import QueryBuilder, Table
+from pypika.queries import Column, QueryBuilder, Table
 from pypika.terms import AggregateFunction, ArithmeticExpression, Star, Term, ValueWrapper
 
 import frappe
@@ -123,6 +123,9 @@ ALLOWED_FIELD_PATTERN = re.compile(
 # Group 3: Optional quote for field name
 # Group 4: Field name (e.g., `field` or field)
 FIELD_PARSE_REGEX = re.compile(r"^(?:(`?)(tab[\w\s-]+)\1\.)?(`?)(\w+)\3$")
+
+# Like FIELD_PARSE_REGEX but compulsary table name with backticks
+BACKTICK_FIELD_PARSE_REGEX = re.compile(r"^`tab([\w\s-]+)`\.(`?)(\w+)\2$")
 
 # Direct mapping from uppercase function names to pypika function classes
 FUNCTION_MAPPING = {
@@ -449,7 +452,7 @@ class Engine:
 	def _build_criterion_for_simple_filter(
 		self,
 		field: str | Field,
-		value: FilterValue | Field | list | set | None,
+		value: FilterValue | Field | Column | list | set | None,
 		operator: str = "=",
 		doctype: str | None = None,
 	) -> "Criterion | None":
@@ -458,7 +461,7 @@ class Engine:
 
 		_field = self._validate_and_prepare_filter_field(field, doctype)
 
-		if isinstance(value, Field):
+		if isinstance(value, Field | Column):
 			_value = self._validate_and_prepare_filter_field(value.name, doctype)
 		else:
 			# Regular value processing for literal comparisons like: table.field = 'value'
@@ -1024,19 +1027,14 @@ class Engine:
 	def _parse_backtick_field_notation(self, field_name: str) -> tuple[str, str] | None:
 		"""
 		Parse backtick field notation like `tabDocType`.`fieldname` or `tabDocType`.fieldname and return (doctype_name, field_name).
-		Uses FIELD_PARSE_REGEX for fast parsing.
+		Uses BACKTICK_FIELD_PARSE_REGEX for fast parsing.
 		Returns None if the notation is invalid.
 		"""
-		match = FIELD_PARSE_REGEX.match(field_name.strip())
+		match = BACKTICK_FIELD_PARSE_REGEX.match(field_name.strip())
 		if not match:
 			return None
 
-		table_name = match.group(2)
-		if not table_name:
-			return None
-
-		# return table_name without 'tab' prefix and field_name
-		return (table_name[3:], match.group(4))
+		return (match.group(1), match.group(3))
 
 	def _validate_and_parse_field_for_clause(self, field_name: str, clause_name: str) -> Field:
 		"""
