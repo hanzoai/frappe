@@ -2073,75 +2073,10 @@ class SQLFunctionParser:
 			frappe.throw(_("Empty alias is not allowed"), frappe.ValidationError)
 
 		# Alias should be a simple identifier
+		# Note: pypika wraps aliases in backticks, so anything without backticks is safe
 		if not IDENTIFIER_PATTERN.match(alias):
 			frappe.throw(
 				_("Invalid alias format: {0}. Alias must be a simple identifier.").format(alias),
-				frappe.ValidationError,
-			)
-
-		# Check for SQL keywords that shouldn't be used as aliases
-		sql_keywords = {
-			"select",
-			"from",
-			"where",
-			"join",
-			"inner",
-			"left",
-			"right",
-			"outer",
-			"union",
-			"group",
-			"order",
-			"by",
-			"having",
-			"limit",
-			"offset",
-			"insert",
-			"update",
-			"delete",
-			"create",
-			"drop",
-			"alter",
-			"table",
-			"index",
-			"view",
-			"database",
-			"schema",
-			"grant",
-			"revoke",
-			"commit",
-			"rollback",
-			"transaction",
-			"begin",
-			"end",
-			"if",
-			"else",
-			"case",
-			"when",
-			"then",
-			"null",
-			"not",
-			"and",
-			"or",
-			"in",
-			"exists",
-			"between",
-			"like",
-			"is",
-			"as",
-			"on",
-			"using",
-			"distinct",
-			"all",
-			"any",
-			"some",
-			"true",
-			"false",
-		}
-
-		if alias.lower() in sql_keywords:
-			frappe.throw(
-				_("Alias cannot be a SQL keyword: {0}").format(alias),
 				frappe.ValidationError,
 			)
 
