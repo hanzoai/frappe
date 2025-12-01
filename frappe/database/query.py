@@ -91,6 +91,13 @@ COMMA_PATTERN = re.compile(r",\s*(?![^()]*\))")
 # to allow table names like __Auth
 TABLE_NAME_PATTERN = re.compile(r"^[\w -]*$", flags=re.ASCII)
 
+# Pattern for validating simple field names (alphanumeric + underscore)
+SIMPLE_FIELD_PATTERN = re.compile(r"^\w+$", flags=re.ASCII)
+
+# Pattern for validating SQL identifiers (aliases, field names in functions)
+# More restrictive: must start with letter or underscore
+IDENTIFIER_PATTERN = re.compile(r"^[a-zA-Z_][a-zA-Z0-9_]*$", flags=re.ASCII)
+
 
 def _is_function_call(field_str: str) -> bool:
 	"""Check if a string is a SQL function call using sqlparse."""
@@ -693,7 +700,7 @@ class Engine:
 				)
 		else:
 			# No '.' and no '`'. Check if it's a simple field name (alphanumeric + underscore).
-			if not re.fullmatch(r"\w+", field):
+			if not SIMPLE_FIELD_PATTERN.match(field):
 				frappe.throw(
 					_(
 						"Invalid characters in fieldname: {0}. Only letters, numbers, and underscores are allowed."
@@ -1072,7 +1079,7 @@ class Engine:
 			return dynamic_field.field
 		else:
 			# Validate as simple field name (alphanumeric + underscore only)
-			if not re.fullmatch(r"\w+", field_name):
+			if not SIMPLE_FIELD_PATTERN.match(field_name):
 				frappe.throw(
 					_(
 						"Invalid field format in {0}: {1}. Use 'field', 'link_field.field', or 'child_table.field'."
@@ -2056,7 +2063,7 @@ class SQLFunctionParser:
 	def _is_valid_field_name(self, name: str) -> bool:
 		"""Check if a string is a valid field name."""
 		# Field names should only contain alphanumeric characters and underscores
-		return re.fullmatch(r"[a-zA-Z_][a-zA-Z0-9_]*", name) is not None
+		return IDENTIFIER_PATTERN.match(name) is not None
 
 	def _validate_alias(self, alias: str):
 		"""Validate alias name for SQL injection."""
@@ -2068,7 +2075,7 @@ class SQLFunctionParser:
 			frappe.throw(_("Empty alias is not allowed"), frappe.ValidationError)
 
 		# Alias should be a simple identifier
-		if not re.fullmatch(r"[a-zA-Z_][a-zA-Z0-9_]*", alias):
+		if not IDENTIFIER_PATTERN.match(alias):
 			frappe.throw(
 				_("Invalid alias format: {0}. Alias must be a simple identifier.").format(alias),
 				frappe.ValidationError,
