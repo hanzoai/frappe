@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 import sqlparse
 from pypika.enums import Arithmetic
 from pypika.queries import Column, QueryBuilder, Table
-from pypika.terms import AggregateFunction, ArithmeticExpression, Term, ValueWrapper
+from pypika.terms import AggregateFunction, ArithmeticExpression, Star, Term, ValueWrapper
 
 import frappe
 from frappe import _
@@ -2032,9 +2032,9 @@ class SQLFunctionParser:
 
 		# Special case: allow '*' for COUNT(*) and similar aggregate functions
 		if arg == "*":
-			# Return as-is for SQL star expansion (COUNT(*), etc.)
-			# pypika will handle this correctly when used with aggregate functions
-			return Column("*")
+			# Star() produces correct unquoted * for COUNT(*)
+			# Column("*") would produce COUNT("*") which is wrong
+			return Star()
 
 		# Check for string literals (quoted strings)
 		if self._is_string_literal(arg):
