@@ -1675,8 +1675,6 @@ class DynamicTableField:
 
 					linked_field = meta.get_field(potential_parent_fieldname)
 				except Exception:
-					# Handle cases where doctype doesn't exist, etc.
-					print(f"Error getting metadata for {doctype} while parsing field {field}")
 					return None
 
 				if linked_field:
