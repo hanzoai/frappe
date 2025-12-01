@@ -1739,11 +1739,11 @@ def _validate_select_field(field: str):
 	if field.isdigit():
 		return field
 
-	# Reject SQL functions
+	# Reject SQL functions in string format - use dict syntax instead
 	if _is_function_call(field):
 		frappe.throw(
 			_(
-				"SQL functions are not allowed in SELECT fields: {0}. Use the query builder API with functions instead."
+				"SQL functions are not allowed as strings in SELECT: {0}. Use dict syntax like {{'COUNT': '*'}} instead."
 			).format(field),
 			frappe.ValidationError,
 		)
