@@ -3,7 +3,6 @@ import re
 from functools import lru_cache
 from typing import TYPE_CHECKING, Any
 
-import sqlparse
 from pypika.enums import Arithmetic
 from pypika.queries import QueryBuilder, Table
 from pypika.terms import AggregateFunction, ArithmeticExpression, Star, Term, ValueWrapper
@@ -98,14 +97,13 @@ SIMPLE_FIELD_PATTERN = re.compile(r"^\w+$", flags=re.ASCII)
 # More restrictive: must start with letter or underscore
 IDENTIFIER_PATTERN = re.compile(r"^[a-zA-Z_][a-zA-Z0-9_]*$", flags=re.ASCII)
 
+# Pattern for detecting SQL function calls: identifier followed by opening parenthesis
+FUNCTION_CALL_PATTERN = re.compile(r"^\s*[a-zA-Z_][a-zA-Z0-9_]*\s*\(", flags=re.ASCII)
+
 
 def _is_function_call(field_str: str) -> bool:
-	"""Check if a string is a SQL function call using sqlparse."""
-	parsed = sqlparse.parse(field_str.strip())
-	if not parsed:
-		return False
-
-	return any(isinstance(token, sqlparse.sql.Function) for token in parsed[0].tokens)
+	"""Check if a string is a SQL function call."""
+	return bool(FUNCTION_CALL_PATTERN.match(field_str))
 
 
 # Pattern to validate field names in SELECT:
