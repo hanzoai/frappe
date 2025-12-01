@@ -6,6 +6,7 @@
 // add_fetches
 import Awesomplete from "awesomplete";
 frappe.ui.form.recent_link_validations = {};
+const SPECIAL_VALUES = ["create_new__link_option", "advanced_search__link_option"];
 
 frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlData {
 	static trigger_change_on_input_event = false;
@@ -663,9 +664,20 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		}
 
 		const columns_to_fetch = Object.values(this.fetch_map);
+		const nothing_to_fetch = !columns_to_fetch.length;
 
 		// if default and no fetch, no need to validate
-		if (!columns_to_fetch.length && this.df.__default_value === value) {
+		if (nothing_to_fetch && this.df.__default_value === value) {
+			return value;
+		}
+
+		if (
+			nothing_to_fetch &&
+			value &&
+			!SPECIAL_VALUES.includes(value) &&
+			this.awesomplete.get_item(value)
+		) {
+			// if value is in the suggestion list, must be correct
 			return value;
 		}
 
