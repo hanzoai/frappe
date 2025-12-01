@@ -5,6 +5,7 @@
 """
 import json
 import os
+from pathlib import Path
 
 import frappe
 import frappe.utils
@@ -206,9 +207,13 @@ def get_module_path(module):
 	return frappe.get_module_path(module)
 
 
-def get_doc_path(module, doctype, name):
-	dt, dn = scrub_dt_dn(doctype, name)
-	return os.path.join(get_module_path(module), dt, dn)
+def get_doc_path(module: str, doctype: str, name: str) -> str:
+	"""Return path of a doc in a module."""
+	module_path = Path(get_module_path(module))
+	path = module_path / Path(*scrub_dt_dn(doctype, name))
+	if not path.resolve().is_relative_to(module_path.resolve()):
+		raise ValueError(_("Path {0} is not within module {1}").format(path, module))
+	return path.resolve()
 
 
 def reload_doc(module, dt=None, dn=None, force=False, reset_permissions=False):
