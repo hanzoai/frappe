@@ -1007,73 +1007,20 @@ class Engine:
 
 	def _parse_backtick_field_notation(self, field_name: str) -> tuple[str, str] | None:
 		"""
-		Parse backtick field notation like `tabDocType`.`fieldname` or `tabDocType`.fieldname and return (table_name, field_name).
-		Uses sqlparse for robust SQL parsing with Identifier support.
+		Parse backtick field notation like `tabDocType`.`fieldname` or `tabDocType`.fieldname and return (doctype_name, field_name).
+		Uses FIELD_PARSE_REGEX for fast parsing.
 		Returns None if the notation is invalid.
 		"""
-		import sqlparse
-		from sqlparse.sql import Identifier
-
-		# Parse the field name as SQL
-		parsed = sqlparse.parse(field_name.strip())
-		if not parsed or not parsed[0].tokens:
+		match = FIELD_PARSE_REGEX.match(field_name.strip())
+		if not match:
 			return None
 
-		tokens = parsed[0].tokens
-
-		# Filter out whitespace tokens
-		non_ws_tokens = [t for t in tokens if not t.is_whitespace]
-
-		if len(non_ws_tokens) != 1:
+		table_name = match.group(2)
+		if not table_name:
 			return None
 
-		# Check if it's an Identifier (which handles table.field notation)
-		first_token = non_ws_tokens[0]
-		if not isinstance(first_token, Identifier):
-			return None
-
-		# Get the sub-tokens within the identifier
-		# Should have: `tabTable` (Name), `.` (Punctuation), `fieldname` (Name)
-		identifier_tokens = [t for t in first_token.tokens if not t.is_whitespace]
-
-		if len(identifier_tokens) != 3:
-			return None
-
-		table_token = identifier_tokens[0]
-		dot_token = identifier_tokens[1]
-		field_token = identifier_tokens[2]
-
-		# Verify the dot
-		if str(dot_token).strip() != ".":
-			return None
-
-		# Extract and validate table name (should be backtick-quoted)
-		table_str = str(table_token).strip()
-		if not (table_str.startswith("`") and table_str.endswith("`")):
-			return None
-
-		# Extract field name (can be backtick-quoted or unquoted)
-		field_str = str(field_token).strip()
-		# Remove backticks if present
-		if field_str.startswith("`") and field_str.endswith("`"):
-			field_str = field_str[1:-1]
-
-		# Remove backticks from table name
-		table_name = table_str[1:-1]
-		field_name = field_str
-
-		# Validate table name starts with "tab"
-		if not table_name.startswith("tab"):
-			return None
-
-		# Extract doctype name by stripping "tab" prefix
-		doctype_name = table_name[3:]
-
-		# Validate doctype name is not empty and table actually exists
-		if not doctype_name or not frappe.db.table_exists(doctype_name):
-			return None
-
-		return (doctype_name, field_name)
+		# return table_name without 'tab' prefix and field_name
+		return (table_name[3:], match.group(4))
 
 	def _validate_and_parse_field_for_clause(self, field_name: str, clause_name: str) -> Field:
 		"""
