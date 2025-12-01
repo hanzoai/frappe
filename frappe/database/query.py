@@ -210,6 +210,7 @@ class Engine:
 		self.function_aliases = set()
 		self.field_aliases = set()
 		self.db_query_compat = db_query_compat
+		self.permitted_fields_cache = {}  # Cache for get_permitted_fields results
 
 		if isinstance(table, Table):
 			self.table = table
@@ -798,22 +799,16 @@ class Engine:
 		if not self.apply_permissions:
 			return
 
+		if fieldname in OPTIONAL_FIELDS:
+			return
+
 		# Skip field permission check if doctype has no permissions defined
 		meta = frappe.get_meta(doctype)
 		if not meta.get_permissions(parenttype=parent_doctype):
 			return
 
 		permission_type = self.get_permission_type(doctype)
-		permitted_fields = get_permitted_fields(
-			doctype=doctype,
-			parenttype=parent_doctype,
-			permission_type=permission_type,
-			ignore_virtual=True,
-			user=self.user,
-		)
-
-		if fieldname in OPTIONAL_FIELDS:
-			return
+		permitted_fields = self._get_cached_permitted_fields(doctype, parent_doctype, permission_type)
 
 		if fieldname not in permitted_fields:
 			frappe.throw(
@@ -823,6 +818,21 @@ class Engine:
 				frappe.PermissionError,
 				title=_("Permission Error"),
 			)
+
+	def _get_cached_permitted_fields(self, doctype: str, parenttype: str | None, permission_type: str) -> set:
+		"""Get permitted fields with caching to avoid redundant lookups."""
+		cache_key = (doctype, parenttype, permission_type)
+		if cache_key not in self.permitted_fields_cache:
+			self.permitted_fields_cache[cache_key] = set(
+				get_permitted_fields(
+					doctype=doctype,
+					parenttype=parenttype,
+					permission_type=permission_type,
+					ignore_virtual=True,
+					user=self.user,
+				)
+			)
+		return self.permitted_fields_cache[cache_key]
 
 	def parse_string_field(self, field: str):
 		"""
@@ -1169,22 +1179,8 @@ class Engine:
 		"""Filter the list of fields based on permlevel."""
 		allowed_fields = []
 		parent_permission_type = self.get_permission_type(self.doctype)
-		permitted_fields_cache = {}
 
-		def get_cached_permitted_fields(doctype, parenttype, permission_type):
-			cache_key = (doctype, parenttype, permission_type)
-			if cache_key not in permitted_fields_cache:
-				permitted_fields_cache[cache_key] = set(
-					get_permitted_fields(
-						doctype=doctype,
-						parenttype=parenttype,
-						permission_type=permission_type,
-						ignore_virtual=True,
-					)
-				)
-			return permitted_fields_cache[cache_key]
-
-		permitted_fields_set = get_cached_permitted_fields(
+		permitted_fields_set = self._get_cached_permitted_fields(
 			self.doctype, self.parent_doctype, parent_permission_type
 		)
 
@@ -1195,7 +1191,7 @@ class Engine:
 					continue
 
 				# Cache permitted fields for child doctypes if accessed multiple times
-				permitted_child_fields_set = get_cached_permitted_fields(
+				permitted_child_fields_set = self._get_cached_permitted_fields(
 					field.doctype, field.parent_doctype, self.get_permission_type(field.doctype)
 				)
 				# Check permission for the specific field in the child table
@@ -1212,7 +1208,7 @@ class Engine:
 
 					if has_target_perm:
 						# Finally, check if the specific field *in the target doctype* is permitted
-						permitted_target_fields_set = get_cached_permitted_fields(
+						permitted_target_fields_set = self._get_cached_permitted_fields(
 							target_doctype, None, self.get_permission_type(target_doctype)
 						)
 						if field.fieldname in permitted_target_fields_set:
@@ -1223,7 +1219,7 @@ class Engine:
 					continue
 
 				# Cache permitted fields for the child doctype of the query
-				permitted_child_fields_set = get_cached_permitted_fields(
+				permitted_child_fields_set = self._get_cached_permitted_fields(
 					field.doctype, field.parent_doctype, self.get_permission_type(field.doctype)
 				)
 				# Filter the fields *within* the ChildQuery object based on permissions
