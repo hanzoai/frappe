@@ -154,7 +154,7 @@ class Workspace(Document):
 				pluck="name",
 			)
 			if desktop_icon:
-				frappe.delete_doc("Desktop Icon", desktop_icon)
+				frappe.delete_doc("Desktop Icon", desktop_icon[0])
 
 	def delete_workspace_sidebar(self):
 		if self.public:
