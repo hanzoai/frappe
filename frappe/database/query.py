@@ -1560,38 +1560,6 @@ class Engine:
 		return True
 
 
-class Permission:
-	@classmethod
-	def check_permissions(cls, query, **kwargs):
-		if not isinstance(query, str):
-			query = query.get_sql()
-
-		doctype = cls.get_tables_from_query(query)
-		if isinstance(doctype, str):
-			doctype = [doctype]
-
-		for dt in doctype:
-			dt = TAB_PATTERN.sub("", dt)
-			if not frappe.has_permission(
-				dt,
-				"select",
-				user=kwargs.get("user"),
-				parent_doctype=kwargs.get("parent_doctype"),
-			) and not frappe.has_permission(
-				dt,
-				"read",
-				user=kwargs.get("user"),
-				parent_doctype=kwargs.get("parent_doctype"),
-			):
-				frappe.throw(
-					_("Insufficient Permission for {0}").format(frappe.bold(dt)), frappe.PermissionError
-				)
-
-	@staticmethod
-	def get_tables_from_query(query: str):
-		return [table for table in WORDS_PATTERN.findall(query) if table.startswith("tab")]
-
-
 class DynamicTableField:
 	def __init__(
 		self,
