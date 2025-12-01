@@ -119,7 +119,7 @@ ALLOWED_FIELD_PATTERN = re.compile(
 # Group 2: Optional table name (e.g., `tabDocType` or tabDocType or `tabNote Seen By`)
 # Group 3: Optional quote for field name
 # Group 4: Field name (e.g., `field` or field)
-FIELD_PARSE_REGEX = re.compile(r"^(?:([`\"]?)(tab[\w\s-]+)\1\.)?([`\"]?)(\w+)\3$")
+FIELD_PARSE_REGEX = re.compile(r"^(?:(`?)(tab[\w\s-]+)\1\.)?(`?)(\w+)\3$")
 
 # Direct mapping from uppercase function names to pypika function classes
 FUNCTION_MAPPING = {
