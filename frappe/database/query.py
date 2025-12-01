@@ -22,7 +22,6 @@ from frappe.model.base_document import DOCTYPES_FOR_DOCTYPE
 from frappe.model.document import Document
 from frappe.query_builder import Criterion, Field, Order, functions
 from frappe.query_builder.custom import Month, MonthName, Quarter
-from frappe.query_builder.utils import PseudoColumnMapper
 
 CORE_DOCTYPES = DOCTYPES_FOR_DOCTYPE | frozenset(
 	("Custom Field", "Property Setter", "Module Def", "__Auth", "__global_search", "Singles")
