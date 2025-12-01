@@ -15,6 +15,7 @@ from frappe.database.schema import SPECIAL_CHAR_PATTERN
 from frappe.model.db_query import get_order_by
 from frappe.permissions import has_permission
 from frappe.utils import cint, cstr, escape_html, unique
+from frappe.utils.caching import redis_cache
 from frappe.utils.data import make_filter_tuple
 
 
@@ -32,8 +33,13 @@ class LinkSearchResults(TypedDict):
 	label: NotRequired[str]
 
 
+def should_cache(doctype, txt, *args, **kwargs):
+	return not txt
+
+
 # this is called by the Link Field
 @frappe.whitelist()
+@redis_cache(ttl=60 * 5, user=True, condition=should_cache)
 def search_link(
 	doctype: str,
 	txt: str,
