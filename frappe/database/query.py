@@ -24,7 +24,6 @@ from frappe.model.document import Document
 from frappe.query_builder import Criterion, Field, Order, functions
 from frappe.query_builder.custom import Month, MonthName, Quarter
 from frappe.query_builder.utils import PseudoColumnMapper
-from frappe.utils.data import MARIADB_SPECIFIC_COMMENT
 
 CORE_DOCTYPES = DOCTYPES_FOR_DOCTYPE | frozenset(
 	("Custom Field", "Property Setter", "Module Def", "__Auth", "__global_search", "Singles")
@@ -904,7 +903,7 @@ class Engine:
 		for item in initial_field_list:
 			if isinstance(item, str):
 				# Sanitize and split potentially comma-separated strings within the list
-				if sanitized_item := _sanitize_field(item.strip(), self.is_mariadb).strip():
+				if sanitized_item := _validate_select_field(item.strip()):
 					parsed = self._parse_single_field_item(sanitized_item)
 					if isinstance(parsed, list):  # Result from parsing a child query dict
 						_fields.extend(parsed)
@@ -1735,10 +1734,10 @@ def get_nested_set_hierarchy_result(doctype: str, name: str, hierarchy: str) -> 
 def _validate_select_field(field: str):
 	"""Validate a field string intended for use in a SELECT clause."""
 	if field == "*":
-		return
+		return field
 
 	if field.isdigit():
-		return
+		return field
 
 	# Reject SQL functions
 	if _is_function_call(field):
@@ -1750,7 +1749,7 @@ def _validate_select_field(field: str):
 		)
 
 	if ALLOWED_FIELD_PATTERN.match(field):
-		return
+		return field
 
 	frappe.throw(
 		_(
@@ -1758,19 +1757,6 @@ def _validate_select_field(field: str):
 		).format(field),
 		frappe.PermissionError,
 	)
-
-
-@lru_cache(maxsize=1024)
-def _sanitize_field(field: str, is_mariadb):
-	"""Validate and sanitize a field string for SELECT clause by stripping comments."""
-	_validate_select_field(field)
-
-	stripped_field = sqlparse.format(field, strip_comments=True, keyword_case="lower")
-
-	if is_mariadb:
-		stripped_field = MARIADB_SPECIFIC_COMMENT.sub("", stripped_field)
-
-	return stripped_field.strip()
 
 
 class RawCriterion(Term):
