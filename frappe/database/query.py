@@ -1996,8 +1996,7 @@ class SQLFunctionParser:
 					frappe.ValidationError,
 				)
 		elif self._is_valid_field_name(arg):
-			# Validate field name and check permissions
-			self._validate_function_field_arg(arg)
+			self._check_function_field_permission(arg)
 			return self.engine.table[arg]
 
 		# Check if it's a numeric string like "1" (for COUNT(1), etc.)
@@ -2034,20 +2033,6 @@ class SQLFunctionParser:
 				frappe.ValidationError,
 			)
 
-	def _validate_function_field_arg(self, field_name: str):
-		"""Validate a field name used as a function argument."""
-		if not isinstance(field_name, str):
-			return  # Non-string arguments are allowed (literals)
-
-		# Basic validation - should be a simple field name
-		if not self._is_valid_field_name(field_name):
-			frappe.throw(
-				_("Invalid field name in function: {0}. Only simple field names are allowed.").format(
-					field_name
-				),
-				frappe.ValidationError,
-			)
-
-		# Check field permission if permissions are being applied
+	def _check_function_field_permission(self, field_name: str):
 		if self.engine.apply_permissions and self.engine.doctype:
 			self.engine._check_field_permission(self.engine.doctype, field_name)
