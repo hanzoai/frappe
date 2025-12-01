@@ -1973,8 +1973,9 @@ class SQLFunctionParser:
 			return Star()
 
 		# Check for string literals (quoted strings)
-		if self._is_string_literal(arg):
-			return self._validate_string_literal(arg)
+		if len(arg) >= 2 and arg[0] in ("'", '"') and arg[-1] == arg[0]:
+			# note: pypika handles proper escaping with wrap_constant
+			return arg[1:-1]
 
 		# Check for backtick notation: `tabDocType`.`fieldname`
 		# Parse and return as Field object to preserve field reference in operators
@@ -2006,57 +2007,6 @@ class SQLFunctionParser:
 				).format(arg),
 				frappe.ValidationError,
 			)
-
-	def _is_string_literal(self, arg: str) -> bool:
-		"""Check if argument is a properly quoted string literal."""
-		return (arg.startswith("'") and arg.endswith("'") and len(arg) >= 2) or (
-			arg.startswith('"') and arg.endswith('"') and len(arg) >= 2
-		)
-
-	def _validate_string_literal(self, literal: str):
-		"""Validate a string literal for SQL injection attacks."""
-		if literal.startswith("'") and literal.endswith("'"):
-			quote_char = "'"
-			content = literal[1:-1]
-		elif literal.startswith('"') and literal.endswith('"'):
-			quote_char = '"'
-			content = literal[1:-1]
-		else:
-			frappe.throw(_("Invalid string literal format: {0}").format(literal), frappe.ValidationError)
-
-		if quote_char in content:
-			escaped_content = content.replace(quote_char + quote_char, "")
-			if quote_char in escaped_content:
-				frappe.throw(
-					_("Unescaped quotes in string literal: {0}").format(literal),
-					frappe.ValidationError,
-				)
-
-		# Reject dangerous SQL keywords and patterns
-		dangerous_patterns = [
-			# SQL injection keywords
-			r"\b(?:union|select|insert|update|delete|drop|create|alter|exec|execute)\b",
-			# Comment patterns
-			r"--",
-			r"/\*",
-			r"\*/",
-			# Semicolon (statement terminator)
-			r";",
-			# Backslash escape sequences that could be dangerous
-			r"\\x[0-9a-fA-F]{2}",  # Hex escape sequences
-			r"\\[0-7]{1,3}",  # Octal escape sequences
-		]
-
-		content_lower = content.lower()
-		for pattern in dangerous_patterns:
-			if re.search(pattern, content_lower, re.IGNORECASE):
-				frappe.throw(
-					_("Potentially dangerous content in string literal: {0}").format(literal),
-					frappe.ValidationError,
-				)
-
-		# Return just the content without quotes - pypika will handle proper escaping
-		return content
 
 	def _is_valid_field_name(self, name: str) -> bool:
 		"""Check if a string is a valid field name."""
