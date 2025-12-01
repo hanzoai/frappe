@@ -1108,8 +1108,7 @@ class Engine:
 			frappe.throw(_("Group By must be a string"), TypeError)
 
 		parsed_fields = []
-		parts = COMMA_PATTERN.split(group_by)
-		for part in parts:
+		for part in group_by.split(","):
 			field_name = part.strip()
 			if not field_name:
 				continue
