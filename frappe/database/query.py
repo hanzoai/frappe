@@ -1354,27 +1354,16 @@ class Engine:
 	def add_permission_conditions(self):
 		conditions = []
 		role_permissions = frappe.permissions.get_role_permissions(self.doctype, user=self.user)
-		fetch_shared_docs = False
+
+		# False only when role permissions without if owner exist and no user perms are applied
+		fetch_shared_docs = True
 
 		if self.requires_owner_constraint(role_permissions):
-			fetch_shared_docs = True
 			conditions.append(self.table.owner == self.user)
 		# skip user perm check if owner constraint is required
 		elif role_permissions.get("read") or role_permissions.get("select"):
-			user_perm_conditions, fetch_shared = self.get_user_permission_conditions(role_permissions)
+			user_perm_conditions, fetch_shared_docs = self.get_user_permission_conditions(role_permissions)
 			conditions.extend(user_perm_conditions)
-			fetch_shared_docs = fetch_shared_docs or fetch_shared
-		else:
-			# No role permissions - check if user has any user permissions
-			# If not, must check for shared documents (like db_query does)
-			user_permissions = frappe.permissions.get_user_permissions(self.user)
-			doctype_user_permissions = user_permissions.get(self.doctype, [])
-			has_user_perm = any(
-				not perm.get("applicable_for") or perm.get("applicable_for") == self.reference_doctype
-				for perm in doctype_user_permissions
-			)
-			if not has_user_perm:
-				fetch_shared_docs = True
 
 		permission_query_conditions = self.get_permission_query_conditions()
 		if permission_query_conditions:
