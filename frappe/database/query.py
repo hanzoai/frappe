@@ -1154,12 +1154,10 @@ class Engine:
 			)
 
 		if not has_permission("select") and not has_permission("read"):
-			# Check for shared documents
-			if not frappe.share.get_shared(self.doctype, self.user):
-				frappe.throw(
-					_("Insufficient Permission for {0}").format(frappe.bold(self.doctype)),
-					frappe.PermissionError,
-				)
+			frappe.throw(
+				_("Insufficient Permission for {0}").format(frappe.bold(self.doctype)),
+				frappe.PermissionError,
+			)
 
 	def apply_field_permissions(self):
 		"""Filter the list of fields based on permlevel."""
