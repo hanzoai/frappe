@@ -11,6 +11,7 @@ context("Awesome Bar", () => {
 
 	beforeEach(() => {
 		cy.get("body").click(0, 0); // Click on some blank space to avoid any modals.
+		cy.wait(200);
 		cy.get("#navbar-modal-search").as("awesome_bar_search");
 		cy.get("@awesome_bar_search").click();
 		cy.get("#navbar-search").as("awesome_bar");
