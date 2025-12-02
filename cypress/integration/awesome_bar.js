@@ -19,6 +19,11 @@ context("Awesome Bar", () => {
 		cy.wait(400);
 	});
 
+	afterEach(() => {
+		cy.get("body").type("{esc}");
+		cy.wait(400);
+	});
+
 	after(() => {
 		cy.visit("/desk/todo"); // Make sure we're not bleeding any filters to the next spec.
 		cy.clear_filters();
