@@ -21,6 +21,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.setup_events();
 		this.sidebar_module_map = {};
 		this.build_sidebar_module_map();
+		this.standard_items_setup = false;
 	}
 
 	prepare() {
@@ -228,6 +229,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.handle_outside_click();
 	}
 	add_standard_items(items) {
+		if (this.standard_items_setup) return;
 		this.standard_items = [
 			{
 				label: "Search",
@@ -240,6 +242,7 @@ frappe.ui.Sidebar = class Sidebar {
 			this.add_item(this.$standard_items_sections, w);
 		});
 		this.setup_awesomebar();
+		this.standard_items_setup = true;
 	}
 	setup_awesomebar() {
 		if (frappe.boot.desk_settings.search_bar) {
