@@ -48,6 +48,7 @@ frappe.ui.Tags = class {
 		this.$input.on("input-selected", () => {
 			// Adds tag if a input is selected
 			select_tag();
+			this.deactivate();
 		});
 
 		this.$input.on("blur", () => {
