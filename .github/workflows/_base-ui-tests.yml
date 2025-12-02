@@ -128,6 +128,16 @@ jobs:
         with:
           name: coverage-js-${{ matrix.index }}
           path: ./apps/${{ github.event.repository.name }}/.cypress-coverage/clover.xml
+      - name: Compress Cypress Videos
+        run: |
+          zip -r cypress_recordings.zip ./cypressVideos
+      - name: Upload Cypress Videos
+        uses: actions/upload-artifact@v5
+        with:
+          name: Cypress CI Video Recordings
+          path: ./cypress_recordings.zip
+
+        
 
       - name: Upload coverage data
         uses: actions/upload-artifact@v5
@@ -135,7 +145,7 @@ jobs:
         with:
           name: coverage-py-${{ matrix.index }}
           path: ./sites/*-coverage*.xml
-
+    
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
         if: ${{ failure() && contains( github.event.pull_request.labels.*.name, 'debug-gha') }}
