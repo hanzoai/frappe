@@ -3,7 +3,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.sidebar = sidebar;
 		this.sidebar_wrapper = $(".body-sidebar");
 		this.drop_down_expanded = false;
-		this.workspace_title = this.sidebar.workspace_title;
+		this.title = this.sidebar.sidebar_title;
 		const me = this;
 		this.fetch;
 		this.dropdown_items = [
@@ -47,7 +47,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 	fetch_sibling_workspaces() {
 		let sibling_workspaces = [];
 		let workspaces = frappe.current_app.workspaces;
-		workspaces.splice(workspaces.indexOf(this.workspace_title), 1);
+		workspaces.splice(workspaces.indexOf(this.title), 1);
 		workspaces.forEach((w) => {
 			let item = {
 				name: w.toLowerCase(),
@@ -65,7 +65,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.set_header_icon();
 		$(
 			frappe.render_template("sidebar_header", {
-				workspace_title: this.workspace_title,
+				workspace_title: this.title,
 				header_icon: this.header_icon,
 				header_bg_color: this.header_stroke_color,
 			})
@@ -76,11 +76,9 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.$drop_icon = this.wrapper.find(".drop-icon");
 	}
 	set_header_icon() {
-		let desktop_icon = this.get_desktop_icon_by_label(this.sidebar.workspace_title);
+		let desktop_icon = this.get_desktop_icon_by_label(this.sidebar.sidebar_title);
 		if (desktop_icon && desktop_icon.logo_url) {
-			this.header_icon = this.get_desktop_icon_by_label(
-				this.sidebar.workspace_title
-			).logo_url;
+			this.header_icon = this.get_desktop_icon_by_label(this.sidebar.sidebar_title).logo_url;
 			this.header_icon = `<img src=${this.header_icon}></img>`;
 		} else if (this.sidebar.sidebar_data) {
 			this.header_icon = this.sidebar.sidebar_data.header_icon;

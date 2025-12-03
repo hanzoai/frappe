@@ -300,3 +300,13 @@
 .indent + .nested-container {
 	margin-left: 16px;
 }
+.sidebar-item-suffix {
+	margin-left: auto;
+	.keyboard-shortcut {
+		color: var(--ink-gray-4, #999999);
+		font-size: var(--text-sm);
+		line-height: 1.15;
+		letter-spacing: 0.02em;
+		font-weight: 420;
+	}
+}

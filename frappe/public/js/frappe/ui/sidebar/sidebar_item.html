@@ -35,6 +35,9 @@
                     {% } %}
                 </span>
                 <span class="sidebar-item-label">{{ item.label }}</span>
+                {% if (item.suffix) { %}
+                     <span class="sidebar-item-suffix">{{ item.suffix }}</span>
+                {% } %}
                 {% if (!item.show_arrow) { %}
                 <div class="sidebar-item-control"></div>
                 {% } %}
