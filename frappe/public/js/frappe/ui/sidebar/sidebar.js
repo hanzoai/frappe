@@ -240,6 +240,9 @@ frappe.ui.Sidebar = class Sidebar {
 				icon: "search",
 				type: "Button",
 				id: "navbar-modal-search",
+				suffix: {
+					keyboard_shortcut: "CtrlK",
+				},
 			},
 		];
 		this.standard_items.forEach((w) => {
