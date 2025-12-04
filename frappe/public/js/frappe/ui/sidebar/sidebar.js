@@ -248,20 +248,18 @@ frappe.ui.Sidebar = class Sidebar {
 				class: "navbar-search-bar hidden",
 			});
 		}
-		this.standard_items.push(
-			{
-				label: "Notification",
-				icon: "bell",
-				type: "Button",
-				class: "sidebar-notification hidden",
-				onClick: () => {
-					this.wrapper.find(".dropdown-notifications").toggleClass("hidden");
-					if (frappe.is_mobile()) {
-						this.wrapper.removeClass("expanded");
-					}
-				},
-			}
-		);
+		this.standard_items.push({
+			label: "Notification",
+			icon: "bell",
+			type: "Button",
+			class: "sidebar-notification hidden",
+			onClick: () => {
+				this.wrapper.find(".dropdown-notifications").toggleClass("hidden");
+				if (frappe.is_mobile()) {
+					this.wrapper.removeClass("expanded");
+				}
+			},
+		});
 		this.standard_items.forEach((w) => {
 			this.add_item(this.$standard_items_sections, w);
 		});
