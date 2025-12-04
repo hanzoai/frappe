@@ -141,7 +141,11 @@ frappe.ui.Notifications = class Notifications {
 		});
 
 		$(document).on("click", function (e) {
-			if (!dropdown.find(".notifications-list").is(e.target)) {
+			const isInsideNotificationBtn =
+				$(e.target).closest(".standard-items-sections .sidebar-notification").length > 0;
+			const isInsideDropdown = $(e.target).closest(".notifications-list").length > 0;
+
+			if (!isInsideNotificationBtn && !isInsideDropdown) {
 				dropdown.addClass("hidden");
 			}
 		});
