@@ -157,6 +157,14 @@
 	}
 
 	.standard-items-sections {
+		.navbar-search-bar {
+			background-color: var(--control-bg-on-gray);
+			border-radius: var(--border-radius);
+			padding-right: 7px;
+			.standard-sidebar-item a:hover {
+				background-color: var(--control-bg-on-gray);
+			}
+		}
 		.dropdown-notifications {
 			.notifications-list {
 				left: 3.4%;
