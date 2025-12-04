@@ -17,8 +17,7 @@ frappe.ui.toolbar.Toolbar = class {
 			$(this).closest(".dropdown-menu").prev().dropdown("toggle");
 		});
 
-		this.setup_awesomebar();
-		this.setup_notifications();
+		// this.setup_awesomebar();
 		this.setup_help();
 		this.setup_read_only_mode();
 		this.setup_announcement_widget();
@@ -178,29 +177,6 @@ frappe.ui.toolbar.Toolbar = class {
 			if (path) {
 				e.preventDefault();
 			}
-		}
-	}
-
-	setup_awesomebar() {
-		if (frappe.boot.desk_settings.search_bar) {
-			let awesome_bar = new frappe.search.AwesomeBar();
-			awesome_bar.setup("#navbar-modal-search");
-
-			frappe.search.utils.make_function_searchable(
-				frappe.utils.generate_tracking_url,
-				__("Generate Tracking URL")
-			);
-			if (frappe.model.can_read("RQ Job")) {
-				frappe.search.utils.make_function_searchable(function () {
-					frappe.set_route("List", "RQ Job");
-				}, __("Background Jobs"));
-			}
-		}
-	}
-
-	setup_notifications() {
-		if (frappe.boot.desk_settings.notifications && frappe.session.user !== "Guest") {
-			this.notifications = new frappe.ui.Notifications();
 		}
 	}
 
