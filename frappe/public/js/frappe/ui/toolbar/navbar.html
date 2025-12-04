@@ -10,6 +10,21 @@
 			</a>
 			<ul class="nav navbar-nav d-none d-sm-flex" id="navbar-breadcrumbs"></ul>
 			<div class="collapse navbar-collapse justify-content-end">
+				{% if frappe.is_mobile() %}
+					<div class="search-bar text-muted hidden">
+						<div
+							id="navbar-modal-search"
+							class="navbar-modal-search-mobile"
+							placeholder="Search for type a command"
+						>
+						<span class="search-icon">
+							<svg class="icon icon-sm"><use href="#icon-search"></use></svg>
+							{{ __("Search") }}
+						</span>
+						<span>{%= frappe.utils.is_mac() ? '⌘ + K' : 'Ctrl + K' %}</span>
+					</div>
+					</div>
+				{% endif %}
 				<ul class="navbar-nav">
 					<li class="nav-item dropdown dropdown-message dropdown-mobile hidden">
 						<button

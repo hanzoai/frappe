@@ -5,13 +5,16 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.drop_down_expanded = false;
 		this.title = this.sidebar.sidebar_title;
 		const me = this;
-		this.fetch;
+		this.sibling_workspaces = this.fetch_sibling_workspaces();
 		this.dropdown_items = [
 			{
 				name: "workspaces",
 				label: "Workspaces",
 				icon: "wallpaper",
-				items: this.fetch_sibling_workspaces(),
+				condition: function () {
+					return me.sibling_workspaces.length > 0;
+				},
+				items: this.sibling_workspaces,
 			},
 			{
 				name: "desktop",
@@ -46,18 +49,23 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 	}
 	fetch_sibling_workspaces() {
 		let sibling_workspaces = [];
-		let workspaces = frappe.current_app.workspaces;
-		workspaces.splice(workspaces.indexOf(this.title), 1);
-		workspaces.forEach((w) => {
-			let item = {
-				name: w.toLowerCase(),
-				label: w,
-				icon: "wallpaper",
-				url: frappe.utils.generate_route({ type: "Workspace", route: w.toLowerCase() }),
-			};
-			sibling_workspaces.push(item);
-		});
-		return sibling_workspaces;
+		if (frappe.current_app) {
+			let workspaces = [...frappe.current_app.workspaces];
+			workspaces.splice(workspaces.indexOf(this.title), 1);
+			workspaces.forEach((w) => {
+				let item = {
+					name: w.toLowerCase(),
+					label: w,
+					icon: "wallpaper",
+					url: frappe.utils.generate_route({
+						type: "Workspace",
+						route: w.toLowerCase(),
+					}),
+				};
+				sibling_workspaces.push(item);
+			});
+			return sibling_workspaces;
+		}
 	}
 	make() {
 		$(".sidebar-header").remove();
