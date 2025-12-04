@@ -37,12 +37,7 @@ frappe.ui.form.Layout = class Layout {
 		}
 
 		this.frm && this.setup_tooltip_events();
-
-		// Only render once during make()
-		if (!this.rendered) {
-			this.render();
-			this.rendered = true;
-		}
+		this.render();
 	}
 
 	setup_tabbed_layout() {
@@ -165,10 +160,7 @@ frappe.ui.form.Layout = class Layout {
 			let first_tab =
 				first_field_visible?.fieldtype === "Tab Break" ? first_field_visible : null;
 
-			// Check if default tab already exists to prevent duplicates
-			let has_default_tab = this.fields.find((df) => df.fieldname === "__details");
-
-			if (!first_tab && !has_default_tab) {
+			if (!first_tab) {
 				this.fields.splice(0, 0, default_tab);
 			} else {
 				// reshuffle __newname field to accomodate under 1st Tab Break
@@ -429,7 +421,8 @@ frappe.ui.form.Layout = class Layout {
 		}
 
 		const visible_tabs = this.tabs.filter((tab) => !tab.hidden);
-		if (visible_tabs && visible_tabs.length == 1) {
+		// Hide single tab only for regular forms, not for child tables
+		if (visible_tabs && visible_tabs.length == 1 && !this.is_child_table) {
 			visible_tabs[0].tab_link.toggleClass("hide show");
 		}
 		this.set_tab_as_active();
@@ -448,23 +441,22 @@ frappe.ui.form.Layout = class Layout {
 	}
 
 	set_tab_as_active() {
-		// Set active tab based on hash
+		// For child tables (grid row forms), always activate first visible tab
+		if (this.is_child_table) {
+			if (this.tabs.length) {
+				let first_visible_tab = this.tabs.find((tab) => !tab.is_hidden());
+				if (first_visible_tab && !first_visible_tab.is_active()) {
+					first_visible_tab.set_active();
+				}
+			}
+			return;
+		}
+
+		// Set active tab based on hash (for regular forms only)
 		const tab_from_hash = window.location.hash.replace("#", "");
 		const tab = this.tabs.find((tab) => tab.df.fieldname === tab_from_hash);
 		if (tab) {
 			tab.set_active();
-			return;
-		}
-
-		// For child tables (grid row forms), don't use parent frm's active tab
-		// Always activate the first visible tab
-		if (this.is_child_table) {
-			if (this.tabs.length) {
-				let first_visible_tab = this.tabs.find((tab) => !tab.is_hidden());
-				if (first_visible_tab) {
-					first_visible_tab.set_active();
-				}
-			}
 			return;
 		}
 

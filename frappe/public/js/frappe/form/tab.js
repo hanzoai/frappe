@@ -3,10 +3,12 @@ export default class Tab {
 		this.layout = layout;
 		this.df = df || {};
 		this.frm = frm;
-		this.doctype = this.frm?.doctype ?? this.df.parent;
+		// Use layout.doctype for child tables, otherwise frm.doctype
+		this.doctype = layout?.is_child_table ? layout.doctype : (this.frm?.doctype ?? this.df.parent);
 		this.label = this.df && this.df.label;
 		this.tab_link_container = tab_link_container;
 		this.tabs_content = tabs_content;
+		this.hidden = false;
 		this.make();
 		this.setup_listeners();
 		this.refresh();
@@ -14,11 +16,12 @@ export default class Tab {
 
 	make() {
 		const id = `${frappe.scrub(this.doctype, "-")}-${this.df.fieldname}`;
+		this.id = id;
+
+		// Use button element for better accessibility and consistent behavior
 		this.tab_link = $(`
 			<li class="nav-item">
 				<button class="nav-link ${this.df.active ? "active" : ""}" id="${id}-tab"
-					data-toggle="tab"
-					data-target="#${id}"
 					data-fieldname="${this.df.fieldname}"
 					type="button"
 					role="tab"
@@ -46,10 +49,11 @@ export default class Tab {
 		if (!hide) {
 			// show only if there is at least one visible section or control
 			hide = true;
-			const visible_sections = this.wrapper.find(
-				".form-section:not(.hide-control, .empty-section), .form-dashboard-section:not(.hide-control, .empty-section)"
-			);
-			if (visible_sections.length) {
+			if (
+				this.wrapper.find(
+					".form-section:not(.hide-control, .empty-section), .form-dashboard-section:not(.hide-control, .empty-section)"
+				).length
+			) {
 				hide = false;
 			}
 		}
@@ -82,18 +86,24 @@ export default class Tab {
 	}
 
 	set_active() {
-		// Use Bootstrap's tab method to properly activate
-		this.tab_link.find(".nav-link").tab("show");
+		// Deactivate all other tabs first
+		if (this.layout?.tabs) {
+			this.layout.tabs.forEach((tab) => {
+				if (tab !== this) {
+					tab.tab_link.find(".nav-link").removeClass("active");
+					tab.wrapper.removeClass("show active");
+				}
+			});
+		}
 
-		// Ensure the wrapper has the correct classes
+		// Activate this tab
+		this.tab_link.find(".nav-link").addClass("active");
 		this.wrapper.addClass("show active");
 
-		// Call set_active_tab on the appropriate form object
+		// Notify the appropriate form about tab change
 		if (this.layout?.grid_row_form) {
-			// For child tables, call grid_row_form's set_active_tab
 			this.layout.grid_row_form.set_active_tab?.(this);
 		} else {
-			// For regular forms, call frm's set_active_tab
 			this.frm?.set_active_tab?.(this);
 		}
 	}
@@ -107,38 +117,10 @@ export default class Tab {
 	}
 
 	setup_listeners() {
-		this.tab_link.find(".nav-link").on("shown.bs.tab", () => {
-			// Call set_active_tab on the appropriate form object
-			if (this.layout?.grid_row_form) {
-				this.layout.grid_row_form.set_active_tab?.(this);
-			} else {
-				this.frm?.set_active_tab?.(this);
-			}
+		// Click handler for tab switching - works for both regular and child table forms
+		this.tab_link.find(".nav-link").on("click", (e) => {
+			e.preventDefault();
+			this.set_active();
 		});
-
-		// For child tables, add explicit click handler to ensure tab switching works
-		if (this.layout?.is_child_table) {
-			this.tab_link.find(".nav-link").on("click", (e) => {
-				e.preventDefault();
-				e.stopPropagation();
-
-				// Deactivate all other tabs
-				this.layout.tabs.forEach((tab) => {
-					if (tab !== this) {
-						tab.tab_link.find(".nav-link").removeClass("active");
-						tab.wrapper.removeClass("show active");
-					}
-				});
-
-				// Activate this tab
-				this.tab_link.find(".nav-link").addClass("active");
-				this.wrapper.addClass("show active");
-
-				// Notify grid_row_form about tab change
-				if (this.layout.grid_row_form) {
-					this.layout.grid_row_form.set_active_tab?.(this);
-				}
-			});
-		}
 	}
 }
