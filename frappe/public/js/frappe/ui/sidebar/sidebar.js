@@ -235,8 +235,9 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 	add_standard_items(items) {
 		if (this.standard_items_setup) return;
-		this.standard_items = [
-			{
+		this.standard_items = [];
+		if (!frappe.is_mobile()) {
+			this.standard_items.push({
 				label: "Search",
 				icon: "search",
 				type: "Button",
@@ -244,8 +245,9 @@ frappe.ui.Sidebar = class Sidebar {
 				suffix: {
 					keyboard_shortcut: "CtrlK",
 				},
-			},
-		];
+				class: "navbar-search-bar hidden",
+			});
+		}
 		this.standard_items.forEach((w) => {
 			this.add_item(this.$standard_items_sections, w);
 		});
