@@ -382,6 +382,7 @@ frappe.ui.sidebar_item.TypeButton = class SidebarButton extends frappe.ui.sideba
 		super(item);
 		this.title = frappe.app.sidebar.workspace_title;
 		this.item.id && this.wrapper.attr("id", this.item.id);
+		this.item.class && this.wrapper.attr("class", this.item.class);
 		this.wrapper.attr("title", this.item.label);
 		this.setup_click();
 	}

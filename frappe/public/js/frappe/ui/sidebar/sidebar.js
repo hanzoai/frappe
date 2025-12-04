@@ -248,10 +248,23 @@ frappe.ui.Sidebar = class Sidebar {
 				class: "navbar-search-bar hidden",
 			});
 		}
+		this.standard_items.push({
+			label: "Notification",
+			icon: "bell",
+			type: "Button",
+			class: "sidebar-notification hidden",
+			onClick: () => {
+				this.wrapper.find(".dropdown-notifications").toggleClass("hidden");
+				if (frappe.is_mobile()) {
+					this.wrapper.removeClass("expanded");
+				}
+			},
+		});
 		this.standard_items.forEach((w) => {
 			this.add_item(this.$standard_items_sections, w);
 		});
 		this.setup_awesomebar();
+		this.setup_notifications();
 		this.standard_items_setup = true;
 	}
 	setup_awesomebar() {
@@ -268,6 +281,11 @@ frappe.ui.Sidebar = class Sidebar {
 					frappe.set_route("List", "RQ Job");
 				}, __("Background Jobs"));
 			}
+		}
+	}
+	setup_notifications() {
+		if (frappe.boot.desk_settings.notifications && frappe.session.user !== "Guest") {
+			this.notifications = new frappe.ui.Notifications();
 		}
 	}
 	add_item(container, item) {
