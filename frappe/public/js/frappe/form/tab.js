@@ -4,7 +4,9 @@ export default class Tab {
 		this.df = df || {};
 		this.frm = frm;
 		// Use layout.doctype for child tables, otherwise frm.doctype
-		this.doctype = layout?.is_child_table ? layout.doctype : (this.frm?.doctype ?? this.df.parent);
+		this.doctype = layout?.is_child_table
+			? layout.doctype
+			: this.frm?.doctype ?? this.df.parent;
 		this.label = this.df && this.df.label;
 		this.tab_link_container = tab_link_container;
 		this.tabs_content = tabs_content;
@@ -45,7 +47,6 @@ export default class Tab {
 		if (!hide && this.frm && !this.frm.get_perm(this.df.permlevel || 0, "read")) {
 			hide = true;
 		}
-
 		if (!hide) {
 			// show only if there is at least one visible section or control
 			hide = true;
