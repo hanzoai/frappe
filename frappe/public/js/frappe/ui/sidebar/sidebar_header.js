@@ -99,7 +99,13 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 				false,
 				`var(${this.header_bg_color})`
 			);
+		} else {
+			this.header_icon = this.get_default_icon();
+			this.header_icon = `<img src=${this.header_icon}></img>`;
 		}
+	}
+	get_default_icon() {
+		return frappe.boot.app_data[0].app_logo_url;
 	}
 	get_desktop_icon_by_label(title, filters) {
 		if (!filters) {
