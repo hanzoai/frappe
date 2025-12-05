@@ -4,6 +4,7 @@ const jump_to_field = (field_label) => {
 		.type("{ctrl+j}") // jump to field
 		.type(field_label)
 		.type("{downArrow}")
+		.type("{enter}")
 		.wait(500)
 		.type("{enter}")
 		.wait(200)
