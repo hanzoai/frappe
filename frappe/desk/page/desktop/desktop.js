@@ -509,6 +509,7 @@ class DesktopIconGrid {
 class DesktopIcon {
 	constructor(icon, in_folder) {
 		this.icon_data = icon;
+		this.icon_data.label = __(this.icon_data.label);
 		this.icon_title = this.icon_data.label;
 		this.icon_subtitle = "";
 		this.icon_type = this.icon_data.icon_type;
