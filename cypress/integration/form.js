@@ -12,7 +12,7 @@ const jump_to_field = (field_label) => {
 };
 
 const type_value = (value) => {
-	cy.focused().clear().type(value).type("{esc}");
+	cy.focused().clear({ force: true }).type(value).type("{esc}");
 };
 
 context("Form", () => {
