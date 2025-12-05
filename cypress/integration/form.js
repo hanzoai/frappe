@@ -3,6 +3,7 @@ const jump_to_field = (field_label) => {
 		.type("{esc}") // lose focus if any
 		.type("{ctrl+j}") // jump to field
 		.type(field_label)
+		.type("{downArrow}")
 		.wait(500)
 		.type("{enter}")
 		.wait(200)
@@ -99,9 +100,7 @@ context("Form", () => {
 		cy.new_form("User");
 
 		jump_to_field("Location"); // this is in collapsed section
-		cy.wait(500);
 		type_value("Bermuda");
-		cy.wait(500);
 
 		cy.get_field("location").should("have.value", "Bermuda");
 	});
