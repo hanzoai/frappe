@@ -3,12 +3,11 @@ const jump_to_field = (field_label) => {
 		.type("{esc}") // lose focus if any
 		.type("{ctrl+j}") // jump to field
 		.type(field_label)
-		.type("{downArrow}")
-		.type("{enter}")
 		.wait(500)
 		.type("{enter}")
 		.wait(200)
-		.type("{enter}")
+		.findByRole("button", { name: "Go" })
+		.click()
 		.wait(1000);
 };
 
