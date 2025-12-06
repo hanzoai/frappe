@@ -12,7 +12,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 				label: "Workspaces",
 				icon: "wallpaper",
 				condition: function () {
-					return me.sibling_workspaces.length > 0;
+					return me.sibling_workspaces && me.sibling_workspaces.length > 0;
 				},
 				items: this.sibling_workspaces,
 			},
