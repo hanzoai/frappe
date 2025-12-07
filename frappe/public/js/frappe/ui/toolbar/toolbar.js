@@ -8,7 +8,6 @@ frappe.ui.toolbar.Toolbar = class {
 	constructor() {
 		$("header").replaceWith(
 			frappe.render_template("navbar", {
-				avatar: frappe.avatar(frappe.session.user, "avatar-medium"),
 				navbar_settings: frappe.boot.navbar_settings,
 			})
 		);
@@ -17,7 +16,6 @@ frappe.ui.toolbar.Toolbar = class {
 			$(this).closest(".dropdown-menu").prev().dropdown("toggle");
 		});
 
-		// this.setup_awesomebar();
 		this.setup_read_only_mode();
 		this.setup_announcement_widget();
 		this.make();
