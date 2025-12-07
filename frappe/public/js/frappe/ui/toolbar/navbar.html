@@ -10,6 +10,16 @@
 			</a>
 			<ul class="nav navbar-nav d-none d-sm-flex" id="navbar-breadcrumbs"></ul>
 			<div class="collapse navbar-collapse justify-content-end">
+				{% if (frappe.boot.read_only) { %}
+					<span class="indicator-pill yellow no-indicator-dot read-only-banner" title="{%= __("Your site is undergoing maintenance or being updated.") %}">
+						{%= __("Read Only Mode") %}
+					</span>
+				{% } %}
+				{% if (frappe.boot.user.impersonated_by) { %}
+					<span class="indicator-pill red no-indicator-dot" title="{%= __("You are impersonating as another user.") %}">
+						{%= __("Impersonating {0}", [frappe.boot.user.name]) %}
+					</span>
+				{% } %}
 				{% if frappe.is_mobile() %}
 					<div class="search-bar text-muted hidden">
 						<div
