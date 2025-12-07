@@ -6,6 +6,7 @@ perms will get synced only if none exist
 """
 
 import os
+import re
 
 import frappe
 from frappe.cache_manager import clear_controller_cache
@@ -235,12 +236,25 @@ def check_if_record_exists(type=None, path=None, entity_type=None, name=None, mo
 	scrubbed_entity_type = frappe.scrub(entity_type.lower())
 	if scrubbed_entity_type == "dashboard" and module_name:
 		scrubbed_entity_type = f"{frappe.scrub(module_name.lower())}_dashboard"
-	if type == "app":
-		entity_path = os.path.join(path, scrubbed_entity_type, f"{scrubbed_name}.json")
-	else:
-		entity_path = os.path.join(path, scrubbed_entity_type, scrubbed_name, f"{scrubbed_name}.json")
-	print(entity_path)
-	return os.path.exists(entity_path)
+
+	def build_path(entity_name):
+		if type == "app":
+			return os.path.join(path, scrubbed_entity_type, f"{entity_name}.json")
+		return os.path.join(path, scrubbed_entity_type, entity_name, f"{entity_name}.json")
+
+	entity_path = build_path(scrubbed_name)
+	if os.path.exists(entity_path):
+		return True
+
+	# This will handle names with brackets Eg: Item Balance (Simple)
+	if "(" in name:
+		cleaned_name = re.sub(r"\s*\([^)]*\)", "", name)
+		scrubbed_cleaned = frappe.scrub(cleaned_name)
+		cleaned_path = build_path(scrubbed_cleaned)
+		if os.path.exists(cleaned_path):
+			return True
+
+	return False
 
 
 def delete_duplicate_icons():
