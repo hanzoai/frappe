@@ -226,6 +226,7 @@ def remove_orphan_entities():
 						print()
 
 				except Exception as e:
+					print(f"Error occurred while deleting entity: {entity} {w.name}")
 					print(e)
 			# save the deleted icons
 			frappe.db.commit()  # nosemgrep
