@@ -240,7 +240,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.standard_items = [];
 		if (!frappe.is_mobile()) {
 			this.standard_items.push({
-				label: "Search",
+				label: __("Search"),
 				icon: "search",
 				type: "Button",
 				id: "navbar-modal-search",
@@ -251,7 +251,7 @@ frappe.ui.Sidebar = class Sidebar {
 			});
 		}
 		this.standard_items.push({
-			label: "Notification",
+			label: __("Notification"),
 			icon: "bell",
 			type: "Button",
 			class: "sidebar-notification hidden",
