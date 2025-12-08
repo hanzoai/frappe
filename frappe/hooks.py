@@ -64,7 +64,7 @@ website_route_rules = [
 ]
 
 website_redirects = [
-	{"source": r"/app/(.*)", "target": r"/desk/\1", "match_with_query_string": True},
+	{"source": r"/app/(.*)", "target": r"/desk/\1", "forward_query_parameters": True},
 	{"source": "/apps", "target": "/desk"},
 	{"source": "/app", "target": "/desk"},
 ]
