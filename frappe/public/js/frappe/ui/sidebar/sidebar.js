@@ -161,11 +161,11 @@ frappe.ui.Sidebar = class Sidebar {
 		let match = false;
 		const that = this;
 		$(".item-anchor").each(function () {
-			let href = $(this).attr("href")?.split("?")[0];
+			let href = decodeURIComponent($(this).attr("href")?.split("?")[0]);
 			const path = decodeURIComponent(window.location.pathname);
 
 			// Match only if path equals href or starts with it followed by "/" or end of string
-			const isActive = new RegExp(`^${href}(?:/|$)`).test(path);
+			const isActive = href === path;
 			if (href && isActive) {
 				match = true;
 				if (that.active_item) that.active_item.removeClass("active-sidebar");

@@ -54,7 +54,9 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 				});
 			}
 		}
-		return path;
+		if (path) {
+			return encodeURI(path);
+		}
 	}
 	prepare() {}
 	make() {
