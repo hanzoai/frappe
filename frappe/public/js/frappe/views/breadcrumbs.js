@@ -85,7 +85,9 @@ frappe.breadcrumbs = {
 		const el = document.createElement("li");
 		const a = document.createElement("a");
 		a.href = route;
-		a.classList.add(css_classes);
+		if (css_classes) {
+			a.classList.add(css_classes);
+		}
 		a.innerText = label;
 		el.appendChild(a);
 		this.$breadcrumbs.append(el);
@@ -203,7 +205,7 @@ frappe.breadcrumbs = {
 		} else {
 			docname_title = doc.name;
 		}
-		this.append_breadcrumb_element(form_route, docname_title);
+		this.append_breadcrumb_element(form_route, docname_title, "title-text-form");
 
 		if (view === "form") {
 			let last_crumb = this.$breadcrumbs.find("li").last();
