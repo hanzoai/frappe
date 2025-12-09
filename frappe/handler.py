@@ -266,18 +266,16 @@ def run_doc_method(method, docs=None, dt=None, dn=None, arg=None, args=None):
 	if dt:  # not called from a doctype (from a page)
 		if not dn:
 			dn = dt  # single
-		doc = frappe.get_doc(dt, dn)
+		doc = frappe.get_doc(dt, dn, check_permission=True)
 
 	else:
 		docs = frappe.parse_json(docs)
-		doc = frappe.get_doc(docs)
+		doc = frappe.get_doc(docs, check_permission=True)
 		doc._original_modified = doc.modified
 		doc.check_if_latest()
 
 	if not doc:
 		frappe.throw_permission_error()
-
-	doc.check_permission("read")
 
 	try:
 		args = frappe.parse_json(args)
