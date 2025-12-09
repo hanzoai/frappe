@@ -315,6 +315,11 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 				return false;
 			}
 
+			if (item.value === "filter_description__link_option") {
+				e.preventDefault();
+				return false;
+			}
+
 			if (item.action) {
 				item.value = "";
 				item.label = "";
@@ -384,8 +389,7 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 				if (filter_string) {
 					r.message.push({
 						html: `<span class="text-muted" style="line-height: 1.5">${filter_string}</span>`,
-						value: "",
-						action: () => {},
+						value: "filter_description__link_option",
 					});
 				}
 
