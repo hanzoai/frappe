@@ -44,6 +44,7 @@
 		}
 		.indicator-pill {
 			margin-top: 2px;
+			margin-left: var(--margin-sm);
 		}
 		.sub-heading {
 			@include get_textstyle("sm", "regular");
