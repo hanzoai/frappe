@@ -81,11 +81,18 @@ frappe.breadcrumbs = {
 		this.append_breadcrumb_element(breadcrumbs.route, breadcrumbs.label);
 	},
 
-	append_breadcrumb_element(route, label) {
+	append_breadcrumb_element(route, label, is_new_doc = false) {
 		const el = document.createElement("li");
 		const a = document.createElement("a");
 		a.href = route;
-		a.innerText = label;
+		if (is_new_doc) {
+			const small_tag = document.createElement("small");
+			small_tag.classList.add("text-muted");
+			small_tag.innerText = label;
+			a.appendChild(small_tag);
+		} else {
+			a.innerText = label;
+		}
 		el.appendChild(a);
 		this.$breadcrumbs.append(el);
 	},
@@ -194,13 +201,16 @@ frappe.breadcrumbs = {
 		const doctype = breadcrumbs.doctype;
 		let docname = frappe.get_route().slice(2).join("/");
 		let doc = frappe.get_doc(doctype, docname);
-
-		if (doc.__islocal) return; // new doc, no breadcrumb required
-
-		let title = frappe.model.get_doc_title(doc);
-
 		let form_route = `/desk/${frappe.router.slug(doctype)}/${encodeURIComponent(docname)}`;
-		this.append_breadcrumb_element(form_route, doc.name);
+
+		let docname_title;
+		if (docname.startsWith("new-" + doctype.toLowerCase().replace(/ /g, "-"))) {
+			docname_title = __("New {0}", [__(doctype)]);
+			this.append_breadcrumb_element(form_route, docname_title, true);
+		} else {
+			docname_title = doc.name;
+			this.append_breadcrumb_element(form_route, docname_title);
+		}
 
 		if (view === "form") {
 			let last_crumb = this.$breadcrumbs.find("li").last();
