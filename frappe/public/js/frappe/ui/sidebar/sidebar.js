@@ -445,7 +445,7 @@ frappe.ui.Sidebar = class Sidebar {
 		if (route.length == 2) {
 			workspace_title = this.get_correct_workspace_sidebars(route[1]);
 		} else {
-			workspace_title = this.get_correct_workspace_sidebars(route);
+			workspace_title = this.get_correct_workspace_sidebars(route[0]);
 		}
 		let module_name = workspace_title[0];
 		if (module_name) {
