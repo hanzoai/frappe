@@ -35,13 +35,6 @@
 	.title-area {
 		display: inline-flex;
 		align-items: center;
-		.title-text {
-			@include get_textstyle("xl", "semibold");
-			cursor: pointer;
-			margin-bottom: 0px;
-			margin-right: var(--margin-sm);
-			max-width: 25vw;
-		}
 		.indicator-pill {
 			margin-top: 2px;
 			margin-left: var(--margin-sm);
