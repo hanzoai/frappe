@@ -24,6 +24,7 @@ export default class Tab {
 		this.tab_link = $(`
 			<li class="nav-item">
 				<button class="nav-link ${this.df.active ? "active" : ""}" id="${id}-tab"
+					data-toggle="tab"
 					data-fieldname="${this.df.fieldname}"
 					type="button"
 					role="tab"
