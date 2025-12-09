@@ -4,6 +4,28 @@ context("Kanban Board", () => {
 		cy.visit("/desk");
 	});
 
+	it("Delete ToDo Kanban from list view if it exists", () => {
+		cy.go_to_list("Kanban Board");
+
+		cy.get(".list-row-container").should("exist");
+
+		cy.get(".list-row-container").then(($list_row) => {
+			cy.contains(".list-row-container", "ToDo Kanban").then(($row) => {
+				if (!$row.length) {
+					cy.log("ToDo Kanban does not exist — skipping delete.");
+					return;
+				}
+
+				cy.wrap($row).find(".list-row-checkbox").check({ force: true });
+
+				cy.get(".actions-btn-group > .btn").contains("Actions").click();
+				cy.get('.actions-btn-group > .dropdown-menu [data-label="Delete"]').click();
+
+				cy.click_modal_primary_button("Yes");
+			});
+		});
+	});
+
 	it("Create ToDo Kanban", () => {
 		cy.visit("/desk/todo");
 
