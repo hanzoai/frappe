@@ -67,7 +67,13 @@ def export_customizations(
 	sync_on_migrate = cint(sync_on_migrate)
 	with_permissions = cint(with_permissions)
 	apply_module_export_filter = cint(apply_module_export_filter)
-	module_export_filter = module if apply_module_export_filter else ""
+
+	cf_filters = {"dt": doctype}
+	ps_filters = {"doc_type": doctype}
+
+	if apply_module_export_filter:
+		cf_filters["module"] = module
+		ps_filters["module"] = module
 
 	if not frappe.conf.developer_mode:
 		frappe.throw(_("Only allowed to export customizations in developer mode"))
@@ -76,13 +82,13 @@ def export_customizations(
 		"custom_fields": frappe.get_all(
 			"Custom Field",
 			fields="*",
-			filters={"dt": doctype, "module": module_export_filter},
+			filters=cf_filters,
 			order_by="name",
 		),
 		"property_setters": frappe.get_all(
 			"Property Setter",
 			fields="*",
-			filters={"doc_type": doctype, "module": module_export_filter},
+			filters=ps_filters,
 			order_by="name",
 		),
 		"custom_perms": [],
