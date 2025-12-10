@@ -59,7 +59,9 @@ def get_doc(doctype: str, /) -> _SingleDocument:
 
 
 @overload
-def get_doc(doctype: str, name: str, /, *, for_update: bool | None = None) -> "Document":
+def get_doc(
+	doctype: str, name: str, /, *, for_update: bool | None = None, check_permission: str | bool | None = None
+) -> "Document":
 	"""Retrieve DocType from DB, doctype and name must be positional argument."""
 	pass
 
