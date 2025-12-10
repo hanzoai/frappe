@@ -211,14 +211,12 @@ def check_write_permission(doctype: str | None = None, name: str | None = None):
 		return
 
 	try:
-		doc = frappe.get_lazy_doc(doctype, name)
+		frappe.get_lazy_doc(doctype, name, check_permission="write")
 	except frappe.DoesNotExistError:
 		# doc has not been inserted yet, name is set to "new-some-doctype"
 		# If doc inserts fine then only this attachment will be linked see file/utils.py:relink_mismatched_files
 		frappe.new_doc(doctype).check_permission("write")
 		return
-
-	doc.check_permission("write")
 
 
 @frappe.whitelist(allow_guest=True)

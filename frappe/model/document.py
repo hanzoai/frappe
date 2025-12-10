@@ -147,7 +147,7 @@ def get_lazy_doc(
 ) -> "Document":
 	if doctype == "DocType":
 		warnings.warn("DocType doesn't support lazy loading", stacklevel=1)
-		return get_doc(doctype, name)
+		return get_doc(doctype, name, check_permission=check_permission)
 
 	if controller := get_lazy_controller(doctype):
 		doc = controller(doctype, name, for_update=for_update)
