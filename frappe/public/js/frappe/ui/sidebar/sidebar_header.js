@@ -29,8 +29,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 				label: __("Edit Sidebar"),
 				icon: "edit",
 				onClick: function () {
-					me.sidebar.edit_mode = true;
-					me.sidebar.toggle_editing_mode();
+					me.sidebar.editor.toggle();
 				},
 			},
 			{
