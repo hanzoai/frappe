@@ -63,11 +63,11 @@ context("Grid Row Form Tabs", () => {
 			.find('.frappe-control[data-fieldname="quantity"]')
 			.should("be.visible");
 
-		// Click on the "Details" tab
-		cy.get("@table-form").findByRole("tab", { name: "Details" }).click();
-
-		// Verify second tab is now active
-		cy.get("@table-form").find(".form-tabs .nav-link").last().should("have.class", "active");
+		// Click on the "Details" tab and wait for it to become active
+		cy.get("@table-form")
+			.find('.form-tabs .nav-link[data-fieldname="tab_details"]')
+			.click()
+			.should("have.class", "active");
 
 		// Verify first tab is no longer active
 		cy.get("@table-form")
@@ -95,7 +95,10 @@ context("Grid Row Form Tabs", () => {
 		cy.get("@table").find('[data-idx="1"]').as("row1");
 		cy.get("@row1").find(".btn-open-row").click();
 		cy.get(".grid-row-open").as("table-form");
-		cy.get("@table-form").findByRole("tab", { name: "Details" }).click();
+		cy.get("@table-form")
+			.find('.form-tabs .nav-link[data-fieldname="tab_details"]')
+			.click()
+			.should("have.class", "active");
 
 		// Collapse first row
 		cy.get("@table-form").find(".grid-collapse-row").click();
@@ -126,15 +129,24 @@ context("Grid Row Form Tabs", () => {
 		cy.fill_table_field("items", "1", "item_name", "Test Item");
 		cy.fill_table_field("items", "1", "quantity", "10");
 
-		// Switch to Details tab
-		cy.get("@table-form").findByRole("tab", { name: "Details" }).click();
+		// Switch to Details tab and wait for it to become active
+		cy.get("@table-form")
+			.find('.form-tabs .nav-link[data-fieldname="tab_details"]')
+			.click()
+			.should("have.class", "active");
 
-		// Fill fields in second tab
+		// Wait for tab content to be visible, then fill fields in second tab
+		cy.get("@table-form")
+			.find('.frappe-control[data-fieldname="description"]')
+			.should("be.visible");
 		cy.fill_table_field("items", "1", "description", "This is a test description");
 		cy.fill_table_field("items", "1", "notes", "Some notes here");
 
-		// Switch back to first tab and verify data is preserved
-		cy.get("@table-form").findByRole("tab", { name: "General" }).click();
+		// Switch back to first tab and wait for it to become active
+		cy.get("@table-form")
+			.find('.form-tabs .nav-link[data-fieldname="tab_general"]')
+			.click()
+			.should("have.class", "active");
 		cy.get("@table-form")
 			.find('.frappe-control[data-fieldname="item_name"] input')
 			.should("have.value", "Test Item");

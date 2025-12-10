@@ -8,6 +8,11 @@ export default {
 	engine: "InnoDB",
 	fields: [
 		{
+			fieldname: "tab_general",
+			fieldtype: "Tab Break",
+			label: "General",
+		},
+		{
 			fieldname: "item_name",
 			fieldtype: "Data",
 			in_list_view: 1,
@@ -23,7 +28,7 @@ export default {
 		{
 			fieldname: "tab_details",
 			fieldtype: "Tab Break",
-			label: "More Details",
+			label: "Details",
 		},
 		{
 			fieldname: "description",
