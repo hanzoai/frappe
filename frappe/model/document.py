@@ -59,7 +59,9 @@ def get_doc(doctype: str, /) -> _SingleDocument:
 
 
 @overload
-def get_doc(doctype: str, name: str, /, *, for_update: bool | None = None) -> "Document":
+def get_doc(
+	doctype: str, name: str, /, *, for_update: bool | None = None, check_permission: str | bool | None = None
+) -> "Document":
 	"""Retrieve DocType from DB, doctype and name must be positional argument."""
 	pass
 
@@ -142,14 +144,16 @@ def get_doc_from_dict(data: dict[str, Any], **kwargs) -> "Document":
 	raise ImportError(data["doctype"])
 
 
-def get_lazy_doc(doctype: str, name: str, *, for_update=None) -> "Document":
+def get_lazy_doc(
+	doctype: str, name: str, *, for_update=None, check_permission: str | bool | None = None
+) -> "Document":
 	if doctype == "DocType":
 		warnings.warn("DocType doesn't support lazy loading", stacklevel=1)
-		return get_doc(doctype, name)
+		return get_doc(doctype, name, check_permission=check_permission)
 
-	controller = get_lazy_controller(doctype)
-	if controller:
-		return controller(doctype, name, for_update=for_update)
+	if controller := get_lazy_controller(doctype):
+		doc = controller(doctype, name, for_update=for_update)
+		return get_doc_permission_check(doc, check_permission)
 	raise ImportError(doctype)
 
 
