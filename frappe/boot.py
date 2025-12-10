@@ -544,7 +544,7 @@ def get_sidebar_items():
 	)
 	module_sidebars = auto_generate_sidebar_from_module()
 	sidebars.extend(module_sidebars)
-	add_user_specific_sidebar(sidebars)
+	add_private_workspace_sidebar(sidebars)
 	sidebar_items = {}
 
 	for s in sidebars:
@@ -592,18 +592,21 @@ def get_sidebar_items():
 				or w.is_item_allowed(si.link_to, si.link_type)
 			):
 				sidebar_items[sidebar_title.lower()]["items"].append(workspace_sidebar)
-
-	old_name = f"my workspaces-{frappe.session.user.lower()}"
-	if old_name in sidebar_items.keys():
-		sidebar_items["my workspaces"] = sidebar_items.pop(old_name)
+	add_user_specific_sidebar(sidebar_items)
+	# old_name = f"my workspaces-{frappe.session.user.lower()}"
+	# if old_name in sidebar_items.keys():
+	# 	sidebar_items["my workspaces"] = sidebar_items.pop(old_name)
 	return sidebar_items
 
 
-def add_user_specific_sidebar(sidebars):
+def add_private_workspace_sidebar(sidebars):
 	try:
 		my_workspace_for_user = frappe.get_doc("Workspace Sidebar", f"My Workspaces-{frappe.session.user}")
 		sidebars.append(
-			{"name": my_workspace_for_user.name, "header_icon": my_workspace_for_user.header_icon}
+			{
+				"name": my_workspace_for_user.name,
+				"header_icon": my_workspace_for_user.header_icon,
+			}
 		)
 	except frappe.DoesNotExistError:
 		my_workspace = frappe.get_doc("Workspace Sidebar", "My Workspaces")
@@ -635,3 +638,14 @@ def get_desktop_icon_urls():
 						icons_map[app][variant].append(assets_path)
 
 	return icons_map
+
+
+def add_user_specific_sidebar(sidebar_items):
+	sidebars_to_remove = []
+	for sidebar in sidebar_items.keys():
+		if f"-{frappe.session.user.lower()}" in sidebar:
+			sidebars_to_remove.append(sidebar)
+
+	for sidebar in sidebars_to_remove:
+		sidebar_name = sidebar.replace(f"-{frappe.session.user.lower()}", "")
+		sidebar_items[sidebar_name] = sidebar_items.pop(sidebar)

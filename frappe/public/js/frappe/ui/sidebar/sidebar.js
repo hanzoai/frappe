@@ -97,8 +97,9 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 	setup(workspace_title) {
 		this.sidebar_title = workspace_title;
-		this.workspace_title = workspace_title.toLowerCase();
 		this.check_for_private_workspace(workspace_title);
+		this.workspace_title = this.sidebar_title.toLowerCase();
+
 		this.prepare();
 		this.$sidebar.attr("data-title", this.sidebar_title);
 		this.sidebar_header = new frappe.ui.SidebarHeader(this);

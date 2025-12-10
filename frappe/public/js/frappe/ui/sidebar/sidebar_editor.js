@@ -5,10 +5,9 @@ export class SidebarEditor {
 		this.setup();
 	}
 	setup() {
-		console.log("Setting Up Editor");
-		this.setup_editing_off();
+		this.handle_route_change();
 	}
-	setup_editing_off() {
+	handle_route_change() {
 		const me = this;
 		frappe.router.on("change", function () {
 			if (frappe.get_prev_route().length == 0) return;
@@ -28,7 +27,6 @@ export class SidebarEditor {
 	start() {
 		const me = this;
 		this.edit_mode = true;
-		console.log("Start Editing");
 		this.sidebar.open();
 
 		this.sidebar.wrapper.attr("data-mode", "edit");
@@ -99,6 +97,14 @@ export class SidebarEditor {
 		this.sortable = Sortable.create($(".sidebar-items").get(0), {
 			handler: ".drag-handle",
 			group: "sidebar-item",
+			onAdd: function (event) {
+				let old_index = event.oldIndex;
+				let section_name = $(event.from).parent().attr("item-name");
+				let item_data = me.get_item_data(section_name).nested_items[old_index];
+				me.get_item_data(section_name).nested_items.splice(old_index, 1);
+				item_data.child = 0;
+				me.new_sidebar_items.splice(event.newIndex, 0, item_data);
+			},
 			onMove: function (evt, originalEvent) {
 				me.close_section = false;
 				let item_name = $(evt.related).attr("item-name");
@@ -117,7 +123,6 @@ export class SidebarEditor {
 							.first()
 							.get(0)
 							.getBoundingClientRect();
-						console.log(nested_container.top > originalEvent.clientY);
 						if (
 							nested_container.top > originalEvent.clientY ||
 							originalEvent.clientY < nested_container.bottom
@@ -434,7 +439,6 @@ export class SidebarEditor {
 				if (opts && opts.nested) {
 					values.child = 1;
 					console.log("Add it as a nested item");
-					console.log(opts.parent_item);
 					let index = me.new_sidebar_items.findIndex((f) => {
 						return f.label == opts.parent_item.label;
 					});
@@ -445,11 +449,11 @@ export class SidebarEditor {
 					me.new_sidebar_items[index].nested_items.push(values);
 				} else if (opts && opts.item) {
 					if (opts.item.child) {
-						let parent_icon = me.find_parent(me.new_sidebar_items, opts.item);
-						if (parent_icon) {
-							let index = parent_icon.nested_items.indexOf(opts.item);
-							let parent_icon_index = me.new_sidebar_items.indexOf(parent_icon);
-							me.new_sidebar_items[parent_icon_index].nested_items[index] = values;
+						let parent_item = me.find_parent(me.new_sidebar_items, opts.item);
+						if (parent_item) {
+							let index = parent_item.nested_items.indexOf(opts.item);
+							let parent_item_index = me.new_sidebar_items.indexOf(parent_item);
+							me.new_sidebar_items[parent_item_index].nested_items[index] = values;
 						}
 					} else {
 						let index = me.new_sidebar_items.indexOf(opts.item);
@@ -518,9 +522,11 @@ export class SidebarEditor {
 	delete_item(item) {
 		let index;
 		if (item.child) {
-			let parent_icon = this.find_parent(this.new_sidebar_items, item);
-			index = parent_icon.nested_items.indexOf(item);
-			parent_icon.nested_items.splice(index, 1);
+			let parent_item = this.find_parent(this.new_sidebar_items, item);
+			if (parent_item) {
+				index = parent_item.nested_items.indexOf(item);
+				parent_item.nested_items.splice(index, 1);
+			}
 		} else {
 			index = this.new_sidebar_items.indexOf(item);
 			this.new_sidebar_items.splice(index, 1);
