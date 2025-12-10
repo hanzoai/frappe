@@ -298,12 +298,15 @@ def get_module_info(module_name):
 
 
 def choose_top_doctypes(doctype_names):
+	from frappe.model.utils import is_single_doctype
+
 	doctype_limit = 3
 	if len(doctype_names) > doctype_limit:
 		try:
 			doctype_count_map = {}
 			for doctype in doctype_names:
-				doctype_count_map[doctype] = frappe.db.count(doctype)
+				if not is_single_doctype(doctype):
+					doctype_count_map[doctype] = frappe.db.count(doctype)
 			top_doctypes = [
 				name
 				for name, count in sorted(doctype_count_map.items(), key=lambda x: x[1], reverse=True)[
