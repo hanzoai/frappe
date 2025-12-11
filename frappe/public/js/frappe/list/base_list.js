@@ -889,13 +889,17 @@ class FilterArea {
 
 		const doctype_fields = this.list_view.meta.fields;
 		const title_field = this.list_view.meta.title_field;
+		const user_setting_fields =
+			frappe.get_user_settings(this.list_view.doctype)?.group_by_fields || [];
 
 		fields = fields.concat(
 			doctype_fields
 				.filter(
 					(df) =>
 						(df.fieldname === title_field ||
-							(df.in_standard_filter && frappe.model.is_value_type(df.fieldtype))) &&
+							((df.in_standard_filter ||
+								user_setting_fields.includes(df.fieldname)) &&
+								frappe.model.is_value_type(df.fieldtype))) &&
 						frappe.perm.has_perm(this.list_view.doctype, df.permlevel)
 				)
 				.map((df) => {
