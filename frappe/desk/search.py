@@ -34,7 +34,9 @@ class LinkSearchResults(TypedDict):
 
 
 def should_cache(doctype, txt, *args, **kwargs):
-	return not txt
+	"""Return True if there is no search text and the filters are cacheable."""
+	filters = kwargs.get("filters")
+	return not txt and not isinstance(filters, dict | list)
 
 
 # this is called by the Link Field
