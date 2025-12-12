@@ -200,14 +200,6 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 	make_sidebar() {
 		this.empty();
-
-		// Display collapse button when sidebar is not in edit mode
-		if (!this.edit_mode) {
-			this.wrapper.find(".collapse-sidebar-link").removeClass("hidden");
-		} else {
-			this.wrapper.find(".collapse-sidebar-link").addClass("hidden");
-		}
-
 		this.create_sidebar(this.workspace_sidebar_items);
 
 		// Scroll sidebar to selected page if it is not in viewport.
@@ -484,6 +476,7 @@ frappe.ui.Sidebar = class Sidebar {
 				me.show_new_dialog();
 			});
 		} else {
+			this.wrapper.removeAttr("data-mode");
 			$(this.active_item).addClass("active-sidebar");
 			$(".collapse-sidebar-link").removeClass("hidden");
 			this.wrapper.find(".edit-mode").addClass("hidden");
