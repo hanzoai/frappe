@@ -67,7 +67,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 					icon: "wallpaper",
 					url: frappe.utils.generate_route({
 						type: "Workspace",
-						route: w.toLowerCase(),
+						route: frappe.router.slug(w),
 					}),
 				};
 				sibling_workspaces.push(item);
