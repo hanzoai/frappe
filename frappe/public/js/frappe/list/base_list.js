@@ -838,7 +838,17 @@ class FilterArea {
 			</div>`;
 		};
 
-		let html = ["assigned_to", "owner"].map(get_item_html).join("");
+		let filtes_to_add = [];
+
+		if (this.user_setting_fields.includes("owner")) {
+			filtes_to_add.push("owner");
+		}
+
+		if (this.user_setting_fields.includes("assigned_to")) {
+			filtes_to_add.push("assigned_to");
+		}
+
+		let html = filtes_to_add.map(get_item_html).join("");
 		this.list_view.page.page_form.find(".standard-filter-section").append(html);
 		this.setup_non_standard_items_dropdown();
 		this.setup_filter_by();
