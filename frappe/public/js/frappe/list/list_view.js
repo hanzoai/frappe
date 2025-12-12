@@ -2044,13 +2044,23 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 
 	get_group_by_dropdown_fields() {
 		let group_by_fields = [];
-		let default_fields = ["assigned_to", "owner"];
-		default_fields = default_fields.concat(
-			frappe.get_user_settings(this.doctype)?.group_by_fields || []
-		);
+		let default_fields = frappe.get_user_settings(this.doctype)?.group_by_fields || [];
+
 		let fields = this.meta.fields.filter((f) =>
 			["Select", "Link", "Data", "Int", "Check"].includes(f.fieldtype)
 		);
+
+		let default_fields_dict = [
+			{
+				label: "Assigned To",
+				fieldname: "assigned_to",
+			},
+			{
+				label: "Created By",
+				fieldname: "owner",
+			},
+		];
+		fields = fields.concat(default_fields_dict);
 
 		group_by_fields.push({
 			label: __(this.doctype),
