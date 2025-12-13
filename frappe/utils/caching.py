@@ -167,19 +167,13 @@ def site_cache(ttl: int | None = None, maxsize: int | None = None) -> Callable:
 	return time_cache_wrapper
 
 
-def redis_cache(
-	ttl: int | None = 3600,
-	user: str | bool | None = None,
-	shared: bool = False,
-	condition: Callable | None = None,
-) -> Callable:
+def redis_cache(ttl: int | None = 3600, user: str | bool | None = None, shared: bool = False) -> Callable:
 	"""Decorator to cache method calls and its return values in Redis
 
 	args:
 	        ttl: time to expiry in seconds, defaults to 1 hour
 	        user: `true` should cache be specific to session user.
 	        shared: `true` should cache be shared across sites
-	        condition: A callable that returns `True` if the cache should be used, `False` otherwise.
 	"""
 
 	def wrapper(func: Callable | None = None) -> Callable:
@@ -193,9 +187,6 @@ def redis_cache(
 
 		@wraps(func)
 		def redis_cache_wrapper(*args, **kwargs):
-			if condition and not condition(*args, **kwargs):
-				return func(*args, **kwargs)
-
 			func_call_key = f"{func_key}::{hash(__generate_request_cache_key(args, kwargs))}"
 			cached_val = frappe.cache.get_value(func_call_key, user=user, shared=shared)
 			if cached_val is not None:
