@@ -125,6 +125,8 @@ def get_home_page():
 
 		home_page = home_page.strip("/")
 
+		if home_page == "me" and frappe.session.data.user_type == "System User":
+			home_page = "desk"
 		return home_page
 
 	if frappe._dev_server:
