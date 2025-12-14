@@ -289,10 +289,6 @@ frappe.views.BaseList = class BaseList {
 		});
 	}
 
-	toggle_side_bar(show) {
-		frappe.app.sidebar.toggle_sidebar();
-	}
-
 	show_or_hide_sidebar() {
 		let show_sidebar = JSON.parse(localStorage.show_sidebar || "true");
 		$(document.body).toggleClass("no-list-sidebar", !show_sidebar);
@@ -701,7 +697,7 @@ class FilterArea {
 		this.user_setting_fields =
 			frappe.get_user_settings(this.list_view.doctype)?.group_by_fields || [];
 
-		if (["assigned_to", "owner"].some((v) => this.user_setting_fields.includes(v))) {
+		if (["assigned_to", "owner", "tags"].some((v) => this.user_setting_fields.includes(v))) {
 			this.render_non_standard_fields_filter();
 		}
 	}
@@ -823,6 +819,8 @@ class FilterArea {
 				label = __("Assigned To");
 			} else if (fieldname === "owner") {
 				label = __("Created By");
+			} else if (fieldname === "tags") {
+				label = __("Tags");
 			}
 
 			return `<div class="group-by-field list-link form-group frappe-control input-max-width">
@@ -848,6 +846,10 @@ class FilterArea {
 			filtes_to_add.push("assigned_to");
 		}
 
+		if (this.user_setting_fields.includes("tags")) {
+			filtes_to_add.push("tags");
+		}
+
 		let html = filtes_to_add.map(get_item_html).join("");
 		this.list_view.page.page_form.find(".standard-filter-section").append(html);
 		this.setup_non_standard_items_dropdown();
@@ -863,11 +865,21 @@ class FilterArea {
 			this.set_dropdown_loading_state($dropdown);
 			let fieldname = $(e.currentTarget).find("a").attr("data-fieldname");
 			let fieldtype = $(e.currentTarget).find("a").attr("data-fieldtype");
+
+			if (fieldname == "tags") {
+				$dropdown.addClass("list-stats-dropdown");
+				this.get_stats($dropdown);
+				return;
+			}
 			this.get_group_by_count(fieldname).then((field_count_list) => {
 				if (field_count_list.length) {
-					let applied_filter = this.list_view.get_filter_value(
-						fieldname == "assigned_to" ? "_assign" : fieldname
-					);
+					if (fieldname == "assigned_to") {
+						fieldname = "_assign";
+					}
+					if (fieldname == "tags") {
+						fieldname = "_user_tags";
+					}
+					let applied_filter = this.list_view.get_filter_value(fieldname);
 					this.render_dropdown_items(
 						field_count_list,
 						fieldtype,
@@ -896,27 +908,19 @@ class FilterArea {
 				typeof $target.data("value") === "string"
 					? decodeURIComponent($target.data("value").trim())
 					: $target.data("value");
-			fieldname = fieldname === "assigned_to" ? "_assign" : fieldname;
+
+			if (fieldname == "assigned_to") {
+				fieldname = "_assign";
+			}
+			if (fieldname == "tags") {
+				fieldname = "_user_tags";
+			}
 
 			return this.list_view.filter_area.remove(fieldname).then(() => {
 				if (is_selected) return;
 				return this.apply_filter(fieldname, value);
 			});
 		});
-	}
-
-	apply_filter(fieldname, value) {
-		let operator = "=";
-		if (value === "") {
-			operator = "is";
-			value = "not set";
-		}
-		if (fieldname === "_assign") {
-			operator = "like";
-			value = `%${value}%`;
-		}
-
-		return this.list_view.filter_area.add(this.list_view.doctype, fieldname, operator, value);
 	}
 
 	render_dropdown_items(fields, fieldtype, $dropdown, applied_filter) {
@@ -943,18 +947,6 @@ class FilterArea {
 		let dropdown_html = standard_html + applied_filter_html + dropdown_items_html;
 		$dropdown.toggleClass("has-selected", Boolean(applied_filter_html));
 		$dropdown.html(dropdown_html);
-	}
-
-	setup_search($dropdown) {
-		frappe.utils.setup_search($dropdown, ".group-by-item", ".group-by-value", "data-name");
-	}
-
-	set_empty_state($dropdown) {
-		$dropdown.html(
-			`<div class="empty-state group-by-empty">
-				${__("No filters found")}
-			</div>`
-		);
 	}
 
 	get_dropdown_html(field, fieldtype, applied = false) {
@@ -985,18 +977,61 @@ class FilterArea {
 		</div>`;
 	}
 
-	set_dropdown_loading_state($dropdown) {
-		$dropdown.html(`<li>
-			<div class="empty-state group-by-loading">
-				${__("Loading...")}
-			</div>
-		</li>`);
+	get_stats($dropdown) {
+		let me = this;
+
+		frappe.call({
+			method: "frappe.desk.reportview.get_sidebar_stats",
+			type: "GET",
+			args: {
+				stats: ["_user_tags"],
+				doctype: me.list_view.doctype,
+				// wait for list filter area to be generated before getting filters, or fallback to default filters
+				filters:
+					(me.list_view.filter_area
+						? me.list_view.get_filters_for_args()
+						: me.default_filters) || [],
+			},
+			callback: function (r) {
+				let stats = (r.message.stats || {})["_user_tags"] || [];
+				me.render_stat(stats, $dropdown);
+				frappe.utils.setup_search($dropdown, ".stat-link", ".stat-label");
+			},
+		});
+	}
+
+	render_stat(stats, $dropdown) {
+		let args = {
+			stats: stats,
+			label: __("Tags"),
+			applied_filter: this.list_view.get_filter_value("_user_tags"),
+		};
+
+		let tag_list = $(frappe.render_template("list_sidebar_stat", args)).on(
+			"click",
+			".stat-link",
+			(e) => {
+				let fieldname = $(e.currentTarget).attr("data-field");
+				let label = $(e.currentTarget).attr("data-label");
+				let condition = "like";
+				let existing = this.list_view.filter_area.filter_list.get_filter(fieldname);
+				if (existing) {
+					existing.remove();
+				}
+				if (label == "No Tags") {
+					label = "not set";
+					condition = "is";
+				}
+				this.list_view.filter_area.add(this.doctype, fieldname, condition, label);
+			}
+		);
+
+		$dropdown.html(tag_list);
 	}
 
 	get_group_by_count(field) {
 		let current_filters = this.list_view.get_filters_for_args();
 
-		// remove filter of the current field
 		current_filters = current_filters.filter(
 			(f_arr) => !f_arr.includes(field === "assigned_to" ? "_assign" : field)
 		);
@@ -1018,6 +1053,40 @@ class FilterArea {
 			if (current_user) field_counts.unshift(current_user);
 			return field_counts;
 		});
+	}
+
+	apply_filter(fieldname, value) {
+		let operator = "=";
+		if (value === "") {
+			operator = "is";
+			value = "not set";
+		}
+		if (fieldname === "_assign") {
+			operator = "like";
+			value = `%${value}%`;
+		}
+
+		return this.list_view.filter_area.add(this.list_view.doctype, fieldname, operator, value);
+	}
+
+	set_dropdown_loading_state($dropdown) {
+		$dropdown.html(`<li>
+			<div class="empty-state group-by-loading">
+				${__("Loading...")}
+			</div>
+		</li>`);
+	}
+
+	setup_search($dropdown) {
+		frappe.utils.setup_search($dropdown, ".group-by-item", ".group-by-value", "data-name");
+	}
+
+	set_empty_state($dropdown) {
+		$dropdown.html(
+			`<div class="empty-state group-by-empty">
+				${__("No filters found")}
+			</div>`
+		);
 	}
 
 	remove_filters(filters) {
