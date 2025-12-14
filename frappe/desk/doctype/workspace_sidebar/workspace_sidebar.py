@@ -181,12 +181,14 @@ def add_sidebar_items(sidebar_title, sidebar_items):
 	sidebar_items = loads(sidebar_items)
 	title = f"{sidebar_title}-{frappe.session.user}"
 	w = frappe.get_doc("Workspace Sidebar", sidebar_title)
-	try:
-		w = frappe.get_doc("Workspace Sidebar", title)
-	except frappe.DoesNotExistError:
-		frappe.clear_messages()
-		w = frappe.copy_doc(w, ignore_no_copy=False)
-		w.title = title
+	if not frappe.conf.developer_mode:
+		try:
+			w = frappe.get_doc("Workspace Sidebar", title)
+		except frappe.DoesNotExistError:
+			frappe.clear_messages()
+			w = frappe.copy_doc(w, ignore_no_copy=False)
+			w.title = title
+			w.for_user = frappe.session.user
 	items = []
 	current_idx = 1
 	for item in sidebar_items:

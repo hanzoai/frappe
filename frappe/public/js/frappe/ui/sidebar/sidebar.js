@@ -400,10 +400,16 @@ frappe.ui.Sidebar = class Sidebar {
 				case 2:
 					view = route[0];
 					entity_name = route[1];
+
+					if (frappe.boot.workspace_sidebar_item[entity_name.toLowerCase()]) {
+						frappe.app.sidebar.setup(entity_name);
+						return;
+					}
 					break;
 				case 3:
+					view = route[0];
+					entity_name = route[1];
 					if (route[0] == "Workspaces" && route[1] == "private") {
-						view = route[0];
 						entity_name = route[2];
 					}
 					break;
@@ -436,6 +442,7 @@ frappe.ui.Sidebar = class Sidebar {
 				return a.localeCompare(b);
 			});
 		if (sidebars && sidebars.length) {
+			if (this.sidebar_title) return;
 			frappe.app.sidebar.setup(sidebars[0]);
 		}
 	}
