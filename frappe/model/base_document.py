@@ -1390,7 +1390,10 @@ class BaseDocument:
 		):
 			currency = frappe.db.get_value("Currency", currency_value, cache=True)
 
-		val = self.get(fieldname)
+		if fieldname and (prop := getattr(type(self), fieldname, None)) and is_a_property(prop):
+			val = getattr(self, fieldname)
+		else:
+			val = self.get(fieldname)
 
 		if translated:
 			val = _(val)
