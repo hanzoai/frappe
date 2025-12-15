@@ -67,7 +67,7 @@ frappe.views.ListViewSelect = class ListViewSelect {
 							action: () => frappe.set_route("report"),
 						};
 					}
-					this.setup_dropdown_in_sidebar("Report", reports, default_action);
+					this.setup_dropdown_in_navbar("Report", reports, default_action);
 				},
 			},
 			Dashboard: {
@@ -79,7 +79,7 @@ frappe.views.ListViewSelect = class ListViewSelect {
 				action: () => this.set_route("calendar", "default"),
 				current_view_handler: () => {
 					this.get_calendars().then((calendars) => {
-						this.setup_dropdown_in_sidebar("Calendar", calendars);
+						this.setup_dropdown_in_navbar("Calendar", calendars);
 					});
 				},
 			},
@@ -99,7 +99,7 @@ frappe.views.ListViewSelect = class ListViewSelect {
 							action: () => frappe.new_doc("Email Account"),
 						};
 					}
-					this.setup_dropdown_in_sidebar("Inbox", accounts, default_action);
+					this.setup_dropdown_in_navbar("Inbox", accounts, default_action);
 				},
 			},
 			Image: {
@@ -144,7 +144,7 @@ frappe.views.ListViewSelect = class ListViewSelect {
 		});
 	}
 
-	setup_dropdown_in_sidebar(view, items, default_action) {
+	setup_dropdown_in_navbar(view, items, default_action) {
 		let placeholder = __("Select {0}", [__(view)]);
 
 		if (items && items.length) {

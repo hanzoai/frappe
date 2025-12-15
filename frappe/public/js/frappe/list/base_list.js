@@ -28,7 +28,6 @@ frappe.views.BaseList = class BaseList {
 			this.setup_fields,
 			// make view
 			this.setup_page,
-			this.setup_side_bar,
 			this.setup_main_section,
 			this.setup_view,
 			this.setup_view_menu,
@@ -222,7 +221,6 @@ frappe.views.BaseList = class BaseList {
 				parent: this.views_menu,
 				page: this.page,
 				list_view: this,
-				sidebar: this.list_sidebar,
 				icon_map: icon_map,
 				label_map: label_map,
 			});
@@ -275,20 +273,6 @@ frappe.views.BaseList = class BaseList {
 
 	set_breadcrumbs() {
 		frappe.breadcrumbs.add(this.meta.module, this.doctype);
-	}
-
-	setup_side_bar() {
-		if (this.page.disable_sidebar_toggle) {
-			return;
-		}
-
-		this.list_sidebar = new frappe.views.ListSidebar({
-			doctype: this.doctype,
-			stats: this.stats,
-			parent: this.$page.find(".layout-side-section"),
-			page: this.page,
-			list_view: this,
-		});
 	}
 
 	show_or_hide_sidebar() {
