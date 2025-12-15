@@ -7,13 +7,14 @@ from werkzeug.routing import Rule
 import frappe
 from frappe.website.page_renderers.document_page import DocumentPage
 from frappe.website.page_renderers.not_found_page import NotFoundPage
+from frappe.website.page_renderers.portal_renderer import PortalPage
 from frappe.website.page_renderers.print_page import PrintPage
 from frappe.website.page_renderers.redirect_page import RedirectPage
 from frappe.website.page_renderers.static_page import StaticPage
 from frappe.website.page_renderers.template_page import TemplatePage
 from frappe.website.page_renderers.web_form import WebFormPage
 from frappe.website.router import evaluate_dynamic_routes
-from frappe.website.utils import can_cache, get_home_page
+from frappe.website.utils import can_cache, check_if_webform_exists, get_home_page
 
 
 class PathResolver:
@@ -60,6 +61,7 @@ class PathResolver:
 			DocumentPage,
 			TemplatePage,
 			PrintPage,
+			PortalPage,
 		]
 
 		for renderer in renderers:
@@ -135,6 +137,7 @@ def resolve_redirect(path, query_string=None):
 		return
 
 	redirects = frappe.get_hooks("website_redirects")
+	redirects += add_portal_redirect()
 	redirects += [
 		{
 			"source": r.source,
@@ -226,3 +229,20 @@ def get_website_rules():
 def validate_path(path: str):
 	if not PathResolver(path).is_valid_path():
 		frappe.throw(frappe._("Path {0} it not a valid path").format(frappe.bold(path)))
+
+
+def add_portal_redirect():
+	redirects = []
+	menu_items = frappe.get_single("Portal Settings").menu
+
+	for item in menu_items:
+		if check_if_webform_exists(item.route):
+			continue
+		redirects.append(
+			{
+				"source": item.route,
+				"target": f"/portal{item.route}",
+				"formward_query_parameters": True,
+			}
+		)
+	return redirects
