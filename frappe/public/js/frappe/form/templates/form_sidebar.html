@@ -17,6 +17,36 @@
 		</div>
 		{% endif %}
 	</div>
+	<div class="sidebar-image-details">
+		<div class="form-details">
+			<div class="form-title">{%= frm.get_title() %}</div>
+		</div>
+		<div class="form-name-container">
+			<div class="form-name">{%= frm.doc.name %}</div>
+			<span class="indicator-pill whitespace-nowrap"></span>
+		</div>
+	</div>
+</div>
+<div class="sidebar-section meta-section">
+	<div class="created-by-wrapper">
+		<div class="created-by-label">
+			{%= frappe.utils.icon("user-pen")%}
+			{%= __("Created By") %}
+		</div>
+		<div class="created-by-user">
+			{%= frappe.avatar(frappe.session.user, "avatar-xs")%}
+			{%= frappe.session.user %}
+		</div>
+	</div>
+	<div class="last-modified-wrapper">
+		<div class="last-modified-label">
+			{%= frappe.utils.icon("file-pen-line")%}
+			{%= __("Last Modified") %}
+		</div>
+		<div class="last-modified-time">
+			{%= frappe.datetime.prettyDate(cur_frm.doc.modified) %}
+		</div>
+	</div>
 </div>
 {% if frm.meta.beta %}
 <div class="sidebar-section">
@@ -45,7 +75,8 @@
 <div class="sidebar-section form-assignments">
 	<div>
 		<span class="form-sidebar-items">
-			<span class="add-assignment-label">
+			<span class="add-assignment-label form-sidebar-label">
+				{%= frappe.utils.icon("user-plus") %}
 				<span class="ellipsis">{%= __("Assigned To") %}</span>
 			</span>
 			<button class="add-assignment-btn btn btn-link icon-btn">
@@ -59,7 +90,8 @@
 	<div class="attachments-actions">
 		<span class="form-sidebar-items">
 			<span>
-				<a class="pill-label ellipsis explore-link">
+				<a class="pill-label ellipsis form-sidebar-label">
+					{%= frappe.utils.icon("paperclip") %}
 					{%= __("Attachments") %}
 				</a>
 			</span>
@@ -77,7 +109,8 @@
 <div class="sidebar-section form-tags">
 	<div>
 		<span class="form-sidebar-items">
-			<div>
+			<div class="form-sidebar-label">
+				{%= frappe.utils.icon("tag") %}
 				<span class="tags-label ellipsis">{%= __("Tags") %}</span>
 			</div>
 		</span>
@@ -86,7 +119,8 @@
 <div class="sidebar-section form-shared">
 	<div>
 		<span class="form-sidebar-items">
-			<span class="share-label">
+			<span class="share-label form-sidebar-label">
+				{%= frappe.utils.icon("share-2") %}
 				<span class="ellipsis">{%= __("Share") %}</span>
 			</span>
 			<button class="share-doc-btn btn btn-link icon-btn">
@@ -113,11 +147,11 @@
 <div class="sidebar-section hidden">
 	<a><li class="indicator blue auto-repeat-status" style="display: none;"></li></a>
 </div>
-<div class="sidebar-section text-muted border-top mt-3 pt-3">
+<!-- <div class="sidebar-section text-muted border-top mt-3 pt-3">
 	<div class="pageview-count hidden"></div>
 	<div class="created-modified-section">
 	</div>
-</div>
+</div> -->
 {% if(frappe.get_form_sidebar_extension) { %}
 	{{ frappe.get_form_sidebar_extension() }}
 {% } %}

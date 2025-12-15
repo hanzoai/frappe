@@ -78,7 +78,7 @@ frappe.ui.form.Toolbar = class Toolbar {
 			!!(this.is_title_editable() || this.can_rename())
 		);
 
-		this.set_indicator();
+		// this.set_indicator();
 	}
 	is_title_editable() {
 		let title_field = this.frm.meta.title_field;

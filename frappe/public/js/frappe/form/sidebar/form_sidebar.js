@@ -34,8 +34,23 @@ frappe.ui.form.Sidebar = class {
 		this.setup_keyboard_shortcuts();
 		this.show_auto_repeat_status();
 		frappe.ui.form.setup_user_image_event(this.frm);
-
+		this.indicator = $(this.sidebar).find(".indicator-pill");
+		this.set_form_indicator();
 		this.refresh();
+	}
+
+	set_form_indicator() {
+		let indicator = frappe.get_indicator(this.frm.doc);
+		if (indicator) {
+			this.set_indicator(indicator[0], indicator[1]);
+		}
+	}
+	set_indicator(label, color) {
+		this.clear_indicator().removeClass("hide").html(`<span>${label}</span>`).addClass(color);
+	}
+
+	clear_indicator() {
+		return this.indicator.addClass("indicator-pill no-indicator-dot whitespace-nowrap hide");
 	}
 
 	setup_keyboard_shortcuts() {
