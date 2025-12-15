@@ -124,8 +124,15 @@ def get_bootinfo():
 
 	bootinfo.setup_wizard_completed_apps = get_setup_wizard_completed_apps() or []
 	bootinfo.desktop_icon_urls = get_desktop_icon_urls()
-	bootinfo.desktop_icon_style = frappe.db.get_single_value("Desktop Settings", "icon_style") or "Subtle"
+	bootinfo.desktop_icon_style = get_icon_style() or "Subtle"
 	return bootinfo
+
+
+def get_icon_style():
+	icon_style = frappe.db.get_single_value("Desktop Settings", "icon_style")
+	if icon_style not in ["Subtle", "Solid"]:
+		return "Solid"
+	return icon_style
 
 
 def get_letter_heads():
