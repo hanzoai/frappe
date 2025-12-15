@@ -1,3 +1,4 @@
+import ListFilter from "./list_filter";
 frappe.provide("frappe.views");
 
 frappe.views.BaseList = class BaseList {
@@ -14,6 +15,7 @@ frappe.views.BaseList = class BaseList {
 			() => this.init(),
 			() => this.before_refresh(),
 			() => this.refresh(),
+			() => this.setup_list_filter_by(),
 		]);
 	}
 
@@ -631,6 +633,10 @@ frappe.views.BaseList = class BaseList {
 				}
 			},
 		});
+	}
+
+	setup_list_filter_by() {
+		new ListFilter(this);
 	}
 };
 

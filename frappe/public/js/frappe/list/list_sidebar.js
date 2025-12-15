@@ -107,55 +107,6 @@ frappe.views.ListSidebar = class ListSidebar {
 		}
 	}
 
-	setup_reports() {
-		// add reports linked to this doctype to the dropdown
-		var me = this;
-		var added = [];
-		var dropdown = this.page.sidebar.find(".reports-dropdown");
-		var divider = false;
-
-		var add_reports = function (reports) {
-			$.each(reports, function (name, r) {
-				if (!r.ref_doctype || r.ref_doctype == me.doctype) {
-					var report_type =
-						r.report_type === "Report Builder"
-							? `List/${r.ref_doctype}/Report`
-							: "query-report";
-
-					var route = r.route || report_type + "/" + (r.title || r.name);
-
-					if (added.indexOf(route) === -1) {
-						// don't repeat
-						added.push(route);
-
-						if (!divider) {
-							me.get_divider().appendTo(dropdown);
-							divider = true;
-						}
-
-						$(
-							'<li><a href="#' + route + '">' + __(r.title || r.name) + "</a></li>"
-						).appendTo(dropdown);
-					}
-				}
-			});
-		};
-
-		// from reference doctype
-		if (this.list_view.settings.reports) {
-			add_reports(this.list_view.settings.reports);
-		}
-
-		// Sort reports alphabetically
-		var reports =
-			Object.values(frappe.boot.user.all_reports).sort((a, b) =>
-				a.title.localeCompare(b.title)
-			) || [];
-
-		// from specially tagged reports
-		add_reports(reports);
-	}
-
 	setup_list_filter() {
 		this.list_filter = new ListFilter({
 			wrapper: this.page.sidebar.find(".list-filters"),
@@ -191,12 +142,6 @@ frappe.views.ListSidebar = class ListSidebar {
 		frappe.views.KanbanView.setup_dropdown_in_sidebar(this.doctype, $dropdown);
 	}
 
-	setup_keyboard_shortcuts() {
-		this.sidebar.find(".list-link > a, .list-link > .btn-group > a").each((i, el) => {
-			frappe.ui.keys.get_shortcut_group(this.page).add($(el));
-		});
-	}
-
 	setup_list_group_by() {
 		this.list_group_by = new frappe.views.ListGroupBy({
 			doctype: this.doctype,
@@ -204,74 +149,5 @@ frappe.views.ListSidebar = class ListSidebar {
 			list_view: this.list_view,
 			page: this.page,
 		});
-	}
-
-	get_stats() {
-		var me = this;
-
-		let dropdown_options = me.sidebar.find(".list-stats-dropdown .stat-result");
-		this.set_loading_state(dropdown_options);
-
-		frappe.call({
-			method: "frappe.desk.reportview.get_sidebar_stats",
-			type: "GET",
-			args: {
-				stats: me.stats,
-				doctype: me.doctype,
-				// wait for list filter area to be generated before getting filters, or fallback to default filters
-				filters:
-					(me.list_view.filter_area
-						? me.list_view.get_filters_for_args()
-						: me.default_filters) || [],
-			},
-			callback: function (r) {
-				let stats = (r.message.stats || {})["_user_tags"] || [];
-				me.render_stat(stats);
-				let stats_dropdown = me.sidebar.find(".list-stats-dropdown");
-				frappe.utils.setup_search(stats_dropdown, ".stat-link", ".stat-label");
-			},
-		});
-	}
-
-	set_loading_state(dropdown) {
-		dropdown.html(`<div>
-			<div class="empty-state">
-				${__("Loading...")}
-			</div>
-		</div>`);
-	}
-
-	render_stat(stats) {
-		let args = {
-			stats: stats,
-			label: __("Tags"),
-		};
-
-		let tag_list = $(frappe.render_template("list_sidebar_stat", args)).on(
-			"click",
-			".stat-link",
-			(e) => {
-				let fieldname = $(e.currentTarget).attr("data-field");
-				let label = $(e.currentTarget).attr("data-label");
-				let condition = "like";
-				let existing = this.list_view.filter_area.filter_list.get_filter(fieldname);
-				if (existing) {
-					existing.remove();
-				}
-				if (label == "No Tags") {
-					label = "not set";
-					condition = "is";
-				}
-				this.list_view.filter_area.add(this.doctype, fieldname, condition, label);
-			}
-		);
-
-		this.sidebar.find(".list-stats-dropdown .stat-result").html(tag_list);
-	}
-
-	reload_stats() {
-		this.sidebar.find(".stat-link").remove();
-		this.sidebar.find(".stat-no-records").remove();
-		this.get_stats();
 	}
 };
