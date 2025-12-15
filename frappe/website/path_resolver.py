@@ -242,7 +242,7 @@ def add_portal_redirect():
 			{
 				"source": item.route,
 				"target": f"/portal{item.route}",
-				"formward_query_parameters": True,
+				"forward_query_parameters": True,
 			}
 		)
 	return redirects
