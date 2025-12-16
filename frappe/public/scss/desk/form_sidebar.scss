@@ -1,6 +1,6 @@
 :root {
 	--form-sidebar-width: 277px;
-	--form-sidebar-image-width: 40px;
+	--form-sidebar-image-width: 75px;
 }
 .underline-hover {
 	display: initial;
@@ -65,22 +65,20 @@
 	}
 
 	.sidebar-image-section {
-		padding: 8px 12px;
-		display: flex;
-		gap: 4px;
+		padding-bottom: 0px;
 		.sidebar-image {
 			height: auto;
-			max-height: var(--sidebar-width);
 			object-fit: cover;
 			cursor: pointer;
 		}
 
 		.standard-image {
-			font-size: 52px;
+			font-size: 40px;
 			border-radius: var(--border-radius-lg);
 		}
 
 		.sidebar-image-wrapper {
+			margin: auto;
 			position: relative;
 			width: fit-content;
 			height: fit-content;
@@ -89,10 +87,8 @@
 		.sidebar-image,
 		.sidebar-standard-image {
 			transition: opacity 0.3s;
-			border-radius: var(--border-radius-lg);
-			border: 1px solid var(--border-color);
 			width: var(--form-sidebar-image-width);
-			height: var(--form-sidebar-image-width);
+			border-radius: var(--border-radius-lg);
 		}
 
 		.sidebar-image-wrapper:hover {
