@@ -25,7 +25,16 @@ from frappe.query_builder import Criterion, Field, Order, functions
 from frappe.query_builder.custom import Month, MonthName, Quarter
 
 CORE_DOCTYPES = DOCTYPES_FOR_DOCTYPE | frozenset(
-	("Custom Field", "Property Setter", "Module Def", "__Auth", "__global_search", "Singles")
+	(
+		"Custom Field",
+		"Property Setter",
+		"Module Def",
+		"__Auth",
+		"__global_search",
+		"Singles",
+		"Sessions",
+		"Series",
+	)
 )
 
 
@@ -317,6 +326,10 @@ class Engine:
 
 		if self.apply_permissions:
 			self.add_permission_conditions()
+
+		# Store metadata for masked field processing during execution
+		self.query._doctype = self.doctype
+		self.query._fields_list = getattr(self, "fields", [])
 
 		self.query.immutable = True
 		return self.query
