@@ -122,10 +122,14 @@
 			}
 		}
 
-		.form-details,
-		.form-name-container {
+		.form-details {
 			display: flex;
 			align-items: center;
+		}
+	}
+	.form-name-container {
+		.form-name-copy {
+			cursor: pointer;
 		}
 	}
 	.meta-section {

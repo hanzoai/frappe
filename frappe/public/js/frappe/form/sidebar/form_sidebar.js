@@ -36,6 +36,7 @@ frappe.ui.form.Sidebar = class {
 		frappe.ui.form.setup_user_image_event(this.frm);
 		this.indicator = $(this.sidebar).find(".form-details .indicator-pill");
 		this.set_form_indicator();
+		this.setup_copy_event();
 		this.refresh();
 	}
 
@@ -76,6 +77,14 @@ frappe.ui.form.Sidebar = class {
 			this.refresh_creation_modified();
 			frappe.ui.form.set_user_image(this.frm);
 		}
+	}
+
+	setup_copy_event() {
+		$(this.sidebar)
+			.find(".form-name-container .form-name-copy")
+			.on("click", (e) => {
+				frappe.utils.copy_to_clipboard($(e.currentTarget).attr("data-copy"));
+			});
 	}
 
 	refresh_web_view_count() {
