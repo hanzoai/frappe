@@ -138,7 +138,8 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 	}
 	set_header_icon() {
 		let desktop_icon = this.get_desktop_icon_by_label(this.sidebar.sidebar_title);
-		let desktop_icon_url = frappe.utils.get_desktop_icon(desktop_icon.label, "solid");
+		let desktop_icon_url =
+			desktop_icon && frappe.utils.get_desktop_icon(desktop_icon.label, "solid");
 		if (desktop_icon_url) {
 			this.header_icon = desktop_icon_url;
 			this.header_icon = `<img src=${this.header_icon}></img>`;
