@@ -5,13 +5,24 @@ from frappe.website.page_renderers.template_page import TemplatePage
 
 class ListPage(TemplatePage):
 	def can_render(self):
-		doctype = frappe.db.exists("DocType", self.path, True)
-		if doctype and doctype != "Web Page":
+		doctype = self.path
+		if not doctype or doctype == "Web Page":
+			return False
+
+		try:
 			meta = frappe.get_meta(doctype)
-			module = load_doctype_module(doctype)
-			if meta.has_web_view or hasattr(module, "get_list_context"):
-				return True
-		return False
+		except frappe.DoesNotExistError:
+			frappe.clear_last_message()
+			return False
+
+		if meta.has_web_view:
+			return True
+
+		if meta.custom:
+			return False
+
+		module = load_doctype_module(doctype)
+		return hasattr(module, "get_list_context")
 
 	def render(self):
 		frappe.form_dict.doctype = self.path
