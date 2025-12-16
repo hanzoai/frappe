@@ -1,7 +1,6 @@
 :root {
 	--form-sidebar-width: 277px;
 	--form-sidebar-image-width: 40px;
-	--form-sidebar-meta-section-height: 122px;
 }
 .underline-hover {
 	display: initial;
@@ -9,6 +8,7 @@
 // form sidebar
 .form-sidebar {
 	.sidebar-section {
+		padding: var(--padding-md);
 		.form-sidebar-items {
 			display: flex;
 			width: 100%;
@@ -129,8 +129,6 @@
 		}
 	}
 	.meta-section {
-		height: var(--form-sidebar-meta-section-height);
-		padding: 11px 8px 11px 8px;
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
@@ -146,7 +144,7 @@
 		.last-modified-label,
 		.last-modified-time {
 			display: flex;
-			padding: 6px 8px 6px 8px;
+			padding: 6px 8px 6px 0px;
 			align-items: center;
 			gap: 8px;
 			flex: 0 0 50%;
@@ -163,7 +161,7 @@
 }
 body[data-route^="Form"] {
 	.layout-side-section {
-		min-width: var(--form-sidebar-width);
+		width: var(--form-sidebar-width);
 	}
 }
 
@@ -323,10 +321,10 @@ body[data-route^="Form"] {
 	.data-pill {
 		background-color: unset;
 		box-shadow: none;
-		padding: 0 var(--padding-xs) 0 var(--padding-md) !important;
+		padding-left: 0px !important;
 
 		.attachment-file-label {
-			width: 94px;
+			max-width: 150px;
 			display: block;
 			margin-left: var(--margin-xs);
 			text-align: left;

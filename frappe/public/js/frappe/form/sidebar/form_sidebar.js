@@ -34,7 +34,7 @@ frappe.ui.form.Sidebar = class {
 		this.setup_keyboard_shortcuts();
 		this.show_auto_repeat_status();
 		frappe.ui.form.setup_user_image_event(this.frm);
-		this.indicator = $(this.sidebar).find(".indicator-pill");
+		this.indicator = $(this.sidebar).find(".form-details .indicator-pill");
 		this.set_form_indicator();
 		this.refresh();
 	}
