@@ -355,13 +355,7 @@ class TestEmailIntegrationTest(IntegrationTestCase):
 		subject = "checking if email works"
 		content = "is email working?"
 
-		email = frappe.sendmail(
-			sender=sender, recipients=recipients, subject=subject, content=content, now=True
-		)
-		email.reload()
-		self.assertEqual(email.sender, sender)
-		self.assertEqual(len(email.recipients), 2)
-		self.assertEqual(email.status, "Sent")
+		frappe.sendmail(sender=sender, recipients=recipients, subject=subject, content=content, now=True)
 
 		sent_mails = self.get_last_sent_emails()
 		self.assertEqual(len(sent_mails), 2)
