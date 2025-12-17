@@ -1917,7 +1917,8 @@ class CombinedRawCriterion(RawCriterion):
 	def get_sql(self, **kwargs: Any) -> str:
 		left_sql = self.left.get_sql(**kwargs) if hasattr(self.left, "get_sql") else str(self.left)
 		right_sql = self.right.get_sql(**kwargs) if hasattr(self.right, "get_sql") else str(self.right)
-		return f"({left_sql}) {self.operator} ({right_sql})"
+		# Wrap entire expression in parentheses to ensure correct operator precedence
+		return f"(({left_sql}) {self.operator} ({right_sql}))"
 
 
 class SQLFunctionParser:
