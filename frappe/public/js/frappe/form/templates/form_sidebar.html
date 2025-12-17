@@ -1,5 +1,5 @@
 <div class="sidebar-section user-actions hidden"></div>
-<div class="sidebar-section sidebar-image-section hide">
+<div class="flex justify-between sidebar-image-section sidebar-section hide">
 	<div class="sidebar-image-wrapper">
 		<img class="sidebar-image">
 		<div class="sidebar-standard-image">
@@ -17,36 +17,23 @@
 		</div>
 		{% endif %}
 	</div>
+	<div class="form-stats-likes">
+		<span class="liked-by like-action d-flex align-items-center">
+			<svg class="icon icon-sm like-icon pointer">
+				<use href="#icon-heart"></use>
+			</svg>
+			<span class="like-count ml-2"></span>
+		</span>
+	</div>
 </div>
 <div class="sidebar-section sidebar-meta-details border-bottom">
 	<div class="form-details flex justify-between">
-		<span class="ellipsis mr-3">{%= frm.get_title() %}</span>
-		<span class="indicator-pill whitespace-nowrap"></span>
+		<span class="ellipsis mr-3 bold">{%= frm.get_title() %}</span>
+		<span class="form-name-copy" data-copy="{{frm.get_title()}}">{%= frappe.utils.icon("copy")%}</span>
 	</div>
-	<div class="form-name-container mt-2">
+	<div class="form-name-container mt-2 flex justify-between">
 		<span class="ellipsis mr-3">{%= frm.doc.name %}</span>
-		<span class="form-name-copy" data-copy="{{frm.doc.name}}">{%= frappe.utils.icon("copy")%}</span>
-	</div>
-</div>
-<div class="sidebar-section meta-section border-bottom">
-	<div class="created-by-wrapper">
-		<div class="created-by-label">
-			{%= frappe.utils.icon("user")%}
-			{%= __("Created By") %}
-		</div>
-		<div class="created-by-user">
-			{%= frappe.avatar(frappe.session.user, "avatar-xs")%}
-			{%= frappe.session.user %}
-		</div>
-	</div>
-	<div class="last-modified-wrapper">
-		<div class="last-modified-label">
-			{%= frappe.utils.icon("file-pen-line")%}
-			{%= __("Last Modified") %}
-		</div>
-		<div class="last-modified-time">
-			{%= frappe.datetime.prettyDate(cur_frm.doc.modified) %}
-		</div>
+		<span class="indicator-pill whitespace-nowrap"></span>
 	</div>
 </div>
 {% if frm.meta.beta %}
@@ -77,8 +64,8 @@
 	<div>
 		<span class="form-sidebar-items">
 			<span class="add-assignment-label form-sidebar-label">
-				{%= frappe.utils.icon("user-plus") %}
-				<span class="ellipsis">{%= __("Assigned To") %}</span>
+				{%= frappe.utils.icon("users") %}
+				<span class="ellipsis">{%= __("Assign") %}</span>
 			</span>
 			<button class="add-assignment-btn btn btn-link icon-btn">
 				<svg class="es-icon icon-sm"><use href="#es-line-add"></use></svg>
@@ -148,11 +135,14 @@
 <div class="sidebar-section hidden">
 	<a><li class="indicator blue auto-repeat-status" style="display: none;"></li></a>
 </div>
-<!-- <div class="sidebar-section text-muted border-top mt-3 pt-3">
-	<div class="pageview-count hidden"></div>
-	<div class="created-modified-section">
-	</div>
-</div> -->
+<div class="sidebar-section text-muted border-top pt-3">
+	<ul class="list-unstyled sidebar-menu text-muted">
+		<li class="pageview-count"></li>
+		<li class="modified-by"></li>
+		<li class="created-by"></li>
+	</ul>
+</div>
+
 {% if(frappe.get_form_sidebar_extension) { %}
 	{{ frappe.get_form_sidebar_extension() }}
 {% } %}

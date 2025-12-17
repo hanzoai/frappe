@@ -1,6 +1,6 @@
 :root {
 	--form-sidebar-width: 277px;
-	--form-sidebar-image-width: 75px;
+	--form-sidebar-image-width: 80px;
 }
 .underline-hover {
 	display: initial;
@@ -78,7 +78,6 @@
 		}
 
 		.sidebar-image-wrapper {
-			margin: auto;
 			position: relative;
 			width: fit-content;
 			height: fit-content;
@@ -88,6 +87,7 @@
 		.sidebar-standard-image {
 			transition: opacity 0.3s;
 			width: var(--form-sidebar-image-width);
+			height: var(--form-sidebar-image-width);
 			border-radius: var(--border-radius-lg);
 		}
 
@@ -123,34 +123,9 @@
 			align-items: center;
 		}
 	}
-	.form-name-container {
+	.sidebar-meta-details {
 		.form-name-copy {
 			cursor: pointer;
-		}
-	}
-	.meta-section {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-
-		.created-by-wrapper,
-		.last-modified-wrapper {
-			display: flex;
-			justify-content: space-between;
-			gap: 12px;
-		}
-		.created-by-label,
-		.created-by-user,
-		.last-modified-label,
-		.last-modified-time {
-			display: flex;
-			padding: 6px 8px 6px 0px;
-			align-items: center;
-			gap: 8px;
-			flex: 0 0 50%;
-			svg {
-				margin: 0px;
-			}
 		}
 	}
 }
@@ -160,7 +135,7 @@
 	gap: 8px;
 }
 body[data-route^="Form"] {
-	.layout-side-section {
+	.layout-side-section .form-sidebar {
 		width: var(--form-sidebar-width);
 	}
 }
@@ -374,7 +349,6 @@ body[data-route^="Form"] {
 .add-assignment-btn,
 .add-attachment-btn,
 .add-review-btn,
-.shares,
 .add-tags-btn,
 .share-doc-btn,
 .followed-by {

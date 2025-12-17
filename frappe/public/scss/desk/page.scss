@@ -56,7 +56,6 @@
 
 .page-actions {
 	align-items: center;
-	overflow: auto;
 	.btn {
 		height: var(--btn-height);
 		margin-left: var(--margin-sm, 8px);
@@ -95,7 +94,7 @@
 body[data-route^="Form"] {
 	.layout-main-section-wrapper {
 		width: calc(100% - var(--form-sidebar-width));
-		flex: unset;
+		flex: calc(100% - var(--form-sidebar-width));
 	}
 }
 
