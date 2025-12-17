@@ -1926,6 +1926,187 @@ class TestQuery(IntegrationTestCase):
 		self.assertIn("00:00:00", sql)
 		self.assertIn("23:59:59", sql)
 
+	def test_share_only_access(self):
+		"""Test that shared docs grant access when user has no role permissions."""
+		import frappe.share
+
+		test_user = "test2@example.com"
+
+		# Create a private event (only owner can see by default)
+		event = frappe.get_doc(
+			doctype="Event",
+			subject="Share Only Test Event",
+			starts_on="2025-01-01 10:00:00",
+			event_type="Private",
+		).insert()
+
+		# Verify user can't access without share
+		frappe.set_user(test_user)
+		result = frappe.qb.get_query("Event", filters={"name": event.name}, ignore_permissions=False).run()
+		self.assertEqual(len(result), 0, "User should not see event without share")
+
+		# Share the document
+		frappe.set_user("Administrator")
+		frappe.share.add("Event", event.name, test_user)
+
+		# Now user should be able to access via share
+		frappe.set_user(test_user)
+		result = frappe.qb.get_query("Event", filters={"name": event.name}, ignore_permissions=False).run()
+		self.assertEqual(len(result), 1, "User should see event via share")
+
+		# Cleanup
+		frappe.set_user("Administrator")
+		event.delete()
+
+	def test_if_owner_constraint_with_shared_docs(self):
+		"""Test that shared docs trump if_owner constraint."""
+		import frappe.share
+		from frappe.core.page.permission_manager.permission_manager import update
+
+		test_user = "test2@example.com"
+		test_user_doc = frappe.get_doc("User", test_user)
+		test_user_doc.add_roles("Blogger")
+
+		# Create blog post owned by Administrator
+		blog_post = frappe.get_doc(
+			doctype="Test Blog Post",
+			title="If Owner Test Post",
+			content="Test Content",
+			blog_category="_Test Blog Category",
+		).insert(ignore_permissions=True, ignore_mandatory=True)
+
+		# Enable if_owner constraint for Test Blog Post
+		update("Test Blog Post", "Blogger", 0, "if_owner", 1)
+
+		# User shouldn't see it (not owner, if_owner enabled)
+		frappe.set_user(test_user)
+		result = frappe.qb.get_query(
+			"Test Blog Post", filters={"name": blog_post.name}, ignore_permissions=False
+		).run()
+		self.assertEqual(len(result), 0, "User should not see post owned by others with if_owner")
+
+		# Share the document
+		frappe.set_user("Administrator")
+		frappe.share.add("Test Blog Post", blog_post.name, test_user)
+
+		# Now user should see it via share (shared docs trump if_owner)
+		frappe.set_user(test_user)
+		result = frappe.qb.get_query(
+			"Test Blog Post", filters={"name": blog_post.name}, ignore_permissions=False
+		).run()
+		self.assertEqual(len(result), 1, "User should see post via share despite if_owner")
+
+		# Cleanup
+		frappe.set_user("Administrator")
+		update("Test Blog Post", "Blogger", 0, "if_owner", 0)
+		blog_post.delete()
+		test_user_doc.remove_roles("Blogger")
+
+	def test_user_permission_with_shared_docs(self):
+		"""Test that shared docs grant access even when user permission doesn't match."""
+		import frappe.share
+		from frappe.permissions import add_user_permission, clear_user_permissions_for_doctype
+
+		test_user = "test2@example.com"
+		test_user_doc = frappe.get_doc("User", test_user)
+		test_user_doc.add_roles("Blogger")
+
+		# Create two blog posts
+		blog_post1 = frappe.get_doc(
+			doctype="Test Blog Post",
+			title="User Perm Test Post 1",
+			content="Test Content",
+			blog_category="_Test Blog Category",
+		).insert(ignore_permissions=True, ignore_mandatory=True)
+
+		blog_post2 = frappe.get_doc(
+			doctype="Test Blog Post",
+			title="User Perm Test Post 2",
+			content="Test Content",
+			blog_category="_Test Blog Category",
+		).insert(ignore_permissions=True, ignore_mandatory=True)
+
+		clear_user_permissions_for_doctype("Test Blog Post", test_user)
+
+		# Add user permission for only post1
+		add_user_permission("Test Blog Post", blog_post1.name, test_user, True)
+
+		# User should see post1 via user permission
+		frappe.set_user(test_user)
+		result = frappe.qb.get_query(
+			"Test Blog Post", filters={"name": blog_post1.name}, ignore_permissions=False
+		).run()
+		self.assertEqual(len(result), 1, "User should see post1 via user permission")
+
+		# User should NOT see post2 (no user permission)
+		result = frappe.qb.get_query(
+			"Test Blog Post", filters={"name": blog_post2.name}, ignore_permissions=False
+		).run()
+		self.assertEqual(len(result), 0, "User should not see post2 without user permission")
+
+		# Share post2 with user
+		frappe.set_user("Administrator")
+		frappe.share.add("Test Blog Post", blog_post2.name, test_user)
+
+		# Now user should see post2 via share (shared docs trump user permissions)
+		frappe.set_user(test_user)
+		result = frappe.qb.get_query(
+			"Test Blog Post", filters={"name": blog_post2.name}, ignore_permissions=False
+		).run()
+		self.assertEqual(len(result), 1, "User should see post2 via share")
+
+		# Cleanup
+		frappe.set_user("Administrator")
+		clear_user_permissions_for_doctype("Test Blog Post", test_user)
+		blog_post1.delete()
+		blog_post2.delete()
+		test_user_doc.remove_roles("Blogger")
+
+	def test_role_permission_without_restrictions(self):
+		"""Test that all documents are accessible when role permissions exist without if_owner/user_perms."""
+		from frappe.core.page.permission_manager.permission_manager import update
+		from frappe.permissions import clear_user_permissions_for_doctype
+
+		test_user = "test2@example.com"
+		test_user_doc = frappe.get_doc("User", test_user)
+		test_user_doc.add_roles("Blogger")
+
+		# Clear any user permissions
+		clear_user_permissions_for_doctype("Test Blog Post", test_user)
+
+		# Ensure if_owner is disabled
+		update("Test Blog Post", "Blogger", 0, "if_owner", 0)
+
+		# Create blog posts owned by Administrator
+		blog_post1 = frappe.get_doc(
+			doctype="Test Blog Post",
+			title="No Restriction Test 1",
+			content="Test Content",
+			blog_category="_Test Blog Category",
+		).insert(ignore_permissions=True, ignore_mandatory=True)
+
+		blog_post2 = frappe.get_doc(
+			doctype="Test Blog Post",
+			title="No Restriction Test 2",
+			content="Test Content",
+			blog_category="_Test Blog Category",
+		).insert(ignore_permissions=True, ignore_mandatory=True)
+
+		# User should see both posts (no restrictions)
+		frappe.set_user(test_user)
+		result = frappe.qb.get_query(
+			"Test Blog Post",
+			filters={"name": ["in", [blog_post1.name, blog_post2.name]]},
+			ignore_permissions=False,
+		).run()
+		self.assertEqual(len(result), 2, "User should see all posts without restrictions")
+
+		# Cleanup
+		frappe.set_user("Administrator")
+		blog_post1.delete()
+		blog_post2.delete()
+		test_user_doc.remove_roles("Blogger")
+
 
 # This function is used as a permission query condition hook
 def test_permission_hook_condition(user):
