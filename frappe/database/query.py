@@ -1556,7 +1556,7 @@ class Engine:
 		try:
 			db_type_info = frappe.db.type_map.get(fieldtype, ("varchar",))
 			if db_type_info:
-				db_type = db_type_info[0] if isinstance(db_type_info, (tuple, list)) else db_type_info
+				db_type = db_type_info[0] if isinstance(db_type_info, tuple | list) else db_type_info
 				if db_type in ("varchar", "text", "longtext", "smalltext", "json"):
 					return "''"
 		except Exception:
@@ -1612,7 +1612,7 @@ class Engine:
 				return False
 
 		if operator.lower() == "in":
-			if isinstance(value, (list, tuple)):
+			if isinstance(value, list | tuple):
 				# if values contain '' or falsy values then only coalesce column
 				# for `in` query this is only required if values contain '' or values are empty.
 				has_null_or_empty = any(v is None or v == "" for v in value)
