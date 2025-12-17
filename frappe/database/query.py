@@ -1321,7 +1321,7 @@ class Engine:
 
 		return allowed_fields
 
-	def get_user_permission_conditions(self, role_permissions):
+	def get_user_permission_conditions(self, role_permissions) -> tuple[list, bool]:
 		"""Build conditions for user permissions and return tuple of (conditions, fetch_shared_docs)"""
 		conditions = []
 		fetch_shared_docs = False
@@ -1383,11 +1383,13 @@ class Engine:
 
 		# False only when role permissions without if owner exist and no user perms are applied
 		fetch_shared_docs = True
+		has_role_permissions = False
 
 		if self.requires_owner_constraint(role_permissions):
 			conditions.append(self.table.owner == self.user)
 		# skip user perm check if owner constraint is required
 		elif role_permissions.get("read") or role_permissions.get("select"):
+			has_role_permissions = True
 			user_perm_conditions, fetch_shared_docs = self.get_user_permission_conditions(role_permissions)
 			conditions.extend(user_perm_conditions)
 
@@ -1400,13 +1402,12 @@ class Engine:
 			shared_docs = frappe.share.get_shared(self.doctype, self.user)
 
 		if shared_docs:
-			shared_condition = self.table.name.isin(shared_docs)
-			if conditions:
-				# (permission conditions) OR (shared condition)
-				self.query = self.query.where(Criterion.all(conditions) | shared_condition)
+			# Depending on the presence of role permissions, decide whether to use OR or AND
+			if has_role_permissions:
+				self.query = self.query.where(Criterion.all(conditions) | self.table.name.isin(shared_docs))
 			else:
-				self.query = self.query.where(shared_condition)
-		elif conditions:
+				self.query = self.query.where(Criterion.all(conditions) & self.table.name.isin(shared_docs))
+		else:
 			# AND all permission conditions
 			self.query = self.query.where(Criterion.all(conditions))
 
