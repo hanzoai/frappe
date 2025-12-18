@@ -109,7 +109,6 @@ frappe.ui.form.Sidebar = class {
 
 		this.like_wrapper.attr("data-liked-by", this.frm.doc._liked_by);
 		const liked = frappe.ui.is_liked(this.frm.doc);
-		console.log(liked, "wow", this.frm.doc);
 
 		this.like_wrapper
 			.toggleClass("not-liked", !liked)
