@@ -1413,8 +1413,10 @@ class Engine:
 		if not self.apply_permissions:
 			return
 
-		# For child tables, join to parent table so permission conditions can reference it
-		if self.permission_doctype != self.doctype:
+		meta = frappe.get_meta(self.permission_doctype)
+
+		# For child tables, join to parent table so permission conditions can reference it (skip for Single doctypes)
+		if self.permission_doctype != self.doctype and not meta.issingle:
 			self.query = self.query.inner_join(self.permission_table).on(
 				self.table.parent == self.permission_table.name
 			)
