@@ -49,6 +49,10 @@ let docfield_df = computed(() => {
 					args.value.is_table_field = 1;
 				}
 			}
+			if (store.form.selected_field.fieldtype === "Data") {
+				df.fieldtype = "Select";
+				df.options = "\nEmail\nName\nPhone\nURL\nBarcode\nIBAN";
+			}
 		}
 
 		// show link_filters docfield only when link field is selected
