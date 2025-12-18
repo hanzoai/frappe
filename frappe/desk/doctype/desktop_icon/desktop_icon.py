@@ -74,6 +74,8 @@ class DesktopIcon(Document):
 	def is_permitted(self, bootinfo):
 		if frappe.session.user == "Administrator":
 			return True
+		if self.icon_type == "Folder":
+			return True
 		workspaces = get_workspace_names(bootinfo.workspaces)
 		if self.icon_type == "Link":
 			if self.link_type == "DocType":
@@ -81,18 +83,18 @@ class DesktopIcon(Document):
 			elif self.link_type == "Workspace":
 				return self.link_to in workspaces
 		elif self.icon_type == "App":
-			return self.get_app_from_title(self.label)
+			return self.check_app_permission(self.label)
 
-	def get_app_from_title(self, title):
+	def check_app_permission(self, app_name):
 		for a in frappe.get_installed_apps():
-			if frappe.get_hooks(app_name=a)["app_title"][0] == title:
+			if frappe.get_hooks(app_name=a)["app_title"][0] == app_name or self.app == a:
 				permission_method = frappe.get_hooks(app_name=a)["add_to_apps_screen"][0].get(
 					"has_permission", None
 				)
 				if permission_method:
 					return frappe.call(permission_method)
 				else:
-					return False
+					return True
 
 	# def is_permitted(self):
 	# 	"""Return True if `Has Role` is not set or the user is allowed."""
