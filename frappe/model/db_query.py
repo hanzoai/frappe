@@ -1155,6 +1155,31 @@ from {tables}
 			if condition := script.get_permission_query_conditions(self.user):
 				conditions.append(condition)
 
+		if hasattr(self, "tables") and len(self.tables) > 1:
+			"""(Custom): Applying User Permissions on linked child tables (for report view)"""
+			user_permissions = frappe.permissions.get_user_permissions(self.user)
+			for table_name in self.tables:
+				# skip parent table since already permissions are handled (look only for child tables)
+				if table_name == f"`tab{self.doctype}`":
+					continue
+				child_doctype = table_name.strip("`").replace("tab", "", 1)
+				child_meta = frappe.get_meta(child_doctype)
+				for field in child_meta.get_link_fields():
+					if field.options in user_permissions:
+						allowed = [frappe.db.escape(p.doc) for p in user_permissions[field.options]]
+						conditions.append(f"{table_name}.{field.fieldname} IN ({', '.join(allowed)})")
+					else:
+						linked_meta = frappe.get_meta(field.options)
+						for nested_field in linked_meta.get_link_fields():
+							if nested_field.options in user_permissions:
+								allowed = [
+									frappe.db.escape(p.doc) for p in user_permissions[nested_field.options]
+								]
+								conditions.append(f"""{table_name}.{field.fieldname} IN (
+									SELECT name FROM `tab{field.options}`
+									WHERE {nested_field.fieldname} IN ({", ".join(allowed)})
+								)""")
+
 		return " and ".join(conditions) if conditions else ""
 
 	def set_order_by(self, args):
