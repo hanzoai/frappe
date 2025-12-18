@@ -117,6 +117,8 @@ class DatabaseQuery:
 		if not fields:
 			fields = [pluck or "name"]
 
+		self.fields = fields
+
 		# Handle virtual doctypes before any other processing
 		if is_virtual_doctype(self.doctype):
 			return self._handle_virtual_doctype(
