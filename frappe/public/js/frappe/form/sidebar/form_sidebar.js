@@ -16,6 +16,7 @@ frappe.ui.form.Sidebar = class {
 			doctype: this.frm.doctype,
 			frm: this.frm,
 			can_write: frappe.model.can_write(this.frm.doctype, this.frm.docname),
+			image_field: this.frm.meta.image_field ?? false,
 		});
 
 		this.sidebar = $('<div class="form-sidebar overlay-sidebar hidden-xs hidden-sm"></div>')
