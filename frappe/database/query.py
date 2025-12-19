@@ -758,6 +758,8 @@ class Engine:
 			if parsed := self._parse_backtick_field_notation(field):
 				table_name, field_name = parsed
 
+				self._check_field_permission(table_name, field_name)
+
 				# Return query builder field reference
 				return frappe.qb.DocType(table_name)[field_name]
 
@@ -1151,6 +1153,7 @@ class Engine:
 		if "`" in field_name:
 			if parsed := self._parse_backtick_field_notation(field_name):
 				table_name, field_name = parsed
+				self._check_field_permission(table_name, field_name)
 				return frappe.qb.DocType(table_name)[field_name]
 
 			# If parsing failed, fall through to error handling below
@@ -2126,6 +2129,7 @@ class SQLFunctionParser:
 		elif "`" in arg:
 			if parsed := self.engine._parse_backtick_field_notation(arg):
 				table_name, field_name = parsed
+				self.engine._check_field_permission(table_name, field_name)
 				return Table(f"tab{table_name}")[field_name]
 			else:
 				frappe.throw(
