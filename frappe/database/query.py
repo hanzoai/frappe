@@ -1166,16 +1166,15 @@ class Engine:
 		dynamic_field = DynamicTableField.parse(field_name, self.doctype, allow_tab_notation=False)
 		if dynamic_field:
 			# Check permissions for dynamic field
-			if self.apply_permissions:
-				if isinstance(dynamic_field, ChildTableField):
-					self._check_field_permission(
-						dynamic_field.doctype, dynamic_field.fieldname, dynamic_field.parent_doctype
-					)
-				elif isinstance(dynamic_field, LinkTableField):
-					# Check permission for the link field in parent doctype
-					self._check_field_permission(self.doctype, dynamic_field.link_fieldname)
-					# Check permission for the target field in linked doctype
-					self._check_field_permission(dynamic_field.doctype, dynamic_field.fieldname)
+			if isinstance(dynamic_field, ChildTableField):
+				self._check_field_permission(
+					dynamic_field.doctype, dynamic_field.fieldname, dynamic_field.parent_doctype
+				)
+			elif isinstance(dynamic_field, LinkTableField):
+				# Check permission for the link field in parent doctype
+				self._check_field_permission(self.doctype, dynamic_field.link_fieldname)
+				# Check permission for the target field in linked doctype
+				self._check_field_permission(dynamic_field.doctype, dynamic_field.fieldname)
 
 			# Apply join for the dynamic field
 			self.query = dynamic_field.apply_join(self.query, engine=self)
@@ -1191,8 +1190,7 @@ class Engine:
 				)
 
 			# Check permissions for simple field
-			if self.apply_permissions:
-				self._check_field_permission(self.doctype, field_name)
+			self._check_field_permission(self.doctype, field_name)
 
 			# Create Field object for simple field
 			return self.table[field_name]
