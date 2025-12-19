@@ -415,13 +415,13 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 				let filter_string = this.df.filter_description
 					? this.df.filter_description
 					: args.filters
-						? this.get_filter_description(args.filters)
-						: null;
+					? this.get_filter_description(args.filters)
+					: null;
 				if (filter_string) {
 					r.message.push({
 						html: `<span class="text-muted" style="line-height: 1.5">${filter_string}</span>`,
 						value: "",
-						action: () => { },
+						action: () => {},
 					});
 				}
 
