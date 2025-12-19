@@ -772,6 +772,13 @@ class Engine:
 
 		# Handle dot notation (link_field.target_field or child_table_field.target_field)
 		if "." in field:
+			if self.validate_filters:
+				frappe.throw(
+					_("Filtering by link fields is not allowed with validate_filters: {0}").format(field),
+					frappe.ValidationError,
+					title=_("Invalid Filter"),
+				)
+
 			# Disallow tabDoc.field notation in filters.
 			dynamic_field = DynamicTableField.parse(field, self.doctype, allow_tab_notation=False)
 			if dynamic_field:
@@ -814,6 +821,14 @@ class Engine:
 			# If a specific doctype is provided and it's different from the main query doctype,
 			# assume it's a child table and add the join using ChildTableField logic.
 			if doctype and doctype != self.doctype:
+				if self.validate_filters:
+					frappe.throw(
+						_(
+							"Filtering by child table doctype explicitly is not allowed with validate_filters: {0}"
+						).format(doctype),
+						frappe.ValidationError,
+						title=_("Invalid Filter"),
+					)
 				# Check if doctype is a valid child table of self.doctype
 				parent_meta = frappe.get_meta(self.doctype)
 				# Find the parent fieldname for this child doctype
