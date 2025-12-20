@@ -65,6 +65,7 @@ frappe.breadcrumbs = {
 					frappe.ui.create_menu({
 						parent: $(last_element),
 						menu_items: breadcrumbs.menu_items,
+						size: "fit-content",
 					});
 				});
 			}
