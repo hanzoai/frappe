@@ -51,7 +51,7 @@ frappe.ui.menu = class ContextMenu {
 							>`
 						}
 					</div>
-					<span class="menu-item-title">${item.label}</span>
+					<span class="menu-item-title">${__(item.label)}</span>
 					<div class="menu-item-icon" style="margin-left:auto">
 						${item.items && item.items.length ? frappe.utils.icon("chevron-right") : ""}
 					</div>
