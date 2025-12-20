@@ -53,9 +53,21 @@ frappe.breadcrumbs = {
 
 		this.clear();
 		if (!breadcrumbs) return this.toggle(false);
-
 		if (breadcrumbs.type === "Custom") {
 			this.set_custom_breadcrumbs(breadcrumbs);
+			if (breadcrumbs.menu_items && breadcrumbs.menu_items.length) {
+				let breadcrumbs_container = $(".navbar-breadcrumbs");
+				breadcrumbs_container.each((index, container) => {
+					let last_element = $(container)
+						.find("li")
+						.get($(container).find("li").length - 1);
+					$(last_element).find("a").attr("href", "");
+					frappe.ui.create_menu({
+						parent: $(last_element),
+						menu_items: breadcrumbs.menu_items,
+					});
+				});
+			}
 		} else {
 			// workspace
 			this.set_workspace_breadcrumb(breadcrumbs);
