@@ -51,7 +51,7 @@ let docfield_df = computed(() => {
 			}
 			if (store.form.selected_field.fieldtype === "Data") {
 				df.fieldtype = "Select";
-				df.options = "\nEmail\nName\nPhone\nURL\nBarcode\nIBAN";
+				df.options = ["", "Email", "Name", "Phone", "URL", "Barcode", "IBAN"]
 			}
 		}
 
