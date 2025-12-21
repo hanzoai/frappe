@@ -22,4 +22,9 @@
         <div class="icon-subtitle"></div>
     </div>
     {% } %}
+    {% if(!icon.in_folder) { %}
+    <div class="hide-button">
+        {%= frappe.utils.icon("x") %}
+    </div>
+    {% } %}
 </a>

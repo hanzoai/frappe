@@ -185,7 +185,7 @@ frappe.ui.menu = class ContextMenu {
 frappe.menu_map = {};
 
 frappe.ui.create_menu = function (opts) {
-	$(opts.parent).css("cursor", "pointer");
+	if (!opts.right_click) $(opts.parent).css("cursor", "pointer");
 	let context_menu = new frappe.ui.menu(opts);
 
 	frappe.menu_map[context_menu.name] = context_menu;
