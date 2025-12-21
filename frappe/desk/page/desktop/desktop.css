@@ -347,5 +347,8 @@
     .edit-mode-buttons{
         display: flex;
         justify-content: flex-end;
+        position: absolute;
+        bottom: 5%;
+        right: 5%;
     }
 }
