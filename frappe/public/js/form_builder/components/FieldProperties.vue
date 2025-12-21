@@ -41,7 +41,11 @@ let docfield_df = computed(() => {
 			df.options = "";
 			args.value = {};
 
-			if (["Table", "Link"].includes(store.form.selected_field.fieldtype)) {
+			if (
+				["Table MultiSelect", "Table", "Link"].includes(
+					store.form.selected_field.fieldtype
+				)
+			) {
 				df.fieldtype = "Link";
 				df.options = "DocType";
 
