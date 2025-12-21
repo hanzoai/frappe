@@ -12,9 +12,7 @@
 
         </div>
     {% } else { %}
-        <div class="icon-container">
-            {%= frappe.utils.icon(icon.icon || "list-alt" , "lg", "", "", "text-ink-gray-7 current-color", true)%}
-        </div>
+            {%= frappe.utils.desktop_icon(icon.label.charAt(0).toUpperCase(),"gray")%}
     {% } %}
     {% if (!in_folder) { %}
     <div class="icon-caption">
