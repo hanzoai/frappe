@@ -187,7 +187,7 @@ class DesktopPage {
 				label: "Edit Layout",
 				icon: "edit",
 				onClick: function () {
-					frappe.new_desktop_icons = Array.from(frappe.desktop_icons);
+					frappe.new_desktop_icons = JSON.parse(JSON.stringify(frappe.desktop_icons));
 					me.start_editing_layout();
 				},
 			},
@@ -208,14 +208,19 @@ class DesktopPage {
 	}
 	stop_editing_layout(action) {
 		this.edit_mode = false;
-		let icons_to_save;
-		if (action == "cancel") {
-			icons_to_save = frappe.desktop_icons;
-		} else {
-			icons_to_save = frappe.new_desktop_icons;
+
+		$(".desktop-icon").removeClass("edit-mode");
+		$(".desktop-wrapper").removeAttr("data-mode");
+		if (action === "cancel") {
+			frappe.new_desktop_icons = null;
+			this.update();
+			return;
 		}
-		save_desktop(icons_to_save);
+
+		// submit
+		save_desktop(frappe.new_desktop_icons);
 	}
+
 	start_editing_layout() {
 		this.edit_mode = true;
 		$(".desktop-icon").addClass("edit-mode");
@@ -234,21 +239,13 @@ class DesktopPage {
 	}
 	setup_edit_buttons() {
 		const me = this;
-		this.$edit_button = $(`<div class="edit-mode-buttons">
-            <button class="cancel btn btn-default ellipsis">
-                ${__("Cancel")}
-            </button>
-            <button class="done btn btn-primary ellipsis">
-				${__("Done")}
-            </button>
-        </div>`);
+		this.$edit_button = $(".edit-mode-buttons");
 		this.$edit_button.find(".cancel").on("click", function () {
 			me.stop_editing_layout("cancel");
 		});
 		this.$edit_button.find(".done").on("click", function () {
 			me.stop_editing_layout("submit");
 		});
-		$(".icons-container:first").prepend(this.$edit_button);
 	}
 	setup_avatar() {
 		$(".desktop-avatar").html(frappe.avatar(frappe.session.user, "avatar-medium"));
@@ -602,7 +599,7 @@ class DesktopIconGrid {
 				icon.idx = idx;
 			}
 		});
-		frappe.boot.desktop_icons.sort((a, b) => a.idx - b.idx);
+		frappe.desktop_icons.sort((a, b) => a.idx - b.idx);
 	}
 	add_to_main_screen(title) {
 		let icon = get_desktop_icon_by_label(title);
