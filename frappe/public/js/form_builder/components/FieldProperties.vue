@@ -57,6 +57,12 @@ let docfield_df = computed(() => {
 				df.fieldtype = "Select";
 				df.options = ["", "Email", "Name", "Phone", "URL", "Barcode", "IBAN"];
 			}
+
+			if (store.form.selected_field.fieldtype === "Select") {
+				df.description = __("Enter list of Options, each on a new line.");
+			} else {
+				df.description = "";
+			}
 		}
 
 		// show link_filters docfield only when link field is selected
