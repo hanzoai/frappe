@@ -46,7 +46,7 @@ EMAIL_MATCH_PATTERN = re.compile(
 
 UNSET = object()
 
-type PropertyType = property | functools.cached_property
+PropertyType: TypeAlias = property | functools.cached_property
 
 
 def get_fullname(user=None):
