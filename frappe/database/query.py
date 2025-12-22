@@ -2,7 +2,7 @@ import datetime
 import re
 import warnings
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal
 
 from pypika.enums import Arithmetic
 from pypika.queries import QueryBuilder, Table
@@ -919,7 +919,16 @@ class Engine:
 		if not meta.get_permissions(parenttype=parent_doctype):
 			return
 
-		permission_type = self.get_permission_type(doctype)
+		# Don't allow querying child table fields if user has only "select" permission
+		permission_type = self.get_permission_type(doctype, parent_doctype)
+		if parent_doctype and permission_type == "select":
+			frappe.throw(
+				_("You do not have permission to access child table field: {0}").format(
+					frappe.bold(f"{doctype}.{fieldname}")
+				),
+				frappe.PermissionError,
+			)
+
 		permitted_fields = self._get_cached_permitted_fields(doctype, parent_doctype, permission_type)
 
 		if fieldname not in permitted_fields:
@@ -1300,7 +1309,9 @@ class Engine:
 
 				# Cache permitted fields for child doctypes if accessed multiple times
 				permitted_child_fields_set = self._get_cached_permitted_fields(
-					field.doctype, field.parent_doctype, self.get_permission_type(field.doctype)
+					field.doctype,
+					field.parent_doctype,
+					self.get_permission_type(field.doctype, field.parent_doctype),
 				)
 				# Check permission for the specific field in the child table
 				if field.fieldname in permitted_child_fields_set:
@@ -1328,7 +1339,9 @@ class Engine:
 
 				# Cache permitted fields for the child doctype of the query
 				permitted_child_fields_set = self._get_cached_permitted_fields(
-					field.doctype, field.parent_doctype, self.get_permission_type(field.doctype)
+					field.doctype,
+					field.parent_doctype,
+					self.get_permission_type(field.doctype, field.parent_doctype),
 				)
 				# Filter the fields *within* the ChildQuery object based on permissions
 				field.fields = [f for f in field.fields if f in permitted_child_fields_set]
@@ -1499,11 +1512,24 @@ class Engine:
 			script = frappe.get_doc("Server Script", permission_script_name)
 			if condition := script.get_permission_query_conditions(self.user):
 				conditions.append(RawCriterion(f"({condition})"))
-
 		return conditions
 
-	def get_permission_type(self, doctype) -> str:
-		"""Get permission type (select/read) based on user permissions"""
+	def get_permission_type(
+		self, doctype: str, parent_doctype: str | None = None
+	) -> Literal["read", "select"]:
+		"""Get permission type (select/read) based on user permissions.
+
+		Args:
+			doctype: The doctype to check permissions for.
+			parent_doctype: The parent of the specified doctype. If passed, we assume that `doctype` is a child table,
+							and fall back to checking permissions from this parent.
+
+		Returns:
+			The allowed permission type (read|select).
+		"""
+		if parent_doctype:
+			return self.get_permission_type(parent_doctype)
+
 		if frappe.only_has_select_perm(doctype, user=self.user):
 			return "select"
 		return "read"
