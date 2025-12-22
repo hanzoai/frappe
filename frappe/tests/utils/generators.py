@@ -2,6 +2,7 @@ import datetime
 import json
 import logging
 import os
+import tomllib
 from collections import defaultdict
 from collections.abc import Generator
 from functools import cache
@@ -9,8 +10,6 @@ from importlib import reload
 from pathlib import Path
 from types import MappingProxyType, ModuleType
 from typing import TYPE_CHECKING, Any
-
-import tomli
 
 import frappe
 from frappe.model.naming import revert_series_if_last
@@ -129,7 +128,7 @@ def load_test_records_for(index_doctype) -> dict[str, Any]:
 	toml_path = os.path.join(module_path, "test_records.toml")
 	if os.path.exists(toml_path):
 		with open(toml_path, "rb") as f:
-			return tomli.load(f)
+			return tomllib.load(f)
 
 	else:
 		return {}
