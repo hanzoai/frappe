@@ -249,7 +249,7 @@ class TestPerformance(IntegrationTestCase):
 
 		default_affinity_16 = list(range(16))
 		# "linear" siblings = (0,1) (2,3) ...
-		linear_siblings_16 = list(itertools.batched(range(16), 2))
+		linear_siblings_16 = list(itertools.batched(range(16), 2, strict=True))
 		logical_cores = list(range(16))
 		expected_assignments = [*(l[0] for l in linear_siblings_16), *(l[1] for l in linear_siblings_16)]
 		for pid, expected_core in zip(logical_cores, expected_assignments, strict=True):
