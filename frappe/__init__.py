@@ -88,17 +88,17 @@ if _dev_server:
 
 
 # local-globals
-ConfType: TypeAlias = _dict[str, Any]  # type: ignore[no-any-explicit]
+type ConfType = _dict[str, Any]  # type: ignore[no-any-explicit]
 # TODO: make session a dataclass instead of undtyped _dict
-SessionType: TypeAlias = _dict[str, Any]  # type: ignore[no-any-explicit]
+type SessionType = _dict[str, Any]  # type: ignore[no-any-explicit]
 # TODO: implement dataclass
-LogMessageType: TypeAlias = _dict[str, Any]  # type: ignore[no-any-explicit]
+type LogMessageType = _dict[str, Any]  # type: ignore[no-any-explicit]
 # TODO: implement dataclass
 # holds job metadata if the code is run in a background job context
-JobMetaType: TypeAlias = _dict[str, Any]  # type: ignore[no-any-explicit]
-ResponseDict: TypeAlias = _dict[str, Any]  # type: ignore[no-any-explicit]
-FlagsDict: TypeAlias = _dict[str, Any]  # type: ignore[no-any-explicit]
-FormDict: TypeAlias = _dict[str, str]
+type JobMetaType = _dict[str, Any]  # type: ignore[no-any-explicit]
+type ResponseDict = _dict[str, Any]  # type: ignore[no-any-explicit]
+type FlagsDict = _dict[str, Any]  # type: ignore[no-any-explicit]
+type FormDict = _dict[str, str]
 
 db: LocalProxy["PyMariaDBDatabase" | "MariaDBDatabase" | "PostgresDatabase" | "SQLiteDatabase"] = local("db")
 qb: LocalProxy["MariaDB" | "Postgres" | "SQLite"] = local("qb")

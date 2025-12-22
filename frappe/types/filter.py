@@ -8,20 +8,20 @@ from typing import Any, NamedTuple, Self, TypeAlias, TypeGuard, TypeVar, cast, o
 
 from pypika import Column
 
-Doct: TypeAlias = str
-Fld: TypeAlias = str
-Op: TypeAlias = str
-DateTime: TypeAlias = datetime | date
-_Value: TypeAlias = str | int | float | None | DateTime | Column
-_InputValue: TypeAlias = _Value | bool
-Value: TypeAlias = _Value | Sequence[_Value]
-InputValue: TypeAlias = _InputValue | Sequence[_InputValue]
+type Doct = str
+type Fld = str
+type Op = str
+type DateTime = datetime | date
+type _Value = str | int | float | None | DateTime | Column
+type _InputValue = _Value | bool
+type Value = _Value | Sequence[_Value]
+type InputValue = _InputValue | Sequence[_InputValue]
 
 
-FilterTupleSpec: TypeAlias = (
+type FilterTupleSpec = (
 	tuple[Fld, InputValue] | tuple[Fld, Op, InputValue] | tuple[Doct, Fld, Op, InputValue]
 )
-FilterMappingSpec: TypeAlias = Mapping[Fld, _InputValue | tuple[Op, InputValue]]
+type FilterMappingSpec = Mapping[Fld, _InputValue | tuple[Op, InputValue]]
 
 
 class Sentinel:
@@ -38,7 +38,7 @@ UNSPECIFIED = Sentinel()
 T = TypeVar("T")
 
 
-def is_unspecified(value: T | Sentinel) -> TypeGuard[Sentinel]:
+def is_unspecified[T](value: T | Sentinel) -> TypeGuard[Sentinel]:
 	return value is UNSPECIFIED
 
 
@@ -280,4 +280,4 @@ class Filters(list[FilterTuple]):
 		return f"Filters(\n{filters_str}\n)"
 
 
-FilterSignature: TypeAlias = Filters | FilterTuple | FilterMappingSpec | FilterTupleSpec
+type FilterSignature = Filters | FilterTuple | FilterMappingSpec | FilterTupleSpec

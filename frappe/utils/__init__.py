@@ -46,16 +46,9 @@ EMAIL_MATCH_PATTERN = re.compile(
 
 UNSET = object()
 
-PropertyType: TypeAlias = property | functools.cached_property
+type PropertyType = property | functools.cached_property
 
 
-if sys.version_info < (3, 11):
-
-	def exception():
-		_exc_type, exc_value, _exc_traceback = sys.exc_info()
-		return exc_value
-
-	sys.exception = exception
 
 
 def get_fullname(user=None):

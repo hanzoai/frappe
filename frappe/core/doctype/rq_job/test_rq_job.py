@@ -180,8 +180,7 @@ class TestRQJob(IntegrationTestCase):
 		# Observed higher usage on 3.14. Temporarily raising the limit
 		from sys import version_info
 
-		if version_info >= (3, 14):
-			LAST_MEASURED_USAGE += 5
+		LAST_MEASURED_USAGE += 5
 
 		self.assertLessEqual(rss, LAST_MEASURED_USAGE * 1.05, msg)
 

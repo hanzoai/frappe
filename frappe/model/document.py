@@ -42,8 +42,8 @@ DOCUMENT_LOCK_EXPIRY = 3 * 60 * 60  # All locks expire in 3 hours automatically
 DOCUMENT_LOCK_SOFT_EXPIRY = 30 * 60  # Let users force-unlock after 30 minutes
 
 
-_SingleDocument: TypeAlias = "Document"
-_NewDocument: TypeAlias = "Document"
+type _SingleDocument = "Document"
+type _NewDocument = "Document"
 
 
 @overload
