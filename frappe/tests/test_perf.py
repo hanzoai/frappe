@@ -193,7 +193,7 @@ class TestPerformance(IntegrationTestCase):
 		"""
 
 		query = "select * from tabUser"
-		expected_refcount = 1 if sys.version_info >= (3, 14) else 2
+		expected_refcount = 1
 		for kwargs in ({}, {"as_dict": True}, {"as_list": True}):
 			result = frappe.db.sql(query, **kwargs)
 			self.assertEqual(sys.getrefcount(result), expected_refcount)  # Note: This always returns +1
@@ -201,7 +201,7 @@ class TestPerformance(IntegrationTestCase):
 
 	def test_no_cyclic_references(self):
 		doc = frappe.get_doc("User", "Administrator")
-		expected_refcount = 1 if sys.version_info >= (3, 14) else 2
+		expected_refcount = 1
 		self.assertEqual(sys.getrefcount(doc), expected_refcount)  # Note: This always returns +1
 
 	def test_get_doc_cache_calls(self):
