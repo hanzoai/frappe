@@ -137,9 +137,7 @@ def load_test_records_for(index_doctype) -> dict[str, Any]:
 # Test record generation
 
 
-def _generate_all_records_towards(
-	index_doctype, reset=False, commit=False
-) -> Generator[tuple[str, int], None, None]:
+def _generate_all_records_towards(index_doctype, reset=False, commit=False) -> Generator[tuple[str, int]]:
 	"""Generate test records for the given doctype and its dependencies."""
 
 	# NOTE: visited excludes dependency discovery of any index doctype which
@@ -155,7 +153,7 @@ def _generate_all_records_towards(
 
 def _generate_records_for(
 	index_doctype: str, reset: bool = False, commit: bool = False, initial_doctype: str | None = None
-) -> Generator[tuple[str, "Document"], None, None]:
+) -> Generator[tuple[str, "Document"]]:
 	"""Create and yield test records for a specific doctype."""
 	test_module: ModuleType
 
@@ -204,7 +202,7 @@ test_record_manager_instance = None
 
 def _sync_records(
 	index_doctype: str, test_records: dict[str, list], reset: bool = False, commit: bool = False
-) -> Generator[tuple[str, "Document"], None, None]:
+) -> Generator[tuple[str, "Document"]]:
 	"""Generate test objects for a register doctype from provided records, with caching and persistence."""
 	# NOTE: This method is called in roughly these situations:
 	# 1. First sync of a index doctype's records

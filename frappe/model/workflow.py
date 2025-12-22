@@ -40,7 +40,7 @@ def get_workflow_name(doctype):
 
 @frappe.whitelist()
 def get_transitions(
-	doc: Union["Document", str, dict], workflow: "Workflow" = None, raise_exception: bool = False
+	doc: "Document" | str | dict, workflow: "Workflow" = None, raise_exception: bool = False
 ) -> list[dict]:
 	"""Return list of possible transitions for the given doc"""
 	from frappe.model.document import Document

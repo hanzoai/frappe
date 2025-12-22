@@ -148,7 +148,7 @@ def sendmail(
 	email_read_tracker_url=None,
 	x_priority: Literal[1, 3, 5] = 3,
 	email_headers=None,
-) -> Optional["EmailQueue"]:
+) -> "EmailQueue" | None:
 	"""Send email using user's default **Email Account** or global default **Email Account**.
 
 

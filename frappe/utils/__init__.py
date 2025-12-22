@@ -925,7 +925,7 @@ def get_safe_filters(filters):
 	return filters
 
 
-def create_batch(iterable: Iterable, size: int) -> Generator[Iterable, None, None]:
+def create_batch(iterable: Iterable, size: int) -> Generator[Iterable]:
 	"""Convert an iterable to multiple batches of constant size of batch_size.
 
 	Args:
