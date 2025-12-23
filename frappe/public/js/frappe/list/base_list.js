@@ -189,9 +189,9 @@ frappe.views.BaseList = class BaseList {
 	setup_view_menu() {
 		if (frappe.boot.desk_settings.view_switcher && !this.meta.force_re_route_to_default_view) {
 			const icon_map = {
-				Image: "image-view",
+				Image: "image",
 				List: "list",
-				Report: "small-file",
+				Report: "sheet",
 				Calendar: "calendar",
 				Gantt: "gantt",
 				Kanban: "kanban",
