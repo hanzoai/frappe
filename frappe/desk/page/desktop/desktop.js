@@ -240,10 +240,10 @@ class DesktopPage {
 	setup_edit_buttons() {
 		const me = this;
 		this.$edit_button = $(".edit-mode-buttons");
-		this.$edit_button.find(".cancel").on("click", function () {
+		this.$edit_button.find(".discard").on("click", function () {
 			me.stop_editing_layout("cancel");
 		});
-		this.$edit_button.find(".done").on("click", function () {
+		this.$edit_button.find(".save").on("click", function () {
 			me.stop_editing_layout("submit");
 		});
 	}
