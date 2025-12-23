@@ -301,9 +301,7 @@ def get_app_publisher(module: str) -> str:
 	return frappe.get_hooks(hook="app_publisher", app_name=app)[0]
 
 
-def make_boilerplate(
-	template: str, doc: Union["Document", "frappe._dict"], opts: Union[dict, "frappe._dict"] = None
-):
+def make_boilerplate(template: str, doc: "Document" | "frappe._dict", opts: dict | "frappe._dict" = None):
 	target_path = get_doc_path(doc.module, doc.doctype, doc.name)
 	template_name = template.replace("controller", scrub(doc.name))
 	if template_name.endswith("._py"):
