@@ -1649,13 +1649,15 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		}
 
 		if (this.report_settings.export_hidden_cols) {
-			const hidden_fields = [];
+			const hidden_fields = new Set();
+
 			this.columns.forEach((column) => {
 				if (column.hidden) {
-					hidden_fields.push(column.label);
+					hidden_fields.add(column.label);
 				}
 			});
-			if (hidden_fields.length) {
+
+			if (hidden_fields.size) {
 				extra_fields.push(
 					{
 						fieldname: "column_break_1",
@@ -1664,13 +1666,14 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 					{
 						label: __("Include hidden columns"),
 						fieldname: "include_hidden_columns",
-						description: __("Hidden columns include: {0}", [hidden_fields.join(", ")]),
 						fieldtype: "Check",
+						description: __("Hidden columns include: <br> {0}", [
+							frappe.utils.comma_and(Array.from(hidden_fields)),
+						]),
 					}
 				);
 			}
 		}
-
 		this.export_dialog = frappe.report_utils.get_export_dialog(
 			__(this.report_name),
 			extra_fields,
