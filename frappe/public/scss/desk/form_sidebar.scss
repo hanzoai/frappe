@@ -81,7 +81,6 @@
 			position: relative;
 			width: fit-content;
 			height: fit-content;
-			margin: 0 auto;
 		}
 
 		.sidebar-image,
@@ -301,42 +300,20 @@ body[data-route^="Form"] {
 	}
 }
 .attachment-row {
-	margin: var(--margin-sm) 0;
-	padding: var(--padding-sm);
-	.attachment-file-label {
-		max-width: 150px;
-		margin-left: var(--margin-xs);
-		text-align: left;
-	}
-	.attachment-icon {
-		line-height: 0;
-	}
-	.file-type,
-	.file-size {
-		color: var(--text-light);
-	}
-	.attachment-remove-btn {
-		display: none;
-	}
-	.file-type {
-		position: relative;
-		margin-right: 6px;
-		&::after {
-			content: ".";
-			width: 5px;
-			height: 2px;
-			display: inline-block;
-			position: absolute;
-			bottom: 32px;
-			font-size: 25px;
-			right: -7px;
-		}
-	}
-	&:hover {
-		background-color: var(--subtle-fg);
-		border-radius: var(--border-radius-sm);
-		.attachment-remove-btn {
+	.data-pill {
+		background-color: unset;
+		box-shadow: none;
+		padding-left: 0px !important;
+		width: 100%;
+
+		.attachment-file-label {
 			display: block;
+			margin-left: var(--margin-xs);
+			padding-right: var(--padding-xs);
+			text-align: left;
+		}
+		.attachment-icon {
+			line-height: 0;
 		}
 	}
 }
