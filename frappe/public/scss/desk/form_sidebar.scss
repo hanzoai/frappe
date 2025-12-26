@@ -136,8 +136,15 @@
 	gap: 8px;
 }
 body[data-route^="Form"] {
-	.layout-side-section .form-sidebar {
-		width: var(--form-sidebar-width);
+	.layout-side-section {
+		overflow-y: auto;
+		overflow-x: hidden;
+		height: calc(100vh - var(--page-head-height));
+		position: sticky;
+		top: var(--page-head-height);
+		.form-sidebar {
+			width: var(--form-sidebar-width);
+		}
 	}
 }
 
