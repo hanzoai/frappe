@@ -132,10 +132,6 @@
 .icon-container:has(.icon){
     background-color: var(--surface-gray-3);
 }
-.icon-container .icon{
-    width: 27px;
-    height: 27px;
-}
 .icon-container:hover{
 	transform: scale(1.05);
     transition: transform 0.1s;
