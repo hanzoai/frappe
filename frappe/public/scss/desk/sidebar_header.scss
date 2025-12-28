@@ -48,6 +48,4 @@
 	color: var(--ink-gray-6);
 	font-size: var(--text-sm);
 	@include truncate();
-	line-height: 1;
-	margin-top: 4px;
 }
