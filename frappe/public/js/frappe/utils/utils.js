@@ -1285,10 +1285,15 @@ Object.assign(frappe.utils, {
 				</svg>
 			</div>
 		`);
-		let color_value = this.desktop_pallete[color || "blue"];
-		let bg_color = color_value + opacity_hex;
+		let pallete_color = this.desktop_pallete[color || "blue"];
+		let bg_color = pallete_color + opacity_hex;
+		let stroke_color = pallete_color;
+		if (frappe.boot.desktop_icon_style == "Solid") {
+			bg_color = stroke_color;
+			stroke_color = "var(--white)";
+		}
 		icon_html.css("backgroundColor", bg_color);
-		icon_html.find("svg").css("color", color_value);
+		icon_html.find("svg").css("color", stroke_color);
 		return icon_html.get(0).outerHTML;
 	},
 	desktop_pallete: {
