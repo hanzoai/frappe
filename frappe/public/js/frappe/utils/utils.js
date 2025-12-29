@@ -1474,6 +1474,9 @@ Object.assign(frappe.utils, {
 							route = doctype_slug;
 					}
 				}
+				if (item.tab) {
+					route += `#${item.tab}`;
+				}
 			} else if (type === "report") {
 				if (item.is_query_report) {
 					route = "query-report/" + item.name;
