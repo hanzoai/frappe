@@ -1527,7 +1527,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				let display_value = value;
 
 				if (docfield.fieldtype === "Check") {
-					display_value = this.boolean_labels[value];
+					display_value = this.boolean_labels[cint(value)];
 				} else {
 					display_value = frappe.format(value, docfield);
 				}
@@ -1666,7 +1666,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			const df = frappe.query_report.get_filter(key).df;
 			if (!df.hidden_due_to_dependency) {
 				applied_filters[df.label] =
-					df.fieldtype === "Check" ? this.boolean_labels[value] : value;
+					df.fieldtype === "Check" ? this.boolean_labels[cint(value)] : value;
 			}
 		}
 
