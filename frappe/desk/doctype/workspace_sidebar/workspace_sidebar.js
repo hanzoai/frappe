@@ -15,4 +15,9 @@ frappe.ui.form.on("Workspace Sidebar", {
 			});
 		}
 	},
+	link_type: function (frm) {
+		if (frm.doc.link_type == "URL") {
+			frm.set_value("link_to", "");
+		}
+	},
 });
