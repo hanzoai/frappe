@@ -1276,11 +1276,12 @@ Object.assign(frappe.utils, {
 		},
 		image_path: "/assets/frappe/images/leaflet/",
 	},
-	desktop_icon(letter, color) {
+	desktop_icon(letter, color, size) {
+		let icon_size = size ? size : "md";
 		let opacity_hex = "1A";
 		let icon_html = $(`
 			<div class="icon-container">
-				<svg fill="currentColor" class="desktop-alphabet icon text-ink-gray-7 icon-lg" stroke=none style="" aria-hidden="true">
+				<svg fill="currentColor" class="desktop-alphabet icon text-ink-gray-7 icon-${icon_size}" stroke=none style="" aria-hidden="true">
 				<use class="" href="#${letter}"></use>
 				</svg>
 			</div>
