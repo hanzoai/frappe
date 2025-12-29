@@ -12,7 +12,7 @@
 
         </div>
     {% } else { %}
-            {%= frappe.utils.desktop_icon(icon.label.charAt(0).toUpperCase(),"gray")%}
+            {%= frappe.utils.desktop_icon(icon.label,"gray")%}
     {% } %}
     {% if (!in_folder) { %}
     <div class="icon-caption">
