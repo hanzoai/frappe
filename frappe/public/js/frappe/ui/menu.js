@@ -143,6 +143,7 @@ frappe.ui.menu = class ContextMenu {
 		}
 
 		this.visible = true;
+		frappe.visible_menus.push(this);
 	}
 	close_all_other_menu() {
 		$(".context-menu").hide();
@@ -183,6 +184,7 @@ frappe.ui.menu = class ContextMenu {
 };
 
 frappe.menu_map = {};
+frappe.visible_menus = [];
 
 frappe.ui.create_menu = function (opts) {
 	if (!opts.right_click) $(opts.parent).css("cursor", "pointer");
@@ -229,3 +231,14 @@ frappe.ui.create_menu = function (opts) {
 		}
 	});
 };
+
+function close_all_open_menus() {
+	frappe.visible_menus.forEach((menu) => {
+		menu.hide();
+	});
+	frappe.visible_menus = [];
+}
+
+frappe.router.on("change", function () {
+	close_all_open_menus();
+});
