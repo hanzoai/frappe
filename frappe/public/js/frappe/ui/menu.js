@@ -48,17 +48,18 @@ frappe.ui.menu = class ContextMenu {
 				`<div class="dropdown-menu-item"><div class="dropdown-divider documentation-links"></div></div>`
 			);
 		} else {
+			const iconMarkup = item.icon_html
+				? item.icon_html
+				: item.icon
+				? frappe.utils.icon(item.icon)
+				: item.icon_url
+				? `<img class="logo" src="${item.icon_url}">`
+				: "";
+
 			item_wrapper = $(`<div class="dropdown-menu-item">
 				<a>
-					<div class="menu-item-icon" ${!(item.icon || item.icon_url) ? "hidden" : ""}>
-						${
-							item.icon
-								? frappe.utils.icon(item.icon)
-								: `<img
-								class="logo"
-								src="${item.icon_url}"
-							>`
-						}
+					<div class="menu-item-icon" ${!(iconMarkup != "") ? "hidden" : ""}>
+						${iconMarkup}
 					</div>
 					<span class="menu-item-title">${__(item.label)}</span>
 					<div class="menu-item-icon" style="margin-left:auto">
