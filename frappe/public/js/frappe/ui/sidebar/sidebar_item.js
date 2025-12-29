@@ -51,6 +51,7 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 				path = frappe.utils.generate_route({
 					type: this.item.link_type,
 					name: this.item.link_to,
+					tab: this.item.tab,
 				});
 			}
 		}
