@@ -24,7 +24,7 @@ if typing.TYPE_CHECKING:
 def getdoc(doctype, name):
 	"""
 	Loads a doclist for a given document. This method is called directly from the client.
-	Requries "doctype", "name" as form variables.
+	Requires "doctype", "name" as form variables.
 	Will also call the "onload" method on the document.
 	"""
 
@@ -182,7 +182,7 @@ def get_milestones(doctype, name):
 def get_attachments(dt, dn):
 	return frappe.get_all(
 		"File",
-		fields=["name", "file_name", "file_url", "is_private", "file_type", "file_size"],
+		fields=["name", "file_name", "file_url", "is_private"],
 		filters={"attached_to_name": str(dn), "attached_to_doctype": dt},
 	)
 

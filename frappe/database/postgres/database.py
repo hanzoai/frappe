@@ -1,4 +1,5 @@
 import re
+from contextlib import contextmanager
 
 import psycopg2
 import psycopg2.extensions
@@ -488,8 +489,30 @@ class PostgresDatabase(PostgresExceptionUtil, Database):
 		from frappe.utils.data import cint
 
 		table = get_table_name(doctype)
-		count = self.sql("select reltuples from pg_class where relname = %s", table)
+
+		# Scope to current database to avoid cross-site estimates
+		count = self.sql(
+			"select c.reltuples from pg_class c join pg_namespace n on n.oid = c.relnamespace where c.relname = %s and n.nspname = %s and c.relkind = 'r'",
+			(table, self.db_schema),
+		)
 		return cint(count[0][0]) if count else 0
+
+	@contextmanager
+	def unbuffered_cursor(self):
+		"""Unbuffered cursor in Postgres can only call .execute() once,
+		usage:
+			with frappe.db.unbuffered_cursor():
+				frappe.db.sql()
+		"""
+		try:
+			if not self._conn:
+				self.connect()
+			original_cursor = self._cursor
+			new_cursor = self._cursor = self._conn.cursor(name="ss_cursor")
+			yield
+		finally:
+			self._cursor = original_cursor
+			new_cursor.close()
 
 
 def modify_query(query):
