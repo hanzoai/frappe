@@ -4,6 +4,7 @@ cd ~ || exit
 
 echo "Setting Up Bench..."
 
+export BENCH_DISABLE_UV=1
 pip install frappe-bench
 bench -v init frappe-bench --skip-assets --python "$(which python)" --frappe-path "${GITHUB_WORKSPACE}"
 cd ./frappe-bench || exit
