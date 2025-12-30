@@ -492,6 +492,9 @@ class Engine:
 		elif len(filter) == 4:
 			doctype, field, operator, value = filter
 			self._apply_filter(field, value, operator, doctype, collect=collect)
+		elif len(filter) == 5:
+			doctype, field, operator, value, _ = filter
+			self._apply_filter(field, value, operator, doctype, collect=collect)
 		else:
 			raise ValueError(f"Unknown filter format: {filter}")
 
