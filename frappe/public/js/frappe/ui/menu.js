@@ -56,7 +56,9 @@ frappe.ui.menu = class ContextMenu {
 				? `<img class="logo" src="${item.icon_url}">`
 				: "";
 
-			item_wrapper = $(`<div class="dropdown-menu-item">
+			item_wrapper = $(`<div class="dropdown-menu-item" onclick="${
+				item.action ? `return ${item.action}` : ""
+			}">
 				<a>
 					<div class="menu-item-icon" ${!(iconMarkup != "") ? "hidden" : ""}>
 						${iconMarkup}
