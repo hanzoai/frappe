@@ -131,8 +131,13 @@ frappe.breadcrumbs = {
 
 		this.append_breadcrumb_element(
 			`/desk/${frappe.router.slug(breadcrumbs.workspace)}`,
-			__(breadcrumbs.workspace)
+			__(breadcrumbs.workspace),
+			"worksapce-breadcrumb"
 		);
+
+		let worksapce_crumb = this.$breadcrumbs.find("li a.worksapce-breadcrumb");
+
+		worksapce_crumb.parent().addClass("ellipsis");
 	},
 
 	set_workspace(breadcrumbs) {
@@ -223,7 +228,6 @@ frappe.breadcrumbs = {
 		if (view === "form") {
 			let last_crumb = this.$breadcrumbs.find("li").last();
 			last_crumb.addClass("disabled");
-			last_crumb.addClass("ellipsis");
 			last_crumb.css("cursor", "copy");
 			last_crumb.click((event) => {
 				event.stopImmediatePropagation();
