@@ -1271,9 +1271,9 @@ class Engine:
 		if not has_permission("select") and not has_permission("read"):
 			self._raise_permission_error()
 
-	def _raise_permission_error(self):
+	def _raise_permission_error(self, doctype=None):
 		frappe.throw(
-			_("Insufficient Permission for {0}").format(frappe.bold(self.doctype)),
+			_("Insufficient Permission for {0}").format(frappe.bold(doctype or self.doctype)),
 			frappe.PermissionError,
 		)
 
@@ -1457,7 +1457,7 @@ class Engine:
 			shared_docs = frappe.share.get_shared(doctype, self.user)
 			if not shared_docs:
 				# this should NEVER happen, but being defensive
-				self._raise_permission_error()
+				self._raise_permission_error(doctype=doctype)
 
 			return table.name.isin(shared_docs)
 
