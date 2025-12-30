@@ -179,6 +179,20 @@ class DesktopPage {
 		this.setup_editing_mode();
 		this.handle_route_change();
 		this.setup_events();
+		this.setup_edit_button();
+	}
+	setup_edit_button() {
+		const me = this;
+		this.$desktop_edit_button = $(
+			"<button class='btn btn-reset desktop-edit'></button>"
+		).appendTo(document.body);
+		this.$desktop_edit_button.html(
+			frappe.utils.icon("square-pen", "md", "", "", "", "", "white")
+		);
+		this.$desktop_edit_button.on("click", () => {
+			me.start_editing_layout();
+			me.$desktop_edit_button.hide();
+		});
 	}
 	setup_editing_mode() {
 		const me = this;
