@@ -306,6 +306,11 @@ body[data-route^="Form"] {
 		padding-left: 0px !important;
 		width: 100%;
 
+		&:active {
+			background-color: transparent !important;
+			box-shadow: none !important;
+		}
+
 		.attachment-file-label {
 			display: block;
 			margin-left: var(--margin-xs);
