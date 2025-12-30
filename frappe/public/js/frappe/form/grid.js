@@ -226,9 +226,14 @@ export default class Grid {
 			// toggle "Add Row" button
 			this.wrapper.find(".grid-add-row").toggleClass("hidden", num_selected_rows > 0);
 
-			// update "Delete" button label
-			this.remove_rows_button.text(__("Delete {0} rows", [num_selected_rows]));
-			this.duplicate_rows_button.text(__("Duplicate {0} rows", [num_selected_rows]));
+			// update "Delete" and "Duplicate" button labels
+			if (num_selected_rows == 1) {
+				this.remove_rows_button.text(__("Delete row"));
+				this.duplicate_rows_button.text(__("Duplicate row"));
+			} else {
+				this.remove_rows_button.text(__("Delete {0} rows", [num_selected_rows]));
+				this.duplicate_rows_button.text(__("Duplicate {0} rows", [num_selected_rows]));
+			}
 
 			this.refresh_remove_rows_button();
 			this.refresh_duplicate_rows_button();
