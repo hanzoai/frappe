@@ -483,17 +483,17 @@ class Engine:
 			self.query = self.query.where(combined)
 
 	def apply_list_filters(self, filter: list, collect: list | None = None):
-		if len(filter) == 2:
-			field, value = filter
-			self._apply_filter(field, value, collect=collect)
-		elif len(filter) == 3:
-			field, operator, value = filter
-			self._apply_filter(field, value, operator, collect=collect)
-		elif len(filter) == 4:
-			doctype, field, operator, value = filter
-			self._apply_filter(field, value, operator, doctype, collect=collect)
-		else:
-			raise ValueError(f"Unknown filter format: {filter}")
+		match filter:
+			case [field, value]:
+				self._apply_filter(field, value, collect=collect)
+			case [field, operator, value]:
+				self._apply_filter(field, value, operator, collect=collect)
+			case [doctype, field, operator, value]:
+				self._apply_filter(field, value, operator, doctype, collect=collect)
+			case [doctype, field, operator, value, _]:
+				self._apply_filter(field, value, operator, doctype, collect=collect)
+			case _:
+				raise ValueError(f"Unknown filter format: {filter}")
 
 	def apply_dict_filters(self, filters: dict[str, FilterValue | list], collect: list | None = None):
 		for field, value in filters.items():
