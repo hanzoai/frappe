@@ -137,7 +137,6 @@ export default class Grid {
 		this.remove_rows_button = this.grid_buttons.find(".grid-remove-rows");
 		this.duplicate_rows_button = this.grid_buttons.find(".grid-duplicate-rows");
 		this.remove_all_rows_button = this.grid_buttons.find(".grid-remove-all-rows");
-		this.duplicate_row_button = this.grid_buttons.find(".grid-duplicate-row");
 
 		this.setup_allow_bulk_edit();
 		this.setup_check();
@@ -369,7 +368,7 @@ export default class Grid {
 			return;
 		}
 
-		this.duplicate_row_button.toggleClass(
+		this.duplicate_rows_button.toggleClass(
 			"hidden",
 			this.wrapper.find(".grid-body .grid-row-check:checked:first").length ? false : true
 		);
@@ -578,7 +577,7 @@ export default class Grid {
 			) {
 				// add 'hidden' to buttons
 				this.wrapper
-					.find(".grid-add-row, .grid-add-multiple-rows, .grid-duplicate-row")
+					.find(".grid-add-row, .grid-add-multiple-rows, .grid-duplicate-rows")
 					.addClass("hidden");
 			} else {
 				// show buttons
