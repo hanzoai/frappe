@@ -95,9 +95,10 @@ function get_route(desktop_icon) {
 	return route;
 }
 
-function get_desktop_icon_by_label(title, filters) {
+function get_desktop_icon_by_label(title, filters, force) {
+	if (force === undefined) force = false;
 	let icons = frappe.desktop_icons;
-	if (frappe.pages["desktop"].desktop_page.edit_mode) {
+	if (!force && frappe.pages["desktop"].desktop_page.edit_mode) {
 		icons = frappe.new_desktop_icons;
 	}
 	if (!filters) {
@@ -155,7 +156,7 @@ class DesktopPage {
 
 	prepare() {
 		this.apps_icons = [];
-
+		this.hidden_icons = [];
 		const icon_map = {};
 		frappe.desktop_icons = this.get_saved_layout() || frappe.boot.desktop_icons;
 		let icons = this.edit_mode ? frappe.new_desktop_icons : frappe.desktop_icons;
@@ -164,6 +165,8 @@ class DesktopPage {
 				icon.child_icons = [];
 				icon_map[icon.label] = icon;
 				return true;
+			} else {
+				this.hidden_icons.push(icon);
 			}
 			return false;
 		});
@@ -185,6 +188,7 @@ class DesktopPage {
 		return JSON.parse(localStorage.getItem(`${frappe.session.user}:desktop`));
 	}
 	setup_events() {
+		const me = this;
 		this.wrapper.find(".hide-button").on("click", function (event) {
 			event.preventDefault();
 			event.stopImmediatePropagation();
@@ -221,6 +225,7 @@ class DesktopPage {
 		this.setup_events();
 	}
 	setup_edit_button() {
+		if (this.edit_mode) return;
 		const me = this;
 		$(".desktop-edit").remove();
 		this.$desktop_edit_button = $(
@@ -241,15 +246,18 @@ class DesktopPage {
 				label: "Edit Layout",
 				icon: "edit",
 				onClick: function () {
+					me.$desktop_edit_button.hide();
 					frappe.new_desktop_icons = JSON.parse(JSON.stringify(frappe.desktop_icons));
 					me.start_editing_layout();
 				},
 			},
 			{
-				label: "Add Desktop Item",
+				label: "Restore Icons",
 				icon: "plus",
 				condition: function () {
-					return me.edit_mode;
+					return (
+						me.edit_mode && frappe.pages.desktop.desktop_page.hidden_icons.length > 0
+					);
 				},
 				onClick: function () {
 					me.desktop_pane.show();
@@ -449,6 +457,9 @@ class DesktopPage {
 class DesktopIconGrid {
 	constructor(opts) {
 		$.extend(this, opts);
+		this.init();
+	}
+	init() {
 		this.icons = [];
 		this.icons_html = [];
 		// this.page_size = {
@@ -463,7 +474,6 @@ class DesktopIconGrid {
 		this.make();
 		frappe.desktop_grids.push(this);
 	}
-
 	prepare() {
 		this.total_pages = 1;
 		this.icons_data = this.icons_data.sort((a, b) => {
@@ -641,9 +651,21 @@ class DesktopIconGrid {
 				sort: true, // keep sorting normally
 				dragoverBubble: true,
 				group: {
-					name: "desktop",
+					name: this.name || "desktop",
 					put: true,
 					pull: true,
+				},
+				onAdd(evt) {
+					if (Sortable.get(evt.from).option("group").name == "hidden-icons-grid") {
+						let icon_name = $(evt.item).attr("data-id");
+						let icon = get_desktop_icon_by_label(icon_name, {}, true);
+						icon.index = evt.newIndex;
+						icon.hidden = 0;
+						frappe.new_desktop_icons.push(icon);
+						let hidden_icons = frappe.pages.desktop.desktop_page.hidden_icons;
+						let added_icon_index = hidden_icons.findIndex((d) => d.label == icon_name);
+						hidden_icons.splice(added_icon_index, 1);
+					}
 				},
 				onStart(evt) {
 					frappe.desktop_utils.dragged_item = evt.item;
@@ -686,6 +708,10 @@ class DesktopIconGrid {
 				},
 			});
 		}
+	}
+	update_grid(icons) {
+		this.wrapper.empty();
+		this.init();
 	}
 	reorder_icons(reordered_icons, filters) {
 		reordered_icons.forEach((d, idx) => {
@@ -829,51 +855,6 @@ class DesktopIcon {
 				}
 			}
 		});
-		// this.icon.on("dragstart", function (event) {
-		// 	frappe.desktop_utils.dragged_item = event.target;
-		// });
-		// this.icon.on("dragover", function (event) {
-		// 	console.log(event.target);
-		// 	if (frappe.desktop_utils.dragged_item == event.target.parentElement) return;
-		// 	if (
-		// 		event.target == frappe.desktop_utils.dragged_item ||
-		// 		frappe.desktop_utils.dragged_item.contains(event.target)
-		// 	) {
-		// 		return;
-		// 	}
-		// 	if (event.target.parentElement.classList.contains("icon-container")) {
-		// 		frappe.desktop_utils.allow_move = false;
-		// 		frappe.desktop_utils.in_folder_creation = true;
-
-		// 		let icon_list = [];
-		// 		icon_list.push(
-		// 			get_desktop_icon_by_label(event.target.parentElement.parentElement.dataset.id)
-		// 		);
-		// 		icon_list.push(
-		// 			get_desktop_icon_by_label(frappe.desktop_utils.dragged_item.dataset.id)
-		// 		);
-
-		// 		let icon = {
-		// 			label: "Untitled Folder",
-		// 			icon_type: "Folder",
-		// 			child_icons: icon_list,
-		// 		};
-		// 		let modal = frappe.desktop_utils.create_desktop_modal(icon);
-		// 		modal.setup(icon.label, icon_list, 4);
-		// 		$(event.target.parentElement).addClass("folder-icon");
-		// 		$(event.target.parentElement).empty();
-		// 		modal.show();
-		// 		frappe.boot.desktop_icons.push(icon);
-		// 		icon_list.forEach((icon) => {
-		// 			let desktop_icon = frappe.utils.get_desktop_icon_by_label(icon.label);
-		// 			desktop_icon.parent_icon = "Untitled Folder";
-		// 			frappe.new_desktop_icons.splice(frappe.boot.desktop_icons.indexOf(icon), 1);
-		// 			frappe.new_desktop_icons.push(desktop_icon);
-		// 		});
-		// 	} else {
-		// 		frappe.desktop_utils.allow_move = true;
-		// 	}
-		// });
 	}
 }
 
@@ -944,18 +925,25 @@ class DesktopModal {
 }
 
 class DesktopPane {
-	constructor() {
-		this.wrapper = $(".desktop-wrapper").find(".desktop-pane");
+	constructor() {}
+	get wrapper() {
+		return $(".desktop-wrapper .desktop-pane");
 	}
 	show() {
 		this.wrapper.removeClass("hidden");
-
-		new DesktopIconGrid({
-			wrapper: $(".desktop-wrapper").find(".desktop-pane").find(".pane-icons-area"),
-			icons_data: frappe.desktop_icons,
+		if (this.grid) {
+			this.grid.icons_data = frappe.pages.desktop.desktop_page.hidden_icons;
+			this.grid.update_grid();
+			return;
+		}
+		this.grid = new DesktopIconGrid({
+			name: "hidden-icons-grid",
+			wrapper: this.wrapper.find(".pane-icons-area"),
+			icons_data: frappe.pages.desktop.desktop_page.hidden_icons,
 			row_size: 2,
 			edit_mode: true,
 		});
+
 		this.setup();
 	}
 	hide() {
