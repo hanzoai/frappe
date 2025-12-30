@@ -1456,7 +1456,7 @@ class Engine:
 			# no role permissions, apply only share permissions
 			shared_docs = frappe.share.get_shared(doctype, self.user)
 			if not shared_docs:
-				# this should NEVER happen, but being defensive
+				# no permissions at all
 				self._raise_permission_error(doctype=doctype)
 
 			return table.name.isin(shared_docs)
