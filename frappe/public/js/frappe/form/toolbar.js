@@ -315,7 +315,7 @@ frappe.ui.form.Toolbar = class Toolbar {
 		this.page.clear_menu();
 
 		if (frappe.boot.desk_settings.form_sidebar) {
-			this.make_navigation();
+			// this.make_navigation();
 			this.make_menu_items();
 		}
 	}

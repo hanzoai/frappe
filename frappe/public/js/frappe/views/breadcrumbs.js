@@ -209,6 +209,9 @@ frappe.breadcrumbs = {
 			}
 			this.append_breadcrumb_element(`/desk/${route}`, __(doctype), "title-text");
 		}
+
+		let list_crumb = this.$breadcrumbs.find("li a.title-text");
+		list_crumb.parent().addClass("ellipsis");
 	},
 
 	set_form_breadcrumb(breadcrumbs, view) {
