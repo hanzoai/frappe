@@ -203,10 +203,13 @@ frappe.ui.form.Toolbar = class Toolbar {
 	setup_editable_title(element) {
 		let me = this;
 
-		$(element).tooltip({
-			delay: { show: 100, hide: 100 },
-			trigger: "hover",
-		});
+		if (me.is_title_editable()) {
+			$(element).tooltip({
+				delay: { show: 100, hide: 100 },
+				trigger: "hover",
+			});
+			$(element).addClass("pointer");
+		}
 
 		element.on("click", () => {
 			let fields = [];
