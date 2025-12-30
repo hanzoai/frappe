@@ -15,6 +15,7 @@ frappe.pages["print"].on_page_load = function (wrapper) {
 				frm.doc = frappe.get_doc(doctype, docname);
 				frappe.model.with_doctype(doctype, () => {
 					frm.meta = frappe.get_meta(route[1]);
+					frm.meta.module && frappe.app.sidebar.show_sidebar_for_module(frm.meta.module);
 					print_view.show(frm);
 				});
 			});
@@ -127,7 +128,7 @@ frappe.ui.form.PrintView = class {
 			description =
 				"<div class='form-message yellow p-3 mt-3'>" +
 				__("Footer might not be visible as {0} option is disabled</div>", [
-					`<a href="/app/print-settings/Print Settings">${__(
+					`<a href="/desk/print-settings/Print Settings">${__(
 						"Repeat Header and Footer"
 					)}</a>`,
 				]);
@@ -198,18 +199,20 @@ frappe.ui.form.PrintView = class {
 		this.setup_customize_dialog();
 
 		// print designer link
-		if (Object.keys(frappe.boot.versions).includes("print_designer")) {
-			this.page.add_inner_message(`
-			<a style="line-height: 2.4" href="/app/print-designer?doctype=${this.frm.doctype}">
-				${__("Try the new Print Designer")}
-			</a>
-			`);
-		} else {
-			this.page.add_inner_message(`
-			<a style="line-height: 2.4" href="https://frappecloud.com/marketplace/apps/print_designer?utm_source=framework-desk&utm_medium=print-view&utm_campaign=try-link">
-				${__("Try the new Print Designer")}
-			</a>
-			`);
+		if (!cint(frappe.boot.sysdefaults.disable_product_suggestion)) {
+			if (Object.keys(frappe.boot.versions).includes("print_designer")) {
+				this.page.add_inner_message(`
+				<a style="line-height: 2.4" href="/desk/print-designer?doctype=${this.frm.doctype}">
+					${__("Try the new Print Designer")}
+				</a>
+				`);
+			} else {
+				this.page.add_inner_message(`
+				<a style="line-height: 2.4" href="https://frappecloud.com/marketplace/apps/print_designer?utm_source=framework-desk&utm_medium=print-view&utm_campaign=try-link">
+					${__("Try the new Print Designer")}
+				</a>
+				`);
+			}
 		}
 		let tasks = [
 			this.set_default_print_format,
@@ -259,12 +262,28 @@ frappe.ui.form.PrintView = class {
 			print_format.name &&
 			(print_format.print_format_builder || print_format.print_format_builder_beta) &&
 			print_format.standard === "No";
-		let is_standard_but_editable = print_format.name && print_format.custom_format;
 
-		if (is_standard_but_editable) {
+		let is_standard_jinja_custom =
+			print_format.standard === "Yes" &&
+			print_format.custom_format &&
+			print_format.print_format_type === "Jinja";
+
+		if (is_standard_jinja_custom) {
+			let doc = frappe.get_doc("Print Format", print_format.name);
+			frappe.model.with_doctype("Print Format", () => {
+				let newdoc = frappe.model.copy_doc(doc);
+				frappe.set_route("Form", "Print Format", newdoc.name);
+			});
+			return;
+		}
+
+		let is_editable = print_format.name && print_format.custom_format;
+
+		if (is_editable) {
 			frappe.set_route("Form", "Print Format", print_format.name);
 			return;
 		}
+
 		if (is_custom_format) {
 			if (print_format.print_format_builder_beta) {
 				frappe.set_route("print-format-builder-beta", print_format.name);
@@ -680,11 +699,15 @@ frappe.ui.form.PrintView = class {
 			}
 		} else {
 			this.is_wkhtmltopdf_valid();
-			this.render_page("/api/method/frappe.utils.print_format.download_pdf?");
+			this.render_page(
+				"/api/method/frappe.utils.print_format.download_pdf?",
+				false,
+				print_format?.pdf_generator
+			);
 		}
 	}
 
-	render_page(method, printit = false) {
+	render_page(method, printit = false, pdf_generator = "wkhtmltopdf") {
 		let w = window.open(
 			frappe.urllib.get_full_url(
 				method +
@@ -701,7 +724,9 @@ frappe.ui.form.PrintView = class {
 					encodeURIComponent(this.get_letterhead()) +
 					"&settings=" +
 					encodeURIComponent(JSON.stringify(this.additional_settings)) +
-					(this.lang_code ? "&_lang=" + this.lang_code : "")
+					(this.lang_code ? "&_lang=" + this.lang_code : "") +
+					"&pdf_generator=" +
+					encodeURIComponent(pdf_generator)
 			)
 		);
 		if (!w) {

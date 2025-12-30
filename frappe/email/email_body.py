@@ -237,11 +237,12 @@ class EMail:
 		"""Append the message with MIME content to the root node (as attachment)"""
 		from email.mime.text import MIMEText
 
-		maintype, subtype = mime_type.split("/")
+		_maintype, subtype = mime_type.split("/")
 		part = MIMEText(message, _subtype=subtype, policy=policy.SMTP)
 
 		if as_attachment:
-			part.add_header("Content-Disposition", "attachment", filename=filename)
+			clean_filename = re.sub("[\r\n]", "", str(filename))
+			part.add_header("Content-Disposition", "attachment", filename=clean_filename)
 
 		self.msg_root.attach(part)
 
@@ -445,7 +446,7 @@ def add_attachment(fname, fcontent, content_type=None, parent=None, content_id=N
 	from email.mime.text import MIMEText
 
 	if not content_type:
-		content_type, encoding = mimetypes.guess_type(fname)
+		content_type, _encoding = mimetypes.guess_type(fname)
 
 	if not parent:
 		return
@@ -476,7 +477,8 @@ def add_attachment(fname, fcontent, content_type=None, parent=None, content_id=N
 	# Set the filename parameter
 	if fname:
 		attachment_type = "inline" if inline else "attachment"
-		part.add_header("Content-Disposition", attachment_type, filename=str(fname))
+		clean_filename = re.sub("[\r\n]", "", str(fname))
+		part.add_header("Content-Disposition", attachment_type, filename=clean_filename)
 	if content_id:
 		part.add_header("Content-ID", f"<{content_id}>")
 
@@ -597,7 +599,7 @@ def get_header(header=None):
 	if not title:
 		title = frappe.get_hooks("app_title")[-1]
 
-	email_header, text = get_email_from_template(
+	email_header, _text = get_email_from_template(
 		"email_header", {"header_title": title, "indicator": indicator}
 	)
 

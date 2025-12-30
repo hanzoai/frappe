@@ -8,7 +8,7 @@ permission, homepage, default variables, system defaults etc
 """
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 from urllib.parse import unquote
 
 import redis
@@ -257,6 +257,9 @@ class Session:
 		self.data.data.user = self.user
 		self.data.data.session_ip = frappe.local.request_ip
 
+		if frappe.request:
+			self.data.data.user_agent = frappe.request.headers.get("User-Agent")
+
 		if session_end:
 			self.data.data.session_end = session_end
 
@@ -367,7 +370,7 @@ class Session:
 
 			if self.time_diff > expiry or (
 				(session_end := session_data.get("session_end"))
-				and datetime.now(tz=timezone.utc) > datetime.fromisoformat(session_end)
+				and datetime.now(tz=UTC) > datetime.fromisoformat(session_end)
 			):
 				self._delete_session()
 				data = None
@@ -420,6 +423,7 @@ class Session:
 		) and not frappe.flags.read_only:
 			self.data.data.last_updated = now
 			self.data.data.lang = str(frappe.lang)
+			self.data.data.session_ip = frappe.local.request_ip
 
 			Sessions = frappe.qb.DocType("Sessions")
 			# update sessions table

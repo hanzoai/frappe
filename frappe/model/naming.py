@@ -137,7 +137,7 @@ class NamingSeries:
 
 	def get_current_value(self) -> int:
 		prefix = self.get_prefix()
-		return cint(frappe.db.get_value("Series", prefix, "current", order_by="name"))
+		return cint(frappe.db.get_value("Series", prefix, "current", order_by="name", for_update=True))
 
 
 def set_new_name(doc):
@@ -200,7 +200,7 @@ def set_new_name(doc):
 	doc.name = validate_name(doc.doctype, doc.name)
 
 
-def is_autoincremented(doctype: str, meta: Optional["Meta"] = None) -> bool:
+def is_autoincremented(doctype: str, meta: "Meta" | None = None) -> bool:
 	"""Checks if the doctype has autoincrement autoname set"""
 
 	if not meta:
@@ -328,7 +328,7 @@ def _generate_random_string(length=10):
 def parse_naming_series(
 	parts: list[str] | str,
 	doctype=None,
-	doc: Optional["Document"] = None,
+	doc: "Document" | None = None,
 	number_generator: Callable[[str, int], str] | None = None,
 ) -> str:
 	"""Parse the naming series and get next name.

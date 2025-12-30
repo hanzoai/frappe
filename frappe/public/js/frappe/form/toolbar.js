@@ -9,7 +9,6 @@ frappe.ui.form.Toolbar = class Toolbar {
 		$.extend(this, opts);
 		this.refresh();
 		this.add_update_button_on_dirty();
-		this.setup_editable_title();
 	}
 	refresh() {
 		this.make_menu();
@@ -26,7 +25,18 @@ frappe.ui.form.Toolbar = class Toolbar {
 				this.page.hide_menu();
 				this.print_icon && this.print_icon.addClass("hide");
 			} else {
-				this.page.show_menu();
+				const is_children_visible =
+					this.page.menu.children().filter(function () {
+						return (
+							$(this).css("display") !== "none" &&
+							!$(this).hasClass("dropdown-divider")
+						);
+					}).length > 0;
+				if (is_children_visible) {
+					this.page.show_menu();
+				} else {
+					this.page.hide_menu();
+				}
 				this.print_icon && this.print_icon.removeClass("hide");
 			}
 		}
@@ -190,10 +200,15 @@ frappe.ui.form.Toolbar = class Toolbar {
 			}
 		});
 	}
-	setup_editable_title() {
+	setup_editable_title(element) {
 		let me = this;
 
-		this.page.$title_area.find(".title-text").on("click", () => {
+		$(element).tooltip({
+			delay: { show: 100, hide: 100 },
+			trigger: "hover",
+		});
+
+		element.on("click", () => {
 			let fields = [];
 			let docname = me.frm.doc.name;
 			let title_field = me.frm.meta.title_field || "";
@@ -300,8 +315,30 @@ frappe.ui.form.Toolbar = class Toolbar {
 		this.page.clear_menu();
 
 		if (frappe.boot.desk_settings.form_sidebar) {
-			// this.make_navigation();
+			this.make_navigation();
 			this.make_menu_items();
+		}
+	}
+
+	make_navigation() {
+		// Navigate
+		if (!this.frm.is_new() && !this.frm.meta.issingle) {
+			this.page.add_action_icon(
+				"es-line-left-chevron",
+				() => {
+					this.frm.navigate_records(1);
+				},
+				"prev-doc",
+				__("Previous Document")
+			);
+			this.page.add_action_icon(
+				"es-line-right-chevron",
+				() => {
+					this.frm.navigate_records(0);
+				},
+				"next-doc",
+				__("Next Document")
+			);
 		}
 	}
 

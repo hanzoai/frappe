@@ -67,6 +67,7 @@ frappe.ui.form.Form = class FrappeForm {
 			Cancel: "cancel",
 			Amend: "amend",
 			Delete: "delete",
+			Mask: "mask",
 		};
 	}
 
@@ -464,6 +465,8 @@ frappe.ui.form.Form = class FrappeForm {
 			this.show_conflict_message();
 			this.show_submission_queue_banner();
 
+			this.mark_mask_fields_readonly();
+
 			if (frappe.boot.read_only) {
 				this.disable_form();
 			}
@@ -602,6 +605,7 @@ frappe.ui.form.Form = class FrappeForm {
 				this.sidebar = new frappe.ui.form.Sidebar({
 					frm: this,
 					page: this.page,
+					toolbar: this.toolbar,
 				});
 				this.sidebar.make();
 			}
@@ -1168,6 +1172,15 @@ frappe.ui.form.Form = class FrappeForm {
 			this.set_df_property(field.df.fieldname, "read_only", "1");
 		});
 		this.disable_save();
+	}
+
+	mark_mask_fields_readonly() {
+		const masked_fields = this.meta.masked_fields || [];
+
+		masked_fields.forEach((fieldname) => {
+			this.set_df_property(fieldname, "read_only", 1);
+			this.set_df_property(fieldname, "fieldtype", "Data");
+		});
 	}
 
 	handle_save_fail(btn, on_error) {
@@ -1836,6 +1849,7 @@ frappe.ui.form.Form = class FrappeForm {
 				share: p.share,
 				print: p.print,
 				email: p.email,
+				mask: p.mask,
 			};
 		});
 		this.refresh_fields();
@@ -1866,7 +1880,7 @@ frappe.ui.form.Form = class FrappeForm {
 		// returns list of children that are selected. returns [parentfield, name] for each
 		var selected = {},
 			me = this;
-		frappe.meta.get_table_fields(this.doctype).forEach(function (df) {
+		frappe.meta.get_table_fields(this.doctype, true).forEach(function (df) {
 			// handle TableMultiselect child fields
 			let _selected = [];
 
@@ -1887,7 +1901,7 @@ frappe.ui.form.Form = class FrappeForm {
 		if (frappe.meta.docfield_map[this.doctype][fieldname]) {
 			doctype = this.doctype;
 		} else {
-			frappe.meta.get_table_fields(this.doctype).every(function (df) {
+			frappe.meta.get_table_fields(this.doctype, true).every(function (df) {
 				if (frappe.meta.docfield_map[df.options][fieldname]) {
 					doctype = df.options;
 					return false;
@@ -1917,7 +1931,7 @@ frappe.ui.form.Form = class FrappeForm {
 
 				return `
 						<a class="indicator ${get_color(doc || {})}"
-							href="/app/${frappe.router.slug(df.options)}/${escaped_name}"
+							href="/desk/${frappe.router.slug(df.options)}/${escaped_name}"
 							data-doctype="${df.options}"
 							data-name="${frappe.utils.escape_html(value)}">
 							${label}
@@ -2015,9 +2029,10 @@ frappe.ui.form.Form = class FrappeForm {
 
 	scroll_to_field(fieldname, focus = true) {
 		let field = this.get_field(fieldname);
-		if (!field) return;
+		if (!field) return false;
 
 		let $el = field.$wrapper;
+		if (!$el || !$el.length) return false;
 
 		// set tab as active
 		if (field.tab && !field.tab.is_active()) {
@@ -2041,10 +2056,12 @@ frappe.ui.form.Form = class FrappeForm {
 
 		// highlight control inside field
 		let control_element = $el.closest(".frappe-control");
-		control_element.addClass("highlight");
-		setTimeout(() => {
-			control_element.removeClass("highlight");
-		}, 2000);
+		if (control_element.length) {
+			control_element.addClass("highlight");
+			setTimeout(() => {
+				control_element.removeClass("highlight");
+			}, 2000);
+		}
 		return true;
 	}
 
@@ -2224,7 +2241,7 @@ frappe.ui.form.Form = class FrappeForm {
 						secondary = `
 						</div>
 						<div class="col-md-6">
-							<a href='/app/submission-queue?ref_doctype=${encodeURIComponent(
+							<a href='/desk/submission-queue?ref_doctype=${encodeURIComponent(
 								this.doctype
 							)}&ref_docname=${encodeURIComponent(this.docname)}'>${__(
 							"All Submissions"
@@ -2235,7 +2252,7 @@ frappe.ui.form.Form = class FrappeForm {
 					let html = `
 					<div class="row">
 						<div class="${div_class}">
-							<a href='/app/submission-queue/${r.message.latest_submission}'>${submission_label} (${r.message.status})</a>${secondary}
+							<a href='/desk/submission-queue/${r.message.latest_submission}'>${submission_label} (${r.message.status})</a>${secondary}
 						</div>
 					</div>
 					`;

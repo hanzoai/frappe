@@ -5,7 +5,7 @@ import io
 import json
 import os
 import sys
-from datetime import date, datetime, time, timedelta, timezone
+from datetime import UTC, date, datetime, time, timedelta, timezone
 from decimal import ROUND_HALF_UP, Decimal, localcontext
 from enum import Enum
 from io import StringIO
@@ -31,6 +31,7 @@ from frappe.utils import (
 	get_bench_path,
 	get_file_timestamp,
 	get_gravatar,
+	get_link_to_report,
 	get_site_info,
 	get_sites,
 	get_url,
@@ -64,6 +65,7 @@ from frappe.utils.data import (
 	duration_to_seconds,
 	evaluate_filters,
 	expand_relative_urls,
+	format_duration,
 	get_datetime,
 	get_first_day_of_week,
 	get_time,
@@ -89,6 +91,7 @@ from frappe.utils.image import optimize_image, strip_exif_data
 from frappe.utils.make_random import can_make, get_random, how_many
 from frappe.utils.response import json_handler
 from frappe.utils.synchronization import LockTimeoutError, filelock
+from frappe.utils.typing_validations import FrappeTypeError, validate_argument_types
 
 
 class Capturing(list):
@@ -342,6 +345,13 @@ class TestFilters(IntegrationTestCase):
 		self.assertTrue(compare(None, "is", "Not Set"))
 		self.assertTrue(compare(None, "is", "not set"))
 
+	def test_get_link_to_report_with_between_filter(self):
+		filters = {
+			"creation": [["between", ["2024-01-01", "2024-12-31"]]],
+		}
+		link = get_link_to_report(name="ToDo", filters=filters)
+		self.assertIn('creation=["between",["2024-01-01","2024-12-31"]]', link)
+
 
 class TestMoney(IntegrationTestCase):
 	def test_money_in_words(self):
@@ -468,7 +478,7 @@ class TestMathUtils(IntegrationTestCase):
 		self.assertEqual(floor(22.7330), 22)
 		self.assertEqual(floor("24.7"), 24)
 		self.assertEqual(floor("26.7"), 26)
-		self.assertEqual(floor(Decimal(29.45)), 29)
+		self.assertEqual(floor(Decimal("29.45")), 29)
 
 	def test_ceil(self):
 		from decimal import Decimal
@@ -478,7 +488,7 @@ class TestMathUtils(IntegrationTestCase):
 		self.assertEqual(ceil(22.7330), 23)
 		self.assertEqual(ceil("24.7"), 25)
 		self.assertEqual(ceil("26.7"), 27)
-		self.assertEqual(ceil(Decimal(29.45)), 30)
+		self.assertEqual(ceil(Decimal("29.45")), 30)
 
 
 class TestHTMLUtils(IntegrationTestCase):
@@ -565,6 +575,39 @@ class TestValidationUtils(IntegrationTestCase):
 		self.assertEqual(
 			validate_email_address("erp+Job%20Applicant=JA00004@frappe.com"),
 			"erp+Job%20Applicant=JA00004@frappe.com",
+		)
+
+		# RFC 5322 format - Display name with comma (main bug fix)
+		self.assertEqual(
+			validate_email_address('"Lastname, Firstname" <test@example.com>'), "test@example.com"
+		)
+		self.assertEqual(validate_email_address('"Doe, John" <john.doe@example.com>'), "john.doe@example.com")
+
+		# RFC 5322 format - Display name without comma
+		self.assertEqual(validate_email_address("Test User <test@example.com>"), "test@example.com")
+
+		# RFC 5322 format - Multiple emails
+		self.assertEqual(
+			validate_email_address('"Last, First" <test1@example.com>, "Another, Name" <test2@example.com>'),
+			"test1@example.com, test2@example.com",
+		)
+
+		# RFC 5322 format - Mixed with plain emails
+		self.assertEqual(
+			validate_email_address("Test User <test@example.com>, plain@example.com"),
+			"test@example.com, plain@example.com",
+		)
+
+		# Emails with newlines
+		self.assertEqual(
+			validate_email_address("test1@example.com\ntest2@example.com"),
+			"test1@example.com, test2@example.com",
+		)
+
+		# Undisclosed recipients should be filtered
+		self.assertEqual(validate_email_address("undisclosed-recipients:;"), "")
+		self.assertEqual(
+			validate_email_address("test@example.com, undisclosed-recipients:;"), "test@example.com"
 		)
 
 	def test_valid_phone(self):
@@ -784,6 +827,24 @@ class TestDateUtils(IntegrationTestCase):
 		self.assertEqual(duration_to_seconds("110m"), 110 * 60)
 		self.assertEqual(duration_to_seconds("110m"), 110 * 60)
 
+	def test_format_duration(self):
+		# Basic positive durations
+		self.assertEqual(format_duration(0), "")
+		self.assertEqual(format_duration(45.7), "45s")
+		self.assertEqual(format_duration(90.9), "1m 30s")
+		self.assertEqual(format_duration(3600), "1h")
+		self.assertEqual(format_duration("12885"), "3h 34m 45s")
+		self.assertEqual(format_duration(86400), "1d")
+		self.assertEqual(format_duration(86401), "1d 1s")
+
+		# Negative durations
+		self.assertEqual(format_duration(-45.3), "-45s")
+		self.assertEqual(format_duration(-12885), "-3h 34m 45s")
+
+		# hide_days parameter
+		self.assertEqual(format_duration(86400, hide_days=True), "24h")
+		self.assertEqual(format_duration(90061, hide_days=True), "25h 1m 1s")
+
 	def test_get_timespan_date_range(self):
 		supported_timespans = [
 			"last week",
@@ -900,13 +961,13 @@ class TestResponse(IntegrationTestCase):
 					minute=23,
 					second=23,
 					microsecond=23,
-					tzinfo=timezone.utc,
+					tzinfo=UTC,
 				),
-				time(hour=23, minute=23, second=23, microsecond=23, tzinfo=timezone.utc),
+				time(hour=23, minute=23, second=23, microsecond=23, tzinfo=UTC),
 				timedelta(days=10, hours=12, minutes=120, seconds=10),
 			],
 			"float": [
-				Decimal(29.21),
+				Decimal("29.21"),
 			],
 			"doc": [
 				frappe.get_doc("System Settings"),
@@ -1177,7 +1238,7 @@ class TestMiscUtils(IntegrationTestCase):
 		self.assertIsInstance(get_file_timestamp(__file__), str)
 
 	def test_execute_in_shell(self):
-		err, out = execute_in_shell("ls")
+		_err, out = execute_in_shell("ls")
 		self.assertIn("apps", cstr(out))
 
 	def test_get_all_sites(self):
@@ -1191,8 +1252,8 @@ class TestMiscUtils(IntegrationTestCase):
 		self.assertGreaterEqual(len(info["users"]), 1)
 
 	def test_get_url_to_form(self):
-		self.assertTrue(get_url_to_form("System Settings").endswith("/app/system-settings"))
-		self.assertTrue(get_url_to_form("User", "Test User").endswith("/app/user/Test%20User"))
+		self.assertTrue(get_url_to_form("System Settings").endswith("/desk/system-settings"))
+		self.assertTrue(get_url_to_form("User", "Test User").endswith("/desk/user/Test%20User"))
 
 	def test_safe_json_load(self):
 		self.assertEqual(safe_json_loads("{}"), {})
@@ -1219,11 +1280,11 @@ class TestTypingValidations(IntegrationTestCase):
 	ERR_REGEX = "^Argument '.*' should be of type '.*' but got '.*' instead.$"
 
 	def test_validate_whitelisted_api(self):
-		@frappe.whitelist()
+		@validate_argument_types
 		def simple(string: str, number: int):
 			return
 
-		@frappe.whitelist()
+		@validate_argument_types
 		def varkw(string: str, **kwargs):
 			return
 
@@ -1436,10 +1497,6 @@ class TestArgumentTypingValidations(IntegrationTestCase):
 		from unittest.mock import AsyncMock, MagicMock, Mock
 
 		from frappe.core.doctype.doctype.doctype import DocType
-		from frappe.utils.typing_validations import (
-			FrappeTypeError,
-			validate_argument_types,
-		)
 
 		@validate_argument_types
 		def test_simple_types(a: int, b: float, c: bool):
