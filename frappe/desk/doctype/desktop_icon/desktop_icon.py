@@ -46,8 +46,13 @@ class DesktopIcon(Document):
 
 	def on_trash(self):
 		clear_desktop_icons_cache()
+		self.check_for_restrict_removal()
 		if frappe.conf.developer_mode and self.standard and self.app:
 			self.delete_desktop_icon_file()
+
+	def check_for_restrict_removal(self):
+		if self.restrict_removal:
+			frappe.throw(_("Cannot delete Desktop Icon '{0}' as it is restricted").format(self.label))
 
 	def on_update(self):
 		allow_export = (
@@ -150,7 +155,7 @@ def get_desktop_icons(user=None, bootinfo=None):
 			"logo_url",
 			"hidden",
 			"name",
-			"sidebar",
+			"restrict_removal",
 		]
 
 		active_domains = frappe.get_active_domains()
