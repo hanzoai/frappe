@@ -287,9 +287,9 @@ class DesktopPage {
 		frappe.ui.create_menu({
 			parent: $(".desktop-avatar"),
 			menu_items: menu_items,
-			// If it's RTL, we want it to open on the right (false); 
+			// If it's RTL, we want it to open on the right (false);
 			// if it's LTR, we want it to open on the left (true).
-			open_on_left: !frappe.utils.is_rtl()
+			open_on_left: !frappe.utils.is_rtl(),
 		});
 	}
 	setup_navbar() {
