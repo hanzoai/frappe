@@ -486,7 +486,6 @@
     border-bottom: 1px solid var(--border-color);
 }
 .pane-icons-area{
-    height: 100%;
     .icons-container {
         height: 100%;
         margin-top: 0px;
