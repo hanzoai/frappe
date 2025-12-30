@@ -42,12 +42,39 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 			},
 		];
 		if (frappe.boot.desk_settings.notifications) {
-			this.dropdown_items.push({
-				name: "help",
-				label: "Help",
-				icon: "info",
-				items: this.get_help_siblings(),
-			});
+			let is_dark = frappe.ui.get_current_theme() === "dark";
+			this.dropdown_items.push(
+				{
+					name: "help",
+					label: "Help",
+					icon: "info",
+					items: this.get_help_siblings(),
+				},
+				{
+					label: "Session Defaults",
+					action: "frappe.ui.toolbar.setup_session_defaults()",
+					is_standard: 1,
+					icon: "sliders-horizontal",
+				},
+				{
+					label: "Reload",
+					action: "frappe.ui.toolbar.clear_cache()",
+					is_standard: 1,
+					icon: "rotate-ccw",
+				},
+				{
+					label: "Toggle Full Width",
+					action: "frappe.ui.toolbar.toggle_full_width()",
+					is_standard: 1,
+					icon: "maximize",
+				},
+				{
+					label: "Toggle Theme",
+					action: "new frappe.ui.ThemeSwitcher().show()",
+					is_standard: 1,
+					icon: is_dark ? "sun" : "moon",
+				}
+			);
 		}
 		this.make();
 		this.setup_app_switcher();
