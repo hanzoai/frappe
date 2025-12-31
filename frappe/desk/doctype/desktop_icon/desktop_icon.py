@@ -181,9 +181,6 @@ def get_desktop_icons(user=None, bootinfo=None):
 		# 			icon.hidden = 0
 
 		# sort by idx
-		for icon in user_icons:
-			print(icon.label)
-			print(icon.idx)
 		user_icons.sort(key=lambda a: a.idx)
 
 		permitted_icons = []
