@@ -222,7 +222,7 @@ export default class Grid {
 
 			const num_selected_rows = this.get_selected_children().length;
 
-			// toggle "Add Row" button
+			// toggle "Add row" button
 			this.wrapper.find(".grid-add-row").toggleClass("hidden", num_selected_rows > 0);
 
 			// update "Delete" and "Duplicate" button labels
