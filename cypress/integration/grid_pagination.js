@@ -43,7 +43,7 @@ context("Grid Pagination", () => {
 		cy.get("@table").find(".current-page-number").should("have.value", "21");
 		cy.get("@table").find(".total-page-number").should("contain", "21");
 		cy.get("@table").find(".grid-body .grid-row .grid-row-check").click({ force: true });
-		cy.get("@table").findByRole("button", { name: "Delete" }).click();
+		cy.get("@table").findByRole("button", { name: "Delete row" }).click();
 		cy.get("@table").find(".grid-body .row-index").last().should("contain", 1000);
 		cy.get("@table").find(".current-page-number").should("have.value", "20");
 		cy.get("@table").find(".total-page-number").should("contain", "20");
