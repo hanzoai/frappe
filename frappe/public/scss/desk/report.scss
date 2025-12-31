@@ -231,6 +231,7 @@
 			background: var(--card-bg);
 			border-radius: var(--border-radius-sm, 4px);
 			border: 1px solid var(--dark-border-color);
+			padding: 4px 6px;
 
 			&.green {
 				color: var(--green-500);
