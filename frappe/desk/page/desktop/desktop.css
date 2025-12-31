@@ -495,3 +495,9 @@
         overflow: scroll;
     }
 }
+
+.add-new-icon{
+    cursor: pointer;
+    gap: 0px;
+    justify-content: center;
+}

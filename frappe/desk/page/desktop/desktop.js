@@ -1,6 +1,7 @@
 frappe.desktop_utils = {};
 frappe.desktop_grids = [];
 frappe.desktop_icons_objects = [];
+frappe.new_icons = [];
 $.extend(frappe.desktop_utils, {
 	modal: null,
 	modal_stack: [],
@@ -211,6 +212,7 @@ class DesktopPage {
 				col: 3,
 			},
 		});
+		this.setup_context_menu();
 		if (this.edit_mode) {
 			this.start_editing_layout();
 		}
@@ -239,7 +241,7 @@ class DesktopPage {
 			me.start_editing_layout();
 		});
 	}
-	setup_editing_mode() {
+	setup_context_menu() {
 		const me = this;
 		let menu_items = [
 			{
@@ -280,7 +282,6 @@ class DesktopPage {
 	}
 	stop_editing_layout(action) {
 		this.edit_mode = false;
-
 		$(".desktop-icon").removeClass("edit-mode");
 		$(".desktop-wrapper").removeAttr("data-mode");
 		if (action === "cancel") {
@@ -307,13 +308,39 @@ class DesktopPage {
 		frappe.desktop_icons_objects.forEach((icon_object) => {
 			icon_object.setup_dragging();
 		});
-		if (this.edit_mode) this.setup_edit_buttons();
+		this.add_new_icons_to_grid();
+		if (this.edit_mode) {
+			this.setup_edit_buttons();
+		}
+	}
+	add_new_icons_to_grid() {
+		let grid = $($(".desktop-container .icons").get(0));
+		let desktop_icon = `<div class="desktop-icon desktop-edit-mode add-new-icon" title="Add New Icon">
+		 ${frappe.utils.icon("plus", "lg")}
+		 New Icon
+		 </div>`;
+		grid.append(desktop_icon);
+		$(".add-new-icon").on("click", function () {
+			frappe.ui.form.make_quick_entry(
+				"Desktop Icon",
+				function (icon) {
+					frappe.new_desktop_icons.push(icon);
+					frappe.new_icons.push(icon.name);
+					frappe.pages["desktop"].desktop_page.update();
+				},
+				"",
+				"",
+				null,
+				true
+			);
+		});
 	}
 	setup_edit_buttons() {
 		const me = this;
 		this.$edit_button = $(".edit-mode-buttons");
 		this.$edit_button.find(".discard").on("click", function () {
 			me.stop_editing_layout("cancel");
+			me.delete_new_icons();
 		});
 		this.$edit_button.find(".save").on("click", function () {
 			me.stop_editing_layout("submit");
@@ -325,6 +352,12 @@ class DesktopPage {
 			full_height: false,
 		});
 	}
+
+	delete_new_icons() {
+		const bulk_operations = new frappe.ui.BulkOperations({ doctype: "Desktop Icon" });
+		bulk_operations.delete(frappe.new_icons);
+	}
+
 	setup_avatar() {
 		$(".desktop-avatar").html(frappe.avatar(frappe.session.user, "avatar-medium"));
 		let is_dark = document.documentElement.getAttribute("data-theme") === "dark";
