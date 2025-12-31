@@ -582,6 +582,72 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	move_check_filter_area() {
+		this.page.page_form.append(this.check_filter_area);
+	}
+
+	setup_check_filter_area() {
+		let check_filter_area = "<div class='check-filter-area'> </div>";
+		this.page.page_form.append(check_filter_area);
+		this.check_filter_area = this.page.page_form.find(".check-filter-area");
+	}
+
+	get_filter_row_length() {
+		let max_width = document.documentElement.clientWidth;
+		let all_filters_position = this.filters.map((f) => f.wrapper.getBoundingClientRect().x);
+		let closest_width = all_filters_position.reduce(function (prev, curr) {
+			return Math.abs(curr - max_width) < Math.abs(prev - max_width) ? curr : prev;
+		});
+		return all_filters_position.indexOf(closest_width) + 1;
+	}
+
+	toggle_filter_visiblity() {
+		let icon_name;
+		if (this.filters_hidden) {
+			for (let i = this.filter_row_length; i < this.filters.length; i++) {
+				$(this.filters[i].wrapper).addClass("hidden");
+			}
+			this.check_filter_area && this.check_filter_area.css("display", "none");
+			this.filters_hidden = false;
+			icon_name = "chevron-down";
+		} else {
+			for (let i = this.filter_row_length; i < this.filters.length; i++) {
+				$(this.filters[i].wrapper).removeClass("hidden");
+			}
+			this.check_filter_area.css("display", "flex");
+			this.filters_hidden = true;
+			icon_name = "chevron-up";
+		}
+		this.$collapse_button.find("use").attr("href", `#icon-${icon_name}`);
+	}
+
+	add_collapse_button() {
+		const me = this;
+		let filter_no = this.filter_row_length - 1;
+		if (this.filters[filter_no]) {
+			this.$collapse_button = $(`<div>${frappe.utils.icon("chevron-down", "md")}</div>`);
+			$(this.filters[filter_no].wrapper).append(this.$collapse_button);
+			$(this.filters[filter_no].wrapper).css("display", "flex");
+			$(this.filters[filter_no].wrapper).css("align-items", "center");
+			$(this.filters[filter_no].wrapper).css("gap", "5px");
+			this.$collapse_button.on("click", function () {
+				me.toggle_filter_visiblity();
+			});
+		}
+	}
+	handle_filter_styles(wrapper) {
+		if (wrapper.find("select")) {
+			wrapper.find(".select-icon").css("left", wrapper.find("select").width() + 18 + "px");
+		}
+
+		if (wrapper.find(".multiselect-list")) {
+			wrapper.find(".multiselect-list").css("flex", "1 0");
+		}
+	}
+
+>>>>>>> 71c85f1f53 (fix: render report letterhead jinja on print/pdf)
 	set_filters(filters) {
 		this.filters.map((f) => {
 			if (f.fieldtype == "MultiSelectList") {
@@ -1425,6 +1491,8 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 		const custom_format = await this.get_custom_format(print_settings);
 
+		await this.render_report_letterhead(print_settings);
+
 		this.make_access_log("Print", "PDF");
 
 		frappe.render_grid({
@@ -1449,10 +1517,11 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 		const custom_format = await this.get_custom_format(print_settings);
 
+		await this.render_report_letterhead(print_settings);
+
 		const columns = this.get_columns_for_print(print_settings, custom_format);
 		const data = this.get_data_for_print();
 		const applied_filters = this.get_filter_values();
-
 		const filters_html = this.get_filters_html_for_print();
 		const template = this.get_print_template(print_settings, custom_format);
 		const content = frappe.render_template(template, {
@@ -1499,8 +1568,10 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 	async get_custom_format(print_settings) {
 		let custom_format = this.report_settings.html_format || null;
 
-		if (print_settings.print_format) {
-			custom_format = await this.get_report_print_format(print_settings.print_format);
+		const print_format = print_settings.print_format || print_settings.report;
+
+		if (print_format) {
+			custom_format = await this.get_report_print_format(print_format);
 		} else if (
 			!print_settings.columns?.length &&
 			typeof this.report_settings.get_pdf_format === "function"
@@ -1528,6 +1599,32 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		} else {
 			frappe.msgprint(__("Print Format not found"));
 			return null;
+		}
+	}
+
+	async render_report_letterhead(print_settings) {
+		if (!print_settings.with_letter_head || !print_settings.letter_head_name) return;
+		if (print_settings.__letter_head_rendered) return;
+
+		const filters = this.get_filter_values ? this.get_filter_values() : {};
+		const doc_context = Object.assign({}, filters);
+
+		if (!doc_context.company) {
+			doc_context.company = frappe.defaults.get_default("company");
+		}
+
+		try {
+			const r = await frappe.call("frappe.utils.print_format.render_letterhead_for_print", {
+				letterhead: print_settings.letter_head_name,
+				doc: doc_context,
+			});
+			if (r.message) {
+				print_settings.letter_head = r.message;
+				print_settings.__letter_head_rendered = true;
+			}
+		} catch (e) {
+			// fall back silently if rendering fails
+			console.warn("[Query Report] Letterhead render failed", e);
 		}
 	}
 
