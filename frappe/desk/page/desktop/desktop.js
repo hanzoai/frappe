@@ -43,16 +43,24 @@ function get_route(desktop_icon) {
 	if (desktop_icon.link_type == "External" && desktop_icon.link) {
 		route = window.location.origin + desktop_icon.link;
 	} else {
-		if (desktop_icon.link_type == "Workspace") {
-			item = {
-				type: desktop_icon.link_type,
-				link: frappe.router.slug(desktop_icon.link_to),
-			};
-		} else if (desktop_icon.link_type == "DocType" || desktop_icon.link_type == "list") {
-			item = {
-				type: desktop_icon.link_type,
-				name: desktop_icon.link_to,
-			};
+		let sidebar = frappe.boot.workspace_sidebar_item[desktop_icon.label.toLowerCase()];
+		if (desktop_icon.link_type == "Workspace Sidebar" && sidebar) {
+			let first_link = sidebar.items.find((i) => i.type == "Link");
+			switch (first_link.link_type) {
+				case "Report":
+					item = {
+						type: first_link.link_type,
+						is_query_report: first_link.report.report_type == "Query Report" ? 1 : 0,
+						name: frappe.router.slug(first_link.link_to),
+					};
+					break;
+				default:
+					item = {
+						type: first_link.link_type,
+						name: frappe.router.slug(first_link.link_to),
+					};
+					break;
+			}
 		}
 		route = frappe.utils.generate_route(item);
 	}

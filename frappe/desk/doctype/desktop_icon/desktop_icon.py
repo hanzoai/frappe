@@ -25,14 +25,16 @@ class DesktopIcon(Document):
 
 		app: DF.Autocomplete | None
 		hidden: DF.Check
-		icon_type: DF.Literal["Folder", "App", "Link"]
+		icon_image: DF.Attach | None
+		icon_type: DF.Literal["Link", "Folder", "App"]
 		idx: DF.Int
 		label: DF.Data | None
 		link: DF.SmallText | None
 		link_to: DF.DynamicLink | None
-		link_type: DF.Literal["DocType", "Workspace", "External"]
+		link_type: DF.Literal["Workspace Sidebar", "External"]
 		logo_url: DF.Data | None
 		parent_icon: DF.Link | None
+		restrict_removal: DF.Check
 		roles: DF.Table[HasRole]
 		sidebar: DF.Link | None
 		standard: DF.Check
