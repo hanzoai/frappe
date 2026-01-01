@@ -641,11 +641,15 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		const me = this;
 		let filter_no = this.filter_row_length - 1;
 		if (this.filters[filter_no]) {
-			this.$collapse_button = $(`<div>${frappe.utils.icon("chevron-down", "md")}</div>`);
+			this.$collapse_button = $(`<div>${frappe.utils.icon("chevron-down")}</div>`);
 			$(this.filters[filter_no].wrapper).append(this.$collapse_button);
 			$(this.filters[filter_no].wrapper).css("display", "flex");
 			$(this.filters[filter_no].wrapper).css("align-items", "center");
-			$(this.filters[filter_no].wrapper).css("gap", "5px");
+			$(this.filters[filter_no].wrapper).css("gap", "16px");
+
+			this.$collapse_button.addClass("btn");
+			this.$collapse_button.addClass("btn-xs");
+			this.$collapse_button.addClass("btn-secondary");
 			this.$collapse_button.on("click", function () {
 				me.toggle_filter_visiblity();
 			});
