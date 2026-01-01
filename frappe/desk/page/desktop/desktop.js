@@ -891,6 +891,9 @@ class DesktopIcon {
 				);
 			}
 		} else {
+			if (this.icon_route.startsWith("http")) {
+				this.icon.attr("target", "_blank");
+			}
 			this.icon.attr("href", this.icon_route);
 		}
 		if (this.icon_data.sidebar) {
