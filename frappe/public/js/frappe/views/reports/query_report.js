@@ -44,6 +44,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			this.setup_events,
 		].map((fn) => fn.bind(this));
 		this.init_promise = frappe.run_serially(tasks);
+		this.boolean_labels = { 1: __("Yes"), 0: __("No") };
 		return this.init_promise;
 	}
 
@@ -1524,6 +1525,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 	get_filters_html_for_print() {
 		const applied_filters = this.get_filter_values();
+
 		return Object.keys(applied_filters)
 			.map((fieldname) => {
 				const docfield = frappe.query_report.get_filter(fieldname).df;
@@ -1533,8 +1535,16 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 					return null;
 				}
 
+				let display_value = value;
+
+				if (docfield.fieldtype === "Check") {
+					display_value = this.boolean_labels[cint(value)];
+				} else {
+					display_value = frappe.format(value, docfield);
+				}
+
 				return `<div class="filter-row">
-					<b>${__(docfield.label, null, docfield.parent)}:</b> ${frappe.format(value, docfield)}
+					<strong>${__(docfield.label, null, docfield.parent)}:</strong> ${display_value}
 				</div>`;
 			})
 			.join("");
