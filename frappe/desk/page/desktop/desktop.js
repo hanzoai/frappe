@@ -46,25 +46,50 @@ function get_route(desktop_icon) {
 		let sidebar = frappe.boot.workspace_sidebar_item[desktop_icon.label.toLowerCase()];
 		if (desktop_icon.link_type == "Workspace Sidebar" && sidebar) {
 			let first_link = sidebar.items.find((i) => i.type == "Link");
-			switch (first_link.link_type) {
-				case "Report":
-					item = {
+			if (first_link) {
+				if (first_link.link_type === "Report") {
+					let args = {
 						type: first_link.link_type,
-						is_query_report: first_link.report.report_type == "Query Report" ? 1 : 0,
-						name: frappe.router.slug(first_link.link_to),
+						name: first_link.link_to,
 					};
-					break;
-				default:
-					item = {
+
+					if (first_link.report || !frappe.app.sidebar.editor.edit_mode) {
+						args.is_query_report =
+							first_link.report.report_type === "Query Report" ||
+							first_link.report.report_type == "Script Report";
+						args.report_ref_doctype = first_link.report.ref_doctype;
+					}
+
+					route = frappe.utils.generate_route(args);
+				} else if (first_link.link_type == "Workspace") {
+					let workspaces = frappe.workspaces[frappe.router.slug(first_link.link_to)];
+					if (workspaces.public) {
+						route = "/desk/" + frappe.router.slug(first_link.link_to);
+					} else {
+						route = "/desk/private/" + frappe.router.slug(workspaces.title);
+					}
+
+					if (first_link.route) {
+						route = first_link.route;
+					}
+				} else if (first_link.link_type === "URL") {
+					route = first_link.url;
+				} else if (first_link.link_type == "Page" && first_link.route_options) {
+					route = frappe.utils.generate_route({
 						type: first_link.link_type,
-						name: frappe.router.slug(first_link.link_to),
-					};
-					break;
+						name: first_link.link_to,
+						route_options: JSON.parse(first_link.route_options),
+					});
+				} else {
+					route = frappe.utils.generate_route({
+						type: first_link.link_type,
+						name: first_link.link_to,
+						tab: first_link.tab,
+					});
+				}
 			}
 		}
-		route = frappe.utils.generate_route(item);
 	}
-
 	return route;
 }
 
