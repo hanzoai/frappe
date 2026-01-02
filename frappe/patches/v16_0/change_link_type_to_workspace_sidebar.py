@@ -9,4 +9,5 @@ def execute():
 			icon_doc.link_type = "Workspace Sidebar"
 			icon_doc.link_to = icon.name
 			icon_doc.save()
-			frappe.db.commit()
+
+	frappe.db.commit()
