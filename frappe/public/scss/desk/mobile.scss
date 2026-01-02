@@ -320,15 +320,17 @@ body {
 }
 
 @media (max-width: 480px) {
-	.page-title {
-		width: 100%;
-		.title-area {
-			flex-direction: column;
-			align-items: baseline !important;
+	body[data-route^="Form"] {
+		.page-title {
+			width: 100%;
+			.title-area {
+				flex-direction: column;
+				align-items: baseline !important;
 
-			.mobile-no-divider li a {
-				font-size: 14px;
-				padding-bottom: 5px;
+				.mobile-no-divider li a {
+					font-size: 14px;
+					padding-bottom: 5px;
+				}
 			}
 		}
 	}
