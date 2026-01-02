@@ -144,6 +144,9 @@ body[data-route^="Form"] {
 		.form-sidebar {
 			width: var(--form-sidebar-width);
 		}
+		@media (max-width: 991px) {
+			position: relative;
+		}
 	}
 }
 
