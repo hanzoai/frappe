@@ -770,7 +770,8 @@ frappe.ui.Page = class Page {
 		if (icon) {
 			title = `${frappe.utils.icon(icon)} ${title}`;
 		}
-		let title_wrapper = this.$title_area.find(".title-text");
+
+		let title_wrapper = this.$title_area.find(".title-text-form");
 		title_wrapper.html(title);
 		title_wrapper.attr("title", __(tooltip_label) || this.title);
 
