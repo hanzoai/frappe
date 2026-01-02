@@ -321,12 +321,15 @@ body {
 
 @media (max-width: 480px) {
 	body[data-route^="Form"] {
+		.navbar-breadcrumbs {
+			max-width: 165px;
+		}
 		.page-title {
 			width: 100%;
 			.title-area {
-				flex-direction: column;
-				align-items: baseline !important;
-
+				.indicator-pill {
+					margin-left: 5px;
+				}
 				.mobile-no-divider li a {
 					font-size: 14px;
 					padding-bottom: 5px;
