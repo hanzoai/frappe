@@ -21,7 +21,7 @@ def is_enabled() -> bool:
 	)
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist()
 def capture(event_name, site=None, app=None, user=None, properties=None, interval=None):
 	if not is_enabled():
 		return
@@ -46,7 +46,7 @@ def capture(event_name, site=None, app=None, user=None, properties=None, interva
 		frappe.logger("pulse").error(f"pulse-client - capture failed: {e!s}")
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist()
 def bulk_capture(events):
 	if not is_enabled():
 		return
