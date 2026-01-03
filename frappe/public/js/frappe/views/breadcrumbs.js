@@ -231,6 +231,10 @@ frappe.breadcrumbs = {
 		if (view === "form") {
 			let last_crumb = this.$breadcrumbs.find("li").last();
 			last_crumb.addClass("disabled");
+			if (frappe.is_mobile()) {
+				last_crumb.addClass("ellipsis");
+				last_crumb.find("a").addClass("ellipsis");
+			}
 			last_crumb.css("cursor", "copy");
 			last_crumb.click((event) => {
 				event.stopImmediatePropagation();
