@@ -3,10 +3,11 @@ from contextlib import suppress
 from json import JSONDecodeError
 
 import frappe
-from frappe.pulse.utils import anonymize_user, ensure_http, parse_interval, utc_iso
 from frappe.utils import get_request_session
 from frappe.utils.caching import site_cache
 from frappe.utils.frappecloud import on_frappecloud
+
+from .utils import anonymize_user, ensure_http, parse_interval, utc_iso
 
 
 @frappe.whitelist()
