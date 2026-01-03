@@ -4,7 +4,6 @@ from contextlib import suppress
 from orjson import JSONDecodeError
 
 import frappe
-from frappe.rate_limiter import rate_limit
 from frappe.utils import get_request_session
 from frappe.utils.caching import site_cache
 from frappe.utils.frappecloud import on_frappecloud
