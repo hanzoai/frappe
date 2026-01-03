@@ -11,8 +11,8 @@ from frappe.utils.caching import site_cache
 # posthog provider
 from .posthog import POSTHOG_HOST_FIELD, POSTHOG_PROJECT_FIELD
 from .posthog import capture as ph_capture
-from .posthog import capture_doc as ph_capture_doc
-from .posthog import init_telemetry as init_ph_telemetry
+from .posthog import capture_doc as _ph_capture_doc
+from .posthog import init_telemetry as _init_ph_telemetry
 from .posthog import is_enabled as is_posthog_enabled
 
 # pulse provider
@@ -53,5 +53,5 @@ def site_age():
 
 
 # for backward compatibility
-init_telemetry = init_ph_telemetry
-capture_doc = ph_capture_doc
+init_telemetry = _init_ph_telemetry
+capture_doc = _ph_capture_doc
