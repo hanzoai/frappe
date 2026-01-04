@@ -382,6 +382,7 @@ def get_formatted_html(
 	sender=None,
 	with_container=False,
 	raw_html=False,
+	add_css=True,
 ):
 	email_account = email_account or EmailAccount.find_outgoing(match_by_email=sender)
 
@@ -411,7 +412,7 @@ def get_formatted_html(
 	if unsubscribe_link:
 		html = html.replace("<!--unsubscribe link here-->", unsubscribe_link.html)
 
-	return inline_style_in_html(html, add_css=not raw_html)
+	return inline_style_in_html(html, add_css=add_css)
 
 
 @frappe.whitelist()

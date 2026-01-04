@@ -212,6 +212,13 @@ frappe.views.CommunicationComposer = class {
 			},
 			{ fieldtype: "Column Break" },
 			{
+				label: __("Add CSS"),
+				fieldtype: "Check",
+				fieldname: "add_css",
+				default: 1,
+				depends_on: "eval:doc.use_html",
+			},
+			{
 				label: __("Select Attachments"),
 				fieldtype: "HTML",
 				fieldname: "select_attachments",
@@ -881,6 +888,7 @@ frappe.views.CommunicationComposer = class {
 				send_after: form_values.send_after ? form_values.send_after : null,
 				print_language: form_values.print_language,
 				raw_html: form_values.use_html,
+				add_css: form_values.add_css,
 			},
 			btn,
 			callback(r) {
