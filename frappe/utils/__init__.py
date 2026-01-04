@@ -1211,3 +1211,14 @@ class CallbackManager:
 
 	def reset(self):
 		self._functions.clear()
+
+
+def get_frappe_version() -> str:
+	return getattr(frappe, "__version__", "unknown")
+
+
+def get_app_version(app_name: str) -> str:
+	try:
+		return frappe.get_attr(app_name + ".__version__")
+	except Exception:
+		return "0.0.1"
