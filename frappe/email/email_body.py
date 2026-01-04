@@ -385,31 +385,26 @@ def get_formatted_html(
 ):
 	email_account = email_account or EmailAccount.find_outgoing(match_by_email=sender)
 
+	params = {
+		"site_url": get_url(),
+		"title": subject,
+		"print_html": print_html,
+		"subject": subject,
+	}
 	if raw_html:
-		rendered_email = frappe.render_template(
-			message,
-			{
-				"site_url": get_url(),
-				"title": subject,
-				"print_html": print_html,
-				"subject": subject,
-			},
-		)
+		rendered_email = frappe.render_template(message, params)
 
 	else:
-		rendered_email = frappe.get_template("templates/emails/standard.html").render(
+		params.update(
 			{
 				"brand_logo": get_brand_logo(email_account) if with_container or header else None,
 				"with_container": with_container,
-				"site_url": get_url(),
 				"header": get_header(header),
 				"content": message,
 				"footer": get_footer(email_account, footer),
-				"title": subject,
-				"print_html": print_html,
-				"subject": subject,
 			}
 		)
+		rendered_email = frappe.get_template("templates/emails/standard.html").render(params)
 
 	html = scrub_urls(rendered_email)
 
