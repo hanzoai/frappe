@@ -23,6 +23,7 @@ export default class Tab {
 					role="tab"
 					aria-controls="${id}">
 <<<<<<< HEAD
+<<<<<<< HEAD
 					${__(this.label)}
 =======
 <<<<<<< HEAD
@@ -33,6 +34,8 @@ export default class Tab {
 						}
 =======
 >>>>>>> 19cdf236bc (fix: remove icon from form tabs)
+=======
+>>>>>>> dff76a1f07 (fix: clean merge artifacts)
 						${__(this.label, null, this.doctype)}
 >>>>>>> e94fd9e2f3 (fix: remove icon from form tabs)
 				</button>
