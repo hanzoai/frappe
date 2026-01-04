@@ -260,10 +260,11 @@ frappe.views.CommunicationComposer = class {
 	}
 
 	get_content_field() {
-		const content_field = this.dialog.fields_dict.use_html.value
-			? this.dialog.fields_dict.html_content
-			: this.dialog.fields_dict.content;
-		return content_field;
+		if (this.dialog.fields_dict.use_html.value) {
+			return this.dialog.fields_dict.html_content;
+		} else {
+			return this.dialog.fields_dict.content;
+		}
 	}
 
 	get_default_recipients(fieldname) {
@@ -1066,11 +1067,6 @@ frappe.views.CommunicationComposer = class {
 
 		const text = frappe.utils.html2text(html);
 		return text.replace(/\n{3,}/g, "\n\n");
-	}
-
-	get_content_field() {
-		const use_html = this.dialog.get_value("use_html");
-		return use_html ? this.dialog.fields_dict.content_html : this.dialog.fields_dict.content;
 	}
 
 	get_email_content() {
