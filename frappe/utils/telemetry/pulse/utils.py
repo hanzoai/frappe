@@ -1,5 +1,5 @@
 import hashlib
-from datetime import UTC, datetime, timezone
+from datetime import UTC, datetime
 
 import frappe
 
@@ -78,19 +78,8 @@ def parse_interval(interval):
 	return number * multipliers[unit]
 
 
-def get_frappe_version() -> str:
-	return getattr(frappe, "__version__", "unknown")
-
-
 def utc_iso() -> str:
 	return datetime.now(UTC).isoformat()
-
-
-def get_app_version(app_name: str) -> str:
-	try:
-		return frappe.get_attr(app_name + ".__version__")
-	except Exception:
-		return "0.0.1"
 
 
 def ensure_http(url: str) -> str:
