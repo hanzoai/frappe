@@ -69,13 +69,14 @@ def send_queued_events():
 
 
 def post(events):
-	# TODO: implement retry logic
 	session = _create_session()
 	url = _get_ingest_url()
 	data = frappe.as_json({"events": events})
 	resp = session.post(url, data=data, timeout=15)
 	if not (200 <= resp.status_code < 300):
-		frappe.logger("pulse").error(f"pulse-client - post failed: {resp.status_code} {resp.text}")
+		msg = f"pulse-client - post failed: {resp.status_code} {resp.text}"
+		frappe.logger("pulse").error(msg)
+		raise Exception(msg)
 	return resp
 
 
@@ -147,15 +148,30 @@ class EventQueue:
 		frappe.cache.lpush(self.queue, frappe.as_json(event))
 		frappe.cache.ltrim(self.queue, 0, self.queue_size - 1)
 
-	def batch_process(self, fn, batch_size=100, max_batches=10):
+	def batch_process(self, fn, batch_size=100, max_batches=10, max_retries=3, backoff_seconds=1):
+		pending_events = None
+		retry_attempts = 0
+
 		for _ in range(max_batches):
-			events = self.collect(batch_size)
+			events = pending_events or self.collect(batch_size)
 			if not events:
 				break
+
 			try:
 				fn(events)
+				pending_events = None
+				retry_attempts = 0
 			except Exception as e:
-				frappe.logger("pulse").error(f"pulse-client - batch_process failed: {e!s}")
+				retry_attempts += 1
+				if retry_attempts > max_retries:
+					# Tried enough times, re-queue pending events and exit.
+					frappe.logger("pulse").error(f"pulse-client - max retries reached: {e!s}")
+					self._requeue_events(events)
+					break
+
+				pending_events = events
+				time.sleep(backoff_seconds * (2 ** (retry_attempts - 1)))
+				frappe.logger("pulse").error(f"pulse-client - retrying batch due to error: {e!s}")
 
 	def collect(self, batch_size=100):
 		events = []
@@ -167,6 +183,12 @@ class EventQueue:
 			if data:
 				events.append(data)
 		return events
+
+	def _requeue_events(self, events):
+		# Preserve original processing order (FIFO): we pop from right, so re-add in reverse.
+		for event in reversed(events):
+			frappe.cache.rpush(self.queue, frappe.as_json(event))
+		frappe.cache.ltrim(self.queue, 0, self.queue_size - 1)
 
 	def _decode_event(self, event_json):
 		event_json = event_json.decode()
@@ -196,6 +218,7 @@ class EventQueue:
 					"last_sent": last_sent,
 				}
 			)
+		return events
 
 
 @frappe.whitelist()
