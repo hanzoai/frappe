@@ -10,7 +10,6 @@ POSTHOG_PROJECT_FIELD = "posthog_project_id"
 POSTHOG_HOST_FIELD = "posthog_host"
 
 
-@site_cache()
 def is_enabled():
 	return bool(
 		frappe.conf.get(POSTHOG_HOST_FIELD)
