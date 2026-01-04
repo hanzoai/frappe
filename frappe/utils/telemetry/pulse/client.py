@@ -48,6 +48,9 @@ def bulk_capture(events):
 	if not is_enabled():
 		return
 
+	if isinstance(events, str):
+		events = frappe.parse_json(events)
+
 	for event in events:
 		capture(
 			event.get("event_name"),
