@@ -35,14 +35,6 @@ export default class Tab {
 					type="button"
 					role="tab"
 					aria-controls="${id}">
-<<<<<<< HEAD
-						${
-							ICON_MAP[this.label] || this.df.icon
-								? frappe.utils.icon(this.df.icon || ICON_MAP[this.label])
-								: ""
-						}
-=======
->>>>>>> 19cdf236bc (fix: remove icon from form tabs)
 						${__(this.label, null, this.doctype)}
 				</button>
 			</li>
