@@ -235,7 +235,7 @@ frappe.breadcrumbs = {
 		this.append_breadcrumb_element(form_route, docname_title, "title-text-form");
 
 		if (view === "form") {
-			let last_crumb = this.$breadcrumbs.find("li").last();
+			let last_crumb = this.$breadcrumbs.find(".title-text-form").parent();
 			last_crumb.addClass("disabled");
 			if (frappe.is_mobile()) {
 				last_crumb.addClass("ellipsis");
@@ -281,7 +281,7 @@ frappe.breadcrumbs = {
 	},
 
 	clear() {
-		this.$breadcrumbs = $($(".navbar-breadcrumbs")[0]).empty();
+		this.$breadcrumbs = $(".navbar-breadcrumbs").empty();
 		this.append_breadcrumb_element("/desk", frappe.utils.icon("monitor"));
 	},
 
