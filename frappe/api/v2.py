@@ -235,6 +235,206 @@ def execute_doc_method(doctype: str, name: str, method: str | None = None):
 	return result
 
 
+def bulk_delete_docs(doctype: str):
+	"""Bulk delete multiple documents of the same doctype.
+
+	Request body should contain:
+		names: List of document names to delete
+
+	Returns:
+		deleted: List of successfully deleted document names
+		failed: List of failed deletions with error messages
+		total: Total number of documents attempted
+		success_count: Number of successful deletions
+		failure_count: Number of failed deletions
+	"""
+	data = frappe.form_dict
+	names = frappe.parse_json(data.get("names", "[]"))
+
+	if not isinstance(names, list):
+		frappe.throw(_("'names' must be an array"))
+
+	deleted = []
+	failed = []
+
+	for name in names:
+		try:
+			frappe.delete_doc(doctype, name, ignore_missing=False)
+			deleted.append(name)
+		except Exception as e:
+			failed.append({"name": name, "error": str(e)})
+
+	return {
+		"deleted": deleted,
+		"failed": failed,
+		"total": len(names),
+		"success_count": len(deleted),
+		"failure_count": len(failed),
+	}
+
+
+def bulk_delete():
+	"""Bulk delete documents across multiple doctypes.
+
+	Request body should contain:
+		documents: List of {"doctype": str, "name": str} objects
+
+	Returns:
+		deleted: List of successfully deleted documents
+		failed: List of failed deletions with error messages
+		total: Total number of documents attempted
+		success_count: Number of successful deletions
+		failure_count: Number of failed deletions
+	"""
+	data = frappe.form_dict
+	documents = frappe.parse_json(data.get("documents", "[]"))
+
+	if not isinstance(documents, list):
+		frappe.throw(_("Request body must contain 'documents' as an array"))
+
+	deleted = []
+	failed = []
+
+	for item in documents:
+		doctype = None
+		name = None
+		try:
+			if not isinstance(item, dict):
+				raise ValueError(_("Each document must be a dictionary with 'doctype' and 'name' keys"))
+
+			doctype = item.get("doctype")
+			name = item.get("name")
+
+			if not doctype or not name:
+				raise ValueError(_("Both 'doctype' and 'name' are required"))
+
+			frappe.delete_doc(doctype, name, ignore_missing=False)
+			deleted.append({"doctype": doctype, "name": name})
+		except Exception as e:
+			failed.append({"doctype": doctype, "name": name, "error": str(e)})
+
+	return {
+		"deleted": deleted,
+		"failed": failed,
+		"total": len(documents),
+		"success_count": len(deleted),
+		"failure_count": len(failed),
+	}
+
+
+def bulk_update_docs(doctype: str):
+	"""Bulk update multiple documents of the same doctype.
+
+	Request body should contain:
+		updates: List of {"name": str, ...fields} objects where each object contains
+		         the document name and the fields to update
+
+	Returns:
+		updated: List of successfully updated document names
+		failed: List of failed updates with error messages
+		total: Total number of documents attempted
+		success_count: Number of successful updates
+		failure_count: Number of failed updates
+	"""
+	data = frappe.form_dict
+	updates = frappe.parse_json(data.get("updates", "[]"))
+
+	if not isinstance(updates, list):
+		frappe.throw(_("'updates' must be an array"))
+
+	updated = []
+	failed = []
+
+	for item in updates:
+		name = None
+		try:
+			if not isinstance(item, dict):
+				raise ValueError(_("Each update must be a dictionary with 'name' and field values"))
+
+			name = item.get("name")
+			if not name:
+				raise ValueError(_("'name' is required"))
+
+			doc = frappe.get_doc(doctype, name, for_update=True)
+			item_copy = item.copy()
+			item_copy.pop("name")
+			item_copy.pop("flags", None)
+
+			doc.update(item_copy)
+			doc.save()
+
+			updated.append(name)
+		except Exception as e:
+			failed.append({"name": name, "error": str(e)})
+
+	return {
+		"updated": updated,
+		"failed": failed,
+		"total": len(updates),
+		"success_count": len(updated),
+		"failure_count": len(failed),
+	}
+
+
+def bulk_update():
+	"""Bulk update documents across multiple doctypes.
+
+	Request body should contain:
+		documents: List of {"doctype": str, "name": str, ...fields} objects
+
+	Returns:
+		updated: List of successfully updated documents
+		failed: List of failed updates with error messages
+		total: Total number of documents attempted
+		success_count: Number of successful updates
+		failure_count: Number of failed updates
+	"""
+	data = frappe.form_dict
+	documents = frappe.parse_json(data.get("documents", "[]"))
+
+	if not isinstance(documents, list):
+		frappe.throw(_("Request body must contain 'documents' as an array"))
+
+	updated = []
+	failed = []
+
+	for item in documents:
+		doctype = None
+		name = None
+		try:
+			if not isinstance(item, dict):
+				raise ValueError(
+					_("Each document must be a dictionary with 'doctype', 'name', and field values")
+				)
+
+			doctype = item.get("doctype")
+			name = item.get("name")
+
+			if not doctype or not name:
+				raise ValueError(_("Both 'doctype' and 'name' are required"))
+
+			doc = frappe.get_doc(doctype, name, for_update=True)
+			item_copy = item.copy()
+			item_copy.pop("doctype")
+			item_copy.pop("name")
+			item_copy.pop("flags", None)
+
+			doc.update(item_copy)
+			doc.save()
+
+			updated.append({"doctype": doctype, "name": name})
+		except Exception as e:
+			failed.append({"doctype": doctype, "name": name, "error": str(e)})
+
+	return {
+		"updated": updated,
+		"failed": failed,
+		"total": len(documents),
+		"success_count": len(updated),
+		"failure_count": len(failed),
+	}
+
+
 def run_doc_method(method: str, document: dict[str, Any] | str, kwargs=None):
 	"""run a whitelisted controller method on in-memory document.
 
@@ -272,6 +472,8 @@ url_rules = [
 	Rule("/method/logout", endpoint=logout, methods=["POST"]),
 	Rule("/method/ping", endpoint=frappe.ping),
 	Rule("/method/upload_file", endpoint=upload_file, methods=["POST"]),
+	Rule("/method/bulk_delete", endpoint=bulk_delete, methods=["POST"]),
+	Rule("/method/bulk_update", endpoint=bulk_update, methods=["POST"]),
 	Rule("/method/<method>", endpoint=handle_rpc_call),
 	Rule(
 		"/method/run_doc_method",
@@ -282,6 +484,8 @@ url_rules = [
 	# Document level APIs
 	Rule("/document/<doctype>", methods=["GET"], endpoint=document_list),
 	Rule("/document/<doctype>", methods=["POST"], endpoint=create_doc),
+	Rule("/document/<doctype>/bulk_delete", methods=["POST"], endpoint=bulk_delete_docs),
+	Rule("/document/<doctype>/bulk_update", methods=["POST"], endpoint=bulk_update_docs),
 	Rule("/document/<doctype>/<path:name>/", methods=["GET"], endpoint=read_doc),
 	Rule("/document/<doctype>/<path:name>/copy", methods=["GET"], endpoint=copy_doc),
 	Rule("/document/<doctype>/<path:name>/", methods=["PATCH", "PUT"], endpoint=update_doc),
