@@ -221,8 +221,10 @@ frappe.breadcrumbs = {
 		let form_route = `/desk/${frappe.router.slug(doctype)}/${encodeURIComponent(docname)}`;
 
 		let docname_title;
+		let is_new_doc = false;
 		if (docname.startsWith("new-" + doctype.toLowerCase().replace(/ /g, "-"))) {
 			docname_title = __("New {0}", [__(doctype)]);
+			is_new_doc = true;
 		} else {
 			let title = frappe.model.get_doc_title(doc);
 			docname_title = title || doc.name;
@@ -239,16 +241,19 @@ frappe.breadcrumbs = {
 				last_crumb.addClass("ellipsis");
 				last_crumb.find("a").addClass("ellipsis");
 			}
-			last_crumb.css("cursor", "copy");
-			last_crumb.click((event) => {
-				event.stopImmediatePropagation();
-				frappe.utils.copy_to_clipboard(doc.name);
-			});
-			last_crumb.attr("title", __("Click to copy name"));
-			last_crumb.tooltip({
-				delay: { show: 100, hide: 100 },
-				trigger: "hover",
-			});
+
+			if (!is_new_doc) {
+				last_crumb.css("cursor", "copy");
+				last_crumb.click((event) => {
+					event.stopImmediatePropagation();
+					frappe.utils.copy_to_clipboard(doc.name);
+				});
+				last_crumb.attr("title", __("Click to copy name"));
+				last_crumb.tooltip({
+					delay: { show: 100, hide: 100 },
+					trigger: "hover",
+				});
+			}
 		}
 	},
 
@@ -276,7 +281,7 @@ frappe.breadcrumbs = {
 	},
 
 	clear() {
-		this.$breadcrumbs = $(".navbar-breadcrumbs").empty();
+		this.$breadcrumbs = $($(".navbar-breadcrumbs")[0]).empty();
 		this.append_breadcrumb_element("/desk", frappe.utils.icon("monitor"));
 	},
 
