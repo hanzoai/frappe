@@ -62,6 +62,11 @@ frappe.ui.form.on("Workspace Sidebar Item", {
 				frappe.model.set_value(cdt, cdn, fieldname, value);
 			},
 		});
+		$(field.wrapper).find(".filter-area").css("margin-bottom", "10px");
+		$(field.wrapper)
+			.find(".filter-area")
+			.prepend("<label class='control-label'>Filters</label>");
+
 		if (row.filters) {
 			filter_group.add_filters_to_filter_group(JSON.parse(row.filters));
 		}
