@@ -226,6 +226,9 @@ frappe.breadcrumbs = {
 		} else {
 			let title = frappe.model.get_doc_title(doc);
 			docname_title = title || doc.name;
+			if (frappe.utils.is_html(docname_title)) {
+				docname_title = $(docname_title).text();
+			}
 		}
 		this.append_breadcrumb_element(form_route, docname_title, "title-text-form");
 
