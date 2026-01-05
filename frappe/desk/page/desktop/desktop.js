@@ -145,6 +145,15 @@ function toggle_icons(icons) {
 	});
 }
 
+function add_icons_to_folder(folder_name, items) {
+	let folder = get_desktop_icon_by_label(folder_name);
+	items.forEach((item) => {
+		let icon = get_desktop_icon_by_label(item);
+		icon.parent_icon = folder.label;
+	});
+	frappe.pages["desktop"].desktop_page.update();
+}
+
 class DesktopPage {
 	constructor(page) {
 		this.page = page;
@@ -158,6 +167,7 @@ class DesktopPage {
 	prepare() {
 		this.apps_icons = [];
 		this.hidden_icons = [];
+		this.folders = [];
 		const icon_map = {};
 		frappe.desktop_icons = this.get_saved_layout() || frappe.boot.desktop_icons;
 		let icons = this.edit_mode ? frappe.new_desktop_icons : frappe.desktop_icons;
@@ -165,6 +175,9 @@ class DesktopPage {
 			if (icon.hidden != 1) {
 				icon.child_icons = [];
 				icon_map[icon.label] = icon;
+				if (icon.icon_type == "Folder") {
+					this.folders.push(icon.label);
+				}
 				return true;
 			} else {
 				this.hidden_icons.push(icon);
@@ -317,6 +330,7 @@ class DesktopPage {
 
 	start_editing_layout() {
 		this.edit_mode = true;
+		const me = this;
 		$(".desktop-icon").not(".folder-icon .desktop-icon").addClass("desktop-edit-mode");
 		$(".desktop-icon")
 			.not(".folder-icon .desktop-icon")
@@ -357,6 +371,35 @@ class DesktopPage {
 									null
 								);
 							},
+						},
+						{
+							label: "Create Folder",
+							icon: "folder",
+							onClick: function () {
+								let current_grid;
+								frappe.desktop_grids.forEach((grid) => {
+									if (grid.wrapper.get(0).contains(icon)) {
+										current_grid = grid;
+									}
+								});
+								let folder = current_grid.add_folder();
+								add_icons_to_folder(folder.label, [icon_data.label]);
+							},
+						},
+						{
+							label: "Add To Folder",
+							icon: "folder-open",
+							condition: function () {
+								return me.folders.length > 0;
+							},
+							items: me.folders.map((name) => {
+								return {
+									label: name,
+									onClick: function () {
+										add_icons_to_folder(this.label, [icon_data.label]);
+									},
+								};
+							}),
 						},
 					],
 				});
@@ -570,6 +613,17 @@ class DesktopIconGrid {
 		this.prepare();
 		this.make();
 		frappe.desktop_grids.push(this);
+		this.folder_count = 0;
+	}
+	add_folder() {
+		this.folder_count++;
+		let icon = frappe.model.get_new_doc("Desktop Icon");
+		icon.icon_type = "Folder";
+		icon.label = `Untitled ${this.folder_count}`;
+		icon.idx = 100000;
+		frappe.new_desktop_icons.push(icon);
+		frappe.new_icons.push(icon);
+		return icon;
 	}
 	prepare() {
 		this.total_pages = 1;
@@ -891,7 +945,7 @@ class DesktopIcon {
 				);
 			}
 		} else {
-			if (this.icon_route.startsWith("http")) {
+			if (this.icon_route && this.icon_route.startsWith("http")) {
 				this.icon.attr("target", "_blank");
 			}
 			this.icon.attr("href", this.icon_route);
