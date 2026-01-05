@@ -1,15 +1,9 @@
 # Copyright (c) 2019, Frappe Technologies and Contributors
 # License: MIT. See LICENSE
 import frappe
-<<<<<<< HEAD
-from frappe.core.doctype.data_import.importer import Importer
+from frappe.core.doctype.data_import.importer import Importer, build_fields_dict_for_column_matching
 from frappe.tests.test_query_builder import db_type_is, run_only_if
 from frappe.tests.utils import FrappeTestCase
-=======
-from frappe.core.doctype.data_import.importer import Importer, build_fields_dict_for_column_matching
-from frappe.tests import IntegrationTestCase
-from frappe.tests.test_query_builder import db_type_is, unimplemented_for
->>>>>>> 2f20bdee70 (test(importer): add test to validate null label fallback to fieldname)
 from frappe.utils import format_duration, getdate
 
 doctype_name = "DocType for Import"
@@ -133,9 +127,17 @@ class TestImporter(FrappeTestCase):
 		self.assertEqual(updated_doc.table_field_1[0].child_description, "child description")
 		self.assertEqual(updated_doc.table_field_1_again[0].child_title, "child title again")
 
-<<<<<<< HEAD
 	def get_importer(self, doctype, import_file, update=False):
-=======
+		data_import = frappe.new_doc("Data Import")
+		data_import.import_type = "Insert New Records" if not update else "Update Existing Records"
+		data_import.reference_doctype = doctype
+		data_import.import_file = import_file.file_url
+		data_import.insert()
+		# Commit so that the first import failure does not rollback the Data Import insert.
+		frappe.db.commit()
+
+		return data_import
+
 	def test_data_import_without_label(self):
 		"""Test fallback to fieldname when label is not set for a table."""
 
@@ -151,18 +153,6 @@ class TestImporter(FrappeTestCase):
 		expected_id_key = "ID (table_field_1)"
 		self.assertIn(expected_id_key, fields_dict, "ID fallback failed")
 		table_field.label = original_label  # maintain sanity in test env
-
-	def get_importer(self, doctype, import_file, update=False, use_sniffer=False):
->>>>>>> 2f20bdee70 (test(importer): add test to validate null label fallback to fieldname)
-		data_import = frappe.new_doc("Data Import")
-		data_import.import_type = "Insert New Records" if not update else "Update Existing Records"
-		data_import.reference_doctype = doctype
-		data_import.import_file = import_file.file_url
-		data_import.insert()
-		# Commit so that the first import failure does not rollback the Data Import insert.
-		frappe.db.commit()
-
-		return data_import
 
 
 def create_doctype_if_not_exists(doctype_name, force=False):
