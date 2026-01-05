@@ -243,6 +243,6 @@ def sendmail(
 	# build email queue and send the email if send_now is True.
 
 	q = builder.process(send_now=False)
-	if now:
+	if now and q:
 		frappe.db.after_commit.add(q.send)
 	return q
