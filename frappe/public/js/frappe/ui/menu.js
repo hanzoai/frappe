@@ -87,7 +87,7 @@ frappe.ui.menu = class ContextMenu {
 				: item.icon_url
 				? `<img class="logo" src="${item.icon_url}">`
 				: "";
-
+			let chevron_direction = frappe.utils.is_rtl() ? "left " : "right";
 			item_wrapper = $(`<div class="dropdown-menu-item" onclick="${
 				item.action ? `return ${item.action}` : ""
 			}">
@@ -97,7 +97,7 @@ frappe.ui.menu = class ContextMenu {
 					</div>
 					<span class="menu-item-title">${__(item.label)}</span>
 					<div class="menu-item-icon" style="margin-left:auto">
-						${item.items && item.items.length ? frappe.utils.icon("chevron-right") : ""}
+						${item.items && item.items.length ? frappe.utils.icon(`chevron-${chevron_direction}`) : ""}
 					</div>
 
 				</a>
