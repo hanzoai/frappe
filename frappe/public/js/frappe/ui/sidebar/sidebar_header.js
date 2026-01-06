@@ -5,7 +5,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.drop_down_expanded = false;
 		this.title = this.sidebar.sidebar_title;
 		const me = this;
-		this.sibling_workspaces = this.fetch_sibling_workspaces();
+		this.sibling_workspaces = this.fetch_related_icons();
 		this.dropdown_items = [
 			{
 				name: "workspaces",
@@ -81,29 +81,32 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		this.populate_dropdown_menu();
 		this.setup_select_options();
 	}
-	fetch_sibling_workspaces() {
+
+	fetch_related_icons() {
 		let sibling_workspaces = [];
 		if (frappe.current_app) {
-			let workspaces = [...frappe.current_app.workspaces];
-			workspaces.splice(workspaces.indexOf(this.title), 1);
+			let workspaces = [...frappe.boot.desktop_icons];
+			workspaces.splice(
+				workspaces.indexOf(frappe.utils.get_desktop_icon_by_label(this.title)),
+				1
+			);
 			workspaces.forEach((w) => {
-				let item = {
-					name: w.toLowerCase(),
-					label: w,
-					url: frappe.utils.generate_route({
-						type: "Workspace",
-						route: frappe.router.slug(w),
-					}),
-				};
-				if (frappe.utils.get_desktop_icon(w, frappe.boot.desktop_icon_style)) {
-					item.icon_url = frappe.utils.get_desktop_icon(
-						w,
-						frappe.boot.desktop_icon_style
-					);
-				} else {
-					item.icon_html = frappe.utils.desktop_icon(w, "gray", "sm");
+				if (w.app && w.app == frappe.current_app.app_name) {
+					let item = {
+						name: w.label.toLowerCase(),
+						label: w.label,
+						url: frappe.utils.get_route_for_icon(w),
+					};
+					if (frappe.utils.get_desktop_icon(w.label, frappe.boot.desktop_icon_style)) {
+						item.icon_url = frappe.utils.get_desktop_icon(
+							w.label,
+							frappe.boot.desktop_icon_style
+						);
+					} else {
+						item.icon_html = frappe.utils.desktop_icon(w.label, "gray", "sm");
+					}
+					sibling_workspaces.push(item);
 				}
-				sibling_workspaces.push(item);
 			});
 			return sibling_workspaces;
 		}
