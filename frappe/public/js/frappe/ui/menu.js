@@ -9,6 +9,7 @@ frappe.ui.menu = class ContextMenu {
 		this.open_on_left = opts.open_on_left;
 		this.size = opts.size;
 		this.opts = opts;
+		this.nested_menus = [];
 	}
 
 	make() {
@@ -77,6 +78,9 @@ frappe.ui.menu = class ContextMenu {
 						me.opts.onItemClick && me.opts.onItemClick(me.opts.parent);
 						me.hide();
 					}
+					me.nested_menus.forEach((menu) => {
+						menu.hide();
+					});
 				});
 			} else if (item.items) {
 				$();
@@ -86,11 +90,13 @@ frappe.ui.menu = class ContextMenu {
 		}
 		item_wrapper.appendTo(this.template);
 		if (item.items) {
-			this.handle_nested_menu(item_wrapper, item);
+			let nested_menu = this.handle_nested_menu(item_wrapper, item);
+			this.nested_menus.push(nested_menu);
 		}
 	}
+
 	handle_nested_menu(item_wrapper, item) {
-		frappe.ui.create_menu({
+		return frappe.ui.create_menu({
 			parent: item_wrapper,
 			menu_items: item.items,
 			nested: true,
@@ -99,7 +105,6 @@ frappe.ui.menu = class ContextMenu {
 	}
 	show(parent, event) {
 		// this.close_all_other_menu();
-
 		this.make();
 
 		const offset = $(parent).offset();
@@ -233,6 +238,7 @@ frappe.ui.create_menu = function (opts) {
 			opts.onHide && opts.onHide(opts.parent);
 		}
 	});
+	return context_menu;
 };
 
 function close_all_open_menus() {
