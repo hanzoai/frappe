@@ -392,9 +392,9 @@ def get_formatted_html(
 		"print_html": print_html,
 		"subject": subject,
 	}
+
 	if raw_html:
 		rendered_email = frappe.render_template(message, params)
-
 	else:
 		params.update(
 			{

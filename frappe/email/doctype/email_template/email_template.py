@@ -57,9 +57,8 @@ class EmailTemplate(Document):
 			kwargs = {"match_by_email": sender}
 		else:
 			kwargs = {"match_by_doctype": doc.get("doctype")}
-		email_account = EmailAccount.find_outgoing(**kwargs)
 
-		if email_account:
+		if email_account := EmailAccount.find_outgoing(**kwargs):
 			doc.update(
 				{"email_signature": get_signature(email_account), "email_footer": get_footer(email_account)}
 			)
