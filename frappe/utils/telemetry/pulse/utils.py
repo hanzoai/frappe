@@ -1,5 +1,5 @@
 import hashlib
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 
 import frappe
 
@@ -79,7 +79,7 @@ def parse_interval(interval):
 
 
 def utc_iso() -> str:
-	return datetime.now(UTC).isoformat()
+	return datetime.now(timezone.utc).isoformat()
 
 
 def ensure_http(url: str) -> str:
