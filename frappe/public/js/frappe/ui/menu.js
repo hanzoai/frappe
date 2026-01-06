@@ -117,11 +117,17 @@ frappe.ui.menu = class ContextMenu {
 			let dropdown = frappe.menu_map[this.opts.parent_menu].template;
 			let width = dropdown.outerWidth();
 			let offset = $(dropdown).offset();
+			let left = offset.left;
+			if (frappe.utils.is_rtl()) {
+				left = left - width - this.gap;
+			} else {
+				left = width + this.gap;
+			}
 			this.template.css({
 				display: "block",
 				position: "absolute",
 				top: top + "px",
-				left: offset.left + width + this.gap + "px",
+				left: left + "px",
 			});
 		} else {
 			this.template.css({
