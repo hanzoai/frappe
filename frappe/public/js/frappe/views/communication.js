@@ -90,15 +90,6 @@ frappe.views.CommunicationComposer = class {
 				fieldname: "send_after",
 			},
 			{
-				label: __("Use HTML"),
-				fieldtype: "Check",
-				fieldname: "use_html",
-				default: 0,
-				onchange: () => {
-					me.on_use_html_toggle();
-				},
-			},
-			{
 				fieldtype: "Section Break",
 				fieldname: "email_template_section_break",
 				hidden: 1,
@@ -127,13 +118,9 @@ frappe.views.CommunicationComposer = class {
 				fieldname: "use_html",
 				default: 0,
 				hidden: 1,
-				onchange: function (e) {
-					if (!e) return;
-					if (e.target.checked) {
-						me.dialog.set_value("html_content", me.dialog.get_value("content"));
-					} else {
-						me.dialog.set_value("content", me.dialog.get_value("html_content"));
-					}
+				description: "Use Raw HTML email editor.",
+				onchange: (event) => {
+					me.on_use_html_toggle(event);
 				},
 			},
 			{ fieldtype: "Section Break" },
@@ -158,13 +145,6 @@ frappe.views.CommunicationComposer = class {
 				onchange: frappe.utils.debounce(this.save_as_draft.bind(this), 300),
 				depends_on: "eval:doc.use_html",
 				options: "HTML",
-			},
-			{
-				label: __("Message"),
-				fieldtype: "HTML Editor",
-				fieldname: "content_html",
-				hidden: 1,
-				onchange: frappe.utils.debounce(this.save_as_draft.bind(this), 300),
 			},
 			{
 				fieldtype: "Button",
@@ -1077,13 +1057,16 @@ frappe.views.CommunicationComposer = class {
 		return this.get_content_field().set_value(value);
 	}
 
-	on_use_html_toggle() {
+	on_use_html_toggle(event) {
+		if (!event) return;
+
 		this.save_as_draft();
-		const use_html = this.dialog.get_value("use_html");
+		const use_html = event.target.checked;
 
-		this.dialog.set_df_property("content", "hidden", use_html);
-		this.dialog.set_df_property("content_html", "hidden", !use_html);
-
-		this.dialog.set_value("email_template", "");
+		if (use_html) {
+			this.dialog.set_value("html_content", this.dialog.get_value("content"));
+		} else {
+			this.dialog.set_value("content", this.dialog.get_value("html_content"));
+		}
 	}
 };
