@@ -2,12 +2,12 @@ import time
 from unittest.mock import patch
 
 import frappe
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 from frappe.utils.telemetry.pulse.client import EventQueue, capture, is_enabled
 from frappe.utils.telemetry.pulse.utils import anonymize_user, parse_interval
 
 
-class TestPulseClient(IntegrationTestCase):
+class TestPulseClient(FrappeTestCase):
 	def setUp(self):
 		super().setUp()
 		# Clear any existing events from queue
