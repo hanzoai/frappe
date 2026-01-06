@@ -85,33 +85,73 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 	fetch_related_icons() {
 		let sibling_workspaces = [];
 		if (frappe.current_app) {
-			let workspaces = [...frappe.boot.desktop_icons];
-			workspaces.splice(
-				workspaces.indexOf(frappe.utils.get_desktop_icon_by_label(this.title)),
+			let desktop_icons = [...frappe.boot.desktop_icons];
+			desktop_icons.splice(
+				desktop_icons.indexOf(frappe.utils.get_desktop_icon_by_label(this.title)),
 				1
 			);
-			workspaces.forEach((w) => {
-				if (w.app && w.app == frappe.current_app.app_name) {
-					let item = {
-						name: w.label.toLowerCase(),
-						label: w.label,
-						url: frappe.utils.get_route_for_icon(w),
-					};
-					if (frappe.utils.get_desktop_icon(w.label, frappe.boot.desktop_icon_style)) {
-						item.icon_url = frappe.utils.get_desktop_icon(
-							w.label,
-							frappe.boot.desktop_icon_style
-						);
-					} else {
-						item.icon_html = frappe.utils.desktop_icon(w.label, "gray", "sm");
-					}
-					sibling_workspaces.push(item);
+			let { folder_map, sibling_icons } = this.build_folder_map(desktop_icons);
+			sibling_icons.forEach((icon) => {
+				if (folder_map[icon.parent_icon]) return;
+				let item = {
+					name: icon.label.toLowerCase(),
+					label: icon.label,
+					url: frappe.utils.get_route_for_icon(icon),
+				};
+				if (icon.icon_type == "Folder") {
+					this.get_icon_for_menu_item(icon, item);
+					item.items = folder_map[item.label];
 				}
+				if (frappe.utils.get_desktop_icon(icon.label, frappe.boot.desktop_icon_style)) {
+					item.icon_url = frappe.utils.get_desktop_icon(
+						icon.label,
+						frappe.boot.desktop_icon_style
+					);
+				} else {
+					item.icon_html = frappe.utils.desktop_icon(icon.label, "gray", "sm");
+				}
+				sibling_workspaces.push(item);
 			});
 			return sibling_workspaces;
 		}
 	}
+	get_icon_for_menu_item(icon, item) {
+		if (frappe.utils.get_desktop_icon(icon.label, frappe.boot.desktop_icon_style)) {
+			item.icon_url = frappe.utils.get_desktop_icon(
+				icon.label,
+				frappe.boot.desktop_icon_style
+			);
+		} else {
+			item.icon_html = frappe.utils.desktop_icon(icon.label, "gray", "sm");
+		}
+	}
+	build_folder_map(desktop_icons) {
+		const folder_map = {};
+		const sibling_icons = [];
+		if (!frappe.current_app) return;
+		desktop_icons.forEach((icon) => {
+			if (
+				icon.link_type != "External" &&
+				icon.app == frappe.current_app.app_name &&
+				!icon.hidden
+			) {
+				if (icon.icon_type === "Folder" && !folder_map[icon.label]) {
+					folder_map[icon.label] = [];
+				}
 
+				if (icon.parent_icon) {
+					icon.url = frappe.utils.get_route_for_icon(icon);
+					if (folder_map[icon.parent_icon]) folder_map[icon.parent_icon].push(icon);
+				}
+				sibling_icons.push(icon);
+			}
+		});
+
+		return {
+			folder_map: folder_map,
+			sibling_icons: sibling_icons,
+		};
+	}
 	get_help_siblings() {
 		const navbar_settings = frappe.boot.navbar_settings;
 		let help_dropdown_items = [];
