@@ -595,8 +595,13 @@ class DesktopIconGrid {
 			this.icons_html.push(icon_html);
 			grid.append(icon_html);
 		});
+		this.setup_tooltip();
 	}
-
+	setup_tooltip() {
+		$('[data-toggle="tooltip"]').tooltip({
+			placement: "bottom",
+		});
+	}
 	setup_reordering(grid) {
 		const me = this;
 		this.hoverTarget = null;
