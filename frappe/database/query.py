@@ -10,6 +10,7 @@ from pypika.terms import AggregateFunction, ArithmeticExpression, Star, Term, Va
 
 import frappe
 from frappe import _
+from frappe.boot import get_additional_filters_from_hooks
 from frappe.database.operator_map import NESTED_SET_OPERATORS, OPERATOR_MAP
 from frappe.database.utils import (
 	DefaultOrderBy,
@@ -531,6 +532,16 @@ class Engine:
 		"""Builds a pypika Criterion object for a simple filter condition."""
 		import operator as builtin_operator
 
+		"""Check hooks for custom_operator definitions"""
+		additional_filters_config = get_additional_filters_from_hooks()
+		if operator.lower() in additional_filters_config:
+			f = frappe._dict(doctype=doctype or self.doctype, fieldname=field, operator=operator, value=value)
+			from frappe.model.db_query import get_additional_filter_field
+
+			resolved = get_additional_filter_field(additional_filters_config, f, value)
+			operator = resolved.get("operator")
+			value = resolved.get("value") or resolved.get("query_value")
+
 		_field = self._validate_and_prepare_filter_field(field, doctype)
 
 		if isinstance(value, Field):
@@ -728,13 +739,23 @@ class Engine:
 		else:
 			# Assume it's a simple filter [field, op, value] etc.
 			field, value, operator, doctype = None, None, None, None
-
+			additional_filters_config = get_additional_filters_from_hooks()
 			# Determine structure based on length and types
-			if len(condition) == 3 and isinstance(condition[1], str) and condition[1].lower() in OPERATOR_MAP:
+			if (
+				len(condition) == 3
+				and isinstance(condition[1], str)
+				and (
+					condition[1].lower() in OPERATOR_MAP or condition[1].lower() in additional_filters_config
+				)
+			):
 				# [field, operator, value]
 				field, operator, value = condition
 			elif (
-				len(condition) == 4 and isinstance(condition[2], str) and condition[2].lower() in OPERATOR_MAP
+				len(condition) == 4
+				and isinstance(condition[2], str)
+				and (
+					condition[2].lower() in OPERATOR_MAP or condition[2].lower() in additional_filters_config
+				)
 			):
 				# [doctype, field, operator, value]
 				doctype, field, operator, value = condition
