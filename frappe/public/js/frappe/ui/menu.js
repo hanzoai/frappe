@@ -149,7 +149,14 @@ frappe.ui.menu = class ContextMenu {
 			} else if (item.items) {
 				$();
 			} else {
-				$(item_wrapper).find("a").attr("href", item.url);
+				item_wrapper.on("click", function () {
+					me.nested_menus.forEach((menu) => {
+						menu.hide();
+					});
+					me.hide();
+					me.opts.onHide && me.opts.onHide(me);
+					frappe.set_route(item.url);
+				});
 			}
 		}
 		item_wrapper.appendTo(this.template);
