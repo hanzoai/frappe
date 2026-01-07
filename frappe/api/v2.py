@@ -362,8 +362,10 @@ def bulk_update_docs(doctype: str):
 
 			doc.update(item_copy)
 			doc.save()
+			doc.apply_fieldlevel_read_permissions()
 
 			updated.append(name)
+			frappe.response.docs.append(doc.as_dict())
 		except Exception as e:
 			failed.append({"name": name, "error": str(e)})
 
@@ -421,8 +423,10 @@ def bulk_update():
 
 			doc.update(item_copy)
 			doc.save()
+			doc.apply_fieldlevel_read_permissions()
 
 			updated.append({"doctype": doctype, "name": name})
+			frappe.response.docs.append(doc.as_dict())
 		except Exception as e:
 			failed.append({"doctype": doctype, "name": name, "error": str(e)})
 
