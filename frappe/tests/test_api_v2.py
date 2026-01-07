@@ -270,23 +270,6 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 
 	version = "v2"
 	DOCTYPE = "ToDo"
-	GENERATED_DOCUMENTS: typing.ClassVar[list] = []
-
-	@classmethod
-	def setUpClass(cls):
-		super().setUpClass()
-		# Create test documents
-		for i in range(10):
-			doc = frappe.get_doc({"doctype": "ToDo", "description": f"Test bulk operations {i}"}).insert()
-			cls.GENERATED_DOCUMENTS.append(doc.name)
-		frappe.db.commit()
-
-	@classmethod
-	def tearDownClass(cls):
-		frappe.db.commit()
-		for name in cls.GENERATED_DOCUMENTS:
-			frappe.delete_doc_if_exists(cls.DOCTYPE, name)
-		frappe.db.commit()
 
 	def setUp(self) -> None:
 		self.post(self.method("login"), {"sid": self.sid})
@@ -296,7 +279,7 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 		# Create docs to delete
 		doc1 = frappe.get_doc({"doctype": self.DOCTYPE, "description": "To delete 1"}).insert()
 		doc2 = frappe.get_doc({"doctype": self.DOCTYPE, "description": "To delete 2"}).insert()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 		# Bulk delete
 		response = self.post(
@@ -319,7 +302,7 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 	def test_bulk_delete_docs_partial_failure(self):
 		# Create one valid doc
 		doc = frappe.get_doc({"doctype": self.DOCTYPE, "description": "To delete"}).insert()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 		# Try to delete valid and non-existent doc
 		non_existent = "non-existent-todo"
@@ -341,7 +324,7 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 		# Create docs of different types
 		todo = frappe.get_doc({"doctype": "ToDo", "description": "Test"}).insert()
 		note = frappe.get_doc({"doctype": "Note", "title": "Test Note", "content": "Test"}).insert()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 		# Bulk delete across doctypes
 		response = self.post(
@@ -388,7 +371,7 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 		# Create fresh docs for this test
 		doc1 = frappe.get_doc({"doctype": self.DOCTYPE, "description": "Original 1"}).insert()
 		doc2 = frappe.get_doc({"doctype": self.DOCTYPE, "description": "Original 2"}).insert()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 		try:
 			# Bulk update
@@ -423,13 +406,13 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 		finally:
 			frappe.delete_doc_if_exists(self.DOCTYPE, doc1.name)
 			frappe.delete_doc_if_exists(self.DOCTYPE, doc2.name)
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 
 	def test_bulk_update_cross_doctype(self):
 		# Create test documents
 		todo = frappe.get_doc({"doctype": "ToDo", "description": "Test"}).insert()
 		note = frappe.get_doc({"doctype": "Note", "title": "Test", "content": "Test"}).insert()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 
 		try:
 			# Bulk update across doctypes
@@ -460,12 +443,12 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 		finally:
 			frappe.delete_doc_if_exists("ToDo", todo.name)
 			frappe.delete_doc_if_exists("Note", note.name)
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 
 	def test_bulk_update_partial_failure(self):
 		# Create a fresh doc for this test
 		doc = frappe.get_doc({"doctype": self.DOCTYPE, "description": "Original"}).insert()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep
 		valid_doc = doc.name
 		non_existent = "non-existent-todo"
 
@@ -498,7 +481,7 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 			self.assertEqual(updated_doc.description, "Updated")
 		finally:
 			frappe.delete_doc_if_exists(self.DOCTYPE, valid_doc)
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep
 
 	def test_bulk_update_invalid_format(self):
 		# Test with invalid format (not a list)
