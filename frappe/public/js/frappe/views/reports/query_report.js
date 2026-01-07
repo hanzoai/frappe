@@ -1487,15 +1487,36 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			return;
 		}
 
-		let extra_fields = null;
+		let extra_fields = [];
 		if (this.tree_report) {
-			extra_fields = [
-				{
-					label: __("Include indentation"),
-					fieldname: "include_indentation",
-					fieldtype: "Check",
-				},
-			];
+			extra_fields.push({
+				label: __("Include indentation"),
+				fieldname: "include_indentation",
+				fieldtype: "Check",
+			});
+		}
+
+		if (this.report_settings.export_hidden_cols) {
+			const hidden_fields = [];
+			this.columns.forEach((column) => {
+				if (column.hidden) {
+					hidden_fields.push(column.label);
+				}
+			});
+			if (hidden_fields.length) {
+				extra_fields.push(
+					{
+						fieldname: "column_break_1",
+						fieldtype: "Column Break",
+					},
+					{
+						label: __("Include hidden columns"),
+						fieldname: "include_hidden_columns",
+						description: __("Hidden columns include: {0}", [hidden_fields.join(", ")]),
+						fieldtype: "Check",
+					}
+				);
+			}
 		}
 
 		if (this.report_settings.export_hidden_fields) {
