@@ -277,7 +277,7 @@ def bulk_delete():
 	"""Bulk delete documents across multiple doctypes.
 
 	Request body should contain:
-		documents: List of {"doctype": str, "name": str} objects
+		docs: List of {"doctype": str, "name": str} objects
 
 	Returns:
 		deleted: List of successfully deleted documents
@@ -287,15 +287,15 @@ def bulk_delete():
 		failure_count: Number of failed deletions
 	"""
 	data = frappe.form_dict
-	documents = frappe.parse_json(data.get("documents", "[]"))
+	docs = frappe.parse_json(data.get("docs", "[]"))
 
-	if not isinstance(documents, list):
-		frappe.throw(_("Request body must contain 'documents' as an array"))
+	if not isinstance(docs, list):
+		frappe.throw(_("Request body must contain 'docs' as an array"))
 
 	deleted = []
 	failed = []
 
-	for item in documents:
+	for item in docs:
 		doctype = None
 		name = None
 		try:
@@ -316,7 +316,7 @@ def bulk_delete():
 	return {
 		"deleted": deleted,
 		"failed": failed,
-		"total": len(documents),
+		"total": len(docs),
 		"success_count": len(deleted),
 		"failure_count": len(failed),
 	}
@@ -326,8 +326,8 @@ def bulk_update_docs(doctype: str):
 	"""Bulk update multiple documents of the same doctype.
 
 	Request body should contain:
-		updates: List of {"name": str, ...fields} objects where each object contains
-		         the document name and the fields to update
+		docs: List of {"name": str, ...fields} objects where each object contains
+		      the document name and the fields to update
 
 	Returns:
 		updated: List of successfully updated document names
@@ -337,15 +337,15 @@ def bulk_update_docs(doctype: str):
 		failure_count: Number of failed updates
 	"""
 	data = frappe.form_dict
-	updates = frappe.parse_json(data.get("updates", "[]"))
+	docs = frappe.parse_json(data.get("docs", "[]"))
 
-	if not isinstance(updates, list):
-		frappe.throw(_("'updates' must be an array"))
+	if not isinstance(docs, list):
+		frappe.throw(_("'docs' must be an array"))
 
 	updated = []
 	failed = []
 
-	for item in updates:
+	for item in docs:
 		name = None
 		try:
 			if not isinstance(item, dict):
@@ -372,7 +372,7 @@ def bulk_update_docs(doctype: str):
 	return {
 		"updated": updated,
 		"failed": failed,
-		"total": len(updates),
+		"total": len(docs),
 		"success_count": len(updated),
 		"failure_count": len(failed),
 	}
@@ -382,7 +382,7 @@ def bulk_update():
 	"""Bulk update documents across multiple doctypes.
 
 	Request body should contain:
-		documents: List of {"doctype": str, "name": str, ...fields} objects
+		docs: List of {"doctype": str, "name": str, ...fields} objects
 
 	Returns:
 		updated: List of successfully updated documents
@@ -392,15 +392,15 @@ def bulk_update():
 		failure_count: Number of failed updates
 	"""
 	data = frappe.form_dict
-	documents = frappe.parse_json(data.get("documents", "[]"))
+	docs = frappe.parse_json(data.get("docs", "[]"))
 
-	if not isinstance(documents, list):
-		frappe.throw(_("Request body must contain 'documents' as an array"))
+	if not isinstance(docs, list):
+		frappe.throw(_("Request body must contain 'docs' as an array"))
 
 	updated = []
 	failed = []
 
-	for item in documents:
+	for item in docs:
 		doctype = None
 		name = None
 		try:
@@ -433,7 +433,7 @@ def bulk_update():
 	return {
 		"updated": updated,
 		"failed": failed,
-		"total": len(documents),
+		"total": len(docs),
 		"success_count": len(updated),
 		"failure_count": len(failed),
 	}
