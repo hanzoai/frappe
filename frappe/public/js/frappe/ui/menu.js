@@ -80,12 +80,12 @@ frappe.ui.menu = class ContextMenu {
 				`<div class="dropdown-menu-item"><div class="dropdown-divider documentation-links"></div></div>`
 			);
 		} else {
-			const iconMarkup = item.icon_html
+			const iconMarkup = item.icon_url
+				? `<img class="logo" src="${item.icon_url}">`
+				: item.icon_html
 				? item.icon_html
 				: item.icon
 				? frappe.utils.icon(item.icon)
-				: item.icon_url
-				? `<img class="logo" src="${item.icon_url}">`
 				: "";
 			let chevron_direction = frappe.utils.is_rtl() ? "left " : "right";
 			item_wrapper = $(`<div class="dropdown-menu-item" onclick="${
@@ -149,7 +149,14 @@ frappe.ui.menu = class ContextMenu {
 			} else if (item.items) {
 				$();
 			} else {
-				$(item_wrapper).find("a").attr("href", item.url);
+				item_wrapper.on("click", function () {
+					me.nested_menus.forEach((menu) => {
+						menu.hide();
+					});
+					me.hide();
+					me.opts.onHide && me.opts.onHide(me);
+					frappe.set_route(item.url);
+				});
 			}
 		}
 		item_wrapper.appendTo(this.template);
