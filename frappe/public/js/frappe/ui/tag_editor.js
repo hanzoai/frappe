@@ -115,9 +115,8 @@ frappe.ui.TagEditor = class TagEditor {
 					txt: value.toLowerCase(),
 				},
 				callback: function (r) {
-					if (r.message.length) {
-						$input.val(r.message[0]);
-					}
+					// Updates input to suggestion value (if any) on <enter>
+					if (r.message.length) $input.val(r.message[0]);
 					$input.trigger("input-selected");
 				},
 			});
