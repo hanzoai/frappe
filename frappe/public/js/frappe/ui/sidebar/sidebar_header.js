@@ -99,8 +99,11 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 					url: frappe.utils.get_route_for_icon(icon),
 				};
 				if (icon.icon_type == "Folder") {
-					this.get_icon_for_menu_item(icon, item);
-					item.items = folder_map[item.label];
+					let nested_items = folder_map[item.label];
+					nested_items.forEach((item) => {
+						this.get_icon_for_menu_item(item, item);
+					});
+					item.items = nested_items;
 				}
 				if (frappe.utils.get_desktop_icon(icon.label, frappe.boot.desktop_icon_style)) {
 					item.icon_url = frappe.utils.get_desktop_icon(
@@ -129,6 +132,7 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 		const folder_map = {};
 		const sibling_icons = [];
 		if (!frappe.current_app) return;
+		this.sort_icons(desktop_icons);
 		desktop_icons.forEach((icon) => {
 			if (
 				icon.link_type != "External" &&
@@ -151,6 +155,17 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 			folder_map: folder_map,
 			sibling_icons: sibling_icons,
 		};
+	}
+	sort_icons(desktop_icons) {
+		let write = 0;
+		for (let i = 0; i < desktop_icons.length; i++) {
+			if (desktop_icons[i].icon_type === "Folder") {
+				const item = desktop_icons.splice(i, 1)[0];
+				desktop_icons.splice(write, 0, item);
+				write++;
+			}
+		}
+		return desktop_icons;
 	}
 	get_help_siblings() {
 		const navbar_settings = frappe.boot.navbar_settings;

@@ -80,12 +80,12 @@ frappe.ui.menu = class ContextMenu {
 				`<div class="dropdown-menu-item"><div class="dropdown-divider documentation-links"></div></div>`
 			);
 		} else {
-			const iconMarkup = item.icon_html
+			const iconMarkup = item.icon_url
+				? `<img class="logo" src="${item.icon_url}">`
+				: item.icon_html
 				? item.icon_html
 				: item.icon
 				? frappe.utils.icon(item.icon)
-				: item.icon_url
-				? `<img class="logo" src="${item.icon_url}">`
 				: "";
 			let chevron_direction = frappe.utils.is_rtl() ? "left " : "right";
 			item_wrapper = $(`<div class="dropdown-menu-item" onclick="${
