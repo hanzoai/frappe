@@ -425,6 +425,12 @@ frappe.ui.Sidebar = class Sidebar {
 
 			if (sidebars.length == 1) {
 				frappe.app.sidebar.setup(sidebars[0]);
+			} else if (sidebars.length > 1) {
+				if (sidebars.includes(this.sidebar_module_map[module])) {
+					frappe.app.sidebar.setup(this.sidebar_module_map[module]);
+				} else {
+					frappe.app.sidebar.setup(sidebars[0]);
+				}
 			} else if (module) {
 				this.show_sidebar_for_module(module);
 			}
@@ -441,7 +447,6 @@ frappe.ui.Sidebar = class Sidebar {
 				return a.localeCompare(b);
 			});
 		if (sidebars && sidebars.length) {
-			if (this.sidebar_title) return;
 			frappe.app.sidebar.setup(sidebars[0]);
 		}
 	}
