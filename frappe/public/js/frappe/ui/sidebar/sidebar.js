@@ -442,7 +442,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.set_active_workspace_item();
 	}
 	show_sidebar_for_module(module) {
-		if (this.sidebar_title != module) return;
+		if (this.sidebar_fixes && this.sidebar_title != module) return;
 		let sidebars =
 			this.sidebar_module_map[module] &&
 			this.sidebar_module_map[module].sort((a, b) => {
