@@ -226,10 +226,11 @@
    "type": "Link"
   }
  ],
- "modified": "2025-11-25 10:46:09.401204",
+ "modified": "2026-01-08 14:16:38.658526",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System",
  "owner": "Administrator",
+ "standard": 1,
  "title": "System"
 }
