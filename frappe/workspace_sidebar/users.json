@@ -135,10 +135,11 @@
    "type": "Link"
   }
  ],
- "modified": "2025-11-25 10:46:09.392824",
+ "modified": "2026-01-08 14:16:38.644051",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Users",
  "owner": "Administrator",
+ "standard": 1,
  "title": "Users"
 }
