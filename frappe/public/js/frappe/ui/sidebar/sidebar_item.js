@@ -54,10 +54,13 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 					tab: this.item.tab,
 				};
 				if (this.item.filters) {
-					let filters_json = frappe.utils.get_filter_as_json(
-						JSON.parse(this.item.filters)
+					let filters_json = JSON.parse(
+						frappe.utils.get_filter_as_json(JSON.parse(this.item.filters))
 					);
-					args.filters = filters_json;
+					if (this.item.link_type == "DocType") {
+						args.doc_view = "List";
+						args.filters = filters_json;
+					}
 				}
 				path = frappe.utils.generate_route(args);
 			}
