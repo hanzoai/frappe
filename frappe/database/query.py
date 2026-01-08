@@ -567,8 +567,17 @@ class Engine:
 			_value = _apply_date_field_filter_conversion(_value, _operator, doctype or self.doctype, field)
 
 		# For Datetime fields with date values and 'between' operator, convert to datetime range to match db_query
-		if _operator.lower() == "between" and isinstance(_value, list | tuple) and len(_value) == 2:
-			_value = _apply_datetime_field_filter_conversion(_value, doctype or self.doctype, field)
+		if _operator.lower() == "between":
+			if isinstance(_value, list | tuple) and len(_value) == 2:
+				_value = _apply_datetime_field_filter_conversion(_value, doctype or self.doctype, field)
+			elif isinstance(_value, str):
+				from frappe.model.db_query import get_between_date_filter
+
+				target_meta = frappe.get_meta(doctype or self.doctype)
+				df = target_meta.get_field(field)
+				_value = tuple(
+					v.strip().strip("'") for v in get_between_date_filter(_value, df).split(" AND ")
+				)
 
 		if not _value and isinstance(_value, list | tuple | set):
 			_value = ("",)
