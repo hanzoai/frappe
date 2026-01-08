@@ -1416,13 +1416,12 @@ Object.assign(frappe.utils, {
 	},
 	get_desktop_icon_by_label(title, filters) {
 		if (!filters) {
-			return frappe.boot.desktop_icons.find((f) => f.label === title && f.hidden != 1);
+			return frappe.boot.desktop_icons.find((f) => f.label === title);
 		} else {
 			return frappe.boot.desktop_icons.find((f) => {
 				return (
 					f.label === title &&
-					Object.keys(filters).every((key) => f[key] === filters[key]) &&
-					f.hidden != 1
+					Object.keys(filters).every((key) => f[key] === filters[key])
 				);
 			});
 		}
