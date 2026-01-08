@@ -329,8 +329,8 @@ def build_for_autosuggest(res: list[tuple], doctype: str) -> list[LinkSearchResu
 			item = list(item)
 			if len(item) == 1:
 				item = [item[0], item[0]]
-			label = item[1]  # use title as label
-			item[1] = item[0]  # show name in description instead of title
+			label = _(item[1]) if meta.translated_doctype else item[1]
+			item[1] = item[0]
 
 			if len(item) >= 3 and item[2] == label:
 				# remove redundant title ("label") value
@@ -342,7 +342,9 @@ def build_for_autosuggest(res: list[tuple], doctype: str) -> list[LinkSearchResu
 
 			results.append(autosuggest_row)
 	else:
-		results.extend({"value": item[0], "description": to_string(item[1:])} for item in res)
+		for item in res:
+			value = _(item[0]) if meta.translated_doctype else item[0]
+			results.append({"value": item[0], "description": to_string(item[1:]), "label": value})
 
 	return results
 
