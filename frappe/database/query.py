@@ -540,7 +540,7 @@ class Engine:
 
 			resolved = get_additional_filter_field(additional_filters_config, f, value)
 			operator = resolved.get("operator")
-			value = resolved.get("value") or resolved.get("query_value")
+			value = resolved.get("value", value)
 
 		_field = self._validate_and_prepare_filter_field(field, doctype)
 
