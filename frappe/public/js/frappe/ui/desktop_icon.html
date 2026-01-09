@@ -21,7 +21,7 @@
     </div>
     {% } %}
     {% if(!icon.in_folder && !icon.restrict_removal) { %}
-    <div class="hide-button">
+    <div class="hide-button" data-mode="hide">
         {%= frappe.utils.icon("x") %}
     </div>
     {% } %}
