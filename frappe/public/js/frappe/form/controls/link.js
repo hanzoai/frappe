@@ -199,8 +199,8 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		// reference to calling link
 		frappe._from_link = {
 			field_obj: this,
-			from_doctype: this.doctype,
-			from_docname: this.doc?.name,
+			doc: this.doc,
+			set_route_args: ["Form", this.frm?.doctype, this.frm?.docname],
 			scrollY: $(document).scrollTop(),
 		};
 
