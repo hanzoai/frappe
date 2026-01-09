@@ -223,6 +223,7 @@ class DesktopPage {
 	}
 	setup_edit_button() {
 		const me = this;
+		$(".desktop-edit").remove();
 		this.$desktop_edit_button = $(
 			"<button class='btn btn-reset desktop-edit'></button>"
 		).appendTo(document.body);
@@ -387,6 +388,10 @@ class DesktopPage {
 				me.$desktop_edit_button.remove();
 				$(".navbar").show();
 				frappe.desktop_utils.close_desktop_modal();
+				// stop edit mode if route changes and cleanup
+				me.edit_mode = false;
+				$(".desktop-icon").removeClass("edit-mode");
+				$(".desktop-wrapper").removeAttr("data-mode");
 			}
 		});
 	}
