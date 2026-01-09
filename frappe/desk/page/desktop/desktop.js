@@ -106,13 +106,11 @@ function get_desktop_icon_by_label(title, filters, force) {
 		icons = frappe.new_desktop_icons;
 	}
 	if (!filters) {
-		return icons.find((f) => f.label === title && f.hidden != 1);
+		return icons.find((f) => f.label === title);
 	} else {
 		return icons.find((f) => {
 			return (
-				f.label === title &&
-				Object.keys(filters).every((key) => f[key] === filters[key]) &&
-				f.hidden != 1
+				f.label === title && Object.keys(filters).every((key) => f[key] === filters[key])
 			);
 		});
 	}
@@ -177,7 +175,6 @@ class DesktopPage {
 	update() {
 		this.sync_layout();
 	}
-
 	prepare() {
 		this.apps_icons = [];
 		this.hidden_icons = [];
@@ -233,19 +230,10 @@ class DesktopPage {
 			me.prepare();
 			me.make(me.page);
 			me.setup();
-			me.desktop_pane = new DesktopPane();
 		});
 	}
 	setup_events() {
 		const me = this;
-		this.wrapper.find(".hide-button").on("click", function (event) {
-			event.preventDefault();
-			event.stopImmediatePropagation();
-			let desktop_label = event.currentTarget.parentElement.dataset.id;
-			let desktop_icon = get_desktop_icon_by_label(desktop_label);
-			desktop_icon.hidden = 1;
-			frappe.pages["desktop"].desktop_page.update();
-		});
 	}
 	make() {
 		this.page.page_head.hide();
@@ -302,18 +290,6 @@ class DesktopPage {
 				},
 			},
 			{
-				label: "Restore Icons",
-				icon: "plus",
-				condition: function () {
-					return (
-						me.edit_mode && frappe.pages.desktop.desktop_page.hidden_icons.length > 0
-					);
-				},
-				onClick: function () {
-					me.desktop_pane.show();
-				},
-			},
-			{
 				label: "Reset Layout",
 				icon: "rotate-ccw",
 				onClick: function () {
@@ -345,10 +321,11 @@ class DesktopPage {
 	start_editing_layout() {
 		this.edit_mode = true;
 		const me = this;
+		this.desktop_pane = new IconsPane();
+		$(".desktop-wrapper").attr("data-mode", "Edit");
 		frappe.desktop_icons_objects.forEach((icon) => {
 			icon.edit_mode = true;
 		});
-		$(".desktop-wrapper").attr("data-mode", "Edit");
 		frappe.desktop_grids.forEach((desktop_grid) => {
 			if (!desktop_grid.no_dragging) {
 				desktop_grid.grids.forEach((grid) => {
@@ -359,6 +336,7 @@ class DesktopPage {
 		this.add_new_icons_to_grid();
 		if (this.edit_mode) {
 			this.setup_edit_buttons();
+			this.desktop_pane.show();
 		}
 	}
 	add_new_icons_to_grid() {
@@ -580,6 +558,9 @@ class DesktopIconGrid {
 	make() {
 		const me = this;
 		this.icons_container = $(`<div class="icons-container"></div>`).appendTo(this.wrapper);
+		if (this.compact) {
+			this.icons_container.css("margin-top", "0px");
+		}
 		for (let i = 0; i < this.total_pages; i++) {
 			let template = `<div class="icons"></div>`;
 
@@ -722,9 +703,18 @@ class DesktopIconGrid {
 			let icon_html = icon_obj.get_desktop_icon_html();
 			this.icons.push(icon_obj);
 			this.icons_html.push(icon_html);
+			this.setup_actions_on_icon(icon_obj);
 			grid.append(icon_html);
 		});
 		this.setup_tooltip();
+	}
+	setup_actions_on_icon(icon) {
+		if (this.edit_mode) {
+			icon.edit_mode = true;
+		}
+		if (this.is_pane) {
+			icon.in_pane = true;
+		}
 	}
 	setup_tooltip() {
 		$('[data-toggle="tooltip"]').tooltip({
@@ -832,6 +822,7 @@ class DesktopIcon {
 		this.icon_data.in_folder = in_folder;
 		this.link_type = this.icon_data.link_type;
 		this._edit_mode = false;
+		this.in_pane = false;
 		if (this.icon_type != "Folder" && !this.icon_data.sidebar) {
 			this.icon_route = get_route(this.icon_data);
 		}
@@ -857,27 +848,57 @@ class DesktopIcon {
 				},
 				set: function (value) {
 					if (value) {
-						if (!this.in_folder) {
-							this.icon.addClass("desktop-edit-mode");
+						this.icon.addClass("desktop-edit-mode");
+						if (this.in_folder) {
+							this.icon.removeClass("desktop-edit-mode");
 						}
-
 						this.grid.remove_label_tooltip();
 						this.setup_dragging();
 						this.setup_edit_menu();
+						this.setup_hide_button();
 						this.icon.removeAttr("href");
 					} else {
 						this.icon.addClass("desktop-edit-mode");
-						this.icon.setup_click();
+						this.setup_click();
 					}
 					this._edit_mode = value;
 				},
 			});
-
+			Object.defineProperty(this, "in_pane", {
+				get: function () {
+					return this._in_pane;
+				},
+				set: function (value) {
+					this._in_pane = value;
+					if (value) {
+						this.icon.find(".hide-button").html(frappe.utils.icon("plus"));
+						this.icon.find(".hide-button").attr("data-mode", "add");
+						this.setup_hide_button();
+					} else {
+						this.icon.find(".hide-button").html(frappe.utils.icon("x"));
+						this.icon.find(".hide-button").attr("data-mode", "hide");
+					}
+				},
+			});
 			frappe.desktop_icons_objects.push(this);
 		}
 
 		// this.child_icons = this.get_desktop_icon(this.icon_title).child_icons;
 		// this.child_icons_data = this.get_child_icons_data();
+	}
+	setup_hide_button() {
+		this.icon.find(".hide-button").on("click", function (event) {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			let desktop_label = event.currentTarget.parentElement.dataset.id;
+			let desktop_icon = get_desktop_icon_by_label(desktop_label);
+			if (event.target.parentElement.dataset.mode == "hide") {
+				desktop_icon.hidden = 1;
+			} else {
+				desktop_icon.hidden = 0;
+			}
+			frappe.pages["desktop"].desktop_page.update();
+		});
 	}
 	validate_icon() {
 		// validate if my workspaces are empty
@@ -1127,10 +1148,9 @@ class DesktopModal {
 	}
 }
 
-class DesktopPane {
-	constructor() {}
-	get wrapper() {
-		return $(".desktop-wrapper .desktop-pane");
+class IconsPane {
+	constructor() {
+		this.wrapper = $($(".desktop-container .icons-container").get(0));
 	}
 	show() {
 		this.wrapper.removeClass("hidden");
@@ -1139,14 +1159,18 @@ class DesktopPane {
 			this.grid.update_grid();
 			return;
 		}
+		this.wrapper.append(
+			"<span style='margin-top: 10px; margin-bottom: 20px'>Removed Icons</span>"
+		);
 		this.grid = new DesktopIconGrid({
 			name: "hidden-icons-grid",
-			wrapper: this.wrapper.find(".pane-icons-area"),
+			wrapper: this.wrapper,
 			icons_data: frappe.pages.desktop.desktop_page.hidden_icons,
-			row_size: 2,
+			row_size: 6,
 			edit_mode: true,
+			compact: true,
+			is_pane: true,
 		});
-
 		this.setup();
 	}
 	hide() {
