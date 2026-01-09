@@ -355,7 +355,7 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 			{"docs": {"doctype": "ToDo", "name": "test"}, "sid": self.sid},
 		)
 		self.assertEqual(response.status_code, 417)
-		self.assertIn("'docs' must be a list", response.json["errors"][0]["message"])
+		self.assertIn("'docs' must be a list", response.json["errors"][0]["exception"])
 
 		# Test with invalid document format (not dict)
 		response = self.post(
@@ -484,7 +484,7 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 			{"docs": {"name": "test", "description": "test"}, "sid": self.sid},
 		)
 		self.assertEqual(response.status_code, 417)
-		self.assertIn("'docs' must be a list", response.json["errors"][0]["message"])
+		self.assertIn("'docs' must be a list", response.json["errors"][0]["exception"])
 
 		# Test with missing name field
 		response = self.post(
@@ -495,6 +495,54 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 		data = response.json["data"]
 		self.assertEqual(data["failure_count"], 1)
 		self.assertIn("'name' must be a string or integer", data["failed"][0]["error"])
+
+	def test_bulk_enqueue(self):
+		# Create 25 docs
+		docs = [
+			frappe.get_doc({"doctype": self.DOCTYPE, "description": f"To delete {i}"}).insert()
+			for i in range(25)
+		]
+		frappe.db.commit()  # nosemgrep
+
+		try:
+			# Bulk delete > 20 docs
+			names = [doc.name for doc in docs]
+			response = self.post(
+				self.resource(self.DOCTYPE, "bulk_delete"),
+				{"names": names, "sid": self.sid},
+			)
+
+			self.assertEqual(response.status_code, 202)
+			self.assertIn("job_id", response.json["data"])
+		finally:
+			# Clean up
+			for doc in docs:
+				frappe.delete_doc_if_exists(self.DOCTYPE, doc.name)
+			frappe.db.commit()  # nosemgrep
+
+	def test_bulk_update_enqueue(self):
+		# Create 25 docs
+		docs = [
+			frappe.get_doc({"doctype": self.DOCTYPE, "description": f"To update {i}"}).insert()
+			for i in range(25)
+		]
+		frappe.db.commit()  # nosemgrep
+
+		try:
+			# Bulk update > 20 docs
+			updates = [{"name": doc.name, "description": "Updated"} for doc in docs]
+			response = self.post(
+				self.resource(self.DOCTYPE, "bulk_update"),
+				{"docs": updates, "sid": self.sid},
+			)
+
+			self.assertEqual(response.status_code, 202)
+			self.assertIn("job_id", response.json["data"])
+		finally:
+			# Clean up
+			for doc in docs:
+				frappe.delete_doc_if_exists(self.DOCTYPE, doc.name)
+			frappe.db.commit()  # nosemgrep
 
 
 class TestDocTypeAPIV2(FrappeAPITestCase):

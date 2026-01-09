@@ -25,6 +25,10 @@ PERMISSION_MAP = {
 }
 
 
+class FrappeValueError(ValueError):
+	http_status_code = 417
+
+
 def handle_rpc_call(method: str, doctype: str | None = None):
 	from frappe.modules.utils import load_doctype_module
 
@@ -125,13 +129,13 @@ def document_list(doctype: str) -> list[dict[str, Any]]:
 	as_dict: bool = bool(args.get("as_dict", True))
 
 	if fields and not isinstance(fields, list):
-		frappe.throw(_("'fields' must be a list"))
+		raise FrappeValueError("'fields' must be a list")
 	if filters and not isinstance(filters, (list, dict)):
-		frappe.throw(_("'filters' must be a list or dictionary"))
+		raise FrappeValueError("'filters' must be a list or dictionary")
 	if order_by and not isinstance(order_by, str):
-		frappe.throw(_("'order_by' must be a string"))
+		raise FrappeValueError("'order_by' must be a string")
 	if group_by and not isinstance(group_by, str):
-		frappe.throw(_("'group_by' must be a string"))
+		raise FrappeValueError("'group_by' must be a string")
 
 	query = frappe.qb.get_query(
 		table=doctype,
@@ -257,19 +261,34 @@ def bulk_delete_docs(doctype: str):
 		success_count: Number of successful deletions
 		failure_count: Number of failed deletions
 	"""
-	data = frappe.form_dict
-	names = data.get("names", [])
+	names = frappe.form_dict.get("names")
 
 	if not isinstance(names, list):
-		frappe.throw(_("'names' must be a list"))
+		raise FrappeValueError("'names' must be a list")
 
+	if len(names) > 20:
+		job = frappe.enqueue(
+			"frappe.api.v2.execute_bulk_delete_docs",
+			doctype=doctype,
+			names=names,
+		)
+		frappe.response.http_status_code = 202
+		return {"job_id": job.id}
+
+	return execute_bulk_delete_docs(doctype, names)
+
+
+def execute_bulk_delete_docs(doctype: str, names: list[str | int]):
 	deleted = []
 	failed = []
 
 	for name in names:
 		if not isinstance(name, str | int):
-			failed.append({"name": name, "error": _("'name' must be a string or integer")})
+			failed.append({"name": name, "error": "'name' must be a string or integer"})
 			continue
+
+		if isinstance(name, int):
+			name = str(name)
 
 		savepoint = "bulk_delete_docs"
 		frappe.db.savepoint(savepoint)
@@ -303,12 +322,23 @@ def bulk_delete():
 		success_count: Number of successful deletions
 		failure_count: Number of failed deletions
 	"""
-	data = frappe.form_dict
-	docs = data.get("docs")
+	docs = frappe.form_dict.get("docs", [])
 
 	if not isinstance(docs, list):
-		frappe.throw(_("'docs' must be a list"))
+		raise FrappeValueError("'docs' must be a list")
 
+	if len(docs) > 20:
+		job = frappe.enqueue(
+			"frappe.api.v2.execute_bulk_delete",
+			docs=docs,
+		)
+		frappe.response.http_status_code = 202
+		return {"job_id": job.id}
+
+	return execute_bulk_delete(docs)
+
+
+def execute_bulk_delete(docs: list):
 	deleted = []
 	failed = []
 
@@ -320,16 +350,19 @@ def bulk_delete():
 
 		try:
 			if not isinstance(item, dict):
-				raise ValueError(_("Each document must be a dictionary with 'doctype' and 'name' keys"))
+				raise FrappeValueError("Each document must be a dictionary with 'doctype' and 'name' keys")
 
 			doctype = item.get("doctype")
 			name = item.get("name")
 
 			if not isinstance(doctype, str):
-				raise ValueError(_("'doctype' must be a string"))
+				raise FrappeValueError("'doctype' must be a string")
 
 			if not isinstance(name, str | int):
-				raise ValueError(_("'name' must be a string or integer"))
+				raise FrappeValueError("'name' must be a string or integer")
+
+			if isinstance(name, int):
+				name = str(name)
 
 			frappe.delete_doc(doctype, name, ignore_missing=False)
 			deleted.append({"doctype": doctype, "name": name})
@@ -360,12 +393,24 @@ def bulk_update_docs(doctype: str):
 		success_count: Number of successful updates
 		failure_count: Number of failed updates
 	"""
-	data = frappe.form_dict
-	docs = data.get("docs")
+	docs = frappe.form_dict.get("docs")
 
 	if not isinstance(docs, list):
-		frappe.throw(_("'docs' must be a list"))
+		raise FrappeValueError("'docs' must be a list")
 
+	if len(docs) > 20:
+		job = frappe.enqueue(
+			"frappe.api.v2.execute_bulk_update_docs",
+			doctype=doctype,
+			docs=docs,
+		)
+		frappe.response.http_status_code = 202
+		return {"job_id": job.id}
+
+	return execute_bulk_update_docs(doctype, docs)
+
+
+def execute_bulk_update_docs(doctype: str, docs: list):
 	updated = []
 	failed = []
 
@@ -376,11 +421,14 @@ def bulk_update_docs(doctype: str):
 
 		try:
 			if not isinstance(item, dict):
-				raise ValueError(_("Each update must be a dictionary with 'name' and field values"))
+				raise FrappeValueError("Each update must be a dictionary with 'name' and field values")
 
 			name = item.get("name")
 			if not isinstance(name, str | int):
-				raise ValueError(_("'name' must be a string or integer"))
+				raise FrappeValueError("'name' must be a string or integer")
+
+			if isinstance(name, int):
+				name = str(name)
 
 			doc = frappe.get_doc(doctype, name, for_update=True)
 			item_copy = item.copy()
@@ -419,12 +467,23 @@ def bulk_update():
 		success_count: Number of successful updates
 		failure_count: Number of failed updates
 	"""
-	data = frappe.form_dict
-	docs = data.get("docs")
+	docs = frappe.form_dict.get("docs")
 
 	if not isinstance(docs, list):
-		frappe.throw(_("'docs' must be a list"))
+		raise FrappeValueError("'docs' must be a list")
 
+	if len(docs) > 20:
+		job = frappe.enqueue(
+			"frappe.api.v2.execute_bulk_update",
+			docs=docs,
+		)
+		frappe.response.http_status_code = 202
+		return {"job_id": job.id}
+
+	return execute_bulk_update(docs)
+
+
+def execute_bulk_update(docs: list):
 	updated = []
 	failed = []
 
@@ -436,18 +495,21 @@ def bulk_update():
 
 		try:
 			if not isinstance(item, dict):
-				raise ValueError(
-					_("Each document must be a dictionary with 'doctype', 'name', and field values")
+				raise FrappeValueError(
+					"Each document must be a dictionary with 'doctype', 'name', and field values"
 				)
 
 			doctype = item.get("doctype")
 			name = item.get("name")
 
 			if not isinstance(doctype, str):
-				raise ValueError(_("'doctype' must be a string"))
+				raise FrappeValueError("'doctype' must be a string")
 
 			if not isinstance(name, str | int):
-				raise ValueError(_("'name' must be a string or integer"))
+				raise FrappeValueError("'name' must be a string or integer")
+
+			if isinstance(name, int):
+				name = str(name)
 
 			doc = frappe.get_doc(doctype, name, for_update=True)
 			item_copy = item.copy()
@@ -488,7 +550,7 @@ def run_doc_method(method: str, document: dict[str, Any] | str, kwargs=None):
 		document = frappe.parse_json(document)
 
 	if not isinstance(document, dict):
-		frappe.throw(_("'document' must be a dictionary"))
+		raise FrappeValueError("'document' must be a dictionary")
 
 	if kwargs is None:
 		kwargs = {}
