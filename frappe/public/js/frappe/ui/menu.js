@@ -155,7 +155,13 @@ frappe.ui.menu = class ContextMenu {
 					});
 					me.hide();
 					me.opts.onHide && me.opts.onHide(me);
-					frappe.set_route(item.url);
+					if (item.url.startsWith("/desk")) {
+						frappe.set_route(item.url);
+					} else if (item.url.startsWith("/")) {
+						window.location.href = window.location.origin + item.url;
+					} else {
+						window.open(item.url, "_blank").focus();
+					}
 				});
 			}
 		}
