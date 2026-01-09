@@ -284,7 +284,7 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 		# Bulk delete
 		response = self.post(
 			self.resource(self.DOCTYPE, "bulk_delete"),
-			{"names": frappe.as_json([doc1.name, doc2.name]), "sid": self.sid},
+			{"names": [doc1.name, doc2.name], "sid": self.sid},
 		)
 
 		self.assertEqual(response.status_code, 200)
@@ -308,7 +308,7 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 		non_existent = "non-existent-todo"
 		response = self.post(
 			self.resource(self.DOCTYPE, "bulk_delete"),
-			{"names": frappe.as_json([doc.name, non_existent]), "sid": self.sid},
+			{"names": [doc.name, non_existent], "sid": self.sid},
 		)
 
 		self.assertEqual(response.status_code, 200)
@@ -330,12 +330,10 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 		response = self.post(
 			self.method("bulk_delete"),
 			{
-				"docs": frappe.as_json(
-					[
-						{"doctype": "ToDo", "name": todo.name},
-						{"doctype": "Note", "name": note.name},
-					]
-				),
+				"docs": [
+					{"doctype": "ToDo", "name": todo.name},
+					{"doctype": "Note", "name": note.name},
+				],
 				"sid": self.sid,
 			},
 		)
@@ -354,18 +352,20 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 		# Test with invalid format (not a list)
 		response = self.post(
 			self.method("bulk_delete"),
-			{"docs": frappe.as_json({"doctype": "ToDo", "name": "test"}), "sid": self.sid},
+			{"docs": {"doctype": "ToDo", "name": "test"}, "sid": self.sid},
 		)
 		self.assertEqual(response.status_code, 417)
+		self.assertIn("'docs' must be a list", response.json["errors"][0]["message"])
 
 		# Test with invalid document format (not dict)
 		response = self.post(
 			self.method("bulk_delete"),
-			{"docs": frappe.as_json(["invalid-item"]), "sid": self.sid},
+			{"docs": ["invalid-item"], "sid": self.sid},
 		)
 		self.assertEqual(response.status_code, 200)
 		data = response.json["data"]
 		self.assertEqual(data["failure_count"], 1)
+		self.assertIn("must be a dictionary", data["failed"][0]["error"])
 
 	def test_bulk_update_docs_single_doctype(self):
 		# Create fresh docs for this test
@@ -378,12 +378,10 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 			response = self.post(
 				self.resource(self.DOCTYPE, "bulk_update"),
 				{
-					"docs": frappe.as_json(
-						[
-							{"name": doc1.name, "description": "Updated description 1", "priority": "High"},
-							{"name": doc2.name, "description": "Updated description 2", "priority": "Low"},
-						]
-					),
+					"docs": [
+						{"name": doc1.name, "description": "Updated description 1", "priority": "High"},
+						{"name": doc2.name, "description": "Updated description 2", "priority": "Low"},
+					],
 					"sid": self.sid,
 				},
 			)
@@ -419,12 +417,10 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 			response = self.post(
 				self.method("bulk_update"),
 				{
-					"docs": frappe.as_json(
-						[
-							{"doctype": "ToDo", "name": todo.name, "description": "Updated ToDo"},
-							{"doctype": "Note", "name": note.name, "title": "Updated Note"},
-						]
-					),
+					"docs": [
+						{"doctype": "ToDo", "name": todo.name, "description": "Updated ToDo"},
+						{"doctype": "Note", "name": note.name, "title": "Updated Note"},
+					],
 					"sid": self.sid,
 				},
 			)
@@ -457,12 +453,10 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 			response = self.post(
 				self.resource(self.DOCTYPE, "bulk_update"),
 				{
-					"docs": frappe.as_json(
-						[
-							{"name": valid_doc, "description": "Updated"},
-							{"name": non_existent, "description": "Should fail"},
-						]
-					),
+					"docs": [
+						{"name": valid_doc, "description": "Updated"},
+						{"name": non_existent, "description": "Should fail"},
+					],
 					"sid": self.sid,
 				},
 			)
@@ -487,18 +481,20 @@ class TestBulkOperationsV2(FrappeAPITestCase):
 		# Test with invalid format (not a list)
 		response = self.post(
 			self.resource(self.DOCTYPE, "bulk_update"),
-			{"docs": frappe.as_json({"name": "test", "description": "test"}), "sid": self.sid},
+			{"docs": {"name": "test", "description": "test"}, "sid": self.sid},
 		)
 		self.assertEqual(response.status_code, 417)
+		self.assertIn("'docs' must be a list", response.json["errors"][0]["message"])
 
 		# Test with missing name field
 		response = self.post(
 			self.resource(self.DOCTYPE, "bulk_update"),
-			{"docs": frappe.as_json([{"description": "test"}]), "sid": self.sid},
+			{"docs": [{"description": "test"}], "sid": self.sid},
 		)
 		self.assertEqual(response.status_code, 200)
 		data = response.json["data"]
 		self.assertEqual(data["failure_count"], 1)
+		self.assertIn("'name' must be a string or integer", data["failed"][0]["error"])
 
 
 class TestDocTypeAPIV2(FrappeAPITestCase):

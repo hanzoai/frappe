@@ -121,8 +121,17 @@ def document_list(doctype: str) -> list[dict[str, Any]]:
 	start: int = cint(args.get("start", 0))
 	limit: int = cint(args.get("limit", 20))
 	group_by: str | None = args.get("group_by", None)
-	debug: bool = args.get("debug", False)
-	as_dict: bool = args.get("as_dict", True)
+	debug: bool = bool(args.get("debug", False))
+	as_dict: bool = bool(args.get("as_dict", True))
+
+	if fields and not isinstance(fields, list):
+		frappe.throw(_("'fields' must be a list"))
+	if filters and not isinstance(filters, (list, dict)):
+		frappe.throw(_("'filters' must be a list or dictionary"))
+	if order_by and not isinstance(order_by, str):
+		frappe.throw(_("'order_by' must be a string"))
+	if group_by and not isinstance(group_by, str):
+		frappe.throw(_("'group_by' must be a string"))
 
 	query = frappe.qb.get_query(
 		table=doctype,
@@ -249,19 +258,27 @@ def bulk_delete_docs(doctype: str):
 		failure_count: Number of failed deletions
 	"""
 	data = frappe.form_dict
-	names = frappe.parse_json(data.get("names", "[]"))
+	names = data.get("names", [])
 
 	if not isinstance(names, list):
-		frappe.throw(_("'names' must be an array"))
+		frappe.throw(_("'names' must be a list"))
 
 	deleted = []
 	failed = []
 
 	for name in names:
+		if not isinstance(name, str | int):
+			failed.append({"name": name, "error": _("'name' must be a string or integer")})
+			continue
+
+		savepoint = "bulk_delete_docs"
+		frappe.db.savepoint(savepoint)
+
 		try:
 			frappe.delete_doc(doctype, name, ignore_missing=False)
 			deleted.append(name)
 		except Exception as e:
+			frappe.db.rollback(save_point=savepoint)
 			failed.append({"name": name, "error": str(e)})
 
 	return {
@@ -287,10 +304,10 @@ def bulk_delete():
 		failure_count: Number of failed deletions
 	"""
 	data = frappe.form_dict
-	docs = frappe.parse_json(data.get("docs", "[]"))
+	docs = data.get("docs")
 
 	if not isinstance(docs, list):
-		frappe.throw(_("Request body must contain 'docs' as an array"))
+		frappe.throw(_("'docs' must be a list"))
 
 	deleted = []
 	failed = []
@@ -298,6 +315,9 @@ def bulk_delete():
 	for item in docs:
 		doctype = None
 		name = None
+		savepoint = "bulk_delete"
+		frappe.db.savepoint(savepoint)
+
 		try:
 			if not isinstance(item, dict):
 				raise ValueError(_("Each document must be a dictionary with 'doctype' and 'name' keys"))
@@ -305,12 +325,16 @@ def bulk_delete():
 			doctype = item.get("doctype")
 			name = item.get("name")
 
-			if not doctype or not name:
-				raise ValueError(_("Both 'doctype' and 'name' are required"))
+			if not isinstance(doctype, str):
+				raise ValueError(_("'doctype' must be a string"))
+
+			if not isinstance(name, str | int):
+				raise ValueError(_("'name' must be a string or integer"))
 
 			frappe.delete_doc(doctype, name, ignore_missing=False)
 			deleted.append({"doctype": doctype, "name": name})
 		except Exception as e:
+			frappe.db.rollback(save_point=savepoint)
 			failed.append({"doctype": doctype, "name": name, "error": str(e)})
 
 	return {
@@ -337,23 +361,26 @@ def bulk_update_docs(doctype: str):
 		failure_count: Number of failed updates
 	"""
 	data = frappe.form_dict
-	docs = frappe.parse_json(data.get("docs", "[]"))
+	docs = data.get("docs")
 
 	if not isinstance(docs, list):
-		frappe.throw(_("'docs' must be an array"))
+		frappe.throw(_("'docs' must be a list"))
 
 	updated = []
 	failed = []
 
 	for item in docs:
 		name = None
+		savepoint = "bulk_update_docs"
+		frappe.db.savepoint(savepoint)
+
 		try:
 			if not isinstance(item, dict):
 				raise ValueError(_("Each update must be a dictionary with 'name' and field values"))
 
 			name = item.get("name")
-			if not name:
-				raise ValueError(_("'name' is required"))
+			if not isinstance(name, str | int):
+				raise ValueError(_("'name' must be a string or integer"))
 
 			doc = frappe.get_doc(doctype, name, for_update=True)
 			item_copy = item.copy()
@@ -367,6 +394,7 @@ def bulk_update_docs(doctype: str):
 			updated.append(name)
 			frappe.response.docs.append(doc.as_dict())
 		except Exception as e:
+			frappe.db.rollback(save_point=savepoint)
 			failed.append({"name": name, "error": str(e)})
 
 	return {
@@ -392,10 +420,10 @@ def bulk_update():
 		failure_count: Number of failed updates
 	"""
 	data = frappe.form_dict
-	docs = frappe.parse_json(data.get("docs", "[]"))
+	docs = data.get("docs")
 
 	if not isinstance(docs, list):
-		frappe.throw(_("Request body must contain 'docs' as an array"))
+		frappe.throw(_("'docs' must be a list"))
 
 	updated = []
 	failed = []
@@ -403,6 +431,9 @@ def bulk_update():
 	for item in docs:
 		doctype = None
 		name = None
+		savepoint = "bulk_update"
+		frappe.db.savepoint(savepoint)
+
 		try:
 			if not isinstance(item, dict):
 				raise ValueError(
@@ -412,8 +443,11 @@ def bulk_update():
 			doctype = item.get("doctype")
 			name = item.get("name")
 
-			if not doctype or not name:
-				raise ValueError(_("Both 'doctype' and 'name' are required"))
+			if not isinstance(doctype, str):
+				raise ValueError(_("'doctype' must be a string"))
+
+			if not isinstance(name, str | int):
+				raise ValueError(_("'name' must be a string or integer"))
 
 			doc = frappe.get_doc(doctype, name, for_update=True)
 			item_copy = item.copy()
@@ -428,6 +462,7 @@ def bulk_update():
 			updated.append({"doctype": doctype, "name": name})
 			frappe.response.docs.append(doc.as_dict())
 		except Exception as e:
+			frappe.db.rollback(save_point=savepoint)
 			failed.append({"doctype": doctype, "name": name, "error": str(e)})
 
 	return {
@@ -451,6 +486,9 @@ def run_doc_method(method: str, document: dict[str, Any] | str, kwargs=None):
 
 	if isinstance(document, str):
 		document = frappe.parse_json(document)
+
+	if not isinstance(document, dict):
+		frappe.throw(_("'document' must be a dictionary"))
 
 	if kwargs is None:
 		kwargs = {}
