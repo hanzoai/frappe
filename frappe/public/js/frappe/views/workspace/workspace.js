@@ -778,7 +778,7 @@ frappe.views.Workspace = class Workspace {
 								message: __("Saved"),
 								indicator: "green",
 							});
-							frappe.set_route("desk","private",page.title)
+							frappe.set_route("desk", "private", page.title);
 						}
 					},
 				});
