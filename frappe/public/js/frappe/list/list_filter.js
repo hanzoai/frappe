@@ -30,7 +30,7 @@ export default class ListFilter {
 
 			// Apply filter
 			$item.find(".filter-label").on("click", () => {
-				this.apply_saved_filter(filter.name);
+				this.apply_saved_filter(filter.name, filter.filter_name);
 			});
 
 			// Remove filter
@@ -44,11 +44,15 @@ export default class ListFilter {
 		});
 
 		this.append_create_new_item($menu);
+		this.append_clear_selected_filter($menu);
 	}
 
-	apply_saved_filter(filter_name) {
+	apply_saved_filter(filter_name, filter_label) {
 		this.list_view.filter_area.clear().then(() => {
 			this.list_view.filter_area.add(this.get_filters_values(filter_name));
+			this.list_view.page.add_inner_message(
+				__("Applied saved filter: {0}", [filter_label.bold()])
+			);
 		});
 	}
 
@@ -75,6 +79,19 @@ export default class ListFilter {
 			this.show_create_filter_dialog();
 		});
 		$menu.append($create_item);
+	}
+	append_clear_selected_filter($menu) {
+		const clear_filters = {
+			name: "clear_selected",
+			filter_name: "Clear Selected Filter",
+		};
+
+		const $clear_item = this.filter_template(clear_filters, true);
+		$clear_item.find(".filter-label").on("click", (e) => {
+			this.list_view.filter_area.clear();
+			$(".inner-page-message").remove();
+		});
+		$menu.append($clear_item);
 	}
 
 	show_create_filter_dialog() {
