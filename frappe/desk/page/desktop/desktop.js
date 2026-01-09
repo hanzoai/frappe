@@ -145,6 +145,20 @@ function toggle_icons(icons) {
 	});
 }
 
+frappe.desktop_utils.get_folder_icons = function (folder_name) {
+	let icons_in_folder = [];
+	let icons = frappe.desktop_icons;
+	if (frappe.pages["desktop"].desktop_page.edit_mode) {
+		icons = frappe.new_desktop_icons;
+	}
+	icons.forEach((icon) => {
+		if (icon.parent_icon == folder_name) {
+			icons_in_folder.push(icon.label);
+		}
+	});
+	return icons_in_folder;
+};
+
 function add_icons_to_folder(folder_name, items) {
 	let folder = get_desktop_icon_by_label(folder_name);
 	items.forEach((item) => {
@@ -959,8 +973,18 @@ class DesktopIcon {
 				let modal = frappe.desktop_utils.create_desktop_modal(me);
 				modal.setup(me.icon_title, me.child_icons, 4);
 				let $title = modal.modal.find(".modal-title");
-				let title = new InlineEditor($title, this.icon_data.label, function (newValue) {
-					console.log("Init rename");
+				let title = new InlineEditor($title, this.icon_data.label, function (
+					old_value,
+					new_value
+				) {
+					let icon = get_desktop_icon_by_label(old_value);
+					let folder_icons = frappe.desktop_utils.get_folder_icons(old_value);
+					if (icon) {
+						icon.label = new_value;
+					}
+					add_icons_to_folder(new_value, folder_icons);
+
+					frappe.pages["desktop"].desktop_page.update();
 				});
 				modal.show();
 			});
@@ -1174,11 +1198,11 @@ class InlineEditor {
 		this.input.on("keydown", (event) => {
 			if (event.key === "Enter") {
 				const newValue = this.input.val().trim();
-
+				this.input.css("display", "none");
 				this.label.css("visibility", "visible");
 				this.label.find("span").text(newValue);
 
-				this.onRename(newValue, this);
+				this.onRename(this.initialValue, newValue, this);
 			}
 		});
 
