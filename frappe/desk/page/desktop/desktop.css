@@ -501,3 +501,32 @@
     gap: 0px;
     justify-content: center;
 }
+
+.title-widget{
+    display: inline-block;
+    position: relative;
+}
+
+.title-input-label{
+  position: absolute;
+  top: 0px;
+  color: var(--neutral-white);
+  line-height: 22px;
+  z-index: 1;
+  pointers-events: none;
+  width: 100%;
+    text-align: center;
+}
+.title-input-wrapper{
+    position: relative;
+    display: inline-block;
+
+}
+
+.title-input-wrapper input{
+  border: 1px solid transparent;
+  width: 100%;
+  height: 100%;
+  background: none;
+    color: var(--neutral-white);
+}
