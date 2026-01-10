@@ -440,12 +440,7 @@ def validate_link_and_fetch(
 	if not search_result:
 		return {}  # does not exist or filtered out
 
-	# get value in the right case and type (str | int)
-	# for matching with search result
-	columns_to_fetch = ["name"]
-	if frappe.is_table(doctype):
-		columns_to_fetch.append("parenttype")  # for child table permission check
-
+	values = None
 	is_virtual_dt = is_virtual_doctype(doctype)
 	if is_virtual_dt:
 		try:
@@ -455,16 +450,20 @@ def validate_link_and_fetch(
 
 		except frappe.DoesNotExistError:
 			frappe.clear_last_message()
-			return {}
 	else:
+		# get value in the right case and type (str | int)
+		# for matching with search result
+		columns_to_fetch = ["name"]
+		if frappe.is_table(doctype):
+			columns_to_fetch.append("parenttype")  # for child table permission check
 		values = frappe.db.get_value(doctype, docname, columns_to_fetch, as_dict=True)
+
+	if not values:
+		return {}  # does not exist
 
 	name_to_compare = values["name"]
 	# this will be used to fetch fields later
 	parent_doctype = values.pop("parenttype", None)
-
-	if not name_to_compare:
-		return {}  # does not exist
 
 	# try to match name in search result
 	# if search_result is large, assume valid link (result may not appear in some custom queries)
