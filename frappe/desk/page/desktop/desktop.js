@@ -275,7 +275,7 @@ class DesktopPage {
 		this.setup_events();
 	}
 	setup_edit_button() {
-		if (this.edit_mode) return;
+		if (this.edit_mode || frappe.is_mobile()) return;
 		const me = this;
 		$(".desktop-edit").remove();
 		this.$desktop_edit_button = $(
