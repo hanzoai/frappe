@@ -375,9 +375,9 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 	}
 
 	/**
-	 * Determine if we should use GET (enables HTTP caching) or POST.
-	 * Use GET for empty searches with filters that fit in URL.
-	 * Use POST for searches with text or large filters.
+	 * Helps determine if we should use GET (enables HTTP caching) or POST.
+	 * Use GET for filters that fit in URL.
+	 * Use POST for large filters.
 	 */
 	are_filters_large(filters, max_get_size = 2000) {
 		if (!filters) return [false, filters];
