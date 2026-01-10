@@ -432,8 +432,8 @@ def validate_link_and_fetch(
 
 	fields_to_fetch = frappe.parse_json(fields_to_fetch)
 
-	# only cache is no fields to fetch and no filters specified by user
-	can_cache = not (fields_to_fetch or filters)
+	# only cache is no fields to fetch and request is GET
+	can_cache = not fields_to_fetch and frappe.request.method == "GET"
 
 	# Use search_widget to validate - ensures filters/custom queries are respected
 	# in addition to standard permission checks
