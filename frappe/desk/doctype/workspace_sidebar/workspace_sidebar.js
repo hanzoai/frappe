@@ -3,6 +3,10 @@
 
 frappe.ui.form.on("Workspace Sidebar", {
 	refresh(frm) {
+		if (frm.doc.standard && !frappe.boot.developer_mode) {
+			frm.set_intro("This is a standard sidebar and cannot be edited");
+			frm.set_read_only();
+		}
 		if (!frm.is_new()) {
 			frm.add_custom_button(__(`View Sidebar`), () => {
 				if (frm.doc.items[0].link_type === "DocType") {

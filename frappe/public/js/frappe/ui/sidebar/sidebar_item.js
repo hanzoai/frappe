@@ -59,7 +59,7 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 					);
 					if (this.item.link_type == "DocType") {
 						args.doc_view = "List";
-						args.filters = filters_json;
+						args.route_options = filters_json;
 					}
 				}
 				path = frappe.utils.generate_route(args);
