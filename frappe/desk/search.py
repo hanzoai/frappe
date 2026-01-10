@@ -16,6 +16,8 @@ from frappe.utils import cint, cstr, escape_html, unique
 from frappe.utils.caching import http_cache
 from frappe.utils.data import make_filter_tuple
 
+PAGE_LENGTH_FOR_LINK_VALIDATION = 25_000
+
 
 def sanitize_searchfield(searchfield: str):
 	if not searchfield:
@@ -130,7 +132,7 @@ def search_widget(
 		# for custom queries that don't respect filters but respect limit (rare)
 		# or for when we have to rely on txt
 		# we want to match "A" with "A" only and not "A1", "BA" etc.
-		page_length = 100_000
+		page_length = PAGE_LENGTH_FOR_LINK_VALIDATION
 
 	if query:  # Query = custom search query i.e. python function
 		try:

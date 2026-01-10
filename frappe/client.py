@@ -9,7 +9,7 @@ import frappe.model
 import frappe.utils
 from frappe import _
 from frappe.desk.reportview import validate_args
-from frappe.desk.search import make_filter_tuple, search_widget
+from frappe.desk.search import PAGE_LENGTH_FOR_LINK_VALIDATION, search_widget
 from frappe.model.utils import is_virtual_doctype
 from frappe.utils import attach_expanded_links, get_safe_filters
 from frappe.utils.caching import http_cache
@@ -420,16 +420,6 @@ def validate_link_and_fetch(
 	if not docname:
 		frappe.throw(_("Document Name must not be empty"))
 
-	if is_virtual_doctype(doctype):
-		try:
-			doc = frappe.get_doc(doctype, docname)
-			doc.check_permission("select" if frappe.only_has_select_perm(doctype) else "read")
-			return {"name": doc.name}
-
-		except frappe.DoesNotExistError:
-			frappe.clear_last_message()
-			return {}
-
 	fields_to_fetch = frappe.parse_json(fields_to_fetch)
 
 	# only cache is no fields to fetch and request is GET
@@ -456,17 +446,36 @@ def validate_link_and_fetch(
 	if frappe.is_table(doctype):
 		columns_to_fetch.append("parenttype")  # for child table permission check
 
-	values = frappe.db.get_value(doctype, docname, columns_to_fetch, as_dict=True)
-	name_to_compare = values.name
+	is_virtual_dt = is_virtual_doctype(doctype)
+	if is_virtual_dt:
+		try:
+			doc = frappe.get_doc(doctype, docname)
+			doc.check_permission("select" if frappe.only_has_select_perm(doctype) else "read")
+			values = {"name": doc.name}
+
+		except frappe.DoesNotExistError:
+			frappe.clear_last_message()
+			return {}
+	else:
+		values = frappe.db.get_value(doctype, docname, columns_to_fetch, as_dict=True)
+
+	name_to_compare = values["name"]
 	# this will be used to fetch fields later
 	parent_doctype = values.pop("parenttype", None)
 
 	if not name_to_compare:
 		return {}  # does not exist
 
-	# for custom queries that don't respect filters
-	if not any(item[0] == name_to_compare for item in search_result):
+	# try to match name in search result
+	# if search_result is large, assume valid link (result may not appear in some custom queries)
+	if len(search_result) < PAGE_LENGTH_FOR_LINK_VALIDATION and not any(
+		item[0] == name_to_compare for item in search_result
+	):
 		return {}  # no permission or filtered out
+
+	# don't cache or fetch for virtual doctypes
+	if is_virtual_dt:
+		return values
 
 	if not fields_to_fetch:
 		if can_cache:
