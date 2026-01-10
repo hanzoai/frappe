@@ -8,7 +8,7 @@
   "pdf_settings",
   "send_print_as_pdf",
   "repeat_header_footer",
-  "pdf_generator_for_standard_format",
+  "pdf_generator",
   "column_break_4",
   "pdf_page_size",
   "pdf_page_height",
@@ -174,9 +174,9 @@
   },
   {
    "default": "wkhtmltopdf",
-   "fieldname": "pdf_generator_for_standard_format",
+   "fieldname": "pdf_generator",
    "fieldtype": "Select",
-   "label": "PDF Generator for Standard Format",
+   "label": "PDF Generator",
    "options": "wkhtmltopdf\nchrome"
   }
  ],
@@ -184,7 +184,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-01-10 11:08:14.847391",
+ "modified": "2026-01-10 11:54:14.176810",
  "modified_by": "Administrator",
  "module": "Printing",
  "name": "Print Settings",

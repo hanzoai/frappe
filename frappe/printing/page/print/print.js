@@ -712,7 +712,7 @@ frappe.ui.form.PrintView = class {
 	}
 	get_pdf_generator(pdf_generator) {
 		if (!pdf_generator) {
-			pdf_generator = this.print_settings.pdf_generator_for_standard_format || "wkhtmltopdf";
+			pdf_generator = this.print_settings.pdf_generator || "wkhtmltopdf";
 		}
 		return pdf_generator;
 	}
