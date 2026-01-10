@@ -62,6 +62,7 @@ class PrintSettings(Document):
 		print_style: DF.Link | None
 		repeat_header_footer: DF.Check
 		send_print_as_pdf: DF.Check
+		use_chrome_for_standard_format: DF.Check
 		with_letterhead: DF.Check
 	# end: auto-generated types
 
