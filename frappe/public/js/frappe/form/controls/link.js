@@ -379,27 +379,22 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 	 * Use GET for empty searches with filters that fit in URL.
 	 * Use POST for searches with text or large filters.
 	 */
-	should_use_post_for_search(txt, filters, max_get_size = 2000) {
-		// Always use POST if there's search text
-		if (txt) return true;
+	are_filters_large(filters, max_get_size = 2000) {
+		if (!filters) return [false, filters];
 
-		// If no filters, use GET
-		if (!filters) return false;
-
-		// Check size of filters when stringified
 		let filters_str = filters;
 		if (typeof filters !== "string") {
 			try {
 				filters_str = JSON.stringify(filters);
 			} catch (e) {
 				// If stringification fails, use POST
-				return true;
+				return [true, filters];
 			}
 		}
 
 		// URL-encoded params add ~30% overhead on average
 		const estimated_size = filters_str.length * 1.3;
-		return estimated_size > max_get_size;
+		return [estimated_size > max_get_size, filters_str];
 	}
 
 	get_search_args(txt) {
@@ -435,7 +430,15 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 			this.awesomplete.list = cache[doctype][term];
 		}
 
-		const use_get = !this.should_use_post_for_search(term, args.filters);
+		const filters = args.filters;
+		let use_get = !term;
+		if (use_get) {
+			const [are_filters_large, filters_str] = this.are_filters_large(filters);
+			use_get = !are_filters_large;
+
+			// perf: to prevent stringifying again in the call
+			args.filters = filters_str;
+		}
 		frappe.call({
 			type: use_get ? "GET" : "POST",
 			method: "frappe.desk.search.search_link",
@@ -451,8 +454,8 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 				// show filter description in awesomplete
 				let filter_string = this.df.filter_description
 					? this.df.filter_description
-					: args.filters
-					? await this.get_filter_description(args.filters)
+					: filters
+					? await this.get_filter_description(filters)
 					: null;
 				if (filter_string) {
 					r.message.push({
@@ -902,7 +905,14 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		this._debounced_input_handler?.cancel();
 
 		// filters may be too large to be sent as GET
-		const can_cache = !columns_to_fetch.length && !args.filters;
+		let can_cache = !columns_to_fetch.length;
+		if (can_cache) {
+			const [are_filters_large, filters_str] = this.are_filters_large(args.filters);
+			can_cache = !are_filters_large;
+
+			// perf: to prevent stringifying again in the call
+			args.filters = filters_str;
+		}
 
 		return frappe
 			.xcall(
