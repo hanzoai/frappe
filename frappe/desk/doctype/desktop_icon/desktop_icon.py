@@ -221,7 +221,6 @@ def create_desktop_icons_from_workspace():
 		icon.link_type = "Workspace Sidebar"
 		icon.label = w.name
 		icon.icon_type = "Link"
-		icon.standard = 1
 		icon.link_to = w.name
 		icon.icon = w.icon
 		if w.module:
@@ -267,7 +266,6 @@ def create_desktop_icons_from_installed_apps():
 				icon = frappe.new_doc("Desktop Icon")
 				icon.label = app_title
 				icon.link_type = "External"
-				icon.standard = 1
 				icon.idx = index
 				icon.icon_type = "App"
 				icon.app = a
@@ -281,3 +279,7 @@ def create_desktop_icons_from_installed_apps():
 def create_desktop_icons():
 	create_desktop_icons_from_installed_apps()
 	create_desktop_icons_from_workspace()
+
+
+def create_user_icons(user, data):
+	print("Hello")
