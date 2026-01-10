@@ -233,7 +233,12 @@ def get_user_pages_or_reports(parent, cache=False):
 	).run(as_dict=True)
 
 	for p in pages_with_custom_roles:
-		has_role[p.name] = {"modified": p.modified, "title": p.title, "ref_doctype": p.ref_doctype, "module": p.module}
+		has_role[p.name] = {
+			"modified": p.modified,
+			"title": p.title,
+			"ref_doctype": p.ref_doctype,
+			"module": p.module,
+		}
 
 	subq = (
 		frappe.qb.from_(customRole)
