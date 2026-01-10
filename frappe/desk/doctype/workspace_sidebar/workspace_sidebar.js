@@ -28,7 +28,7 @@ frappe.ui.form.on("Workspace Sidebar Item", {
 		let grid = frm.fields_dict.items.grid;
 		let link_to = row.link_to;
 		let row_obj = grid.get_grid_row(cdn);
-		if (link_to) {
+		if (link_to && row.link_type === "DocType" && row_obj) {
 			frappe.model.with_doctype(link_to, function () {
 				let meta = frappe.get_meta(link_to);
 				let field_obj = row_obj.get_field("navigate_to_tab");
