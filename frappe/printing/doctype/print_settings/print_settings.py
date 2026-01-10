@@ -24,6 +24,7 @@ class PrintSettings(Document):
 		enable_raw_printing: DF.Check
 		font: DF.Literal["Default", "Helvetica Neue", "Arial", "Helvetica", "Inter", "Verdana", "Monospace"]
 		font_size: DF.Float
+		pdf_generator_for_standard_format: DF.Literal["wkhtmltopdf", "chrome"]
 		pdf_page_height: DF.Float
 		pdf_page_size: DF.Literal[
 			"A0",
@@ -62,7 +63,6 @@ class PrintSettings(Document):
 		print_style: DF.Link | None
 		repeat_header_footer: DF.Check
 		send_print_as_pdf: DF.Check
-		use_chrome_for_standard_format: DF.Check
 		with_letterhead: DF.Check
 	# end: auto-generated types
 
