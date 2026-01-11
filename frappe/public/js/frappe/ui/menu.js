@@ -34,7 +34,7 @@ frappe.ui.menu = class ContextMenu {
 				if (!me.parent_menu) {
 					if (me.visible) {
 						me.hide();
-						me.opts.onHide && me.opts.onHide(me);
+						me.opts.onHide && me.opts.onHide(me.parent);
 					} else {
 						me.show(event);
 						me.opts.onShow && me.opts.onShow(me.parent);
