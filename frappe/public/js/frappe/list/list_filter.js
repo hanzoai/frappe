@@ -7,6 +7,7 @@ export default class ListFilter {
 		Object.assign(this, arguments[0]);
 		this.can_add_global = frappe.user.has_role(["System Manager", "Administrator"]);
 		this.filters = [];
+		this.active_filter = null;
 		this.refresh_list_filter();
 	}
 
@@ -50,10 +51,15 @@ export default class ListFilter {
 	apply_saved_filter(filter_name, filter_label) {
 		this.list_view.filter_area.clear().then(() => {
 			this.list_view.filter_area.add(this.get_filters_values(filter_name));
-			this.list_view.page.add_inner_message(
-				__("Applied saved filter: {0}", [filter_label.bold()])
-			);
+			this.active_filter = filter_label;
+			this.update_active_filter_label(this.active_filter);
 		});
+	}
+
+	update_active_filter_label(label) {
+		$(`.inner-group-button[data-label="${encodeURIComponent("Saved Filters")}"] button`)
+			.contents()
+			.first()[0].textContent = label;
 	}
 
 	bind_remove_filter(filter) {
@@ -63,6 +69,7 @@ export default class ListFilter {
 				const name = filter.name;
 				const applied_filters = this.get_filters_values(name);
 				this.remove_filter(name).then(() => this.refresh_list_filter());
+				this.update_active_filter_label("Saved Filters");
 				this.list_view.filter_area.remove_filters(applied_filters);
 			}
 		);
@@ -89,7 +96,8 @@ export default class ListFilter {
 		const $clear_item = this.filter_template(clear_filters, true);
 		$clear_item.find(".filter-label").on("click", (e) => {
 			this.list_view.filter_area.clear();
-			$(".inner-page-message").remove();
+			this.active_filter = null;
+			this.update_active_filter_label("Saved Filters");
 		});
 		$menu.append($clear_item);
 	}
