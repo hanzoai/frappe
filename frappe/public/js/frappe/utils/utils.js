@@ -979,25 +979,54 @@ Object.assign(frappe.utils, {
 		const $search_input = $wrapper.find('[data-element="search"]').show();
 		$search_input.focus().val("");
 		const $elements = $wrapper.find(el_class).show();
+		const $multichecks = $wrapper.find('[data-fieldtype="MultiCheck"]');
+
+		let $no_results = $wrapper.find(".no-results-message");
+		if (!$no_results.length) {
+			$no_results = $(`
+				<div class="no-results-message text-muted text-center" style="padding: 5px; display: none;">
+					${__("No values to show")}
+				</div>
+			`).appendTo($wrapper);
+		}
+
+		$no_results.hide();
+
+		const matches_filter = ($el, filter) => {
+			const $text_el = $el.find(text_class);
+			const text = $text_el.text().toLowerCase();
+
+			let name = "";
+			if (data_attr && $text_el.attr(data_attr)) {
+				name = $text_el.attr(data_attr).toLowerCase();
+			}
+
+			return text.includes(filter) || name.includes(filter);
+		};
 
 		$search_input.off("keyup").on("keyup", () => {
-			let text_filter = $search_input.val().toLowerCase();
-			// Replace trailing and leading spaces
-			text_filter = text_filter.replace(/^\s+|\s+$/g, "");
-			for (let i = 0; i < $elements.length; i++) {
-				const text_element = $elements.eq(i).find(text_class);
-				const text = text_element.text().toLowerCase();
+			const text_filter = $search_input.val().toLowerCase().trim();
+			let any_visible = false;
 
-				let name = "";
-				if (data_attr && text_element.attr(data_attr)) {
-					name = text_element.attr(data_attr).toLowerCase();
-				}
+			$elements.each(function () {
+				const match = matches_filter($(this), text_filter);
+				$(this).toggle(match);
+				if (match) any_visible = true;
+			});
 
-				if (text.includes(text_filter) || name.includes(text_filter)) {
-					$elements.eq(i).css("display", "");
-				} else {
-					$elements.eq(i).css("display", "none");
-				}
+			if ($multichecks.length) {
+				$multichecks.show();
+
+				$multichecks.each(function () {
+					const has_visible = $(this).find(el_class + ":visible").length;
+					$(this).toggle(!!has_visible);
+				});
+			}
+
+			if (text_filter) {
+				$no_results.toggle(!any_visible);
+			} else {
+				$no_results.hide();
 			}
 		});
 	},
