@@ -1839,7 +1839,9 @@ Object.assign(frappe.utils, {
 	},
 
 	process_filter_expression(filter) {
-		return this.cleanup_filters(new Function(`return ${filter}`)());
+		let filters = [];
+		filters = filter ? new Function(`return ${filter}`)() : [];
+		return this.cleanup_filters(filters);
 	},
 	cleanup_filters(filters) {
 		if (filters.length && filters[0].length == 5) {
