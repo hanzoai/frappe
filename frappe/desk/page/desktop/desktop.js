@@ -214,6 +214,8 @@ class DesktopPage {
 
 	setup() {
 		this.setup_avatar();
+		this.setup_help();
+		this.setup_notifications();
 		this.setup_navbar();
 		this.setup_awesomebar();
 		this.setup_editing_mode();
@@ -301,6 +303,19 @@ class DesktopPage {
 		});
 		this.$edit_button.find(".save").on("click", function () {
 			me.stop_editing_layout("submit");
+		});
+	}
+	setup_notifications() {
+		this.notifications = new frappe.ui.Notifications({
+			wrapper: $(".desktop-notifications"),
+			full_height: false,
+		});
+	}
+	setup_help() {
+		frappe.ui.create_menu({
+			parent: $(".help-dropdown"),
+			menu_items: frappe.utils.get_help_siblings(),
+			open_on_left: true,
 		});
 	}
 	setup_avatar() {
