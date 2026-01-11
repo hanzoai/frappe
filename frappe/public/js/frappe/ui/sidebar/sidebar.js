@@ -162,11 +162,16 @@ frappe.ui.Sidebar = class Sidebar {
 		let match = false;
 		const that = this;
 		$(".item-anchor").each(function () {
-			let href = decodeURIComponent($(this).attr("href")?.split("?")[0]);
+			let href = decodeURIComponent($(this).attr("href")?.split("?")[0].split("#")[0]);
+
 			const path = decodeURIComponent(window.location.pathname);
 
-			// Match only if path equals href or starts with it followed by "/" or end of string
-			const isActive = href === path;
+			// ensure no trailing slash mismatch
+			const clean_href = href.replace(/\/$/, "");
+			const clean_path = path.replace(/\/$/, "");
+
+			const isActive = clean_path === clean_href || clean_path.startsWith(clean_href + "/");
+
 			if (href && isActive) {
 				match = true;
 				if (that.active_item) that.active_item.removeClass("active-sidebar");
@@ -423,7 +428,7 @@ frappe.ui.Sidebar = class Sidebar {
 				default:
 					entity_name = route[1];
 			}
-			let sidebars = this.get_correct_workspace_sidebars(entity_name);
+			let sidebars = this.get_workspace_sidebars(entity_name);
 			this.preffered_sidebars = sidebars;
 			let module = router?.meta?.module;
 			if (this.sidebar_title && sidebars.includes(this.sidebar_title)) {
@@ -497,9 +502,9 @@ frappe.ui.Sidebar = class Sidebar {
 		if (matches) return;
 		let workspace_title;
 		if (route.length == 2) {
-			workspace_title = this.get_correct_workspace_sidebars(route[1]);
+			workspace_title = this.get_workspace_sidebars(route[1]);
 		} else {
-			workspace_title = this.get_correct_workspace_sidebars(route[0]);
+			workspace_title = this.get_workspace_sidebars(route[0]);
 		}
 		let module_name = workspace_title[0];
 		if (module_name) {
@@ -507,7 +512,7 @@ frappe.ui.Sidebar = class Sidebar {
 		}
 	}
 
-	get_correct_workspace_sidebars(link_to) {
+	get_workspace_sidebars(link_to) {
 		let sidebars = [];
 		Object.entries(this.all_sidebar_items).forEach(([name, sidebar]) => {
 			const { items, label } = sidebar;
