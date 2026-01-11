@@ -10,7 +10,7 @@
    "label": "Notification Summary"
   }
  ],
- "content": "[{\"id\":\"-bxX6Dwxxy\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Background Job Activity\",\"col\":12}},{\"id\":\"gccD2r7Ut3\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Notification Summary\",\"col\":12}}]",
+ "content": "[{\"id\":\"-bxX6Dwxxy\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Background Job Activity\",\"col\":12}},{\"id\":\"_U6-GCce9y\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Today's Error Count\",\"col\":4}},{\"id\":\"O8uXg3zzF1\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Scheduled Jobs\",\"col\":4}},{\"id\":\"i8x_VBbG5v\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Active Workers\",\"col\":4}},{\"id\":\"gccD2r7Ut3\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Notification Summary\",\"col\":12}}]",
  "creation": "2025-09-08 11:33:57.533875",
  "custom_blocks": [],
  "docstatus": 0,
@@ -24,11 +24,24 @@
  "label": "System",
  "link_type": "DocType",
  "links": [],
- "modified": "2025-10-30 18:22:58.416219",
+ "modified": "2026-01-12 00:03:31.031145",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "System",
- "number_cards": [],
+ "number_cards": [
+  {
+   "label": "Today's Error Count",
+   "number_card_name": "Error Logs"
+  },
+  {
+   "label": "Scheduled Jobs",
+   "number_card_name": "Scheduled Jobs"
+  },
+  {
+   "label": "Active Workers",
+   "number_card_name": "Active RQ Worker"
+  }
+ ],
  "owner": "Administrator",
  "parent_page": "",
  "public": 1,
