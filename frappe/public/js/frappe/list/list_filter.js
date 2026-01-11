@@ -20,6 +20,13 @@ export default class ListFilter {
 			[],
 			__("Saved Filters")
 		);
+
+		// Clear active filter on clicking 'x' button
+		const filter_x_btn = $(".filter-x-button");
+		filter_x_btn.on("click", () => {
+			this.active_filter = null;
+			this.update_active_filter_label("Saved Filters");
+		});
 	}
 
 	render_saved_filters() {
@@ -45,7 +52,6 @@ export default class ListFilter {
 		});
 
 		this.append_create_new_item($menu);
-		this.append_clear_selected_filter($menu);
 	}
 
 	apply_saved_filter(filter_name, filter_label) {
@@ -86,20 +92,6 @@ export default class ListFilter {
 			this.show_create_filter_dialog();
 		});
 		$menu.append($create_item);
-	}
-	append_clear_selected_filter($menu) {
-		const clear_filters = {
-			name: "clear_selected",
-			filter_name: "Clear Selected Filter",
-		};
-
-		const $clear_item = this.filter_template(clear_filters, true);
-		$clear_item.find(".filter-label").on("click", (e) => {
-			this.list_view.filter_area.clear();
-			this.active_filter = null;
-			this.update_active_filter_label("Saved Filters");
-		});
-		$menu.append($clear_item);
 	}
 
 	show_create_filter_dialog() {
