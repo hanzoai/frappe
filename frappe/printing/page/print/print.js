@@ -36,6 +36,10 @@ frappe.ui.form.PrintView = class {
 		this.wrapper = $(wrapper);
 		this.page = wrapper.page;
 		this.make();
+
+		this.wrapper.on("show", () => {
+			this.page.sidebar.show();
+		});
 	}
 
 	make() {
@@ -152,7 +156,6 @@ frappe.ui.form.PrintView = class {
 		this.sidebar_dynamic_section = $(`<div class="dynamic-settings"></div>`).appendTo(
 			this.sidebar
 		);
-		this.page.sidebar.show();
 	}
 
 	add_sidebar_item(df, is_dynamic) {
