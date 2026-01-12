@@ -44,6 +44,15 @@ frappe.ui.Page = class Page {
 		this.wrapper = $(this.parent);
 		this.add_main_section();
 		this.setup_scroll_handler();
+		this.setup_main_sidebar_toggle();
+		this.setup_mobile_awesomebar();
+	}
+
+	setup_mobile_awesomebar() {
+		if (frappe.boot.desk_settings.search_bar && frappe.is_mobile()) {
+			let awesome_bar = new frappe.search.AwesomeBar();
+			awesome_bar.setup(".navbar-modal-search-mobile");
+		}
 	}
 
 	setup_scroll_handler() {
@@ -221,6 +230,14 @@ frappe.ui.Page = class Page {
 			.tooltip({ delay: { show: 600, hide: 100 }, trigger: "hover" });
 
 		return button;
+	}
+
+	setup_main_sidebar_toggle() {
+		$(".sidebar-toggle-btn.navbar-brand").on("click", (event) => {
+			frappe.app.sidebar.set_height();
+			frappe.app.sidebar.toggle_width();
+			frappe.app.sidebar.prevent_scroll();
+		});
 	}
 
 	clear_indicator() {
