@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="row flex-nowrap align-center page-head-content justify-between">
 			<div class="page-title">
-				<button class="btn-reset sidebar-toggle-btn">
+				<button class="btn-reset sidebar-toggle-btn navbar-brand">
 					<svg class="es-icon icon-md sidebar-toggle-placeholder">
 						<use href="#es-line-align-justify"></use>
 					</svg>
@@ -24,7 +24,7 @@
 					<span class="indicator-pill whitespace-nowrap"></span>
 				</div>
 			</div>
-			<div class="flex col page-actions justify-content-end">
+			<div class="flex col page-actions justify-content-end {% if frappe.is_mobile() %} pr-0 {% endif %}">
 				<!-- buttons -->
 				<div class="filters flex"></div>
 				<div class="custom-actions hide hidden-xs hidden-md"></div>
@@ -60,6 +60,18 @@
 					<button class="btn btn-primary btn-sm hide primary-action"></button>
 				</div>
 			</div>
+			{% if frappe.is_mobile() %}
+				<div class="search-bar text-muted hidden ml-2 mr-3">
+					<div
+						class="navbar-modal-search-mobile"
+						placeholder="Search for type a command"
+					>
+						<span class="search-icon">
+							<svg class="icon icon-sm"><use href="#icon-search"></use></svg>
+						</span>
+					</div>
+				</div>
+			{% endif %}
 		</div>
 	</div>
 </div>
