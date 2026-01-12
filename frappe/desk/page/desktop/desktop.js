@@ -310,7 +310,7 @@ class DesktopPage {
 			{
 				icon: "edit",
 				label: "Edit Profile",
-				url: `/update-profile/${frappe.session.user}`,
+				url: `/desk/user/${frappe.session.user}`,
 			},
 			{
 				icon: is_dark ? "sun" : "moon",
