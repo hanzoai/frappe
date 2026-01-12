@@ -310,7 +310,7 @@ class DesktopPage {
 			{
 				icon: "edit",
 				label: "Edit Profile",
-				url: `/update-profile/${frappe.session.user}`,
+				url: `/desk/user/${frappe.session.user}`,
 			},
 			{
 				icon: is_dark ? "sun" : "moon",
@@ -318,11 +318,6 @@ class DesktopPage {
 				onClick: function () {
 					new frappe.ui.ThemeSwitcher().show();
 				},
-			},
-			{
-				icon: "lock",
-				label: "Reset Password",
-				url: "/update-password",
 			},
 			{
 				icon: "rotate-ccw",
