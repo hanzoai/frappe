@@ -320,11 +320,6 @@ class DesktopPage {
 				},
 			},
 			{
-				icon: "lock",
-				label: "Reset Password",
-				url: "/update-password",
-			},
-			{
 				icon: "rotate-ccw",
 				label: "Reset to Default",
 				onClick: function () {
