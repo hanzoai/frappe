@@ -206,7 +206,6 @@ class DesktopPage {
 				col: 3,
 			},
 		});
-		this.setup_editing_mode();
 		if (this.edit_mode) {
 			this.start_editing_layout();
 		}
@@ -217,10 +216,8 @@ class DesktopPage {
 		this.setup_notifications();
 		this.setup_navbar();
 		this.setup_awesomebar();
-		this.setup_editing_mode();
 		this.handle_route_change();
 		this.setup_events();
-		this.setup_edit_button();
 	}
 	setup_edit_button() {
 		const me = this;
