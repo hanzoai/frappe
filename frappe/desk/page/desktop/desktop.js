@@ -231,7 +231,6 @@ class DesktopPage {
 		this.$desktop_edit_button.on("click", () => {
 			frappe.new_desktop_icons = JSON.parse(JSON.stringify(frappe.desktop_icons));
 			me.start_editing_layout();
-			me.$desktop_edit_button.hide();
 		});
 	}
 	setup_editing_mode() {
@@ -398,7 +397,6 @@ class DesktopPage {
 			if (frappe.get_route()[0] == "desktop" || frappe.get_route()[0] == "")
 				me.setup_navbar();
 			else {
-				me.$desktop_edit_button.remove();
 				$(".navbar").show();
 				frappe.desktop_utils.close_desktop_modal();
 				// stop edit mode if route changes and cleanup
