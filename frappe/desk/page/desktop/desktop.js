@@ -214,6 +214,7 @@ class DesktopPage {
 
 	setup() {
 		this.setup_avatar();
+		this.setup_notifications();
 		this.setup_navbar();
 		this.setup_awesomebar();
 		this.setup_editing_mode();
@@ -303,6 +304,12 @@ class DesktopPage {
 			me.stop_editing_layout("submit");
 		});
 	}
+	setup_notifications() {
+		this.notifications = new frappe.ui.Notifications({
+			wrapper: $(".desktop-notifications"),
+			full_height: false,
+		});
+	}
 	setup_avatar() {
 		$(".desktop-avatar").html(frappe.avatar(frappe.session.user, "avatar-medium"));
 		let is_dark = document.documentElement.getAttribute("data-theme") === "dark";
@@ -317,6 +324,20 @@ class DesktopPage {
 				label: "Toggle Theme",
 				onClick: function () {
 					new frappe.ui.ThemeSwitcher().show();
+				},
+			},
+			{
+				icon: "info",
+				label: "About",
+				onClick: function () {
+					return frappe.ui.toolbar.show_about();
+				},
+			},
+			{
+				icon: "support",
+				label: "Frappe Support",
+				onClick: function () {
+					window.open("https://support.frappe.io/help", "_blank");
 				},
 			},
 			{
