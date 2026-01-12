@@ -1129,14 +1129,134 @@ class Document(BaseDocument):
 			)
 		)
 
+	def _prefetch_link_values(self):
+		"""Pre-fetch all link values including fetch_from fields for bulk validation.
+
+		This optimization collects all Link/Dynamic Link values from the doc tree,
+		then bulk-fetches them by doctype to eliminate N+1 queries.
+		"""
+		if self.flags.ignore_links or self._action == "cancel":
+			return
+
+		from collections import defaultdict
+
+		def _chunk(iterable, size):
+			"""Split iterable into chunks of given size."""
+			lst = list(iterable)
+			for i in range(0, len(lst), size):
+				yield lst[i:i + size]
+
+		self._link_value_cache = {}
+		docs_to_validate = [self] + self.get_all_children()
+
+		# Collect: {doctype: {'names': set(), 'fields': set()}}
+		prefetch_map = defaultdict(lambda: {"names": set(), "fields": {"name"}})
+
+		for doc in docs_to_validate:
+			is_submittable = self.meta.is_submittable
+			link_fields = doc.meta.get_link_fields() + doc.meta.get(
+				"fields", {"fieldtype": ("=", "Dynamic Link")}
+			)
+
+			for df in link_fields:
+				docname = doc.get(df.fieldname)
+				if not docname:
+					continue
+
+				# Skip invalid docname types - let get_invalid_links handle the assertion
+				if not isinstance(docname, str | int):
+					continue
+
+				# Resolve target doctype
+				if df.fieldtype == "Link":
+					doctype = df.options
+					if not doctype:
+						continue
+				else:  # Dynamic Link
+					doctype = doc.get(df.options)
+					if not doctype:
+						continue
+
+				prefetch_map[doctype]["names"].add(docname)
+
+				# Collect fetch_from fields
+				for fetch_df in doc.meta.get_fields_to_fetch(df.fieldname):
+					if not fetch_df.get("fetch_if_empty") or (
+						fetch_df.get("fetch_if_empty") and not doc.get(fetch_df.fieldname)
+					):
+						source_field = fetch_df.fetch_from.split(".")[-1]
+						prefetch_map[doctype]["fields"].add(source_field)
+
+				# Add docstatus if needed
+				target_meta = frappe.get_meta(doctype)
+				if is_submittable and target_meta.is_submittable:
+					prefetch_map[doctype]["fields"].add("docstatus")
+
+		# Bulk fetch with chunking
+		for doctype, data in prefetch_map.items():
+			meta = frappe.get_meta(doctype)
+			names = list(data["names"])
+			fields = list(data["fields"])
+
+			# Skip if no names to fetch for this doctype
+			if not names:
+				continue
+
+			if meta.get("is_virtual"):
+				# Virtual doctypes: fetch individually
+				for name in names:
+					try:
+						values = frappe.get_doc(doctype, name).as_dict()
+					except frappe.DoesNotExistError:
+						values = None
+					self._link_value_cache.setdefault(doctype, {})[name] = values
+
+			elif getattr(meta, "issingle", 0):
+				# Single doctypes
+				values = frappe.db.get_singles_dict(doctype)
+				values["name"] = doctype
+				for name in names:
+					self._link_value_cache.setdefault(doctype, {})[name] = frappe._dict(values)
+
+			else:
+				# Regular doctypes: bulk fetch with chunking
+				result_dict = {}
+				for name_chunk in _chunk(names, 1000):
+					results = frappe.db.get_all(
+						doctype,
+						filters={"name": ("in", name_chunk)},
+						fields=fields,
+					)
+					for row in results:
+						result_dict[row.name] = row
+						# Case-insensitive key for MariaDB compatibility
+						if frappe.db.db_type == "mariadb":
+							result_dict[row.name.casefold()] = row
+
+				# Store results (including None for missing names)
+				for name in names:
+					if frappe.db.db_type == "mariadb" and isinstance(name, str):
+						self._link_value_cache.setdefault(doctype, {})[name] = (
+							result_dict.get(name) or result_dict.get(name.casefold())
+						)
+					else:
+						self._link_value_cache.setdefault(doctype, {})[name] = result_dict.get(name)
+
 	def _validate_links(self):
 		if self.flags.ignore_links or self._action == "cancel":
 			return
 
-		invalid_links, cancelled_links = self.get_invalid_links()
+		# Pre-fetch all link values in bulk
+		self._prefetch_link_values()
+		link_cache = getattr(self, "_link_value_cache", None)
+
+		invalid_links, cancelled_links = self.get_invalid_links(link_value_cache=link_cache)
 
 		for d in self.get_all_children():
-			result = d.get_invalid_links(is_submittable=self.meta.is_submittable)
+			result = d.get_invalid_links(
+				is_submittable=self.meta.is_submittable,
+				link_value_cache=link_cache
+			)
 			invalid_links.extend(result[0])
 			cancelled_links.extend(result[1])
 
