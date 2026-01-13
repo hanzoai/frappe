@@ -477,7 +477,7 @@
    "options": "JS"
   },
   {
-   "depends_on": "eval:in_list([\"Data\", \"Int\", \"Float\"], doc.fieldtype)",
+   "depends_on": "eval:in_list([\"Data\", \"Int\", \"Float\", \"Currency\", \"Percent\"], doc.fieldtype)",
    "fieldname": "alignment",
    "fieldtype": "Select",
    "label": "Alignment",
