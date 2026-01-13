@@ -1150,35 +1150,19 @@ from {tables}
 			if c := frappe.call(frappe.get_attr(method), self.user, doctype=self.doctype):
 				conditions.append(c)
 
+		active_child_tables = []
+		if hasattr(self, "tables") and len(self.tables) > 1:  # only if query has multiple tables involved
+			for table_name in self.tables:
+				# skip parent table (user_permissions are already applied)
+				if table_name != f"`tab{self.doctype}`":
+					active_child_tables.append(table_name)  # track child tables
+
 		if permission_script_name := get_server_script_map().get("permission_query", {}).get(self.doctype):
 			script = frappe.get_doc("Server Script", permission_script_name)
-			if condition := script.get_permission_query_conditions(self.user):
+			if condition := script.get_permission_query_conditions(
+				self.user, active_child_tables=active_child_tables
+			):  # parse tracked child tables
 				conditions.append(condition)
-
-		if hasattr(self, "tables") and len(self.tables) > 1:
-			"""(Custom): Applying User Permissions on linked child tables (for report view)"""
-			user_permissions = frappe.permissions.get_user_permissions(self.user)
-			for table_name in self.tables:
-				# skip parent table since already permissions are handled (look only for child tables)
-				if table_name == f"`tab{self.doctype}`":
-					continue
-				child_doctype = table_name.strip("`").replace("tab", "", 1)
-				child_meta = frappe.get_meta(child_doctype)
-				for field in child_meta.get_link_fields():
-					if field.options in user_permissions:
-						allowed = [frappe.db.escape(p.doc) for p in user_permissions[field.options]]
-						conditions.append(f"{table_name}.{field.fieldname} IN ({', '.join(allowed)})")
-					else:
-						linked_meta = frappe.get_meta(field.options)
-						for nested_field in linked_meta.get_link_fields():
-							if nested_field.options in user_permissions:
-								allowed = [
-									frappe.db.escape(p.doc) for p in user_permissions[nested_field.options]
-								]
-								conditions.append(f"""{table_name}.{field.fieldname} IN (
-									SELECT name FROM `tab{field.options}`
-									WHERE {nested_field.fieldname} IN ({", ".join(allowed)})
-								)""")
 
 		return " and ".join(conditions) if conditions else ""
 

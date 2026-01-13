@@ -206,7 +206,7 @@ class ServerScript(Document):
 
 		safe_exec(self.script, script_filename=self.name)
 
-	def get_permission_query_conditions(self, user: str) -> list[str]:
+	def get_permission_query_conditions(self, user: str, active_child_tables=None) -> list[str]:
 		"""Specific to Permission Query Server Scripts.
 
 		Args:
@@ -215,7 +215,12 @@ class ServerScript(Document):
 		Return:
 		        list: Return list of conditions defined by rules in self.script.
 		"""
-		locals = {"user": user, "conditions": ""}
+		locals = {
+			"user": user,
+			"conditions": "",
+			"active_child_tables": active_child_tables
+			or [],  # add 'active_child_tables' to the locals dictionary
+		}
 		safe_exec(self.script, None, locals, script_filename=self.name)
 		if locals["conditions"]:
 			return locals["conditions"]
