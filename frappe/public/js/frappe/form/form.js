@@ -168,6 +168,7 @@ frappe.ui.form.Form = class FrappeForm {
 		frappe.ui.keys.add_shortcut({
 			shortcut: "ctrl+p",
 			action: () => this.print_doc(),
+			page: this.page,
 			description: __("Print document"),
 			condition: () => frappe.model.can_print(this.doctype, this) && !this.meta.issingle,
 		});
