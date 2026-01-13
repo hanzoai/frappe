@@ -28,6 +28,14 @@
 				color: var(--text-light);
 			}
 		}
+		.modified-by,
+		.created-by {
+			.frappe-timestamp {
+				color: var(--text-light);
+				margin-top: 5px;
+				display: block;
+			}
+		}
 	}
 
 	.form-tags {
