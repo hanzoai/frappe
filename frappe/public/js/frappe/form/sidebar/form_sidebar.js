@@ -155,7 +155,28 @@ frappe.ui.form.Sidebar = class {
 	}
 
 	refresh_creation_modified() {
-		// remove redundant (present in the activity timeline) creation/modified info
+		this.sidebar
+			.find(".modified-by")
+			.html(
+				get_user_message(
+					this.frm.doc.modified_by,
+					__("Last Edited by You", null),
+					__("Last Edited by {0}", [get_user_link(this.frm.doc.modified_by)])
+				) +
+					" <br> " +
+					comment_when(this.frm.doc.modified)
+			);
+		this.sidebar
+			.find(".created-by")
+			.html(
+				get_user_message(
+					this.frm.doc.owner,
+					__("Created By You", null),
+					__("Created By {0}", [get_user_link(this.frm.doc.owner)])
+				) +
+					" <br> " +
+					comment_when(this.frm.doc.creation)
+			);
 	}
 
 	show_auto_repeat_status() {
