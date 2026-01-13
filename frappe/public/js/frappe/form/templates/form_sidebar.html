@@ -31,11 +31,11 @@
 	{% endif %}
 </div>
 <div class="sidebar-section sidebar-meta-details border-bottom">
-	<div class="flex justify-between">
-		<div>
+	<div class="flex justify-between overflow-hidden">
+		<div class="ellipsis">
 			{% if frm.doc.name != frm.get_title() %}
 			<div class="form-details flex justify-between">
-				<span class="bold ellipsis form-title-text mr-3 pointer text-medium" title="{{__("Click to edit")}}">{%= frappe.utils.html2text(frm.get_title()) %}</span>
+				<span class="bold ellipsis form-title-text mr-3 text-medium">{%= frappe.utils.html2text(frm.get_title()) %}</span>
 			</div>
 			{% endif %}
 			<div class="form-name-container mt-2 flex justify-between form-name-copy" data-copy="{{frm.doc.name}}" >
