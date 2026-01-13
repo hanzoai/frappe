@@ -17,7 +17,10 @@
 		</div>
 		{% endif %}
 	</div>
-	<div class="form-stats-likes">
+	{% if image_field %}
+	<div class="align-items-baseline flex form-stats-likes">
+		<div class="form-title-text"></div>
+		<div class="form-print"></div>
 		<span class="liked-by like-action d-flex align-items-center">
 			<svg class="icon icon-sm like-icon pointer">
 				<use href="#icon-heart"></use>
@@ -25,14 +28,29 @@
 			<span class="like-count ml-2"></span>
 		</span>
 	</div>
+	{% endif %}
 </div>
-<div class="sidebar-section sidebar-meta-details border-bottom">
-	<div class="form-details flex justify-between">
-		<span class="bold ellipsis form-title-text mr-3 pointer text-medium" title="{{__("Click to edit")}}">{%= frappe.utils.html2text(frm.get_title()) %}</span>
+<div class="sidebar-section sidebar-meta-details border-bottom flex justify-between">
+	<div>
+		{% if frm.doc.name != frm.get_title() %}
+		<div class="form-details flex justify-between">
+			<span class="bold ellipsis form-title-text mr-3 pointer text-medium" title="{{__("Click to edit")}}">{%= frappe.utils.html2text(frm.get_title()) %}</span>
+		</div>
+		{% endif %}
+		<div class="form-name-container mt-2 flex justify-between form-name-copy" data-copy="{{frm.doc.name}}" >
+			<span class="ellipsis mr-3">{%= frm.doc.name %}</span>
+		</div>
 	</div>
-	{% if frm.doc.name != frm.get_title() %}
-	<div class="form-name-container mt-2 flex justify-between form-name-copy" data-copy="{{frm.doc.name}}" >
-		<span class="ellipsis mr-3">{%= frm.doc.name %}</span>
+	{% if not image_field %}
+	<div class="align-items-baseline flex form-stats-likes">
+		<div class="form-title-text"></div>
+		<div class="form-print"></div>
+		<span class="liked-by like-action d-flex align-items-center">
+			<svg class="icon icon-sm like-icon pointer">
+				<use href="#icon-heart"></use>
+			</svg>
+			<span class="like-count ml-2"></span>
+		</span>
 	</div>
 	{% endif %}
 </div>
@@ -60,7 +78,7 @@
 	</div>
 	{% } %}
 </div>
-<div class="sidebar-section form-assignments border-bottom">
+<div class="sidebar-section form-assignments">
 	<div>
 		<span class="form-sidebar-items">
 			<span class="add-assignment-label form-sidebar-label">
@@ -74,7 +92,7 @@
 		<div class="assignments"></div>
 	</div>
 </div>
-<div class="sidebar-section form-attachments border-bottom">
+<div class="sidebar-section form-attachments">
 	<div class="attachments-actions">
 		<span class="form-sidebar-items">
 			<span>
@@ -94,7 +112,7 @@
 		</span>
 	</a>
 </div>
-<div class="sidebar-section form-tags border-bottom">
+<div class="sidebar-section form-tags">
 	<div>
 		<span class="form-sidebar-items">
 			<div class="form-sidebar-label">
@@ -104,7 +122,7 @@
 		</span>
 	</div>
 </div>
-<div class="sidebar-section form-shared">
+<div class="sidebar-section form-shared border-bottom">
 	<div>
 		<span class="form-sidebar-items">
 			<span class="share-label form-sidebar-label">
