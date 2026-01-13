@@ -25,6 +25,17 @@ PERMISSION_MAP = {
 }
 
 
+def get_bulk_operation_async_threshold(doctype: str | None = None) -> int:
+	conf = frappe.conf.get("bulk_operation_async_threshold", 20)
+
+	if isinstance(conf, dict):
+		value = conf.get(doctype, 20) if doctype else conf.get("*", 20)
+	else:
+		value = conf
+
+	return cint(value)
+
+
 class FrappeValueError(ValueError):
 	http_status_code = 417
 
@@ -266,7 +277,7 @@ def bulk_delete_docs(doctype: str):
 	if not isinstance(names, list):
 		raise FrappeValueError("'names' must be a list")
 
-	if len(names) > 20:
+	if len(names) > get_bulk_operation_async_threshold(doctype):
 		job = frappe.enqueue(
 			"frappe.api.v2.execute_bulk_delete_docs",
 			doctype=doctype,
@@ -327,7 +338,7 @@ def bulk_delete():
 	if not isinstance(docs, list):
 		raise FrappeValueError("'docs' must be a list")
 
-	if len(docs) > 20:
+	if len(docs) > get_bulk_operation_async_threshold():
 		job = frappe.enqueue(
 			"frappe.api.v2.execute_bulk_delete",
 			docs=docs,
@@ -398,7 +409,7 @@ def bulk_update_docs(doctype: str):
 	if not isinstance(docs, list):
 		raise FrappeValueError("'docs' must be a list")
 
-	if len(docs) > 20:
+	if len(docs) > get_bulk_operation_async_threshold(doctype):
 		job = frappe.enqueue(
 			"frappe.api.v2.execute_bulk_update_docs",
 			doctype=doctype,
@@ -472,7 +483,7 @@ def bulk_update():
 	if not isinstance(docs, list):
 		raise FrappeValueError("'docs' must be a list")
 
-	if len(docs) > 20:
+	if len(docs) > get_bulk_operation_async_threshold():
 		job = frappe.enqueue(
 			"frappe.api.v2.execute_bulk_update",
 			docs=docs,
