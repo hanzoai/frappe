@@ -180,7 +180,11 @@ frappe.ui.Sidebar = class Sidebar {
 
 		// Find the SectionBreakSidebarItem instance
 		for (let item of this.items) {
-			if (item.item && item.item.type === "Section Break" && item.item.label === section_label) {
+			if (
+				item.item &&
+				item.item.type === "Section Break" &&
+				item.item.label === section_label
+			) {
 				// Expand the section break if it's collapsed
 				if (item.collapsed) {
 					item.open();
