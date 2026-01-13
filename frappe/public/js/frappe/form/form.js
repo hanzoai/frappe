@@ -665,10 +665,11 @@ frappe.ui.form.Form = class FrappeForm {
 				.parent()
 				.css("max-width", overflow ? `calc(50% - ${overflow}px)` : "50%");
 			let breadcrumb = this.page.$title_area.find("ul li.ellipsis");
-			if (!breadcrumb[0]?.clientWidth) {
+
+			if (cint(breadcrumb[0]?.clientWidth) <= 30) {
 				// if workspce sodebar is not visible
 				$(breadcrumb[0]).hide();
-				if (!breadcrumb[1]?.clientWidth) {
+				if (cint(breadcrumb[1]?.clientWidth) <= 30) {
 					// if doctype sodebar is not visible
 					$(breadcrumb[1]).hide();
 
