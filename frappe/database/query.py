@@ -315,6 +315,10 @@ class Engine:
 		if for_update:
 			self.query = self.query.for_update(skip_locked=skip_locked, nowait=not wait)
 
+		if any(isinstance(f, functions.AggregateFunction) for f in getattr(self, "fields", [])):
+			# check if any field in select is aggregated (done to prevent breaking queries in postgres due to order by rule)
+			self.is_aggregate_query = True
+
 		if group_by:
 			self.is_aggregate_query = True  # for postgres (group by used with order by)
 			self.apply_group_by(group_by)
