@@ -962,15 +962,13 @@ class BaseDocument:
 
 		return missing
 
-	def get_invalid_links(self, is_submittable=False, **kwargs):
+	def get_invalid_links(self, is_submittable=False, link_value_cache=None):
 		"""Return list of invalid links and also update fetch values if not set.
 
 		Args:
 			is_submittable: Whether the parent document is submittable
-			**kwargs: Additional arguments (link_value_cache for bulk optimization)
+			link_value_cache: Cache of prefetched link values for bulk optimization
 		"""
-		link_value_cache = kwargs.get("link_value_cache")
-
 		is_submittable = is_submittable or self.meta.is_submittable
 
 		def get_msg(df, docname):

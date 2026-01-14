@@ -1144,10 +1144,10 @@ class Document(BaseDocument):
 			"""Split iterable into chunks of given size."""
 			lst = list(iterable)
 			for i in range(0, len(lst), size):
-				yield lst[i:i + size]
+				yield lst[i : i + size]
 
 		self._link_value_cache = {}
-		docs_to_validate = [self] + self.get_all_children()
+		docs_to_validate = [self, *self.get_all_children()]
 
 		# Collect: {doctype: {'names': set(), 'fields': set()}}
 		prefetch_map = defaultdict(lambda: {"names": set(), "fields": {"name"}})
@@ -1196,7 +1196,7 @@ class Document(BaseDocument):
 		for doctype, data in prefetch_map.items():
 			meta = frappe.get_meta(doctype)
 			names = list(data["names"])
-			fields = list(data["fields"])
+			fields = sorted(data["fields"])  # Sorted for deterministic cache key matching
 
 			# Skip if no names to fetch for this doctype
 			if not names:
@@ -1221,7 +1221,20 @@ class Document(BaseDocument):
 			else:
 				# Regular doctypes: bulk fetch with chunking
 				result_dict = {}
-				for name_chunk in _chunk(names, 1000):
+				field_tuple = tuple(fields)
+
+				# Check db.value_cache first for cross-document caching
+				names_to_query = []
+				for name in names:
+					cached = frappe.db.value_cache.get(doctype, {}).get(name, {}).get(field_tuple)
+					if cached is not None:
+						# Use cached value from previous document in this transaction
+						self._link_value_cache.setdefault(doctype, {})[name] = cached[0] if cached else None
+					else:
+						names_to_query.append(name)
+
+				# Only query for names not found in cache
+				for name_chunk in _chunk(names_to_query, 1000) if names_to_query else []:
 					results = frappe.db.get_all(
 						doctype,
 						filters={"name": ("in", name_chunk)},
@@ -1229,18 +1242,24 @@ class Document(BaseDocument):
 					)
 					for row in results:
 						result_dict[row.name] = row
-						# Case-insensitive key for MariaDB compatibility
-						if frappe.db.db_type == "mariadb":
+						# Case-insensitive key for MariaDB compatibility (strings only)
+						if frappe.db.db_type == "mariadb" and isinstance(row.name, str):
 							result_dict[row.name.casefold()] = row
 
-				# Store results (including None for missing names)
+				# Store results in both caches
 				for name in names:
 					if frappe.db.db_type == "mariadb" and isinstance(name, str):
-						self._link_value_cache.setdefault(doctype, {})[name] = (
-							result_dict.get(name) or result_dict.get(name.casefold())
-						)
+						cached_value = result_dict.get(name) or result_dict.get(name.casefold())
 					else:
-						self._link_value_cache.setdefault(doctype, {})[name] = result_dict.get(name)
+						cached_value = result_dict.get(name)
+
+					# Store in local document cache
+					self._link_value_cache.setdefault(doctype, {})[name] = cached_value
+
+					# Also populate global db.value_cache for cross-document caching
+					# Only for string names (matching get_values behavior at line 632)
+					if cached_value is not None and isinstance(name, str):
+						frappe.db.value_cache[doctype][name][field_tuple] = [cached_value]
 
 	def _validate_links(self):
 		if self.flags.ignore_links or self._action == "cancel":
