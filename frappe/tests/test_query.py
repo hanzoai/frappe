@@ -2289,6 +2289,71 @@ class TestQuery(IntegrationTestCase):
 		# the filter should still apply and return no results
 		self.assertEqual(len(result), 0, "Filter should not be bypassed by shared doc OR condition")
 
+	@run_only_if(db_type_is.POSTGRES)
+	def test_order_by_group_by_postgres(self):
+		"""PostgreSQL specific test that tests if order_by fields are correctly handled when used with group_by"""
+		# test order by fields already in group by (no aggregate needed)
+		query = frappe.qb.get_query(
+			"User",
+			fields=["creation as created_date", {"COUNT": "*"}],
+			group_by="created_date",
+			order_by="created_date",
+		).get_sql()
+
+		self.assertQueryEqual(
+			query,
+			'SELECT "creation" "created_date",COUNT(*) FROM "tabUser" GROUP BY "created_date" ORDER BY "created_date" DESC',
+		)
+
+		# test order by fields not in group by (aggregate needed)
+		query = frappe.qb.get_query(
+			"User",
+			fields=["creation as created_date", {"COUNT": "*"}],
+			group_by="created_date",
+			order_by="name",
+		).get_sql()
+
+		self.assertQueryEqual(
+			query,
+			'SELECT "creation" "created_date",COUNT(*) FROM "tabUser" GROUP BY "created_date" ORDER BY MAX("name") DESC',
+		)
+
+		query = frappe.qb.get_query(
+			"User",
+			fields=["user_type as type", "enabled as status", {"COUNT": "*"}],
+			group_by="type, status",
+			order_by="status asc",
+		).get_sql()
+
+		self.assertQueryEqual(
+			query,
+			'SELECT "user_type" "type","enabled" "status",COUNT(*) FROM "tabUser" GROUP BY "type","status" ORDER BY "status" ASC',
+		)
+
+		# test no double aggregation rule
+		query = frappe.qb.get_query(
+			"User",
+			fields=["creation", {"COUNT": "*", "as": "total"}],
+			group_by="creation",
+			order_by="total desc",
+		).get_sql()
+
+		self.assertQueryEqual(
+			query,
+			'SELECT "creation",COUNT(*) "total" FROM "tabUser" GROUP BY "creation" ORDER BY "total" DESC',
+		)
+
+		# test multiple order_by fields not in group_by
+		query = frappe.qb.get_query(
+			"User",
+			fields=["user_type", {"COUNT": "*"}],
+			group_by="user_type",
+			order_by="creation desc, modified asc",
+		).get_sql()
+
+		self.assertIn('MAX("creation") DESC', query)
+		self.assertIn('MAX("modified") ASC', query)
+
 
 # This function is used as a permission query condition hook
 def test_permission_hook_condition(user):
