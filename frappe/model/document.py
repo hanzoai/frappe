@@ -1223,18 +1223,7 @@ class Document(BaseDocument):
 				result_dict = {}
 				field_tuple = tuple(fields)
 
-				# Check db.value_cache first for cross-document caching
-				names_to_query = []
-				for name in names:
-					cached = frappe.db.value_cache.get(doctype, {}).get(name, {}).get(field_tuple)
-					if cached is not None:
-						# Use cached value from previous document in this transaction
-						self._link_value_cache.setdefault(doctype, {})[name] = cached[0] if cached else None
-					else:
-						names_to_query.append(name)
-
-				# Only query for names not found in cache
-				for name_chunk in _chunk(names_to_query, 1000) if names_to_query else []:
+				for name_chunk in _chunk(names, 1000):
 					results = frappe.db.get_all(
 						doctype,
 						filters={"name": ("in", name_chunk)},
@@ -1272,10 +1261,7 @@ class Document(BaseDocument):
 		invalid_links, cancelled_links = self.get_invalid_links(link_value_cache=link_cache)
 
 		for d in self.get_all_children():
-			result = d.get_invalid_links(
-				is_submittable=self.meta.is_submittable,
-				link_value_cache=link_cache
-			)
+			result = d.get_invalid_links(is_submittable=self.meta.is_submittable, link_value_cache=link_cache)
 			invalid_links.extend(result[0])
 			cancelled_links.extend(result[1])
 
