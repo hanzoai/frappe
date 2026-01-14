@@ -46,7 +46,6 @@ class DesktopIcon(Document):
 
 	def on_trash(self):
 		clear_desktop_icons_cache()
-		self.check_for_restrict_removal()
 		if frappe.conf.developer_mode and self.standard and self.app:
 			self.delete_desktop_icon_file()
 
