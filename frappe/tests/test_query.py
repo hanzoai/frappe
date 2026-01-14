@@ -2354,6 +2354,13 @@ class TestQuery(IntegrationTestCase):
 		self.assertIn('MAX("creation") DESC', query)
 		self.assertIn('MAX("modified") ASC', query)
 
+		# for queries that have aggregate fields selected but not grouped (these queries are redundant but exist in some parts of codebase)
+		query = frappe.qb.get_query(
+			"User", fields=[{"COUNT": "*", "as": "result"}], order_by="creation desc"
+		).get_sql()
+
+		self.assertQueryEqual(query, 'SELECT COUNT(*) "result" FROM "tabUser" ORDER BY MAX("creation") DESC')
+
 
 # This function is used as a permission query condition hook
 def test_permission_hook_condition(user):
