@@ -328,7 +328,7 @@ class Engine:
 				warnings.warn(
 					(
 						"ORDER BY fields have been ignored because PostgreSQL requires them to "
-						"appear in the SELECT list when using DISTINCT or GROUP BY."
+						"appear in the SELECT list when using with DISTINCT"
 					),
 					UserWarning,
 					stacklevel=2,
