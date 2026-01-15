@@ -1745,18 +1745,23 @@ class Engine:
 	def _validate_select_field_grouping_postgres(self):
 		"""DX: In PostgreSQL, selected fields used with group by need to either be aggregated or be grouped,
 		the Query Builder validates this rule if user is unaware"""
+		# string processing needed since this may break in certain queries e.g."tabDocType"."module"
+		clean_groups = {
+			str(g).replace('"', "").replace("`", "").split(".")[-1] for g in self._grouped_queries
+		}
 		for field in self.fields:
 			if isinstance(field, AggregateFunction):
 				continue
 			alias = getattr(field, "alias", None)
-			field_val = alias if alias is not None else field
-			field_val = str(field_val).replace('"', "")
-			if field_val not in self._grouped_queries:
+			field_alias = alias.replace('"', "").replace("`", "") if alias else None
+			field_source = str(field).replace('"', "").replace("`", "").split(".")[-1]
+			is_grouped = (field_source in clean_groups) or (field_alias in clean_groups)
+			if not is_grouped:
 				frappe.throw(
 					_(
 						"PostgreSQL grouping error: The field '{0}' is selected but neither grouped nor aggregated. "
 						"Add it to 'group_by' or aggregate it."
-					).format(field_val),
+					).format(field_alias or field_source),
 					frappe.ValidationError,
 				)
 
