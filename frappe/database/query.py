@@ -1135,6 +1135,7 @@ class Engine:
 		"""In PostgreSQL order_by fields need to either be in group_by or be aggregated
 		when used with select and group_by"""
 		if self.is_postgres and self.is_aggregate_query:
+			self._validate_select_field_grouping_postgres()  # DX: validate query
 			current_sql = field.get_sql() if hasattr(field, "get_sql") else str(field)
 			if current_sql in self._grouped_queries:
 				return field
@@ -1740,6 +1741,24 @@ class Engine:
 				return True
 
 		return True
+
+	def _validate_select_field_grouping_postgres(self):
+		"""DX: In PostgreSQL, selected fields used with group by need to either be aggregated or be grouped,
+		the Query Builder validates this rule if user is unaware"""
+		for field in self.fields:
+			if isinstance(field, AggregateFunction):
+				continue
+			alias = getattr(field, "alias", None)
+			field_val = alias if alias is not None else field
+			field_val = str(field_val).replace('"', "")
+			if field_val not in self._grouped_queries:
+				frappe.throw(
+					_(
+						"PostgreSQL grouping error: The field '{0}' is selected but neither grouped nor aggregated. "
+						"Add it to 'group_by' or aggregate it."
+					).format(field_val),
+					frappe.ValidationError,
+				)
 
 
 class DynamicTableField:
