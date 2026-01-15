@@ -271,6 +271,7 @@ class DesktopPage {
 		this.setup_awesomebar();
 		this.handle_route_change();
 		this.setup_events();
+		this.setup_edit_button();
 	}
 	setup_edit_button() {
 		if (this.edit_mode || frappe.is_mobile()) return;
@@ -334,6 +335,7 @@ class DesktopPage {
 		const me = this;
 		this.desktop_pane = new IconsPane();
 		$(".desktop-wrapper").attr("data-mode", "Edit");
+		$(".desktop-edit").remove();
 		frappe.desktop_icons_objects.forEach((icon) => {
 			icon.edit_mode = true;
 		});
