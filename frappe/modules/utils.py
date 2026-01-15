@@ -413,7 +413,6 @@ def make_boilerplate(template: str, doc: "Document" | "frappe._dict", opts: dict
 			**opts,
 			custom_controller=controller_body,
 		)
-		print("template_file_path \n\n\n", controller_file_content)
 		target.write(frappe.as_unicode(controller_file_content))
 
 
