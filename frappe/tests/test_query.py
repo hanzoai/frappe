@@ -2361,6 +2361,21 @@ class TestQuery(IntegrationTestCase):
 
 		self.assertQueryEqual(query, 'SELECT COUNT(*) "result" FROM "tabUser" ORDER BY MAX("creation") DESC')
 
+	@run_only_if(db_type_is.POSTGRES)
+	def test_query_validation_postgres(self):
+		"""PostgreSQL specific test that tests if query that is built is valid in PostgreSQL, as part of a better DX"""
+		with self.assertRaises(frappe.ValidationError) as pgerr:
+			frappe.qb.get_query(
+				"User",
+				fields=["user_type as type", "enabled as status", {"COUNT": "*"}],
+				group_by="type",
+				order_by="type",
+			).run()
+			self.assertEqual(
+				str(pgerr.exception),
+				"PostgreSQL grouping error: The field 'status' is selected but neither grouped nor aggregated. Add it to 'group_by' or aggregate it.",
+			)
+
 
 # This function is used as a permission query condition hook
 def test_permission_hook_condition(user):
