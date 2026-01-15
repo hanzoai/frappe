@@ -4,10 +4,7 @@ frappe.ui.Notifications = class Notifications {
 	constructor(opts) {
 		this.tabs = {};
 		this.notification_settings = frappe.boot.notification_settings;
-		if (!opts?.full_height) {
-			this.full_height = true;
-		}
-		this.full_height = opts?.full_height;
+		this.full_height = opts?.full_height || false;
 
 		this.wrapper = opts?.wrapper || $(".standard-items-sections");
 		this.make();
@@ -155,9 +152,8 @@ frappe.ui.Notifications = class Notifications {
 			const isInsideNotificationBtn =
 				$(e.target).closest(".standard-items-sections .sidebar-notification").length > 0;
 			const isInsideDropdown = $(e.target).closest(".notifications-list").length > 0;
-
 			if (!isInsideNotificationBtn && !isInsideDropdown) {
-				if (!full_height) {
+				if (full_height) {
 					dropdown.addClass("hidden");
 				}
 			}
