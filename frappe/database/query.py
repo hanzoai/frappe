@@ -267,7 +267,7 @@ class Engine:
 		self.db_query_compat = db_query_compat
 		self.permitted_fields_cache = {}  # Cache for get_permitted_fields results
 		self.is_aggregate_query = False
-		self._grouped_sqls = set()
+		self._grouped_queries = set()
 
 		if isinstance(table, Table):
 			self.table = table
@@ -1136,7 +1136,7 @@ class Engine:
 		when used with select and group_by"""
 		if self.is_postgres and self.is_aggregate_query:
 			current_sql = field.get_sql() if hasattr(field, "get_sql") else str(field)
-			if current_sql in self._grouped_sqls:
+			if current_sql in self._grouped_queries:
 				return field
 			clean_name = current_sql.strip('"')
 			if clean_name in self.field_aliases:
@@ -1147,7 +1147,7 @@ class Engine:
 
 	def apply_group_by(self, group_by: str | None = None):
 		parsed_group_by_fields = self._validate_group_by(group_by)
-		self._grouped_sqls = {
+		self._grouped_queries = {
 			f.get_sql() if hasattr(f, "get_sql") else str(f) for f in parsed_group_by_fields
 		}
 		self.query = self.query.groupby(*parsed_group_by_fields)
