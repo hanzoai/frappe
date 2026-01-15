@@ -345,6 +345,8 @@ class Engine:
 		self.query._fields_list = getattr(self, "fields", [])
 
 		self.query.immutable = True
+		if self.is_postgres and self.is_aggregate_query:
+			self._validate_select_field_grouping_postgres()  # DX: validate query
 		return self.query
 
 	def validate_doctype(self):
@@ -1135,7 +1137,6 @@ class Engine:
 		"""In PostgreSQL order_by fields need to either be in group_by or be aggregated
 		when used with select and group_by"""
 		if self.is_postgres and self.is_aggregate_query:
-			self._validate_select_field_grouping_postgres()  # DX: validate query
 			current_sql = field.get_sql() if hasattr(field, "get_sql") else str(field)
 			if current_sql in self._grouped_queries:
 				return field
