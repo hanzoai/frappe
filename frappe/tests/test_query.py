@@ -2361,6 +2361,28 @@ class TestQuery(IntegrationTestCase):
 
 		self.assertQueryEqual(query, 'SELECT COUNT(*) "result" FROM "tabUser" ORDER BY MAX("creation") DESC')
 
+		# test in case user uses `original_col` name instead of alias
+		query = frappe.qb.get_query(
+			"User", fields=["name as user_name"], group_by="user_name", order_by="user_name"
+		)
+		a = query.run()
+
+		query = frappe.qb.get_query("User", fields=["name as user_name"], group_by="name", order_by="name")
+		b = query.run()
+
+		query = frappe.qb.get_query(
+			"User", fields=["name as user_name"], group_by="name", order_by="user_name"
+		)
+		c = query.run()
+
+		query = frappe.qb.get_query(
+			"User", fields=["name as user_name"], group_by="user_name", order_by="name"
+		)
+		d = query.run()
+
+		for val in [b, c, d]:
+			self.assertEqual(a, val, "Query result mismatch detected.")
+
 
 # This function is used as a permission query condition hook
 def test_permission_hook_condition(user):
