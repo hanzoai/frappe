@@ -800,7 +800,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		for (let i = 0; i < this.columns.length; i++) {
 			let col = this.columns[i];
 
-			if (i == 4 && !doc[col.df.fieldname] && doc[col.df.fieldname] != 0) {
+			if (i == 4 && col.type == "Field" && col.df?.fieldname && !doc[col.df.fieldname] && doc[col.df.fieldname] != 0) {
 				has_value_in_second_column = false;
 			}
 
