@@ -48,13 +48,6 @@ def sync_user_settings():
 	for key, data in frappe.cache.hgetall("_user_settings").items():
 		key = safe_decode(key)
 		doctype, user = key.split("::")  # WTF?
-		hooks = frappe.get_hooks("sync_user_settings")
-
-		methods = hooks.get(doctype, [])
-		for method in methods:
-			updated_data = frappe.call(method, user=user, data=data)
-			data = updated_data
-
 		frappe.db.multisql(
 			{
 				"mariadb": """INSERT INTO `__UserSettings`(`user`, `doctype`, `data`)
