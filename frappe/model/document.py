@@ -1179,11 +1179,9 @@ class Document(BaseDocument):
 
 				prefetch_map[doctype]["names"].add(docname)
 
-				# Collect fetch_from fields
+				# Collect fetch_from fields - fetch ALL, let base_document handle fetch_if_empty
 				for fetch_df in doc.meta.get_fields_to_fetch(df.fieldname):
-					if not fetch_df.get("fetch_if_empty") or (
-						fetch_df.get("fetch_if_empty") and not doc.get(fetch_df.fieldname)
-					):
+					if fetch_df.get("fetch_from"):
 						source_field = fetch_df.fetch_from.split(".")[-1]
 						prefetch_map[doctype]["fields"].add(source_field)
 
