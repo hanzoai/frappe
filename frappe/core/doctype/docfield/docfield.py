@@ -127,7 +127,6 @@ class DocField(Document):
 
 	def get_link_doctype(self):
 		"""Return the Link doctype for the `docfield` (if applicable).
-
 		* If fieldtype is Link: Return "options".
 		* If fieldtype is Table MultiSelect: Return "options" of the Link field in the Child Table.
 		"""
