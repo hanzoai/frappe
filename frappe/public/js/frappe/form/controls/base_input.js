@@ -179,8 +179,8 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 		// This is used to display formatted output AND showing values in read only fields
 		if (this.disp_area) {
 			$(this.disp_area).html(display_value);
-			// Apply alignment for Data, Int, Float fields
-			if (this.df.alignment && ["Data", "Int", "Float"].includes(this.df.fieldtype)) {
+			// Apply alignment for supported fields
+			if (this.df.alignment && ["Data", "Int", "Float", "Currency", "Percent"].includes(this.df.fieldtype)) {
 				$(this.disp_area).css("text-align", this.df.alignment.toLowerCase());
 			}
 		}

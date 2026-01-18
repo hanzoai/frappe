@@ -251,8 +251,8 @@ frappe.ui.form.ControlData = class ControlData extends frappe.ui.form.ControlInp
 		if (this.df.input_class) {
 			this.$input.addClass(this.df.input_class);
 		}
-		// Apply alignment if specified
-		if (this.df.alignment) {
+		// Apply alignment if specified for supported field types
+		if (this.df.alignment && ["Data", "Int", "Float", "Currency", "Percent"].includes(this.df.fieldtype)) {
 			this.$input.css("text-align", this.df.alignment.toLowerCase());
 		}
 	}
