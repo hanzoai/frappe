@@ -552,9 +552,6 @@ class DesktopIconGrid {
 			}
 			this.grids.push($(template).appendTo(this.icons_container));
 			this.make_icons(this.icons_data_by_page, this.grids[i]);
-			if (this.edit_mode || !this.no_dragging) {
-				this.setup_reordering(this.grids[i]);
-			}
 		}
 		if (!this.in_folder && this.total_pages > 1) {
 			this.add_page_indicators();
