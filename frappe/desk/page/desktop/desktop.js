@@ -488,6 +488,7 @@ class DesktopPage {
 				me.edit_mode = false;
 				$(".desktop-icon").removeClass("edit-mode");
 				$(".desktop-wrapper").removeAttr("data-mode");
+				$(".desktop-edit").remove();
 			}
 		});
 	}
