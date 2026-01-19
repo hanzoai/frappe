@@ -545,7 +545,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				let f;
 				if (df.fieldtype === "Check" && this.check_filter_area) {
 					f = this.page.add_field(df, this.check_filter_area);
-					// $(f.wrapper).removeClass("col-md-2");
 				} else {
 					f = this.page.add_field(df, filter_area);
 				}
@@ -651,17 +650,19 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			$(this.filters[filter_no].wrapper).css("display", "flex");
 			$(this.filters[filter_no].wrapper).css("align-items", "center");
 			$(this.filters[filter_no].wrapper).css("gap", "16px");
-			if ($(this.filters[filter_no].wrapper).find("select")) {
-				$(this.filters[filter_no].wrapper)
-					.find(".select-icon")
-					.css(
-						"left",
-						$(this.filters[filter_no].wrapper).find("select").width() + 18 + "px"
-					);
-			}
+			this.handle_filter_styles($(this.filters[filter_no].wrapper));
 			this.$collapse_button.on("click", function () {
 				me.toggle_filter_visiblity();
 			});
+		}
+	}
+	handle_filter_styles(wrapper) {
+		if (wrapper.find("select")) {
+			wrapper.find(".select-icon").css("left", wrapper.find("select").width() + 18 + "px");
+		}
+
+		if (wrapper.find(".multiselect-list")) {
+			wrapper.find(".multiselect-list").css("flex", "1 0");
 		}
 	}
 
