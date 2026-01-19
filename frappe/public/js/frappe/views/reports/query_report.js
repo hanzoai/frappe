@@ -538,7 +538,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 		let filter_area = this.page.page_form;
 		this.filters = [];
-		this.check_filter_area = filter_area;
 		if (this.report_settings.seperate_check_filters) this.setup_check_filter_area();
 		this.filters = filters
 			.map((df, index) => {
@@ -624,7 +623,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			for (let i = this.filter_row_length; i < this.filters.length; i++) {
 				$(this.filters[i].wrapper).addClass("hidden");
 			}
-			this.check_filter_area.css("display", "none");
+			this.check_filter_area && this.check_filter_area.css("display", "none");
 			this.filters_hidden = false;
 			icon_name = "chevron-down";
 		} else {
@@ -642,15 +641,23 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		const me = this;
 		let filter_no = this.filter_row_length - 1;
 		if (this.filters[filter_no]) {
-			this.$collapse_button = $(`<div>${frappe.utils.icon("chevron-down")}</div>`);
+			this.$collapse_button = $(
+				`<div class='btn btn-xs btn-secondary collapsible-filters'>${frappe.utils.icon(
+					"chevron-down"
+				)}</div>`
+			);
 			$(this.filters[filter_no].wrapper).append(this.$collapse_button);
 			$(this.filters[filter_no].wrapper).css("display", "flex");
 			$(this.filters[filter_no].wrapper).css("align-items", "center");
 			$(this.filters[filter_no].wrapper).css("gap", "16px");
-
-			this.$collapse_button.addClass("btn");
-			this.$collapse_button.addClass("btn-xs");
-			this.$collapse_button.addClass("btn-secondary");
+			if ($(this.filters[filter_no].wrapper).find("select")) {
+				$(this.filters[filter_no].wrapper)
+					.find(".select-icon")
+					.css(
+						"left",
+						$(this.filters[filter_no].wrapper).find("select").width() + 18 + "px"
+					);
+			}
 			this.$collapse_button.on("click", function () {
 				me.toggle_filter_visiblity();
 			});
