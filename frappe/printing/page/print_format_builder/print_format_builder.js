@@ -709,8 +709,8 @@ frappe.PrintFormatBuilder = class PrintFormatBuilder {
 				$body.find("input[type='checkbox']").each(function () {
 					if (!$(this).prop("checked")) {
 						$(this).prop("checked", true);
-						var fieldname = $(this).attr("data-fieldname");
-						var input = get_width_input(fieldname);
+						const fieldname = $(this).attr("data-fieldname");
+						const input = get_width_input(fieldname);
 						input.prop("disabled", false);
 					}
 				});
@@ -722,8 +722,8 @@ frappe.PrintFormatBuilder = class PrintFormatBuilder {
 				$body.find("input[type='checkbox']").each(function () {
 					if ($(this).prop("checked")) {
 						$(this).prop("checked", false);
-						var fieldname = $(this).attr("data-fieldname");
-						var input = get_width_input(fieldname);
+						const fieldname = $(this).attr("data-fieldname");
+						const input = get_width_input(fieldname);
 						input.prop("disabled", true);
 						input.val("");
 					}
