@@ -817,6 +817,10 @@ frappe.ui.form.Form = class FrappeForm {
 		this.validate_form_action(save_action, resolve);
 
 		var after_save = function (r) {
+			// preserve active tab before clearing hash to avoid scroll after save
+			const active_tab = me.get_active_tab();
+			const active_tab_fieldname = active_tab?.df?.fieldname;
+
 			// to remove hash from URL to avoid scroll after save
 			history.replaceState(null, null, " ");
 			if (!r.exc) {
@@ -836,6 +840,30 @@ frappe.ui.form.Form = class FrappeForm {
 				if (me.comment_box) {
 					me.comment_box.submit();
 				}
+
+				// restore active tab after refresh completes
+				if (active_tab_fieldname) {
+					// use one-time event listener to restore tab after render completes
+					let tab_restored = false;
+					const restore_tab = () => {
+						if (!tab_restored && me.layout && me.layout.tabs) {
+							const tab = me.layout.tabs.find(
+								(tab) => tab.df.fieldname === active_tab_fieldname
+							);
+							if (tab) {
+								tab.set_active();
+								tab_restored = true;
+							}
+						}
+					};
+
+					// listen for render_complete event
+					me.$wrapper.one("render_complete", restore_tab);
+
+					// fallback: restore tab after a short delay in case event doesn't fire
+					setTimeout(restore_tab, 100);
+				}
+
 				me.refresh();
 			} else {
 				if (on_error) {
