@@ -104,6 +104,10 @@ frappe.ui.get_print_settings = function (
 			}
 
 			callback(settings);
+			// clean up user selections from settings
+			columns
+				.filter((d) => d.fieldname in settings)
+				.forEach((d) => delete settings[d.fieldname]);
 		},
 		__("Print Settings")
 	);
