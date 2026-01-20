@@ -704,6 +704,33 @@ frappe.PrintFormatBuilder = class PrintFormatBuilder {
 				update_column_count_message();
 			});
 
+			// Select All functionality
+			$body.on("click", ".select-all-btn", function () {
+				$body.find("input[type='checkbox']").each(function () {
+					if (!$(this).prop("checked")) {
+						$(this).prop("checked", true);
+						var fieldname = $(this).attr("data-fieldname");
+						var input = get_width_input(fieldname);
+						input.prop("disabled", false);
+					}
+				});
+				update_column_count_message();
+			});
+
+			// Unselect All functionality
+			$body.on("click", ".unselect-all-btn", function () {
+				$body.find("input[type='checkbox']").each(function () {
+					if ($(this).prop("checked")) {
+						$(this).prop("checked", false);
+						var fieldname = $(this).attr("data-fieldname");
+						var input = get_width_input(fieldname);
+						input.prop("disabled", true);
+						input.val("");
+					}
+				});
+				update_column_count_message();
+			});
+
 			d.show();
 
 			return false;
