@@ -822,11 +822,13 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 					this.render_datatable();
 					this.add_chart_buttons_to_toolbar(true);
 					this.add_card_button_to_toolbar();
+					this.toggle_print_buttons(true);
 					this.$report.show();
 				} else {
 					this.data = [];
 					this.toggle_nothing_to_show(true);
 					this.add_chart_buttons_to_toolbar(false);
+					this.toggle_print_buttons(false);
 				}
 
 				this.show_footer_message();
@@ -1888,7 +1890,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 						this.get_visible_columns(),
 						true
 					);
-
 					this.add_portrait_warning(dialog);
 				},
 				condition: () => frappe.model.can_print(this.report_doc.ref_doctype),
@@ -2307,6 +2308,12 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		this.$report.toggle(flag);
 		this.$chart.toggle(flag);
 		this.$summary.toggle(flag);
+	}
+
+	toggle_print_buttons(show) {
+		const menu = this.page.menu;
+		menu.find('[data-label="Print"]').parent().parent().toggle(show);
+		menu.find('[data-label="PDF"]').parent().parent().toggle(show);
 	}
 
 	get_checked_items(only_docnames) {
