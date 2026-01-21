@@ -8,22 +8,6 @@ $.extend(frappe.contacts, {
 	},
 
 	render_address_and_contact: function (frm) {
-<<<<<<< HEAD
-		// render address
-		if (frm.fields_dict["address_html"] && "addr_list" in frm.doc.__onload) {
-			$(frm.fields_dict["address_html"].wrapper)
-				.html(frappe.render_template("address_list", frm.doc.__onload))
-				.find(".btn-address")
-				.on("click", () => new_record("Address", frm.doc));
-		}
-
-		// render contact
-		if (frm.fields_dict["contact_html"] && "contact_list" in frm.doc.__onload) {
-			$(frm.fields_dict["contact_html"].wrapper)
-				.html(frappe.render_template("contact_list", frm.doc.__onload))
-				.find(".btn-contact")
-				.on("click", () => new_record("Contact", frm.doc));
-=======
 		const items = [
 			{
 				field: "address_html",
@@ -51,7 +35,6 @@ $.extend(frappe.contacts, {
 					.find(item.btn)
 					.on("click", () => new_record(item.doctype, frm));
 			}
->>>>>>> 89f0713d10 (refactor: streamline address and contact rendering logic)
 		}
 	},
 
