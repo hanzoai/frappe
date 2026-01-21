@@ -2302,12 +2302,8 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 	toggle_print_buttons(show) {
 		const menu = this.page.menu;
-		menu.find(`a:contains("${__("Print")}")`)
-			.parent()
-			.toggle(show);
-		menu.find(`a:contains("${__("PDF")}")`)
-			.parent()
-			.toggle(show);
+		menu.find('[data-label="Print"]').parent().parent().toggle(show);
+		menu.find('[data-label="PDF"]').parent().parent().toggle(show);
 	}
 
 	get_checked_items(only_docnames) {
