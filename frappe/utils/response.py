@@ -169,7 +169,7 @@ def as_binary():
 	response.mimetype = "application/octet-stream"
 	filename = frappe.response["filename"]
 	filename = filename.encode("utf-8").decode("unicode-escape", "ignore")
-	response.headers.add("Content-Disposition", None, filename=filename)
+	response.headers.add("Content-Disposition", "attachment", filename=filename)
 	response.data = frappe.response["filecontent"]
 	return response
 
