@@ -1001,7 +1001,9 @@ class DesktopIcon {
 			} else {
 				this.icon.on("click", function (event) {
 					frappe.msgprint(
-						"Icon is not correctly configured please check the workspace sidebar to it"
+						__(
+							"Icon is not correctly configured please check the workspace sidebar to it"
+						)
 					);
 				});
 			}
