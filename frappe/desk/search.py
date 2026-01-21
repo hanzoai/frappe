@@ -109,13 +109,6 @@ def search_widget(
 	if filters is None:
 		filters = {}
 
-	if for_link_validation:
-		as_dict = False
-		# for custom queries, we don't mutate filters
-		# we have to rely on txt
-		# we want to match "A" with "A" only and not "A1", "BA" etc.
-		page_length = PAGE_LENGTH_FOR_LINK_VALIDATION
-
 	if query:  # Query = custom search query i.e. python function
 		try:
 			is_whitelisted(frappe.get_attr(query))
@@ -359,8 +352,8 @@ def build_for_autosuggest(res: list[tuple], doctype: str) -> list[LinkSearchResu
 			results.append(autosuggest_row)
 	else:
 		for item in res:
-			value = _(item[0]) if meta.translated_doctype else item[0]
-			results.append({"value": item[0], "description": to_string(item[1:]), "label": value})
+			label = _(item[0]) if meta.translated_doctype else item[0]
+			results.append({"value": item[0], "description": to_string(item[1:]), "label": label})
 
 	return results
 
