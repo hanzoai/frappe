@@ -29,6 +29,7 @@ class WorkspaceSidebar(Document):
 		for_user: DF.Link | None
 		items: DF.Table[WorkspaceSidebarItem]
 		module: DF.Text | None
+		standard: DF.Check
 		title: DF.Data | None
 	# end: auto-generated types
 
@@ -37,6 +38,7 @@ class WorkspaceSidebar(Document):
 		if not frappe.flags.in_migrate:
 			self.user = frappe.get_user()
 			self.can_read = self.get_cached("user_perm_can_read", self.get_can_read_items)
+			self.allowed_modules = self.get_cached("user_allowed_modules", self.get_allowed_modules)
 
 		self.allowed_pages = get_allowed_pages(cache=True)
 		self.allowed_reports = get_allowed_reports(cache=True)
@@ -74,7 +76,7 @@ class WorkspaceSidebar(Document):
 		else:
 			frappe.throw(_("You need to be Workspace Manager to delete a public workspace."))
 
-	def is_item_allowed(self, name, item_type):
+	def is_item_allowed(self, name, item_type, allowed_workspaces):
 		if frappe.session.user == "Administrator":
 			return True
 
@@ -96,6 +98,8 @@ class WorkspaceSidebar(Document):
 			return True
 		if item_type == "url":
 			return True
+		if item_type == "workspace":
+			return name in allowed_workspaces
 
 	def get_cached(self, cache_key, fallback_fn):
 		value = frappe.cache.get_value(cache_key, user=frappe.session.user)
@@ -126,6 +130,12 @@ class WorkspaceSidebar(Document):
 		counts = Counter(all_modules_in_sidebars)
 		if counts and counts.most_common(1)[0]:
 			return counts.most_common(1)[0][0]
+
+	def get_allowed_modules(self):
+		if not self.user.allow_modules:
+			self.user.build_permissions()
+
+		return self.user.allow_modules
 
 
 def is_workspace_manager():
@@ -179,13 +189,21 @@ def create_workspace_sidebar_for_workspaces():
 @frappe.whitelist()
 def add_sidebar_items(sidebar_title, sidebar_items):
 	sidebar_items = loads(sidebar_items)
+	title = f"{sidebar_title}-{frappe.session.user}"
 	w = frappe.get_doc("Workspace Sidebar", sidebar_title)
+	if not frappe.conf.developer_mode:
+		try:
+			w = frappe.get_doc("Workspace Sidebar", title)
+		except frappe.DoesNotExistError:
+			frappe.clear_messages()
+			w = frappe.copy_doc(w, ignore_no_copy=False)
+			w.title = title
+			w.for_user = frappe.session.user
 	items = []
 	current_idx = 1
 	for item in sidebar_items:
 		si = frappe.new_doc("Workspace Sidebar Item")
 		si.update(item)
-		items.append(si)
 		si.idx = current_idx
 		items.append(si)
 		current_idx += 1
@@ -305,7 +323,7 @@ def choose_top_doctypes(doctype_names):
 		try:
 			doctype_count_map = {}
 			for doctype in doctype_names:
-				if not is_single_doctype(doctype):
+				if not is_single_doctype(doctype) and not frappe.get_meta(doctype).is_virtual:
 					doctype_count_map[doctype] = frappe.db.count(doctype)
 			top_doctypes = [
 				name
