@@ -252,47 +252,27 @@ frappe.ui.form.ControlTextEditor = class ControlTextEditor extends frappe.ui.for
 			return null;
 		}
 		let me = this;
-		const esc = frappe.utils.escape_html;
-
-		// FIXED normalize_values
-		function normalize_values(values) {
-			if (!Array.isArray(values)) return [];
-
-			return values.map(v => {
-				return {
-					id: v.id,
-					value: v.value,
-					email: v.email || "",
-					is_group: v.is_group || false
-				};
-			});
-		}
 
 		return {
 			allowedChars: /^[A-Za-z0-9_]*$/,
 			mentionDenotationChars: ["@"],
 			isolateCharacter: true,
 
-			source: frappe.utils.debounce(async function(search_term, renderList) {
-				let method = me.mention_search_method || "frappe.desk.search.get_names_for_mentions";
+			source: frappe.utils.debounce(async function (search_term, renderList) {
+				let method =
+					me.mention_search_method || "frappe.desk.search.get_names_for_mentions";
+				let values = await frappe.xcall(method, {
+					search_term,
+				});
 
-				let values = await frappe.xcall(method, { search_term });
-
-				// DEBUG
-				console.log("MENTION RAW VALUES:", values);
-
-				let normalized = normalize_values(values);
-
-				// DEBUG
-				console.log("MENTION NORMALIZED:", normalized);
-
-				renderList(normalized, search_term);
+				let sorted_values = me.prioritize_involved_users_in_mention(values);
+				renderList(sorted_values, search_term);
 			}, 300),
 			renderItem(item) {
-				const name = esc(item.value);
-				const email = esc(item.email || "");
-				return `${name} ${email ? " (" + email + ")" : ""}`;
-			}
+				let value = item.value;
+				let email = item?.email ? `(${item?.email})` : "";
+				return `${value} ${email} ${item.is_group ? frappe.utils.icon("users") : ""}`;
+			},
 		};
 	}
 
