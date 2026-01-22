@@ -2273,8 +2273,8 @@ frappe.ui.form.Form = class FrappeForm {
 							<a href='/desk/submission-queue?ref_doctype=${encodeURIComponent(
 								this.doctype
 							)}&ref_docname=${encodeURIComponent(this.docname)}'>${__(
-								"All Submissions"
-							)}</a>
+							"All Submissions"
+						)}</a>
 						`;
 					}
 
