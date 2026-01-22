@@ -989,7 +989,7 @@ class DesktopIcon {
 			});
 			if (this.icon_type == "App") {
 				$($(this.icon_caption_area).children()[1]).html(
-					`${this.child_icons.length} Workspaces`
+					__(`${this.child_icons.length} Workspaces`)
 				);
 			}
 		} else {
@@ -1174,7 +1174,7 @@ class InlineEditor {
 		this.container.html(`
 			<div class="title-widget">
 				<div class="title-input-label">
-					<span>${this.initialValue}</span>
+					<span>${__(this.initialValue)}</span>
 				</div>
 				<div class="title-input-wrapper">
 					<input class="title-input">
