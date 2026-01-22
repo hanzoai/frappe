@@ -1622,8 +1622,8 @@ class Engine:
 						& (columns.table_schema == current_schema)
 					)
 				).run(pluck=True)
-				db_type = res[0] if res else None
-				if db_type in ("smallint", "bigint", "int", "numeric"):  # can add as needed
+				data_type = res[0] if res else None
+				if data_type in ("smallint", "bigint", "int", "numeric"):  # can add as needed
 					return "0"
 			return "''"
 
