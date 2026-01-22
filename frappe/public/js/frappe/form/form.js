@@ -1509,7 +1509,9 @@ frappe.ui.form.Form = class FrappeForm {
 		if (group && group.indexOf("fa fa-") !== -1) group = null;
 
 		let btn = this.page.add_inner_button(label, fn, group);
-
+		if (btn) {
+			this.custom_buttons[label] = btn;
+		}
 		return btn;
 	}
 
