@@ -181,18 +181,6 @@ frappe.ui.form.QuickEntryForm = class QuickEntryForm extends frappe.ui.Dialog {
 
 			if (data) {
 				me.dialog.working = true;
-<<<<<<< HEAD
-				me.script_manager.trigger("validate").then(() => {
-					me.insert().then(() => {
-						let messagetxt = __("{1} saved", [__(me.doctype), this.doc.name.bold()]);
-						me.dialog.animation_speed = "slow";
-						me.dialog.hide();
-						setTimeout(function () {
-							frappe.show_alert({ message: messagetxt, indicator: "green" }, 3);
-						}, 500);
-					});
-				});
-=======
 				if (me.skip_insert) {
 					// Skip insert mode - just update the doc and trigger callbacks
 					me.update_doc();
@@ -216,7 +204,6 @@ frappe.ui.form.QuickEntryForm = class QuickEntryForm extends frappe.ui.Dialog {
 						}, 500);
 					});
 				}
->>>>>>> 0c49aa5428 (revert: remove script manager from Quick Entry dialog)
 			}
 		});
 	}
