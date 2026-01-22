@@ -988,9 +988,8 @@ class DesktopIcon {
 				modal.show();
 			});
 			if (this.icon_type == "App") {
-				$($(this.icon_caption_area).children()[1]).html(
-					`${this.child_icons.length} Workspaces`
-				);
+				let content = `${this.child_icons.length} Workspaces`;
+				$($(this.icon_caption_area).children()[1]).html(__(content));
 			}
 		} else {
 			if (this.icon_route && this.icon_route.startsWith("http")) {
@@ -1174,7 +1173,7 @@ class InlineEditor {
 		this.container.html(`
 			<div class="title-widget">
 				<div class="title-input-label">
-					<span>${this.initialValue}</span>
+					<span>${__(this.initialValue)}</span>
 				</div>
 				<div class="title-input-wrapper">
 					<input class="title-input">
