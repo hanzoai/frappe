@@ -100,10 +100,14 @@ frappe.ui.get_print_settings = function (
 
 			if (settings.print_format) {
 				settings.pick_columns = 0;
-				settings.columns = [];
+				settings.columns = null;
 			}
 
 			callback(settings);
+			// clean up print format to avoid affecting next print
+			if (settings.print_format) {
+				settings.print_format = null;
+			}
 		},
 		__("Print Settings")
 	);

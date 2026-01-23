@@ -8,7 +8,7 @@ app_publisher = "Frappe Technologies"
 app_description = "Full stack web framework with Python, Javascript, MariaDB, Redis, Node"
 app_license = "MIT"
 app_logo_url = "/assets/frappe/images/frappe-framework-logo.svg"
-develop_version = "15.x.x-develop"
+develop_version = "17.x.x-develop"
 app_home = "/app/build"
 
 app_email = "developers@frappe.io"
@@ -217,7 +217,7 @@ scheduler_events = {
 			"frappe.automation.doctype.reminder.reminder.send_reminders",
 			"frappe.model.utils.link_count.update_link_count",
 			"frappe.search.sqlite_search.build_index_if_not_exists",
-			"frappe.pulse.client.send_queued_events",
+			"frappe.utils.telemetry.pulse.client.send_queued_events",
 		],
 		# 10 minutes
 		"0/10 * * * *": [

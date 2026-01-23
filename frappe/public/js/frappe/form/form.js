@@ -168,6 +168,7 @@ frappe.ui.form.Form = class FrappeForm {
 		frappe.ui.keys.add_shortcut({
 			shortcut: "ctrl+p",
 			action: () => this.print_doc(),
+			page: this.page,
 			description: __("Print document"),
 			condition: () => frappe.model.can_print(this.doctype, this) && !this.meta.issingle,
 		});
@@ -635,6 +636,7 @@ frappe.ui.form.Form = class FrappeForm {
 				() => this.run_after_load_hook(),
 				() => this.dashboard.after_refresh(),
 				() => (this.cscript.is_onload = false),
+				() => this.configure_breadcrumb_width(),
 			]);
 		} else {
 			this.refresh_header(switched);
@@ -651,6 +653,32 @@ frappe.ui.form.Form = class FrappeForm {
 
 	onload_post_render() {
 		this.setup_image_autocompletions_in_markdown();
+	}
+
+	configure_breadcrumb_width() {
+		let el = this.page.page_actions[0];
+		const rect = el.getBoundingClientRect();
+		let is_outside = rect.right > document.documentElement.clientWidth;
+		if (is_outside) {
+			// check if the default actions are outside of the screen
+			const overflow = Math.max(0, rect.right - document.documentElement.clientWidth);
+			this.page.$title_area
+				.parent()
+				.css("max-width", overflow ? `calc(50% - ${overflow}px)` : "50%");
+			let breadcrumb = this.page.$title_area.find("ul li.ellipsis");
+
+			if (cint(breadcrumb[0]?.clientWidth) <= 30) {
+				// if workspce sodebar is not visible
+				$(breadcrumb[0]).hide();
+				if (cint(breadcrumb[1]?.clientWidth) <= 30) {
+					// if doctype sodebar is not visible
+					$(breadcrumb[1]).hide();
+
+					// add elipsis to the name/title breadcrumb
+					this.page.$title_area.find(".title-text-form").parent().addClass("ellipsis");
+				}
+			}
+		}
 	}
 
 	focus_on_first_input() {
@@ -1372,7 +1400,7 @@ frappe.ui.form.Form = class FrappeForm {
 	}
 
 	email_doc(message) {
-		new frappe.views.CommunicationComposer({
+		return new frappe.views.CommunicationComposer({
 			doc: this.doc,
 			frm: this,
 			subject: __(this.meta.name) + ": " + this.docname,
@@ -1481,7 +1509,9 @@ frappe.ui.form.Form = class FrappeForm {
 		if (group && group.indexOf("fa fa-") !== -1) group = null;
 
 		let btn = this.page.add_inner_button(label, fn, group);
-
+		if (btn) {
+			this.custom_buttons[label] = btn;
+		}
 		return btn;
 	}
 
