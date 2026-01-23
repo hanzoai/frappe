@@ -136,8 +136,7 @@ def clean_script_and_style(html):
 def sanitize_html(html, linkify=False, always_sanitize=False):
 	"""
 	Sanitize HTML tags, attributes and style to prevent XSS attacks
-	Based on nh3 clean (formerly bleach clean), bleach whitelist and html5lib's
-	Sanitizer defaults
+	Based on nh3 clean, bleach whitelist and html5lib's Sanitizer defaults
 
 	Does not sanitize JSON unless explicitly specified, as it could lead to future problems
 	"""
