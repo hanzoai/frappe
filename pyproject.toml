@@ -110,7 +110,6 @@ dev = [
     "types-PyYAML",
     "types-Pygments",
     "types-beautifulsoup4",
-    "types-bleach",
     "types-cffi",
     "types-colorama",
     "types-croniter",
