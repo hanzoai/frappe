@@ -1062,6 +1062,10 @@ class DesktopModal {
 	setup(icon_title, child_icons_data, grid_row_size) {
 		const me = this;
 		this.make_modal(icon_title);
+
+		// Check if we're in edit mode
+		const is_edit_mode = frappe.pages["desktop"].desktop_page.edit_mode;
+
 		this.child_icon_grid = new DesktopIconGrid({
 			wrapper: this.$child_icons_wrapper,
 			icons_data: child_icons_data,
@@ -1069,7 +1073,15 @@ class DesktopModal {
 			in_folder: false,
 			in_modal: true,
 			parent_icon: this.parent_icon_obj,
+			edit_mode: is_edit_mode, // Pass edit mode state
 		});
+
+		// If in edit mode, setup reordering for the modal icons
+		if (is_edit_mode) {
+			this.child_icon_grid.grids.forEach((grid) => {
+				this.child_icon_grid.setup_reordering(grid);
+			});
+		}
 
 		this.modal.on("hidden.bs.modal", function () {
 			me.modal.remove();
@@ -1188,8 +1200,10 @@ class InlineEditor {
 
 	bindEvents() {
 		this.container.on("click", () => {
-			this.label.css("visibility", "hidden");
-			this.input.focus().select();
+			if (frappe.pages["desktop"].desktop_page.edit_mode) {
+				this.label.css("visibility", "hidden");
+				this.input.focus().select();
+			}
 		});
 
 		this.input.on("keydown", (event) => {
