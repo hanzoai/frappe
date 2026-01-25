@@ -129,8 +129,9 @@ function save_desktop(icons) {
 }
 
 function reset_to_default() {
-	frappe.model.user_settings.save("Desktop Icon", "icons_to_create", null);
-	frappe.model.user_settings.save("Desktop Icon", "desktop_layout", null);
+	frappe.db.delete_doc("Desktop Layout", frappe.session.user).then(() => {
+		frappe.ui.toolbar.clear_cache();
+	});
 }
 
 function toggle_icons(icons) {
