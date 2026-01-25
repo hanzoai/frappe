@@ -881,6 +881,10 @@ class DesktopModal {
 	setup(icon_title, child_icons_data, grid_row_size) {
 		const me = this;
 		this.make_modal(icon_title);
+
+		// Check if we're in edit mode
+		const is_edit_mode = frappe.pages["desktop"].desktop_page.edit_mode;
+
 		this.child_icon_grid = new DesktopIconGrid({
 			wrapper: this.$child_icons_wrapper,
 			icons_data: child_icons_data,
@@ -888,7 +892,15 @@ class DesktopModal {
 			in_folder: false,
 			in_modal: true,
 			parent_icon: this.parent_icon_obj,
+			edit_mode: is_edit_mode, // Pass edit mode state
 		});
+
+		// If in edit mode, setup reordering for the modal icons
+		if (is_edit_mode) {
+			this.child_icon_grid.grids.forEach((grid) => {
+				this.child_icon_grid.setup_reordering(grid);
+			});
+		}
 
 		this.modal.on("hidden.bs.modal", function () {
 			me.modal.remove();
@@ -939,3 +951,96 @@ class DesktopModal {
 		this.modal.modal("hide");
 	}
 }
+<<<<<<< HEAD
+=======
+
+class IconsPane {
+	constructor() {
+		this.wrapper = $($(".desktop-container .icons-container").get(0));
+	}
+	show() {
+		this.wrapper.removeClass("hidden");
+		if (this.grid) {
+			this.grid.icons_data = frappe.pages.desktop.desktop_page.hidden_icons;
+			this.grid.update_grid();
+			return;
+		}
+		this.wrapper.append(
+			"<span style='margin-top: 10px; margin-bottom: 20px'>Removed Icons</span>"
+		);
+		this.grid = new DesktopIconGrid({
+			name: "hidden-icons-grid",
+			wrapper: this.wrapper,
+			icons_data: frappe.pages.desktop.desktop_page.hidden_icons,
+			row_size: 6,
+			edit_mode: true,
+			compact: true,
+			is_pane: true,
+		});
+		this.setup();
+	}
+	hide() {
+		this.wrapper.addClass("hidden");
+	}
+	setup() {
+		this.setup_close_button();
+	}
+	setup_close_button() {
+		const me = this;
+		this.wrapper.find(".close-button").on("click", function () {
+			me.hide();
+		});
+	}
+}
+
+class InlineEditor {
+	constructor(container, initialValue = "", onRename = () => {}) {
+		this.container = container;
+		this.initialValue = initialValue;
+		this.onRename = onRename;
+
+		this.render();
+		this.bindEvents();
+	}
+
+	render() {
+		this.container.html(`
+			<div class="title-widget">
+				<div class="title-input-label">
+					<span>${__(this.initialValue)}</span>
+				</div>
+				<div class="title-input-wrapper">
+					<input class="title-input">
+				</div>
+			</div>
+		`);
+
+		this.input = this.container.find(".title-input");
+		this.label = this.container.find(".title-input-label");
+	}
+
+	bindEvents() {
+		this.container.on("click", () => {
+			if (frappe.pages["desktop"].desktop_page.edit_mode) {
+				this.label.css("visibility", "hidden");
+				this.input.focus().select();
+			}
+		});
+
+		this.input.on("keydown", (event) => {
+			if (event.key === "Enter") {
+				const newValue = this.input.val().trim();
+				this.input.css("display", "none");
+				this.label.css("visibility", "visible");
+				this.label.find("span").text(newValue);
+
+				this.onRename(this.initialValue, newValue, this);
+			}
+		});
+
+		this.input.on("blur", () => {
+			this.label.css("visibility", "visible");
+		});
+	}
+}
+>>>>>>> 89269057ad (fix: icons in modal are also in editing mode)
