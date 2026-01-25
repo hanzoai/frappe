@@ -888,7 +888,6 @@ frappe.ui.form.Toolbar = class Toolbar {
 	}
 
 	setup_sidebar_toggle(sidebar_wrapper) {
-		console.log(sidebar_wrapper);
 		if (frappe.utils.is_xs() || frappe.utils.is_sm()) {
 			this.setup_overlay_sidebar(sidebar_wrapper);
 		} else {
