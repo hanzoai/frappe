@@ -125,7 +125,13 @@ function save_desktop(icons) {
 }
 
 function reset_to_default() {
+<<<<<<< HEAD
 	localStorage.setItem(`${frappe.session.user}:desktop`, null);
+=======
+	frappe.db.delete_doc("Desktop Layout", frappe.session.user).then(() => {
+		frappe.ui.toolbar.clear_cache();
+	});
+>>>>>>> 51ad3ad309 (fix: make reset to default work)
 }
 
 frappe.pages["desktop"].on_page_show = function () {
