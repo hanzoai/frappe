@@ -334,9 +334,7 @@ class BaseDocument:
 			else:
 				value.idx = 1
 
-		if getattr(value, "__islocal", None):
-			value.__dict__["name"] = None
-		elif not getattr(value, "name", None):
+		if not getattr(value, "name", None):
 			value.__dict__["__islocal"] = 1
 
 		return value
