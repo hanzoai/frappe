@@ -45,6 +45,7 @@ frappe.ui.menu = class ContextMenu {
 	}
 	make() {
 		this.template.empty();
+		this.menu_items_to_show = [];
 		this.menu_items.forEach((f) => {
 			f.condition =
 				f.condition ||
@@ -53,13 +54,19 @@ frappe.ui.menu = class ContextMenu {
 				};
 			if (f.condition()) {
 				this.add_menu_item(f);
+				this.menu_items_to_show.push(f);
 			}
 		});
 
 		// if (!$.contains(document.body, this.template[0])) {
 		// 	$(document.body).append(this.template);
 		// }
-		$(document.body).append(this.template);
+
+		// only append if there are items to show
+		if (this.menu_items_to_show.length > 0) {
+			$(document.body).append(this.template);
+		}
+
 		this.set_styles();
 	}
 	set_styles() {
@@ -132,19 +139,7 @@ frappe.ui.menu = class ContextMenu {
 								me.current_menu.show();
 							}
 						}
-
-						// debugger
-						// if(!current_menu.visible){
-						// 	current_menu.show(event)
-						// }
-						// me.nested_menus.forEach(menu => {
-						// 	if(current_menu == menu) return;
-						// 	menu.hide()
-						// })
 					}
-					// me.nested_menus.forEach((menu) => {
-					// 	menu.hide();
-					// });
 				});
 			} else if (item.items) {
 				$();
@@ -184,48 +179,27 @@ frappe.ui.menu = class ContextMenu {
 
 	show(event) {
 		this.make();
-		const offset = $(this.parent).offset();
-		const height = $(this.parent).outerHeight();
-		this.left_offset = 0;
+		const parent_rect = this.parent.get(0).getBoundingClientRect();
 		this.gap = 4;
+		let top, left;
 		if (this.opts.nested && this.opts.parent_menu) {
-			let top =
-				this.parent.get(0).getBoundingClientRect().bottom -
-				this.parent.get(0).getBoundingClientRect().height;
-			let dropdown = frappe.menu_map[this.opts.parent_menu].template;
-			let width = dropdown.outerWidth();
-			let offset = $(dropdown).offset();
-			let left = offset.left;
+			let parent_menu_el = frappe.menu_map[this.opts.parent_menu].template;
+			let parent_menu_rect = parent_menu_el.get(0).getBoundingClientRect();
+			top = parent_rect.top;
 			if (frappe.utils.is_rtl()) {
-				left = left - width - this.gap;
+				left = parent_menu_rect.left - this.template.outerWidth() - this.gap;
 			} else {
-				left = left + width + this.gap;
+				left = parent_menu_rect.right + this.gap;
 			}
-			this.template.css({
-				display: "block",
-				position: "absolute",
-				top: top + "px",
-				left: left + "px",
-			});
 		} else {
-			this.template.css({
-				display: "block",
-				position: "absolute",
-				top: offset.top + height + this.gap + "px",
-				left: offset.left,
-			});
+			top = parent_rect.bottom + this.gap;
+			left = parent_rect.left;
+			if (this.open_on_left || frappe.utils.is_rtl()) {
+				left = parent_rect.right - this.template.outerWidth();
+			}
 		}
 
-		if (this.open_on_left) {
-			this.left_offset = this.parent.get(0).getBoundingClientRect().width;
-			this.template.css({
-				left:
-					offset.left -
-					this.template.get(0).getBoundingClientRect().width +
-					this.left_offset +
-					"px",
-			});
-		}
+		if (left < 0) left = 10;
 
 		if (this.opts.right_click) {
 			this.template.css({
@@ -233,6 +207,13 @@ frappe.ui.menu = class ContextMenu {
 				top: `${event.clientY}px`,
 			});
 		}
+
+		this.template.css({
+			display: "block",
+			position: "fixed",
+			top: top + "px",
+			left: left + "px",
+		});
 
 		this.visible = true;
 		frappe.visible_menus.push(this);

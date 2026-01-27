@@ -418,7 +418,7 @@ frappe.form.get_formatter = function (fieldtype) {
 
 frappe.format = function (value, df, options, doc) {
 	let mask_readonly = false;
-	if (df.parent) {
+	if (df?.parent) {
 		const mask_fields = frappe.get_meta(df.parent)?.masked_fields;
 		mask_readonly = mask_fields?.includes(df.fieldname);
 	}
@@ -433,9 +433,7 @@ frappe.format = function (value, df, options, doc) {
 		df._options = doc ? doc[df.options] : null;
 	}
 
-	var formatter =
-		frappe.meta.get_docfield(doc?.doctype, df.fieldname)?.formatter ||
-		frappe.form.get_formatter(fieldtype);
+	var formatter = df.formatter || frappe.form.get_formatter(fieldtype);
 
 	var formatted = formatter(value, df, options, doc);
 

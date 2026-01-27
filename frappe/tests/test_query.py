@@ -2383,6 +2383,15 @@ class TestQuery(IntegrationTestCase):
 		for val in [b, c, d]:
 			self.assertEqual(a, val, "Query result mismatch detected.")
 
+	@run_only_if(db_type_is.POSTGRES)
+	def test_ifnull_fallback_postgres(self):
+		"""Test ifnull fallback in postgres"""
+		from frappe.database.query import Engine
+
+		engine = Engine()
+		self.assertEqual(engine._get_ifnull_fallback("Patch Log", "skipped"), "0")
+		self.assertEqual(engine._get_ifnull_fallback("Patch Log", "patch"), "''")
+
 
 # This function is used as a permission query condition hook
 def test_permission_hook_condition(user):
