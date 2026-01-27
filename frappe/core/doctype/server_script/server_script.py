@@ -211,6 +211,7 @@ class ServerScript(Document):
 
 		Args:
 		        user (str): Take user email to execute script and return list of conditions.
+				active_child_tables (list, optional): A list of child table names involved in the current SQL query.
 
 		Return:
 		        list: Return list of conditions defined by rules in self.script.
@@ -218,8 +219,7 @@ class ServerScript(Document):
 		locals = {
 			"user": user,
 			"conditions": "",
-			"active_child_tables": active_child_tables
-			or [],  # add 'active_child_tables' to the locals dictionary
+			"active_child_tables": active_child_tables or [],
 		}
 		safe_exec(self.script, None, locals, script_filename=self.name)
 		if locals["conditions"]:

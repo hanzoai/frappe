@@ -1151,17 +1151,16 @@ from {tables}
 				conditions.append(c)
 
 		active_child_tables = []
-		if hasattr(self, "tables") and len(self.tables) > 1:  # only if query has multiple tables involved
+		if len(self.tables) > 1:  # only if query has multiple tables involved
 			for table_name in self.tables:
-				# skip parent table (user_permissions are already applied)
 				if table_name != f"`tab{self.doctype}`":
-					active_child_tables.append(table_name)  # track child tables
+					active_child_tables.append(table_name)
 
 		if permission_script_name := get_server_script_map().get("permission_query", {}).get(self.doctype):
 			script = frappe.get_doc("Server Script", permission_script_name)
 			if condition := script.get_permission_query_conditions(
 				self.user, active_child_tables=active_child_tables
-			):  # parse tracked child tables
+			):
 				conditions.append(condition)
 
 		return " and ".join(conditions) if conditions else ""
