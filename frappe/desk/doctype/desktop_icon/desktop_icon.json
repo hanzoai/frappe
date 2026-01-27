@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:label",
  "creation": "2016-02-22 03:47:45.387068",
@@ -56,6 +57,7 @@
   {
    "fieldname": "icon",
    "fieldtype": "Icon",
+   "hidden": 1,
    "label": "Icon"
   },
   {
