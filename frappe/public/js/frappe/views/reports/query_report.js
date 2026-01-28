@@ -538,7 +538,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 		let filter_area = this.page.page_form;
 		this.filters = [];
-		if (this.report_settings.seperate_check_filters) this.setup_check_filter_area();
+		if (this.report_settings.separate_check_filters) this.setup_check_filter_area();
 		this.filters = filters
 			.map((df, index) => {
 				if (df.fieldtype === "Break") return;
@@ -582,7 +582,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				return f;
 			})
 			.filter(Boolean);
-		if (this.report_settings.seperate_check_filters) this.move_check_filter_area();
+		if (this.report_settings.separate_check_filters) this.move_check_filter_area();
 		if (this.report_settings.collapsible_filters) {
 			this.filters_hidden = true;
 			this.filter_row_length = this.get_filter_row_length();
@@ -623,7 +623,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			for (let i = this.filter_row_length; i < this.filters.length; i++) {
 				$(this.filters[i].wrapper).addClass("hidden");
 			}
-			this.check_filter_area.css("display", "none");
+			this.check_filter_area && this.check_filter_area.css("display", "none");
 			this.filters_hidden = false;
 			icon_name = "chevron-down";
 		} else {
@@ -646,9 +646,19 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			$(this.filters[filter_no].wrapper).css("display", "flex");
 			$(this.filters[filter_no].wrapper).css("align-items", "center");
 			$(this.filters[filter_no].wrapper).css("gap", "5px");
+			this.handle_filter_styles($(this.filters[filter_no].wrapper));
 			this.$collapse_button.on("click", function () {
 				me.toggle_filter_visiblity();
 			});
+		}
+	}
+	handle_filter_styles(wrapper) {
+		if (wrapper.find("select")) {
+			wrapper.find(".select-icon").css("left", wrapper.find("select").width() + 18 + "px");
+		}
+
+		if (wrapper.find(".multiselect-list")) {
+			wrapper.find(".multiselect-list").css("flex", "1 0");
 		}
 	}
 
