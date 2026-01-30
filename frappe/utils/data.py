@@ -1387,13 +1387,23 @@ def money_in_words(
 	elif main == "0":
 		out = in_words(fraction, in_million).title() + " " + fraction_currency
 	else:
-		out = _(main_currency, context="Currency") + " " + in_words(main, in_million).title()
+		if main_currency == "DZD":
+			# Use Dinars for Algerian Compliance
+			out = in_words(main, in_million).title() + " " + _("Dinars", context="Currency")
+		else:
+			out = _(main_currency, context="Currency") + " " + in_words(main, in_million).title()
 		if cint(fraction):
 			out = (
 				out + " " + _("and") + " " + in_words(fraction, in_million).title() + " " + fraction_currency
 			)
 
+<<<<<<< HEAD
 	return out + " " + _("only.")
+=======
+	if main_currency == "DZD":
+		return _("{0}.", context="Money in words").format(out)
+	return _("{0} only.", context="Money in words").format(out)
+>>>>>>> 2050a127bc (fix(data): fix currency in words for Algerian compliance)
 
 
 #
