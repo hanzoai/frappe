@@ -1156,7 +1156,7 @@ from {tables}
 			for table_name in self.tables:
 				clean_name = table_name.replace("`", "").replace('"', "")
 				if clean_name != main_table_name:
-					active_child_tables.append(table_name)
+					active_child_tables.append(clean_name)
 
 		if permission_script_name := get_server_script_map().get("permission_query", {}).get(self.doctype):
 			script = frappe.get_doc("Server Script", permission_script_name)
