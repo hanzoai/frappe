@@ -5,7 +5,7 @@ import io
 import json
 import os
 import sys
-from datetime import date, datetime, time, timedelta, timezone
+from datetime import UTC, date, datetime, time, timedelta, timezone
 from decimal import ROUND_HALF_UP, Decimal, localcontext
 from enum import Enum
 from io import StringIO
@@ -508,7 +508,7 @@ class TestHTMLUtils(IntegrationTestCase):
 		sample = """<h1>Hello</h1><p>Para</p><a href="http://test.com">text</a>"""
 		clean = clean_email_html(sample)
 		self.assertTrue("<h1>Hello</h1>" in clean)
-		self.assertTrue('<a href="http://test.com">text</a>' in clean)
+		self.assertTrue('<a href="http://test.com" rel="noopener noreferrer">text</a>' in clean)
 
 	def test_sanitize_html(self):
 		from frappe.utils.html_utils import sanitize_html
@@ -961,9 +961,9 @@ class TestResponse(IntegrationTestCase):
 					minute=23,
 					second=23,
 					microsecond=23,
-					tzinfo=timezone.utc,
+					tzinfo=UTC,
 				),
-				time(hour=23, minute=23, second=23, microsecond=23, tzinfo=timezone.utc),
+				time(hour=23, minute=23, second=23, microsecond=23, tzinfo=UTC),
 				timedelta(days=10, hours=12, minutes=120, seconds=10),
 			],
 			"float": [
@@ -1252,8 +1252,8 @@ class TestMiscUtils(IntegrationTestCase):
 		self.assertGreaterEqual(len(info["users"]), 1)
 
 	def test_get_url_to_form(self):
-		self.assertTrue(get_url_to_form("System Settings").endswith("/app/system-settings"))
-		self.assertTrue(get_url_to_form("User", "Test User").endswith("/app/user/Test%20User"))
+		self.assertTrue(get_url_to_form("System Settings").endswith("/desk/system-settings"))
+		self.assertTrue(get_url_to_form("User", "Test User").endswith("/desk/user/Test%20User"))
 
 	def test_safe_json_load(self):
 		self.assertEqual(safe_json_loads("{}"), {})

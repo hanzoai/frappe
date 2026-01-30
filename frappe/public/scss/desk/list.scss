@@ -264,6 +264,10 @@
 	}
 }
 
+.list-row-col .indicator-pill {
+	max-width: 150px;
+}
+
 $level-margin-right: 8px;
 
 .list-subject {
@@ -303,7 +307,7 @@ $level-margin-right: 8px;
 .layout-main-list {
 	.list-paging-area,
 	.footnote-area {
-		padding: var(--padding-sm) var(--padding-md);
+		padding: var(--padding-sm) 0;
 	}
 }
 
@@ -578,7 +582,7 @@ input.list-header-checkbox {
 		.result-container {
 			overflow-x: auto;
 			.result {
-				overflow-y: auto;
+				overflow-y: hidden;
 			}
 		}
 	}
