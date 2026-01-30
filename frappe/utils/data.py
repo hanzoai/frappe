@@ -1398,7 +1398,7 @@ def money_in_words(
 			)
 
 	if main_currency == "DZD":
-		return out + " " + _(".")
+		return out + "."
 	return out + " " + _("only.")
 
 
