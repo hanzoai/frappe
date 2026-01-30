@@ -1397,13 +1397,9 @@ def money_in_words(
 				out + " " + _("and") + " " + in_words(fraction, in_million).title() + " " + fraction_currency
 			)
 
-<<<<<<< HEAD
-	return out + " " + _("only.")
-=======
 	if main_currency == "DZD":
-		return _("{0}.", context="Money in words").format(out)
-	return _("{0} only.", context="Money in words").format(out)
->>>>>>> 2050a127bc (fix(data): fix currency in words for Algerian compliance)
+		return out + " " + _(".")
+	return out + " " + _("only.")
 
 
 #
