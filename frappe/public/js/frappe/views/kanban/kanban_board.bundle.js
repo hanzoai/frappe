@@ -714,7 +714,7 @@ frappe.provide("frappe.views");
 		function make_dom() {
 			var opts = {
 				name: card.name,
-				title: frappe.utils.html2text(card.title),
+				title: frappe.utils.escape_html(frappe.utils.html2text(card.title)),
 				disable_click: card._disable_click ? "disable-click" : "",
 				creation: card.creation,
 				doc_content: get_doc_content(card),
