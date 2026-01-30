@@ -739,7 +739,11 @@ frappe.provide("frappe.views");
 				let label = cur_list.board.show_labels
 					? `<span>${__(field.label, null, field.parent)}: </span>`
 					: "";
-				let value = frappe.format(card.doc[field_name], field);
+				let rendered_value = card.doc[field_name];
+				if (field.fieldtype === "Data") {
+					rendered_value = frappe.utils.escape_html(rendered_value);
+				}
+				let value = frappe.format(rendered_value, field);
 				fields.push(`
 					<div class="text-muted text-truncate">
 						${label}
