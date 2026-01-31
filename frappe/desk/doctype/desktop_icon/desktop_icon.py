@@ -165,11 +165,22 @@ def get_desktop_icons(user=None, bootinfo=None):
 			"icon_image",
 		]
 
-		standard_icons = frappe.get_all("Desktop Icon", fields=fields, filters={"standard": 1})
-		user_icons = frappe.get_all(
-			"Desktop Icon", fields=fields, filters=[["standard", "=", 0], "or", ["owner", "=", user]]
-		)
-		user_icons = user_icons + standard_icons
+		from frappe.query_builder import DocType
+
+		DesktopIcon = DocType("Desktop Icon")
+
+		user_icons = (
+			frappe.qb.from_(DesktopIcon)
+			.select(*fields)
+			.where(
+				(DesktopIcon.standard == 1)
+				| (
+					(DesktopIcon.standard == 0)
+					& (DesktopIcon.owner.isin(["Administrator", frappe.session.user]))
+				)
+			)
+			.distinct()
+		).run(as_dict=True)
 
 		# sort by idx
 		user_icons.sort(key=lambda a: a.idx)
