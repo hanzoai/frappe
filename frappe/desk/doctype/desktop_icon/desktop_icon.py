@@ -102,10 +102,11 @@ class DesktopIcon(Document):
 
 				if len(items) and all(item["type"] == "Section Break" for item in items):
 					return False
-
+				if len(items) == 0:
+					return False
 				return True
 			except KeyError:
-				return True
+				return False
 
 	def check_app_permission(self):
 		for a in frappe.get_installed_apps():
