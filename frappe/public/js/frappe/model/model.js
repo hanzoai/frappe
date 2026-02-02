@@ -614,7 +614,12 @@ $.extend(frappe.model, {
 		}
 		let meta = frappe.get_meta(doc.doctype);
 		if (meta.title_field) {
-			return doc[meta.title_field];
+			let df = meta.fields.find((df) => df.fieldname === meta.title_field);
+			let title_value = doc[meta.title_field];
+			if (df && df.fieldtype === "Link") {
+				title_value = frappe.utils.get_link_title(df.options, title_value) ?? title_value;
+			}
+			return title_value;
 		} else {
 			return String(doc.name);
 		}
