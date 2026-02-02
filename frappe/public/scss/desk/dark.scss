@@ -280,38 +280,38 @@ $check-icon-dark: url("data:image/svg+xml, <svg viewBox='0 0 8 7' fill='none' xm
 	}
 
 	.hljs {
-		background: var(--gray-800) !important;
-		color: var(--gray-200) !important;
+		background: var(--gray-800);
+		color: var(--gray-200);
 	}
 
 	.hljs-keyword,
 	.hljs-selector-tag,
 	.hljs-built_in {
-		color: var(--blue-300) !important;
+		color: var(--blue-300);
 	}
 
 	.hljs-string,
 	.hljs-title {
-		color: var(--yellow-200) !important;
+		color: var(--yellow-200);
 	}
 
 	.hljs-number,
 	.hljs-literal {
-		color: var(--orange-300) !important;
+		color: var(--orange-300);
 	}
 
 	.hljs-comment {
-		color: var(--gray-500) !important;
+		color: var(--gray-500);
 	}
 
 	.hljs-meta,
 	.hljs-meta-keyword {
-		color: var(--gray-400) !important;
+		color: var(--gray-400);
 	}
 
 	.frappe-control pre,
 	.frappe-control pre code {
-		background-color: var(--gray-800) !important;
-		color: var(--gray-200) !important;
+		background-color: var(--gray-800);
+		color: var(--gray-200);
 	}
 }
