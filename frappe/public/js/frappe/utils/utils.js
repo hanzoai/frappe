@@ -285,15 +285,11 @@ Object.assign(frappe.utils, {
 		if (!txt) return txt;
 
 		var content = $("<div></div>").html(txt);
-		content
-			.find("blockquote")
-			.parent("blockquote")
-			.addClass("hidden")
-			.before(
-				'<p><a class="text-muted btn btn-default toggle-blockquote" style="padding: 2px 7px 0px; line-height: 1;"> \
+		content.find("blockquote").parent("blockquote").addClass("hidden").before(
+			'<p><a class="text-muted btn btn-default toggle-blockquote" style="padding: 2px 7px 0px; line-height: 1;"> \
 					• • • \
 				</a></p>'
-			);
+		);
 		return content.html();
 	},
 	scroll_page_to_top() {
@@ -2182,5 +2178,28 @@ Object.assign(frappe.utils, {
 			links.push({ is_divider: true });
 		}
 		return links;
+	},
+	eval_expression(value) {
+		if (typeof value === "string") {
+			const parsed_components = value.match(/[^\d.,]+|[\d.,]+/g);
+			var parsed_value = value;
+			if (parsed_components !== null) {
+				parsed_value = parsed_components
+					.map((v) => {
+						return isNaN(parseFloat(v)) ? v : flt(v);
+					})
+					.join("");
+			}
+			if (parsed_value.match(/^[0-9+\-/*.() ]+$/)) {
+				// If it is a string containing operators
+				try {
+					return eval(parsed_value);
+				} catch (e) {
+					// bad expression
+					return value;
+				}
+			}
+		}
+		return value;
 	},
 });
