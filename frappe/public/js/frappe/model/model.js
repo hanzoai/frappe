@@ -610,8 +610,9 @@ $.extend(frappe.model, {
 		let df = meta.fields.find((df) => df.fieldname === meta.title_field);
 		let title_value = doc[meta.title_field];
 
-		if (df && df.fieldtype === "Link") {
-			title_value = frappe.utils.get_link_title(df.options, title_value) ?? title_value;
+		if (df?.fieldtype && ["Link", "Dynamic Link"].includes(df.fieldtype)) {
+			const doctype = df.fieldtype === "Dynamic Link" ? doc[df.options] : df.options;
+			title_value = frappe.utils.get_link_title(doctype, title_value) ?? title_value;
 		}
 
 		return title_value;
