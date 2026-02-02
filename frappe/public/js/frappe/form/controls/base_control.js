@@ -214,6 +214,7 @@ frappe.ui.form.Control = class BaseControl {
 		const is_value_same = this.get_model_value() === value;
 
 		if (this.inside_change_event || (is_value_same && !force_set_value)) {
+			me.refresh();
 			return Promise.resolve();
 		}
 
