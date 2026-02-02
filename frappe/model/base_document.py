@@ -311,6 +311,15 @@ class BaseDocument:
 	def get_db_value(self, key):
 		return frappe.db.get_value(self.doctype, self.name, key)
 
+	def get_virtual_field_value(self, df):
+		fieldname = df.fieldname
+
+		if (prop := getattr(type(self), fieldname, None)) and is_a_property(prop):
+			return getattr(self, fieldname)
+
+		elif options := getattr(df, "options", None):
+			return self._evaluate_virtual_field_options(options)
+
 	def get(self, key, filters=None, limit=None, default=None, ignore_virtual=False):
 		if isinstance(key, dict):
 			return _filter(self.get_all_children(), key, limit=limit)
@@ -329,17 +338,12 @@ class BaseDocument:
 
 		if not value:
 			df = self.meta.get_field(key)
+
 			is_virtual_field = getattr(df, "is_virtual", False)
+			ignore_virtual = ignore_virtual or key not in self.permitted_fieldnames
 
-			if is_virtual_field:
-				if ignore_virtual or key not in self.permitted_fieldnames:
-					return value
-
-				if (prop := getattr(type(self), key, None)) and is_a_property(prop):
-					value = getattr(self, key)
-
-				elif options := getattr(df, "options", None):
-					value = self._evaluate_virtual_field_options(options)
+			if is_virtual_field and not ignore_virtual:
+				value = self.get_virtual_field_value(df, ignore_virtual)
 
 		return value
 
@@ -530,12 +534,7 @@ class BaseDocument:
 				if is_virtual_field:
 					if ignore_virtual or fieldname not in self.permitted_fieldnames:
 						continue
-
-					if (prop := getattr(type(self), fieldname, None)) and is_a_property(prop):
-						value = getattr(self, fieldname)
-
-					elif options := getattr(df, "options", None):
-						value = self._evaluate_virtual_field_options(options)
+					value = self.get_virtual_field_value(df)
 
 				fieldtype = df.fieldtype
 				if isinstance(value, list) and fieldtype not in table_fields:
