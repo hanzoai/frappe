@@ -121,6 +121,9 @@ frappe.ui.form.on("User", {
 		}
 
 		frm.toggle_display(["sb1", "sb3", "modules_access"], false);
+		if (frm.is_new() && has_access_to_edit_user()) {
+			frm.toggle_display(["sb1", "sb3", "modules_access"], true);
+		}
 		frm.trigger("setup_impersonation");
 
 		if (!frm.is_new()) {
