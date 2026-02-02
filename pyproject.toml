@@ -31,11 +31,8 @@ dependencies = [
     "Werkzeug==3.1.5",
     "Whoosh~=2.7.4",
     "beautifulsoup4~=4.13.5",
-    "bleach-allowlist~=1.0.3",
-<<<<<<< HEAD
     "bleach~=6.3.0",
-=======
->>>>>>> 4ad934719b (chore: Replace bleach HTML sanitiser for nh3)
+    "bleach-allowlist~=1.0.3",
     "chardet~=5.2.0",
     "croniter~=6.0.0",
     "cryptography~=46.0.3",
