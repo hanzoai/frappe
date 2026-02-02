@@ -30,6 +30,7 @@ frappe.ui.Sidebar = class Sidebar {
 			this.add_standard_items();
 			this.sidebar_data = frappe.boot.workspace_sidebar_item[this.workspace_title];
 			this.workspace_sidebar_items = this.sidebar_data.items;
+			this.all_sidebar_items = frappe.boot.workspace_sidebar_item;
 			if (this.edit_mode) {
 				this.workspace_sidebar_items = this.editor.new_sidebar_items;
 			}
