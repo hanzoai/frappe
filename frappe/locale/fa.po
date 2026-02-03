@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-01-02 22:45+0000\n"
-"PO-Revision-Date: 2026-02-02 14:45\n"
+"PO-Revision-Date: 2026-02-03 15:46\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -187,12 +187,12 @@ msgstr "1 رکورد برون‌بُرد خواهد شد"
 #: frappe/public/js/frappe/form/footer/version_timeline_content_builder.js:325
 msgctxt "User removed row from child table"
 msgid "1 row from {0}"
-msgstr ""
+msgstr "۱ ردیف از {0}"
 
 #: frappe/public/js/frappe/form/footer/version_timeline_content_builder.js:280
 msgctxt "User added row to child table"
 msgid "1 row to {0}"
-msgstr ""
+msgstr "۱ ردیف به {0}"
 
 #: frappe/tests/test_utils.py:811
 msgid "1 second ago"
@@ -787,7 +787,7 @@ msgstr "کلیدهای API"
 #. Label of a Section Break field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "API Logging"
-msgstr ""
+msgstr "لاگ API"
 
 #. Label of a Data field in DocType 'Server Script'
 #: frappe/core/doctype/server_script/server_script.json
@@ -5534,7 +5534,7 @@ msgstr "لاگ‌های کنسول را نمی‌توان حذف کرد"
 #. Label of a Section Break field in DocType 'DocField'
 #: frappe/core/doctype/docfield/docfield.json
 msgid "Constraints"
-msgstr "محدودیت ها"
+msgstr "محدودیت‌ها"
 
 #. Name of a DocType
 #. Linked DocType in User's connections
@@ -20677,7 +20677,7 @@ msgstr "محدود کردن تعداد درخواست"
 #. Label of a Section Break field in DocType 'Blog Settings'
 #: frappe/website/doctype/blog_settings/blog_settings.json
 msgid "Rate Limits"
-msgstr "محدودیت های نرخ"
+msgstr "محدودیت‌های نرخ"
 
 #. Label of a Int field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
@@ -21973,7 +21973,7 @@ msgstr "کاربر را فقط از این آدرس IP محدود کنید. چن
 #: frappe/public/js/frappe/list/list_view.js:199
 msgctxt "Title of message showing restrictions in list view"
 msgid "Restrictions"
-msgstr "محدودیت ها"
+msgstr "محدودیت‌ها"
 
 #: frappe/public/js/frappe/ui/toolbar/awesome_bar.js:362
 #: frappe/public/js/frappe/ui/toolbar/awesome_bar.js:377
