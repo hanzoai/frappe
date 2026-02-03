@@ -33,7 +33,7 @@ $.extend(frappe.contacts, {
 				$(field_wrapper)
 					.html(frappe.render_template(item.template, frm.doc.__onload))
 					.find(item.btn)
-					.on("click", () => new_record(item.doctype, frm));
+					.on("click", () => new_record(item.doctype, frm.doc));
 			}
 		}
 	},

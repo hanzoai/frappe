@@ -40,10 +40,9 @@ def get_children(doctype, parent="", **filters):
 
 
 def _get_children(doctype, parent="", ignore_permissions=False):
-	parent_field = "parent_" + frappe.scrub(doctype)
-	filters = [[f"ifnull(`{parent_field}`,'')", "=", parent], ["docstatus", "<", 2]]
-
 	meta = frappe.get_meta(doctype)
+	parent_field = meta.get("nsm_parent_field") or "parent_" + frappe.scrub(doctype)
+	filters = [[f"ifnull(`{parent_field}`,'')", "=", parent], ["docstatus", "<", 2]]
 
 	return frappe.get_list(
 		doctype,
