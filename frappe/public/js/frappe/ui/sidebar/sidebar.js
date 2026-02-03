@@ -106,7 +106,20 @@ frappe.ui.Sidebar = class Sidebar {
 		this.$sidebar.attr("data-title", this.sidebar_title);
 		this.sidebar_header = new frappe.ui.SidebarHeader(this);
 		this.make_sidebar();
+		this.add_sidebar_card();
 	}
+	add_sidebar_card() {
+		let card = new frappe.ui.SidebarCard({
+			title: "Trial ends in 3 days",
+			icon: "zap",
+			message: "Upgrade to Pro to unlock more features",
+			parent: this.wrapper.find(".body-sidebar-bottom"),
+			primary_action_icon: "zap",
+			primary_action_label: "Upgrade",
+			primary_action: () => {},
+		});
+	}
+
 	check_for_private_workspace(workspace_title) {
 		if (workspace_title == "private" || workspace_title == "Personal") {
 			this.sidebar_title = "My Workspaces";
