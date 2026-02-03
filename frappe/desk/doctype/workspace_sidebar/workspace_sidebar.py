@@ -51,7 +51,8 @@ class WorkspaceSidebar(Document):
 
 	def before_save(self):
 		self.export_sidebar()
-		self.set_module()
+		if not self.for_user:
+			self.set_module()
 
 	def export_sidebar(self):
 		allow_export = (
