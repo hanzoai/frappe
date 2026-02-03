@@ -738,6 +738,7 @@ class File(Document):
 					name=self.file_name,
 					suffix=self.content_hash[-6:],
 					is_private=self.is_private,
+					content_hash=self.content_hash,
 				)
 			call_hook_method("before_write_file", file_size=self.file_size)
 			write_file_method = get_hook_method("write_file")
