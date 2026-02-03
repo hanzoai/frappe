@@ -579,6 +579,20 @@ class Engine:
 					v.strip().strip("'") for v in get_between_date_filter(_value, df).split(" AND ")
 				)
 
+		# Handle empty lists for IN/NOT IN operators before conversion
+		# IN with empty list should return 0 results (always False)
+		# NOT IN with empty list should return all results (always True)
+		if _operator.lower() in ("in", "not in"):
+			if isinstance(_value, (list, tuple, set)) and len(_value) == 0:
+				if _operator.lower() == "in":
+					# Return a criterion that always evaluates to False (1=0)
+					# This ensures IN with empty list returns 0 results
+					return RawCriterion("1=0")
+				else:  # not in
+					# Return a criterion that always evaluates to True (1=1)
+					# NOT IN with empty set matches all rows since nothing is excluded
+					return RawCriterion("1=1")
+
 		if not _value and isinstance(_value, list | tuple | set):
 			_value = ("",)
 
