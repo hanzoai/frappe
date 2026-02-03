@@ -52,6 +52,36 @@ max_positive_value = {"smallint": 2**15 - 1, "int": 2**31 - 1, "bigint": 2**63 -
 # Used to distinguish between "not in cache" and "cached as None (does not exist)"
 _NOT_IN_CACHE = object()
 
+
+def _fetch_link_values(doctype: str, docname: str, fields: tuple, meta) -> dict | None:
+	"""Fetch link field values from database with fallback logic.
+
+	This helper encapsulates the repeated DB query pattern:
+	1. Try get_value with cache=True
+	2. If not found, retry without cache (handles negative caching)
+	3. For virtual doctypes, use frappe.get_doc instead
+
+	Args:
+	    doctype: Target DocType
+	    docname: Document name to fetch
+	    fields: Tuple of field names to fetch
+	    meta: Meta object for the doctype
+
+	Returns:
+	    Dict of field values or None if document doesn't exist
+	"""
+	if not meta.get("is_virtual"):
+		values = frappe.db.get_value(doctype, docname, fields, as_dict=True, cache=True, order_by=None)
+		if not values:
+			values = frappe.db.get_value(doctype, docname, fields, as_dict=True, order_by=None)
+	else:
+		try:
+			values = frappe.get_doc(doctype, docname).as_dict()
+		except frappe.DoesNotExistError:
+			values = None
+	return values
+
+
 DOCTYPE_TABLE_FIELDS = [
 	_dict(fieldname="fields", options="DocField"),
 	_dict(fieldname="permissions", options="DocPerm"),
@@ -1014,12 +1044,15 @@ class BaseDocument:
 				if not _df.get("fetch_if_empty")
 				or (_df.get("fetch_if_empty") and not self.get(_df.fieldname))
 			]
-			values_to_fetch = (
-				"name",
-				*(_df.fetch_from.split(".")[-1] for _df in fields_to_fetch),
+			values_to_fetch = tuple(
+				sorted(
+					{
+						"name",
+						*(_df.fetch_from.split(".")[-1] for _df in fields_to_fetch),
+						*(("docstatus",) if check_docstatus else ()),
+					}
+				)
 			)
-			if check_docstatus:
-				values_to_fetch += ("docstatus",)
 
 			# Use cache if available (bulk optimization)
 			if link_value_cache is not None:
@@ -1035,19 +1068,7 @@ class BaseDocument:
 
 				if cached is _NOT_IN_CACHE:
 					# Not prefetched - fall back to original DB query path
-					if not meta.get("is_virtual"):
-						values = frappe.db.get_value(
-							doctype, docname, values_to_fetch, as_dict=True, cache=True, order_by=None
-						)
-						if not values:
-							values = frappe.db.get_value(
-								doctype, docname, values_to_fetch, as_dict=True, order_by=None
-							)
-					else:
-						try:
-							values = frappe.get_doc(doctype, docname).as_dict()
-						except frappe.DoesNotExistError:
-							values = None
+					values = _fetch_link_values(doctype, docname, values_to_fetch, meta)
 				elif cached is None:
 					# Prefetch confirmed document doesn't exist
 					values = _dict.fromkeys(values_to_fetch, None)
@@ -1056,27 +1077,12 @@ class BaseDocument:
 					values = cached
 				else:
 					# Cache missing some fields - fall back to DB
-					if not meta.get("is_virtual"):
-						values = frappe.db.get_value(
-							doctype, docname, values_to_fetch, as_dict=True, cache=True, order_by=None
-						)
-						if not values:
-							values = frappe.db.get_value(
-								doctype, docname, values_to_fetch, as_dict=True, order_by=None
-							)
-					else:
-						values = cached
-			elif not meta.get("is_virtual"):
-				# No cache - original behavior
-				values = frappe.db.get_value(
-					doctype, docname, values_to_fetch, as_dict=True, cache=True, order_by=None
-				)
-				if not values:  # NOTE: DB Value cache does negative caching, which is hard to remove now.
-					values = frappe.db.get_value(
-						doctype, docname, values_to_fetch, as_dict=True, order_by=None
-					)
+					values = _fetch_link_values(doctype, docname, values_to_fetch, meta)
+					if values is None and not meta.get("is_virtual"):
+						values = cached  # Fall back to partial cache
 			else:
-				values = frappe.get_doc(doctype, docname).as_dict()
+				# No cache - original behavior
+				values = _fetch_link_values(doctype, docname, values_to_fetch, meta)
 
 			# fallback to dict with field_to_fetch=None if link field value is not found
 			# (for compatibility, `values` must have same data type)
