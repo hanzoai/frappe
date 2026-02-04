@@ -1468,9 +1468,7 @@ def impersonate(user: str, reason: str):
 		"User {0} has started an impersonation session as you. <br><br><b>Reason provided:</b> {1}"
 	).format(escape_html(impersonator), escape_html(reason))
 
-	frappe.enqueue(
-		method="frappe.sendmail",
-		queue="short",
+	frappe.sendmail(
 		recipients=[user_email],
 		subject=_("Security Alert: Your account is being impersonated"),
 		content=email_message,
