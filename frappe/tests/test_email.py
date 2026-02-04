@@ -318,15 +318,14 @@ class TestEmail(IntegrationTestCase):
 			frappe.get_doc({"doctype": "User", "email": target_user, "first_name": "Target"}).insert(
 				ignore_permissions=True
 			)
-		with patch("frappe.enqueue") as mocked_enqueue:
-			reason = "Testing Security Alert"
-			impersonate(user=target_user, reason=reason)
-
-			self.assertEqual(frappe.session.user, target_user)  # test if impersonation worked
-			_, kwargs = mocked_enqueue.call_args
-			self.assertEqual(kwargs.get("method"), "frappe.sendmail")  # test if email was enqueued
-			self.assertIn(target_user, kwargs.get("recipients"))
-			self.assertIn(reason, kwargs.get("content"))
+		reason = "Testing Security Alert"
+		impersonate(user=target_user, reason=reason)
+		self.assertEqual(frappe.session.user, target_user)  # test if impersonation worked
+		self.assertTrue(frappe.db.exists("Activity Log", {"user": target_user, "operation": "Impersonate"}))
+		email_queued = frappe.db.exists(
+			"Email Queue Recipient", {"recipient": target_user, "status": "Not Sent"}
+		)
+		self.assertTrue(email_queued, f"Impersonation email was not queued for {target_user}")
 
 		frappe.db.delete("User", {"email": target_user})
 
