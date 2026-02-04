@@ -1,5 +1,12 @@
 frappe.provide("frappe.views");
 
+const DEFAULT_FIELD_MAP = {
+	start: "start",
+	end: "end",
+	id: "name",
+	progress: "progress",
+};
+
 frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 	get view_name() {
 		return "Gantt";
@@ -9,6 +16,10 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 		return super.setup_defaults().then(() => {
 			this.page_title = this.page_title + " " + __("Gantt");
 			this.calendar_settings = frappe.views.calendar[this.doctype] || {};
+			this.calendar_settings.field_map = {
+				...DEFAULT_FIELD_MAP,
+				...(this.calendar_settings.field_map || {}),
+			};
 
 			if (typeof this.calendar_settings.gantt == "object") {
 				Object.assign(this.calendar_settings, this.calendar_settings.gantt);
@@ -35,32 +46,34 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 	prepare_tasks() {
 		var me = this;
 		var meta = this.meta;
-		var field_map = this.calendar_settings.field_map;
+		var field_map = this.calendar_settings.field_map || DEFAULT_FIELD_MAP;
 
 		this.tasks = this.data.map(function (item) {
 			// set progress
 			var progress = 0;
-			if (field_map.progress && $.isFunction(field_map.progress)) {
+			if (typeof field_map.progress === "function") {
 				progress = field_map.progress(item);
 			} else if (field_map.progress) {
 				progress = item[field_map.progress];
 			}
 
 			// title
-			var label;
-			if (meta.title_field) {
+			let label;
+			if (field_map.title) {
+				label = item[field_map.title];
+			} else if (meta.title_field) {
 				label = item.progress
 					? __("{0} ({1}) - {2}%", [item[meta.title_field], item.name, item.progress])
 					: __("{0} ({1})", [item[meta.title_field], item.name]);
 			} else {
-				label = item[field_map.title];
+				label = item["name"];
 			}
 
-			var r = {
+			const r = {
 				start: item[field_map.start],
-				end: item[field_map.end],
+				end: item[field_map.end] || item[field_map.start],
 				name: label,
-				id: item[field_map.id || "name"],
+				id: item[field_map.id],
 				doctype: me.doctype,
 				progress: progress,
 				dependencies: item.depends_on_tasks || "",
@@ -118,7 +131,7 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 				if (!me.can_write) return;
 				var progress_fieldname = "progress";
 
-				if ($.isFunction(field_map.progress)) {
+				if (typeof field_map.progress === "function") {
 					progress_fieldname = null;
 				} else if (field_map.progress) {
 					progress_fieldname = field_map.progress;
