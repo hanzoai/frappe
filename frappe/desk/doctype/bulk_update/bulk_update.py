@@ -47,6 +47,9 @@ class BulkUpdate(Document):
 
 @frappe.whitelist()
 def submit_cancel_or_update_docs(doctype, docnames, action="submit", data=None, task_id=None):
+	if not frappe.get_cached_value("User", frappe.session.user, "bulk_actions"):
+		frappe.throw(_("You are not allowed to perform bulk actions."), frappe.PermissionError)
+
 	if isinstance(docnames, str):
 		docnames = frappe.parse_json(docnames)
 
