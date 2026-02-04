@@ -46,7 +46,7 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 	prepare_tasks() {
 		var me = this;
 		var meta = this.meta;
-		var field_map = this.calendar_settings.field_map || DEFAULT_FIELD_MAP;
+		let field_map = this.calendar_settings.field_map || DEFAULT_FIELD_MAP;
 
 		this.tasks = this.data.map(function (item) {
 			// set progress
@@ -68,7 +68,15 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 			} else {
 				label = item["name"];
 			}
-
+			if (!item[field_map.start]) {
+				frappe.msgprint({
+					title: __("Incorrect configuration"),
+					message: __(
+						"Please configure the start field for this Doctype in the controller file."
+					),
+					indicator: "red",
+				});
+			}
 			const r = {
 				start: item[field_map.start],
 				end: item[field_map.end] || item[field_map.start],
