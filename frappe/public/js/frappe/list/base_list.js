@@ -646,11 +646,16 @@ class FilterArea {
 		this.setup();
 		if (frappe.is_mobile()) this.setup_mobile(list_view);
 	}
+
 	setup_mobile(list_view) {
 		const me = this;
 		this.standard_filters_visible = false;
 		this.standard_filters_wrapper.hide();
+
 		this.list_view.page.page_form.css("justify-content", "flex-end");
+		list_view.page.page_form.addClass("flex-column");
+		this.$filter_list_wrapper.addClass("justify-between p-0");
+
 		$(`<button class="filter-toggle btn btn-default btn-sm filter-button">
 					<span class="filter-icon button-icon">
 						${frappe.utils.icon("funnel-plus")}
@@ -1126,13 +1131,22 @@ class FilterArea {
 		let fields = [];
 
 		if (!this.list_view.settings.hide_name_filter) {
-			fields.push({
+			let field = {
 				fieldtype: "Data",
 				label: "ID",
 				condition: "like",
 				fieldname: "name",
 				onchange: () => this.debounced_refresh_list_view(),
-			});
+			};
+
+			if (frappe.is_mobile()) {
+				let mobile_id_filter = this.$filter_list_wrapper.append(
+					`<div class="mobile-id-filter"></div>`
+				);
+				this.list_view.page.add_field(field, mobile_id_filter.find(".mobile-id-filter"));
+			} else {
+				fields.push(field);
+			}
 		}
 
 		if (
