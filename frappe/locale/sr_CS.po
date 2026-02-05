@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-02-01 09:42+0000\n"
-"PO-Revision-Date: 2026-02-03 16:50\n"
+"PO-Revision-Date: 2026-02-04 17:19\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Serbian (Latin)\n"
 "MIME-Version: 1.0\n"
@@ -7491,7 +7491,7 @@ msgstr "Brojčano"
 #: frappe/utils/data.py:1563
 msgctxt "Currency"
 msgid "Dinars"
-msgstr ""
+msgstr "Dinari"
 
 #. Label of the ldap_directory_server (Select) field in DocType 'LDAP Settings'
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.json
@@ -15832,7 +15832,7 @@ msgstr "Upravljaj eksternim aplikacijama"
 
 #: frappe/public/js/billing.bundle.js:45
 msgid "Manage Billing"
-msgstr ""
+msgstr "Upravljanje fakturisanjem"
 
 #. Label of the reqd (Check) field in DocType 'DocField'
 #. Label of the mandatory (Check) field in DocType 'Report Filter'
@@ -22784,7 +22784,7 @@ msgstr "Preusmeravanje putanje"
 #. Description of the 'Home Page' (Data) field in DocType 'Role'
 #: frappe/core/doctype/role/role.json
 msgid "Route: Example \"/desk\""
-msgstr ""
+msgstr "Putanja: Primer \"/desk\""
 
 #: frappe/model/base_document.py:969 frappe/model/document.py:821
 msgid "Row"
