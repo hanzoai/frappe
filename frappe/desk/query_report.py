@@ -226,6 +226,7 @@ def run(
 		filters = report.custom_filters
 
 	is_prepared_report = report.prepared_report and not sbool(ignore_prepared_report) and not custom_columns
+	skip_total_calculation = sbool(skip_total_calculation)
 
 	try:
 		if is_prepared_report:
@@ -248,10 +249,12 @@ def run(
 
 	result["add_total_row"] = report.add_total_row and not result.get("skip_total_row", False)
 
+	if skip_total_calculation and is_prepared_report:
+		# remove total row from result
+		result["result"] = result["result"][:-1]
+
 	if sbool(are_default_filters) and report.get("custom_filters"):
 		result["custom_filters"] = report.custom_filters
-
-	result["is_prepared_report"] = is_prepared_report
 
 	return result
 
@@ -409,9 +412,6 @@ def _export_query(form_params, csv_params, populate_response=True):
 
 	# calculate total row only for visible rows
 	if skip_all_rows_total and cint(data.get("add_total_row")):
-		if data.get("is_prepared_report"):
-			data.result = data.result[:-1]  # delete total row from result
-
 		data["result"] = add_total_row(data.result, data.columns, visible_idx=visible_idx)
 
 	format_fields(data)
