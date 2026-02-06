@@ -1530,6 +1530,24 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 		});
 	}
 
+	get_visible_indexes() {
+		// without total row idx cause, it will always visible
+		return this.datatable?.bodyRenderer.visibleRowIndices || [];
+	}
+
+	validate_visible_indexes_for_action() {
+		const visible_idx = this.get_visible_indexes();
+
+		if (!visible_idx || !visible_idx.length) {
+			frappe.throw({
+				title: __("No data to perform this action"),
+				message: __("Please adjust filters to include some data"),
+			});
+		}
+
+		return visible_idx;
+	}
+
 	async print_report(print_settings) {
 		const filters_html = this.get_filters_html_for_print();
 		const landscape = print_settings.orientation == "Landscape";
@@ -1701,6 +1719,8 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 	}
 
 	export_report() {
+		this.validate_visible_indexes_for_action();
+
 		const extra_fields = [];
 		const applied_filters = this.get_applied_filters(this.get_filter_values());
 
@@ -1769,8 +1789,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				}
 
 				// excluding total row index
-				let visible_idx = this.datatable?.bodyRenderer.visibleRowIndices || [];
-
+				let visible_idx = this.get_visible_indexes();
 				const ignore_visible_idx = visible_idx.length === this.data.length - 1;
 				visible_idx = ignore_visible_idx ? [] : visible_idx;
 
@@ -1897,7 +1916,10 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			},
 			{
 				label: __("Print"),
+
 				action: () => {
+					this.validate_visible_indexes_for_action();
+
 					let dialog = frappe.ui.get_print_settings(
 						false,
 						(print_settings) => this.print_report(print_settings),
@@ -1913,6 +1935,8 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			{
 				label: __("PDF"),
 				action: () => {
+					this.validate_visible_indexes_for_action();
+
 					let dialog = frappe.ui.get_print_settings(
 						false,
 						(print_settings) => this.pdf_report(print_settings),
