@@ -557,10 +557,14 @@ def build_xlsx_data(
 		column_widths.append(column_width)
 	result.append(column_data)
 
+	last_row_index = len(data.result) - 1
+
 	# build table from result
 	for row_idx, row in enumerate(data.result):
-		# only pick up rows that are visible in the report
-		if not ignore_visible_idx and row_idx not in visible_idx:
+		# only pick up rows that are visible in the report + total row if added
+		if not (
+			ignore_visible_idx or row_idx in visible_idx or (data.add_total_row and row_idx == last_row_index)
+		):
 			continue
 
 		row_data = []
@@ -665,7 +669,9 @@ def add_total_row(
 			total_row[col_idx] = result[0].get(fieldname) if is_row_dict else result[0][col_idx]
 
 	for col_idx in has_percent:
-		total_row[col_idx] = flt(total_row[col_idx]) / len(result)
+		total_row[col_idx] = flt(total_row[col_idx]) / (
+			len(result) if ignore_visible_idx else len(visible_idx)
+		)
 
 	first_col_fieldtype = None
 	if isinstance(columns[0], str):

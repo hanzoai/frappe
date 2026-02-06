@@ -1771,10 +1771,6 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 				// excluding total row index
 				let visible_idx = this.datatable?.bodyRenderer.visibleRowIndices || [];
 
-				if (this.raw_data.add_total_row) {
-					visible_idx.push(this.data.length - 1); // total row index
-				}
-
 				const ignore_visible_idx = visible_idx.length === this.data.length;
 				visible_idx = ignore_visible_idx ? [] : visible_idx;
 
