@@ -5,6 +5,7 @@ frappe.ui.SidebarCard = class SidebarCard {
 	constructor(opts) {
 		Object.assign(this, opts);
 		this.make(opts);
+		this.setup();
 	}
 	make() {
 		this.card = $(
@@ -14,5 +15,15 @@ frappe.ui.SidebarCard = class SidebarCard {
 		);
 
 		this.card.prependTo(this.parent);
+	}
+	setup() {
+		this.setup_primary_action();
+	}
+	setup_primary_action() {
+		const me = this;
+		this.card.find(".sidebar-card-button").on("click", function (event) {
+			event.preventDefault();
+			me.primary_action(event);
+		});
 	}
 };

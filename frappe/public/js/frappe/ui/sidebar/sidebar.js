@@ -19,6 +19,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.$standard_items_sections = this.wrapper.find(".standard-items-sections");
 		this.$sidebar = this.wrapper.find(".body-sidebar");
 		this.items = [];
+		this.cards = [];
 		this.setup_events();
 		this.sidebar_module_map = {};
 		this.build_sidebar_module_map();
@@ -106,17 +107,21 @@ frappe.ui.Sidebar = class Sidebar {
 		this.$sidebar.attr("data-title", this.sidebar_title);
 		this.sidebar_header = new frappe.ui.SidebarHeader(this);
 		this.make_sidebar();
-		this.add_sidebar_card();
+		this.add_sidebar_cards();
 	}
-	add_sidebar_card() {
-		let card = new frappe.ui.SidebarCard({
-			title: "Trial ends in 3 days",
-			icon: "info",
-			message: "Upgrade to Pro to unlock more features",
-			parent: this.wrapper.find(".body-sidebar-cards"),
-			primary_action_icon: "zap",
-			primary_action_label: "Upgrade",
-			primary_action: () => {},
+	add_card(card) {
+		if (
+			this.desktop_menu_items &&
+			this.desktop_menu_items.find((i) => i.to_title_case === card.title)
+		)
+			return;
+		this.cards.push(card);
+	}
+	add_sidebar_cards() {
+		this.wrapper.find(".body-sidebar-cards").html("");
+		this.cards.forEach((card) => {
+			let card_obj = new frappe.ui.SidebarCard(card);
+			card.obj = card_obj;
 		});
 	}
 
