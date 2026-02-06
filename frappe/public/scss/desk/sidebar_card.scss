@@ -10,6 +10,13 @@
 		@include get_textstyle("base", "medium");
 	}
 }
+.sidebar-card {
+	width: 100%;
+	background-color: var(--surface-modal);
+	box-shadow: var(--shadow-sm);
+	gap: 12px;
+	border-radius: 12px;
+}
 .sidebar-card-description {
 	@include get_textstyle("sm", "regular");
 }
@@ -25,6 +32,8 @@
 		margin: 0px;
 	}
 }
-.sidebar-card-button:hover {
+.sidebar-card-button:hover,
+.sidebar-card-button:focus {
 	outline: 1px solid var(--surface-blue-3);
+	color: var(--ink-blue-3);
 }
