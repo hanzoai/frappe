@@ -8,6 +8,9 @@ frappe.ui.SidebarCard = class SidebarCard {
 		this.setup();
 	}
 	make() {
+		if (!this.icon) {
+			this.icon = "info";
+		}
 		this.card = $(
 			frappe.render_template("sidebar_card", {
 				card: this,

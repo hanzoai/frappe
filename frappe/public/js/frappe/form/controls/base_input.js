@@ -1,3 +1,4 @@
+import { createPopper } from "@popperjs/core";
 frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control {
 	static horizontal = true;
 	make() {
@@ -7,7 +8,7 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 
 		// set description
 		this.set_max_width();
-
+		this.info_card_display = false;
 		// set initial value if set
 		if (this.df.initial_value) {
 			this.set_value(this.df.initial_value);
@@ -147,6 +148,7 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 			me.set_description();
 			me.set_label();
 			me.set_doc_url();
+			// me.set_info_url();
 			me.set_mandatory(me.value);
 			me.set_bold();
 			me.set_required();
@@ -189,6 +191,7 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 		}
 	}
 	set_label(label) {
+		const me = this;
 		if (label) this.df.label = label;
 
 		if (this.only_input || this.df.label == this._label) return;
@@ -197,14 +200,64 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 		this.label_span.innerHTML =
 			(icon ? '<i class="' + icon + '"></i> ' : "") +
 				__(this.df.label, null, this.df.parent) || "&nbsp;";
+		if (this.df.show_description_on_click) {
+			$(`<a>${frappe.utils.icon("message-circle-question-mark", "sm")}</a>`).appendTo(
+				$(this.label_span)
+			);
+			this.$info_card = $("<div class='info-card'></div>").appendTo(this.label_span);
+			$(this.label_area).css({
+				display: "flex",
+				gap: "6px",
+				"align-items": "center",
+				"white-space": "nowrap",
+			});
+			let popper = createPopper(
+				$(this.label_span).find("a").get(0),
+				this.$info_card.get(0),
+				{
+					modifiers: [
+						{
+							name: "offset",
+							options: {
+								offset: [0, 8],
+							},
+						},
+					],
+				}
+			);
+			$(this.label_span)
+				.find("a")
+				.on("click", (event) => {
+					event.preventDefault();
+					me.$info_card.html("");
+					let card = new frappe.ui.SidebarCard({
+						// title: "Trial ends in 3 days",
+						// icon: "info",
+						message: me.df.description,
+						parent: me.$info_card,
+						// primary_action_icon: "zap",
+						// primary_action_label: "Upgrade",
+						close_button: true,
+						// primary_action: () => {},
+					});
+					if (me.info_card_display) {
+						me.info_card_display = false;
+						me.$info_card.removeAttr("data-show");
+					} else {
+						me.info_card_display = true;
+						me.$info_card.attr("data-show", "");
+						popper.update();
+					}
+				});
+		}
 		this._label = this.df.label;
 	}
 
 	set_doc_url() {
+		if (this.df.show_description_on_click) return;
 		let unsupported_fieldtypes = frappe.model.no_value_type.filter(
 			(x) => frappe.model.table_fields.indexOf(x) === -1
 		);
-
 		if (
 			!this.df.label ||
 			!this.df?.documentation_url ||
@@ -214,6 +267,7 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 
 		let $help = this.$wrapper.find("span.help");
 		$help.empty();
+
 		$(`<a
 			href="${frappe.utils.escape_html(this.df.documentation_url)}"
 			target="_blank"
@@ -224,6 +278,7 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 	}
 
 	set_description(description) {
+		if (this.df.show_description_on_click) return;
 		if (description !== undefined) {
 			this.df.description = description;
 		}
