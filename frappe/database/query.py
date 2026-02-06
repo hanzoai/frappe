@@ -1130,15 +1130,14 @@ class Engine:
 	def _normalize_postgres_order_field(self, field):
 		"""In PostgreSQL order_by fields need to either be in group_by or be aggregated
 		when used with select and group_by"""
-		if self.is_postgres and self.is_aggregate_query:
-			current_sql = field.get_sql() if hasattr(field, "get_sql") else str(field)
-			if current_sql in self._grouped_queries:
-				return field
-			clean_name = current_sql.strip('"')
-			if clean_name in self.field_aliases:
-				return field
-			if not isinstance(field, functions.AggregateFunction):
-				return functions.Max(field)
+		current_sql = field.get_sql() if hasattr(field, "get_sql") else str(field)
+		if current_sql in self._grouped_queries:
+			return field
+		clean_name = current_sql.strip('"')
+		if clean_name in self.field_aliases:
+			return field
+		if not isinstance(field, functions.AggregateFunction):
+			return functions.Max(field)
 		return field
 
 	def apply_group_by(self, group_by: str | None = None):
@@ -1155,9 +1154,12 @@ class Engine:
 
 		parsed_order_fields = self._validate_order_by(order_by)
 		for order_field, order_direction in parsed_order_fields:
-			self.query = self.query.orderby(
-				self._normalize_postgres_order_field(order_field), order=order_direction
-			)
+			if self.is_postgres and self.is_aggregate_query:
+				self.query = self.query.orderby(
+					self._normalize_postgres_order_field(order_field), order=order_direction
+				)
+			else:
+				self.query = self.query.orderby(order_field, order=order_direction)
 
 	def _apply_default_order_by(self):
 		"""Apply default ordering based on configured DocType metadata"""
@@ -1176,18 +1178,24 @@ class Engine:
 						order_direction = Order.desc if spec_order == "desc" else Order.asc
 					else:
 						order_direction = Order.asc if spec_order == "asc" else Order.desc
-					self.query = self.query.orderby(
-						self._normalize_postgres_order_field(field), order=order_direction
-					)
+					if self.is_postgres and self.is_aggregate_query:
+						self.query = self.query.orderby(
+							self._normalize_postgres_order_field(field), order=order_direction
+						)
+					else:
+						self.query = self.query.orderby(field, order=order_direction)
 		else:
 			field = self.table[sort_field]
 			if self.db_query_compat:
 				order_direction = Order.desc if sort_order.lower() == "desc" else Order.asc
 			else:
 				order_direction = Order.asc if sort_order.lower() == "asc" else Order.desc
-			self.query = self.query.orderby(
-				self._normalize_postgres_order_field(field), order=order_direction
-			)
+			if self.is_postgres and self.is_aggregate_query:
+				self.query = self.query.orderby(
+					self._normalize_postgres_order_field(field), order=order_direction
+				)
+			else:
+				self.query = self.query.orderby(field, order=order_direction)
 
 	def _parse_backtick_field_notation(self, field_name: str) -> tuple[str, str] | None:
 		"""
