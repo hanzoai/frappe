@@ -201,9 +201,16 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 			(icon ? '<i class="' + icon + '"></i> ' : "") +
 				__(this.df.label, null, this.df.parent) || "&nbsp;";
 		if (this.df.show_description_on_click) {
-			$(`<a>${frappe.utils.icon("message-circle-question-mark", "sm")}</a>`).appendTo(
-				$(this.label_span)
-			);
+			$(
+				`${frappe.utils.icon(
+					"message-circle-question-mark",
+					"sm",
+					"",
+					"",
+					"cursor-pointer"
+				)}`
+			).appendTo($(this.label_span));
+			$(this.label_span).find("svg").attr("role", "button");
 			this.$info_card = $("<div class='info-card'></div>").appendTo(this.label_span);
 			$(this.label_area).css({
 				display: "flex",
@@ -212,7 +219,7 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 				"white-space": "nowrap",
 			});
 			let popper = createPopper(
-				$(this.label_span).find("a").get(0),
+				$(this.label_span).find("svg").get(0),
 				this.$info_card.get(0),
 				{
 					modifiers: [
@@ -226,7 +233,7 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 				}
 			);
 			$(this.label_span)
-				.find("a")
+				.find("svg")
 				.on("click", (event) => {
 					event.preventDefault();
 					me.$info_card.html("");
@@ -241,11 +248,11 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 						card_args.primary_action = function () {
 							window.open(me.df.documentation_url);
 						};
-						$(":root").css({
-							"--sidebar-card-button-bg-color": "var(--surface-gray-2)",
-							"--sidebar-card-button-color": "var(--ink-gray-7)",
-							"--sidebar-card-button-outline": "var(--ink-gray-7)",
-						});
+						card_args.styles = {
+							"sidebar-card-button-bg-color": "var(--surface-gray-2)",
+							"sidebar-card-button-color": "var(--ink-gray-7)",
+							"sidebar-card-button-outline": "var(--ink-gray-7)",
+						};
 					}
 					let card = new frappe.ui.SidebarCard(card_args);
 					if (me.info_card_display) {
@@ -257,10 +264,9 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 						popper.update();
 					}
 				});
+			this._label = this.df.label;
 		}
-		this._label = this.df.label;
 	}
-
 	set_doc_url() {
 		if (this.df.show_description_on_click) return;
 		let unsupported_fieldtypes = frappe.model.no_value_type.filter(
