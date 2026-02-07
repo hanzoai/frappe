@@ -6,6 +6,7 @@ frappe.ui.SidebarCard = class SidebarCard {
 		Object.assign(this, opts);
 		this.make(opts);
 		this.setup();
+		this.set_styles();
 	}
 	make() {
 		if (!this.icon) {
@@ -28,5 +29,11 @@ frappe.ui.SidebarCard = class SidebarCard {
 			event.preventDefault();
 			me.primary_action(event);
 		});
+	}
+	set_styles() {
+		const $root = $(":root");
+		for (const [variable, value] of Object.entries(this.styles)) {
+			$root.css(`--${variable}`, value);
+		}
 	}
 };
