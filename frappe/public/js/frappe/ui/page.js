@@ -203,7 +203,17 @@ frappe.ui.Page = class Page {
 	}
 
 	set_indicator(label, color) {
-		this.clear_indicator().removeClass("hide").html(`<span>${label}</span>`).addClass(color);
+		let indicator_html = `<span>${label}</span>`;
+		const is_mobile = frappe.is_mobile();
+		if (is_mobile) {
+			indicator_html = `<span class="indicator-doc-html" style="background-color: var(--${color}-400)"></span>`;
+		}
+		this.clear_indicator().removeClass("hide").html(indicator_html).addClass(color);
+
+		if (is_mobile) {
+			this.indicator.attr("title", label);
+			this.indicator.tooltip();
+		}
 	}
 
 	add_action_icon(icon, click, css_class = "", tooltip_label) {

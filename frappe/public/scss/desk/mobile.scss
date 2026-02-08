@@ -321,11 +321,11 @@ body {
 
 @media (max-width: 480px) {
 	.mobile-id-filter .form-group {
-		width: 150px;
+		width: 120px;
 	}
 	body[data-route^="Form"] {
 		.navbar-breadcrumbs {
-			max-width: 165px;
+			max-width: 125px;
 		}
 		.page-title {
 			width: 100%;
