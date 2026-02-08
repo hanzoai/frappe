@@ -1,4 +1,4 @@
-import { createPopper } from "@popperjs/core";
+import { InfoCard } from "../info_card";
 frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control {
 	static horizontal = true;
 	make() {
@@ -8,7 +8,6 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 
 		// set description
 		this.set_max_width();
-		this.info_card_display = false;
 		// set initial value if set
 		if (this.df.initial_value) {
 			this.set_value(this.df.initial_value);
@@ -200,71 +199,17 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 		this.label_span.innerHTML =
 			(icon ? '<i class="' + icon + '"></i> ' : "") +
 				__(this.df.label, null, this.df.parent) || "&nbsp;";
+		this.show_description_on_click();
+		this._label = this.df.label;
+	}
+	show_description_on_click() {
+		const me = this;
 		if (this.df.show_description_on_click) {
-			$(
-				`${frappe.utils.icon(
-					"message-circle-question-mark",
-					"sm",
-					"",
-					"",
-					"cursor-pointer"
-				)}`
-			).appendTo($(this.label_span));
-			$(this.label_span).find("svg").attr("role", "button");
-			this.$info_card = $("<div class='info-card'></div>").appendTo(this.label_span);
-			$(this.label_area).css({
-				display: "flex",
-				gap: "6px",
-				"align-items": "center",
-				"white-space": "nowrap",
+			let info_card = new InfoCard({
+				label_area: this.label_area,
+				label_span: this.label_span,
+				df: this.df,
 			});
-			let popper = createPopper(
-				$(this.label_span).find("svg").get(0),
-				this.$info_card.get(0),
-				{
-					modifiers: [
-						{
-							name: "offset",
-							options: {
-								offset: [0, 8],
-							},
-						},
-					],
-				}
-			);
-			$(this.label_span)
-				.find("svg")
-				.on("click", (event) => {
-					event.preventDefault();
-					me.$info_card.html("");
-					let card_args = {
-						message: me.df.description,
-						parent: me.$info_card,
-						close_button: true,
-					};
-					if (me.df.documentation_url) {
-						card_args.primary_action_label = "Read More";
-						card_args.primary_action_suffix_icon = "square-arrow-out-up-right";
-						card_args.primary_action = function () {
-							window.open(me.df.documentation_url);
-						};
-						card_args.styles = {
-							"sidebar-card-button-bg-color": "var(--surface-gray-2)",
-							"sidebar-card-button-color": "var(--ink-gray-7)",
-							"sidebar-card-button-outline": "var(--ink-gray-7)",
-						};
-					}
-					let card = new frappe.ui.SidebarCard(card_args);
-					if (me.info_card_display) {
-						me.info_card_display = false;
-						me.$info_card.removeAttr("data-show");
-					} else {
-						me.info_card_display = true;
-						me.$info_card.attr("data-show", "");
-						popper.update();
-					}
-				});
-			this._label = this.df.label;
 		}
 	}
 	set_doc_url() {

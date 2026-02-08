@@ -14,7 +14,7 @@
                 <div class="sidebar-card-title">{{ card.title }}</div>
                 <div class="sidebar-card-description">{{ card.message }}</div>
             </span>
-            {%= frappe.utils.icon("x","sm", "", "", "card-icon") %}
+        {%= frappe.utils.icon("x","sm", "", "", "card-icon cursor-pointer") %}
          </div>
     {% } %}
     {% if(card.primary_action_label) { %}
