@@ -38,13 +38,19 @@ frappe.ui.SidebarCard = class SidebarCard {
 	}
 	toggle() {
 		if (this.display) {
-			this.display = false;
-			this.parent.removeAttr("data-show");
+			this.hide();
 		} else {
-			this.display = true;
-			this.parent.attr("data-show", "");
-			this.popper.update();
+			this.show();
 		}
+	}
+	hide() {
+		this.display = false;
+		this.parent.removeAttr("data-show");
+	}
+	show() {
+		this.display = true;
+		this.parent.attr("data-show", "");
+		this.popper.update();
 	}
 	setup_primary_action() {
 		const me = this;

@@ -52,5 +52,10 @@ export class InfoCard {
 				event.preventDefault();
 				me.card.toggle();
 			});
+		$(document).on("click", function (e) {
+			if (!e.originalEvent.composedPath().includes(me.label_area)) {
+				me.card.hide();
+			}
+		});
 	}
 }
