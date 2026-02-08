@@ -650,12 +650,7 @@ class FilterArea {
 	setup_mobile(list_view) {
 		const me = this;
 		this.standard_filters_visible = false;
-<<<<<<< HEAD
 		this.standard_filters_wrapper?.hide();
-=======
-		this.standard_filters_wrapper.hide();
-
->>>>>>> 407a041261 (feat(mobile): show id filter by default)
 		this.list_view.page.page_form.css("justify-content", "flex-end");
 		list_view.page.page_form.addClass("flex-column");
 		this.$filter_list_wrapper.addClass("justify-between p-0");
