@@ -1790,7 +1790,9 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 
 				// excluding total row index
 				let visible_idx = this.get_visible_indexes();
-				const ignore_visible_idx = visible_idx.length === this.data.length - 1;
+				const ignore_visible_idx =
+					visible_idx.length ===
+					this.data.length - (this.raw_data.add_total_row ? 1 : 0);
 				visible_idx = ignore_visible_idx ? [] : visible_idx;
 
 				const args = {
