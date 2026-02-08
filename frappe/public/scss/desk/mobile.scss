@@ -323,6 +323,11 @@ body {
 	.mobile-id-filter .form-group {
 		width: 120px;
 	}
+
+	.list-subject a {
+		line-height: 0;
+	}
+
 	body[data-route^="Form"] {
 		.navbar-breadcrumbs {
 			max-width: 125px;
