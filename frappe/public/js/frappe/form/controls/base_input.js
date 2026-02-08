@@ -147,7 +147,6 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 			me.set_description();
 			me.set_label();
 			me.set_doc_url();
-			// me.set_info_url();
 			me.set_mandatory(me.value);
 			me.set_bold();
 			me.set_required();

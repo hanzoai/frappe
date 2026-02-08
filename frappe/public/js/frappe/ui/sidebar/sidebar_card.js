@@ -60,9 +60,11 @@ frappe.ui.SidebarCard = class SidebarCard {
 		});
 	}
 	set_styles() {
-		const $root = $(":root");
-		for (const [variable, value] of Object.entries(this.styles)) {
-			$root.css(`--${variable}`, value);
+		if (this.styles) {
+			const $root = $(":root");
+			for (const [variable, value] of Object.entries(this.styles)) {
+				$root.css(`--${variable}`, value);
+			}
 		}
 	}
 };
