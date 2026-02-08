@@ -10,7 +10,13 @@ export class InfoCard {
 	}
 	make_toggle_button() {
 		$(
-			`${frappe.utils.icon("message-circle-question-mark", "sm", "", "", "cursor-pointer")}`
+			`${frappe.utils.icon(
+				"message-circle-question-mark",
+				"sm",
+				"",
+				"",
+				"cursor-pointer m-0"
+			)}`
 		).appendTo($(this.label_span));
 		$(this.label_span).find("svg").attr("role", "button");
 		$(this.label_area).css({
