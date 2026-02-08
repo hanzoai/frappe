@@ -650,8 +650,7 @@ class FilterArea {
 	setup_mobile(list_view) {
 		const me = this;
 		this.standard_filters_visible = false;
-		this.standard_filters_wrapper.hide();
-
+		this.standard_filters_wrapper?.hide();
 		this.list_view.page.page_form.css("justify-content", "flex-end");
 		list_view.page.page_form.addClass("flex-column");
 		this.$filter_list_wrapper.addClass("justify-between p-0");
@@ -1231,6 +1230,7 @@ class FilterArea {
 						onchange: () => this.debounced_refresh_list_view(),
 						ignore_link_validation: fieldtype === "Dynamic Link",
 						is_filter: 1,
+						link_filters: df.link_filters,
 					};
 				})
 		);
