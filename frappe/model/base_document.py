@@ -1,7 +1,9 @@
 # Copyright (c) 2022, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
 import datetime
+import functools
 import json
+import re
 import weakref
 from types import MappingProxyType
 from typing import TYPE_CHECKING, TypeVar
@@ -65,18 +67,15 @@ DOCTYPES_FOR_DOCTYPE = {"DocType", *TABLE_DOCTYPES_FOR_DOCTYPE.values()}
 def _reduce_extended_instance(doc):
 	"""Make extended class instances pickle-able.
 
-	When unpickling, this will use get_controller() to recreate the extended class.
+	Stores __bases__ for reconstructing the extended class during unpickling.
 	Respects the __getstate__ method for proper state handling.
 	"""
-	return (_reconstruct_extended_instance, (doc.doctype,), doc.__getstate__())
+	return (_reconstruct_extended_instance, (type(doc).__bases__,), doc.__getstate__())
 
 
-def _reconstruct_extended_instance(doctype):
-	"""
-	Helper function to reconstruct an extended class instance during unpickling.
-	"""
-	# Get the current extended class (uses caching from get_controller)
-	extended_class = get_controller(doctype)
+def _reconstruct_extended_instance(bases):
+	"""Reconstruct an extended class instance during unpickling."""
+	extended_class = _create_extended_class(bases)
 	return extended_class.__new__(extended_class)
 
 
@@ -206,9 +205,25 @@ def _get_extended_class(base_class, doctype):
 
 	# Create the extended class by combining extension classes with base class
 	# Extension classes come first in MRO, then base class
+	return _create_extended_class((*extension_classes, base_class))
+
+
+# cached to avoid recreating the same class multiple times during unpickling
+# safe to cache, classes on file don't change at runtime
+@functools.cache
+def _create_extended_class(bases):
+	"""Create an extended class from base classes.
+
+	Args:
+		bases: Tuple of base classes (extension classes first, then the controller class)
+
+	Returns:
+		Extended class combining all bases with pickle support
+	"""
+	base_class = bases[-1]
 	return type(
 		f"Extended{base_class.__name__}",
-		(*extension_classes, base_class),
+		bases,
 		{
 			"__reduce__": _reduce_extended_instance,
 			"__module__": base_class.__module__,
@@ -800,7 +815,21 @@ class BaseDocument:
 				),
 				[*list(d.values()), name],
 			)
+
 		except Exception as e:
+			if frappe.db.is_data_too_long(e):
+				column = re.search(r"column\s+'([^']+)'", e.args[1])
+				if column:
+					label = self.get_label_from_fieldname(column.group(1))
+
+					# data too long for column
+					frappe.throw(
+						_(
+							"The value of the field {0} is too long in the {1} document. To resolve this issue, please reduce the value length or change the {0} field Type to Long Text using customize form, and then try again."
+						).format(frappe.bold(label), frappe.bold(self.doctype)),
+						title=_("Value Too Long"),
+					)
+
 			if frappe.db.is_unique_key_violation(e):
 				self.show_unique_validation_message(e)
 			else:
@@ -1388,7 +1417,10 @@ class BaseDocument:
 		):
 			currency = frappe.db.get_value("Currency", currency_value, cache=True)
 
-		val = self.get(fieldname)
+		if fieldname and (prop := getattr(type(self), fieldname, None)) and is_a_property(prop):
+			val = getattr(self, fieldname)
+		else:
+			val = self.get(fieldname)
 
 		if translated:
 			val = _(val)

@@ -8,7 +8,10 @@
 // form sidebar
 .form-sidebar {
 	.sidebar-section {
-		padding: var(--padding-md);
+		padding: var(--padding-md) var(--padding-md) 0;
+		&.border-bottom {
+			padding-bottom: var(--padding-md);
+		}
 		.form-sidebar-items {
 			display: flex;
 			width: 100%;
@@ -23,6 +26,14 @@
 
 			a {
 				color: var(--text-light);
+			}
+		}
+		.modified-by,
+		.created-by {
+			.frappe-timestamp {
+				color: var(--text-light);
+				margin-top: 5px;
+				display: block;
 			}
 		}
 	}
@@ -125,7 +136,20 @@
 	}
 	.sidebar-meta-details {
 		.form-name-copy {
-			cursor: pointer;
+			cursor: copy;
+			font-size: 14px;
+		}
+	}
+
+	.form-stats-likes {
+		gap: 8px;
+		.form-print {
+			button:hover {
+				background: var(--btn-default-hover-bg);
+			}
+			svg {
+				margin: 0px;
+			}
 		}
 	}
 }
@@ -143,6 +167,9 @@ body[data-route^="Form"] {
 		top: var(--page-head-height);
 		.form-sidebar {
 			width: var(--form-sidebar-width);
+		}
+		@media (max-width: 991px) {
+			position: relative;
 		}
 	}
 }
@@ -306,6 +333,11 @@ body[data-route^="Form"] {
 		padding-left: 0px !important;
 		width: 100%;
 
+		&:active {
+			background-color: transparent !important;
+			box-shadow: none !important;
+		}
+
 		.attachment-file-label {
 			display: block;
 			margin-left: var(--margin-xs);
@@ -322,6 +354,7 @@ body[data-route^="Form"] {
 	margin-right: var(--margin-xs);
 	.data-pill {
 		background-color: var(--subtle-fg);
+		max-width: 150px;
 	}
 	display: inline-flex;
 }
@@ -336,7 +369,6 @@ body[data-route^="Form"] {
 	background-color: var(--bg-color);
 	text-align: start;
 	margin-top: var(--margin-sm);
-	margin-left: var(--margin-md);
 	margin-bottom: var(--margin-sm);
 	color: var(--text-light);
 }
@@ -372,6 +404,14 @@ body[data-route^="Form"] {
 	}
 	&:focus {
 		box-shadow: none;
+	}
+}
+
+.add-assignment-label,
+.tags-label,
+.share-label {
+	&:hover {
+		cursor: pointer;
 	}
 }
 
