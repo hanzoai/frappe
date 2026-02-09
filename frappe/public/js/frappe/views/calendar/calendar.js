@@ -244,8 +244,6 @@ frappe.views.Calendar = class Calendar {
 
 			$(this).addClass("active");
 		});
-
-		this.$wrapper.closest(".result-container").css("overflow", "auto");
 	}
 
 	get_system_datetime(date) {
