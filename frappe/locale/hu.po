@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-01-02 22:45+0000\n"
-"PO-Revision-Date: 2026-01-21 10:33\n"
+"PO-Revision-Date: 2026-02-03 15:46\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -2146,51 +2146,51 @@ msgstr "DocType, DocType engedélyezése. Legyen óvatos!"
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:52
 msgid "Allows printing or PDF download of documents."
-msgstr ""
+msgstr "Lehetővé teszi a dokumentumok nyomtatását vagy PDF letöltését."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:77
 msgid "Allows sharing document access with other users."
-msgstr ""
+msgstr "Lehetővé teszi a dokumentumokhoz való hozzáférés megosztását más felhasználókkal."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:62
 msgid "Allows the user to access reports related to the document."
-msgstr ""
+msgstr "Lehetővé teszi a felhasználó számára a dokumentumhoz kapcsolódó jelentések elérését."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:42
 msgid "Allows the user to create new documents."
-msgstr ""
+msgstr "Lehetővé teszi a felhasználó számára új dokumentumok létrehozását."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:47
 msgid "Allows the user to delete documents."
-msgstr ""
+msgstr "Lehetővé teszi a felhasználó számára dokumentumok törlését."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:37
 msgid "Allows the user to edit existing records they have access to."
-msgstr ""
+msgstr "Lehetővé teszi a felhasználó számára a meglévő, hozzáféréssel rendelkező rekordok szerkesztését."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:57
 msgid "Allows the user to email from the document."
-msgstr ""
+msgstr "Lehetővé teszi a felhasználó számára, hogy e-mailt küldjön a dokumentumból."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:67
 msgid "Allows the user to export data from the Report view."
-msgstr ""
+msgstr "Lehetővé teszi a felhasználó számára az adatok exportálását a Jelentés nézetből."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:27
 msgid "Allows the user to search and see records."
-msgstr ""
+msgstr "Lehetővé teszi a felhasználó számára a rekordok keresését és megtekintését."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:72
 msgid "Allows the user to use Data Import tool to create / update records."
-msgstr ""
+msgstr "Lehetővé teszi a felhasználó számára, hogy az Adatimport eszközzel rekordokat hozzon létre/frissítsen."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:32
 msgid "Allows the user to view the document."
-msgstr ""
+msgstr "Lehetővé teszi a felhasználó számára a dokumentum megtekintését."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:82
 msgid "Allows users to enable the mask property for any field of the respective doctype."
-msgstr ""
+msgstr "Lehetővé teszi a felhasználók számára a mask tulajdonság engedélyezését a megfelelő doctype bármely mezőjéhez."
 
 #: frappe/core/doctype/user/user.py:981
 msgid "Already Registered"
@@ -2986,7 +2986,7 @@ msgstr "A QZ tálca elindítására tett kísérlet..."
 #: frappe/desk/doctype/event/event.json
 #: frappe/desk/doctype/event_participants/event_participants.json
 msgid "Attending"
-msgstr ""
+msgstr "Részt vesz"
 
 #. Label of a Table field in DocType 'Newsletter'
 #: frappe/email/doctype/newsletter/newsletter.json
@@ -3490,7 +3490,7 @@ msgstr "Biztonsági Mentések Gyakorisága"
 #. Label of a Data field in DocType 'S3 Backup Settings'
 #: frappe/integrations/doctype/s3_backup_settings/s3_backup_settings.json
 msgid "Backup Path"
-msgstr ""
+msgstr "Biztonsági Mentés Útvonala"
 
 #: frappe/desk/page/backups/backups.py:99
 msgid "Backup job is already queued. You will receive an email with the download link"
@@ -9679,7 +9679,7 @@ msgstr "Esemény Gyakorisága"
 #. Name of a DocType
 #: frappe/desk/doctype/event_notifications/event_notifications.json
 msgid "Event Notifications"
-msgstr ""
+msgstr "Esemény Emlékeztetők"
 
 #. Label of a Table field in DocType 'Event'
 #. Name of a DocType
@@ -12585,7 +12585,7 @@ msgstr "Ha engedélyezve van, a felhasználók értesítést kapnak, valahánysz
 #. Settings'
 #: frappe/integrations/doctype/s3_backup_settings/s3_backup_settings.json
 msgid "If it's empty, it will backup to the root of the bucket."
-msgstr ""
+msgstr "Ha üres, akkor a vödör gyökérkönyvtárába fogja menteni."
 
 #. Description of the 'Default Workspace' (Link) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
@@ -12627,11 +12627,11 @@ msgstr "Ha a feltétel teljesül, a felhasználó pontokat kap. pl. doc.status =
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:83
 msgid "If the user enables the mask property for the phone number field, the value will be displayed in a masked format (e.g., 811XXXXXXX)."
-msgstr ""
+msgstr "Ha a felhasználó engedélyezi a maszk tulajdonságot a telefonszám mezőhöz, az érték maszkolt formátumban jelenik meg (pl. 811XXXXXXX)."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:63
 msgid "If the user has access to Employee and Report is enabled, they can view Employee-based reports."
-msgstr ""
+msgstr "Ha a felhasználó hozzáfér az Alkalmazotti beállításokhoz, és a Jelentés engedélyezve van, akkor megtekintheti az Alkalmazotti alapú jelentéseket."
 
 #. Description of the 'User Type' (Link) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
@@ -13395,7 +13395,7 @@ msgstr "Belső rekord a dokumentum megosztásokhoz"
 #. Label of a Select field in DocType 'Event Notifications'
 #: frappe/desk/doctype/event_notifications/event_notifications.json
 msgid "Interval"
-msgstr ""
+msgstr "Időtartam"
 
 #: frappe/desk/page/user_profile/user_profile_sidebar.html:22
 msgid "Intro"
@@ -13630,7 +13630,7 @@ msgstr "Érvénytelen kifejezés a szűrőben {0} ({1})"
 
 #: frappe/desk/page/user_profile/user_profile.py:34
 msgid "Invalid field for grouping"
-msgstr ""
+msgstr "Érvénytelen mező a csoportosításhoz"
 
 #: frappe/utils/data.py:2007
 msgid "Invalid field name {0}"
@@ -15843,7 +15843,7 @@ msgstr "Maximum {0} sor engedélyezett"
 #: frappe/desk/doctype/event/event.json
 #: frappe/desk/doctype/event_participants/event_participants.json
 msgid "Maybe"
-msgstr ""
+msgstr "Talán"
 
 #: frappe/public/js/frappe/list/list_sidebar_group_by.js:221
 msgid "Me"
@@ -15851,7 +15851,7 @@ msgstr "Nekem"
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:14
 msgid "Meaning of Different Permission Types"
-msgstr ""
+msgstr "A különböző Jogosultságok jelentése"
 
 #. Option for the 'Priority' (Select) field in DocType 'ToDo'
 #. Label of a Data field in DocType 'Web Page View'
@@ -19196,7 +19196,7 @@ msgstr "{0} végleges törlése?"
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:19
 msgid "Permission"
-msgstr ""
+msgstr "Jogosultság"
 
 #: frappe/core/doctype/user_type/user_type.py:83
 msgid "Permission Error"
@@ -26488,7 +26488,7 @@ msgstr "A kiválasztott dokumentumtípus egy gyermektábla, ezért a szülő dok
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:58
 msgid "The email button is enabled for the user in the document."
-msgstr ""
+msgstr "Az e-mail gomb engedélyezve van a felhasználó számára a dokumentumban."
 
 #: frappe/core/doctype/user_type/user_type.py:109
 msgid "The field {0} is mandatory"
@@ -26559,7 +26559,7 @@ msgstr "Fiókod jelszava lejárt."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:53
 msgid "The print button is enabled for the user in the document."
-msgstr ""
+msgstr "A nyomtatás gomb engedélyezve van a felhasználó számára a dokumentumban."
 
 #: frappe/website/doctype/personal_data_deletion_request/personal_data_deletion_request.py:394
 msgid "The process for deletion of {0} data associated with {1} has been initiated."
@@ -26612,19 +26612,19 @@ msgstr "Átlépte a felhasználói dokumentumtípusok maximális számát."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:43
 msgid "The user can create a new Item but cannot edit existing items."
-msgstr ""
+msgstr "A felhasználó létrehozhat új elemet, de a meglévő elemeket nem szerkesztheti."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:48
 msgid "The user can delete Draft / Cancelled documents."
-msgstr ""
+msgstr "A felhasználó törölheti a Vázlat / Visszavont dokumentumokat."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:68
 msgid "The user can export report data."
-msgstr ""
+msgstr "A felhasználó exportálhatja a jelentés adatait."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:73
 msgid "The user can import new records or update existing data for the document."
-msgstr ""
+msgstr "A felhasználó új rekordokat importálhat, vagy frissítheti a dokumentum meglévő adatait."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:28
 msgid "The user can select a Customer in Sales Order but cannot open the Customer master."
@@ -26632,7 +26632,7 @@ msgstr ""
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:78
 msgid "The user can share document access with another user."
-msgstr ""
+msgstr "A felhasználó megoszthatja a dokumentumhoz való hozzáférést egy másik felhasználóval."
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:38
 msgid "The user can update a customer or any other fields in an existing Sales Order but cannot create a new Sales Order."
@@ -30300,7 +30300,7 @@ msgstr "Nem küldhet e-mailt ezzel a dokumentummal kapcsolatban"
 
 #: frappe/desk/doctype/event/event.py:248
 msgid "You are not allowed to update the status of this event."
-msgstr ""
+msgstr "Nem frissítheti az esemény állapotát."
 
 #: frappe/website/doctype/web_form/web_form.py:595
 msgid "You are not allowed to update this Web Form Document"
