@@ -396,7 +396,7 @@ frappe.ui.GroupBy = class {
 					"Dynamic Link",
 					"Autocomplete",
 					"Date",
-				].includes(f.fieldtype)
+				].includes(f.fieldtype) && !f.is_virtual
 			);
 		this.group_by_fields[this.doctype] = fields.sort((a, b) =>
 			__(cstr(a.label)).localeCompare(cstr(__(b.label)))
@@ -404,7 +404,9 @@ frappe.ui.GroupBy = class {
 		this.all_fields[this.doctype] = this.report_view.meta.fields;
 
 		const standard_fields_filter = (df) =>
-			!frappe.model.no_value_type.includes(df.fieldtype) && !df.report_hide;
+			!frappe.model.no_value_type.includes(df.fieldtype) &&
+			!df.report_hide &&
+			!df.is_virtual;
 
 		const table_fields = frappe.meta.get_table_fields(this.doctype).filter((df) => !df.hidden);
 
