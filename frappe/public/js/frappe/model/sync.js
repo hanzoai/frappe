@@ -202,6 +202,10 @@ Object.assign(frappe.model, {
 			updated_doc.__newname = local_parent_doc.__newname;
 		}
 
+		if (updated_doc.__islocal && local_parent_doc.__newname) {
+			updated_doc.__newname = local_parent_doc.__newname; // preserve set by user name
+		}
+
 		// clear keys on parent
 		clear_keys(updated_doc, local_parent_doc);
 	},
