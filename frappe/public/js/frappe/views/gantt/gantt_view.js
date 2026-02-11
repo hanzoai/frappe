@@ -47,7 +47,9 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 		var me = this;
 		var meta = this.meta;
 		let field_map = this.calendar_settings.field_map || DEFAULT_FIELD_MAP;
-
+		if (!this.data[0]?.[field_map.progress]) {
+			this.progress_disabled = true;
+		}
 		this.tasks = this.data.map(function (item) {
 			// set progress
 			var progress = 0;
@@ -120,12 +122,14 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 			hover_on_date: true,
 			view_mode: gantt_view_mode,
 			date_format: "YYYY-MM-DD",
-			readonly_progress: !field_map.progress,
+			readonly: !me.can_write,
+			readonly_progress: this.progress_disabled,
 			fixed_duration: field_map.start == field_map.end,
 			on_double_click: (task) => {
 				frappe.set_route("Form", task.doctype, task.id);
 			},
 			on_date_click: (date) => {
+				console.log(date);
 				if (date) frappe.new_doc("ToDo", { date: new Date(date) });
 			},
 			on_date_change: (task, start, end) => {
@@ -137,11 +141,11 @@ frappe.views.GanttView = class GanttView extends frappe.views.ListView {
 			},
 			on_progress_change: (task, progress) => {
 				if (!me.can_write) return;
-				var progress_fieldname = "progress";
+				let progress_fieldname;
 
 				if (typeof field_map.progress === "function") {
 					progress_fieldname = null;
-				} else if (field_map.progress) {
+				} else if (field_map.progress && task[field_map.progress]) {
 					progress_fieldname = field_map.progress;
 				}
 
