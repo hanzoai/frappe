@@ -128,7 +128,6 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 				label: "Add Item Below",
 				icon: "add",
 				onClick: () => {
-					console.log("Moving");
 					frappe.app.sidebar.editor.perform_action("add_item_below", me.item);
 				},
 			},
@@ -143,7 +142,6 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 				label: "Delete",
 				icon: "trash-2",
 				onClick: () => {
-					console.log(me.item);
 					frappe.app.sidebar.editor.perform_action("delete", me.item);
 				},
 			},
