@@ -128,7 +128,8 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 				label: "Add Item Below",
 				icon: "add",
 				onClick: () => {
-					frappe.app.sidebar.editor.perform_action("add_below", me.item);
+					console.log("Moving");
+					frappe.app.sidebar.editor.perform_action("add_item_below", me.item);
 				},
 			},
 			{
