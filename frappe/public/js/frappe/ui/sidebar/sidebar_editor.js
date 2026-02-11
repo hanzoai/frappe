@@ -566,7 +566,7 @@ export class SidebarEditor {
 				this.delete_item(item_data);
 				break;
 			case "add_item_below":
-				this.edit_item(item_data);
+				this.add_below(item_data);
 				break;
 			case "duplicate":
 				this.duplicate_item(item_data);
