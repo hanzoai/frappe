@@ -35,7 +35,7 @@ class PathResolver:
 			return "desk", TemplatePage("desk", self.http_status_code)
 
 		# check if the request url is in 404 list
-		if request.url and can_cache() and frappe.cache.hget("website_404", request.url):
+		if request.url and can_cache() and frappe.cache.hget("website_404", f"{frappe.session.user}|{request.url}"):
 			return self.path, NotFoundPage(self.path)
 
 		try:
