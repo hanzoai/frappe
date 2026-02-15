@@ -384,7 +384,13 @@ frappe.ui.form.on("Web Form", {
 			});
 
 			dialog.show();
-			dialog.set_values(frm.dynamic_filters);
+			if (frm.dynamic_filters) {
+				let filter_values = {};
+				frm.dynamic_filters.forEach((f) => {
+					filter_values[f[0] + ":" + f[1]] = f[3];
+				});
+				dialog.set_values(filter_values);
+			}
 		});
 	},
 	set_dynamic_filters_in_table: function (frm) {
