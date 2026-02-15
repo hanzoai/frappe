@@ -346,6 +346,18 @@ frappe.ui.form.on("Web Form", {
 			frm.dynamic_filters
 		);
 
+		// Override description to show Python expressions (evaluated server-side)
+		let desc_field = fields.find((f) => f.fieldname === "description");
+		if (desc_field) {
+			desc_field.options = `<div>
+				<p>${__("Set dynamic filter values as Python expressions.")}</p>
+				<p>${__("For example:")}
+					<code>frappe.session.user</code> ${__("or")}
+					<code>frappe.utils.now()</code>
+				</p>
+			</div>`;
+		}
+
 		frm.dynamic_filter_table.on("click", () => {
 			if (!frm.has_perm("write")) {
 				return;

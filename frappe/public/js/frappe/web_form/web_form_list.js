@@ -116,40 +116,6 @@ export default class WebFormList {
 			this.filters = Object.assign(this.filters, JSON.parse(filter));
 		}
 
-		if (this.dynamic_filters_json) {
-			let dynamic_filters = JSON.parse(this.dynamic_filters_json);
-			if (dynamic_filters.length) {
-				dynamic_filters.forEach((f) => {
-					let expression = f[3];
-					try {
-						f[3] = eval(f[3]);
-					} catch (e) {
-						frappe.throw(
-							__("Invalid expression set in filter {0} ({1}): {2}", [
-								f[1],
-								f[0],
-								expression,
-							])
-						);
-					}
-					if (f[3] == null) {
-						frappe.throw(
-							__("Invalid expression set in filter {0} ({1}): {2}", [
-								f[1],
-								f[0],
-								expression,
-							])
-						);
-					}
-				});
-				let df_obj = {};
-				dynamic_filters.forEach((f) => {
-					df_obj[f[1]] = [f[2], f[3]];
-				});
-				this.filters = Object.assign(this.filters, df_obj);
-			}
-		}
-
 		let args = {
 			method: "frappe.www.list.get_list_data",
 			args: {
