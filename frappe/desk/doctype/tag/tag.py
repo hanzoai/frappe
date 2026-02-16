@@ -42,7 +42,7 @@ def add_tag(tag, dt, dn, color=None):
 
 
 @frappe.whitelist()
-def add_tags(tags, dt, docs, color=None):
+def add_tags(tags: str, dt: str, docs: str | list, color: str | None = None) -> None:
 	"adds a new tag to a record, and creates the Tag master"
 
 	if not frappe.get_cached_value("User", frappe.session.user, "bulk_actions"):

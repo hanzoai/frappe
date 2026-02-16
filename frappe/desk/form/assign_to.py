@@ -140,7 +140,7 @@ def add(args=None, *, ignore_permissions=False):
 
 
 @frappe.whitelist()
-def add_multiple(args=None):
+def add_multiple(args: dict | None = None) -> None:
 	if not frappe.get_cached_value("User", frappe.session.user, "bulk_actions"):
 		frappe.throw(_("You are not allowed to perform bulk actions"), frappe.PermissionError)
 
