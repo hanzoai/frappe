@@ -182,7 +182,7 @@ def remove(doctype, name, assign_to, ignore_permissions=False):
 
 
 @frappe.whitelist()
-def remove_multiple(doctype, names, ignore_permissions=False):
+def remove_multiple(doctype: str, names: str | list[str], ignore_permissions: bool = False) -> None:
 	if not frappe.get_cached_value("User", frappe.session.user, "bulk_actions"):
 		frappe.throw(_("You are not allowed to perform bulk actions"), frappe.PermissionError)
 
