@@ -15,7 +15,7 @@ dependencies = [
     "filetype~=1.2.0",
     "GitPython~=3.1.45",
     "Jinja2~=3.1.6",
-    "Pillow~=12.0.0",
+    "Pillow~=12.1.1",
     "PyJWT~=2.10.1",
     # We depend on internal attributes,
     # do NOT add loose requirements on PyMySQL versions.
@@ -37,6 +37,7 @@ dependencies = [
     "cryptography~=46.0.3",
     "cssutils~=2.11.1",
     "email-reply-parser~=0.5.12",
+    "Faker~=18.10.1",
     "gunicorn @ git+https://github.com/frappe/gunicorn@bb554053bb87218120d76ab6676af7015680e8b6",
     "html5lib~=1.1",
     "ipython~=8.37.0",
@@ -45,7 +46,7 @@ dependencies = [
     "MarkupSafe~=3.0.3",
     "nh3~=0.3.2",
     "num2words~=0.5.14",
-    "oauthlib~=3.2.2",
+    "oauthlib~=3.3.1",
     "openpyxl~=3.1.5",
     "orjson~=3.11.5",
     "passlib~=1.7.4",
@@ -81,9 +82,9 @@ dependencies = [
     "zxcvbn~=4.5.0",
     "markdownify~=1.2.2",
     # integration dependencies
-    "google-api-python-client~=2.172.0",
-    "google-auth-oauthlib~=1.2.2",
-    "google-auth~=2.40.3",
+    "google-api-python-client~=2.188.0",
+    "google-auth-oauthlib~=1.2.4",
+    "google-auth~=2.48.0",
     "posthog~=5.0.0",
     "vobject~=0.9.9",
     "pycountry~=24.6.1",
@@ -127,7 +128,6 @@ dev = [
 test = [
     "unittest-xml-reporting~=3.2.0",
     "coverage~=7.10.0",
-    "Faker~=18.10.1",
     "hypothesis~=6.77.0",
     "freezegun~=1.5.1",
 ]
@@ -145,7 +145,6 @@ skip_namespaces = [
 
 [tool.bench.dev-dependencies]
 coverage = "~=7.10.0"
-Faker = "~=18.10.1"
 pyngrok = "~=7.5.0"
 unittest-xml-reporting = "~=3.2.0"
 watchdog = "~=6.0.0"
