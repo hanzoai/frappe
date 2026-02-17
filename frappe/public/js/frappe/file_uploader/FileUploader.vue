@@ -552,7 +552,14 @@ function upload_via_web_link() {
 		close_dialog.value = true;
 		return Promise.reject();
 	}
-	file_url = decodeURI(file_url);
+	try {
+		file_url = decodeURI(file_url);
+	} catch (error) {
+		var error_message = error.message;
+		frappe.msgprint(__(error_message));
+		close_dialog.value = true;
+		return Promise.reject();
+	}
 	close_dialog.value = true;
 	return upload_file({
 		file_url,
@@ -634,6 +641,10 @@ function upload_file(file, i) {
 					file.error_message = response.server_messages.length
 						? response.server_messages.join("\n")
 						: __("File upload failed.");
+
+					if (!files.value.includes(file)) {
+						frappe.msgprint(__(file.error_message));
+					}
 				} else {
 					file.failed = true;
 					let detail =
