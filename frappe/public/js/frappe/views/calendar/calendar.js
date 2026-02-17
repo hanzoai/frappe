@@ -249,6 +249,8 @@ frappe.views.Calendar = class Calendar {
 	}
 	setup_options(defaults) {
 		var me = this;
+		const user_time_fmt = frappe.datetime.get_user_time_fmt();
+		const event_time_fmt = user_time_fmt.replace(/[:.]s{1,2}/g, "").trim();
 		defaults.meridiem = "false";
 		this.cal_options = {
 			locale: frappe.boot.lang,
@@ -256,11 +258,7 @@ frappe.views.Calendar = class Calendar {
 				left: "prev, title, next",
 				right: "today, month, agendaWeek, agendaDay",
 			},
-			eventTimeFormat: {
-				hour: "numeric",
-				minute: "2-digit",
-				hour12: true,
-			},
+			eventTimeFormat: event_time_fmt,
 			editable: true,
 			selectable: true,
 			selectHelper: true,
@@ -287,6 +285,7 @@ frappe.views.Calendar = class Calendar {
 					},
 				});
 			},
+			timezone: "local",
 			displayEventEnd: true,
 			eventRender: function (event, element) {
 				element.attr("title", event.tooltip);
@@ -357,8 +356,8 @@ frappe.views.Calendar = class Calendar {
 	get_args(start, end) {
 		var args = {
 			doctype: this.doctype,
-			start: this.get_system_datetime(start),
-			end: this.get_system_datetime(end),
+			start: start.format(),
+			end: end.format(),
 			fields: this.fields,
 			filters: this.list_view.filter_area.get(),
 			field_map: this.field_map,
