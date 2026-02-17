@@ -1519,9 +1519,6 @@ class Engine:
 
 		return where_condition
 
-<<<<<<< HEAD
-	def get_permission_query_conditions(self, doctype: str | None = None) -> list["RawCriterion"]:
-=======
 	def get_queried_tables(self) -> list[str]:
 		"""Extract all table names involved in the current query."""
 		tables = []
@@ -1532,8 +1529,7 @@ class Engine:
 			tables.append(join.item.get_sql())
 		return list(set(tables))
 
-	def get_permission_query_conditions(self) -> list["RawCriterion"]:
->>>>>>> edd15715b6 (feat(query): parse child tables via query file too)
+	def get_permission_query_conditions(self, doctype: str | None = None) -> list["RawCriterion"]:
 		"""Add permission query conditions from hooks and server scripts"""
 		from frappe.core.doctype.server_script.server_script_utils import get_server_script_map
 
