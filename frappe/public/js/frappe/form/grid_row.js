@@ -1062,33 +1062,27 @@ export default class GridRow {
 				if (is_focused) return;
 				is_focused = true;
 				if (["Link", "Dynamic Link", "Autocomplete"].includes(df.fieldtype)) {
-					frappe.utils.sleep(300).then(() => {
-						let $dropdown = $(this).find(".awesomplete > ul:first-of-type");
-						let $grid_field = $dropdown.closest(".grid-field");
+					let $dropdown = $(this).find(".awesomplete > ul:first-of-type");
+					let $grid_field = $dropdown.closest(".grid-field");
 
-						if ($grid_field.length) {
-							let $wrapper = $grid_field.find("div.awesomplete");
-							$wrapper = $(
-								`<div class="awesomplete ${$dropdown.attr("id")}"></div>`
-							);
-							$grid_field.append($wrapper);
-							$wrapper.append($dropdown);
+					if ($grid_field.length) {
+						let $wrapper = $grid_field.find("div.awesomplete");
+						$wrapper = $(`<div class="awesomplete ${$dropdown.attr("id")}"></div>`);
+						$grid_field.append($wrapper);
+						$wrapper.append($dropdown);
 
-							let element_position = event.target.getBoundingClientRect();
+						let element_position = event.target.getBoundingClientRect();
 
-							let left_difference =
-								element_position.left - $grid_field.offset().left;
-							let top_difference =
-								element_position.top - $grid_field.offset().top + 30;
-							$wrapper.css({
-								position: "absolute",
-								top: `${top_difference + 10}px`,
-								left: `${left_difference}px`,
-								minWidth: "250px",
-								width: `${element_position.width}px`,
-							});
-						}
-					});
+						let left_difference = element_position.left - $grid_field.offset().left;
+						let top_difference = element_position.top - $grid_field.offset().top + 30;
+						$wrapper.css({
+							position: "absolute",
+							top: `${top_difference + 10}px`,
+							left: `${left_difference}px`,
+							minWidth: "250px",
+							width: `${element_position.width}px`,
+						});
+					}
 				}
 			})
 			.on("click", function (event) {
