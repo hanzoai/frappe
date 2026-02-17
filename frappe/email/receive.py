@@ -441,14 +441,7 @@ class Email:
 		subject = "".join(decoded_fragments).strip()
 
 		# Truncate to 140 chars (can be used as a document name)
-<<<<<<< HEAD
-		self.subject = str(self.subject).strip()[:140]
-
-		if not self.subject:
-			self.subject = "No Subject"
-=======
 		self.subject = subject[:140] if subject else "No Subject"
->>>>>>> f951445e82 (fix: properly decode encoded `Subject` header (#37016))
 
 	def set_from(self):
 		# gmail mailing-list compatibility
