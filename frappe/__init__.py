@@ -2164,7 +2164,7 @@ def attach_print(
 	is_weasyprint_print_format = False
 	if print_format and print_format != "Standard":
 		print_format_doc = get_cached_doc("Print Format", print_format)
-		is_weasyprint_print_format = not print_format_doc.custom_format
+		is_weasyprint_print_format = print_format_doc.print_format_builder_beta
 
 	with print_language(lang or local.lang):
 		content = ""
