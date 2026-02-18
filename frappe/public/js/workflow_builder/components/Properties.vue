@@ -4,6 +4,11 @@ import { useStore } from "../store";
 
 let store = useStore();
 
+const is_doc_status_readonly = computed(() => {
+	if (!store.workflow.selected || !("state" in store.workflow.selected.data)) return false;
+	return !store.is_submittable();
+});
+
 let title = ref("Workflow Details");
 
 let doc = computed(() => {
@@ -29,6 +34,13 @@ let properties = computed(() => {
 			(df) => !["allow_edit", "workflow_builder_id"].includes(df.fieldname)
 		);
 		store.statefields.splice(2, 0, allow_edit);
+
+		const submittable = store.is_submittable();
+
+		// Auto-reset doc_status to "Draft" for non-submittable doctypes
+		if (!submittable && store.workflow.selected.data.doc_status !== "Draft") {
+			store.workflow.selected.data.doc_status = "Draft";
+		}
 
 		return store.statefields.filter((df) => {
 			if (df.fieldname == "doc_status") {
@@ -61,6 +73,7 @@ let properties = computed(() => {
 						v-model="doc[df.fieldname]"
 						:data-fieldname="df.fieldname"
 						:data-fieldtype="df.fieldtype"
+						:read_only="df.fieldname === 'doc_status' ? is_doc_status_readonly : false"
 					/>
 				</div>
 			</div>

@@ -109,9 +109,10 @@ frappe.ui.form.on("Workflow", {
 			return;
 		}
 		frappe.model.with_doctype(doc.document_type, () => {
-			const fieldnames = frappe
-				.get_meta(doc.document_type)
-				.fields.filter((field) => !frappe.model.no_value_type.includes(field.fieldtype))
+			const meta = frappe.get_meta(doc.document_type);
+			const is_submittable = meta.is_submittable;
+			const fieldnames = meta.fields
+				.filter((field) => !frappe.model.no_value_type.includes(field.fieldtype))
 				.map((field) => field.fieldname);
 
 			frm.fields_dict.states.grid.update_docfield_property(
@@ -119,6 +120,23 @@ frappe.ui.form.on("Workflow", {
 				"options",
 				[""].concat(fieldnames)
 			);
+
+			frm.fields_dict.states.grid.update_docfield_property(
+				"doc_status",
+				"read_only",
+				!is_submittable
+			);
+
+			if (!is_submittable) {
+				let changed = false;
+				frm.doc.states.forEach((row) => {
+					if (parseInt(row.doc_status || 0) !== 0) {
+						row.doc_status = "0";
+						changed = true;
+					}
+				});
+				if (changed) frm.refresh_field("states");
+			}
 		});
 	},
 	create_warning_dialog: function (frm) {

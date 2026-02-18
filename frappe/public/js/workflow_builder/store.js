@@ -135,13 +135,18 @@ export const useStore = defineStore("workflow-builder-store", () => {
 		frappe.breadcrumbs.$breadcrumbs.append(breadcrumbs);
 	}
 
+	function is_submittable() {
+		if (!workflow_doc.value?.document_type) return true;
+		return frappe.get_meta(workflow_doc.value.document_type)?.is_submittable;
+	}
+
 	function get_state_df(data) {
 		let doc_status_map = {
 			Draft: 0,
 			Submitted: 1,
 			Cancelled: 2,
 		};
-		data.doc_status = doc_status_map[data.doc_status];
+		data.doc_status = is_submittable() ? doc_status_map[data.doc_status] : 0;
 		return data;
 	}
 
@@ -234,5 +239,6 @@ export const useStore = defineStore("workflow-builder-store", () => {
 		reset_changes,
 		save_changes,
 		setup_undo_redo,
+		is_submittable,
 	};
 });
