@@ -1598,7 +1598,7 @@ Object.assign(frappe.utils, {
 			route +=
 				"?" +
 				$.map(item.route_options, function (value, key) {
-					return key + "=" + value;
+					return encodeURIComponent(key) + "=" + encodeURIComponent(value);
 				}).join("&");
 		}
 
