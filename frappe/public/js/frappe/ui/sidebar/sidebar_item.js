@@ -69,9 +69,7 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 				path = frappe.utils.generate_route(args);
 			}
 		}
-		if (path) {
-			return encodeURI(path);
-		}
+		return path;
 	}
 	transform_filters(filters_json) {
 		for (const [key, value] of Object.entries(filters_json)) {
