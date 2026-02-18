@@ -484,7 +484,7 @@ def check_safe_sql_query(query: str, throw: bool = True) -> bool:
 	"""
 
 	query = query.strip().lower()
-	whitelisted_statements = ("select", "explain")
+	whitelisted_statements = ("select", "explain", "with")
 
 	if query.startswith(whitelisted_statements):
 		return True
