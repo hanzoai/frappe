@@ -248,20 +248,20 @@ class DesktopPage {
 		$(this.page.body).empty();
 		$(frappe.render_template("desktop")).appendTo(this.page.body);
 		if (this.data !== undefined) {
-			this._continue_make();
+			this.render();
 		} else {
 			const me = this;
 			frappe.call({
 				method: "frappe.desk.doctype.desktop_layout.desktop_layout.get_layout",
 				callback: function (r) {
 					me.data = r.message;
-					me._continue_make();
+					me.render();
 				},
 			});
 		}
 	}
 
-	_continue_make() {
+	render() {
 		this.sync_layout();
 		this.prepare();
 		this.wrapper = this.page.body.find(".desktop-container");
