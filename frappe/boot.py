@@ -549,11 +549,15 @@ def get_sidebar_items(allowed_workspaces):
 		else:
 			sidebar_title = s.title
 			w = s
+<<<<<<< mergify/bp/version-16-hotfix/pr-36603
 		if (
 			frappe.session.user == "Administrator"
 			or w.module in w.user.permitted_modules
 			or sidebar_title == "My Workspaces"
 		):
+=======
+		if w.module in w.user.permitted_modules or sidebar_title == "My Workspaces":
+>>>>>>> version-16-hotfix
 			sidebar_items[sidebar_title.lower()] = {
 				"label": sidebar_title,
 				"items": [],
