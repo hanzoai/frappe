@@ -15,7 +15,9 @@ frappe.ui.form.ControlInt = class ControlInt extends frappe.ui.form.ControlData 
 		return this.parse(value);
 	}
 	eval_expression(value, number_format) {
-		return typeof value === "string" ? frappe.utils.eval_expression(value, number_format) : value;
+		return typeof value === "string"
+			? frappe.utils.eval_expression(value, number_format)
+			: value;
 	}
 	parse(value) {
 		return cint(this.eval_expression(value), null);
