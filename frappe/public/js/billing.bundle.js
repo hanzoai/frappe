@@ -5,7 +5,7 @@ $(document).ready(function () {
 	const response = frappe.boot.site_info;
 	const trial_end_date = new Date(response.trial_end_date);
 	frappeCloudBaseEndpoint = response.base_url;
-	isFCUser = response.is_fc_user;
+	// isFCUser = response.is_fc_user;
 
 	const today = new Date();
 	const diffTime = trial_end_date - today;
@@ -24,15 +24,19 @@ $(document).ready(function () {
 		popper: true,
 		primary_button_alignment: "right",
 	};
-	isFCUser = true;
 	if (isFCUser) {
-		card_args.primary_action_label = "Upgrade";
-		card_args.primary_action_suffix_icon = "square-arrow-out-up-right";
-		card_args.styles = {
-			"sidebar-card-button-bg-color": "var(--surface-gray-2)",
-			"sidebar-card-button-color": "var(--ink-gray-7)",
-			"sidebar-card-button-outline": "var(--ink-gray-7)",
-		};
+		$.extend(card_args, {
+			primary_action_label: "Upgrade",
+			primary_action_suffix_icon: "square-arrow-out-up-right",
+			styles: {
+				"sidebar-card-button-bg-color": "var(--surface-gray-2)",
+				"sidebar-card-button-color": "var(--ink-gray-7)",
+				"sidebar-card-button-outline": "var(--ink-gray-7)",
+			},
+			primary_action: () => {
+				openFrappeCloudDashboard();
+			},
+		});
 	}
 	$(document).on("desktop_screen", function (event, data) {
 		if (
@@ -54,16 +58,23 @@ $(document).ready(function () {
 	});
 	$(document).on("sidebar_setup", function (event, data) {
 		let sidebar = data.sidebar;
-		// card_args.close_button = null;
-		sidebar.add_card({
+		let sidebar_card_args = {
 			title: card_args.title,
 			icon: "info",
 			message: card_args.message,
-			// primary_action_icon: "zap",
-			// primary_action_label: "Upgrade",
-			// primary_button_width: "full",
-			// primary_action: () => {},
-		});
+		};
+		isFCUser = true;
+		if (isFCUser) {
+			$.extend(sidebar_card_args, {
+				primary_action_label: "Upgrade",
+				primary_action_icon: "zap",
+				primary_button_width: "full",
+				primary_action: () => {
+					openFrappeCloudDashboard();
+				},
+			});
+		}
+		sidebar.add_card(sidebar_card_args);
 	});
 });
 
