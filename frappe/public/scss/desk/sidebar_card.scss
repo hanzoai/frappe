@@ -43,11 +43,6 @@
 	gap: 4px;
 	svg {
 		stroke: var(--sidebar-card-button-color);
-	background-color: var(--surface-blue-2);
-	color: var(--ink-blue-3);
-	gap: 4px;
-	svg {
-		stroke: var(--ink-blue-3);
 		margin: 0px;
 	}
 }
@@ -58,6 +53,4 @@
 }
 .cursor-pointer {
 	cursor: pointer;
-	outline: 1px solid var(--surface-blue-3);
-	color: var(--ink-blue-3);
 }

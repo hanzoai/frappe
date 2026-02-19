@@ -14,8 +14,6 @@ frappe.ui.SidebarCard = class SidebarCard {
 		if (!this.icon) {
 			this.icon = "info";
 		}
-	}
-	make() {
 		this.card = $(
 			frappe.render_template("sidebar_card", {
 				card: this,
@@ -33,7 +31,6 @@ frappe.ui.SidebarCard = class SidebarCard {
 				],
 			});
 		}
-
 		this.card.prependTo(this.parent);
 	}
 	setup() {
