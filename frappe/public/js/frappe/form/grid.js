@@ -511,8 +511,9 @@ export default class Grid {
 	}
 
 	setup_toolbar() {
-		if (this.is_editable()) {
-			this.wrapper.find(".grid-footer").toggle(true);
+		const is_editable = this.is_editable();
+		if (is_editable) {
+			this.wrapper.find(".grid-footer").removeClass("hidden");
 
 			// show, hide buttons to add rows
 			if (this.cannot_add_rows || (this.df && this.df.cannot_add_rows)) {
@@ -530,12 +531,12 @@ export default class Grid {
 			this.grid_rows.length < this.grid_pagination.page_length &&
 			!this.df.allow_bulk_edit
 		) {
-			this.wrapper.find(".grid-footer").toggle(false);
+			this.wrapper.find(".grid-footer").addClass("hidden");
 		}
 
 		this.wrapper
 			.find(".grid-add-row, .grid-add-multiple-rows, .grid-upload")
-			.toggle(this.is_editable());
+			.toggleClass("hidden", !is_editable);
 	}
 
 	truncate_rows() {
