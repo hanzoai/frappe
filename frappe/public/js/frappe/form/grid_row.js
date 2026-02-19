@@ -53,6 +53,12 @@ export default class GridRow {
 		this.wrapper.appendTo(this.parent);
 	}
 
+	update_doc(doc) {
+		const changed = !this.doc || this.doc !== doc;
+		this.doc = doc;
+		if (changed) this.set_docfields();
+	}
+
 	set_docfields() {
 		if (this.doc && this.parent_df.options) {
 			this.docfields = frappe.meta.get_docfields(
@@ -187,8 +193,6 @@ export default class GridRow {
 		);
 	}
 	refresh() {
-		this.set_docfields();
-
 		if (this.frm && this.doc) {
 			this.doc = locals[this.doc.doctype][this.doc.name];
 		}
