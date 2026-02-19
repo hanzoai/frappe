@@ -90,11 +90,9 @@ class Workflow(Document):
 
 			frappe.throw(frappe._("{0} not a valid State").format(state))
 
-		# Check if doctype is submittable
 		meta = frappe.get_meta(self.document_type)
 		is_submittable = meta.is_submittable
 
-		# Validate that non-submittable doctypes only have doc_status 0
 		if not is_submittable:
 			for state in self.states:
 				if cint(state.doc_status or 0) != 0:

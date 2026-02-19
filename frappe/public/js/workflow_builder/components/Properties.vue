@@ -5,7 +5,7 @@ import { useStore } from "../store";
 let store = useStore();
 
 const is_doc_status_readonly = computed(() => {
-	if (!store.workflow.selected || !("state" in store.workflow.selected.data)) return false;
+	if (!store.workflow.selected || !(store.workflow.selected.type === "state")) return false;
 	return !store.is_submittable();
 });
 
@@ -37,7 +37,6 @@ let properties = computed(() => {
 
 		const submittable = store.is_submittable();
 
-		// Auto-reset doc_status to "Draft" for non-submittable doctypes
 		if (!submittable && store.workflow.selected.data.doc_status !== "Draft") {
 			store.workflow.selected.data.doc_status = "Draft";
 		}
