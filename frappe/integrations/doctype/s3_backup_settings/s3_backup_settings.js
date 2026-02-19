@@ -12,15 +12,9 @@ frappe.ui.form.on("S3 Backup Settings", {
 			frm.add_custom_button(__("Take Backup Now"), function () {
 				frm.dashboard.set_headline_alert("S3 Backup Started!");
 				frappe.call({
-					method: "frappe.integrations.doctype.s3_backup_settings.s3_backup_settings.take_backups_s3",
-					callback: function (r) {
-						if (!r.exc) {
-							frappe.msgprint(__("S3 Backup complete!"));
-							frm.dashboard.clear_headline();
-						}
-					},
+					method: "frappe.integrations.doctype.s3_backup_settings.s3_backup_settings.take_backup",
 				});
-			}).addClass("btn-primary");
+			}).addClass("btn-secondary");
 		}
 	},
 });
