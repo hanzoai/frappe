@@ -1,11 +1,11 @@
 let frappeCloudBaseEndpoint = "https://frappecloud.com";
-let isFCUser = true;
+let isFCUser = false;
 
 $(document).ready(function () {
 	const response = frappe.boot.site_info;
 	const trial_end_date = new Date(response.trial_end_date);
 	frappeCloudBaseEndpoint = response.base_url;
-	// isFCUser = response.is_fc_user;
+	isFCUser = response.is_fc_user;
 
 	const today = new Date();
 	const diffTime = trial_end_date - today;
@@ -23,6 +23,8 @@ $(document).ready(function () {
 		close_button: true,
 		popper: true,
 		primary_button_alignment: "right",
+		dismiss_key: `${frappe.boot.site_info.name}_trial_card_time`,
+		dismiss_it_for: "day",
 	};
 	if (isFCUser) {
 		$.extend(card_args, {
