@@ -597,7 +597,6 @@ function upload_file(file, i) {
 		});
 		xhr.upload.addEventListener("load", (e) => {
 			file.uploading = false;
-			resolve();
 		});
 		xhr.addEventListener("error", (e) => {
 			file.failed = true;
@@ -606,6 +605,7 @@ function upload_file(file, i) {
 		xhr.onreadystatechange = () => {
 			if (xhr.readyState == XMLHttpRequest.DONE) {
 				if (xhr.status === 200) {
+					resolve();
 					file.request_succeeded = true;
 					let r = null;
 					let file_doc = null;
@@ -634,6 +634,7 @@ function upload_file(file, i) {
 						close_dialog.value = true;
 					}
 				} else if (xhr.status === 403) {
+					reject();
 					file.failed = true;
 					let response = parse_error_response(xhr.responseText);
 					file.error_message = __("Not permitted. {0}.", [response.error_message || ""]);
@@ -641,9 +642,11 @@ function upload_file(file, i) {
 						file.error_message += `\n${response.server_messages.join("\n")}`;
 					}
 				} else if (xhr.status === 413) {
+					reject();
 					file.failed = true;
 					file.error_message = __("Size exceeds the maximum allowed file size.");
 				} else if (xhr.status === 417) {
+					reject();
 					// regular frappe.throw() in backend
 					file.failed = true;
 					let response = parse_error_response(xhr.responseText);
@@ -661,6 +664,7 @@ function upload_file(file, i) {
 						});
 					}
 				} else {
+					reject();
 					file.failed = true;
 					let detail =
 						xhr.statusText ||
