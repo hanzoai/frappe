@@ -19,9 +19,14 @@ import inspect
 import json
 import os
 import re
+<<<<<<< HEAD
 import signal
 import traceback
 import unicodedata
+=======
+import sys
+import threading
+>>>>>>> cda5b6bda0 (fix: restrict the allowed characters in site names (#35134))
 import warnings
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any, Literal, Optional, TypeAlias, overload
@@ -87,6 +92,7 @@ controllers = {}
 local = Local()
 cache = None
 STANDARD_USERS = ("Guest", "Administrator")
+SITE_NAME_PATTERN = re.compile(r"^[a-zA-Z0-9._-]+$")
 
 _one_time_setup = {}
 _dev_server = int(sbool(os.environ.get("DEV_SERVER", False)))
@@ -193,6 +199,9 @@ def init(site: str, sites_path: str = ".", new_site: bool = False, force=False) 
 	"""Initialize frappe for the current site. Reset thread locals `frappe.local`"""
 	if getattr(local, "initialised", None) and not force:
 		return
+
+	if site and not SITE_NAME_PATTERN.match(site):
+		raise ValueError(f"Invalid site name `{site}`")
 
 	local.error_log = []
 	local.message_log = []
