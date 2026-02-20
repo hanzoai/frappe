@@ -78,6 +78,40 @@ frappe.ui.Sidebar = class Sidebar {
 		}
 	}
 
+	setup_onboarding() {
+		let me = this;
+		this.$onboarding = this.wrapper.find(".user_onboarding");
+		this.$onboarding.empty();
+		this.wrapper.find(".onboarding-sidebar").removeClass("hidden");
+
+		if (this.sidebar_data && this.sidebar_data.module_onboarding) {
+			return frappe
+				.call({
+					method: "frappe.desk.desktop.get_onboarding_data",
+					args: {
+						// send sorted min requirements to increase chance of cache hit
+						module: this.sidebar_data.module_onboarding,
+					},
+					type: "GET",
+				})
+				.then((data) => {
+					if (data.message?.length > 0) {
+						let onboarding_data = data.message[0];
+						me.onboarding_widget = new frappe.ui.UserOnboarding({
+							title: onboarding_data.title,
+							steps: onboarding_data.items,
+							wrapper: me.$onboarding,
+							header_icon: me.sidebar_header.header_icon,
+						});
+					} else {
+						this.wrapper.find(".onboarding-sidebar").addClass("hidden");
+					}
+				});
+		} else {
+			this.wrapper.find(".onboarding-sidebar").addClass("hidden");
+		}
+	}
+
 	find_nested_items() {
 		const me = this;
 		let currentSection = null;
@@ -109,6 +143,11 @@ frappe.ui.Sidebar = class Sidebar {
 		this.sidebar_header = new frappe.ui.SidebarHeader(this);
 		this.make_sidebar();
 		this.add_sidebar_cards();
+		this.setup_onboarding();
+
+		this.wrapper.find(".onboarding-sidebar").click(() => {
+			this.setup_onboarding();
+		});
 	}
 	add_card(card) {
 		if (this.cards && this.cards.find((i) => i.title === card.title)) return;

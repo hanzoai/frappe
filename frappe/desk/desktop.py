@@ -51,20 +51,23 @@ class Workspace:
 
 		self.allowed_pages = get_allowed_pages(cache=True)
 		self.allowed_reports = get_allowed_reports(cache=True)
+		self.onboarding_list = self.get_onboarding_list()
 
 		if not minimal:
-			if self.doc.content:
-				self.onboarding_list = [
-					x["data"]["onboarding_name"] for x in loads(self.doc.content) if x["type"] == "onboarding"
-				]
-			self.onboardings = []
-
 			self.table_counts = get_table_with_counts()
 		self.restricted_doctypes = (
 			frappe.cache.get_value("domain_restricted_doctypes") or build_domain_restricted_doctype_cache()
 		)
 		self.restricted_pages = (
 			frappe.cache.get_value("domain_restricted_pages") or build_domain_restricted_page_cache()
+		)
+
+	def get_onboarding_list(self):
+		return frappe.get_all(
+			"Module Onboarding",
+			filters={"is_complete": 0, "module": self.page_name},
+			pluck="name",
+			order_by="creation",
 		)
 
 	def is_permitted(self):
@@ -157,7 +160,6 @@ class Workspace:
 		self.cards = {"items": self.get_links()}
 		self.charts = {"items": self.get_charts()}
 		self.shortcuts = {"items": self.get_shortcuts()}
-		self.onboardings = {"items": self.get_onboardings()}
 		self.quick_lists = {"items": self.get_quick_lists()}
 		self.number_cards = {"items": self.get_number_cards()}
 		self.custom_blocks = {"items": self.get_custom_blocks()}
@@ -316,38 +318,6 @@ class Workspace:
 		return items
 
 	@handle_not_exist
-	def get_onboardings(self):
-		if self.onboarding_list:
-			for onboarding in self.onboarding_list:
-				onboarding_doc = self.get_onboarding_doc(onboarding)
-				if onboarding_doc:
-					item = {
-						"label": _(onboarding),
-						"title": _(onboarding_doc.title),
-						"subtitle": _(onboarding_doc.subtitle),
-						"success": _(onboarding_doc.success_message),
-						"docs_url": onboarding_doc.documentation_url,
-						"items": self.get_onboarding_steps(onboarding_doc),
-					}
-					self.onboardings.append(item)
-		return self.onboardings
-
-	@handle_not_exist
-	def get_onboarding_steps(self, onboarding_doc):
-		steps = []
-		for doc in onboarding_doc.get_steps():
-			step = doc.as_dict().copy()
-			step.label = _(doc.title)
-			step.description = _(doc.description)
-			if step.action == "Create Entry":
-				step.is_submittable = frappe.db.get_value(
-					"DocType", step.reference_document, "is_submittable", cache=True
-				)
-			steps.append(step)
-
-		return steps
-
-	@handle_not_exist
 	def get_number_cards(self):
 		all_number_cards = []
 		if frappe.has_permission("Number Card", throw=False):
@@ -400,7 +370,6 @@ def get_desktop_page(page: str):
 			"charts": workspace.charts,
 			"shortcuts": workspace.shortcuts,
 			"cards": workspace.cards,
-			"onboardings": workspace.onboardings,
 			"quick_lists": workspace.quick_lists,
 			"number_cards": workspace.number_cards,
 			"custom_blocks": workspace.custom_blocks,
@@ -681,7 +650,7 @@ def prepare_widget(config, doctype, parentfield):
 
 
 @frappe.whitelist()
-def update_onboarding_step(name: str | int, field: str, value: int | str):
+def update_onboarding_step(name: str, field: str, value: any):
 	"""Update status of onboaridng step
 
 	Args:
@@ -700,3 +669,47 @@ def update_onboarding_step(name: str | int, field: str, value: int | str):
 @frappe.whitelist()
 def get_installed_apps():
 	return frappe.get_installed_apps()
+
+
+@frappe.whitelist()
+@frappe.read_only()
+def get_onboarding_data(module: str):
+	"""Get onboarding data for a page
+
+	Args:
+	        page (string): page name
+
+	Return:
+	        dict: onboarding data
+	"""
+	onboardings = []
+	onboarding_doc = frappe.get_doc("Module Onboarding", module)
+	if onboarding_doc.is_complete:
+		return []
+
+	item = {
+		"label": _(module),
+		"title": _(onboarding_doc.title),
+		"subtitle": _(onboarding_doc.subtitle),
+		"success": _(onboarding_doc.success_message),
+		"docs_url": onboarding_doc.documentation_url,
+		"items": [],
+	}
+
+	maps = get_onboarding_step_maps(onboarding_doc.name)
+	for step in maps:
+		steps = frappe.get_all("Onboarding Step", filters={"name": step}, order_by="idx", fields=["*"])
+
+		if steps:
+			item["items"].append(steps[0])
+
+	onboardings.append(item)
+
+	if all(step.get("is_complete") or step.get("is_skipped") for step in item["items"]):
+		return []
+
+	return onboardings
+
+
+def get_onboarding_step_maps(onboarding):
+	return frappe.get_all("Onboarding Step Map", filters={"parent": onboarding}, pluck="step", order_by="idx")
