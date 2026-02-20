@@ -557,7 +557,7 @@ function upload_via_file_browser() {
 function upload_via_web_link() {
 	let file_url = web_link.value.url;
 	if (!file_url) {
-		web_link.value.invalid_input("Please enter a valid URL");
+		web_link.value.invalid_input(__("Please enter a valid URL"));
 		return Promise.reject();
 	}
 	try {
