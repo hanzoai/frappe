@@ -35,6 +35,10 @@ frappe.ui.FieldGroup = class FieldGroup extends frappe.ui.form.Layout {
 
 				if (def_value == "Today" && field.df["fieldtype"] == "Date") {
 					def_value = frappe.datetime.get_today();
+				} else if (def_value == "Now" && field.df["fieldtype"] == "Datetime") {
+					def_value = frappe.datetime.now_datetime();
+				} else if (def_value == "Now" && field.df["fieldtype"] == "Time") {
+					def_value = frappe.datetime.now_time();
 				}
 
 				field.set_input(def_value);
