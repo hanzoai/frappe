@@ -90,7 +90,7 @@ frappe.ui.form.on("File", {
 	},
 
 	download: function (frm) {
-		let file_url = frm.doc.file_url;
+		let file_url = frm.doc.file_url + "?fid=" + frm.doc.name;
 		if (frm.doc.file_name) {
 			file_url = file_url.replace(/#/g, "%23");
 		}
