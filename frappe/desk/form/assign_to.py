@@ -4,6 +4,7 @@
 """assign/unassign to ToDo"""
 
 import json
+from typing import Any
 
 import frappe
 import frappe.share
@@ -40,7 +41,7 @@ def get(args=None):
 
 
 @frappe.whitelist()
-def add(args=None, *, ignore_permissions=False):
+def add(args: dict[str, Any] | None = None, *, ignore_permissions: bool | int = False):
 	"""add in someone's to do list
 	args = {
 	        "assign_to": [],
@@ -140,11 +141,13 @@ def add(args=None, *, ignore_permissions=False):
 
 
 @frappe.whitelist()
-def add_multiple() -> None:
+def add_multiple(args: dict[str, Any] | None = None):
 	if not frappe.get_cached_value("User", frappe.session.user, "bulk_actions"):
 		frappe.throw(_("You are not allowed to perform bulk actions"), frappe.PermissionError)
 
-	args = frappe.local.form_dict
+	if not args:
+		args = frappe.local.form_dict
+
 	docname_list = json.loads(args["name"])
 
 	for docname in docname_list:
@@ -175,12 +178,12 @@ def close_all_assignments(doctype, name, ignore_permissions=False):
 
 
 @frappe.whitelist()
-def remove(doctype, name, assign_to, ignore_permissions=False):
+def remove(doctype: str, name: str | int, assign_to: str, ignore_permissions: bool | int = False):
 	return set_status(doctype, name, "", assign_to, status="Cancelled", ignore_permissions=ignore_permissions)
 
 
 @frappe.whitelist()
-def remove_multiple(doctype: str, names: str | list[str], ignore_permissions: bool = False) -> None:
+def remove_multiple(doctype: str, names: str, ignore_permissions: bool | int = False):
 	if not frappe.get_cached_value("User", frappe.session.user, "bulk_actions"):
 		frappe.throw(_("You are not allowed to perform bulk actions"), frappe.PermissionError)
 
@@ -197,7 +200,7 @@ def remove_multiple(doctype: str, names: str | list[str], ignore_permissions: bo
 
 
 @frappe.whitelist()
-def close(doctype: str, name: str, assign_to: str, ignore_permissions=False):
+def close(doctype: str, name: str, assign_to: str, ignore_permissions: bool | int = False):
 	if assign_to != frappe.session.user:
 		frappe.throw(_("Only the assignee can complete this to-do."))
 

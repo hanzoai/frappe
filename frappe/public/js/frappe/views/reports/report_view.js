@@ -17,7 +17,9 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 
 	setup_defaults() {
 		super.setup_defaults();
-		this.page_title = __("Report:") + " " + this.page_title;
+		if (!frappe.is_mobile()) {
+			this.page_title = __("Report:") + " " + this.page_title;
+		}
 		this.view = "Report";
 
 		this.link_title_doctype_fields = [];
@@ -1038,9 +1040,10 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 
 		table_fields.forEach((df) => {
 			const cdt = df.options;
+			const label = df.label || frappe.unscrub(df.fieldname);
 
 			dialog_fields.push({
-				label: __(df.label, null, df.parent) + ` (${__(cdt)})`,
+				label: __(label) + ` (${__(cdt)})`,
 				fieldname: df.options,
 				fieldtype: "MultiCheck",
 				columns: 2,
@@ -1298,7 +1301,11 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 					this.remove_column_from_datatable(col);
 				}
 			} else if (col.field in d) {
-				const value = d[col.field];
+				let rendered_value = d[col.field];
+				if (col.docfield.fieldtype == "Data") {
+					rendered_value = frappe.utils.escape_html(rendered_value);
+				}
+				const value = rendered_value;
 				return {
 					name: d.name,
 					doctype: col.docfield.parent,

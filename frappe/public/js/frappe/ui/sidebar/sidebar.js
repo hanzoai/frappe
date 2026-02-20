@@ -19,6 +19,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.$standard_items_sections = this.wrapper.find(".standard-items-sections");
 		this.$sidebar = this.wrapper.find(".body-sidebar");
 		this.items = [];
+		this.cards = [];
 		this.setup_events();
 		this.sidebar_module_map = {};
 		this.build_sidebar_module_map();
@@ -98,6 +99,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.workspace_sidebar_items = updated_items;
 	}
 	setup(workspace_title) {
+		$(document).trigger("sidebar_setup", { sidebar: this });
 		this.sidebar_title = workspace_title;
 		this.check_for_private_workspace(workspace_title);
 		this.workspace_title = this.sidebar_title.toLowerCase();
@@ -106,7 +108,22 @@ frappe.ui.Sidebar = class Sidebar {
 		this.$sidebar.attr("data-title", this.sidebar_title);
 		this.sidebar_header = new frappe.ui.SidebarHeader(this);
 		this.make_sidebar();
+		this.add_sidebar_cards();
 	}
+	add_card(card) {
+		if (this.cards && this.cards.find((i) => i.title === card.title)) return;
+		card.parent = this.wrapper.find(".body-sidebar-cards");
+		delete card.styles;
+		this.cards.push(card);
+	}
+	add_sidebar_cards() {
+		this.wrapper.find(".body-sidebar-cards").html("");
+		this.cards.forEach((card) => {
+			let card_obj = new frappe.ui.SidebarCard(card);
+			card.obj = card_obj;
+		});
+	}
+
 	check_for_private_workspace(workspace_title) {
 		if (workspace_title == "private" || workspace_title == "Personal") {
 			this.sidebar_title = "My Workspaces";
@@ -117,6 +134,7 @@ frappe.ui.Sidebar = class Sidebar {
 		frappe.router.on("change", function (router) {
 			if (frappe.route_options.sidebar) {
 				frappe.app.sidebar.setup(frappe.route_options.sidebar);
+				frappe.route_options = null;
 			} else {
 				frappe.app.sidebar.set_workspace_sidebar(router);
 			}
