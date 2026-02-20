@@ -30,6 +30,9 @@ frappe.pages["desktop"].on_page_load = function (wrapper) {
 	// setup();
 };
 
+frappe.pages["desktop"].on_page_show = function (wrapper) {
+	frappe.pages["desktop"].desktop_page.update();
+};
 function get_workspaces_from_app_name(app_name) {
 	const app = frappe.boot.app_data.filter((a) => {
 		return a.app_title === app_name;
@@ -70,7 +73,7 @@ function get_route(desktop_icon) {
 					if (workspaces) {
 						let args = {
 							type: "workspace",
-							name: first_link.link_to,
+							name: workspaces.title,
 							public: workspaces.public ? 1 : 0,
 							route_options: {
 								sidebar: desktop_icon.label,
@@ -171,12 +174,9 @@ class DesktopPage {
 		this.page = page;
 		this.edit_mode = false;
 		this.desktop_menu_items = [];
-		this.make(this.page);
-		this.setup();
 	}
 	update() {
-		this.make(this.page);
-		this.setup();
+		this.make();
 	}
 	prepare() {
 		this.apps_icons = [];
@@ -245,6 +245,7 @@ class DesktopPage {
 	make() {
 		this.page.page_head.hide();
 		$(this.page.body).empty();
+		this.awesomebar_setup = false;
 		$(frappe.render_template("desktop")).appendTo(this.page.body);
 		if (!this.data) {
 			this.data = JSON.parse($("#desktop-layout").text());
@@ -264,8 +265,8 @@ class DesktopPage {
 		if (this.edit_mode) {
 			this.start_editing_layout();
 		}
+		this.setup();
 	}
-
 	setup() {
 		$(document).trigger("desktop_screen", { desktop: this });
 		this.setup_avatar();
@@ -361,23 +362,53 @@ class DesktopPage {
 		let grid = $($(".desktop-container .icons").get(0));
 		this.add_new_icon = `<div class="desktop-icon desktop-edit-mode add-new-icon" title="Add New Icon">
 		 ${frappe.utils.icon("plus", "lg")}
-		 New Icon
+		  <div>Workspace</div>
 		 </div>`;
 		grid.append(this.add_new_icon);
 		$(".add-new-icon").on("click", function () {
-			frappe.ui.form.make_quick_entry(
-				"Desktop Icon",
-				function (icon) {
+			let d = new frappe.ui.Dialog({
+				title: "New Workspace",
+				fields: [
+					{
+						label: "Label",
+						fieldname: "label",
+						fieldtype: "Data",
+					},
+					{
+						label: "Public",
+						fieldname: "public",
+						fieldtype: "Check",
+					},
+				],
+				primary_action_label: "Create",
+				primary_action: function (values) {
+					let icon = frappe.model.get_new_doc("Desktop Icon");
+					icon.workspace = {
+						label: values.label,
+						public: values.public,
+					};
+					icon.link_type = "Workspace Sidebar";
+					icon.label = values.label;
 					frappe.new_desktop_icons.push(icon);
 					frappe.new_icons.push(icon);
 					frappe.pages["desktop"].desktop_page.update();
+					d.hide();
 				},
-				"",
-				"",
-				null,
-				true,
-				true
-			);
+			});
+			d.show();
+			// frappe.ui.form.make_quick_entry(
+			// 	"Desktop Icon",
+			// 	function (icon) {
+			// 		frappe.new_desktop_icons.push(icon);
+			// 		frappe.new_icons.push(icon);
+			// 		frappe.pages["desktop"].desktop_page.update();
+			// 	},
+			// 	"",
+			// 	"",
+			// 	null,
+			// 	true,
+			// 	true
+			// );
 		});
 	}
 	setup_edit_buttons() {

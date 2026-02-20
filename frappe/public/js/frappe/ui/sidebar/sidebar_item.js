@@ -177,6 +177,9 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 		this.full_template = $(this.wrapper);
 	}
 	make() {
+		if (this.nested_items.length == 0) {
+			return;
+		}
 		super.make();
 		if (!this.item.nested_items || this.item.nested_items.length == 0) return;
 		this.add_items();
@@ -221,7 +224,6 @@ frappe.ui.sidebar_item.TypeSectionBreak = class SectionBreakSidebarItem extends 
 			} else {
 				$(me.wrapper.find(".section-break")).addClass("hidden");
 				$(me.wrapper.find(".divider")).removeClass("hidden");
-				$(me.wrapper).removeAttr("data-original-title");
 				me.old_state = me.collapsed;
 				me.open();
 				if (me.item.indent) {
