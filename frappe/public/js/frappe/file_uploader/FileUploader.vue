@@ -564,7 +564,7 @@ function upload_via_web_link() {
 		file_url = decodeURI(file_url);
 	} catch (error) {
 		var error_message = error.message;
-		web_link.value.invalid_input(error_message);
+		web_link.value.invalid_input(__(error_message));
 		return Promise.reject();
 	}
 	return upload_file({
@@ -655,7 +655,7 @@ function upload_file(file, i) {
 						: __("File upload failed.");
 
 					if (show_web_link.value && web_link.value && file.file_url) {
-						web_link.value.invalid_input(file.error_message);
+						web_link.value.invalid_input(__(file.error_message));
 					} else if (!files.value.includes(file)) {
 						frappe.msgprint({
 							title: __("Upload Failed"),
