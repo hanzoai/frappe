@@ -3,7 +3,9 @@ frappe.ui.form.on("File", {
 		if (frm.doc.file_url) {
 			frm.add_custom_button(__("View File"), () => {
 				if (!frappe.utils.is_url(frm.doc.file_url)) {
-					window.open(window.location.origin + frm.doc.file_url);
+					window.open(
+						window.location.origin + frm.doc.file_url + "?fid=" + frm.doc.name
+					);
 				} else {
 					window.open(frm.doc.file_url);
 				}
