@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-02-15 09:42+0000\n"
-"PO-Revision-Date: 2026-02-19 21:12\n"
+"PO-Revision-Date: 2026-02-20 21:07\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -9459,7 +9459,7 @@ msgstr "Introduzca un nombre para este {0}"
 #. Description of the 'User Defaults' (Table) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "Enter default value fields (keys) and values. If you add multiple values for a field, the first one will be picked. These defaults are also used to set \"match\" permission rules. To see list of fields, go to \"Customize Form\"."
-msgstr ""
+msgstr "Ingrese campos del valor por defecto (claves) y valores. Si agrega varios valores para un campo, el primero será elegido. Estos valores predeterminados se utilizan también para \"emparejar\" reglas de permisos. Para ver la lista de campos, vaya a \"Personalizar Formulario\"."
 
 #: frappe/public/js/frappe/views/file/file_view.js:111
 msgid "Enter folder name"
@@ -9473,7 +9473,7 @@ msgstr "Introduzca una lista de opciones, cada una en una nueva línea."
 #. Settings'
 #: frappe/core/doctype/sms_settings/sms_settings.json
 msgid "Enter static url parameters here (Eg. sender=ERPNext, username=ERPNext, password=1234 etc.)"
-msgstr ""
+msgstr "Introduzca los parámetros de URL aquí (Ej. sender=ERPNext, username=ERPNext, password=1234 etc.)"
 
 #. Description of the 'Message Parameter' (Data) field in DocType 'SMS
 #. Settings'
@@ -9817,7 +9817,7 @@ msgstr "Expandir todo"
 
 #: frappe/database/query.py:729
 msgid "Expected 'and' or 'or' operator, found: {0}"
-msgstr ""
+msgstr "Se esperaba el operador 'and' u 'or', se ha encontrado: {0}"
 
 #: frappe/public/js/frappe/form/templates/form_sidebar.html:66
 msgid "Experimental"
@@ -11167,7 +11167,7 @@ msgstr "Formulario de paso de visita"
 #. Option for the 'Request Structure' (Select) field in DocType 'Webhook'
 #: frappe/integrations/doctype/webhook/webhook.json
 msgid "Form URL-Encoded"
-msgstr ""
+msgstr "Formulario codificado en URL"
 
 #. Label of the format (Data) field in DocType 'Workspace Shortcut'
 #. Label of the format (Select) field in DocType 'Auto Email Report'
@@ -21026,7 +21026,7 @@ msgstr ""
 #. Label of the queued_by (Data) field in DocType 'Prepared Report'
 #: frappe/core/doctype/prepared_report/prepared_report.json
 msgid "Queued By"
-msgstr ""
+msgstr "En cola por"
 
 #: frappe/core/doctype/submission_queue/submission_queue.py:186
 msgid "Queued for Submission. You can track the progress over {0}."
@@ -23037,7 +23037,7 @@ msgstr "El mismo Campo se ingresa más de una vez"
 #. Label of the sample (HTML) field in DocType 'Client Script'
 #: frappe/custom/doctype/client_script/client_script.json
 msgid "Sample"
-msgstr ""
+msgstr "Muestra"
 
 #. Option for the 'Day' (Select) field in DocType 'Assignment Rule Day'
 #. Option for the 'Day' (Select) field in DocType 'Auto Repeat Day'
@@ -23080,7 +23080,7 @@ msgstr "Sábado"
 #: frappe/public/js/print_format_builder/print_format_builder.bundle.js:15
 #: frappe/public/js/workflow_builder/workflow_builder.bundle.js:33
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: frappe/workflow/doctype/workflow/workflow.js:143
 msgid "Save Anyway"
@@ -23189,7 +23189,7 @@ msgstr "Programado contra"
 #. Label of the scheduled_job_type (Link) field in DocType 'Scheduled Job Log'
 #: frappe/core/doctype/scheduled_job_log/scheduled_job_log.json
 msgid "Scheduled Job"
-msgstr ""
+msgstr "Trabajo programado"
 
 #. Name of a DocType
 #: frappe/core/doctype/scheduled_job_log/scheduled_job_log.json
@@ -24156,7 +24156,7 @@ msgstr "El servidor estaba demasiado ocupado para procesar esta solicitud. Por f
 #: frappe/email/doctype/email_account/email_account.json
 #: frappe/integrations/doctype/integration_request/integration_request.json
 msgid "Service"
-msgstr ""
+msgstr "Servicios"
 
 #. Label of the session_created (Datetime) field in DocType 'User Session
 #. Display'
@@ -24220,7 +24220,7 @@ msgstr "Establecer"
 #. Settings'
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Set Banner from Image"
-msgstr ""
+msgstr "Establecer banner desde imagen"
 
 #: frappe/public/js/frappe/views/reports/query_report.js:201
 msgid "Set Chart"
@@ -24386,7 +24386,24 @@ msgid "Set the filters here. For example:\n"
 "\treqd: 1\n"
 "}]\n"
 "</code></pre>"
-msgstr ""
+msgstr "Establezca aquí los filtros. Por ejemplo:\n"
+"<pre class=\"small text-muted\"><code>\n"
+"[{\n"
+"\tfieldname: \"company\",\n"
+"\tlabel: __(\"Company\"),\n"
+"\tfieldtype: \"Link\",\n"
+"\toptions: \"Company\",\n"
+"\tdefault: frappe.defaults.get_user_default(\"Company\"),\n"
+"\treqd: 1\n"
+"},\n"
+"{\n"
+"\tfieldname: \"account\",\n"
+"\tlabel: __(\"Account\"),\n"
+"\tfieldtype: \"Link\",\n"
+"\toptions: \"Account\",\n"
+"\treqd: 1\n"
+"}]\n"
+"</code></pre>"
 
 #. Description of the 'Method' (Data) field in DocType 'Number Card'
 #: frappe/desk/doctype/number_card/number_card.json
@@ -26369,7 +26386,7 @@ msgstr "Privilegios del Administrador del Sistema requeridos."
 #. Option for the 'Channel' (Select) field in DocType 'Notification'
 #: frappe/email/doctype/notification/notification.json
 msgid "System Notification"
-msgstr ""
+msgstr "Notificación del sistema"
 
 #. Label of the system_page (Check) field in DocType 'Page'
 #: frappe/core/doctype/page/page.json
@@ -26390,7 +26407,7 @@ msgstr ""
 #. 'Module Onboarding'
 #: frappe/desk/doctype/module_onboarding/module_onboarding.json
 msgid "System managers are allowed by default"
-msgstr ""
+msgstr "Los administradores del sistema están permitidos de forma predeterminada"
 
 #: frappe/public/js/frappe/utils/number_systems.js:5
 msgctxt "Number system"
@@ -26459,7 +26476,7 @@ msgstr "Falta Nombre del Campo de Tabla"
 #. Label of the table_html (HTML) field in DocType 'Version'
 #: frappe/core/doctype/version/version.json
 msgid "Table HTML"
-msgstr ""
+msgstr "Tabla HTML"
 
 #. Option for the 'Type' (Select) field in DocType 'DocField'
 #. Option for the 'Field Type' (Select) field in DocType 'Custom Field'
@@ -26489,7 +26506,7 @@ msgstr "La tabla {0} no puede estar vacía"
 #. Option for the 'PDF Page Size' (Select) field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloide"
 
 #. Name of a DocType
 #: frappe/desk/doctype/tag/tag.json
