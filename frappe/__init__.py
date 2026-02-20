@@ -16,6 +16,7 @@ import importlib
 import inspect
 import json
 import os
+import re
 import sys
 import threading
 import warnings
@@ -76,6 +77,7 @@ local = Local()
 cache: "RedisWrapper" | None = None
 client_cache: "ClientCache" | None = None
 STANDARD_USERS = ("Guest", "Administrator")
+SITE_NAME_PATTERN = re.compile(r"^[a-zA-Z0-9._-]+$")
 
 # this global may be subsequently changed by frappe.tests.utils.toggle_test_mode()
 in_test = False
@@ -143,6 +145,9 @@ def init(site: str, sites_path: str = ".", new_site: bool = False, force: bool =
 	"""Initialize frappe for the current site. Reset thread locals `frappe.local`"""
 	if getattr(local, "initialised", None) and not force:
 		return
+
+	if site and not SITE_NAME_PATTERN.match(site):
+		raise ValueError(f"Invalid site name `{site}`")
 
 	local.error_log = []
 	local.message_log = []
@@ -1483,12 +1488,12 @@ def get_desk_link(doctype, name, show_title_with_name=False, open_in_new_tab=Fal
 	encoded_name = quote(name)
 
 	if show_title_with_name and name != title:
-		html = '<a href="/desk/Form/{doctype}/{encoded_name}"{target} style="font-weight: bold;">{doctype_local} {name}: {title_local}</a>'
+		html = '<a href="/desk/{doctype}/{encoded_name}"{target} style="font-weight: bold;">{doctype_local} {name}: {title_local}</a>'
 	else:
-		html = '<a href="/desk/Form/{doctype}/{encoded_name}"{target} style="font-weight: bold;">{doctype_local} {title_local}</a>'
+		html = '<a href="/desk/{doctype}/{encoded_name}"{target} style="font-weight: bold;">{doctype_local} {title_local}</a>'
 
 	return html.format(
-		doctype=doctype,
+		doctype=frappe.scrub(doctype),
 		name=name,
 		encoded_name=encoded_name,
 		doctype_local=_(doctype),
