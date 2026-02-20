@@ -41,6 +41,12 @@ frappe.ui.TagEditor = class TagEditor {
 							var user_tags = me.user_tags ? me.user_tags.split(",") : [];
 							user_tags.push(tag);
 							me.user_tags = user_tags.join(",");
+							frappe.model.set_value(
+								me.frm.doctype,
+								me.frm.docname,
+								"_user_tags",
+								me.user_tags
+							);
 							me.on_change && me.on_change(me.user_tags);
 							frappe.tags.utils.fetch_tags();
 						},
@@ -56,6 +62,12 @@ frappe.ui.TagEditor = class TagEditor {
 							var user_tags = me.user_tags.split(",");
 							user_tags.splice(user_tags.indexOf(tag), 1);
 							me.user_tags = user_tags.join(",");
+							frappe.model.set_value(
+								me.frm.doctype,
+								me.frm.docname,
+								"_user_tags",
+								me.user_tags
+							);
 							me.on_change && me.on_change(me.user_tags);
 							frappe.tags.utils.fetch_tags();
 						},
