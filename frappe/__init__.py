@@ -19,14 +19,9 @@ import inspect
 import json
 import os
 import re
-<<<<<<< HEAD
 import signal
 import traceback
 import unicodedata
-=======
-import sys
-import threading
->>>>>>> cda5b6bda0 (fix: restrict the allowed characters in site names (#35134))
 import warnings
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any, Literal, Optional, TypeAlias, overload
