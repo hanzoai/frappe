@@ -279,7 +279,10 @@ frappe.ui.form.ControlInput = class ControlInput extends frappe.ui.form.Control 
 
 		const is_invalid = this.$wrapper.hasClass("has-error-invalid");
 		this.$wrapper.toggleClass("has-error-mandatory", Boolean(this.df.reqd && is_null(value)));
-		this.$wrapper.toggleClass("has-error", is_invalid || Boolean(this.df.reqd && is_null(value)));
+		this.$wrapper.toggleClass(
+			"has-error",
+			is_invalid || Boolean(this.df.reqd && is_null(value))
+		);
 	}
 	set_invalid() {
 		let invalid = !!this.df.invalid;
