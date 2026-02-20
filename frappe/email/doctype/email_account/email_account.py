@@ -162,9 +162,14 @@ class EmailAccount(Document):
 			if self.auth_method == "Basic" or self.get_oauth_token():
 				self.validate_frappe_mail_settings()
 
-		# validate the imap settings
-		if self.enable_incoming and self.use_imap and len(self.imap_folder) <= 0:
-			frappe.throw(_("You need to set one IMAP folder for {0}").format(frappe.bold(self.email_id)))
+		if self.enable_incoming:
+			if self.use_imap and not self.imap_folder:
+				frappe.throw(_("You need to set one IMAP folder for {0}").format(frappe.bold(self.email_id)))
+
+			valid_doctypes = {d[0] for d in get_append_to()}
+			for folder in self.imap_folder:
+				if folder.append_to and folder.append_to not in valid_doctypes:
+					frappe.throw(_("Append To can be one of {0}").format(comma_or(valid_doctypes)))
 
 		if frappe.local.flags.in_patch or frappe.in_test:
 			return
@@ -201,13 +206,6 @@ class EmailAccount(Document):
 				frappe.throw(_("{0} is mandatory").format(self.meta.get_label("send_notification_to")))
 			for e in self.get_unreplied_notification_emails():
 				validate_email_address(e, True)
-
-		if self.enable_incoming:
-			for folder in self.imap_folder:
-				if folder.append_to:
-					valid_doctypes = [d[0] for d in get_append_to()]
-					if folder.append_to not in valid_doctypes:
-						frappe.throw(_("Append To can be one of {0}").format(comma_or(valid_doctypes)))
 
 		if self.enable_outgoing:
 			self.validate_reply_to_addresses()
