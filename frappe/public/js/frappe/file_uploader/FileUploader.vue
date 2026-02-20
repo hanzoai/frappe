@@ -519,10 +519,12 @@ function set_loading_state(dialog, loading) {
 	if (loading) {
 		$btn?.css("width", $btn.outerWidth());
 		$btn?.html(`<i class="fa fa-spinner fa-spin"></i>`);
+		$btn?.prop("disabled", true);
 		dialog?.get_secondary_btn().prop("disabled", true);
 	} else {
 		$btn?.css("width", "");
 		$btn?.html(__("Upload"));
+		$btn?.prop("disabled", false);
 		dialog?.get_secondary_btn().prop("disabled", false);
 	}
 }
