@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-02-15 09:42+0000\n"
-"PO-Revision-Date: 2026-02-18 20:54\n"
+"PO-Revision-Date: 2026-02-20 21:07\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -13489,13 +13489,13 @@ msgstr "Integration Begäran"
 #: frappe/integrations/workspace/integrations/integrations.json
 #: frappe/website/doctype/website_settings/website_settings.json
 msgid "Integrations"
-msgstr "System Integrationer"
+msgstr "Integrationer"
 
 #. Description of the 'Delivery Status' (Select) field in DocType
 #. 'Communication'
 #: frappe/core/doctype/communication/communication.json
 msgid "Integrations can use this field to set email delivery status"
-msgstr "System Integrationer kan använda detta fält för att ange E-post leverans status"
+msgstr "Integrationer kan använda detta fält för att ange E-post leverans status"
 
 #. Option for the 'Font' (Select) field in DocType 'Print Settings'
 #: frappe/printing/doctype/print_settings/print_settings.json
