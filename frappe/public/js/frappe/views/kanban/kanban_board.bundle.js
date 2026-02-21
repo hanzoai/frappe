@@ -758,9 +758,9 @@ frappe.provide("frappe.views");
 		function get_tags_html(card) {
 			return card.tags
 				? `<div class="kanban-tags">
-					${cur_list.get_tags_html(card.tags, 3, true)}
+					${cur_list.get_tags_html(card.tags, null, true)}
 				</div>`
-				: "";
+				: ""; // no upper limit to tags
 		}
 
 		function render_card_meta() {
