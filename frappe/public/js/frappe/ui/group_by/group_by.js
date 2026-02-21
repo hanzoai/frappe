@@ -386,17 +386,18 @@ frappe.ui.GroupBy = class {
 
 		const fields = this.report_view.meta.fields
 			.concat(standard_fields)
-			.filter((f) =>
-				[
-					"Select",
-					"Link",
-					"Data",
-					"Int",
-					"Check",
-					"Dynamic Link",
-					"Autocomplete",
-					"Date",
-				].includes(f.fieldtype) && !f.is_virtual
+			.filter(
+				(f) =>
+					[
+						"Select",
+						"Link",
+						"Data",
+						"Int",
+						"Check",
+						"Dynamic Link",
+						"Autocomplete",
+						"Date",
+					].includes(f.fieldtype) && !f.is_virtual
 			);
 		this.group_by_fields[this.doctype] = fields.sort((a, b) =>
 			__(cstr(a.label)).localeCompare(cstr(__(b.label)))
