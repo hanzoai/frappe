@@ -2346,6 +2346,100 @@ class TestQuery(IntegrationTestCase):
 		self.assertEqual(len(result), 0, "Filter should not be bypassed by shared doc OR condition")
 
 	@run_only_if(db_type_is.POSTGRES)
+	def test_order_by_group_by_postgres(self):
+		"""PostgreSQL specific test that tests if order_by fields are correctly handled when used with group_by"""
+		# test order by fields already in group by (no aggregate needed)
+		query = frappe.qb.get_query(
+			"User",
+			fields=["creation as created_date", {"COUNT": "*"}],
+			group_by="created_date",
+			order_by="created_date",
+		).get_sql()
+
+		self.assertQueryEqual(
+			query,
+			'SELECT "creation" "created_date",COUNT(*) FROM "tabUser" GROUP BY "created_date" ORDER BY "created_date" DESC',
+		)
+
+		# test order by fields not in group by (aggregate needed)
+		query = frappe.qb.get_query(
+			"User",
+			fields=["creation as created_date", {"COUNT": "*"}],
+			group_by="created_date",
+			order_by="name",
+		).get_sql()
+
+		self.assertQueryEqual(
+			query,
+			'SELECT "creation" "created_date",COUNT(*) FROM "tabUser" GROUP BY "created_date" ORDER BY MAX("name") DESC',
+		)
+
+		query = frappe.qb.get_query(
+			"User",
+			fields=["user_type as type", "enabled as status", {"COUNT": "*"}],
+			group_by="type, status",
+			order_by="status asc",
+		).get_sql()
+
+		self.assertQueryEqual(
+			query,
+			'SELECT "user_type" "type","enabled" "status",COUNT(*) FROM "tabUser" GROUP BY "type","status" ORDER BY "status" ASC',
+		)
+
+		# test no double aggregation rule
+		query = frappe.qb.get_query(
+			"User",
+			fields=["creation", {"COUNT": "*", "as": "total"}],
+			group_by="creation",
+			order_by="total desc",
+		).get_sql()
+
+		self.assertQueryEqual(
+			query,
+			'SELECT "creation",COUNT(*) "total" FROM "tabUser" GROUP BY "creation" ORDER BY "total" DESC',
+		)
+
+		# test multiple order_by fields not in group_by
+		query = frappe.qb.get_query(
+			"User",
+			fields=["user_type", {"COUNT": "*"}],
+			group_by="user_type",
+			order_by="creation desc, modified asc",
+		).get_sql()
+
+		self.assertIn('MAX("creation") DESC', query)
+		self.assertIn('MAX("modified") ASC', query)
+
+		# for queries that have aggregate fields selected but not grouped (these queries are redundant but exist in some parts of codebase)
+		query = frappe.qb.get_query(
+			"User", fields=[{"COUNT": "*", "as": "result"}], order_by="creation desc"
+		).get_sql()
+
+		self.assertQueryEqual(query, 'SELECT COUNT(*) "result" FROM "tabUser" ORDER BY MAX("creation") DESC')
+
+		# test in case user uses `original_col` name instead of alias
+		query = frappe.qb.get_query(
+			"User", fields=["name as user_name"], group_by="user_name", order_by="user_name"
+		)
+		a = query.run()
+
+		query = frappe.qb.get_query("User", fields=["name as user_name"], group_by="name", order_by="name")
+		b = query.run()
+
+		query = frappe.qb.get_query(
+			"User", fields=["name as user_name"], group_by="name", order_by="user_name"
+		)
+		c = query.run()
+
+		query = frappe.qb.get_query(
+			"User", fields=["name as user_name"], group_by="user_name", order_by="name"
+		)
+		d = query.run()
+
+		for val in [b, c, d]:
+			self.assertEqual(a, val, "Query result mismatch detected.")
+
+	@run_only_if(db_type_is.POSTGRES)
 	def test_ifnull_fallback_postgres(self):
 		"""Test ifnull fallback in postgres"""
 		from frappe.database.query import Engine
