@@ -1459,7 +1459,8 @@ def impersonate(user: str, reason: str):
 	notification.set("type", "Alert")
 	notification.insert(ignore_permissions=True)
 	# notify user via email too
-	if not frappe.conf.get("developer_mode"):  # bypass for testing locally
+	email_exists = frappe.db.exists("Email Account", {"default_outgoing": 1, "awaiting_password": 0})
+	if email_exists:
 		user_email = frappe.db.get_value("User", user, "email")
 		email_message = _(
 			"User {0} has started an impersonation session as you. <br><br><b>Reason provided:</b> {1}"
