@@ -366,14 +366,15 @@ class TestEmail(FrappeTestCase):
 			patch("frappe.sendmail") as mocked_sendmail,
 			patch("frappe.local.login_manager", create=True) as mocked_lm,
 		):
-			reason = "Testing Security Alert"
-			impersonate(user=target_user, reason=reason)
+			with patch("frappe.db.exists", return_value=True):
+				reason = "Testing Security Alert"
+				impersonate(user=target_user, reason=reason)
 
-			self.assertTrue(mocked_sendmail.called)
-			_, kwargs = mocked_sendmail.call_args
-			self.assertIn(target_user, kwargs.get("recipients"))
-			self.assertIn(reason, kwargs.get("content"))
-			mocked_lm.impersonate.assert_called_with(target_user)
+				self.assertTrue(mocked_sendmail.called)
+				_, kwargs = mocked_sendmail.call_args
+				self.assertIn(target_user, kwargs.get("recipients"))
+				self.assertIn(reason, kwargs.get("content"))
+				mocked_lm.impersonate.assert_called_with(target_user)
 
 		# Cleanup
 		frappe.db.delete("User", {"email": target_user})
