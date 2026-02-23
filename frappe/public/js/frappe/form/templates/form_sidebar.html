@@ -1,4 +1,3 @@
-<div class="sidebar-section user-actions hidden"></div>
 <div class="flex justify-between sidebar-image-section sidebar-section hide">
 	<div class="sidebar-image-wrapper">
 		<img class="sidebar-image">
@@ -81,6 +80,15 @@
 		<a class="help-link list-link" data-doctype="{{ doctype }}">{{ __("Help") }}</a>
 	</div>
 	{% } %}
+</div>
+<div class="sidebar-section user-actions hidden border-bottom">
+	<div class="form-sidebar-items user-actions-header">
+		<div class="form-sidebar-label">
+			{%= frappe.utils.icon("link-2") %}
+			<span class="ellipsis">{%= __("Links") %}</span>
+		</div>
+	</div>
+	<div class="user-actions-list"></div>
 </div>
 <div class="sidebar-section form-assignments">
 	<div>

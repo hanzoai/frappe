@@ -20,6 +20,10 @@
 			flex-wrap: wrap;
 			color: var(--text-light);
 
+			.icon {
+				stroke: var(--text-light);
+			}
+
 			.icon-btn {
 				height: unset;
 			}
@@ -36,6 +40,82 @@
 				display: block;
 			}
 		}
+	}
+
+	.user-actions {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		padding: var(--padding-md);
+
+		.user-actions-list {
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+		}
+
+		.user-action-row {
+			margin: 0;
+		}
+
+		.user-action-link {
+			display: flex;
+			align-items: center;
+			text-decoration: underline;
+			justify-content: space-between;
+			gap: var(--margin-sm);
+			width: 100%;
+			padding: 4px 8px;
+			margin-left: -4px;
+			margin-right: -8px;
+			border-radius: var(--border-radius-md);
+			transition: background-color 120ms ease;
+
+			&:hover,
+			&:focus-visible {
+				background: var(--subtle-fg);
+			}
+
+			&:focus-visible {
+				outline: none;
+			}
+
+			.user-action-external-icon {
+				display: none;
+				line-height: 0;
+
+				.icon {
+					margin: 0;
+					--icon-stroke: var(--text-muted);
+				}
+			}
+
+			&[target="_blank"] .user-action-external-icon {
+				display: inline-flex;
+				align-items: center;
+				opacity: 0;
+				transform: translateX(-2px);
+				transition: opacity 120ms ease, transform 120ms ease;
+			}
+
+			&[target="_blank"]:hover .user-action-external-icon,
+			&[target="_blank"]:focus-visible .user-action-external-icon {
+				opacity: 1;
+				transform: translateX(0);
+			}
+		}
+
+		.user-action-label {
+			display: block;
+			max-width: 100%;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+
+	.sidebar-section.user-actions.border-bottom {
+		padding-bottom: 15px;
 	}
 
 	.form-tags {
