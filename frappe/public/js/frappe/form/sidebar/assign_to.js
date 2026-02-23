@@ -286,7 +286,7 @@ frappe.ui.form.AssignmentClass = class AssignmentClass {
 			<div class="dialog-assignment-row" data-user="${assignment}">
 				<div class="assignee">
 					${frappe.avatar(assignment)}
-					${frappe.user.full_name(assignment)}
+					<span>${frappe.user.full_name(assignment)}</span>
 				</div>
 				<div class="btn-group btn-group-sm" role="group" aria-label="Actions">
 				</div>
