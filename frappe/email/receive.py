@@ -270,14 +270,29 @@ class EmailServer:
 
 		return match[0] if match else None
 
-	def retrieve_message(self, uid, msg_num, folder):
+	def retrieve_message(self, uid, msg_num, folder) -> None:
 		try:
 			if cint(self.settings.use_imap):
-				_status, message = self.imap.uid("fetch", uid, "(BODY.PEEK[] BODY.PEEK[HEADER] FLAGS)")
-				raw = message[0]
+				_status, data = self.imap.uid("fetch", uid, "(BODY.PEEK[] FLAGS)")
 
-				self.get_email_seen_status(uid, raw[0])
-				self.latest_messages.append(raw[1])
+				if _status != "OK" or not data:
+					return
+
+				raw_email = next(
+					(part[1] for part in data if isinstance(part, tuple) and b"BODY[]" in part[0]), None
+				)
+
+				if raw_email is None:
+					return
+
+				flags_line = next(
+					(part for part in data if isinstance(part, bytes) and b"FLAGS" in part), None
+				)
+
+				if flags_line is not None:
+					self.get_email_seen_status(uid, flags_line)
+
+				self.latest_messages.append(raw_email)
 			else:
 				msg = self.pop.retr(msg_num)
 				self.latest_messages.append(b"\n".join(msg[1]))
