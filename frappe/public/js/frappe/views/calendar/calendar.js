@@ -254,25 +254,14 @@ frappe.views.Calendar = class Calendar {
 		defaults.meridiem = "false";
 		this.cal_options = {
 			locale: frappe.boot.lang,
-<<<<<<< HEAD
-			header: {
-				left: "prev, title, next",
-				right: "today, month, agendaWeek, agendaDay",
-=======
-			eventTimeFormat: {
-				hour: "numeric",
-				minute: "2-digit",
-				hour12: true,
-			},
+			eventTimeFormat: event_time_fmt,
 			firstDay: frappe.datetime.get_first_day_of_the_week_index(),
 			eventDisplay: "block",
-			headerToolbar: {
+			header: {
 				left: "prev,title,next",
 				center: "",
-				right: "today,dayGridMonth,timeGridWeek,timeGridDay",
->>>>>>> 6b17f56f46 (fix(calendar): update first day of the week to use dynamic configuration)
+				right: "today,month,agendaWeek,agendaDay",
 			},
-			eventTimeFormat: event_time_fmt,
 			editable: true,
 			selectable: true,
 			selectHelper: true,
