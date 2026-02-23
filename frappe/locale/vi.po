@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-01-02 22:45+0000\n"
-"PO-Revision-Date: 2026-02-19 19:11\n"
+"PO-Revision-Date: 2026-02-23 19:59\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Vietnamese\n"
 "MIME-Version: 1.0\n"
@@ -21299,7 +21299,7 @@ msgstr "Tải lại"
 
 #: frappe/public/js/frappe/form/controls/attach.js:16
 msgid "Reload File"
-msgstr "Tải lại tập tin"
+msgstr ""
 
 #: frappe/public/js/frappe/list/base_list.js:248
 msgid "Reload List"
@@ -28208,7 +28208,7 @@ msgstr "Đang cập nhật {0} của {1}, {2}"
 
 #: frappe/public/js/billing.bundle.js:131
 msgid "Upgrade plan"
-msgstr "Kế hoạch nâng cấp"
+msgstr ""
 
 #: frappe/public/js/frappe/list/list_sidebar.js:308
 msgid "Upgrade your support experience with Frappe Helpdesk"
