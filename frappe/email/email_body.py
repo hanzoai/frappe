@@ -489,13 +489,8 @@ def add_attachment(fname, fcontent, content_type=None, parent=None, content_id=N
 	# Set the filename parameter
 	if fname:
 		attachment_type = "inline" if inline else "attachment"
-<<<<<<< HEAD
-		part.add_header("Content-Disposition", attachment_type, filename=str(fname))
-=======
 		clean_filename = re.sub(r"[\r\n]", "", str(fname))
 		part.add_header("Content-Disposition", attachment_type, filename=clean_filename)
-
->>>>>>> 9a3d173b62 (fix: prevent `UTF-8` corruption in text attachments)
 	if content_id:
 		part.add_header("Content-ID", f"<{content_id}>")
 
