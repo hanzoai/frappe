@@ -11,7 +11,7 @@
 					{% let doctype = transactions[i].items[j]; %}
 					{% let fieldname = (transactions[i].fieldnames && transactions[i].fieldnames[doctype]) || transactions[i].fieldname; %}
 					<div class="document-link" data-doctype="{{ doctype }}">
-						<div class="document-link-badge" data-doctype="{{ doctype }}">
+						<div class="document-link-badge" data-doctype="{{ doctype }}" data-fieldname="{{ fieldname }}">
 							<a class="badge-link">{{ __(doctype) }}</a>
 							<span class="count hidden"></span>
 						</div>
