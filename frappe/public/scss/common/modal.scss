@@ -299,15 +299,15 @@ body.modal-open[style^="padding-right"] {
 	}
 	.assignee {
 		flex: 1;
+		display: flex;
+		gap: 8px;
+		align-items: center;
 	}
 	&:hover {
 		.btn-group {
 			opacity: 1;
 			transition: opacity 0.1s ease-in-out;
 		}
-	}
-	.avatar {
-		margin-right: var(--margin-md);
 	}
 }
 
