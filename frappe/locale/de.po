@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-01-02 22:45+0000\n"
-"PO-Revision-Date: 2026-01-21 10:32\n"
+"PO-Revision-Date: 2026-02-23 19:58\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -28436,7 +28436,7 @@ msgstr "{0} von {1}, {2} wird aktualisiert"
 
 #: frappe/public/js/billing.bundle.js:131
 msgid "Upgrade plan"
-msgstr "Plan hochstufen"
+msgstr ""
 
 #: frappe/public/js/frappe/list/list_sidebar.js:308
 msgid "Upgrade your support experience with Frappe Helpdesk"
