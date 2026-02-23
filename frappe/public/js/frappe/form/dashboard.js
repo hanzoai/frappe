@@ -270,6 +270,13 @@ frappe.ui.form.Dashboard = class FormDashboard {
 					if (d.label == group.label) {
 						group_added.push(d.label);
 						group.items.push(...d.items);
+
+						if (d.fieldnames) {
+							if (!group.fieldnames) {
+								group.fieldnames = {};
+							}
+							Object.assign(group.fieldnames, d.fieldnames);
+						}
 					}
 				});
 			});
@@ -335,7 +342,9 @@ frappe.ui.form.Dashboard = class FormDashboard {
 
 		// bind new
 		transactions_area_body.find(".btn-new").on("click", function () {
-			me.frm.make_new($(this).attr("data-doctype"));
+			const doctype = $(this).attr("data-doctype");
+			const fieldname = $(this).attr("data-fieldname");
+			me.frm.make_new(doctype, fieldname);
 		});
 
 		this.data_rendered = true;
