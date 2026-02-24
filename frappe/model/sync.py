@@ -241,16 +241,17 @@ def remove_orphan_entities():
 		)
 		for i, entity in enumerate(all_enitities):
 			try:
-				app_path = frappe.get_app_path(entity.app)
-				if entity.app and not check_if_record_exists("app", app_path, app_entity, entity.name):
-					try:
-						print(f"Deleting entity {app_entity} {entity.name}")
-						frappe.delete_doc(app_entity, entity.name, force=True, ignore_missing=True)
-						update_progress_bar(f"Deleting orphaned {app_entity}", i, len(all_enitities))
-						print()
-					except Exception as e:
-						print(f"Error occurred while deleting entity: {app_entity} {entity.name}")
-						print(e)
+				if entity.app:
+					app_path = frappe.get_app_path(entity.app)
+					if not check_if_record_exists("app", app_path, app_entity, entity.name):
+						try:
+							print(f"Deleting entity {app_entity} {entity.name}")
+							frappe.delete_doc(app_entity, entity.name, force=True, ignore_missing=True)
+							update_progress_bar(f"Deleting orphaned {app_entity}", i, len(all_enitities))
+							print()
+						except Exception as e:
+							print(f"Error occurred while deleting entity: {app_entity} {entity.name}")
+							print(e)
 			except ModuleNotFoundError as e:
 				print(e)
 				print(f"Deleting entity {app_entity} {entity.name}")
