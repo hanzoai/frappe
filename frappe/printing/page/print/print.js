@@ -741,9 +741,7 @@ frappe.ui.form.PrintView = class {
 					encodeURIComponent(this.get_letterhead()) +
 					"&settings=" +
 					encodeURIComponent(JSON.stringify(this.additional_settings)) +
-					(this.lang_code ? "&_lang=" + this.lang_code : "") +
-					"&pdf_generator=" +
-					encodeURIComponent(pdf_generator)
+					(this.lang_code ? "&_lang=" + this.lang_code : "")
 			)
 		);
 		if (!w) {
