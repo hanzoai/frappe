@@ -114,9 +114,7 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 				let args = me.dialog.get_values();
 
 				if (args && args.assign_to) {
-					me.dialog.set_message("Assigning...");
-
-					frappe.call({
+					return frappe.call({
 						method: me.method,
 						args: $.extend(args, {
 							doctype: me.doctype,
@@ -125,15 +123,12 @@ frappe.ui.form.AssignToDialog = class AssignToDialog {
 							bulk_assign: me.bulk_assign || false,
 							re_assign: me.re_assign || false,
 						}),
-						btn: me.dialog.get_primary_btn(),
 						callback: function (r) {
 							if (!r.exc) {
 								if (me.callback) {
 									me.callback(r);
 								}
 								me.dialog && me.dialog.hide();
-							} else {
-								me.dialog.clear_message();
 							}
 						},
 					});
