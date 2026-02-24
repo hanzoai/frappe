@@ -1909,7 +1909,13 @@ Object.assign(frappe.utils, {
 
 	process_filter_expression(filter) {
 		let filters = [];
-		filters = filter ? new Function(`return ${filter}`)() : [];
+		if (filter) {
+			try {
+				filters = JSON.parse(filter);
+			} catch {
+				console.warn("Invalid JSON in filter expression", filter);
+			}
+		}
 		return this.cleanup_filters(filters);
 	},
 	cleanup_filters(filters) {
