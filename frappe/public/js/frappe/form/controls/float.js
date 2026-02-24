@@ -22,9 +22,9 @@ frappe.ui.form.ControlFloat = class ControlFloat extends frappe.ui.form.ControlI
 			(this.df.fieldtype === "Float" && !this.df.options?.trim())
 		)
 			return;
- 
- 		const currency = frappe.meta.get_field_currency(this.df, this.get_doc());
- 		return get_number_format(currency);
+
+		const currency = frappe.meta.get_field_currency(this.df, this.get_doc());
+		return get_number_format(currency);
 	}
 
 	get_precision() {
