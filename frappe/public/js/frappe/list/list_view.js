@@ -320,9 +320,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		const btnRect = btn[0].getBoundingClientRect();
 		if (btnRect.right > containerRect.right) {
 			const short_label = __("Add");
-			btn.attr("title", add_button_label)
-				.tooltip({ delay: { show: 100, hide: 100 }, trigger: "hover" })
-				.html(`<span class="hidden-xs"> ${short_label} </span>`);
+			btn.attr("title", add_button_label).tooltip({
+				delay: { show: 100, hide: 100 },
+				trigger: "hover",
+			});
+			btn.find("span").text(short_label);
 		}
 	}
 
