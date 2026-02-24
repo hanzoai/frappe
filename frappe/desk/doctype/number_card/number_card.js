@@ -202,7 +202,6 @@ frappe.ui.form.on("Number Card", {
 	render_filters_table: function (frm) {
 		frm.set_df_property("filters_section", "hidden", 0);
 		let is_document_type = frm.doc.type == "Document Type";
-		let is_dynamic_filter = (f) => ["Date", "DateRange"].includes(f.fieldtype) && f.default;
 
 		let wrapper = $(frm.get_field("filters_json").wrapper).empty();
 		let table = $(`<table class="table table-bordered" style="cursor:${
@@ -226,18 +225,6 @@ frappe.ui.form.on("Number Card", {
 
 		let filters = JSON.parse(frm.doc.filters_json || "[]");
 		let filters_set = false;
-
-		// Set dynamic filters for reports
-		if (frm.doc.type == "Report") {
-			let set_filters = false;
-			frm.filters.forEach((f) => {
-				if (is_dynamic_filter(f)) {
-					filters[f.fieldname] = f.default;
-					set_filters = true;
-				}
-			});
-			set_filters && frm.set_value("filters_json", JSON.stringify(filters));
-		}
 
 		let fields = [];
 		if (is_document_type) {
@@ -292,7 +279,7 @@ frappe.ui.form.on("Number Card", {
 			}
 			let dialog = new frappe.ui.Dialog({
 				title: __("Set Filters"),
-				fields: fields.filter((f) => !is_dynamic_filter(f)),
+				fields,
 				primary_action: function () {
 					let values = this.get_values();
 					if (values) {
@@ -406,11 +393,6 @@ frappe.ui.form.on("Number Card", {
 	},
 
 	show_doctype_dynamic_filter_dialog: function (frm) {
-		const dynamic_filters =
-			frm.doc.dynamic_filters_json?.length > 2
-				? JSON.parse(frm.doc.dynamic_filters_json)
-				: [];
-
 		const meta = frappe.get_meta(frm.doc.document_type);
 		const field_options = meta.fields
 			.filter((df) => df.fieldname && !frappe.model.no_value_type.includes(df.fieldtype))
@@ -420,57 +402,22 @@ frappe.ui.form.on("Number Card", {
 			field_options.push({ label: df.label, value: df.fieldname });
 		});
 
-		const dialog = new frappe.ui.Dialog({
-			title: __("Set Dynamic Filters"),
-			fields: [
-				{
-					fieldtype: "HTML",
-					fieldname: "help_text",
-					options: frm.events.get_dynamic_filter_help_text(),
-				},
-				{ fieldtype: "HTML", fieldname: "filter_area" },
-			],
-			size: "large",
-			primary_action: () => {
-				const filters = [];
-				dialog.$wrapper.find(".dynamic-filter-row").each(function () {
-					const field = $(this).find(".filter-field").val();
-					const expression = $(this).find(".filter-expression").val();
-					if (field && expression) {
-						filters.push([frm.doc.document_type, field, "=", expression]);
-					}
-				});
-				dialog.hide();
-				frm.set_value("dynamic_filters_json", JSON.stringify(filters));
-				frm.trigger("set_dynamic_filters_in_table");
-			},
-			primary_action_label: __("Update"),
-		});
-
-		const add_filter_row = frm.events.build_dynamic_filter_interface(
-			dialog.fields_dict.filter_area.$wrapper,
-			field_options,
-			"Field"
-		);
-
-		if (dynamic_filters?.length) {
-			dynamic_filters.forEach((filter) => add_filter_row(filter[1], filter[3]));
-		} else {
-			add_filter_row();
-		}
-
-		dialog.show();
+		frm.events.show_dynamic_filter_dialog_common(frm, field_options);
 	},
 
 	show_report_dynamic_filter_dialog: function (frm) {
+		const field_options = frm.filters
+			.filter((f) => f.fieldname)
+			.map((f) => ({ label: f.label || f.fieldname, value: f.fieldname }));
+
+		frm.events.show_dynamic_filter_dialog_common(frm, field_options);
+	},
+
+	show_dynamic_filter_dialog_common: function (frm, field_options) {
 		const dynamic_filters =
 			frm.doc.dynamic_filters_json?.length > 2
 				? JSON.parse(frm.doc.dynamic_filters_json)
 				: {};
-
-		const field_options = frm.filters
-			.filter((f) => f.fieldname)
-			.map((f) => ({ label: f.label || f.fieldname, value: f.fieldname }));
 
 		const dialog = new frappe.ui.Dialog({
 			title: __("Set Dynamic Filters"),
@@ -501,8 +448,7 @@ frappe.ui.form.on("Number Card", {
 
 		const add_filter_row = frm.events.build_dynamic_filter_interface(
 			dialog.fields_dict.filter_area.$wrapper,
-			field_options,
-			"Filter"
+			field_options
 		);
 
 		if (dynamic_filters && Object.keys(dynamic_filters).length) {
@@ -524,13 +470,13 @@ frappe.ui.form.on("Number Card", {
 		</p>`;
 	},
 
-	build_dynamic_filter_interface: function ($filter_area, field_options, field_label) {
+	build_dynamic_filter_interface: function ($filter_area, field_options) {
 		const filter_html = `
 			<div>
 				<table class="table table-bordered" style="margin-bottom: 12px;">
 					<thead>
 						<tr>
-							<th style="width: 35%">${__(field_label)}</th>
+							<th style="width: 35%">${__("Field")}</th>
 							<th style="width: 60%">${__("Expression")}</th>
 							<th style="width: 5%"></th>
 						</tr>
@@ -595,7 +541,7 @@ frappe.ui.form.on("Number Card", {
 
 	set_dynamic_filters_in_table: function (frm) {
 		frm.dynamic_filters =
-			frm.doc.dynamic_filters_json && frm.doc.dynamic_filters_json.length > 2
+			frm.doc.dynamic_filters_json?.length > 2
 				? JSON.parse(frm.doc.dynamic_filters_json)
 				: null;
 
@@ -605,20 +551,11 @@ frappe.ui.form.on("Number Card", {
 			frm.dynamic_filter_table.find("tbody").html(filter_row);
 		} else {
 			let filter_rows = "";
-			if ($.isArray(frm.dynamic_filters)) {
-				frm.dynamic_filters.forEach((filter) => {
-					filter_rows += `<tr>
-							<td>${filter[1]}</td>
-							<td><code>${filter[3]}</code></td>
-						</tr>`;
-				});
-			} else {
-				for (let [key, val] of Object.entries(frm.dynamic_filters)) {
-					filter_rows += `<tr>
-							<td>${key}</td>
-							<td><code>${val || ""}</code></td>
-						</tr>`;
-				}
+			for (let [key, val] of Object.entries(frm.dynamic_filters)) {
+				filter_rows += `<tr>
+						<td>${key}</td>
+						<td><code>${val || ""}</code></td>
+					</tr>`;
 			}
 
 			frm.dynamic_filter_table.find("tbody").html(filter_rows);
