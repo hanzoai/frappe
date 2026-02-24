@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-01-02 22:45+0000\n"
-"PO-Revision-Date: 2026-02-18 18:58\n"
+"PO-Revision-Date: 2026-02-23 19:59\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -27421,7 +27421,7 @@ msgstr "عمل کننده عالی"
 
 #: frappe/templates/emails/energy_points_summary.html:18
 msgid "Top Reviewer"
-msgstr "داور برتر"
+msgstr "ارزیاب برتر"
 
 #. Option for the 'Position' (Select) field in DocType 'Form Tour Step'
 #. Option for the 'Page Number' (Select) field in DocType 'Print Format'
@@ -28214,7 +28214,7 @@ msgstr "در حال به‌روزرسانی {0} از {1}، {2}"
 
 #: frappe/public/js/billing.bundle.js:131
 msgid "Upgrade plan"
-msgstr "طرح ارتقا"
+msgstr ""
 
 #: frappe/public/js/frappe/list/list_sidebar.js:308
 msgid "Upgrade your support experience with Frappe Helpdesk"
