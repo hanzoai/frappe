@@ -696,9 +696,6 @@ def get_onboarding_data(module: str):
 	item = {
 		"label": _(module),
 		"title": _(onboarding_doc.title),
-		"subtitle": _(onboarding_doc.subtitle),
-		"success": _(onboarding_doc.success_message),
-		"docs_url": onboarding_doc.documentation_url,
 		"items": [],
 	}
 
