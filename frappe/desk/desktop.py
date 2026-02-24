@@ -646,15 +646,7 @@ def prepare_widget(config, doctype, parentfield):
 
 
 @frappe.whitelist()
-<<<<<<< HEAD
-<<<<<<< HEAD
-def update_onboarding_step(name, field, value):
-=======
-def update_onboarding_step(name: str, field: str, value: any):
->>>>>>> c859375d2c (feat: module onboarding)
-=======
 def update_onboarding_step(name: str | int, field: str, value: int | str):
->>>>>>> 97e4e46ec4 (fix: cy test case failing)
 	"""Update status of onboaridng step
 
 	Args:
