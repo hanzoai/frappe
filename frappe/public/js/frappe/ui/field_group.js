@@ -19,7 +19,7 @@ frappe.ui.FieldGroup = class FieldGroup extends frappe.ui.form.Layout {
 	}
 
 	resolve_date_default_keywords(def_value, fieldtype) {
-		if (!def_value) return def_value;
+		if (!def_value || typeof def_value !== "string") return def_value;
 
 		def_value = def_value.toLowerCase();
 
@@ -54,7 +54,9 @@ frappe.ui.FieldGroup = class FieldGroup extends frappe.ui.form.Layout {
 				)
 					return;
 
-				def_value = me.resolve_date_default_keywords(def_value, field.df.fieldtype);
+				if (["Date", "Datetime", "Time"].includes(field.df.fieldtype)) {
+					def_value = me.resolve_date_default_keywords(def_value, field.df.fieldtype);
+				}
 
 				field.set_input(def_value);
 				// if default and has depends_on, render its fields.
