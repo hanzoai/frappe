@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-01-02 22:45+0000\n"
-"PO-Revision-Date: 2026-02-23 19:59\n"
+"PO-Revision-Date: 2026-02-24 19:56\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -6358,7 +6358,7 @@ msgstr "سفارشی‌سازی"
 
 #: frappe/custom/doctype/customize_form/customize_form.js:89
 msgid "Customize Child Table"
-msgstr "سفارشی کردن جدول فرزند"
+msgstr "سفارشی‌سازی جدول فرزند"
 
 #: frappe/public/js/frappe/views/dashboard/dashboard_view.js:38
 msgid "Customize Dashboard"
@@ -6382,7 +6382,7 @@ msgstr "سفارشی‌سازی فرم - {0}"
 #. Name of a DocType
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
 msgid "Customize Form Field"
-msgstr "سفارشی کردن فیلد فرم"
+msgstr "سفارشی‌سازی فیلد فرم"
 
 #. Title of an Onboarding Step
 #: frappe/custom/onboarding_step/print_format/print_format.json
@@ -18323,7 +18323,7 @@ msgstr "راهنما گزینه‌ها"
 
 #: frappe/core/doctype/doctype/doctype.py:1625
 msgid "Options for Rating field can range from 3 to 10"
-msgstr "گزینه‌های فیلد رتبه بندی می‌تواند از 3 تا 10 باشد"
+msgstr "گزینه‌های فیلد رتبه‌بندی می‌تواند از 3 تا 10 باشد"
 
 #: frappe/custom/doctype/custom_field/custom_field.js:96
 msgid "Options for select. Each option on a new line."
