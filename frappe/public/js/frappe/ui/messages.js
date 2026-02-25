@@ -206,7 +206,7 @@ frappe.msgprint = function (msg, title, is_minimizable, re_route) {
 			typeof data.primary_action.server_action === "string"
 		) {
 			data.primary_action.action = () => {
-				frappe.call({
+				return frappe.call({
 					method: data.primary_action.server_action,
 					args: data.primary_action.args,
 					callback() {
