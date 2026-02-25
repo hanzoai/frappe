@@ -2195,8 +2195,6 @@ Object.assign(frappe.utils, {
 		}
 		return links;
 	},
-<<<<<<< HEAD
-=======
 	eval_expression(value, number_format) {
 		if (typeof value === "string") {
 			const parsed_components = value.match(/[^\d.,]+|[\d.,]+/g);
@@ -2232,5 +2230,4 @@ Object.assign(frappe.utils, {
 		}
 		return i === small.length;
 	},
->>>>>>> 85464f7031 (fix: business hours in popup,theme and apps for which to show)
 });
