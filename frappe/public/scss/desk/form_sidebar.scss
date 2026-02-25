@@ -19,7 +19,6 @@
 			justify-content: space-between;
 			flex-wrap: wrap;
 			color: var(--text-light);
-			margin-bottom: 8px;
 
 			.icon {
 				stroke: var(--text-light);
@@ -405,6 +404,7 @@ body[data-route^="Form"] {
 .attachment-row,
 .form-tag-row {
 	margin: 4px 0;
+
 	.data-pill {
 		@include get_textstyle("sm", "regular");
 		justify-content: space-between;
@@ -490,10 +490,29 @@ body[data-route^="Form"] {
 .form-shared {
 	padding: var(--padding-sm) var(--padding-md);
 }
+
+.form-attachments {
+	// to add gap between attachment section label and attachments
+	// without affecting empty state
+	.attachments-actions + .attachment-row {
+		margin-top: 8px;
+	}
+}
+
+.form-tags {
+	// to add gap between tag section label and tags
+	// without affecting empty state
+	:not(.form-tag-row) + .form-tag-row {
+		margin-top: 8px;
+	}
+}
+
 .form-assignments,
 .form-shared {
 	.assignments,
 	.shares {
+		margin-top: 8px;
+
 		.dialog-assignment-row {
 			display: flex;
 			align-items: center;
