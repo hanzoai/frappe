@@ -328,7 +328,7 @@ Object.assign(frappe.utils, {
 			scroll_top =
 				typeof element == "number"
 					? element - cint(additional_offset)
-					: this.get_scroll_position(element, additional_offset);
+					: this.get_scroll_position(element, element_to_be_scrolled, additional_offset);
 		}
 
 		if (scroll_top < 0) {
@@ -366,10 +366,26 @@ Object.assign(frappe.utils, {
 			element_to_be_scrolled.scrollTop(scroll_top);
 		}
 	},
-	get_scroll_position: function (element, additional_offset) {
-		let header_offset =
-			$(".navbar").height() + $(".page-head:visible").height() || $(".navbar").height();
-		return $(element).offset().top - header_offset - cint(additional_offset);
+	get_scroll_position: function (element, element_to_be_scrolled, additional_offset) {
+		function getOffsetRelativeToContainer() {
+			let offset = 0;
+
+			let el = element instanceof HTMLElement ? element : element[0];
+			const container = element_to_be_scrolled ? element_to_be_scrolled[0] : null;
+
+			while (el && el !== container && el.offsetParent) {
+				offset += el.offsetTop;
+				el = el.offsetParent;
+			}
+
+			return offset;
+		}
+
+		const navbar_height = $(".navbar").height() || 0;
+		const page_head_height = $(".page-head:visible").height() || 0;
+		const header_offset = navbar_height + page_head_height;
+		const element_offset_top = getOffsetRelativeToContainer();
+		return element_offset_top - header_offset - cint(additional_offset);
 	},
 	filter_dict: function (dict, filters) {
 		var ret = [];
