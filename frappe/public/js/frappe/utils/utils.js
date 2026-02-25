@@ -328,7 +328,7 @@ Object.assign(frappe.utils, {
 			scroll_top =
 				typeof element == "number"
 					? element - cint(additional_offset)
-					: this.get_scroll_position(element, element_to_be_scrolled, additional_offset);
+					: this.get_scroll_position(element, additional_offset, element_to_be_scrolled);
 		}
 
 		if (scroll_top < 0) {
@@ -366,8 +366,8 @@ Object.assign(frappe.utils, {
 			element_to_be_scrolled.scrollTop(scroll_top);
 		}
 	},
-	get_scroll_position: function (element, element_to_be_scrolled, additional_offset) {
-		function getOffsetRelativeToContainer() {
+	get_scroll_position: function (element, additional_offset, element_to_be_scrolled) {
+		const get_offset_relative_to_container = () => {
 			let offset = 0;
 
 			let el = element instanceof HTMLElement ? element : element[0];
@@ -379,12 +379,19 @@ Object.assign(frappe.utils, {
 			}
 
 			return offset;
-		}
+		};
 
-		const navbar_height = $(".navbar").height() || 0;
-		const page_head_height = $(".page-head:visible").height() || 0;
-		const header_offset = navbar_height + page_head_height;
-		const element_offset_top = getOffsetRelativeToContainer();
+		const get_header_offset = () => {
+			const navbar_height = $(".navbar").height() || 0;
+			const page_head_height = $(".page-head:visible").height() || 0;
+			const tabs_container_height = $(".form-tabs-list:visible").height() || 0;
+
+			return navbar_height + page_head_height + tabs_container_height;
+		};
+
+		const element_offset_top = get_offset_relative_to_container();
+		const header_offset = get_header_offset();
+
 		return element_offset_top - header_offset - cint(additional_offset);
 	},
 	filter_dict: function (dict, filters) {
