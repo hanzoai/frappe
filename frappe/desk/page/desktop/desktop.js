@@ -1086,11 +1086,6 @@ class DesktopIcon {
 			this.folder_grid = new DesktopIconGrid({
 				wrapper: this.folder_wrapper,
 				icons_data: this.child_icons,
-				row_size: 3,
-				page_size: {
-					row: 3,
-					col: 3,
-				},
 				in_folder: true,
 				in_modal: false,
 				no_dragging: true,

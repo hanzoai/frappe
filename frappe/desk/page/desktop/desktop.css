@@ -2,7 +2,7 @@
     --desktop-blur: blur(10.2px);
     --desktop-modal-width: 590px;
     --desktop-modal-height: 450px;
-    --folder-thumbnail-icon-height: 12px;
+    --folder-thumbnail-icon-height: 16px;
     --desktop-icon-dimension: 54px;
     --folder-icon-background-color: var(--surface-gray-1);
     --desktop-modal-radius: 30px;
@@ -368,7 +368,7 @@
   :root {
     --desktop-icon-dimension: 50px;
     --desktop-icon-container: 117px;
-    --folder-thumbnail-icon-height:17px;
+    --folder-thumbnail-icon-height:15px;
   }
 
   .desktop-container {
