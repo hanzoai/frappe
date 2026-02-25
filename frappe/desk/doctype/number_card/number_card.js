@@ -349,11 +349,6 @@ frappe.ui.form.on("Number Card", {
 			);
 		}
 
-		frm.dynamic_filters =
-			frm.doc.dynamic_filters_json && frm.doc.dynamic_filters_json.length > 2
-				? JSON.parse(frm.doc.dynamic_filters_json)
-				: null;
-
 		frm.trigger("set_dynamic_filters_in_table");
 
 		frm.dynamic_filter_table.on("click", () => {
@@ -413,11 +408,27 @@ frappe.ui.form.on("Number Card", {
 		frm.events.show_dynamic_filter_dialog_common(frm, field_options);
 	},
 
+	convert_legacy_dynamic_filters: function (dynamic_filters) {
+		if (Array.isArray(dynamic_filters)) {
+			const converted = {};
+			dynamic_filters.forEach((filter) => {
+				if (filter.length >= 4) {
+					// Old format: [doctype, fieldname, operator, expression]
+					converted[filter[1]] = filter[3];
+				}
+			});
+			return converted;
+		}
+		return dynamic_filters;
+	},
+
 	show_dynamic_filter_dialog_common: function (frm, field_options) {
-		const dynamic_filters =
+		let dynamic_filters =
 			frm.doc.dynamic_filters_json?.length > 2
 				? JSON.parse(frm.doc.dynamic_filters_json)
 				: {};
+
+		dynamic_filters = frm.events.convert_legacy_dynamic_filters(dynamic_filters);
 
 		const dialog = new frappe.ui.Dialog({
 			title: __("Set Dynamic Filters"),
@@ -511,8 +522,7 @@ frappe.ui.form.on("Number Card", {
 						</select>
 					</td>
 					<td>
-						<input type="text" class="form-control input-xs filter-expression"
-							value="${expression}">
+						<input type="text" class="form-control input-xs filter-expression">
 					</td>
 					<td class="text-center">
 						<a class="remove-filter text-muted" style="cursor: pointer;">
@@ -524,7 +534,9 @@ frappe.ui.form.on("Number Card", {
 				</tr>
 			`;
 
-			$filter_area.find(".filter-rows").append(row_html);
+			const $row = $(row_html);
+			$row.find(".filter-expression").val(expression);
+			$filter_area.find(".filter-rows").append($row);
 		};
 
 		$filter_area.on("click", ".add-filter", () => add_filter_row());
@@ -540,18 +552,20 @@ frappe.ui.form.on("Number Card", {
 	},
 
 	set_dynamic_filters_in_table: function (frm) {
-		frm.dynamic_filters =
+		let dynamic_filters =
 			frm.doc.dynamic_filters_json?.length > 2
 				? JSON.parse(frm.doc.dynamic_filters_json)
 				: null;
 
-		if (!frm.dynamic_filters || Object.keys(frm.dynamic_filters).length === 0) {
+		dynamic_filters = frm.events.convert_legacy_dynamic_filters(dynamic_filters);
+
+		if (!dynamic_filters || Object.keys(dynamic_filters).length === 0) {
 			const filter_row = $(`<tr><td colspan="2" class="text-muted text-center">
 				${__("Click to Set Dynamic Filters")}</td></tr>`);
 			frm.dynamic_filter_table.find("tbody").html(filter_row);
 		} else {
 			let filter_rows = "";
-			for (let [key, val] of Object.entries(frm.dynamic_filters)) {
+			for (let [key, val] of Object.entries(dynamic_filters)) {
 				filter_rows += `<tr>
 						<td>${key}</td>
 						<td><code>${val || ""}</code></td>

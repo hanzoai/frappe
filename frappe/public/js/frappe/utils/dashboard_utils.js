@@ -132,18 +132,27 @@ frappe.dashboard_utils = {
 
 	remove_common_static_filter_values(static_filters, dynamic_filters) {
 		if (dynamic_filters) {
-			if ($.isArray(static_filters)) {
-				static_filters = static_filters.filter((static_filter) => {
-					for (let dynamic_filter of dynamic_filters) {
-						if (
-							static_filter[0] == dynamic_filter[0] &&
-							static_filter[1] == dynamic_filter[1]
-						) {
-							return false;
+			if (Array.isArray(static_filters)) {
+				if (Array.isArray(dynamic_filters)) {
+					static_filters = static_filters.filter((static_filter) => {
+						for (let dynamic_filter of dynamic_filters) {
+							if (
+								static_filter[0] == dynamic_filter[0] &&
+								static_filter[1] == dynamic_filter[1]
+							) {
+								return false;
+							}
 						}
-					}
-					return true;
-				});
+						return true;
+					});
+				} else {
+					static_filters = static_filters.filter((static_filter) => {
+						return !Object.prototype.hasOwnProperty.call(
+							dynamic_filters,
+							static_filter[1]
+						);
+					});
+				}
 			} else {
 				for (let key of Object.keys(dynamic_filters)) {
 					delete static_filters[key];
