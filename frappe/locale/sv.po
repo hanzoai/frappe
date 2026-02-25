@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-01-02 22:45+0000\n"
-"PO-Revision-Date: 2026-02-05 16:35\n"
+"PO-Revision-Date: 2026-02-23 19:58\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -2786,7 +2786,7 @@ msgstr "Uppgift Klar"
 #. Label of a Table field in DocType 'Assignment Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
 msgid "Assignment Days"
-msgstr "Uppgift Dagar"
+msgstr "Automation Dagar"
 
 #. Name of a DocType
 #. Label of a Link in the Tools Workspace
@@ -2797,17 +2797,17 @@ msgstr "Uppgift Dagar"
 #: frappe/automation/workspace/tools/tools.json
 #: frappe/core/doctype/doctype/doctype.json frappe/desk/doctype/todo/todo.json
 msgid "Assignment Rule"
-msgstr "Tilldelning Regel"
+msgstr "Automation Regel"
 
 #. Name of a DocType
 #: frappe/automation/doctype/assignment_rule_day/assignment_rule_day.json
 msgid "Assignment Rule Day"
-msgstr "Tilldelning Regel Dag"
+msgstr "Automation Regel Dag"
 
 #. Name of a DocType
 #: frappe/automation/doctype/assignment_rule_user/assignment_rule_user.json
 msgid "Assignment Rule User"
-msgstr "Tilldelning Regel Användare"
+msgstr "Automation Regel Användare"
 
 #: frappe/automation/doctype/assignment_rule/assignment_rule.py:55
 msgid "Assignment Rule is not allowed on document type {0}"
@@ -2816,7 +2816,7 @@ msgstr "Tilldelning Regel är ej tillåten på dokument typ {0}"
 #. Label of a Section Break field in DocType 'Assignment Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
 msgid "Assignment Rules"
-msgstr "Tilldelning Regler"
+msgstr "Automation Regler"
 
 #: frappe/desk/doctype/notification_log/notification_log.py:158
 msgid "Assignment Update on {0}"
@@ -14161,7 +14161,7 @@ msgstr "Anslag Tavla"
 #: frappe/desk/doctype/workspace_shortcut/workspace_shortcut.json
 #: frappe/public/js/frappe/widgets/widget_dialog.js:488
 msgid "Kanban Board"
-msgstr "Anslag Tavla"
+msgstr "Anslagstavla"
 
 #. Name of a DocType
 #: frappe/desk/doctype/kanban_board_column/kanban_board_column.json
@@ -22225,7 +22225,7 @@ msgstr "Recension Poäng "
 
 #: frappe/public/js/frappe/form/templates/form_sidebar.html:87
 msgid "Reviews"
-msgstr "Recension "
+msgstr "Recensioner"
 
 #. Label of a Data field in DocType 'Connected App'
 #: frappe/integrations/doctype/connected_app/connected_app.json
@@ -23223,7 +23223,7 @@ msgstr "Visa alla tidigare rapporter."
 #: frappe/public/js/frappe/form/form.js:1158
 #: frappe/website/doctype/contact_us_settings/contact_us_settings.js:4
 msgid "See on Website"
-msgstr "Visapå Webbplats"
+msgstr "Visa på Webbplats"
 
 #: frappe/website/doctype/web_form/templates/web_form.html:157
 msgctxt "Button in web form"

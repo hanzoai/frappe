@@ -87,6 +87,7 @@ controllers = {}
 local = Local()
 cache = None
 STANDARD_USERS = ("Guest", "Administrator")
+SITE_NAME_PATTERN = re.compile(r"^[a-zA-Z0-9._-]+$")
 
 _one_time_setup = {}
 _dev_server = int(sbool(os.environ.get("DEV_SERVER", False)))
@@ -193,6 +194,9 @@ def init(site: str, sites_path: str = ".", new_site: bool = False, force=False) 
 	"""Initialize frappe for the current site. Reset thread locals `frappe.local`"""
 	if getattr(local, "initialised", None) and not force:
 		return
+
+	if site and not SITE_NAME_PATTERN.match(site):
+		raise ValueError(f"Invalid site name `{site}`")
 
 	local.error_log = []
 	local.message_log = []
@@ -2147,6 +2151,9 @@ def attach_print(
 
 	print_settings = db.get_singles_dict("Print Settings")
 
+	if print_letterhead and not letterhead:
+		letterhead = get_cached_value("Letter Head", {"is_default": 1}, "name")
+
 	kwargs = dict(
 		print_format=print_format,
 		style=style,
@@ -2158,16 +2165,27 @@ def attach_print(
 
 	local.flags.ignore_print_permissions = True
 
+	is_weasyprint_print_format = False
+	if print_format and print_format != "Standard":
+		print_format_doc = get_cached_doc("Print Format", print_format)
+		is_weasyprint_print_format = print_format_doc.get("print_format_builder_beta")
+
 	with print_language(lang or local.lang):
 		content = ""
 		if cint(print_settings.send_print_as_pdf):
 			ext = ".pdf"
-			kwargs["as_pdf"] = True
-			content = (
-				get_pdf(html, options={"password": password} if password else None)
-				if html
-				else get_print(doctype, name, **kwargs)
-			)
+			if html:
+				content = get_pdf(html, options={"password": password} if password else None)
+			elif is_weasyprint_print_format:
+				from frappe.utils.weasyprint import PrintFormatGenerator
+
+				doc_obj = doc or get_cached_doc(doctype, name)
+				letterhead_name = letterhead if print_letterhead else None
+				generator = PrintFormatGenerator(print_format, doc_obj, letterhead_name)
+				content = generator.render_pdf()
+			else:
+				kwargs["as_pdf"] = True
+				content = get_print(doctype, name, **kwargs)
 		else:
 			ext = ".html"
 			content = html or scrub_urls(get_print(doctype, name, **kwargs)).encode("utf-8")

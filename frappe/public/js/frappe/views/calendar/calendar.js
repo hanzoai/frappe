@@ -254,11 +254,14 @@ frappe.views.Calendar = class Calendar {
 		defaults.meridiem = "false";
 		this.cal_options = {
 			locale: frappe.boot.lang,
-			header: {
-				left: "prev, title, next",
-				right: "today, month, agendaWeek, agendaDay",
-			},
 			eventTimeFormat: event_time_fmt,
+			firstDay: frappe.datetime.get_first_day_of_the_week_index(),
+			eventDisplay: "block",
+			header: {
+				left: "prev,title,next",
+				center: "",
+				right: "today,month,agendaWeek,agendaDay",
+			},
 			editable: true,
 			selectable: true,
 			selectHelper: true,

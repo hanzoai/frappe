@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-01-02 22:45+0000\n"
-"PO-Revision-Date: 2026-02-15 18:32\n"
+"PO-Revision-Date: 2026-02-24 19:56\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
@@ -4319,7 +4319,7 @@ msgstr "نمی‌توان فیلدهای استاندارد را ویرایش ک
 
 #: frappe/automation/doctype/auto_repeat/auto_repeat.py:126
 msgid "Cannot enable {0} for a non-submittable doctype"
-msgstr "نمی‌توان {0} را برای یک نوع سند غیر قابل ارسال فعال کرد"
+msgstr "نمی‌توان {0} را برای یک نوع سند غیرقابل ارسال فعال کرد"
 
 #: frappe/core/doctype/file/file.py:255
 msgid "Cannot find file {} on disk"
@@ -6358,7 +6358,7 @@ msgstr "سفارشی‌سازی"
 
 #: frappe/custom/doctype/customize_form/customize_form.js:89
 msgid "Customize Child Table"
-msgstr "سفارشی کردن جدول فرزند"
+msgstr "سفارشی‌سازی جدول فرزند"
 
 #: frappe/public/js/frappe/views/dashboard/dashboard_view.js:38
 msgid "Customize Dashboard"
@@ -6382,7 +6382,7 @@ msgstr "سفارشی‌سازی فرم - {0}"
 #. Name of a DocType
 #: frappe/custom/doctype/customize_form_field/customize_form_field.json
 msgid "Customize Form Field"
-msgstr "سفارشی کردن فیلد فرم"
+msgstr "سفارشی‌سازی فیلد فرم"
 
 #. Title of an Onboarding Step
 #: frappe/custom/onboarding_step/print_format/print_format.json
@@ -7157,7 +7157,7 @@ msgstr "نام حذف شده"
 
 #: frappe/desk/reportview.py:612
 msgid "Deleted all documents successfully"
-msgstr "تمام اسناد با موفقیت حذف شد"
+msgstr ""
 
 #: frappe/public/js/frappe/web_form/web_form.js:211
 msgid "Deleted!"
@@ -18323,7 +18323,7 @@ msgstr "راهنما گزینه‌ها"
 
 #: frappe/core/doctype/doctype/doctype.py:1625
 msgid "Options for Rating field can range from 3 to 10"
-msgstr "گزینه‌های فیلد رتبه بندی می‌تواند از 3 تا 10 باشد"
+msgstr "گزینه‌های فیلد رتبه‌بندی می‌تواند از 3 تا 10 باشد"
 
 #: frappe/custom/doctype/custom_field/custom_field.js:96
 msgid "Options for select. Each option on a new line."
@@ -22971,7 +22971,7 @@ msgstr "جستجو یا تایپ یک فرمان ({0})"
 
 #: frappe/public/js/form_builder/components/SearchBox.vue:8
 msgid "Search properties..."
-msgstr ""
+msgstr "جستجوی ویژگی‌ها..."
 
 #: frappe/templates/includes/search_box.html:8
 msgid "Search results for"
@@ -27421,7 +27421,7 @@ msgstr "عمل کننده عالی"
 
 #: frappe/templates/emails/energy_points_summary.html:18
 msgid "Top Reviewer"
-msgstr "داور برتر"
+msgstr "ارزیاب برتر"
 
 #. Option for the 'Position' (Select) field in DocType 'Form Tour Step'
 #. Option for the 'Page Number' (Select) field in DocType 'Print Format'
@@ -28214,7 +28214,7 @@ msgstr "در حال به‌روزرسانی {0} از {1}، {2}"
 
 #: frappe/public/js/billing.bundle.js:131
 msgid "Upgrade plan"
-msgstr "طرح ارتقا"
+msgstr ""
 
 #: frappe/public/js/frappe/list/list_sidebar.js:308
 msgid "Upgrade your support experience with Frappe Helpdesk"
