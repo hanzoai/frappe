@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-02-22 09:42+0000\n"
-"PO-Revision-Date: 2026-02-23 22:07\n"
+"PO-Revision-Date: 2026-02-25 23:14\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -2868,7 +2868,7 @@ msgstr "Tilldelning Klar"
 #. Label of the assignment_days (Table) field in DocType 'Assignment Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
 msgid "Assignment Days"
-msgstr "Automation Dagar"
+msgstr "Tilldelning Dagar"
 
 #. Name of a DocType
 #. Label of the assignment_rule (Link) field in DocType 'ToDo'
@@ -2876,7 +2876,7 @@ msgstr "Automation Dagar"
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
 #: frappe/desk/doctype/todo/todo.json frappe/workspace_sidebar/automation.json
 msgid "Assignment Rule"
-msgstr "Automation Regel"
+msgstr "Tilldelning Regel"
 
 #. Name of a DocType
 #: frappe/automation/doctype/assignment_rule_day/assignment_rule_day.json
@@ -2890,13 +2890,13 @@ msgstr "Automation Regel Användare"
 
 #: frappe/automation/doctype/assignment_rule/assignment_rule.py:55
 msgid "Assignment Rule is not allowed on document type {0}"
-msgstr "Automation Regel är ej tillåten på dokument typ {0}"
+msgstr "Tilldelning Regel är ej tillåten på dokument typ {0}"
 
 #. Label of the assignment_rules_section (Section Break) field in DocType
 #. 'Assignment Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
 msgid "Assignment Rules"
-msgstr "Automation Regler"
+msgstr "Tilldelning Regler"
 
 #: frappe/desk/doctype/notification_log/notification_log.py:153
 msgid "Assignment Update on {0}"
