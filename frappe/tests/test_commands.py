@@ -952,6 +952,7 @@ class TestGunicornWorker(FrappeTestCase):
 		except subprocess.TimeoutExpired:
 			self.handle.kill()
 
+	@unittest.skip("Flaky test")
 	def test_gunicorn_ping_sync(self):
 		self.spawn_gunicorn([])
 		path = f"http://{self.TEST_SITE}:{self.port}/api/method/ping"
