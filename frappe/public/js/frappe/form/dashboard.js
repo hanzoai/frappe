@@ -417,10 +417,14 @@ frappe.ui.form.Dashboard = class FormDashboard {
 	}
 
 	set_open_count() {
+		const has_fieldname =
+			this.data.fieldname ||
+			(this.data.transactions && this.data.transactions.some((group) => group.fieldnames));
+
 		if (
 			!this.data ||
 			!this.data.transactions ||
-			!this.data.fieldname ||
+			!has_fieldname ||
 			this.frm.is_new() ||
 			this._fetched_counts
 		) {
