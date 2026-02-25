@@ -127,12 +127,12 @@
   {
    "fieldname": "image_height",
    "fieldtype": "Float",
-   "label": "Image Height"
+   "label": "Image Height (px)"
   },
   {
    "fieldname": "image_width",
    "fieldtype": "Float",
-   "label": "Image Width"
+   "label": "Image Width (px)"
   },
   {
    "depends_on": "eval:doc.footer_source==='Image' && doc.letter_head_name",
@@ -148,12 +148,12 @@
   {
    "fieldname": "footer_image_height",
    "fieldtype": "Float",
-   "label": "Image Height"
+   "label": "Image Height (px)"
   },
   {
    "fieldname": "footer_image_width",
    "fieldtype": "Float",
-   "label": "Image Width"
+   "label": "Image Width (px)"
   },
   {
    "fieldname": "footer_align",
@@ -203,7 +203,7 @@
  "links": [],
  "make_attachments_public": 1,
  "max_attachments": 3,
- "modified": "2026-02-24 20:53:14.297567",
+ "modified": "2026-02-25 14:37:56.061516",
  "modified_by": "Administrator",
  "module": "Printing",
  "name": "Letter Head",
