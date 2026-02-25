@@ -428,10 +428,11 @@ frappe.ui.form.on("Number Card", {
 			primary_action: () => {
 				const filters = [];
 				dialog.$wrapper.find(".dynamic-filter-row").each(function () {
-					const field = $(this).find(".filter-field").val();
-					const expression = $(this).find(".filter-expression").val();
-					if (field && expression) {
-						filters.push([doctype_or_report, field, "=", expression]);
+					const $row = $(this);
+					const fieldname = $row.data("selected_fieldname");
+					const expression = $row.find(".filter-expression").val();
+					if (fieldname && expression) {
+						filters.push([doctype_or_report, fieldname, "=", expression]);
 					}
 				});
 				dialog.hide();
@@ -443,7 +444,8 @@ frappe.ui.form.on("Number Card", {
 
 		const add_filter_row = frm.events.build_dynamic_filter_interface(
 			dialog.fields_dict.filter_area.$wrapper,
-			field_options
+			field_options,
+			doctype_or_report
 		);
 
 		if (dynamic_filters?.length) {
@@ -465,7 +467,7 @@ frappe.ui.form.on("Number Card", {
 		</p>`;
 	},
 
-	build_dynamic_filter_interface: function ($filter_area, field_options) {
+	build_dynamic_filter_interface: function ($filter_area, field_options, doctype_or_report) {
 		const filter_html = `
 			<div>
 				<table class="table table-bordered" style="margin-bottom: 12px;">
@@ -491,20 +493,16 @@ frappe.ui.form.on("Number Card", {
 
 		$filter_area.html(filter_html);
 
-		const add_filter_row = (field = "", expression = "") => {
-			let options_html = '<option value=""></option>';
-			field_options.forEach((opt) => {
-				const selected = opt.value === field ? "selected" : "";
-				options_html += `<option value="${opt.value}" ${selected}>${opt.label}</option>`;
-			});
+		const filter_fields = field_options.map((opt) => ({
+			fieldname: opt.value,
+			label: opt.label,
+			parent: doctype_or_report,
+		}));
 
+		const add_filter_row = (fieldname = "", expression = "") => {
 			const row_html = `
 				<tr class="dynamic-filter-row">
-					<td>
-						<select class="form-control input-xs filter-field">
-							${options_html}
-						</select>
-					</td>
+					<td class="fieldname-select-area"></td>
 					<td>
 						<input type="text" class="form-control input-xs filter-expression">
 					</td>
@@ -519,7 +517,24 @@ frappe.ui.form.on("Number Card", {
 			`;
 
 			const $row = $(row_html);
+
+			const field_select = new frappe.ui.FieldSelect({
+				parent: $row.find(".fieldname-select-area"),
+				doctype: doctype_or_report,
+				filter_fields: filter_fields,
+				input_class: "input-xs",
+				select: (_, selected_fieldname) => {
+					$row.data("selected_fieldname", selected_fieldname);
+				},
+			});
+
+			if (fieldname) {
+				field_select.set_value(doctype_or_report, fieldname);
+				$row.data("selected_fieldname", fieldname);
+			}
+
 			$row.find(".filter-expression").val(expression);
+			$row.data("field_select", field_select);
 			$filter_area.find(".filter-rows").append($row);
 		};
 
