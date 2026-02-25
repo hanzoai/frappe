@@ -43,6 +43,13 @@ frappe.ui.form.on("File", {
 		if (!frappe.utils.can_upload_public_files() && frm.doc.is_private) {
 			frm.set_df_property("is_private", "read_only", 1);
 		}
+
+		if (frm.doc.attached_to_name) {
+			const field = frm.get_field("attached_to_name");
+			field.$input_wrapper
+				.find(".control-value")
+				.html(`${frappe.utils.get_form_link(frm.doctype, frm.docname, true)}`);
+		}
 	},
 
 	preview_file: function (frm) {
