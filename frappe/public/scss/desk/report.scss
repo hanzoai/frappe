@@ -93,6 +93,41 @@
 		border-radius: var(--border-radius);
 	}
 }
+
+.report-view {
+	.layout-main-section {
+		height: calc(100vh - var(--page-head-height));
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+
+		.page-form {
+			flex-shrink: 0;
+		}
+
+		.frappe-list {
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+			overflow: hidden;
+
+			.result,
+			.no-result {
+				flex-grow: 1;
+				overflow: auto;
+			}
+
+			.comparison-message {
+				margin: 4px 0px;
+			}
+
+			.no-result + .comparison-message {
+				display: none;
+			}
+		}
+	}
+}
+
 @include media-breakpoint-up(sm) {
 	.report-view {
 		width: calc(100% - 220px);
