@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-02-22 09:42+0000\n"
-"PO-Revision-Date: 2026-02-23 22:07\n"
+"PO-Revision-Date: 2026-02-25 23:15\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Bosnian\n"
 "MIME-Version: 1.0\n"
@@ -2870,7 +2870,7 @@ msgstr "Dodjela je Završena"
 #. Label of the assignment_days (Table) field in DocType 'Assignment Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
 msgid "Assignment Days"
-msgstr "Dani Dodjeljivanja"
+msgstr "Dani Dodjele"
 
 #. Name of a DocType
 #. Label of the assignment_rule (Link) field in DocType 'ToDo'
@@ -2888,7 +2888,7 @@ msgstr "Dan Dodjele Pravila"
 #. Name of a DocType
 #: frappe/automation/doctype/assignment_rule_user/assignment_rule_user.json
 msgid "Assignment Rule User"
-msgstr "Korisnik Dodjele Pravila"
+msgstr "Korisnik Pravila Dodjele"
 
 #: frappe/automation/doctype/assignment_rule/assignment_rule.py:55
 msgid "Assignment Rule is not allowed on document type {0}"
