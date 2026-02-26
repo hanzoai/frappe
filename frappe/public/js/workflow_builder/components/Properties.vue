@@ -8,12 +8,10 @@ let title = ref("Workflow Details");
 
 watch(
 	() => store.workflow_doc?.document_type,
-	async (newDocType, oldDocType) => {
+	async (newDocType) => {
 		if (!newDocType) return;
 		await store.update_is_submittable();
-		if (newDocType !== oldDocType) {
-			store.reset_non_submittable_states();
-		}
+		store.reset_non_submittable_states();
 	}
 );
 
