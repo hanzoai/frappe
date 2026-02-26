@@ -2109,7 +2109,7 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 							},
 						],
 						primary_action: (values) => {
-							frappe.call({
+							return frappe.call({
 								method: "frappe.desk.query_report.save_report",
 								args: {
 									reference_report: this.report_name,
