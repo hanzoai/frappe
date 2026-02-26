@@ -92,13 +92,10 @@
     margin: 0px;
     height: 100%;
     overflow: auto;
-<<<<<<< HEAD
-=======
 }
 
 .folder-icon .icons-container {
     overflow: hidden;
->>>>>>> cf2ec23f27 (fix: cannot scroll in folders)
 }
 
 .icons{
