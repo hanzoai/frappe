@@ -751,7 +751,10 @@ class InboundMail(Email):
 			return
 
 		return Communication.find_one_by_filters(
-			message_id=self.message_id, sent_or_received="Received", order_by="creation DESC"
+			message_id=self.message_id,
+			email_account=self.email_account.name,
+			sent_or_received="Received",
+			order_by="creation DESC",
 		)
 
 	def is_sender_same_as_receiver(self):
