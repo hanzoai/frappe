@@ -62,6 +62,7 @@ frappe.views.CommunicationComposer = class {
 			{
 				fieldtype: "Button",
 				label: frappe.utils.icon("down", "xs"),
+				title: __("More Options"),
 				fieldname: "option_toggle_button",
 				click: () => {
 					this.toggle_more_options();
@@ -496,7 +497,11 @@ frappe.views.CommunicationComposer = class {
 			},
 		];
 
-		frappe.utils.add_select_group_button(clear_and_add_template, email_template_actions);
+		frappe.utils.add_select_group_button(
+			clear_and_add_template,
+			email_template_actions,
+			"btn-default"
+		);
 		$(fields.use_html.wrapper).addClass("mt-2 text-center").appendTo(clear_and_add_template);
 	}
 
