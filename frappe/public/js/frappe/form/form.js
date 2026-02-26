@@ -782,6 +782,7 @@ frappe.ui.form.Form = class FrappeForm {
 		this.show_submit_message();
 		this.clear_custom_buttons();
 		this.show_web_link();
+		this.show_report_bug_link();
 		this.show_workflow_read_only_banner();
 	}
 
@@ -1279,6 +1280,17 @@ frappe.ui.form.Form = class FrappeForm {
 		}
 	}
 
+	show_report_bug_link() {
+		if (this.meta.beta) {
+			this.add_web_link(
+				"https://github.com/frappe/" +
+					frappe.boot.module_app[frappe.scrub(this.meta.module)] +
+					"/issues/new",
+				__("Report bug")
+			);
+		}
+	}
+
 	add_web_link(path, label) {
 		label = __(label) || __("See on Website");
 		this.web_link = this.sidebar
@@ -1561,15 +1573,10 @@ frappe.ui.form.Form = class FrappeForm {
 			var scroll_to = frappe.route_options.scroll_to;
 			delete frappe.route_options.scroll_to;
 
-			var selector = [];
-			for (var key in scroll_to) {
-				var value = scroll_to[key];
-				selector.push(repl('[data-%(key)s="%(value)s"]', { key: key, value: value }));
-			}
-
-			selector = $(selector.join(" "));
-			if (selector.length) {
-				frappe.utils.scroll_to(selector);
+			if (this.scroll_to_field(scroll_to)) {
+				const url = new URL(window.location);
+				url.searchParams.delete("scroll_to");
+				history.replaceState(null, null, url);
 			}
 		} else if (window.location.hash) {
 			if ($(window.location.hash).length) {
