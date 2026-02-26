@@ -2252,4 +2252,16 @@ Object.assign(frappe.utils, {
 		}
 		return value;
 	},
+	get_installed_apps() {
+		return frappe.boot.app_data.map((app) => {
+			return app.app_name;
+		});
+	},
+	is_sub_array(big, small) {
+		let i = 0;
+		for (let num of big) {
+			if (num === small[i]) i++;
+		}
+		return i === small.length;
+	},
 });
