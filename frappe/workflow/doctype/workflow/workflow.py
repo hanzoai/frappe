@@ -95,7 +95,7 @@ class Workflow(Document):
 
 		if not is_submittable:
 			for state in self.states:
-				if cint(state.doc_status or 0) != 0:
+				if cint(state.doc_status) != 0:
 					frappe.throw(
 						frappe._(
 							"Workflow State '{0}' has Document Status {1}, but DocType '{2}' is not submittable. "
@@ -106,8 +106,8 @@ class Workflow(Document):
 		for t in self.transitions:
 			state = get_state(t.state)
 			next_state = get_state(t.next_state)
-			state_docstatus = cint(state.doc_status or 0)
-			next_state_docstatus = cint(next_state.doc_status or 0)
+			state_docstatus = cint(state.doc_status)
+			next_state_docstatus = cint(next_state.doc_status)
 
 			if state_docstatus == 2:
 				frappe.throw(

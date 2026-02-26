@@ -128,14 +128,24 @@ frappe.ui.form.on("Workflow", {
 			);
 
 			if (!is_submittable) {
-				let changed = false;
+				let affected_states = [];
 				frm.doc.states.forEach((row) => {
 					if (parseInt(row.doc_status || 0) !== 0) {
+						affected_states.push(row.state || __("Unnamed State"));
 						row.doc_status = "0";
-						changed = true;
 					}
 				});
-				if (changed) frm.refresh_field("states");
+				if (affected_states.length) {
+					frm.refresh_field("states");
+					frappe.msgprint({
+						title: __("Doc Status Reset"),
+						message: __(
+							"The <b>Doc Status</b> for the following states has been reset to <b>Draft</b> because the selected DocType is not submittable: <b>{0}</b>",
+							[affected_states.join(", ")]
+						),
+						indicator: "orange",
+					});
+				}
 			}
 		});
 	},
