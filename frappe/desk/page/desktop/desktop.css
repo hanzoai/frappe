@@ -87,12 +87,17 @@
     }
 }
 .modal
-.modal-body .icons-container,.folder-icon .icons-container {
+.modal-body .icons-container, .folder-icon .icons-container {
     padding:0px;
     margin: 0px;
     height: 100%;
     overflow: hidden;
 }
+
+.folder-icon .icons-container {
+    overflow: hidden;
+}
+
 .icons{
 	gap: 16px;
 	display: grid;
