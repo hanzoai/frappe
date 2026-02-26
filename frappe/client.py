@@ -465,7 +465,7 @@ def validate_link_and_fetch(
 	)
 
 	if not search_result:
-		return {}  # does not exist or filtered out
+		return {}
 
 	values = None
 	is_virtual_dt = bool(meta.get("is_virtual"))
