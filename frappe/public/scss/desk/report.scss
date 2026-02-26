@@ -118,10 +118,6 @@
 			}
 
 			.comparison-message {
-				margin: 4px 0px;
-			}
-
-			.no-result + .comparison-message {
 				display: none;
 			}
 		}
@@ -162,6 +158,36 @@
 }
 .comparison-message {
 	@include get_textstyle("base", "regular");
+}
+
+.report-view {
+	.datatable .dt-row-filter .dt-cell__content {
+		position: relative;
+	}
+
+	.datatable .dt-row-filter .dt-filter.dt-input {
+		padding-inline-end: 1.5rem;
+	}
+
+	.datatable .dt-row-filter .comparison-help-icon {
+		position: absolute;
+		top: 50%;
+		right: 10px;
+		transform: translateY(-50%);
+		display: inline-flex;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.15s ease;
+
+		.icon {
+			stroke: currentColor;
+		}
+	}
+
+	.datatable .dt-row-filter .dt-filter.dt-input:focus + .comparison-help-icon {
+		opacity: 1;
+		pointer-events: auto;
+	}
 }
 
 .list-count {
