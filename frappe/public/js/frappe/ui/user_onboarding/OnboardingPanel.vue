@@ -306,7 +306,7 @@ function markReset(step) {
 							</div>
 							<div v-else>
 								<span
-									class="text-base onb-step-text"
+									class="text-base onb-step-text text-extra-muted"
 									style="text-decoration-line: line-through"
 								>
 									{{ __(step.action_label) }}
