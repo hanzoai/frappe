@@ -1575,7 +1575,8 @@ Object.assign(frappe.utils, {
 				if (item.is_query_report) {
 					route = "query-report/" + item.name;
 				} else if (!item.is_query_report && item.report_ref_doctype) {
-					route = frappe.router.slug(item.report_ref_doctype) + "/view/report/";
+					route =
+						frappe.router.slug(item.report_ref_doctype) + "/view/report/" + item.name;
 				} else {
 					route = "report/" + item.name;
 				}
@@ -1583,6 +1584,12 @@ Object.assign(frappe.utils, {
 				route = item.name;
 			} else if (type === "dashboard") {
 				route = `dashboard-view/${item.name}`;
+			} else if (type == "workspace") {
+				if (item.public) {
+					route = frappe.router.slug(item.name);
+				} else {
+					route = "private/" + frappe.router.slug(item.name);
+				}
 			}
 		} else {
 			route = item.route;
@@ -1903,7 +1910,13 @@ Object.assign(frappe.utils, {
 
 	process_filter_expression(filter) {
 		let filters = [];
-		filters = filter ? new Function(`return ${filter}`)() : [];
+		if (filter) {
+			try {
+				filters = JSON.parse(filter);
+			} catch {
+				console.warn("Invalid JSON in filter expression", filter);
+			}
+		}
 		return this.cleanup_filters(filters);
 	},
 	cleanup_filters(filters) {
@@ -2193,14 +2206,14 @@ Object.assign(frappe.utils, {
 		}
 		return links;
 	},
-	eval_expression(value) {
+	eval_expression(value, number_format) {
 		if (typeof value === "string") {
 			const parsed_components = value.match(/[^\d.,]+|[\d.,]+/g);
 			var parsed_value = value;
 			if (parsed_components !== null) {
 				parsed_value = parsed_components
 					.map((v) => {
-						return isNaN(parseFloat(v)) ? v : flt(v);
+						return isNaN(parseFloat(v)) ? v : flt(v, null, number_format);
 					})
 					.join("");
 			}
@@ -2215,5 +2228,17 @@ Object.assign(frappe.utils, {
 			}
 		}
 		return value;
+	},
+	get_installed_apps() {
+		return frappe.boot.app_data.map((app) => {
+			return app.app_name;
+		});
+	},
+	is_sub_array(big, small) {
+		let i = 0;
+		for (let num of big) {
+			if (num === small[i]) i++;
+		}
+		return i === small.length;
 	},
 });
