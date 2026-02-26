@@ -2195,4 +2195,39 @@ Object.assign(frappe.utils, {
 		}
 		return links;
 	},
+	eval_expression(value, number_format) {
+		if (typeof value === "string") {
+			const parsed_components = value.match(/[^\d.,]+|[\d.,]+/g);
+			var parsed_value = value;
+			if (parsed_components !== null) {
+				parsed_value = parsed_components
+					.map((v) => {
+						return isNaN(parseFloat(v)) ? v : flt(v, null, number_format);
+					})
+					.join("");
+			}
+			if (parsed_value.match(/^[0-9+\-/*.() ]+$/)) {
+				// If it is a string containing operators
+				try {
+					return (0, eval)(parsed_value);
+				} catch (e) {
+					// bad expression
+					return value;
+				}
+			}
+		}
+		return value;
+	},
+	get_installed_apps() {
+		return frappe.boot.app_data.map((app) => {
+			return app.app_name;
+		});
+	},
+	is_sub_array(big, small) {
+		let i = 0;
+		for (let num of big) {
+			if (num === small[i]) i++;
+		}
+		return i === small.length;
+	},
 });
