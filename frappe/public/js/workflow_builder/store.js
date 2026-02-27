@@ -152,15 +152,15 @@ export const useStore = defineStore("workflow-builder-store", () => {
 	function reset_non_submittable_states() {
 		if (is_submittable.value) return;
 
-		let affected_states = [];
+		let has_affected_states = false;
 		workflow.value.elements.forEach((el) => {
 			if (el.type === "state" && el.data.doc_status && el.data.doc_status !== "Draft") {
-				affected_states.push(el.data.state);
+				has_affected_states = true;
 				el.data.doc_status = "Draft";
 			}
 		});
 
-		if (affected_states.length) {
+		if (has_affected_states) {
 			frappe.msgprint({
 				title: __("Doc Status Reset"),
 				message: __(

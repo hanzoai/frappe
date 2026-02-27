@@ -128,14 +128,14 @@ frappe.ui.form.on("Workflow", {
 			);
 
 			if (!is_submittable) {
-				let affected_states = [];
+				let has_affected_states = false;
 				frm.doc.states.forEach((row) => {
 					if (parseInt(row.doc_status || 0) !== 0) {
-						affected_states.push(row.state);
+						has_affected_states = true;
 						row.doc_status = "0";
 					}
 				});
-				if (affected_states.length) {
+				if (has_affected_states) {
 					frm.refresh_field("states");
 					frappe.msgprint({
 						title: __("Doc Status Reset"),
