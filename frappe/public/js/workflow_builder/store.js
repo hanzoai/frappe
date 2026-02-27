@@ -155,7 +155,7 @@ export const useStore = defineStore("workflow-builder-store", () => {
 		let affected_states = [];
 		workflow.value.elements.forEach((el) => {
 			if (el.type === "state" && el.data.doc_status && el.data.doc_status !== "Draft") {
-				affected_states.push(el.data.state || __("No Label State"));
+				affected_states.push(el.data.state);
 				el.data.doc_status = "Draft";
 			}
 		});
@@ -164,8 +164,8 @@ export const useStore = defineStore("workflow-builder-store", () => {
 			frappe.msgprint({
 				title: __("Doc Status Reset"),
 				message: __(
-					"The <b>Doc Status</b> for the following states has been reset to <b>Draft</b> because the <b>{0}</b> is not submittable: <b>{1}</b>",
-					[workflow_doc.value.document_type, affected_states.join(", ")]
+					"The <strong>Doc Status</strong> for all states has been reset to <strong>Draft</strong> because <strong>{0}</strong> is not submittable",
+					[workflow_doc.value.document_type]
 				),
 				indicator: "orange",
 			});

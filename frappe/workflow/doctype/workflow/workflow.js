@@ -131,7 +131,7 @@ frappe.ui.form.on("Workflow", {
 				let affected_states = [];
 				frm.doc.states.forEach((row) => {
 					if (parseInt(row.doc_status || 0) !== 0) {
-						affected_states.push(row.state || __("No Label State"));
+						affected_states.push(row.state);
 						row.doc_status = "0";
 					}
 				});
@@ -140,8 +140,8 @@ frappe.ui.form.on("Workflow", {
 					frappe.msgprint({
 						title: __("Doc Status Reset"),
 						message: __(
-							"The <b>Doc Status</b> for the following states has been reset to <b>Draft</b> because the <b>{0}</b> is not submittable: <b>{1}</b>",
-							[frm.doc.document_type, affected_states.join(", ")]
+							"The <strong>Doc Status</strong> for all states has been reset to <strong>0</strong> because <strong>{0}</strong> is not submittable",
+							[frm.doc.document_type]
 						),
 						indicator: "orange",
 					});
