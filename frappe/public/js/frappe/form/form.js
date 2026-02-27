@@ -1574,15 +1574,10 @@ frappe.ui.form.Form = class FrappeForm {
 			var scroll_to = frappe.route_options.scroll_to;
 			delete frappe.route_options.scroll_to;
 
-			var selector = [];
-			for (var key in scroll_to) {
-				var value = scroll_to[key];
-				selector.push(repl('[data-%(key)s="%(value)s"]', { key: key, value: value }));
-			}
-
-			selector = $(selector.join(" "));
-			if (selector.length) {
-				frappe.utils.scroll_to(selector);
+			if (this.scroll_to_field(scroll_to)) {
+				const url = new URL(window.location);
+				url.searchParams.delete("scroll_to");
+				history.replaceState(null, null, url);
 			}
 		} else if (window.location.hash) {
 			if ($(window.location.hash).length) {
@@ -2106,7 +2101,7 @@ frappe.ui.form.Form = class FrappeForm {
 		}
 
 		// scroll to input
-		frappe.utils.scroll_to($el, true, 15);
+		frappe.utils.scroll_to($el, true, 15, $(".main-section"));
 
 		// focus if text field
 		if (focus) {
