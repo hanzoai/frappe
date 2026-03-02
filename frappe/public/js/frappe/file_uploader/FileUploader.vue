@@ -514,22 +514,7 @@ function check_restrictions(file) {
 	return is_correct_type && valid_file_size;
 }
 
-function set_loading_state(dialog, loading) {
-	let $btn = dialog?.get_primary_btn();
-	if (loading) {
-		$btn?.css("width", $btn.outerWidth());
-		$btn?.html(`<i class="fa fa-spinner fa-spin"></i>`);
-		$btn?.prop("disabled", true);
-		dialog?.get_secondary_btn().prop("disabled", true);
-	} else {
-		$btn?.css("width", "");
-		$btn?.html(__("Upload"));
-		$btn?.prop("disabled", false);
-		dialog?.get_secondary_btn().prop("disabled", false);
-	}
-}
-function upload_files(dialog) {
-	set_loading_state(dialog, true);
+function upload_files() {
 	if (show_file_browser.value) {
 		promise = upload_via_file_browser();
 	} else if (show_web_link.value) {
@@ -542,7 +527,7 @@ function upload_files(dialog) {
 	} else {
 		promise = frappe.run_serially(files.value.map((file, i) => () => upload_file(file, i)));
 	}
-	return promise.finally(() => set_loading_state(dialog, false));
+	return promise;
 }
 function upload_via_file_browser() {
 	let selected_file = file_browser.value.selected_node;

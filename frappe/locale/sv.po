@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-02-22 09:42+0000\n"
-"PO-Revision-Date: 2026-02-23 22:07\n"
+"PO-Revision-Date: 2026-02-28 23:51\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -2868,7 +2868,7 @@ msgstr "Tilldelning Klar"
 #. Label of the assignment_days (Table) field in DocType 'Assignment Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
 msgid "Assignment Days"
-msgstr "Automation Dagar"
+msgstr "Tilldelning Dagar"
 
 #. Name of a DocType
 #. Label of the assignment_rule (Link) field in DocType 'ToDo'
@@ -2876,7 +2876,7 @@ msgstr "Automation Dagar"
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
 #: frappe/desk/doctype/todo/todo.json frappe/workspace_sidebar/automation.json
 msgid "Assignment Rule"
-msgstr "Automation Regel"
+msgstr "Tilldelning Regel"
 
 #. Name of a DocType
 #: frappe/automation/doctype/assignment_rule_day/assignment_rule_day.json
@@ -2890,13 +2890,13 @@ msgstr "Automation Regel Användare"
 
 #: frappe/automation/doctype/assignment_rule/assignment_rule.py:55
 msgid "Assignment Rule is not allowed on document type {0}"
-msgstr "Automation Regel är ej tillåten på dokument typ {0}"
+msgstr "Tilldelning Regel är ej tillåten på dokument typ {0}"
 
 #. Label of the assignment_rules_section (Section Break) field in DocType
 #. 'Assignment Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
 msgid "Assignment Rules"
-msgstr "Automation Regler"
+msgstr "Tilldelning Regler"
 
 #: frappe/desk/doctype/notification_log/notification_log.py:153
 msgid "Assignment Update on {0}"
@@ -8565,7 +8565,7 @@ msgstr "Förfallo Datum"
 #. Label of the due_date_based_on (Select) field in DocType 'Assignment Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
 msgid "Due Date Based On"
-msgstr "Förfallo Datum Baserad På"
+msgstr "Förfallodatum baserat på"
 
 #: frappe/public/js/frappe/form/grid_row_form.js:44
 #: frappe/public/js/frappe/form/toolbar.js:445
@@ -9859,7 +9859,7 @@ msgstr "Exempel: Anges detta till 24:00 loggas användare ut om de inte är akti
 #. Rule'
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
 msgid "Example: {{ subject }}"
-msgstr "Exempel: {{subject}}"
+msgstr "Exempel: {{ subject }}"
 
 #. Option for the 'File Type' (Select) field in DocType 'Data Export'
 #: frappe/core/doctype/data_export/data_export.json
@@ -11577,7 +11577,7 @@ msgstr "Könsartad"
 
 #: frappe/www/contact.html:29
 msgid "General"
-msgstr "Allmän"
+msgstr "Allmänt"
 
 #. Label of the generate_keys (Button) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
@@ -14260,7 +14260,7 @@ msgstr "Är Privat"
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.json
 #: frappe/desk/doctype/number_card/number_card.json
 msgid "Is Public"
-msgstr "Är Allmän"
+msgstr "Är Publik"
 
 #. Label of the is_published_field (Data) field in DocType 'DocType'
 #: frappe/core/doctype/doctype/doctype.json
@@ -15978,7 +15978,7 @@ msgstr "Skapa {0}"
 
 #: frappe/website/doctype/web_page/web_page.js:77
 msgid "Makes the page public"
-msgstr "Allmän Sida"
+msgstr "Publik Sida"
 
 #: frappe/desk/page/setup_wizard/install_fixtures.py:28
 msgid "Male"
@@ -21025,17 +21025,17 @@ msgstr "Leverantör Namn"
 #: frappe/public/js/frappe/views/interaction.js:78
 #: frappe/public/js/frappe/views/workspace/workspace.js:458
 msgid "Public"
-msgstr "Allmän"
+msgstr "Publik"
 
 #. Label of the public_files_size (Float) field in DocType 'System Health
 #. Report'
 #: frappe/desk/doctype/system_health_report/system_health_report.json
 msgid "Public Files (MB)"
-msgstr "Allmänna Filer (MB)"
+msgstr "Publika Filer (MB)"
 
 #: frappe/templates/emails/file_backup_notification.html:5
 msgid "Public Files Backup:"
-msgstr "Allmänna Filer Säkerhetskopiering:"
+msgstr "Publika Filer Säkerhetskopiering:"
 
 #. Label of the publish (Check) field in DocType 'Package Release'
 #: frappe/core/doctype/package_release/package_release.json
@@ -27569,7 +27569,7 @@ msgstr "Den här filen är offentlig och kan nås av vem som helst, även utan a
 
 #: frappe/core/doctype/file/file.js:22
 msgid "This file is public. It can be accessed without authentication."
-msgstr "Denna fil är allmän fil. Den kan nås utan autentisering."
+msgstr "Denna fil är publik. Den kan nås utan autentisering."
 
 #: frappe/public/js/frappe/form/form.js:1248
 msgid "This form has been modified after you have loaded it"
@@ -29789,7 +29789,7 @@ msgstr "Värde måste vara ett av {0}"
 #. 'OAuth Client'
 #: frappe/integrations/doctype/oauth_client/oauth_client.json
 msgid "Value of \"None\" implies a public client. In such a case Client Secret is not given to the client and token exchange makes use of PKCE."
-msgstr "Värdet \"None\" innebär allmän klient. I ett sådant fall ges inte Klient Hemlighet till klient och token utbyte använder PKCE."
+msgstr "Värdet \"None\" innebär publik klient. I ett sådant fall ges inte Klient Hemlighet till klient och token utbyte använder PKCE."
 
 #. Label of the value_to_validate (Data) field in DocType 'Onboarding Step'
 #: frappe/desk/doctype/onboarding_step/onboarding_step.json
@@ -31299,7 +31299,7 @@ msgstr "Du behöver '{0}' behörighet på {1} {2} för att utföra denna åtgär
 #: frappe/desk/doctype/workspace/workspace.py:132
 #: frappe/desk/doctype/workspace_sidebar/workspace_sidebar.py:74
 msgid "You need to be Workspace Manager to delete a public workspace."
-msgstr "Du måste vara Arbetsyta Ansvarig för att ta bort allmän arbetsyta."
+msgstr "Du måste vara Arbetsyta Ansvarig för att ta bort publik arbetsyta."
 
 #: frappe/desk/doctype/workspace/workspace.py:78
 msgid "You need to be Workspace Manager to edit this document"

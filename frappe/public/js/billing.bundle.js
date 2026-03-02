@@ -33,7 +33,14 @@ $(document).ready(function () {
 			!frappe.is_mobile() &&
 			frappe.user.has_role("System Manager");
 		if (visiblity_condition && isFCUser) {
-			addChatBubble();
+			frappe.router.on("change", function () {
+				if (frappe.get_route()[0] == "") {
+					addChatBubble();
+					toggleChatBubble(true);
+				} else {
+					toggleChatBubble(false);
+				}
+			});
 		}
 		if (isFCUser) {
 			$.extend(card_args, {
@@ -89,19 +96,40 @@ function openFrappeCloudDashboard() {
 }
 
 function addChatBubble() {
-	if (checkBusinessHours()) {
+	const all_apps = frappe.utils.get_installed_apps();
+	const desk_apps = ["erpnext", "hrms"];
+
+	const apps_allowed = desk_apps.some((app) => all_apps.includes(app));
+	if (checkBusinessHours() && apps_allowed) {
 		let chat_banner = document.createElement("script");
+		chat_banner.setAttribute("id", "chat_widget_trigger");
 		chat_banner.innerHTML =
 			'(function(d,t){var BASE_URL="https://chat.frappe.cloud";var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.src=BASE_URL+"/packs/js/sdk.js";g.async=true;s.parentNode.insertBefore(g,s);g.onload=function(){window.chatwootSDK.run({websiteToken:"LdmfJzftdJGEcFjoTqk8CrSq",baseUrl:BASE_URL})}})(document,"script");';
 		document.body.append(chat_banner);
 		const root = document.documentElement;
-		root.style.setProperty("--s-700", "var(--gray-50)");
+		root.style.setProperty("--s-700", "var(--gray-500)");
 	}
 }
 
 function checkBusinessHours() {
-	let currentTime = new Date();
-	const istTime = new Date(currentTime.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+	let current_time = new Date();
+	const ist_time = new Date(current_time.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
 
-	return istTime.getHours() >= 11 && istTime.getHours() <= 18;
+	const hours = ist_time.getHours();
+	const day = ist_time.getDay();
+
+	const is_weekend = day === 0 || day === 6;
+	const is_business_hour = hours >= 11 && hours < 18;
+
+	return !is_weekend && is_business_hour;
+}
+
+function toggleChatBubble(toggle) {
+	if (toggle) {
+		$(".woot-widget-holder").show();
+		$("#cw-bubble-holder").show();
+	} else {
+		$(".woot-widget-holder").hide();
+		$("#cw-bubble-holder").hide();
+	}
 }
