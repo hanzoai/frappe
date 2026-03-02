@@ -77,9 +77,7 @@ def get_context(context):
 			)
 
 	separator = '<div class="consolidated-doc-separator print-hide"></div>'
-	body = separator.join(
-		f'<div class="consolidated-doc">{html}</div>' for html in all_html_parts
-	)
+	body = separator.join(f'<div class="consolidated-doc">{html}</div>' for html in all_html_parts)
 
 	if trigger_print:
 		body += trigger_print_script

@@ -200,7 +200,9 @@ export default class BulkOperations {
 
 		if (valid_docs.length > MAX_CONSOLIDATED_LIMIT) {
 			frappe.msgprint(
-				__("You can only consolidate up to {0} documents at a time", [MAX_CONSOLIDATED_LIMIT])
+				__("You can only consolidate up to {0} documents at a time", [
+					MAX_CONSOLIDATED_LIMIT,
+				])
 			);
 			return;
 		}
@@ -210,7 +212,9 @@ export default class BulkOperations {
 			fields: [
 				{
 					fieldtype: "HTML",
-					options: `<p class="text-muted small">${__("All selected documents will be rendered in a single continuous layout without page breaks between them.")}</p>`,
+					options: `<p class="text-muted small">${__(
+						"All selected documents will be rendered in a single continuous layout without page breaks between them."
+					)}</p>`,
 				},
 				{
 					fieldtype: "Select",
