@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-01-02 22:45+0000\n"
-"PO-Revision-Date: 2026-02-28 20:31\n"
+"PO-Revision-Date: 2026-03-02 20:59\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -14500,11 +14500,11 @@ msgstr "Последние 14 дней"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:630
 msgid "Last 30 Days"
-msgstr "Последние 30 дней"
+msgstr "За 30 дней"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:650
 msgid "Last 6 Months"
-msgstr "Последние 6 месяцев"
+msgstr "За 6 месяцев"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:622
 msgid "Last 7 Days"
@@ -14512,7 +14512,7 @@ msgstr "Последние 7 дней"
 
 #: frappe/public/js/frappe/ui/filters/filter.js:634
 msgid "Last 90 Days"
-msgstr "Последние 90 Дней"
+msgstr "За 90 Дней"
 
 #. Label of a Datetime field in DocType 'User'
 #: frappe/core/doctype/user/user.json
