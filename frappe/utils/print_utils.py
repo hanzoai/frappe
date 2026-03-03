@@ -5,30 +5,12 @@ from typing import Literal
 import click
 
 import frappe
-from frappe import _
 from frappe.utils.data import cint, cstr
 
 EXECUTABLE_PATHS = {
 	"linux": ["chrome-linux", "headless_shell"],
 	"darwin": ["chrome-mac", "headless_shell"],
 	"windows": ["chrome-win", "headless_shell.exe"],
-}
-
-SYSTEM_CHROME_PATHS = {
-	"linux": [
-		"/usr/bin/chromium-browser",
-		"/usr/bin/chromium",
-		"/usr/bin/google-chrome",
-		"/usr/bin/google-chrome-stable",
-	],
-	"darwin": [  # macOS
-		"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-		"/Applications/Chromium.app/Contents/MacOS/Chromium",
-	],
-	"windows": [
-		r"C:\Program Files\Google\Chrome\Application\chrome.exe",
-		r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
-	],
 }
 
 
@@ -204,47 +186,33 @@ def setup_chromium():
 
 
 def find_or_download_chromium_executable():
-	"""
-	Prefer system-installed Chrome / Chromium.
-	Fallback to bench-downloaded Chromium.
-	"""
-
+	"""Finds the Chromium executable or downloads if not found."""
 	import platform
+	import shutil
 	from pathlib import Path
 
-	system = platform.system().lower()
+	if chromium_path := shutil.which(frappe.get_common_site_config().get("chromium_path", "")):
+		return chromium_path
 
-	system_paths = SYSTEM_CHROME_PATHS.get(system)
-	if not system_paths:
-		frappe.throw(_("Unsupported operating system for Chromium PDF generation: {0}").format(system))
-
-	#  Try system-installed Chrome / Chromium
-	for path in system_paths:
-		if os.path.exists(path) and os.access(path, os.X_OK):
-			return path
-
-	# Fallback to bench-downloaded Chromium
 	bench_path = frappe.utils.get_bench_path()
+	"""Determine the path to the Chromium executable."""
 	chromium_dir = os.path.join(bench_path, "chromium")
 
-	if not os.path.exists(chromium_dir):
-		from frappe.utils.print_utils import download_chromium
+	platform_name = platform.system().lower()
 
+	if platform_name not in ["linux", "darwin", "windows"]:
+		click.echo(f"Unsupported platform: {platform_name}")
+
+	executable_name = EXECUTABLE_PATHS.get(platform_name)
+
+	# Construct the full path to the executable
+	exec_path = Path(chromium_dir).joinpath(*executable_name)
+	if not exec_path.exists():
+		click.echo("Chromium is not available. downloading...")
 		download_chromium()
 
-	platform_name = platform.system().lower()
-	if platform_name not in EXECUTABLE_PATHS:
-		frappe.throw(_("Unsupported platform for bench Chromium binaries: {0}").format(platform_name))
-
-	exec_path = Path(chromium_dir).joinpath(*EXECUTABLE_PATHS[platform_name])
-
 	if not exec_path.exists():
-		frappe.throw(
-			_(
-				"Chromium executable not found at {0}. "
-				"Install system Chrome/Chromium or run bench setup-chrome."
-			).format(exec_path)
-		)
+		click.echo("Error while downloading chrome")
 
 	return str(exec_path)
 
@@ -421,7 +389,7 @@ def calculate_platform():
 	Includes logic for Linux ARM, Linux x64, macOS (Intel and ARM), and Windows (32-bit and 64-bit).
 
 	Returns:
-	str: The detected platform string (e.g., 'linux64', 'mac-arm64', etc.).
+	        str: The detected platform string (e.g., 'linux64', 'mac-arm64', etc.).
 	"""
 	import platform
 
