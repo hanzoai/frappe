@@ -163,10 +163,10 @@ def flush():
 
 def get_queue():
 	batch_size = cint(frappe.conf.email_queue_batch_size) or 500
-	undo_window = add_to_date(now_datetime(seconds=-10))
+	undo_window = add_to_date(now_datetime(), seconds=-10)
 
 	return frappe.db.sql(
-		f"""select
+		"""select
 			name, sender
 		from
 			`tabEmail Queue`
@@ -176,8 +176,8 @@ def get_queue():
 			(creation < %(undo_window)s)
 		order
 			by priority desc, retry asc, creation asc
-		limit {batch_size}""",
-		{"now": now_datetime(), "undo_window": undo_window},
+		limit %(batch_size)s""",
+		{"now": now_datetime(), "undo_window": undo_window, "batch_size": batch_size},
 		as_dict=True,
 	)
 
