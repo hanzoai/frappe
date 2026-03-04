@@ -896,6 +896,8 @@ frappe.views.CommunicationComposer = class {
 				if (!r.exc) {
 					frappe.utils.play_sound("email");
 
+					const communication_name = r.message["name"];
+
 					if (r.message["emails_not_sent_to"]) {
 						frappe.msgprint(
 							__("Email not sent to {0} (unsubscribed / disabled)", [
@@ -909,6 +911,61 @@ frappe.views.CommunicationComposer = class {
 					if (me.frm) {
 						me.frm.reload_doc();
 					}
+
+					// Show undo toast for 10 seconds
+					let undo_alert = frappe.show_alert(
+						{
+							message: `${__(
+								"Email Sent"
+							)} <a data-action="undo" style="margin-left: 15px; cursor: pointer; font-weight: 500; text-decoration: underline;">${__(
+								"Undo"
+							)}</a>`,
+							indicator: "green",
+						},
+						10,
+						{
+							undo: () => {
+								if (undo_alert) {
+									undo_alert.find(".close").click();
+								}
+								frappe.call({
+									method: "frappe.core.doctype.communication.email.undo_email_send",
+									args: { communication_name: communication_name },
+									callback(undo_r) {
+										if (!undo_r.exc) {
+											if (me.frm) {
+												me.frm.reload_doc();
+											}
+
+											// Reopen the composer with the recovered data
+											const d = undo_r.message;
+											new frappe.views.CommunicationComposer({
+												doc: d.doc,
+												subject: d.subject,
+												recipients: d.recipients,
+												cc: d.cc,
+												bcc: d.bcc,
+												message: d.content,
+												sender: d.sender,
+												email_template: d.email_template,
+												read_receipt: d.send_read_receipt,
+												attachments: d.attachments,
+												frm: me.frm,
+											});
+
+											// Show alert after modal so it stays prominent
+											setTimeout(() => {
+												frappe.show_alert({
+													message: __("Email sending undone"),
+													indicator: "blue",
+												});
+											}, 200);
+										}
+									},
+								});
+							},
+						}
+					);
 
 					// try the success callback if it exists
 					if (me.success) {
