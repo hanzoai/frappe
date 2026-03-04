@@ -5,7 +5,7 @@ from datetime import timedelta
 import frappe
 from frappe import _, msgprint
 from frappe.utils import cint, cstr, get_url, now_datetime
-from frappe.utils.data import getdate
+from frappe.utils.data import add_to_date, getdate
 from frappe.utils.verified_command import get_signed_params, verify_request
 
 # After this percent of failures in every batch, entire batch is aborted.
@@ -163,6 +163,7 @@ def flush():
 
 def get_queue():
 	batch_size = cint(frappe.conf.email_queue_batch_size) or 500
+	undo_window = add_to_date(now_datetime(seconds=-10))
 
 	return frappe.db.sql(
 		f"""select
@@ -171,11 +172,12 @@ def get_queue():
 			`tabEmail Queue`
 		where
 			(status='Not Sent' or status='Partially Sent') and
-			(send_after is null or send_after < %(now)s)
+			(send_after is null or send_after < %(now)s) and
+			(creation < %(undo_window)s)
 		order
 			by priority desc, retry asc, creation asc
 		limit {batch_size}""",
-		{"now": now_datetime()},
+		{"now": now_datetime(), "undo_window": undo_window},
 		as_dict=True,
 	)
 
