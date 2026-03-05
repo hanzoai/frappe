@@ -837,9 +837,13 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			let col = this.columns[i];
 
 			if (frappe.is_mobile() && col.type == "Field" && [3, 4].includes(i)) {
-				left_html += `<div class="mobile-layout ${
-					i == 3 ? "mobile-layout-seperator" : ""
-				}">${this.get_column_html(col, doc, true)}</div>`;
+				const no_seperator_class = !doc[col?.df?.fieldname] ? "no-seperator" : "";
+				left_html += `<div
+					class="mobile-layout ${no_seperator_class} ${i == 3 ? "mobile-layout-seperator" : ""}"
+					${no_seperator_class ? "style='padding-left: var(--margin-sm);'" : ""}
+					>
+					${this.get_column_html(col, doc, true)}
+				</div>`;
 			} else {
 				left_html += this.get_column_html(col, doc, false);
 			}
