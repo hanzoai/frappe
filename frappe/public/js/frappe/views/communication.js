@@ -912,15 +912,14 @@ frappe.views.CommunicationComposer = class {
 						me.frm.reload_doc();
 					}
 
-					// Show undo toast for 10 seconds
 					let undo_alert = frappe.show_alert(
 						{
 							message: `
 								<div class="d-flex align-items-center justify-content-between" style="width: 280px;">
 									<span>${__("Email Sent")}</span>
-									<button class="btn btn-xs btn-default" data-action="undo" style="font-weight: 500;">
+									<span class="cursor-pointer" data-action="undo" style="font-weight: 500; text-decoration: underline;">
 										${__("Undo")}
-									</button>
+									</span>
 								</div>
 							`,
 							indicator: "green",
@@ -956,7 +955,6 @@ frappe.views.CommunicationComposer = class {
 												frm: me.frm,
 											});
 
-											// Show alert after modal so it stays prominent
 											setTimeout(() => {
 												frappe.show_alert({
 													message: __("Email sending undone"),
