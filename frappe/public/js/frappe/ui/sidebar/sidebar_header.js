@@ -82,7 +82,9 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 					label: "Logout",
 					icon: "logout",
 					onClick: function () {
-						return frappe.app.logout();
+						frappe.confirm(__("Are you sure you want to logout?"), () => {
+							return frappe.app.logout();
+						});
 					},
 				}
 			);

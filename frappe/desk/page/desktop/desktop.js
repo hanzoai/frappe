@@ -486,7 +486,9 @@ class DesktopPage {
 				icon: "log-out",
 				label: "Logout",
 				onClick: function () {
-					frappe.app.logout();
+					frappe.confirm(__("Are you sure you want to logout?"), () => {
+						return frappe.app.logout();
+					});
 				},
 			},
 		];
