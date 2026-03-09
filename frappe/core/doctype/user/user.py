@@ -382,7 +382,7 @@ class User(Document):
 	def validate_reset_password(self):
 		pass
 
-	def reset_password(self, send_email=False, password_expired=False):
+	def _reset_password(self, send_email=False, password_expired=False):
 		from frappe.utils import get_url
 
 		key = frappe.generate_hash()
@@ -418,7 +418,7 @@ class User(Document):
 	def send_welcome_mail_to_user(self):
 		from frappe.utils import get_url
 
-		link = self.reset_password()
+		link = self._reset_password()
 		subject = None
 		method = frappe.get_hooks("welcome_email")
 		if method:
@@ -1043,7 +1043,7 @@ def reset_password(user: str) -> str:
 			return "disabled"
 
 		user.validate_reset_password()
-		user.reset_password(send_email=True)
+		user._reset_password(send_email=True)
 
 		return frappe.msgprint(
 			msg=_("Password reset instructions have been sent to your email"),
