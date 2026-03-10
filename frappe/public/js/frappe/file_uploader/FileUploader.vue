@@ -572,7 +572,7 @@ function return_as_dataurl() {
 async function upload_file(file, i) {
 	currently_uploading.value = i;
 
-	const CHUNK_SIZE = 500 * 1024; // 500KB chunks
+	const CHUNK_SIZE = frappe.boot.file_chunk_size;
 
 	const use_chunks = file.file_obj && file.file_obj.size > CHUNK_SIZE;
 	const total_chunks = use_chunks ? Math.ceil(file.file_obj.size / CHUNK_SIZE) : 1;
