@@ -568,7 +568,6 @@ function return_as_dataurl() {
 	close_dialog.value = true;
 	return Promise.all(promises);
 }
-
 async function upload_file(file, i) {
 	currently_uploading.value = i;
 
@@ -586,7 +585,6 @@ async function upload_file(file, i) {
 			});
 			xhr.upload.addEventListener("progress", (e) => {
 				if (e.lengthComputable) {
-					// Accumulate progress across chunks
 					file.progress = chunk_byte_offset + e.loaded;
 					file.total = file.file_obj.size;
 				}
@@ -604,6 +602,7 @@ async function upload_file(file, i) {
 				if (xhr.readyState !== XMLHttpRequest.DONE) return;
 
 				if (xhr.status === 200) {
+					resolve();
 					// Only the last chunk returns a meaningful response
 					if (chunk_index === total_chunks - 1) {
 						file.request_succeeded = true;
@@ -629,25 +628,27 @@ async function upload_file(file, i) {
 							close_dialog.value = true;
 						}
 					}
-					resolve();
 				} else if (xhr.status === 403) {
+					reject();
 					file.failed = true;
 					let response = parse_error_response(xhr.responseText);
 					file.error_message = __("Not permitted. {0}.", [response.error_message || ""]);
 					if (response.server_messages.length) {
 						file.error_message += `\n${response.server_messages.join("\n")}`;
 					}
-					reject();
 				} else if (xhr.status === 413) {
+					reject();
 					file.failed = true;
 					file.error_message = __("Size exceeds the maximum allowed file size.");
-					reject();
 				} else if (xhr.status === 417) {
+					reject();
+					// regular frappe.throw() in backend
 					file.failed = true;
 					let response = parse_error_response(xhr.responseText);
 					file.error_message = response.server_messages.length
 						? response.server_messages.join("\n")
 						: __("File upload failed.");
+
 					if (show_web_link.value && web_link.value && file.file_url) {
 						web_link.value.invalid_input(__(file.error_message));
 					} else if (!files.value.includes(file)) {
@@ -657,8 +658,8 @@ async function upload_file(file, i) {
 							indicator: "red",
 						});
 					}
-					reject();
 				} else {
+					reject();
 					file.failed = true;
 					let detail =
 						xhr.statusText ||
@@ -667,6 +668,7 @@ async function upload_file(file, i) {
 						xhr.status === 0
 							? __("XMLHttpRequest Error")
 							: `${xhr.status} : ${detail}`;
+
 					let error = null;
 					try {
 						error = JSON.parse(xhr.responseText);
@@ -674,7 +676,6 @@ async function upload_file(file, i) {
 						// pass
 					}
 					frappe.request.cleanup({}, error);
-					reject();
 				}
 			};
 
