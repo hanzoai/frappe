@@ -8,7 +8,7 @@ from frappe.core.doctype.communication.communication import Communication, get_e
 from frappe.core.doctype.communication.email import add_attachments, make, undo_email_send
 from frappe.email.doctype.email_queue.email_queue import EmailQueue
 from frappe.tests import IntegrationTestCase
-from frappe.utils import now_datetime
+from frappe.utils import add_to_date, now_datetime
 
 if TYPE_CHECKING:
 	from frappe.contacts.doctype.contact.contact import Contact
@@ -483,16 +483,10 @@ class TestCommunicationEmailMixin(IntegrationTestCase):
 		comm = self.new_communication(recipients=["to@test.com"])
 		comm.sent_or_received = "Sent"
 		comm.save(ignore_permissions=True)
-		frappe.db.set_value(
-			"Communication",
-			comm.name,
-			"creation",
-			now_datetime() - timedelta(seconds=15),
-			update_modified=False,
-		)
 
-		with self.assertRaises(frappe.exceptions.ValidationError):
-			undo_email_send(comm.name)
+		with self.freeze_time(add_to_date(now_datetime(), seconds=12)):
+			with self.assertRaises(frappe.exceptions.ValidationError):
+				undo_email_send(comm.name)
 
 		self.assertTrue(frappe.db.exists("Communication", comm.name))
 

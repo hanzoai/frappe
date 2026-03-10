@@ -345,29 +345,25 @@ def undo_email_send(communication_name: str):
 
 	time_elapsed_in_seconds = time_diff_in_seconds(now_datetime(), communication.creation)
 	if time_elapsed_in_seconds > 10:
-		frappe.throw(_("Email undo window is over. Cannot undo email."))
+		frappe.msgprint(
+			_("Email undo window is over. Cannot undo email."), alert=True, indicator="red", raise_exception=1
+		)
 
-	email_queue_records_status = frappe.get_all(
-		"Email Queue",
-		filters={"communication": communication_name},
-		pluck="status",
+	email_queue_records = frappe.get_all(
+		"Email Queue", filters={"communication": communication_name}, fields=["name", "status"]
 	)
 
-	for status in email_queue_records_status:
-		if status != "Not Sent":
-			frappe.throw(_("It is too late to undo this email. It is already being sent."))
+	for queue in email_queue_records:
+		if queue.status != "Not Sent":
+			frappe.msgprint(
+				_("It is too late to undo this email. It is already being sent."),
+				alert=True,
+				indicator="red",
+				raise_exception=1,
+			)
 
-	frappe.db.delete(
-		"Email Queue Recipient",
-		{
-			"parent": [
-				"in",
-				frappe.get_all("Email Queue", filters={"communication": communication_name}, pluck="name"),
-			]
-		},
-	)
-
-	frappe.db.delete("Email Queue", {"communication": communication_name})
+	for queue in email_queue_records:
+		frappe.delete_doc("Email Queue", queue.name, ignore_permissions=True)
 
 	communication_data = {
 		"subject": communication.subject,
@@ -377,7 +373,6 @@ def undo_email_send(communication_name: str):
 		"bcc": communication.bcc,
 		"doc": {"doctype": communication.reference_doctype, "name": communication.reference_name},
 		"sender": communication.sender,
-		"email_template": communication.email_template,
 		"send_read_receipt": communication.read_receipt,
 	}
 
@@ -386,6 +381,11 @@ def undo_email_send(communication_name: str):
 		filters={"attached_to_doctype": "Communication", "attached_to_name": communication_name},
 		pluck="name",
 	)
+
+	if linked_files:
+		for file_name in linked_files:
+			frappe.db.set_value("File", file_name, {"attached_to_doctype": None, "attached_to_name": None})
+
 	communication_data["attachments"] = linked_files
 
 	communication.delete(ignore_permissions=True)

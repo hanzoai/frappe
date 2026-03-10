@@ -914,14 +914,11 @@ frappe.views.CommunicationComposer = class {
 
 					let undo_alert = frappe.show_alert(
 						{
-							message: `
-								<div class="d-flex align-items-center justify-content-between" style="width: 280px;">
-									<span>${__("Email Sent")}</span>
-									<span class="cursor-pointer" data-action="undo" style="font-weight: 500; text-decoration: underline;">
-										${__("Undo")}
-									</span>
-								</div>
-							`,
+							message: `<span>${__(
+								"Email Sent"
+							)}</span><span class="cursor-pointer ml-4" data-action="undo" style="font-weight: 500; text-decoration: underline;">${__(
+								"Undo"
+							)}</span>`,
 							indicator: "green",
 						},
 						10,
@@ -930,38 +927,35 @@ frappe.views.CommunicationComposer = class {
 								if (undo_alert) {
 									undo_alert.find(".close").click();
 								}
-								frappe.call({
-									method: "frappe.core.doctype.communication.email.undo_email_send",
-									args: { communication_name: communication_name },
-									callback(undo_r) {
-										if (!undo_r.exc) {
-											if (me.frm) {
-												me.frm.reload_doc();
-											}
-
-											// Reopen the composer with the recovered data
-											const d = undo_r.message;
-											new frappe.views.CommunicationComposer({
-												doc: d.doc,
-												subject: d.subject,
-												recipients: d.recipients,
-												cc: d.cc,
-												bcc: d.bcc,
-												message: d.content,
-												sender: d.sender,
-												email_template: d.email_template,
-												read_receipt: d.send_read_receipt,
-												attachments: d.attachments,
-												frm: me.frm,
-											});
-
-											frappe.show_alert({
-												message: __("Email sending undone"),
-												indicator: "blue",
-											});
+								frappe
+									.xcall(
+										"frappe.core.doctype.communication.email.undo_email_send",
+										{ communication_name: communication_name }
+									)
+									.then((d) => {
+										if (me.frm) {
+											me.frm.reload_doc();
 										}
-									},
-								});
+
+										// Reopen the composer with the recovered data
+										new frappe.views.CommunicationComposer({
+											doc: d.doc,
+											subject: d.subject,
+											recipients: d.recipients,
+											cc: d.cc,
+											bcc: d.bcc,
+											message: d.content,
+											sender: d.sender,
+											read_receipt: d.send_read_receipt,
+											attachments: d.attachments,
+											frm: me.frm,
+										});
+
+										frappe.show_alert({
+											message: __("Email sending undone"),
+											indicator: "blue",
+										});
+									});
 							},
 						}
 					);
