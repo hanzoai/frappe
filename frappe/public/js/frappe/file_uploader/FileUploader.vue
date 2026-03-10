@@ -586,7 +586,7 @@ async function upload_file(file, i) {
 			xhr.upload.addEventListener("progress", (e) => {
 				if (e.lengthComputable) {
 					file.progress = chunk_byte_offset + e.loaded;
-					file.total = file.file_obj.size;
+					file.total = file.file_obj?.size || e.total;
 				}
 			});
 			xhr.upload.addEventListener("load", () => {
@@ -622,8 +622,9 @@ async function upload_file(file, i) {
 							props.on_success(file_doc, r);
 						}
 						if (
-							i == files.value.length - 1 &&
-							files.value.every((f) => f.request_succeeded)
+							(i == files.value.length - 1 &&
+								files.value.every((f) => f.request_succeeded)) ||
+							(show_web_link.value && file.file_url)
 						) {
 							close_dialog.value = true;
 						}
