@@ -50,9 +50,8 @@ class FormTimeline extends BaseTimeline {
 	}
 
 	toggle_show_all_activity() {
-		this.timeline_wrapper
-			.find(".timeline-item .show-all-activity")
-			.toggle(this.has_communications());
+		const btn = this.timeline_wrapper.find(".timeline-item .show-all-activity");
+		btn.toggle(!!this.has_communications());
 	}
 
 	has_communications() {
