@@ -25,6 +25,17 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 				items: this.sibling_workspaces,
 			},
 			{
+				name: "website",
+				label: __("Website"),
+				icon: "web",
+				onClick: function () {
+					window.open(window.location.origin);
+				},
+			},
+			{
+				is_divider: true,
+			},
+			{
 				name: "edit-sidebar",
 				label: __("Edit Sidebar"),
 				icon: "edit",
@@ -35,18 +46,13 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 					me.sidebar.editor.toggle();
 				},
 			},
-			{
-				name: "website",
-				label: __("Website"),
-				icon: "web",
-				onClick: function () {
-					window.open(window.location.origin);
-				},
-			},
 		];
 		if (frappe.boot.desk_settings.notifications) {
 			let is_dark = frappe.ui.get_current_theme() === "dark";
 			this.dropdown_items.push(
+				{
+					is_divider: true,
+				},
 				{
 					label: "Session Defaults",
 					action: "frappe.ui.toolbar.setup_session_defaults()",
@@ -76,6 +82,9 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 					label: "Help",
 					icon: "info",
 					items: this.get_help_siblings(),
+				},
+				{
+					is_divider: true,
 				},
 				{
 					name: "logout",
