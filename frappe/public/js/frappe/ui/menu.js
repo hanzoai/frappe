@@ -52,7 +52,6 @@ frappe.ui.menu = class ContextMenu {
 				function () {
 					return true;
 				};
-			console.log(typeof item.condition);
 			let render = false;
 			if (typeof item.condition == "function") {
 				render = item.condition();
