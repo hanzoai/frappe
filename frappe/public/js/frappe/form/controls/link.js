@@ -870,7 +870,6 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 	validate_link_and_fetch(value) {
 		const args = this.get_search_args(value);
 		if (!args) return;
-		const has_filters = !!(args.filters && Object.keys(args.filters).length);
 
 		const columns_to_fetch = Object.values(this.fetch_map);
 
@@ -939,6 +938,7 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 			.then((response) => {
 				if (!response) return;
 
+				const has_filters = !!(args.filters && Object.keys(args.filters).length);
 				if (!response.name && has_filters) {
 					frappe.show_alert({
 						message: __("{0}: {1} did not match any results.", [
