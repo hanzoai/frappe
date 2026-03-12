@@ -509,6 +509,7 @@ default_log_clearing_doctypes = {
 	"Email Queue": 30,
 	"Scheduled Job Log": 7,
 	"Submission Queue": 7,
+	"Background Task": 7,
 	"Prepared Report": 14,
 	"Webhook Request Log": 30,
 	"Unhandled Email": 30,

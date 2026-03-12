@@ -1591,6 +1591,7 @@ from frappe.model.meta import get_meta
 from frappe.realtime import publish_progress, publish_realtime
 from frappe.utils import get_traceback, mock, parse_json, safe_eval, create_folder
 from frappe.utils.background_jobs import enqueue, enqueue_doc
+from frappe.utils.task_queue import enqueue_task, get_current_task
 from frappe.utils.error import log_error
 from frappe.utils.formatters import format_value
 from frappe.utils.print_utils import get_print, attach_print
