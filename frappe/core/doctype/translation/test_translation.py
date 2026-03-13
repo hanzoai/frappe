@@ -94,7 +94,7 @@ class TestTranslation(FrappeTestCase):
 	def test_html_message_translations(self):
 		"""Test fallback for messages w/ HTML Tags"""
 		message = "Hide descendant records of <b>For Value</b>."
-		translated_message = "隐藏下层节点<b>值</b>"
+		translated_message = "隐藏<b>取值</b>的后代记录"
 		self.assertEqual(_(message, lang="zh"), translated_message)
 
 
