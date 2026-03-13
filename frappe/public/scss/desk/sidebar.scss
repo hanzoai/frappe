@@ -306,6 +306,7 @@
 	display: flex;
 	gap: 6px;
 	width: 0;
+	overflow: hidden;
 }
 .standard-sidebar-item[data-name="add-sidebar-item"] {
 	margin-top: 5px;
