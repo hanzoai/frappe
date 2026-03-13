@@ -32,28 +32,6 @@ jobs:
           npm install @commitlint/cli @commitlint/config-conventional
           npx commitlint --verbose --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }}
 
-<<<<<<< HEAD
-=======
-  docs-required:
-    name: 'Documentation Required'
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-
-    steps:
-      - name: 'Setup Environment'
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.14'
-      - uses: actions/checkout@v5
-
-      - name: Validate Docs
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-        run: |
-          pip install requests --quiet
-          python $GITHUB_WORKSPACE/.github/helper/documentation.py $PR_NUMBER
-
->>>>>>> 9f2dba7bef (chore(ci): bump python version)
   linter:
     name: 'Semgrep Rules'
     runs-on: ubuntu-latest
@@ -63,11 +41,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
-<<<<<<< HEAD
-          python-version: '3.10'
-=======
           python-version: '3.14'
->>>>>>> 9f2dba7bef (chore(ci): bump python version)
           cache: pip
 
       - name: Download Semgrep rules
@@ -85,11 +59,7 @@ jobs:
     steps:
       - uses: actions/setup-python@v4
         with:
-<<<<<<< HEAD
-          python-version: '3.10'
-=======
           python-version: '3.14'
->>>>>>> 9f2dba7bef (chore(ci): bump python version)
 
       - uses: actions/checkout@v4
 
@@ -106,21 +76,4 @@ jobs:
         run: |
           pip install pip-audit
           cd ${GITHUB_WORKSPACE}
-<<<<<<< HEAD
           pip-audit --desc on --ignore-vuln GHSA-4xqq-73wg-5mjp --ignore-vuln PYSEC-2023-312 .
-=======
-          pip-audit --desc on --ignore-vuln PYSEC-2023-312 .
-
-  precommit:
-    name: 'Pre-Commit'
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.14'
-          cache: pip
-      - uses: pre-commit/action@v3.0.1
->>>>>>> 9f2dba7bef (chore(ci): bump python version)

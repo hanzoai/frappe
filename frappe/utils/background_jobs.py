@@ -1,7 +1,6 @@
 import gc
 import os
 import socket
-import sys
 import time
 from collections import defaultdict
 from collections.abc import Callable
@@ -328,59 +327,6 @@ def start_worker(
 	)
 
 
-<<<<<<< HEAD
-=======
-class FrappeWorker(Worker):
-	def work(self, *args, **kwargs):
-		self.start_frappe_scheduler()
-		kwargs["with_scheduler"] = False  # Always disable RQ scheduler
-		return super().work(*args, **kwargs)
-
-	def run_maintenance_tasks(self, *args, **kwargs):
-		"""Attempt to start a scheduler in case the worker doing scheduling died."""
-		self.start_frappe_scheduler()
-		return super().run_maintenance_tasks(*args, **kwargs)
-
-	def start_frappe_scheduler(self):
-		from frappe.utils.scheduler import start_scheduler
-
-		# TODO: switch to multiprocessing.Process() after further investigating of fork -> forkserver
-		Thread(target=start_scheduler, daemon=True).start()
-
-
-class FrappeWorkerNoFork(FrappeWorker):
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		self.push_exc_handler(self.no_fork_exception_handler)
-
-	def work(self, *args, **kwargs):
-		kwargs["max_jobs"] = RQ_MAX_JOBS + random.randint(0, RQ_MAX_JOBS_JITTER)
-		return super().work(*args, **kwargs)
-
-	def execute_job(self, job: "Job", queue: "Queue"):
-		"""Execute job in same thread/process, do not fork()"""
-		self.prepare_execution(job)
-		self.perform_job(job, queue)
-		self.set_state(WorkerStatus.IDLE)
-
-	def no_fork_exception_handler(self, job, exc_type, exc_value, traceback):
-		if isinstance(exc_value, JobTimeoutException):
-			# This is done to avoid polluting global state from partial executions.
-			# More such cases MIGHT surface and this is where they should be handled.
-			raise StopRequested
-
-	def get_heartbeat_ttl(self, job: "Job") -> int:
-		if job.timeout == -1:
-			return DEFAULT_WORKER_TTL
-		else:
-			return int(job.timeout or DEFAULT_WORKER_TTL) + 60
-
-	def kill_horse(self, sig=signal.SIGKILL):
-		# Horse = self when we are not forking
-		os.kill(os.getpid(), sig)
-
-
->>>>>>> edc4b4bbd5 (fix: set multiprocessing start mode to `fork` instead of `forkserver`)
 def start_worker_pool(
 	queue: str | None = None,
 	num_workers: int = 1,
@@ -421,19 +367,6 @@ def start_worker_pool(
 	if quiet:
 		logging_level = "WARNING"
 
-<<<<<<< HEAD
-=======
-	# TODO: Make this true by default eventually. It's limited to RQ WorkerPool
-	if sbool(os.environ.get("FRAPPE_BACKGROUND_WORKERS_NOFORK", False)):
-		worker_klass = FrappeWorkerNoFork
-	else:
-		if sys.version_info >= (3, 14):
-			import multiprocessing
-
-			multiprocessing.set_start_method("fork", force=True)
-		worker_klass = FrappeWorker
-
->>>>>>> edc4b4bbd5 (fix: set multiprocessing start mode to `fork` instead of `forkserver`)
 	pool = WorkerPool(
 		queues=queues,
 		connection=redis_connection,

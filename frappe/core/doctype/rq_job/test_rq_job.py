@@ -168,13 +168,7 @@ class TestRQJob(FrappeTestCase):
 		# If this starts failing analyze memory usage using memray or some equivalent tool to find
 		# offending imports/function calls.
 		# Refer this PR: https://github.com/frappe/frappe/pull/21467
-<<<<<<< HEAD
-		LAST_MEASURED_USAGE = 41
-=======
 		LAST_MEASURED_USAGE = 46
-		if frappe.conf.use_mysqlclient:
-			# TEMP: Add extra allowance for running two connectors, this should be rolled back before v16
-			LAST_MEASURED_USAGE += 2
 
 		# Observed higher usage on 3.14. Temporarily raising the limit
 		from sys import version_info
@@ -182,7 +176,6 @@ class TestRQJob(FrappeTestCase):
 		if version_info >= (3, 14):
 			LAST_MEASURED_USAGE += 5
 
->>>>>>> 6e20cde862 (chore: temporarily raise allow higher memory usage in basic rq job)
 		self.assertLessEqual(rss, LAST_MEASURED_USAGE * 1.05, msg)
 
 	def test_clear_failed_jobs(self):
