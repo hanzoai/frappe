@@ -271,7 +271,11 @@ export class SidebarEditor {
 							break;
 					}
 
-					if (d.get_value("type") == "Link" && d.get_value("link_type") !== "URL") {
+					if (
+						!d.get_value("link_to") &&
+						d.get_value("type") == "Link" &&
+						d.get_value("link_type") !== "URL"
+					) {
 						d.set_value("link_to", label);
 					}
 
