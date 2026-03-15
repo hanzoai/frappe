@@ -2,30 +2,48 @@ frappe.ui.form.on("Background Task", {
 	refresh(frm) {
 		frm.disable_save();
 
-		if (frm.doc.status === "Running") {
-			frm.dashboard.add_progress(__("Task Progress"), frm.doc.progress || 0);
-
-			frm.task_update_handler = (data) => {
-				if (data.task_id !== frm.doc.task_id) return;
-
-				if (data.progress !== undefined) {
-					frm.dashboard.add_progress(__("Task Progress"), data.progress);
-				}
-				if (data.stage) {
-					frm.dashboard.set_headline(data.stage);
-				}
-				if (data.status && data.status !== "Running") {
-					frappe.realtime.off("task_update", frm.task_update_handler);
-					frm.reload_doc();
-				}
-			};
-
-			frappe.realtime.on("task_update", frm.task_update_handler);
+		if (frm.task_update_handler) {
+			frappe.realtime.off("task_update", frm.task_update_handler);
+			frm.task_update_handler = null;
 		}
 
+		if (!["Queued", "Running"].includes(frm.doc.status)) {
+			return;
+		}
+
+		let stage_text = frm.doc.stage || "";
 		if (frm.doc.status === "Queued") {
-			frm.dashboard.set_headline(__("Waiting for a worker to pick up this task..."));
+			stage_text = __("Waiting for a worker to pick up this task...");
 		}
+		if (stage_text) {
+			frm.dashboard.set_headline(stage_text);
+		}
+
+		let progress_value = frm.doc.progress || 0;
+		frm.dashboard.show_progress(__("Task Progress"), progress_value);
+
+		let $bar = frm.dashboard.progress_area.body.find(".progress-bar");
+
+		frm.task_update_handler = (data) => {
+			if (data.task_id !== frm.doc.task_id) return;
+
+			if (data.progress !== undefined) {
+				$bar.css("width", data.progress + "%");
+			}
+
+			if (data.stage) {
+				frm.dashboard.clear_headline();
+				frm.dashboard.set_headline(data.stage);
+			}
+
+			if (data.status && data.status !== frm.doc.status) {
+				frappe.realtime.off("task_update", frm.task_update_handler);
+				frm.task_update_handler = null;
+				frm.reload_doc();
+			}
+		};
+
+		frappe.realtime.on("task_update", frm.task_update_handler);
 	},
 
 	on_page_leave(frm) {

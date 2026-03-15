@@ -508,6 +508,21 @@ frappe.ui.Sidebar = class Sidebar {
 				if (!$dropdown.hasClass("hidden")) {
 					$dropdown.trigger("show.bs.dropdown");
 				}
+				this.wrapper.find(".dropdown-background-tasks").addClass("hidden");
+				if (frappe.is_mobile()) {
+					this.wrapper.removeClass("expanded");
+				}
+			},
+		});
+		this.standard_items.push({
+			label: __("Background Tasks"),
+			icon: "server",
+			standard: true,
+			type: "Button",
+			class: "sidebar-background-tasks",
+			onClick: () => {
+				this.wrapper.find(".dropdown-notifications").addClass("hidden");
+				this.wrapper.find(".dropdown-background-tasks").toggleClass("hidden");
 				if (frappe.is_mobile()) {
 					this.wrapper.removeClass("expanded");
 				}
@@ -518,6 +533,7 @@ frappe.ui.Sidebar = class Sidebar {
 		});
 		this.setup_awesomebar();
 		this.setup_notifications();
+		this.setup_background_tasks();
 		this.standard_items_setup = true;
 	}
 	get_workspace_for_module(module) {
@@ -547,6 +563,11 @@ frappe.ui.Sidebar = class Sidebar {
 	setup_notifications() {
 		if (frappe.boot.desk_settings.notifications && frappe.session.user !== "Guest") {
 			this.notifications = new frappe.ui.Notifications({ full_height: true });
+		}
+	}
+	setup_background_tasks() {
+		if (frappe.session.user !== "Guest") {
+			this.background_tasks = new frappe.ui.BackgroundTasks({ full_height: true });
 		}
 	}
 	add_item(container, item) {
