@@ -58,6 +58,12 @@ def enqueue_task(
 			doc.ref_docname = ref_docname
 		doc.insert(ignore_permissions=True)
 
+		frappe.publish_realtime(
+			event="task_update",
+			message={"task_id": task_id, "task_name": task_name, "status": "Queued"},
+			user=user,
+		)
+
 		frappe.enqueue(
 			_execute_task,
 			queue=queue,
@@ -118,7 +124,7 @@ class TaskHandle:
 		self._publish(message)
 
 	def store_result(self, result) -> None:
-		"""Persist a JSON-serialisable result on the Background Task record"""
+		"""Store a JSON result of the task in DB"""
 		frappe.db.set_value(
 			"Background Task",
 			{"task_id": self.task_id},
@@ -163,6 +169,7 @@ def _execute_task(task_id: str, target_method: str | Callable, task_user: str, *
 				pass
 
 		frappe.db.set_value("Background Task", task_doc_filters, values, update_modified=False)
+		frappe.db.commit()
 		handle._publish({"task_id": task_id, "task_name": task_name, "status": "Completed", "progress": 100})
 
 		return result

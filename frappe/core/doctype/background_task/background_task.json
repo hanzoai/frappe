@@ -6,21 +6,29 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "status_and_progress_section",
   "task_id",
   "task_name",
+  "user",
+  "column_break_ljxx",
   "status",
   "progress",
   "stage",
-  "user",
+  "execution_details_section",
   "method",
-  "arguments",
-  "result",
-  "exception",
+  "queue",
+  "column_break_rnhf",
   "started_at",
   "ended_at",
+  "reference_section",
   "ref_doctype",
+  "column_break_him1",
   "ref_docname",
-  "queue"
+  "arguments_section",
+  "arguments",
+  "results__errors_section",
+  "result",
+  "exception"
  ],
  "fields": [
   {
@@ -58,12 +66,14 @@
    "fieldname": "method",
    "fieldtype": "Data",
    "label": "Method",
+   "permlevel": 1,
    "reqd": 1
   },
   {
    "fieldname": "arguments",
    "fieldtype": "JSON",
-   "label": "Arguments"
+   "label": "Arguments",
+   "permlevel": 1
   },
   {
    "fieldname": "result",
@@ -73,7 +83,8 @@
   {
    "fieldname": "exception",
    "fieldtype": "Long Text",
-   "label": "Exception"
+   "label": "Exception",
+   "permlevel": 1
   },
   {
    "fieldname": "started_at",
@@ -111,12 +122,50 @@
    "fieldname": "stage",
    "fieldtype": "Data",
    "label": "Stage"
+  },
+  {
+   "fieldname": "status_and_progress_section",
+   "fieldtype": "Section Break",
+   "label": "Status and Progress"
+  },
+  {
+   "fieldname": "column_break_ljxx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "execution_details_section",
+   "fieldtype": "Section Break",
+   "label": "Execution Details"
+  },
+  {
+   "fieldname": "column_break_rnhf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "reference_section",
+   "fieldtype": "Section Break",
+   "label": "Reference"
+  },
+  {
+   "fieldname": "column_break_him1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "results__errors_section",
+   "fieldtype": "Section Break",
+   "label": "Results"
+  },
+  {
+   "fieldname": "arguments_section",
+   "fieldtype": "Section Break",
+   "label": "Arguments",
+   "permlevel": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-12 12:53:11.349163",
+ "modified": "2026-03-14 17:58:02.872792",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Background Task",
@@ -143,6 +192,11 @@
    "report": 1,
    "role": "Desk User",
    "share": 1
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "System Manager"
   }
  ],
  "row_format": "Dynamic",
