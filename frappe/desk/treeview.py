@@ -14,18 +14,22 @@ def get_all_nodes(doctype, label, parent, tree_method, **filters):
 
 	try:
 		tree_method = frappe.override_whitelisted_method(tree_method)
-		calleble_tree_method = frappe.get_attr(tree_method)
+		callable_tree_method = frappe.get_attr(tree_method)
 	except Exception as e:
 		frappe.throw(_("Failed to get method for command {0} with {1}").format(tree_method, str(e)))
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	if tree_method not in frappe.whitelisted:
 		frappe.throw(_("Not Permitted"), frappe.PermissionError)
 =======
 	frappe.is_whitelisted(calleble_tree_method)
 >>>>>>> 8ee593a1da (fix: get_all_node respect override_whitelisted_methods hooks)
+=======
+	frappe.is_whitelisted(callable_tree_method)
+>>>>>>> 6d7e91208e (fix: correct variable name for callable tree method in get_all_nodes)
 
-	data = calleble_tree_method(doctype, parent, **filters)
+	data = callable_tree_method(doctype, parent, **filters)
 	out = [dict(parent=label, data=data)]
 
 	filters.pop("is_root", None)
@@ -33,7 +37,7 @@ def get_all_nodes(doctype, label, parent, tree_method, **filters):
 
 	while to_check:
 		parent = to_check.pop()
-		data = calleble_tree_method(doctype, parent, is_root=False, **filters)
+		data = callable_tree_method(doctype, parent, is_root=False, **filters)
 		out.append(dict(parent=parent, data=data))
 		for d in data:
 			if d.get("expandable"):
