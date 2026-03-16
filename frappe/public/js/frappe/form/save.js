@@ -201,7 +201,7 @@ frappe.ui.form.check_mandatory = function (frm) {
 		if (df.mandatory_depends_on && doc) {
 			let out = null;
 			let expression = df.mandatory_depends_on;
-			let parent = frappe.get_meta(df.parent);
+			let parent = frm.doc;
 
 			if (typeof expression === "boolean") {
 				out = expression;
@@ -210,9 +210,6 @@ frappe.ui.form.check_mandatory = function (frm) {
 			} else if (expression.substr(0, 5) == "eval:") {
 				try {
 					out = frappe.utils.eval(expression.substr(5), { doc, parent });
-					if (parent && parent.istable && expression.includes("is_submittable")) {
-						out = true;
-					}
 				} catch (e) {
 					frappe.throw(__('Invalid "mandatory_depends_on" expression'));
 				}

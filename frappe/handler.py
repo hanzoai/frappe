@@ -165,7 +165,6 @@ def upload_file():
 		file = files["file"]
 		filename = file.filename
 
-		total_file_size = frappe.form_dict.total_file_size
 		if frappe.form_dict.chunk_index:
 			current_chunk = int(frappe.form_dict.chunk_index)
 			total_chunks = int(frappe.form_dict.total_chunk_count)
@@ -176,7 +175,8 @@ def upload_file():
 			total_chunks = 1
 
 		temp_path = Path(get_files_path(".temp-" + get_safe_file_name(filename), is_private=is_private))
-		with temp_path.open("ab") as f:
+		with temp_path.open("ab" if current_chunk > 0 else "wb") as f:
+			total_file_size = frappe.form_dict.total_file_size or 0
 			f.seek(offset)
 			f.write(file.stream.read())
 			if not f.tell() >= int(total_file_size) or current_chunk != total_chunks - 1:
