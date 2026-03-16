@@ -175,7 +175,6 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 			this.body.append(`
 				<div class="bg-tasks-null-state">
 					<div class="text-center">
-						<img src="/assets/frappe/images/ui-states/notification-empty-state.svg" alt="Generic Empty State" class="null-state">
 						<div class="title">${__("No background tasks")}</div>
 						<div class="subtitle">${__(
 							"Looks like there are no background tasks running or completed recently."
