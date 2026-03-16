@@ -764,12 +764,6 @@ from {tables}
 			else:
 				self.remove_field(i)
 
-		# handle * fields
-		j = 0
-		for i in asterisk_fields:
-			self.fields[i + j : i + j + 1] = permitted_fields
-			j = j + len(permitted_fields) - 1
-
 	def prepare_filter_condition(self, f):
 		"""Returns a filter condition in the format:
 		ifnull(`tabDocType`.`fieldname`, fallback) operator "value"
