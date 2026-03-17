@@ -113,6 +113,7 @@ def _(msg: str, lang: str | None = None, context: str | None = None) -> str:
 	if not lang:
 		lang = local.lang
 
+	all_translations = get_all_translations(lang)
 	non_translated_string = msg
 
 	if is_html(msg):
@@ -120,18 +121,23 @@ def _(msg: str, lang: str | None = None, context: str | None = None) -> str:
 
 	# msg should always be unicode
 	msg = as_unicode(msg).strip()
+	msg_with_html = as_unicode(non_translated_string).strip()
+	msg_list = [msg, msg_with_html]
 
-	translated_string = ""
+	for msg in msg_list:
+		translated_string = ""
 
-	all_translations = get_all_translations(lang)
-	if context:
-		string_key = f"{msg}:{context}"
-		translated_string = all_translations.get(string_key)
+		if context:
+			string_key = f"{msg}:{context}"
+			translated_string = all_translations.get(string_key)
 
-	if not translated_string:
-		translated_string = all_translations.get(msg)
+		if not translated_string:
+			translated_string = all_translations.get(msg)
 
-	return translated_string or non_translated_string
+		if translated_string:
+			return translated_string
+
+	return non_translated_string
 
 
 def _lt(msg: str, lang: str | None = None, context: str | None = None):
