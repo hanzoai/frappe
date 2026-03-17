@@ -133,7 +133,7 @@ def get_messages_for_boot():
 
 
 @frappe.whitelist(allow_guest=True, methods=["GET"])
-def get_boot_translations(lang=None):
+def get_boot_translations(lang: str | None = None) -> dict[str, str]:
 	"""Return all translations for the current user's language."""
 	frappe.local.response_headers["Cache-Control"] = "private, max-age=31536000"
 	return get_all_translations(lang or frappe.local.lang)
