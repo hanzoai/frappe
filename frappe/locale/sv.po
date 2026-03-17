@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-03-15 09:43+0000\n"
-"PO-Revision-Date: 2026-03-16 07:57\n"
+"PO-Revision-Date: 2026-03-17 08:18\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -4355,7 +4355,7 @@ msgstr "Kan inte ändra dokument status från 1 (Godkänd) till 0 (Utkast)"
 
 #: frappe/model/document.py:1064
 msgid "Cannot change docstatus of non submittable doctype {0}"
-msgstr ""
+msgstr "Kan inte ändra dokument status för ej godkännbar dokument typ {0}"
 
 #: frappe/public/js/workflow_builder/utils.js:170
 msgid "Cannot change state of Cancelled Document <b>({0} State)</b>"
@@ -9239,7 +9239,7 @@ msgstr "E-post kö är för närvarande avstängd. Återuppta för att automatis
 
 #: frappe/public/js/frappe/views/communication.js:955
 msgid "Email sending undone"
-msgstr ""
+msgstr "E-post sändning ångrad"
 
 #: frappe/email/doctype/email_queue/email_queue.py:197
 msgid "Email size {0:.2f} MB exceeds the maximum allowed size of {1:.2f} MB"
@@ -9247,7 +9247,7 @@ msgstr "E-post storlek {0:.2f} MB överskrider maximalt tillåten storlek på {1
 
 #: frappe/core/doctype/communication/email.py:349
 msgid "Email undo window is over. Cannot undo email."
-msgstr ""
+msgstr "E-post ånger tid är över. Kan inte ångra e-post sändning."
 
 #. Label of the section_break_udjs (Section Break) field in DocType 'System
 #. Health Report'
@@ -10283,7 +10283,7 @@ msgstr "Misslyckades med att dekryptera nyckel {0}"
 
 #: frappe/core/doctype/communication/email.py:344
 msgid "Failed to delete communication"
-msgstr ""
+msgstr "Misslyckades med att ta bort kommunikation"
 
 #: frappe/desk/reportview.py:642
 msgid "Failed to delete {0} documents: {1}"
@@ -14487,7 +14487,7 @@ msgstr "Det är riskabelt att ta bort denna fil: {0}. Kontakta System Administra
 
 #: frappe/core/doctype/communication/email.py:359
 msgid "It is too late to undo this email. It is already being sent."
-msgstr ""
+msgstr "Det är för sent att ångra detta e-post meddelande. Det har redan skickats."
 
 #. Label of the item_label (Data) field in DocType 'Navbar Item'
 #: frappe/core/doctype/navbar_item/navbar_item.json
@@ -17463,7 +17463,7 @@ msgstr "Ny lösenord kan inte vara samma som gammalt lösenord"
 
 #: frappe/core/doctype/user/user.py:934
 msgid "New password cannot be the same as your current password. Please choose a different password."
-msgstr ""
+msgstr "Det nya lösenordet får inte vara detsamma som ditt nuvarande lösenord. Välj ett annat lösenord."
 
 #: frappe/utils/change_log.py:389
 msgid "New updates are available"
@@ -31247,7 +31247,7 @@ msgstr "Du har inte behörighet att uppdatera denna Webb Formulär Dokument"
 
 #: frappe/core/doctype/communication/email.py:341
 msgid "You are not authorized to undo this email"
-msgstr ""
+msgstr "Du är inte behörig att ångra detta e-postmeddelande"
 
 #: frappe/public/js/frappe/request.js:37
 msgid "You are not connected to Internet. Retry after sometime."
@@ -33430,7 +33430,7 @@ msgstr "{0}: {1}"
 
 #: frappe/public/js/frappe/form/controls/link.js:945
 msgid "{0}: {1} did not match any results."
-msgstr ""
+msgstr "{0}: {1} gav inte några resultat."
 
 #: frappe/workflow/doctype/workflow_action/workflow_action.py:181
 msgid "{0}: {1} is set to state {2}"
