@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-03-15 09:43+0000\n"
-"PO-Revision-Date: 2026-03-16 07:58\n"
+"PO-Revision-Date: 2026-03-17 08:18\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Serbian (Latin)\n"
 "MIME-Version: 1.0\n"
@@ -2723,7 +2723,7 @@ msgstr "Da li ste sigurni da želite da generišete novi izveštaj?"
 
 #: frappe/public/js/frappe/desk.js:380
 msgid "Are you sure you want to log out?"
-msgstr ""
+msgstr "Da li ste sigurni da želite da se odjavite?"
 
 #: frappe/public/js/frappe/form/toolbar.js:130
 msgid "Are you sure you want to merge {0} with {1}?"
@@ -4355,7 +4355,7 @@ msgstr "Nije moguće promeniti status dokumenta iz 1 (podnet) u 0 (nacrt)"
 
 #: frappe/model/document.py:1064
 msgid "Cannot change docstatus of non submittable doctype {0}"
-msgstr ""
+msgstr "Nije moguće promeniti status dokumenta za DocType koji se ne može podneti {0}"
 
 #: frappe/public/js/workflow_builder/utils.js:170
 msgid "Cannot change state of Cancelled Document <b>({0} State)</b>"
@@ -9239,7 +9239,7 @@ msgstr "Red čekanja za imejlove je trenutno obustavljen. Nastavite da bi se ost
 
 #: frappe/public/js/frappe/views/communication.js:955
 msgid "Email sending undone"
-msgstr ""
+msgstr "Slanje imejla je poništeno"
 
 #: frappe/email/doctype/email_queue/email_queue.py:197
 msgid "Email size {0:.2f} MB exceeds the maximum allowed size of {1:.2f} MB"
@@ -9247,7 +9247,7 @@ msgstr "Veličina imejla {0:.2f} MB premašuje maksimalno dozvoljenu veličinu o
 
 #: frappe/core/doctype/communication/email.py:349
 msgid "Email undo window is over. Cannot undo email."
-msgstr ""
+msgstr "Vreme za poništavanje imejla je isteklo. Nije moguće poništiti imejl."
 
 #. Label of the section_break_udjs (Section Break) field in DocType 'System
 #. Health Report'
@@ -10283,7 +10283,7 @@ msgstr "Neuspešno dešifrovanje ključa {0}"
 
 #: frappe/core/doctype/communication/email.py:344
 msgid "Failed to delete communication"
-msgstr ""
+msgstr "Brisanje komunikacije nije uspelo"
 
 #: frappe/desk/reportview.py:642
 msgid "Failed to delete {0} documents: {1}"
@@ -14487,7 +14487,7 @@ msgstr "Rizično je obrisati ovu datoteku: {0}. Molimo Vas da kontaktirate siste
 
 #: frappe/core/doctype/communication/email.py:359
 msgid "It is too late to undo this email. It is already being sent."
-msgstr ""
+msgstr "Prekasno je za poništavanje ovog imejla. Imejl je već u procesu slanja."
 
 #. Label of the item_label (Data) field in DocType 'Navbar Item'
 #: frappe/core/doctype/navbar_item/navbar_item.json
@@ -17463,7 +17463,7 @@ msgstr "Nova lozinka ne sme biti ista kao stara lozinka"
 
 #: frappe/core/doctype/user/user.py:934
 msgid "New password cannot be the same as your current password. Please choose a different password."
-msgstr ""
+msgstr "Nova lozinka ne može biti ista kao trenutna lozinka. Molimo Vas da izaberete drugačiju lozinku."
 
 #: frappe/utils/change_log.py:389
 msgid "New updates are available"
@@ -31252,7 +31252,7 @@ msgstr "Nemate dozvolu da ažurirate ovaj dokument veb-obrasca"
 
 #: frappe/core/doctype/communication/email.py:341
 msgid "You are not authorized to undo this email"
-msgstr ""
+msgstr "Nemate ovlašćenje da poništite ovaj imejl"
 
 #: frappe/public/js/frappe/request.js:37
 msgid "You are not connected to Internet. Retry after sometime."
@@ -33435,7 +33435,7 @@ msgstr "{0}: {1}"
 
 #: frappe/public/js/frappe/form/controls/link.js:945
 msgid "{0}: {1} did not match any results."
-msgstr ""
+msgstr "{0}: {1} ne odgovara nijednom rezultatu."
 
 #: frappe/workflow/doctype/workflow_action/workflow_action.py:181
 msgid "{0}: {1} is set to state {2}"
