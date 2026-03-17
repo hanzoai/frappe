@@ -868,7 +868,11 @@ def has_child_permission(
 			return False
 
 		permlevel = parent_meta.get_field(parentfield).permlevel
-		accessible_permlevels = parent_meta.get_permlevel_access(ptype, user=user)
+		# checking for select == checking for "select or read"
+		# select does not support access of higher permlevel child tables, but read does
+		accessible_permlevels = parent_meta.get_permlevel_access(
+			"read" if ptype == "select" else ptype, user=user
+		)
 		if permlevel > 0 and permlevel not in accessible_permlevels:
 			push_perm_check_log(
 				_("Insufficient Permission Level for {0}").format(frappe.bold(parent_doctype)), debug=debug
