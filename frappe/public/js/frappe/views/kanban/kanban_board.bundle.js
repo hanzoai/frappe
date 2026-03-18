@@ -589,8 +589,6 @@ frappe.provide("frappe.views");
 				group: "cards",
 				animation: 150,
 				dataIdAttr: "data-name",
-				forceFallback: true,
-				fallbackTolerance: 20,
 				onStart: function () {
 					wrapper.find(".kanban-card.add-card").fadeOut(200, function () {
 						wrapper.find(".kanban-cards").height("100vh");
@@ -599,7 +597,6 @@ frappe.provide("frappe.views");
 				onEnd: function (e) {
 					wrapper.find(".kanban-card.add-card").fadeIn(100);
 					wrapper.find(".kanban-cards").height("auto");
-					// update order
 					const args = {
 						name: decodeURIComponent($(e.item).attr("data-name")),
 						from_colname: $(e.from)
@@ -611,7 +608,6 @@ frappe.provide("frappe.views");
 					};
 					store.dispatch("update_order_for_single_card", args);
 				},
-				onAdd: function () {},
 			});
 		}
 
