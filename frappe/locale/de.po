@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-01-02 22:45+0000\n"
-"PO-Revision-Date: 2026-03-09 21:08\n"
+"PO-Revision-Date: 2026-03-18 01:13\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -27934,7 +27934,7 @@ msgstr "Nummernkreis ausprobieren"
 #: frappe/printing/page/print/print.js:189
 #: frappe/printing/page/print/print.js:195
 msgid "Try the new Print Designer"
-msgstr "Probieren Sie den neuen Print-Designer"
+msgstr ""
 
 #: frappe/utils/password_strength.py:100
 msgid "Try to avoid repeated words and characters"
