@@ -850,12 +850,30 @@ from {tables}
 			if isinstance(values, str):
 				values = values.split(",")
 
+<<<<<<< HEAD
 			fallback = "''"
 			value = [frappe.db.escape((cstr(v) or "").strip(), percent=False) for v in values]
 			if len(value):
 				value = f"({', '.join(value)})"
 			else:
 				value = "('')"
+=======
+			if value is None:
+				values = f.value or ""
+				if isinstance(values, str):
+					try:
+						parsed = json.loads(values)
+						values = parsed if isinstance(parsed, list) else [parsed]
+					except (ValueError, TypeError):
+						values = values.split(",")
+
+				fallback = "''"
+				value = [frappe.db.escape((cstr(v) or "").strip(), percent=False) for v in values]
+				if len(value):
+					value = f"({', '.join(value)})"
+				else:
+					value = "('')"
+>>>>>>> 0d1f8992bc (fix(filter): use JSON encoding for in filter values containing commas)
 
 		else:
 			escape = True
