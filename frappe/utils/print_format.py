@@ -12,11 +12,8 @@ import frappe
 from frappe import _
 from frappe.core.doctype.access_log.access_log import make_access_log
 from frappe.translate import print_language
-<<<<<<< HEAD
 from frappe.utils.deprecations import deprecated
-=======
 from frappe.utils.jinja import render_template
->>>>>>> 71c85f1f53 (fix: render report letterhead jinja on print/pdf)
 from frappe.utils.pdf import get_pdf
 
 no_cache = 1

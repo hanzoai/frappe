@@ -22,22 +22,7 @@ export default class Tab {
 					href="#${id}"
 					role="tab"
 					aria-controls="${id}">
-<<<<<<< HEAD
-<<<<<<< HEAD
-					${__(this.label)}
-=======
-<<<<<<< HEAD
-						${
-							ICON_MAP[this.label] || this.df.icon
-								? frappe.utils.icon(this.df.icon || ICON_MAP[this.label])
-								: ""
-						}
-=======
->>>>>>> 19cdf236bc (fix: remove icon from form tabs)
-=======
->>>>>>> dff76a1f07 (fix: clean merge artifacts)
-						${__(this.label, null, this.doctype)}
->>>>>>> e94fd9e2f3 (fix: remove icon from form tabs)
+					${__(this.label, null, this.doctype)}
 				</button>
 			</li>
 		`).appendTo(this.tab_link_container);
