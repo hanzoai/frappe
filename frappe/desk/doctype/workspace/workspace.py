@@ -112,6 +112,7 @@ class Workspace(Document):
 			frappe.throw(
 				_("You need to be {0} to rename this document").format(frappe.bold("Workspace Manager")),
 				frappe.PermissionError,
+				title=_("Permission Error"),
 			)
 
 >>>>>>> abff9626a6 (fix: restrict public workspace rename to Workspace Manager)
