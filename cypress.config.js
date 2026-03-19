@@ -21,9 +21,13 @@ module.exports = defineConfig({
 		// We've imported your old cypress plugins here.
 		// You may want to clean this up later by importing these.
 		setupNodeEvents(on, config) {
+			// Splitting tests only works when Cypress Cloud is not orchestrating parallel runs.
+			if (process.env.CYPRESS_CLOUD_PARALLEL !== "1") {
+				cypressSplit(on, config);
+			}
+
 			// Delete videos for specs without failing or retried tests
 			// https://docs.cypress.io/guides/guides/screenshots-and-videos#Delete-videos-for-specs-without-failing-or-retried-tests
-			cypressSplit(on, config);
 			on("after:spec", (spec, results) => {
 				if (results && results.video) {
 					const failures = results.tests.some((test) =>
