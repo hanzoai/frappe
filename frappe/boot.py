@@ -26,6 +26,7 @@ from frappe.query_builder import DocType
 from frappe.query_builder.functions import Count
 from frappe.query_builder.terms import ParameterizedValueWrapper, SubQuery
 from frappe.utils import add_user_info, cstr, get_system_timezone
+from frappe.utils.caching import redis_cache
 from frappe.utils.change_log import get_versions
 from frappe.utils.frappecloud import on_frappecloud
 from frappe.website.doctype.web_page_view.web_page_view import is_tracking_enabled
@@ -65,10 +66,8 @@ def get_bootinfo():
 
 	bootinfo.module_app = frappe.local.module_app
 	bootinfo.single_types = [d.name for d in frappe.get_all("DocType", {"issingle": 1})]
-	bootinfo.nested_set_doctypes = [
-		d.parent for d in frappe.get_all("DocField", {"fieldname": "lft"}, ["parent"])
-	]
-	bootinfo.tree_view_doctypes = [d.name for d in frappe.get_all("DocType", {"default_view": "Tree"})]
+	bootinfo.nested_set_doctypes = frappe.get_all("DocField", {"fieldname": "lft"}, pluck="parent")
+	bootinfo.tree_view_doctypes = get_tree_view_doctypes()
 	add_home_page(bootinfo, doclist)
 	bootinfo.page_info = get_allowed_pages()
 	load_translations(bootinfo)
@@ -521,6 +520,11 @@ def get_marketplace_apps():
 		frappe.cache.set_value(cache_key, apps, shared=True, expires_in_sec=24 * 60 * 60)
 
 	return apps
+
+
+@redis_cache
+def get_tree_view_doctypes():
+	return frappe.get_all("DocType", {"default_view": "Tree"}, pluck="name")
 
 
 def add_subscription_conf():
