@@ -117,6 +117,7 @@ class Workspace(Document):
 			frappe.throw(
 				_("You need to be {0} to rename this document").format(frappe.bold("Workspace Manager")),
 				frappe.PermissionError,
+				title=_("Permission Error"),
 			)
 
 	def clear_cache(self):
