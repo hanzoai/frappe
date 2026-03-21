@@ -203,7 +203,9 @@ frappe.ui.Filter = class {
 		this._filter_value_set = Promise.resolve();
 
 		if (["in", "not in"].includes(condition) && Array.isArray(value)) {
-			value = value.some((v) => String(v).includes(",")) ? JSON.stringify(value) : value.join(",");
+			value = value.some((v) => String(v).includes(","))
+				? JSON.stringify(value)
+				: value.join(",");
 		}
 
 		if (Array.isArray(value)) {
