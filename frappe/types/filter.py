@@ -113,7 +113,7 @@ class FilterTuple(_FilterTuple):
 			if operator in ("in", "not in") and isinstance(value, str):
 				try:
 					parsed = json.loads(value)
-					value = parsed if isinstance(parsed, list) else [parsed]
+					value = parsed if isinstance(parsed, list) else value.split(",")  # type: ignore[assignment]
 				except ValueError:
 					value = value.split(",")
 
