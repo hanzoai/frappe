@@ -864,7 +864,7 @@ from {tables}
 					try:
 						parsed = json.loads(values)
 						values = parsed if isinstance(parsed, list) else [parsed]
-					except (ValueError, TypeError):
+					except ValueError:
 						values = values.split(",")
 
 				fallback = "''"
