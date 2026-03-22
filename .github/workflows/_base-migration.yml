@@ -105,9 +105,6 @@ jobs:
         source $RUNNER_TEMP/migrate
         update_to_version 15 3.13
         exit $?
-<<<<<<< HEAD
-        
-=======
 
     - name: Update to v16
       run: |
@@ -115,7 +112,6 @@ jobs:
         update_to_version 16
         exit $?
 
->>>>>>> a803525933 (refactor: ci)
     - name: Update to last commit
       run: |
         source $RUNNER_TEMP/migrate
