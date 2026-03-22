@@ -912,7 +912,14 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 			Edit: {
 				label: __("Edit"),
 				click: () => {
-					frappe.set_route(frappe.get_route());
+					this.prepared_report_name = null;
+					Object.values(this.filters).forEach((field) => {
+						if (field.input) {
+							field.df.read_only = false;
+							field.refresh();
+						}
+					});
+					this.add_prepared_report_buttons(this.prepared_report_document);
 				},
 			},
 			Rebuild: {
