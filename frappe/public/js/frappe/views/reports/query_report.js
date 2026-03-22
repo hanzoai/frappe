@@ -915,7 +915,8 @@ frappe.views.QueryReport = class QueryReport extends frappe.views.BaseList {
 					this.prepared_report_name = null;
 					Object.values(this.filters).forEach((field) => {
 						if (field.input) {
-							field.input.disabled = false;
+							field.df.read_only = false;
+							field.refresh();
 						}
 					});
 					this.add_prepared_report_buttons(this.prepared_report_document);
