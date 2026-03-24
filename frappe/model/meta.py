@@ -583,7 +583,7 @@ class Meta(Document):
 	def get_high_permlevel_fields(self):
 		"""Build list of fields with high perm level and all the higher perm levels defined."""
 		if not hasattr(self, "high_permlevel_fields"):
-			self.high_permlevel_fields = [df for df in self.fields if df.permlevel > 0]
+			self.high_permlevel_fields = [df for df in self.fields if (df.permlevel or 0) > 0]
 		return self.high_permlevel_fields
 
 	def get_permitted_fieldnames(
