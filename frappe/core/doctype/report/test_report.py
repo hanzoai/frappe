@@ -406,3 +406,30 @@ result = [
 		self.assertEqual(result[-1][0], "Total")
 		self.assertEqual(result[-1][1], 200)
 		self.assertEqual(result[-1][2], 150.50)
+
+	def test_report_cache_invalidation(self):
+		from frappe.boot import get_bootinfo
+
+		frappe.set_user("test@example.com")
+
+		try:
+			bootinfo = get_bootinfo()
+			frappe.cache.hset("bootinfo", frappe.session.user, bootinfo)
+
+			report_name = _save_report(
+				"Test Cache Invalidation Report",
+				"User",
+				json.dumps([{"fieldname": "email", "fieldtype": "Data", "label": "Email"}]),
+			)
+
+			cached_bootinfo = frappe.cache.hget("bootinfo", frappe.session.user)
+			self.assertIn(report_name, cached_bootinfo["user"]["all_reports"])
+
+			doc = frappe.get_doc("Report", report_name)
+			delete_report(doc.name)
+
+			cached_bootinfo = frappe.cache.hget("bootinfo", frappe.session.user)
+			self.assertNotIn(report_name, cached_bootinfo["user"]["all_reports"])
+
+		finally:
+			frappe.set_user("Administrator")
