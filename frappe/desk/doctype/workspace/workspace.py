@@ -100,13 +100,6 @@ class Workspace(Document):
 			if shortcut.type == "Report":
 				shortcut.report_ref_doctype = frappe.get_value("Report", shortcut.link_to, "ref_doctype")
 
-<<<<<<< HEAD
-=======
-		if not self.app and self.module:
-			from frappe.modules.utils import get_module_app
-
-			self.app = get_module_app(self.module)
-
 	def before_rename(self, old_name, new_name, merge=False):
 		if self.public and not is_workspace_manager() and not disable_saving_as_public():
 			frappe.throw(
@@ -115,7 +108,6 @@ class Workspace(Document):
 				title=_("Permission Error"),
 			)
 
->>>>>>> abff9626a6 (fix: restrict public workspace rename to Workspace Manager)
 	def clear_cache(self):
 		super().clear_cache()
 		if self.for_user:
