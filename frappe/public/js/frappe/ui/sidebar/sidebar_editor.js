@@ -334,6 +334,14 @@ export class SidebarEditor {
 				label: "URL",
 			},
 			{
+				depends_on: 'eval: doc.link_type == "URL"',
+				fieldname: "open_in_new_tab",
+				fieldtype: "Check",
+				default: "1",
+				label: "Open in New Tab",
+				description: "open the URL in a new browser tab",
+			},
+			{
 				depends_on:
 					'eval: doc.type == "Link" || (doc.indent == 1 && doc.type == "Section Break")',
 				fieldname: "icon",
