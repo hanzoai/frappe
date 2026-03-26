@@ -250,22 +250,21 @@ def clear_cache():
 	frappe.cache.delete_value(
 		keys=["bootinfo", USER_TRANSLATION_KEY, MERGED_TRANSLATION_KEY],
 	)
-	bump_translation_version()
+	change_translation_version()
 
 
 def get_translation_version() -> str:
 	"""Return the current translation version from cache."""
 	version = frappe.cache.get_value(TRANSLATION_VERSION_KEY)
 	if version is None:
-		version = 1
+		version = frappe.generate_hash(length=8)
 		frappe.cache.set_value(TRANSLATION_VERSION_KEY, version)
-	return str(version)
+	return version
 
 
-def bump_translation_version():
-	"""Increment the translation version so browser caches are invalidated."""
-	current = frappe.cache.get_value(TRANSLATION_VERSION_KEY) or 0
-	frappe.cache.set_value(TRANSLATION_VERSION_KEY, int(current) + 1)
+def change_translation_version():
+	"""Generate a new random translation version to invalidate browser caches."""
+	frappe.cache.set_value(TRANSLATION_VERSION_KEY, frappe.generate_hash(length=8))
 
 
 def get_messages_for_app(app, deduplicate=True):
