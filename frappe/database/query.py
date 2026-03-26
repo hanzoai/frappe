@@ -2420,13 +2420,14 @@ class SQLFunctionParser:
 					).format(arg),
 					frappe.ValidationError,
 				)
-		elif self._is_valid_field_name(arg):
-			self._check_function_field_permission(arg)
-			return self.engine.table[arg]
 
 		# Check if it's a numeric string like "1" (for COUNT(1), etc.)
 		elif arg.isdigit():
 			return int(arg)
+
+		elif self._is_valid_field_name(arg):
+			self._check_function_field_permission(arg)
+			return self.engine.table[arg]
 
 		else:
 			frappe.throw(
