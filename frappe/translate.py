@@ -264,10 +264,8 @@ def get_translation_version() -> str:
 
 def bump_translation_version():
 	"""Increment the translation version so browser caches are invalidated."""
-	try:
-		frappe.cache.incrby(TRANSLATION_VERSION_KEY, 1)
-	except Exception:
-		frappe.cache.set_value(TRANSLATION_VERSION_KEY, 1)
+	current = frappe.cache.get_value(TRANSLATION_VERSION_KEY) or 0
+	frappe.cache.set_value(TRANSLATION_VERSION_KEY, int(current) + 1)
 
 
 def get_messages_for_app(app, deduplicate=True):
