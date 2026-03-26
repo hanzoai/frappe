@@ -552,9 +552,6 @@ class TestOperatorIn(IntegrationTestCase):
 		self.test_doctype_name = test_doctype.name
 		self.addCleanup(frappe.delete_doc, "DocType", self.test_doctype_name)
 
-		frappe.db.sql(f"DELETE FROM `tab{self.test_doctype_name}`")
-		frappe.db.commit()
-
 		doc_null = frappe.get_doc({"doctype": self.test_doctype_name, "test_field": None})
 		doc_null.insert()
 		doc_empty = frappe.get_doc({"doctype": self.test_doctype_name, "test_field": ""})
