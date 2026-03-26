@@ -20,6 +20,7 @@ from csv import reader, writer
 import frappe
 from frappe.query_builder import DocType, Field
 from frappe.utils import cstr, get_bench_path, is_html, strip, strip_html_tags, unique
+from frappe.utils.caching import http_cache
 
 REPORT_TRANSLATE_PATTERN = re.compile('"([^:,^"]*):')
 CSV_STRIP_WHITESPACE_PATTERN = re.compile(r"{\s?([0-9]+)\s?}")
@@ -28,6 +29,7 @@ CSV_STRIP_WHITESPACE_PATTERN = re.compile(r"{\s?([0-9]+)\s?}")
 # Cache keys
 MERGED_TRANSLATION_KEY = "merged_translations"
 USER_TRANSLATION_KEY = "lang_user_translations"
+TRANSLATION_VERSION_KEY = "translation_version"
 
 
 def get_language(lang_list: list | None = None) -> str:
@@ -133,9 +135,9 @@ def get_messages_for_boot():
 
 
 @frappe.whitelist(allow_guest=True, methods=["GET"])
+@http_cache(max_age=31536000)
 def get_boot_translations(lang: str | None = None) -> dict[str, str]:
 	"""Return all translations for the current user's language."""
-	frappe.local.response_headers["Cache-Control"] = "private, max-age=31536000"
 	return get_all_translations(lang or frappe.local.lang)
 
 
@@ -248,6 +250,24 @@ def clear_cache():
 	frappe.cache.delete_value(
 		keys=["bootinfo", USER_TRANSLATION_KEY, MERGED_TRANSLATION_KEY],
 	)
+	bump_translation_version()
+
+
+def get_translation_version() -> str:
+	"""Return the current translation version from cache."""
+	version = frappe.cache.get_value(TRANSLATION_VERSION_KEY)
+	if version is None:
+		version = 1
+		frappe.cache.set_value(TRANSLATION_VERSION_KEY, version)
+	return str(version)
+
+
+def bump_translation_version():
+	"""Increment the translation version so browser caches are invalidated."""
+	try:
+		frappe.cache.incrby(TRANSLATION_VERSION_KEY, 1)
+	except Exception:
+		frappe.cache.set_value(TRANSLATION_VERSION_KEY, 1)
 
 
 def get_messages_for_app(app, deduplicate=True):

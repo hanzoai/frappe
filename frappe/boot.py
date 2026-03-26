@@ -342,7 +342,10 @@ def get_user_pages_or_reports(parent, cache=False):
 
 
 def load_translations(bootinfo):
+	from frappe.translate import get_translation_version
+
 	bootinfo["lang"] = frappe.lang
+	bootinfo["translations_version"] = get_translation_version()
 
 
 def get_user_info():
