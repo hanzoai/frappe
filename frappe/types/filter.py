@@ -6,9 +6,9 @@ from datetime import date, datetime
 from itertools import groupby
 from operator import attrgetter
 from typing import Any, NamedTuple, TypeAlias, TypeGuard, TypeVar, cast
-from typing_extensions import Self, override
 
 from pypika import Column
+from typing_extensions import Self, override
 
 Doct: TypeAlias = str
 Fld: TypeAlias = str
