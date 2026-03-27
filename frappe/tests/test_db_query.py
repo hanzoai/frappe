@@ -300,7 +300,6 @@ class TestDBQuery(FrappeTestCase):
 			frappe.get_all("DocType", as_list=True), frappe.get_all("DocType", fields="name", as_list=True)
 		)
 
-
 	def test_none_filter(self):
 		query = frappe.qb.get_query("DocType", fields="name", filters={"restrict_to_domain": None})
 		sql = str(query).replace("`", "").replace('"', "")
