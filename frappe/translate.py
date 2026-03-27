@@ -19,7 +19,7 @@ from csv import reader, writer
 
 import frappe
 from frappe.query_builder import DocType, Field
-from frappe.utils import cstr, get_bench_path, is_html, strip, strip_html_tags, unique
+from frappe.utils import cstr, get_bench_path, get_build_version, is_html, strip, strip_html_tags, unique
 from frappe.utils.caching import http_cache
 
 REPORT_TRANSLATE_PATTERN = re.compile('"([^:,^"]*):')
@@ -259,7 +259,7 @@ def get_translation_version() -> str:
 	if version is None:
 		version = frappe.generate_hash(length=8)
 		frappe.cache.set_value(TRANSLATION_VERSION_KEY, version)
-	return version
+	return f"{version}_{get_build_version()}"
 
 
 def change_translation_version():
