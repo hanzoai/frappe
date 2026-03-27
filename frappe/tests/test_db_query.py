@@ -268,8 +268,6 @@ class TestDBQuery(FrappeTestCase):
 				result in DatabaseQuery("DocType").execute(filters={"name": ["not in", "DocType,DocField"]})
 			)
 
-<<<<<<< HEAD
-=======
 	def test_in_filter_json_encoded_values(self):
 		# JSON-encoded list string should work the same as comma-separated
 		for result in [{"name": "DocType"}, {"name": "DocField"}]:
@@ -302,7 +300,7 @@ class TestDBQuery(FrappeTestCase):
 			frappe.get_all("DocType", as_list=True), frappe.get_all("DocType", fields="name", as_list=True)
 		)
 
->>>>>>> d609b8e2cc (test: add test cases)
+
 	def test_none_filter(self):
 		query = frappe.qb.get_query("DocType", fields="name", filters={"restrict_to_domain": None})
 		sql = str(query).replace("`", "").replace('"', "")
