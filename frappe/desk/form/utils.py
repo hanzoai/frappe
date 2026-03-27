@@ -79,18 +79,14 @@ def update_comment_publicity(name: str, publish: bool):
 
 
 @frappe.whitelist()
-<<<<<<< HEAD
-def get_next(doctype, value, prev, filters=None, sort_order="desc", sort_field="modified"):
-=======
 def get_next(
 	doctype: str,
 	value: str,
 	prev: str | int,
 	filters: dict | str | None = None,
 	sort_order: str = "desc",
-	sort_field: str = "creation",
+	sort_field: str = "modified",
 ):
->>>>>>> 8b276237b9 (fix: navigation api for explicit sorting (#37080))
 	prev = int(prev)
 	if not filters:
 		filters = []
@@ -114,26 +110,12 @@ def get_next(
 		)
 		order = frappe.qb.asc
 
-<<<<<<< HEAD
-	# # add condition for next or prev item
-	filters.append([doctype, sort_field, condition, frappe.get_value(doctype, value, sort_field)])
-
-	res = frappe.get_list(
-		doctype,
-		fields=["name"],
-		filters=filters,
-		order_by=f"`tab{doctype}`.{sort_field}" + " " + sort_order,
-		limit_start=0,
-		limit_page_length=1,
-		as_list=True,
-=======
 	query = (
 		frappe.qb.get_query(doctype, filters=filters, fields=["name"], ignore_permissions=False)
 		.orderby(sort_column, order=order)
 		.orderby(name_column, order=order)
 		.where(composite_condition)
 		.limit(1)
->>>>>>> 8b276237b9 (fix: navigation api for explicit sorting (#37080))
 	)
 
 	if res := query.run(as_list=True):
