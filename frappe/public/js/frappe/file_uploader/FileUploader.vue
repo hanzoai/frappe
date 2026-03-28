@@ -688,7 +688,7 @@ async function upload_file(file, i) {
 			if (chunk_blob) {
 				form_data.append("file", chunk_blob, file.name);
 			}
-			
+
 			form_data.append("is_private", +file.private);
 			form_data.append("folder", props.folder);
 			form_data.append("total_file_size", file.file_obj?.size ?? 0);
