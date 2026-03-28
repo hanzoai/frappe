@@ -416,7 +416,7 @@ class TestQuery(IntegrationTestCase):
 				"DocType",
 				filters={"name": ("in", [])},
 			).get_sql(),
-			"SELECT `name` FROM `tabDocType` WHERE `name` IN ('')",
+			"SELECT `name` FROM `tabDocType` WHERE COALESCE(`name`,'') IN ('')",
 		)
 
 		self.assertQueryEqual(
