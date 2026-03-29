@@ -34,7 +34,12 @@ def unimplemented_for(*dbtypes: db_type_is) -> Callable:
 @run_only_if(db_type_is.MARIADB)
 class TestCustomFunctionsMariaDB(IntegrationTestCase):
 	def test_concat(self):
-		self.assertEqual("GROUP_CONCAT('Notes')", GroupConcat("Notes").get_sql())
+		self.assertEqual("GROUP_CONCAT('Notes' SEPARATOR ',')", GroupConcat("Notes").get_sql())
+		user = frappe.qb.DocType("User")
+		query = frappe.qb.from_(user).select(GroupConcat(user.email).separator(" | ").as_("user_list"))
+		sql = query.get_sql()
+		self.assertIn("SEPARATOR ' | '", sql)
+		self.assertIn("`user_list`", sql)
 
 	def test_match(self):
 		query = Match("Notes")
