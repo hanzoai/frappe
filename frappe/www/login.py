@@ -23,8 +23,6 @@ no_cache = True
 
 
 def get_context(context):
-	from frappe.integrations.frappe_providers.frappecloud_billing import get_site_login_url
-	from frappe.utils.frappecloud import on_frappecloud
 
 	redirect_to = frappe.local.request.args.get("redirect-to")
 	redirect_to = sanitize_redirect(redirect_to)
