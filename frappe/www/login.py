@@ -23,7 +23,6 @@ no_cache = True
 
 
 def get_context(context):
-
 	redirect_to = frappe.local.request.args.get("redirect-to")
 	redirect_to = sanitize_redirect(redirect_to)
 
