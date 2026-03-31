@@ -34,7 +34,6 @@ frappe.ui.Notifications = class Notifications {
 		</span>`)
 			.on("click", (e) => {
 				e.stopImmediatePropagation();
-				console.log("what");
 				frappe.set_route("Form", "Notification Settings", frappe.session.user);
 			})
 			.appendTo(this.header_actions)
