@@ -224,8 +224,8 @@ class NotificationsView extends BaseNotificationsView {
 
 		this.setup_notification_listeners();
 
-		this.dropdown_items = []; 
-		this.notifications_fetched = false
+		this.dropdown_items = [];
+		this.notifications_fetched = false;
 
 		if (this.settings && this.settings.seen == 0) {
 			this.toggle_notification_icon(false);
