@@ -223,15 +223,13 @@ class NotificationsView extends BaseNotificationsView {
 			.tooltip({ delay: { show: 600, hide: 100 }, trigger: "hover" });
 
 		this.setup_notification_listeners();
-		this.get_notifications_list(this.max_length).then((r) => {
-			if (!r.message) return;
-			this.dropdown_items = r.message.notification_logs;
-			frappe.update_user_info(r.message.user_info);
-			this.render_notifications_dropdown();
-			if (this.settings.seen == 0 && this.dropdown_items.length > 0) {
-				this.toggle_notification_icon(false);
-			}
-		});
+
+		this.dropdown_items = []; 
+		this.notifications_fetched = false
+
+		if (this.settings && this.settings.seen == 0) {
+			this.toggle_notification_icon(false);
+		}
 	}
 
 	update_dropdown() {
@@ -407,6 +405,21 @@ class NotificationsView extends BaseNotificationsView {
 		});
 
 		this.parent.on("show.bs.dropdown", () => {
+			if (!this.notifications_fetched) {
+				this.container.html(`<div class="notification-null-state">
+					<div class="text-center">
+						<div class="spinner-border spinner-border-sm text-muted"></div>
+					</div>
+				</div>`);
+				this.get_notifications_list(this.max_length).then((r) => {
+					if (!r.message) return;
+					this.dropdown_items = r.message.notification_logs;
+					frappe.update_user_info(r.message.user_info);
+					this.render_notifications_dropdown();
+					this.notifications_fetched = true;
+				});
+			}
+
 			this.toggle_seen(true);
 			if (this.notifications_icon.find(".notifications-unseen").is(":visible")) {
 				this.toggle_notification_icon(true);
@@ -420,20 +433,33 @@ class NotificationsView extends BaseNotificationsView {
 
 class EventsView extends BaseNotificationsView {
 	make() {
-		let today = frappe.datetime.get_today();
-		frappe
-			.xcall(
-				"frappe.desk.doctype.event.event.get_events",
-				{
-					start: today,
-					end: today,
-				},
-				"GET",
-				{ cache: true }
-			)
-			.then((event_list) => {
-				this.render_events_html(event_list);
-			});
+		this.events_fetched = false;
+
+		this.parent.on("show.bs.dropdown", () => {
+			if (this.events_fetched) return;
+
+			this.container.html(`<div class="notification-null-state">
+				<div class="text-center">
+					<div class="spinner-border spinner-border-sm text-muted"></div>
+				</div>
+			</div>`);
+
+			let today = frappe.datetime.get_today();
+			frappe
+				.xcall(
+					"frappe.desk.doctype.event.event.get_events",
+					{
+						start: today,
+						end: today,
+					},
+					"GET",
+					{ cache: true }
+				)
+				.then((event_list) => {
+					this.render_events_html(event_list);
+					this.events_fetched = true;
+				});
+		});
 	}
 
 	render_events_html(event_list) {
