@@ -23,6 +23,7 @@ def enqueue_task(
 	now: bool = False,
 	on_success: Callable | None = None,
 	on_failure: Callable | None = None,
+	show_progress_bar: bool = True,
 	at_front: bool = False,
 	at_front_when_starved: bool = False,
 	**kwargs,
@@ -53,6 +54,7 @@ def enqueue_task(
 		doc.method = method_name
 		doc.arguments = arguments_json
 		doc.queue = queue
+		doc.show_progress_bar = show_progress_bar
 		if ref_doctype:
 			doc.ref_doctype = ref_doctype
 		if ref_docname:

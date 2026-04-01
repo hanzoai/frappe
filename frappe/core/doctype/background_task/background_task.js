@@ -20,14 +20,18 @@ frappe.ui.form.on("Background Task", {
 		}
 
 		let progress_value = frm.doc.progress || 0;
-		frm.dashboard.show_progress(__("Task Progress"), progress_value);
+		if (frm.doc.show_progress_bar !== 0) {
+			frm.dashboard.show_progress(__("Task Progress"), progress_value);
+		}
 
-		let $bar = frm.dashboard.progress_area.body.find(".progress-bar");
+		let $bar = frm.dashboard.progress_area
+			? frm.dashboard.progress_area.body.find(".progress-bar")
+			: null;
 
 		frm.task_update_handler = (data) => {
 			if (data.task_id !== frm.doc.task_id) return;
 
-			if (data.progress !== undefined) {
+			if (data.progress !== undefined && $bar) {
 				$bar.css("width", data.progress + "%");
 			}
 

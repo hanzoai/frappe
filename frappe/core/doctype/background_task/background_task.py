@@ -23,6 +23,7 @@ class BackgroundTask(Document):
 		ref_docname: DF.DynamicLink | None
 		ref_doctype: DF.Link | None
 		result: DF.LongText | None
+		show_progress_bar: DF.Check
 		stage: DF.Data | None
 		started_at: DF.Datetime | None
 		status: DF.Literal["Queued", "Running", "Completed", "Failed"]

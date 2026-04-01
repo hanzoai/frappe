@@ -116,6 +116,7 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 							"status",
 							"stage",
 							"progress",
+							"show_progress_bar",
 							"creation",
 						],
 						limit: 1,
@@ -157,6 +158,7 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 					"status",
 					"stage",
 					"progress",
+					"show_progress_bar",
 					"creation",
 				],
 				limit: 15,
@@ -212,11 +214,17 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 			let stage_html = `<div class="bg-task-stage">${frappe.utils.escape_html(
 				task.stage || ""
 			)}</div>`;
+
+			let bar_html = "";
+			if (task.show_progress_bar !== 0) {
+				bar_html = `<div class="progress">
+					<div class="progress-bar ${bg_class}" role="progressbar" style="width: ${progress}%;" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100"></div>
+				</div>`;
+			}
+
 			progress_bar = `
 				${stage_html}
-				<div class="progress">
-					<div class="progress-bar ${bg_class}" role="progressbar" style="width: ${progress}%;" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100"></div>
-				</div>
+				${bar_html}
 			`;
 		}
 

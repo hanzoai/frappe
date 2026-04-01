@@ -28,7 +28,8 @@
   "arguments",
   "results__errors_section",
   "result",
-  "exception"
+  "exception",
+  "show_progress_bar"
  ],
  "fields": [
   {
@@ -160,12 +161,19 @@
    "fieldtype": "Section Break",
    "label": "Arguments",
    "permlevel": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "show_progress_bar",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Show Progress Bar"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-14 17:58:02.872792",
+ "modified": "2026-04-01 19:06:34.632943",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "Background Task",
