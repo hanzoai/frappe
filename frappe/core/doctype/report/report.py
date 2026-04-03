@@ -32,6 +32,7 @@ class Report(Document):
 		add_total_row: DF.Check
 		add_translate_data: DF.Check
 		columns: DF.Table[ReportColumn]
+		default_print_format: DF.Link | None
 		disabled: DF.Check
 		filters: DF.Table[ReportFilter]
 		is_standard: DF.Literal["No", "Yes"]
@@ -81,6 +82,11 @@ class Report(Document):
 
 		if self.report_type == "Report Builder":
 			self.update_report_json()
+
+		if self.default_print_format:
+			report_name = frappe.db.get_value("Print Format", self.default_print_format, "report")
+			if not report_name or report_name != self.name:
+				frappe.throw(_("Print Format must belong to this report!"))
 
 	def before_insert(self):
 		self.set_doctype_roles()
