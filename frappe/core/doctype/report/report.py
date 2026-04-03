@@ -83,10 +83,8 @@ class Report(Document):
 		if self.report_type == "Report Builder":
 			self.update_report_json()
 
-		if self.default_print_format:
-			report_name = frappe.db.get_value("Print Format", self.default_print_format, "report")
-			if not report_name or report_name != self.name:
-				frappe.throw(_("Print Format must belong to this report!"))
+		if self.default_print_format and self.has_value_changed("default_print_format"):
+			self.validate_default_print_format()
 
 	def before_insert(self):
 		self.set_doctype_roles()
@@ -413,6 +411,23 @@ class Report(Document):
 			data.append(_row)
 
 		return data
+
+	def validate_default_print_format(self):
+		pf = frappe.db.get_value(
+			"Print Format",
+			self.default_print_format,
+			["report", "print_format_for", "print_format_type", "disabled"],
+			as_dict=True,
+		)
+
+		if (
+			not pf
+			or pf.report != self.name
+			or pf.print_format_for != "Report"
+			or pf.print_format_type != "JS"
+			or pf.disabled
+		):
+			frappe.throw(_("Selected Print Format is invalid for this Report."))
 
 	@frappe.whitelist()
 	def toggle_disable(self, disable: bool):
