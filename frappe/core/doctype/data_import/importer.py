@@ -744,25 +744,6 @@ class Row:
 					}
 				)
 				return
-<<<<<<< HEAD
-=======
-		elif df.fieldtype == "Datetime":
-			value = self.get_datetime(value, col)
-			if isinstance(value, str):
-				# value was not parsed as datetime object
-				self.warnings.append(
-					{
-						"row": self.row_number,
-						"col": col.column_number,
-						"field": df_as_json(df),
-						"message": _("Value {0} must in {1} format").format(
-							frappe.bold(escape_html(cstr(value))),
-							frappe.bold(get_user_format(col.date_format)),
-						),
-					}
-				)
-				return
->>>>>>> e562966d46 (fix(security): escape html in invalidation warnings)
 		elif df.fieldtype == "Duration":
 			if not DURATION_PATTERN.match(value):
 				self.warnings.append(
