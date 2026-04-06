@@ -344,7 +344,7 @@ class NotificationsView extends BaseNotificationsView {
 						<div class="full-log-btn">${__("See all Activity")}</div>
 					</a>`);
 			} else {
-				this.container.append(
+				this.container.html(
 					$(`<div class="notification-null-state">
 					<div class="text-center">
 						<img src="/assets/frappe/images/ui-states/notification-empty-state.svg" alt="Generic Empty State" class="null-state">
@@ -412,9 +412,12 @@ class NotificationsView extends BaseNotificationsView {
 					</div>
 				</div>`);
 				this.get_notifications_list(this.max_length).then((r) => {
-					if (!r.message) return;
-					this.dropdown_items = r.message.notification_logs;
-					frappe.update_user_info(r.message.user_info);
+					if (r.message && r.message.notification_logs) {
+						this.dropdown_items = r.message.notification_logs;
+						frappe.update_user_info(r.message.user_info);
+					} else {
+						this.dropdown_items = [];
+					}
 					this.render_notifications_dropdown();
 					this.notifications_fetched = true;
 				});
