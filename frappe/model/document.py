@@ -167,7 +167,7 @@ def get_docs(
 	as_iterator: bool = False,
 	for_update: bool = False,
 	distinct: bool = False,
-) -> list["Document"] | Generator[list["Document"]]:
+) -> list["Document"] | Generator["Document"]:
 	"""Fetch fully instantiated Document objects from the database.
 
 	Returns a list of Documents by default. Pass `as_iterator=True` to get
@@ -175,7 +175,7 @@ def get_docs(
 
 	:param doctype: DocType of the records to fetch.
 	:param filters: Dict or list of filters to apply.
-	:param chunk_size: Number of records to yield per chunk if using `as_iterator`. Default 1000.
+	:param chunk_size: Number of records to fetch in each chunk if using `as_iterator`.
 	:param limit: Maximum total number of records to fetch.
 	:param limit_start: Start results at record #. Default 0.
 	:param order_by: Order By string, e.g. `creation desc`.
@@ -243,7 +243,7 @@ def _get_docs_generator(
 	lock_rows,
 	for_update,
 	distinct,
-) -> Generator[list["Document"]]:
+) -> Generator["Document"]:
 	fetched_count = 0
 	current_offset = limit_start
 
@@ -270,7 +270,7 @@ def _get_docs_generator(
 			break
 
 		built_docs = _build_document_objects(controller, chunk_data, for_update)
-		yield built_docs
+		yield from built_docs
 
 		fetched_count += len(chunk_data)
 		current_offset += len(chunk_data)
