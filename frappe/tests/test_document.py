@@ -904,7 +904,7 @@ class TestGetDocs(IntegrationTestCase):
 		self.assertEqual(docs_asc[0].name, docs_desc[-1].name)
 
 	def test_generator_yields_chunks(self):
-		chunks = list(frappe.get_docs(self.parent_dt, as_generator=True, chunk_size=2))
+		chunks = list(frappe.get_docs(self.parent_dt, as_iterator=True, chunk_size=2))
 		# 5 records with chunk_size=2 should give 3 chunks (2, 2, 1)
 		self.assertEqual(len(chunks), 3)
 		self.assertEqual(len(chunks[0]), 2)
@@ -912,7 +912,7 @@ class TestGetDocs(IntegrationTestCase):
 		self.assertEqual(len(chunks[2]), 1)
 
 	def test_generator_with_limit(self):
-		chunks = list(frappe.get_docs(self.parent_dt, as_generator=True, chunk_size=2, limit=3))
+		chunks = list(frappe.get_docs(self.parent_dt, as_iterator=True, chunk_size=2, limit=3))
 		total = sum(len(c) for c in chunks)
 		self.assertEqual(total, 3)
 
@@ -921,7 +921,7 @@ class TestGetDocs(IntegrationTestCase):
 		gen_docs = [
 			doc
 			for chunk in frappe.get_docs(
-				self.parent_dt, as_generator=True, chunk_size=2, order_by="creation asc"
+				self.parent_dt, as_iterator=True, chunk_size=2, order_by="creation asc"
 			)
 			for doc in chunk
 		]

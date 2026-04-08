@@ -164,22 +164,22 @@ def get_docs(
 	limit: int | None = None,
 	limit_start: int = 0,
 	order_by: str = "creation asc",
-	as_generator: bool = False,
+	as_iterator: bool = False,
 	for_update: bool = False,
 	distinct: bool = False,
 ) -> list["Document"] | Generator[list["Document"]]:
 	"""Fetch fully instantiated Document objects from the database.
 
-	Returns a list of Documents by default. Pass `as_generator=True` to get
+	Returns a list of Documents by default. Pass `as_iterator=True` to get
 	a chunked generator that yields a list of Documents per chunk to reduce memory usage.
 
 	:param doctype: DocType of the records to fetch.
 	:param filters: Dict or list of filters to apply.
-	:param chunk_size: Number of records to yield per chunk if using `as_generator`. Default 1000.
+	:param chunk_size: Number of records to yield per chunk if using `as_iterator`. Default 1000.
 	:param limit: Maximum total number of records to fetch.
 	:param limit_start: Start results at record #. Default 0.
 	:param order_by: Order By string, e.g. `creation desc`.
-	:param as_generator: If True, returns a generator yielding lists of Documents.
+	:param as_iterator: If True, returns a generator yielding lists of Documents.
 	:param for_update: If True, locks the fetched rows for update.
 	:param distinct: If True, return distinct rows.
 	"""
@@ -200,7 +200,7 @@ def get_docs(
 	controller = get_controller(doctype)
 	lock_rows = for_update and frappe.db.db_type != "sqlite"
 
-	if as_generator:
+	if as_iterator:
 		return _get_docs_generator(
 			doctype,
 			controller,
