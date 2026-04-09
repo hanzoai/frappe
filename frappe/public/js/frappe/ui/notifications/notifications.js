@@ -131,6 +131,19 @@ frappe.ui.Notifications = class Notifications {
 		frappe.call("frappe.desk.doctype.notification_log.notification_log.mark_all_as_read");
 	}
 
+	mark_notifications_as_seen() {
+		if ($(".notification-badge").length === 0) return;
+		$(".notification-badge").remove();
+		this.notification_settings.seen = 1;
+		frappe.call(
+			"frappe.desk.doctype.notification_settings.notification_settings.set_seen_value",
+			{ value: 1, user: frappe.session.user }
+		);
+		frappe.call(
+			"frappe.desk.doctype.notification_log.notification_log.trigger_indicator_hide"
+		);
+	}
+
 	setup_dropdown_events() {
 		const dropdown = this.dropdown;
 		const full_height = this.full_height;
@@ -143,6 +156,16 @@ frappe.ui.Notifications = class Notifications {
 		this.dropdown.on("click", (e) => {
 			$(e.currentTarget).data("closable", true);
 		});
+
+		this.dropdown.on("show.bs.dropdown", () => {
+			this.mark_notifications_as_seen();
+		});
+
+		if (this.full_height) {
+			this.wrapper.find(".sidebar-notification").on("click", () => {
+				this.mark_notifications_as_seen();
+			});
+		}
 
 		$(document).on("click", function (e) {
 			const isInsideNotificationBtn =
@@ -400,16 +423,6 @@ class NotificationsView extends BaseNotificationsView {
 		}
 	}
 
-	toggle_seen(flag) {
-		frappe.call(
-			"frappe.desk.doctype.notification_settings.notification_settings.set_seen_value",
-			{
-				value: cint(flag),
-				user: frappe.session.user,
-			}
-		);
-	}
-
 	setup_notification_listeners() {
 		frappe.realtime.on("notification", () => {
 			this.toggle_notification_icon(false);
@@ -418,16 +431,6 @@ class NotificationsView extends BaseNotificationsView {
 
 		frappe.realtime.on("indicator_hide", () => {
 			this.toggle_notification_icon(true);
-		});
-
-		$(document).on("click", ".sidebar-notification, .desktop-notification-icon", () => {
-			if ($(".notification-badge").length > 0) {
-				this.toggle_notification_icon(true);
-				this.toggle_seen(true);
-				frappe.call(
-					"frappe.desk.doctype.notification_log.notification_log.trigger_indicator_hide"
-				);
-			}
 		});
 	}
 }
