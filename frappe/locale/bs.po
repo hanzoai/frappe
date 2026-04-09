@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-04-05 09:44+0000\n"
-"PO-Revision-Date: 2026-04-06 15:04\n"
+"PO-Revision-Date: 2026-04-09 15:23\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Bosnian\n"
 "MIME-Version: 1.0\n"
@@ -27046,7 +27046,7 @@ msgstr "Sistemska Stranica"
 #. Name of a DocType
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "System Settings"
-msgstr "Postavke Sistema"
+msgstr "Postavke"
 
 #. Label of a number card in the Users Workspace
 #: frappe/core/workspace/users/users.json
