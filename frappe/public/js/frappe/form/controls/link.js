@@ -276,11 +276,21 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 					// immediately show from cache
 					me.awesomplete.list = me.$input.cache[doctype][term];
 				}
+				var reference_doctype = me.get_reference_doctype() || "";
+				var docfield_parent =
+					me.df?.parent || reference_doctype || (me.frm && me.frm.doctype) || "";
+				var meta_df =
+					docfield_parent && me.df?.fieldname
+						? frappe.meta.get_docfield(docfield_parent, me.df.fieldname)
+						: null;
+
 				var args = {
 					txt: term,
 					doctype: doctype,
-					ignore_user_permissions: me.df.ignore_user_permissions,
-					reference_doctype: me.get_reference_doctype() || "",
+					ignore_user_permissions:
+						me.df?.ignore_user_permissions ||
+						(meta_df && meta_df.ignore_user_permissions),
+					reference_doctype: reference_doctype,
 					page_length: cint(frappe.boot.sysdefaults?.link_field_results_limit) || 10,
 				};
 
@@ -470,158 +480,6 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 		return input && (item_label.includes(input) || item_description.includes(input));
 	}
 
-<<<<<<< HEAD
-=======
-	/**
-	 * Helps determine if we should use GET (enables HTTP caching) or POST.
-	 * Use GET for filters that fit in URL.
-	 * Use POST for large filters.
-	 */
-	are_filters_large(filters, max_get_size = 2000) {
-		if (!filters) return [false, filters];
-
-		let filters_str = filters;
-		if (typeof filters !== "string") {
-			try {
-				filters_str = JSON.stringify(filters);
-			} catch (e) {
-				// If stringification fails, use POST
-				return [true, filters];
-			}
-		}
-
-		// URL-encoded params add ~30% overhead on average
-		const estimated_size = filters_str.length * 1.3;
-		return [estimated_size > max_get_size, filters_str];
-	}
-
-	get_search_args(txt) {
-		const doctype = this.get_options();
-		if (!doctype) return;
-
-		const reference_doctype = this.get_reference_doctype() || "";
-		const docfield_parent =
-			this.df?.parent || reference_doctype || (this.frm && this.frm.doctype) || "";
-		const meta_df =
-			docfield_parent && this.df?.fieldname
-				? frappe.meta.get_docfield(docfield_parent, this.df.fieldname)
-				: null;
-
-		const args = {
-			txt,
-			doctype,
-			ignore_user_permissions:
-				this.df?.ignore_user_permissions || meta_df?.ignore_user_permissions,
-			reference_doctype,
-			page_length: cint(frappe.boot.sysdefaults?.link_field_results_limit) || 10,
-			link_fieldname: this.df.fieldname,
-		};
-
-		this.set_custom_query(args);
-		return args;
-	}
-
-	on_input(e) {
-		const term = e ? e.target.value : this.$input.val();
-		const args = this.get_search_args(term);
-		if (!args) return;
-
-		const doctype = args.doctype;
-		const cache = this.$input.cache;
-		if (!cache[doctype]) {
-			cache[doctype] = {};
-		}
-
-		if (cache[doctype][term] != null) {
-			// immediately show from cache
-			this.awesomplete.list = cache[doctype][term];
-		}
-
-		const filters = args.filters;
-		let use_get = !term && !this.$input._created_new_doc;
-		if (use_get) {
-			const [are_filters_large, filters_str] = this.are_filters_large(filters);
-			use_get = !are_filters_large;
-
-			// perf: to prevent stringifying again in the call
-			args.filters = filters_str;
-		}
-		frappe.call({
-			type: use_get ? "GET" : "POST",
-			method: "frappe.desk.search.search_link",
-			no_spinner: true,
-			cache: use_get,
-			args: args,
-			callback: async (r) => {
-				if (!window.Cypress && !this.$input.is(":focus")) {
-					return;
-				}
-				r.message = this.merge_duplicates(r.message);
-
-				// show filter description in awesomplete
-				let filter_string = this.df.filter_description
-					? this.df.filter_description
-					: filters
-					? await this.get_filter_description(filters)
-					: null;
-				if (filter_string) {
-					r.message.push({
-						html: `<span class="text-muted" style="line-height: 1.5">${filter_string}</span>`,
-						value: "filter_description__link_option",
-						action: () => {},
-					});
-				}
-
-				if (!this.df.only_select) {
-					if (frappe.model.can_create(doctype)) {
-						// new item
-						r.message.push({
-							html:
-								"<span class='link-option'>" +
-								"<i class='fa fa-plus' style='margin-right: 5px;'></i> " +
-								__("Create a new {0}", [__(this.get_options())]) +
-								"</span>",
-							label: __("Create a new {0}", [__(this.get_options())]),
-							value: "create_new__link_option",
-							action: this.new_doc,
-						});
-					}
-
-					//custom link actions
-					let custom__link_options =
-						frappe.ui.form.ControlLink.link_options &&
-						frappe.ui.form.ControlLink.link_options(this);
-
-					if (custom__link_options) {
-						r.message = r.message.concat(custom__link_options);
-					}
-
-					// advanced search
-					if (locals && locals["DocType"]) {
-						// not applicable in web forms
-						r.message.push({
-							html:
-								"<span class='link-option'>" +
-								"<i class='fa fa-search' style='margin-right: 5px;'></i> " +
-								__("Advanced Search") +
-								"</span>",
-							label: __("Advanced Search"),
-							value: "advanced_search__link_option",
-							action: this.open_advanced_search,
-						});
-					}
-				}
-				cache[doctype][term] = r.message;
-				this.awesomplete.list = cache[doctype][term];
-				this.toggle_href(doctype);
-				r.message.forEach((item) => {
-					frappe.utils.add_link_title(doctype, item.value, item.label);
-				});
-			},
-		});
-	}
-
->>>>>>> ba03f457bf (fix(link): fallback to meta for ignore_user_permissions in Link control)
 	show_untranslated() {
 		let value = this.get_input_value();
 		this.is_translatable() && this.set_input_value(value);
