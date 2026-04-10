@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-04-05 09:44+0000\n"
-"PO-Revision-Date: 2026-04-06 15:03\n"
+"PO-Revision-Date: 2026-04-08 15:22\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -11829,7 +11829,7 @@ msgstr "Global Sökning Inställningar"
 
 #: frappe/public/js/frappe/ui/keyboard.js:122
 msgid "Global Shortcuts"
-msgstr "Globala Genvägar"
+msgstr "Standard Genvägar"
 
 #. Label of the global_unsubscribe (Check) field in DocType 'Email Unsubscribe'
 #: frappe/email/doctype/email_unsubscribe/email_unsubscribe.json

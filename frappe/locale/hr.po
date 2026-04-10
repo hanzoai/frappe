@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-04-05 09:44+0000\n"
-"PO-Revision-Date: 2026-04-06 15:04\n"
+"PO-Revision-Date: 2026-04-09 15:23\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Croatian\n"
 "MIME-Version: 1.0\n"
@@ -2471,7 +2471,7 @@ msgstr "Mogu se koristiti bilo koji jezici pisača zasnovani na stringovima. Isp
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:103
 msgid "Apart from System Manager, roles with Set User Permissions right can set permissions for other users for that Document Type."
-msgstr "Osim Upravitelja Sistema, uloge s pravom Postavi korisničke dozvole mogu postaviti dozvole za druge korisnike za taj tip dokumenta."
+msgstr "Osim Upravitelja Sustava, uloge s pravom Postavi korisničke dozvole mogu postaviti dozvole za druge korisnike za taj tip dokumenta."
 
 #. Label of the app_tab (Tab Break) field in DocType 'System Settings'
 #. Label of the app_section (Section Break) field in DocType 'User'
@@ -6975,7 +6975,7 @@ msgstr "Poštovani"
 
 #: frappe/templates/emails/administrator_logged_in.html:1
 msgid "Dear System Manager,"
-msgstr "Poštovani Upravitelju Sistema,"
+msgstr "Poštovani Upravitelju Sustava,"
 
 #: frappe/templates/emails/account_deletion_notification.html:1
 #: frappe/templates/emails/delete_data_confirmation.html:1
@@ -7725,7 +7725,7 @@ msgstr "Onemogući Standardno Podnožje e-pošte"
 #. 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "Disable System Update Notification"
-msgstr "Onemogući Obavještenje Ažuriranju Sistema"
+msgstr "Onemogući Obavještenje Ažuriranju Sustava"
 
 #. Label of the disable_user_pass_login (Check) field in DocType 'System
 #. Settings'
@@ -12728,7 +12728,7 @@ msgstr "Sati"
 #. Description of the 'Number Format' (Select) field in DocType 'Currency'
 #: frappe/geo/doctype/currency/currency.json
 msgid "How should this currency be formatted? If not set, will use system defaults"
-msgstr "Kako treba formatirati ovu valutu? Ako nije postavljeno, koristit će se standard postavke sistema"
+msgstr "Kako treba formatirati ovu valutu? Ako nije postavljeno, koristit će se standard postavke sustava"
 
 #. Description of the 'Resource Name' (Data) field in DocType 'OAuth Settings'
 #: frappe/integrations/doctype/oauth_settings/oauth_settings.json
@@ -13039,7 +13039,7 @@ msgstr "Ako korisnik ima pristup Osoblju i Izvješće je omogućeno, može pregl
 #. Description of the 'User Type' (Link) field in DocType 'User'
 #: frappe/core/doctype/user/user.json
 msgid "If the user has any role checked, then the user becomes a \"System User\". \"System User\" has access to the desktop"
-msgstr "Ako korisnik ima odabranu bilo koju ulogu, tada korisnik postaje \"Korisnik Sistema\". \"Korisnik Sistema\" ima pristup radnoj površini"
+msgstr "Ako korisnik ima odabranu bilo koju ulogu, tada korisnik postaje \"Korisnik Sustava\". \"Korisnik Sustava\" ima pristup radnoj površini"
 
 #: frappe/core/page/permission_manager/permission_manager_help.html:105
 msgid "If these instructions where not helpful, please add in your suggestions on GitHub Issues."
@@ -14536,7 +14536,7 @@ msgstr "Je Standard"
 
 #: frappe/core/doctype/file/utils.py:157 frappe/utils/file_manager.py:311
 msgid "It is risky to delete this file: {0}. Please contact your System Manager."
-msgstr "Rizično je brisati ovu datoteku: {0}. Kontaktiraj Upravitelja Sistema."
+msgstr "Rizično je brisati ovu datoteku: {0}. Kontaktiraj Upravitelja Sustava."
 
 #: frappe/core/doctype/communication/email.py:359
 msgid "It is too late to undo this email. It is already being sent."
@@ -20262,7 +20262,7 @@ msgstr "Potvrdi akciju {0} ovog dokumenta."
 
 #: frappe/printing/page/print/print.js:669
 msgid "Please contact your system manager to install correct version."
-msgstr "Kontaktiraj Upravitelja Sistema da instalira ispravnu verziju."
+msgstr "Kontaktiraj Upravitelja Sustava da instalira ispravnu verziju."
 
 #: frappe/desk/doctype/number_card/number_card.js:45
 msgid "Please create Card first"
@@ -23133,11 +23133,11 @@ msgstr "Uloga"
 
 #: frappe/core/doctype/role/role.js:8
 msgid "Role 'All' will be given to all system + website users."
-msgstr "Uloga 'Svi' će biti dodijeljena svim korisnicima sistema + web stranice."
+msgstr "Uloga 'Svi' će biti dodijeljena svim korisnicima sustava + web stranice."
 
 #: frappe/core/doctype/role/role.js:13
 msgid "Role 'Desk User' will be given to all system users."
-msgstr "Uloga 'Korisnik Radne Površine' će biti dodijeljena svim korisnicima sistema."
+msgstr "Uloga 'Korisnik Radne Površine' će biti dodijeljena svim korisnicima sustava."
 
 #. Label of the role_name (Data) field in DocType 'Role'
 #. Label of the role_profile (Data) field in DocType 'Role Profile'
@@ -25036,7 +25036,7 @@ msgstr "Postavljanje dokumenata Globalne pretrage."
 
 #: frappe/desk/page/setup_wizard/setup_wizard.js:304
 msgid "Setting up your system"
-msgstr "Postavljanje vašeg sistema"
+msgstr "Postavljanje sustava"
 
 #. Label of the settings_tab (Tab Break) field in DocType 'DocType'
 #. Label of the settings_tab (Tab Break) field in DocType 'User'
@@ -26840,7 +26840,7 @@ msgstr "Sistemski Generisana Polja ne mogu se preimenovati"
 #. Type: Route
 #: frappe/hooks.py
 msgid "System Health"
-msgstr "Status Sistema"
+msgstr "Status Sustava"
 
 #. Name of a DocType
 #: frappe/desk/doctype/system_health_report/system_health_report.json
@@ -26850,27 +26850,27 @@ msgstr "Izvještaj Stanja Sistema"
 #. Name of a DocType
 #: frappe/desk/doctype/system_health_report_errors/system_health_report_errors.json
 msgid "System Health Report Errors"
-msgstr "Greške Izvještaja Stanja Sistema"
+msgstr "Greške Izvještaja Stanja Sustava"
 
 #. Name of a DocType
 #: frappe/desk/doctype/system_health_report_failing_jobs/system_health_report_failing_jobs.json
 msgid "System Health Report Failing Jobs"
-msgstr "Izvještaj Neuspješnih Poslova Stanja Sistema"
+msgstr "Izvještaj Neuspješnih Poslova Stanja Sustava"
 
 #. Name of a DocType
 #: frappe/desk/doctype/system_health_report_queue/system_health_report_queue.json
 msgid "System Health Report Queue"
-msgstr "Red Čekanja Izvještaja Stanja sSistema"
+msgstr "Red Čekanja Izvješća Stanja Sustava"
 
 #. Name of a DocType
 #: frappe/desk/doctype/system_health_report_tables/system_health_report_tables.json
 msgid "System Health Report Tables"
-msgstr "Tabele Izvještaja Stanja Sistema"
+msgstr "Tabele Izvješća Stanja Sustava"
 
 #. Name of a DocType
 #: frappe/desk/doctype/system_health_report_workers/system_health_report_workers.json
 msgid "System Health Report Workers"
-msgstr "Status Sistema Izvještaji Radnici"
+msgstr "Status Sustava Izvještaji Radnici"
 
 #. Label of a Card Break in the Build Workspace
 #: frappe/core/workspace/build/build.json
@@ -27027,11 +27027,11 @@ msgstr "Sistemski Zapisnici"
 #: frappe/workflow/doctype/workflow_state/workflow_state.json
 #: frappe/workflow/doctype/workflow_transition_tasks/workflow_transition_tasks.json
 msgid "System Manager"
-msgstr "Upravitelj Sistema"
+msgstr "Upravitelj Sustava"
 
 #: frappe/desk/page/backups/backups.js:38
 msgid "System Manager privileges required."
-msgstr "Privilegije Upravitelja Sistema su obevezne."
+msgstr "Privilegije Upravitelja Sustava su obevezne."
 
 #. Option for the 'Channel' (Select) field in DocType 'Notification'
 #: frappe/email/doctype/notification/notification.json
@@ -27046,7 +27046,7 @@ msgstr "Sistemska Stranica"
 #. Name of a DocType
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "System Settings"
-msgstr "Postavke Sistema"
+msgstr "Postavke"
 
 #. Label of a number card in the Users Workspace
 #: frappe/core/workspace/users/users.json
@@ -27057,7 +27057,7 @@ msgstr "Korisnici Sustava"
 #. 'Module Onboarding'
 #: frappe/desk/doctype/module_onboarding/module_onboarding.json
 msgid "System managers are allowed by default"
-msgstr "Upravitelji Sistema dopušteni su prema standard postavkama"
+msgstr "Upravitelji Sustava dopušteni su prema standard postavkama"
 
 #: frappe/public/js/frappe/utils/number_systems.js:5
 msgctxt "Number system"
@@ -27406,7 +27406,7 @@ msgstr "Ključ URL Guranog Relejnog Servera (`push_relay_server_url`) nedostaje 
 
 #: frappe/website/doctype/personal_data_deletion_request/personal_data_deletion_request.py:368
 msgid "The User record for this request has been auto-deleted due to inactivity by system admins."
-msgstr "Zapis Korisnika za ovaj zahtjev je automatski obrisan zbog neaktivnosti administratora sistema."
+msgstr "Zapis Korisnika za ovaj zahtjev je automatski obrisan zbog neaktivnosti administratora sustava."
 
 #: frappe/public/js/frappe/desk.js:164
 msgid "The application has been updated to a new version, please refresh this page"
@@ -27888,7 +27888,7 @@ msgstr "Ova poruka e-pošte je automatski generisana"
 msgid "This feature can not be used as dependencies are missing.\n"
 "\t\t\t\tPlease contact your system manager to enable this by installing pycups!"
 msgstr "Ova funkcija se ne može koristiti jer nedostaju zavisnosti.\n"
-"\t\t\t\tMolimo kontaktirajte svog upravitelja sistema da omogući ovo instaliranjem pycups-a!"
+"\t\t\t\tMolimo kontaktirajte svog upravitelja sustava da omogući ovo instaliranjem pycups-a!"
 
 #: frappe/public/js/frappe/form/templates/form_sidebar.html:40
 msgid "This feature is brand new and still experimental"
@@ -28371,7 +28371,7 @@ msgstr "Za dodavanje dinamičkih vrijednosti iz dokumenta upotrijebite jinja ozn
 
 #: frappe/email/doctype/auto_email_report/auto_email_report.py:109
 msgid "To allow more reports update limit in System Settings."
-msgstr "Da biste omogućili više izvještaja, ažurirajte ograničenje u postavkama sistema."
+msgstr "Da biste omogućili više izvještaja, ažurirajte ograničenje u Postavkama Sustava."
 
 #. Label of the section_break_10 (Section Break) field in DocType
 #. 'Communication'
@@ -29882,7 +29882,7 @@ msgstr "Korisnik sa adresom e-pošte {0} ne postoji"
 
 #: frappe/integrations/doctype/ldap_settings/ldap_settings.py:225
 msgid "User with email: {0} does not exist in the system. Please ask 'System Administrator' to create the user for you."
-msgstr "Korisnik sa e-poštom: {0} ne postoji u sistemu. Zamoli 'Administratora Sistema' da kreira korisnika za vas."
+msgstr "Korisnik sa e-poštom: {0} ne postoji u sistemu. Zamoli 'Administratora Sustava' da kreira korisnika za vas."
 
 #: frappe/core/doctype/user/user.py:573
 msgid "User {0} cannot be deleted"
@@ -29927,7 +29927,7 @@ msgstr "Korisnik {0} je onemogućen"
 
 #: frappe/sessions.py:243
 msgid "User {0} is disabled. Please contact your System Manager."
-msgstr "Korisnik {0} je onemogućen. Molimo kontaktirajte svog upravitelja sistema."
+msgstr "Korisnik {0} je onemogućen. Molimo kontaktirajte svog upravitelja sustava."
 
 #: frappe/desk/form/assign_to.py:105
 msgid "User {0} is not permitted to access this document."
@@ -29977,7 +29977,7 @@ msgstr "Korisnici mogu obrisati priložene datoteke samo ako je dokument u nacrt
 
 #: frappe/public/js/frappe/ui/theme_switcher.js:70
 msgid "Uses system's theme to switch between light and dark mode"
-msgstr "Koristi temu sistema za prebacivanje između svijetlog i tamnog načina rada"
+msgstr "Koristi temu sustava za prebacivanje između svijetlog i tamnog načina rada"
 
 #: frappe/public/js/frappe/desk.js:156
 msgid "Using this console may allow attackers to impersonate you and steal your information. Do not enter or paste code that you do not understand."
@@ -31471,7 +31471,7 @@ msgstr "Možete onemogućiti ovo {0} umjesto da ga obrišete."
 
 #: frappe/core/doctype/file/file.py:773
 msgid "You can increase the limit from System Settings."
-msgstr "Ograničenje možete povećati u Postavkama Sistema."
+msgstr "Ograničenje možete povećati u Postavkama Sustava."
 
 #: frappe/utils/synchronization.py:48
 msgid "You can manually remove the lock if you think it's safe: {}"
@@ -31645,7 +31645,7 @@ msgstr "Niste unijeli vrijednost. Polje će biti prazno."
 
 #: frappe/twofactor.py:446
 msgid "You have to enable Two Factor Auth from System Settings."
-msgstr "Morate omogućiti Dvofaktorsku Autentifikaciju iz Postavki Sistema."
+msgstr "Morate omogućiti Dvofaktorsku Autentifikaciju iz Postavki Sustava."
 
 #: frappe/public/js/frappe/model/create_new.js:328
 msgid "You have unsaved changes in this form. Please save before you continue."
@@ -31698,7 +31698,7 @@ msgstr "Morate biti Upravitelj Radnog Prostora da biste uredili ovaj dokument"
 
 #: frappe/www/attribution.py:15
 msgid "You need to be a system user to access this page."
-msgstr "Morate biti korisnik sistema da biste pristupili ovoj stranici."
+msgstr "Morate biti korisnik sustava da biste pristupili ovoj stranici."
 
 #: frappe/website/doctype/web_form/web_form.py:94
 msgid "You need to be in developer mode to edit a Standard Web Form"
@@ -31706,7 +31706,7 @@ msgstr "Morate biti u modu programera da biste uredili Standardni Web Formu"
 
 #: frappe/utils/response.py:280
 msgid "You need to be logged in and have System Manager Role to be able to access backups."
-msgstr "Morate biti prijavljeni i imati ulogu Upravitelja Sistema da biste mogli pristupiti sigurnosnim kopijama."
+msgstr "Morate biti prijavljeni i imati ulogu Upravitelja Sustava da biste mogli pristupiti sigurnosnim kopijama."
 
 #: frappe/www/me.py:13 frappe/www/third_party_apps.py:10
 msgid "You need to be logged in to access this page"
