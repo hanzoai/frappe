@@ -137,6 +137,28 @@ class TaskHandle:
 			update_modified=False,
 		)
 
+	def attach_file(
+		self,
+		file_name: str,
+		content: bytes,
+		is_private: bool = True,
+		doctype: str | None = None,
+		docname: str | None = None,
+	) -> str:
+		"""Attach a file to a document (defaults to the background task) and return its file URL"""
+		file_doc = frappe.get_doc(
+			{
+				"doctype": "File",
+				"file_name": file_name,
+				"attached_to_doctype": doctype or "Background Task",
+				"attached_to_name": docname or self.task_id,
+				"content": content,
+				"is_private": int(is_private),
+			}
+		)
+		file_doc.save(ignore_permissions=True)
+		return file_doc.file_url
+
 	def _publish(self, message: dict) -> None:
 		frappe.publish_realtime(event="task_update", message=message, user=self.user)
 
