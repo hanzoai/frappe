@@ -129,6 +129,11 @@
 						background-color: var(--alert-bg-danger, var(--bg-danger, #fef2f2));
 						color: var(--alert-text-danger, var(--text-danger, #dc2626));
 					}
+
+					&.cancelled {
+						background-color: var(--alert-bg-secondary, var(--bg-gray-100, #f3f4f6));
+						color: var(--alert-text-secondary, var(--text-muted, #6b7280));
+					}
 				}
 			}
 
@@ -146,6 +151,23 @@
 
 				&:not(:empty) + .progress {
 					margin-top: 8px;
+				}
+			}
+
+			.btn-cancel-task {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: var(--text-muted);
+				transition: color 0.2s ease, background-color 0.2s ease;
+				padding: 2px;
+				margin: 0;
+				height: 20px;
+				width: 20px;
+
+				&:hover {
+					color: var(--text-color);
+					background-color: var(--fg-hover-color);
 				}
 			}
 

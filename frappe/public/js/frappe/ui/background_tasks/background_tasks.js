@@ -71,6 +71,16 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 			this.dropdown.addClass("hidden");
 		});
 
+		this.dropdown.on("click", ".btn-cancel-task", (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			let task_id = $(e.currentTarget).data("task-id");
+			frappe.call({
+				method: "frappe.core.doctype.background_task.background_task.stop_task",
+				args: { task_id: task_id },
+			});
+		});
+
 		// Listen for realtime updates to refresh list and show alerts
 		frappe.realtime.on("task_update", (data) => {
 			let task = this.db_tasks.find((t) => t.task_id === data.task_id);
@@ -139,6 +149,7 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 					Running: { message: __("{0} started", [title]), indicator: "blue" },
 					Completed: { message: __("{0} completed", [title]), indicator: "green" },
 					Failed: { message: __("{0} failed", [title]), indicator: "red" },
+					Cancelled: { message: __("{0} cancelled", [title]), indicator: "orange" },
 				};
 
 				if (alerts[data.status]) {
@@ -203,6 +214,7 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 			Completed: { bg: "bg-success", text: "completed" },
 			Failed: { bg: "bg-danger", text: "failed" },
 			Queued: { bg: "bg-warning", text: "queued" },
+			Cancelled: { bg: "bg-secondary", text: "cancelled" },
 		};
 
 		const { bg: bg_class, text: status_class } =
@@ -230,13 +242,27 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 
 		const task_title = frappe.utils.escape_html(task.task_name || task.name);
 
+		let cancel_btn = "";
+		if (task.status === "Queued" || task.status === "Running") {
+			cancel_btn = `
+				<button class="btn btn-xs btn-icon btn-cancel-task" data-task-id="${task.task_id}" title="${__(
+				"Cancel Task"
+			)}">
+					${frappe.utils.icon("close", "sm")}
+				</button>
+			`;
+		}
+
 		return $(`<a class="bg-task-item" data-name="${task.name}" data-task-id="${task.task_id}">
 			<div class="bg-task-header">
 				<div class="bg-task-title">
 					<span>${task_title}</span>
 				</div>
-				<div class="status-badge ${status_class}">
-					${task.status}
+				<div class="bg-task-actions" style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+					<div class="status-badge ${status_class}">
+						${task.status}
+					</div>
+					${cancel_btn}
 				</div>
 			</div>
 			${progress_bar}

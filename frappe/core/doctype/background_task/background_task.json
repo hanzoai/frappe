@@ -8,6 +8,7 @@
  "field_order": [
   "status_and_progress_section",
   "task_id",
+  "job_id",
   "task_name",
   "user",
   "column_break_ljxx",
@@ -41,6 +42,12 @@
    "unique": 1
   },
   {
+   "fieldname": "job_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Job ID"
+  },
+  {
    "fieldname": "task_name",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -52,7 +59,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "Queued\nRunning\nCompleted\nFailed",
+   "options": "Queued\nRunning\nCompleted\nFailed\nCancelled",
    "reqd": 1
   },
   {
@@ -227,6 +234,10 @@
   {
    "color": "Red",
    "title": "Failed"
+  },
+  {
+   "color": "Gray",
+   "title": "Cancelled"
   }
  ]
 }

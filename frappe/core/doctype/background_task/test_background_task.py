@@ -2,6 +2,7 @@ import time
 from unittest.mock import patch
 
 import frappe
+from frappe.core.doctype.doctype.test_doctype import new_doctype
 from frappe.tests import IntegrationTestCase
 from frappe.utils.task_queue import _execute_task, enqueue_task, get_current_task, get_task_status
 
@@ -22,6 +23,12 @@ def sample_task_with_updates(total=3):
 def sample_task_intermediate_result():
 	handle = get_current_task()
 	handle.store_result({"partial": True})
+
+
+def sample_task_with_attachment():
+	handle = get_current_task()
+	handle.attach_file(file_name="bg-task-output.txt", content=b"done")
+	return {"success": True}
 
 
 def failing_task():
@@ -84,6 +91,63 @@ class IntegrationTestBackgroundTask(IntegrationTestCase):
 		_execute_task(task_id, sample_task_intermediate_result, frappe.session.user)
 
 		self.assertIn("partial", frappe.db.get_value("Background Task", {"task_id": task_id}, "result"))
+
+	@patch("frappe.utils.task_queue.frappe.enqueue")
+	@patch("frappe.utils.task_queue.frappe.publish_realtime")
+	def test_cancelled_before_enqueue_is_not_enqueued(self, publish_realtime_mock, enqueue_mock):
+		def cancel_task(*args, **kwargs):
+			message = kwargs.get("message") or {}
+			task_id = message.get("task_id")
+			if task_id and message.get("status") == "Queued":
+				frappe.db.set_value(
+					"Background Task", {"task_id": task_id}, "status", "Cancelled", update_modified=False
+				)
+
+		publish_realtime_mock.side_effect = cancel_task
+
+		task_id = enqueue_task(sample_task, enqueue_after_commit=True)
+		frappe.db.commit()
+
+		self.assertFalse(enqueue_mock.called)
+		self.assertEqual(frappe.db.get_value("Background Task", {"task_id": task_id}, "status"), "Cancelled")
+
+	def test_execute_task_skips_if_cancelled(self):
+		task_id = enqueue_task(sample_task)
+		frappe.db.set_value("Background Task", {"task_id": task_id}, "status", "Cancelled")
+
+		_execute_task(task_id, sample_task, frappe.session.user)
+
+		self.assertEqual(frappe.db.get_value("Background Task", {"task_id": task_id}, "status"), "Cancelled")
+
+	def test_attach_file_links_file_to_task(self):
+		task_id = enqueue_task(sample_task_with_attachment)
+		_execute_task(task_id, sample_task_with_attachment, frappe.session.user)
+
+		task_doc = frappe.get_doc("Background Task", {"task_id": task_id})
+		attached_files = frappe.get_all(
+			"File",
+			filters={"attached_to_doctype": "Background Task", "attached_to_name": task_doc.name},
+			pluck="name",
+		)
+		self.assertTrue(len(attached_files) > 0)
+
+	def test_attach_file_prefers_ref_document(self):
+		test_doctype = new_doctype().insert()
+		test_doc = frappe.get_doc({"doctype": test_doctype.name}).insert()
+
+		task_id = enqueue_task(
+			sample_task_with_attachment,
+			ref_doctype=test_doctype.name,
+			ref_docname=test_doc.name,
+		)
+		_execute_task(task_id, sample_task_with_attachment, frappe.session.user)
+
+		attached_files = frappe.get_all(
+			"File",
+			filters={"attached_to_doctype": test_doctype.name, "attached_to_name": test_doc.name},
+			pluck="name",
+		)
+		self.assertTrue(len(attached_files) > 0)
 
 	def test_task_handle_cleared_after_execution(self):
 		task_id = enqueue_task(sample_task)

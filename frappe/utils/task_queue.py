@@ -48,6 +48,7 @@ def enqueue_task(
 	def _create_and_enqueue():
 		doc = frappe.new_doc("Background Task")
 		doc.task_id = task_id
+		doc.job_id = job_id or task_id
 		doc.task_name = task_name
 		doc.status = "Queued"
 		doc.user = user
@@ -67,13 +68,16 @@ def enqueue_task(
 			user=user,
 		)
 
+		if frappe.db.get_value("Background Task", {"task_id": task_id}, "status") == "Cancelled":
+			return
+
 		frappe.enqueue(
 			_execute_task,
 			queue=queue,
 			timeout=timeout,
 			event=event,
 			deduplicate=deduplicate,
-			job_id=job_id,
+			job_id=job_id or task_id,
 			on_success=on_success,
 			on_failure=on_failure,
 			at_front=at_front,
@@ -146,6 +150,13 @@ class TaskHandle:
 		docname: str | None = None,
 	) -> str:
 		"""Attach a file to a document (defaults to the background task) and return its file URL"""
+		if not (doctype and docname):
+			ref_doctype, ref_docname = frappe.db.get_value(
+				"Background Task", {"task_id": self.task_id}, ["ref_doctype", "ref_docname"]
+			)
+			if ref_doctype and ref_docname:
+				doctype, docname = ref_doctype, ref_docname
+
 		file_doc = frappe.get_doc(
 			{
 				"doctype": "File",
@@ -156,7 +167,7 @@ class TaskHandle:
 				"is_private": int(is_private),
 			}
 		)
-		file_doc.save(ignore_permissions=True)
+		file_doc.insert(ignore_permissions=True)
 		return file_doc.file_url
 
 	def _publish(self, message: dict) -> None:
@@ -167,6 +178,8 @@ def _execute_task(task_id: str, target_method: str | Callable, task_user: str, *
 	"""Internal wrapper run by the background worker"""
 	task_doc_filters = {"task_id": task_id}
 	task_name = frappe.db.get_value("Background Task", task_doc_filters, "task_name") or "Background Task"
+	if frappe.db.get_value("Background Task", task_doc_filters, "status") == "Cancelled":
+		return
 
 	handle = TaskHandle(task_id, task_user, task_name)
 	frappe.local._current_task_handle = handle
