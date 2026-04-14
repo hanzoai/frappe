@@ -255,8 +255,6 @@ class TestSameContent(FrappeTestCase):
 		limit_property.delete()
 		frappe.clear_cache(doctype="ToDo")
 
-<<<<<<< HEAD
-=======
 	def test_create_attachment_copy(self):
 		doctype, docname = make_test_doc()
 		source_file = frappe.get_doc(
@@ -317,25 +315,6 @@ class TestSameContent(FrappeTestCase):
 			limit_property.delete()
 			frappe.clear_cache(doctype="ToDo")
 
-	def test_utf8_bom_content_decoding(self):
-		utf8_bom_content = test_content1.encode("utf-8-sig")
-		_file: frappe.Document = frappe.get_doc(
-			{
-				"doctype": "File",
-				"file_name": "utf8bom.txt",
-				"attached_to_doctype": self.attached_to_doctype1,
-				"attached_to_name": self.attached_to_docname1,
-				"content": utf8_bom_content,
-				"decode": False,
-			}
-		)
-		_file.save()
-		saved_file = frappe.get_doc("File", _file.name)
-		file_content_decoded = saved_file.get_content(encodings=["utf-8"])
-		self.assertEqual(file_content_decoded[0], "\ufeff")
-		file_content_properly_decoded = saved_file.get_content(encodings=["utf-8-sig", "utf-8"])
-		self.assertEqual(file_content_properly_decoded, test_content1)
->>>>>>> 2ac1998000 (feat(File): add helper to copy attachment to different doc (#37972))
 
 class TestFile(FrappeTestCase):
 	def setUp(self):
