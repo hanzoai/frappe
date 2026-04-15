@@ -38,38 +38,33 @@ class BackgroundTask(Document):
 
 @frappe.whitelist()
 def stop_task(task_id: str):
-	task = frappe.get_doc("Background Task", {"task_id": task_id})
+	task_name = frappe.db.get_value("Background Task", {"task_id": task_id}, "name")
+	if not task_name:
+		raise frappe.DoesNotExistError(frappe._("Background Task {0} not found").format(task_id))
+
+	task = frappe.get_doc("Background Task", task_name)
 
 	is_owner = task.user == frappe.session.user
 	is_system_manager = "System Manager" in frappe.get_roles(frappe.session.user)
 	if not (is_owner or is_system_manager):
-		frappe.throw(frappe._("Not permitted"), frappe.PermissionError)
+		raise frappe.PermissionError(frappe._("Not permitted"))
 
 	if task.status not in ("Queued", "Running"):
-		return
+		raise frappe.InvalidStatusError(frappe._("Task is not queued or running"))
 
 	from rq.command import send_stop_job_command
-	from rq.exceptions import InvalidJobOperation, NoSuchJobError
 	from rq.job import Job
 
 	from frappe.utils.background_jobs import create_job_id, get_redis_conn
 
 	conn = get_redis_conn()
 	rq_job_id = create_job_id(task.job_id or task.task_id)
-
-	try:
-		job = Job.fetch(rq_job_id, connection=conn)
-	except NoSuchJobError:
-		job = None
+	job = Job.fetch(rq_job_id, connection=conn)
 
 	if task.status == "Queued":
-		if job:
-			job.cancel()
+		job.cancel()
 	elif task.status == "Running":
-		try:
-			send_stop_job_command(connection=conn, job_id=rq_job_id)
-		except InvalidJobOperation:
-			pass
+		send_stop_job_command(connection=conn, job_id=rq_job_id)
 
 	task.db_set("status", "Cancelled")
 
