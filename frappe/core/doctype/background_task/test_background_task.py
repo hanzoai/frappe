@@ -95,7 +95,8 @@ class IntegrationTestBackgroundTask(IntegrationTestCase):
 		)
 		self.assertTrue(len(attached_files) > 0)
 
-	def test_stop_task_cancels_queued_task(self):
+	@patch("rq.job.Job.fetch")
+	def test_stop_task_cancels_queued_task(self, mock_job_fetch):
 		from frappe.core.doctype.background_task.background_task import stop_task
 
 		task_id = enqueue_task(sample_task, enqueue_after_commit=False)

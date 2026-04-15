@@ -74,10 +74,6 @@ class PreparedReport(Document):
 				stop_task(self.job_id)
 				return
 
-		with suppress(Exception):
-			job = frappe.get_doc("RQ Job", self.job_id)
-			job.stop_job() if self.status == "Started" else job.delete()
-
 	def after_insert(self):
 		timeout = frappe.get_value("Report", self.report_name, "timeout")
 
