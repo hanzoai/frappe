@@ -89,7 +89,7 @@
 
 				.bg-task-title {
 					font-weight: 400;
-					font-size: var(--text-md);
+					font-size: var(--text-sm);
 					color: var(--text-color);
 					white-space: normal;
 					overflow: hidden;
@@ -103,7 +103,9 @@
 
 				.status-badge {
 					flex-shrink: 0;
-					display: inline-block;
+					display: inline-flex;
+					justify-content: center;
+					align-items: center;
 					padding: 2px 8px;
 					border-radius: var(--border-radius-sm, 4px);
 					font-size: 11px;
@@ -133,6 +135,34 @@
 					&.cancelled {
 						background-color: var(--alert-bg-secondary, var(--bg-gray-100, #f3f4f6));
 						color: var(--alert-text-secondary, var(--text-muted, #6b7280));
+					}
+				}
+			}
+
+			&.cancellable {
+				.btn-cancel-task {
+					display: none;
+				}
+
+				&:hover {
+					.status-badge {
+						display: none;
+					}
+
+					.btn-cancel-task {
+						display: flex;
+						color: var(--text-light-muted, #d1d5db);
+
+						svg {
+							stroke-width: 0.5px;
+							width: 16px;
+							height: 16px;
+						}
+
+						&:hover {
+							color: var(--text-color);
+							background-color: transparent;
+						}
 					}
 				}
 			}

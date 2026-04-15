@@ -243,7 +243,9 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 		const task_title = frappe.utils.escape_html(task.task_name || task.name);
 
 		let cancel_btn = "";
+		let cancellable_class = "";
 		if (task.status === "Queued" || task.status === "Running") {
+			cancellable_class = "cancellable";
 			cancel_btn = `
 				<button class="btn btn-xs btn-icon btn-cancel-task" data-task-id="${task.task_id}" title="${__(
 				"Cancel Task"
@@ -253,12 +255,12 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 			`;
 		}
 
-		return $(`<a class="bg-task-item" data-name="${task.name}" data-task-id="${task.task_id}">
+		return $(`<a class="bg-task-item ${cancellable_class}" data-name="${task.name}" data-task-id="${task.task_id}">
 			<div class="bg-task-header">
 				<div class="bg-task-title">
 					<span>${task_title}</span>
 				</div>
-				<div class="bg-task-actions" style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+				<div class="bg-task-actions" style="display: flex; align-items: center; justify-content: flex-end; min-width: 60px; flex-shrink: 0;">
 					<div class="status-badge ${status_class}">
 						${task.status}
 					</div>
