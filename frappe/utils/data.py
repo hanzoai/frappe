@@ -1385,7 +1385,11 @@ def money_in_words(
 		out = _(main_currency, context="Currency") + " " + _("Zero")
 	# 0.XX
 	elif main == "0":
+<<<<<<< HEAD
 		out = in_words(fraction, in_million).title() + " " + fraction_currency
+=======
+		out = f"{fraction_in_words()} {_(fraction_currency, context='Currency')}"
+>>>>>>> 6fe3468dd0 (fix: add translation context for fraction currency)
 	else:
 		if main_currency == "DZD":
 			# Use Dinars for Algerian Compliance
@@ -1394,7 +1398,17 @@ def money_in_words(
 			out = _(main_currency, context="Currency") + " " + in_words(main, in_million).title()
 		if cint(fraction):
 			out = (
+<<<<<<< HEAD
 				out + " " + _("and") + " " + in_words(fraction, in_million).title() + " " + fraction_currency
+=======
+				out
+				+ " "
+				+ _("and")
+				+ " "
+				+ fraction_in_words()
+				+ " "
+				+ _(fraction_currency, context="Currency")
+>>>>>>> 6fe3468dd0 (fix: add translation context for fraction currency)
 			)
 
 	if main_currency == "DZD":
