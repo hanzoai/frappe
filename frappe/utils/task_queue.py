@@ -61,6 +61,8 @@ def enqueue_task(
 		if ref_docname:
 			doc.ref_docname = ref_docname
 		doc.insert(ignore_permissions=True)
+		if enqueue_after_commit:
+			frappe.db.commit()
 
 		frappe.publish_realtime(
 			event="task_update",

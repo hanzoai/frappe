@@ -6,8 +6,6 @@ import resource
 from contextlib import suppress
 from typing import Any
 
-from rq import get_current_job
-
 import frappe
 from frappe import _
 from frappe.core.doctype.background_task.background_task import stop_task
@@ -18,6 +16,7 @@ from frappe.model.document import Document
 from frappe.monitor import add_data_to_monitor
 from frappe.utils import add_to_date, now
 from frappe.utils.background_jobs import enqueue
+from frappe.utils.task_queue import get_current_task
 
 # If prepared report runs for longer than this time it's automatically considered as failed
 FAILURE_THRESHOLD = 6 * 60 * 60
@@ -116,7 +115,7 @@ class PreparedReport(Document):
 
 def generate_report(prepared_report):
 	update_job_id(prepared_report)
-	task_handle = frappe.get_current_task()
+	task_handle = get_current_task()
 
 	instance: PreparedReport = frappe.get_doc("Prepared Report", prepared_report)
 	report = frappe.get_doc("Report", instance.report_name)
@@ -176,7 +175,7 @@ def _save_error(instance, error):
 
 
 def update_job_id(prepared_report):
-	task = frappe.get_current_task()
+	task = get_current_task()
 
 	frappe.db.set_value(
 		"Prepared Report",
