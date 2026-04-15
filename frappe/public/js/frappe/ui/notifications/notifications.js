@@ -222,6 +222,13 @@ class NotificationsView extends BaseNotificationsView {
 			.attr("title", __("Notifications"))
 			.tooltip({ delay: { show: 600, hide: 100 }, trigger: "hover" });
 
+		this.bell_indicator = this.parent.find(".desktop-notification-icon");
+		if (!this.bell_indicator.length) {
+			this.bell_indicator = this.parent
+				.closest(".body-sidebar")
+				?.find(".sidebar-notification .sidebar-item-icon");
+		}
+
 		this.setup_notification_listeners();
 
 		this.dropdown_items = [];
@@ -380,8 +387,7 @@ class NotificationsView extends BaseNotificationsView {
 	}
 
 	toggle_notification_icon(seen) {
-		this.notifications_icon.find(".notifications-seen").toggle(seen);
-		this.notifications_icon.find(".notifications-unseen").toggle(!seen);
+		this.bell_indicator?.toggleClass("indicator blue", !seen);
 	}
 
 	toggle_seen(flag) {
@@ -396,11 +402,13 @@ class NotificationsView extends BaseNotificationsView {
 
 	setup_notification_listeners() {
 		frappe.realtime.on("notification", () => {
+			this.settings.seen = 0;
 			this.toggle_notification_icon(false);
 			this.update_dropdown();
 		});
 
 		frappe.realtime.on("indicator_hide", () => {
+			this.settings.seen = 1;
 			this.toggle_notification_icon(true);
 		});
 
@@ -424,7 +432,7 @@ class NotificationsView extends BaseNotificationsView {
 			}
 
 			this.toggle_seen(true);
-			if (this.notifications_icon.find(".notifications-unseen").is(":visible")) {
+			if (this.bell_indicator?.hasClass("indicator")) {
 				this.toggle_notification_icon(true);
 				frappe.call(
 					"frappe.desk.doctype.notification_log.notification_log.trigger_indicator_hide"
