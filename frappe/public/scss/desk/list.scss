@@ -344,7 +344,6 @@ input.list-header-checkbox {
 .modal-body {
 	.list-item--head {
 		position: sticky !important;
-		z-index: 500;
 		top: 0;
 	}
 
@@ -514,6 +513,7 @@ input.list-header-checkbox {
 		display: flex;
 		padding: 0;
 		align-items: flex-start;
+		margin-top: 3px;
 	}
 
 	.filter-selector .btn-group {

@@ -35,7 +35,12 @@ def unimplemented_for(*dbtypes: db_type_is) -> Callable:
 @run_only_if(db_type_is.MARIADB)
 class TestCustomFunctionsMariaDB(IntegrationTestCase):
 	def test_concat(self):
-		self.assertEqual("GROUP_CONCAT('Notes')", GroupConcat("Notes").get_sql())
+		self.assertEqual("GROUP_CONCAT('Notes' SEPARATOR ',')", GroupConcat("Notes").get_sql())
+		user = frappe.qb.DocType("User")
+		query = frappe.qb.from_(user).select(GroupConcat(user.email).separator(" | ").as_("user_list"))
+		sql = query.get_sql()
+		self.assertIn("SEPARATOR ' | '", sql)
+		self.assertIn("`user_list`", sql)
 
 	def test_match(self):
 		query = Match("Notes")
@@ -520,15 +525,17 @@ class TestOperatorIn(IntegrationTestCase):
 		query = func_in(note.name, [None, "user1"])
 		sql_str = str(query).lower()
 
-		self.assertIn("coalesce", sql_str)
+		self.assertNotIn("coalesce", sql_str)
+		self.assertIn("is null", sql_str)
 		self.assertIn("''", sql_str)
 
-	def test_func_in_with_empty_string_uses_coalesce(self):
+	def test_func_in_with_empty_string_uses_or_is_null(self):
 		note = frappe.qb.DocType("Note")
 		query = func_in(note.name, ["", "user1"])
 		sql_str = str(query).lower()
 
-		self.assertIn("coalesce", sql_str)
+		self.assertNotIn("coalesce", sql_str)
+		self.assertIn("is null", sql_str)
 		self.assertIn("''", sql_str)
 
 	def test_func_in_with_mixed_none_and_values(self):
@@ -536,7 +543,8 @@ class TestOperatorIn(IntegrationTestCase):
 		query = func_in(note.name, ["val1", None, "val2"])
 		sql_str = str(query).lower()
 
-		self.assertIn("coalesce", sql_str)
+		self.assertNotIn("coalesce", sql_str)
+		self.assertIn("is null", sql_str)
 
 	def test_in_filter_matches_null_and_empty_columns(self):
 		test_doctype = new_doctype(
