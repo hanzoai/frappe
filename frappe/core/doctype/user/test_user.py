@@ -431,19 +431,7 @@ class TestUser(FrappeTestCase):
 			update_password(old_password, old_password=new_password)
 			self.assertEqual(
 				frappe.message_log[0].get("message"),
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-				"Password reset instructions have been sent to your email",
-=======
-				"If an account with this email exists, password reset instructions have been sent.",
->>>>>>> a0f4526c58 (fix: update password reset tests for improved accuracy and messaging)
-=======
-				"If this email is registered with us, we’ve sent password reset instructions to it. Please check your inbox.",
->>>>>>> 667787cb47 (fix: updated message)
-=======
 				"If this email is registered with us, we have sent password reset instructions to it. Please check your inbox.",
->>>>>>> 71613d6fc8 (fix: correct wording in password reset message for consistency)
 			)
 
 		sendmail.assert_called_once()
