@@ -50,8 +50,6 @@
 
 	&::before {
 		position: absolute;
-		top: 0;
-		right: 0;
 		left: auto;
 		height: 6px;
 		width: 6px;
@@ -60,7 +58,19 @@
 	}
 }
 
-.sidebar-notification .item-anchor {
+.desktop-notification-icon.indicator::before {
+	top: 0;
+	right: 0;
+}
+
+.sidebar-notification .sidebar-item-icon.indicator::before {
+	top: 3px;
+	right: 5px;
+	height: 5px;
+	width: 5px;
+}
+
+.sidebar-notification .standard-sidebar-item .item-anchor {
 	overflow: visible;
 }
 
