@@ -5,6 +5,7 @@ Sync's doctype and docfields from txt files to database
 perms will get synced only if none exist
 """
 
+import glob
 import os
 import re
 
@@ -42,7 +43,6 @@ IMPORTABLE_DOCTYPES = [
 	("custom", "custom_field"),
 	("custom", "property_setter"),
 	("printing", "letter_head"),
-	("core", "doctype_layout"),
 ]
 
 
@@ -160,6 +160,13 @@ def get_doc_files(files, start_path):
 					if os.path.exists(doc_path):
 						if doc_path not in files:
 							files.append(doc_path)
+
+	# DocType Layouts: doctype/{document_type}/doctype_layout/{name}.json
+	for doc_path in glob.glob(
+		os.path.join(start_path, "doctype", "*", "doctype_layout", "*.json")
+	):
+		if doc_path not in files:
+			files.append(doc_path)
 
 	return files
 

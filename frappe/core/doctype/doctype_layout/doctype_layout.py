@@ -54,9 +54,29 @@ class DocTypeLayout(Document):
 	# end: auto-generated types
 
 	def on_update(self):
-		from frappe.modules.utils import export_module_json
+		if not frappe.flags.in_import and self.is_standard and frappe.conf.developer_mode:
+			self._export_to_doctype_dir()
 
-		export_module_json(self, self.is_standard, self.module)
+	def _export_to_doctype_dir(self):
+		import os
+
+		from frappe.modules.export_file import strip_default_fields
+		from frappe.modules.utils import get_module_path
+
+		module_path = get_module_path(self.module)
+		folder = os.path.join(
+			module_path, "doctype", frappe.scrub(self.document_type), "doctype_layout"
+		)
+		frappe.create_folder(folder)
+
+		doc_export = self.as_dict(no_nulls=True, ignore_computed_child_tables=True)
+		self.run_method("before_export", doc_export)
+		doc_export = strip_default_fields(self, doc_export)
+
+		path = os.path.join(folder, f"{frappe.scrub(self.name)}.json")
+		with open(path, "w+") as f:
+			f.write(frappe.as_json(doc_export) + "\n")
+		print(f"Wrote DocType Layout {self.name} to {path}")
 
 	def after_insert(self):
 		self.ensure_layout_link_field()
