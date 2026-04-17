@@ -15,19 +15,19 @@ const fieldtype_icon = {
 	"Section Break": "es-line-layout-rows",
 	"Column Break": "es-line-columns",
 	"Tab Break": "es-line-tab",
-	"Table": "es-line-table",
-	"Link": "es-line-link",
-	"Check": "es-line-check-circle",
-	"Date": "es-line-calendar",
-	"Datetime": "es-line-clock",
-	"Int": "es-line-hash",
-	"Float": "es-line-decimal",
-	"Currency": "es-line-currency",
-	"Text": "es-line-text",
+	Table: "es-line-table",
+	Link: "es-line-link",
+	Check: "es-line-check-circle",
+	Date: "es-line-calendar",
+	Datetime: "es-line-clock",
+	Int: "es-line-hash",
+	Float: "es-line-decimal",
+	Currency: "es-line-currency",
+	Text: "es-line-text",
 	"Small Text": "es-line-text",
-	"Code": "es-line-code",
-	"Select": "es-line-list",
-	"Attach": "es-line-file-upload",
+	Code: "es-line-code",
+	Select: "es-line-list",
+	Attach: "es-line-file-upload",
 	"Attach Image": "es-line-image",
 };
 
@@ -64,11 +64,22 @@ function toggle(prop, event) {
 
 		<!-- label -->
 		<span class="lb-field-label flex-grow-1">
-			<span class="field-display-label">{{ field.label || base.label || field.fieldname }}</span>
+			<span class="field-display-label">{{
+				field.label || base.label || field.fieldname
+			}}</span>
 			<span class="text-muted small ms-1">({{ field.fieldname }})</span>
-			<span v-if="is_hidden" class="badge badge-muted ms-1" style="font-size:0.7em">{{ __('Hidden') }}</span>
-			<span v-if="field.reqd" class="badge badge-danger ms-1" style="font-size:0.7em">{{ __('Req') }}</span>
-			<span v-if="field.read_only" class="badge badge-warning ms-1" style="font-size:0.7em">{{ __('RO') }}</span>
+			<span v-if="is_hidden" class="badge badge-muted ms-1" style="font-size: 0.7em">{{
+				__("Hidden")
+			}}</span>
+			<span v-if="field.reqd" class="badge badge-danger ms-1" style="font-size: 0.7em">{{
+				__("Req")
+			}}</span>
+			<span
+				v-if="field.read_only"
+				class="badge badge-warning ms-1"
+				style="font-size: 0.7em"
+				>{{ __("RO") }}</span
+			>
 		</span>
 
 		<!-- fieldtype badge -->
@@ -77,16 +88,24 @@ function toggle(prop, event) {
 		<!-- quick toggles (non-structural only) -->
 		<template v-if="!is_structural">
 			<label class="lb-toggle" :title="__('Toggle Hidden')" @click.stop>
-				<input type="checkbox" :checked="!!field.hidden" @change="toggle('hidden', $event)" />
-				{{ __('Hide') }}
+				<input
+					type="checkbox"
+					:checked="!!field.hidden"
+					@change="toggle('hidden', $event)"
+				/>
+				{{ __("Hide") }}
 			</label>
 			<label class="lb-toggle" :title="__('Toggle Required')" @click.stop>
 				<input type="checkbox" :checked="!!field.reqd" @change="toggle('reqd', $event)" />
-				{{ __('Req') }}
+				{{ __("Req") }}
 			</label>
 			<label class="lb-toggle" :title="__('Toggle Read Only')" @click.stop>
-				<input type="checkbox" :checked="!!field.read_only" @change="toggle('read_only', $event)" />
-				{{ __('RO') }}
+				<input
+					type="checkbox"
+					:checked="!!field.read_only"
+					@change="toggle('read_only', $event)"
+				/>
+				{{ __("RO") }}
 			</label>
 		</template>
 	</div>
@@ -104,9 +123,17 @@ function toggle(prop, event) {
 	transition: background 0.12s;
 	user-select: none;
 
-	&:last-child { border-bottom: none; }
-	&:hover { background: var(--control-bg); }
-	&.is-selected { background: var(--blue-50) !important; outline: 2px solid var(--blue-300) !important; outline-offset: -2px; }
+	&:last-child {
+		border-bottom: none;
+	}
+	&:hover {
+		background: var(--control-bg);
+	}
+	&.is-selected {
+		background: var(--blue-50) !important;
+		outline: 2px solid var(--blue-300) !important;
+		outline-offset: -2px;
+	}
 
 	&.is-structural {
 		background: var(--subtle-accent);
@@ -117,7 +144,10 @@ function toggle(prop, event) {
 	}
 
 	&.is-hidden-field {
-		.field-display-label, .lb-field-icon { opacity: 0.4; }
+		.field-display-label,
+		.lb-field-icon {
+			opacity: 0.4;
+		}
 	}
 }
 
@@ -126,10 +156,14 @@ function toggle(prop, event) {
 	color: var(--text-muted);
 	flex-shrink: 0;
 	padding: 0 2px;
-	&:active { cursor: grabbing; }
+	&:active {
+		cursor: grabbing;
+	}
 }
 
-.lb-field-icon { flex-shrink: 0; }
+.lb-field-icon {
+	flex-shrink: 0;
+}
 
 .lb-field-label {
 	font-size: 0.9em;
@@ -155,6 +189,9 @@ function toggle(prop, event) {
 	cursor: pointer;
 	white-space: nowrap;
 
-	input { margin: 0; cursor: pointer; }
+	input {
+		margin: 0;
+		cursor: pointer;
+	}
 }
 </style>

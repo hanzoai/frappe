@@ -712,7 +712,9 @@ frappe.ui.form.Toolbar = class Toolbar {
 		const layout = this.frm.doctype_layout;
 		const title = layout.title || layout.name;
 		const $badge = $(
-			`<span class="layout-indicator indicator-pill no-indicator-dot gray whitespace-nowrap ms-2"><span>${frappe.utils.escape_html(__(title))}</span></span>`
+			`<span class="layout-indicator indicator-pill no-indicator-dot gray whitespace-nowrap ms-2"><span>${frappe.utils.escape_html(
+				__(title)
+			)}</span></span>`
 		);
 		this.page.$title_area.find(".indicator-pill").first().after($badge);
 	}

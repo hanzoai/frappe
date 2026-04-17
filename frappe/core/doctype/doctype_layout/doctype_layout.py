@@ -36,7 +36,9 @@ class DocTypeLayout(Document):
 	from typing import TYPE_CHECKING
 
 	if TYPE_CHECKING:
-		from frappe.core.doctype.doctype_layout_child_table.doctype_layout_child_table import DocTypeLayoutChildTable
+		from frappe.core.doctype.doctype_layout_child_table.doctype_layout_child_table import (
+			DocTypeLayoutChildTable,
+		)
 		from frappe.core.doctype.doctype_layout_field.doctype_layout_field import DocTypeLayoutField
 		from frappe.types import DF
 
@@ -64,9 +66,7 @@ class DocTypeLayout(Document):
 		from frappe.modules.utils import get_module_path
 
 		module_path = get_module_path(self.module)
-		folder = os.path.join(
-			module_path, "doctype", frappe.scrub(self.document_type), "doctype_layout"
-		)
+		folder = os.path.join(module_path, "doctype", frappe.scrub(self.document_type), "doctype_layout")
 		frappe.create_folder(folder)
 
 		doc_export = self.as_dict(no_nulls=True, ignore_computed_child_tables=True)
@@ -244,6 +244,3 @@ def get_layouts_for_doctype(doctype: str) -> list[dict]:
 		fields=fields,
 		order_by="title asc",
 	)
-
-
-

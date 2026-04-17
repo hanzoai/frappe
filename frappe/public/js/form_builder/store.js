@@ -31,9 +31,20 @@ export const useStore = defineStore("form-builder-store", () => {
 
 	// Properties that DocType Layout can override per-field
 	const LAYOUT_OVERRIDE_PROPS = [
-		"label", "hidden", "reqd", "read_only", "default",
-		"description", "depends_on", "mandatory_depends_on", "read_only_depends_on",
-		"bold", "allow_in_quick_entry", "in_list_view", "in_standard_filter", "translatable",
+		"label",
+		"hidden",
+		"reqd",
+		"read_only",
+		"default",
+		"description",
+		"depends_on",
+		"mandatory_depends_on",
+		"read_only_depends_on",
+		"bold",
+		"allow_in_quick_entry",
+		"in_list_view",
+		"in_standard_filter",
+		"translatable",
 	];
 
 	// Getters
@@ -114,7 +125,9 @@ export const useStore = defineStore("form-builder-store", () => {
 		if (layout_rows.length > 0) {
 			merged_fields = layout_rows
 				.map((row) => {
-					let sf = source_doctype_fields.value.find((f) => f.fieldname === row.fieldname);
+					let sf = source_doctype_fields.value.find(
+						(f) => f.fieldname === row.fieldname
+					);
 					if (!sf) return null;
 					let copy = JSON.parse(JSON.stringify(sf));
 					for (let prop of LAYOUT_OVERRIDE_PROPS) {

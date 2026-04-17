@@ -2,17 +2,52 @@ import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 
 export const OVERRIDE_PROPS = [
-	{ fieldname: "label", label: "Label", fieldtype: "Data", description: "Override the field label for this layout" },
-	{ fieldname: "hidden", label: "Hidden", fieldtype: "Check", description: "Hide this field in the layout" },
-	{ fieldname: "reqd", label: "Required", fieldtype: "Check", description: "Make this field mandatory in the layout" },
-	{ fieldname: "read_only", label: "Read Only", fieldtype: "Check", description: "Make this field read-only in the layout" },
+	{
+		fieldname: "label",
+		label: "Label",
+		fieldtype: "Data",
+		description: "Override the field label for this layout",
+	},
+	{
+		fieldname: "hidden",
+		label: "Hidden",
+		fieldtype: "Check",
+		description: "Hide this field in the layout",
+	},
+	{
+		fieldname: "reqd",
+		label: "Required",
+		fieldtype: "Check",
+		description: "Make this field mandatory in the layout",
+	},
+	{
+		fieldname: "read_only",
+		label: "Read Only",
+		fieldtype: "Check",
+		description: "Make this field read-only in the layout",
+	},
 	{ fieldname: "allow_in_quick_entry", label: "Allow in Quick Entry", fieldtype: "Check" },
 	{ fieldname: "bold", label: "Bold", fieldtype: "Check" },
 	{ fieldname: "in_list_view", label: "In List View", fieldtype: "Check" },
 	{ fieldname: "in_standard_filter", label: "In Standard Filter", fieldtype: "Check" },
-	{ fieldname: "default", label: "Default Value", fieldtype: "Data", description: "Override the default value" },
-	{ fieldname: "description", label: "Description", fieldtype: "Small Text", description: "Override the field description" },
-	{ fieldname: "depends_on", label: "Depends On", fieldtype: "Data", description: "eval: doc.field == 'x'" },
+	{
+		fieldname: "default",
+		label: "Default Value",
+		fieldtype: "Data",
+		description: "Override the default value",
+	},
+	{
+		fieldname: "description",
+		label: "Description",
+		fieldtype: "Small Text",
+		description: "Override the field description",
+	},
+	{
+		fieldname: "depends_on",
+		label: "Depends On",
+		fieldtype: "Data",
+		description: "eval: doc.field == 'x'",
+	},
 	{ fieldname: "mandatory_depends_on", label: "Mandatory Depends On", fieldtype: "Data" },
 	{ fieldname: "read_only_depends_on", label: "Read Only Depends On", fieldtype: "Data" },
 ];
@@ -62,12 +97,16 @@ export const useLayoutBuilderStore = defineStore("layout-builder-store", () => {
 
 	function reorder(new_order_fieldnames) {
 		const by_name = {};
-		(frm.value.doc.fields || []).forEach((f) => { by_name[f.fieldname] = f; });
-		frm.value.doc.fields = new_order_fieldnames.map((fn, i) => {
-			const f = by_name[fn];
-			if (f) f.idx = i + 1;
-			return f;
-		}).filter(Boolean);
+		(frm.value.doc.fields || []).forEach((f) => {
+			by_name[f.fieldname] = f;
+		});
+		frm.value.doc.fields = new_order_fieldnames
+			.map((fn, i) => {
+				const f = by_name[fn];
+				if (f) f.idx = i + 1;
+				return f;
+			})
+			.filter(Boolean);
 		fields.value = frm.value.doc.fields.slice();
 		mark_dirty();
 	}
@@ -78,8 +117,18 @@ export const useLayoutBuilderStore = defineStore("layout-builder-store", () => {
 	}
 
 	return {
-		frm, doc, fields, selected_field, dirty,
+		frm,
+		doc,
+		fields,
+		selected_field,
+		dirty,
 		base_meta,
-		init, reload, select, deselect, update_field, reorder, mark_dirty,
+		init,
+		reload,
+		select,
+		deselect,
+		update_field,
+		reorder,
+		mark_dirty,
 	};
 });

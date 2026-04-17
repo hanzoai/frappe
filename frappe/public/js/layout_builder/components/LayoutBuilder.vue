@@ -18,9 +18,13 @@ onMounted(() => {
 	drag_fields.value = store.fields;
 });
 
-watch(() => store.fields, (val) => {
-	drag_fields.value = val;
-}, { deep: false });
+watch(
+	() => store.fields,
+	(val) => {
+		drag_fields.value = val;
+	},
+	{ deep: false }
+);
 
 function on_drag_end() {
 	const new_order = drag_fields.value.map((f) => f.fieldname);
@@ -33,7 +37,9 @@ function on_drag_end() {
 		<!-- Field list panel -->
 		<div class="lb-main">
 			<div v-if="!drag_fields.length" class="lb-empty">
-				<p class="text-muted">{{ __('No fields yet. Set a Document Type and click Sync Fields.') }}</p>
+				<p class="text-muted">
+					{{ __("No fields yet. Set a Document Type and click Sync Fields.") }}
+				</p>
 			</div>
 
 			<draggable
@@ -58,7 +64,9 @@ function on_drag_end() {
 			<FieldProperties v-if="store.selected_field" />
 			<div v-else class="lb-sidebar-placeholder">
 				<span v-html="frappe.utils.icon('es-line-settings', 'lg')" />
-				<p class="text-muted mt-2">{{ __('Click a field to edit its layout overrides') }}</p>
+				<p class="text-muted mt-2">
+					{{ __("Click a field to edit its layout overrides") }}
+				</p>
 			</div>
 		</div>
 	</div>

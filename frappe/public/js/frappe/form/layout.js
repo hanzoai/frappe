@@ -551,9 +551,17 @@ frappe.ui.form.Layout = class Layout {
 		}
 		const has_layout = Object.keys(layout_row_map).length > 0;
 		const LAYOUT_OVERRIDE_PROPS = [
-			"hidden", "reqd", "read_only", "bold",
-			"allow_in_quick_entry", "in_list_view", "in_standard_filter",
-			"default", "description", "depends_on", "mandatory_depends_on",
+			"hidden",
+			"reqd",
+			"read_only",
+			"bold",
+			"allow_in_quick_entry",
+			"in_list_view",
+			"in_standard_filter",
+			"default",
+			"description",
+			"depends_on",
+			"mandatory_depends_on",
 			"read_only_depends_on",
 		];
 
@@ -565,7 +573,9 @@ frappe.ui.form.Layout = class Layout {
 				fieldobj.docname = me.doc.name;
 
 				const base_df = frappe.meta.get_docfield(
-					me.doc.doctype, fieldobj.df.fieldname, me.doc.name
+					me.doc.doctype,
+					fieldobj.df.fieldname,
+					me.doc.name
 				);
 				if (base_df) {
 					if (has_layout) {

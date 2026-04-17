@@ -775,7 +775,9 @@ frappe.ui.form.Form = class FrappeForm {
 		this._layout_print_format = layout?.default_print_format || null;
 		this._layout_email_template = layout?.default_email_template || null;
 
-		this.toolbar && this.toolbar.refresh_layout_indicator && this.toolbar.refresh_layout_indicator();
+		this.toolbar &&
+			this.toolbar.refresh_layout_indicator &&
+			this.toolbar.refresh_layout_indicator();
 	}
 
 	onload_post_render() {

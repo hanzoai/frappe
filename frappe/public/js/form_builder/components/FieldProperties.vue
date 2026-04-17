@@ -10,9 +10,20 @@ let search_text = ref("");
 let args = ref({});
 
 const LAYOUT_OVERRIDE_PROPS = new Set([
-	"label", "hidden", "reqd", "read_only", "default",
-	"description", "depends_on", "mandatory_depends_on", "read_only_depends_on",
-	"bold", "allow_in_quick_entry", "in_list_view", "in_standard_filter", "translatable",
+	"label",
+	"hidden",
+	"reqd",
+	"read_only",
+	"default",
+	"description",
+	"depends_on",
+	"mandatory_depends_on",
+	"read_only_depends_on",
+	"bold",
+	"allow_in_quick_entry",
+	"in_list_view",
+	"in_standard_filter",
+	"translatable",
 ]);
 
 let docfield_df = computed(() => {

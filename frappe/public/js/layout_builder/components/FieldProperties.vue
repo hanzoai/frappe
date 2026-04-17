@@ -36,11 +36,7 @@ function on_change(prop, value) {
 		</div>
 
 		<div class="props-body">
-			<div
-				v-for="prop in applicable_props"
-				:key="prop.fieldname"
-				class="prop-row"
-			>
+			<div v-for="prop in applicable_props" :key="prop.fieldname" class="prop-row">
 				<!-- Check -->
 				<template v-if="prop.fieldtype === 'Check'">
 					<label class="prop-check-label">

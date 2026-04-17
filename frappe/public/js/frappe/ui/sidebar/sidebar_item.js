@@ -79,7 +79,9 @@ frappe.ui.sidebar_item.TypeLink = class SidebarItem {
 					);
 					if (layout_info) {
 						const doctype_slug = frappe.router.slug(this.item.link_to);
-						path = `/app/${doctype_slug}?layout=${encodeURIComponent(layout_info.name)}`;
+						path = `/app/${doctype_slug}?layout=${encodeURIComponent(
+							layout_info.name
+						)}`;
 					}
 				}
 			}

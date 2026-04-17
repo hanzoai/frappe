@@ -232,7 +232,12 @@ onMounted(() => selected.value && label_input.value.focus_on_label());
 					>
 						<div v-html="frappe.utils.icon('filter', 'sm')" />
 					</button>
-					<AddFieldButton v-if="!store.is_layout_form" ref="add_field_ref" :column="column" :field="field">
+					<AddFieldButton
+						v-if="!store.is_layout_form"
+						ref="add_field_ref"
+						:column="column"
+						:field="field"
+					>
 						<div v-html="frappe.utils.icon('add', 'sm')" />
 					</AddFieldButton>
 					<button

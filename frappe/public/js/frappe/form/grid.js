@@ -761,9 +761,18 @@ export default class Grid {
 		if (!child_layout?.fields?.length) return;
 
 		const OVERRIDE_PROPS = [
-			"hidden", "reqd", "read_only", "bold",
-			"allow_in_quick_entry", "in_list_view", "in_standard_filter",
-			"default", "description", "depends_on", "mandatory_depends_on", "read_only_depends_on",
+			"hidden",
+			"reqd",
+			"read_only",
+			"bold",
+			"allow_in_quick_entry",
+			"in_list_view",
+			"in_standard_filter",
+			"default",
+			"description",
+			"depends_on",
+			"mandatory_depends_on",
+			"read_only_depends_on",
 		];
 		const override_map = Object.fromEntries(child_layout.fields.map((f) => [f.fieldname, f]));
 
