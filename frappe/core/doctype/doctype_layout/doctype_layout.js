@@ -106,7 +106,7 @@ frappe.ui.form.on("DocType Layout", {
 	render_builder(frm) {
 		if (!frm.doc.document_type) return;
 
-		const wrapper = $(frm.fields_dict["form_builder"].wrapper).parent().parent().parent().parent();
+		const wrapper = $(frm.fields_dict["form_builder"].wrapper).closest(".tab-pane");
 
 		if (frappe.layout_builder?.store && frappe.layout_builder.frm === frm) {
 			frappe.layout_builder.setup_page_actions();

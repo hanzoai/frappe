@@ -59,10 +59,10 @@ class DocTypeLayout(Document):
 		export_module_json(self, self.is_standard, self.module)
 
 	def after_insert(self):
-		self._ensure_layout_link_field()
+		self.ensure_layout_link_field()
 
 	def on_trash(self):
-		self._cleanup_layout_link_field_if_unused()
+		self.cleanup_layout_link_field_if_unused()
 
 	def validate(self):
 		if self.is_standard and not frappe.conf.developer_mode and not frappe.flags.in_migrate:
@@ -104,7 +104,7 @@ class DocTypeLayout(Document):
 
 		return {"added": added, "removed": removed}
 
-	def _ensure_layout_link_field(self):
+	def ensure_layout_link_field(self):
 		"""Add 'doctype_layout' custom Link field to target doctype if absent."""
 		if frappe.get_meta(self.document_type).istable:
 			return
@@ -127,7 +127,7 @@ class DocTypeLayout(Document):
 			}
 		).insert(ignore_permissions=True)
 
-	def _cleanup_layout_link_field_if_unused(self):
+	def cleanup_layout_link_field_if_unused(self):
 		"""Remove 'doctype_layout' custom field if no layouts remain for this doctype."""
 		remaining = frappe.db.count(
 			"DocType Layout",
