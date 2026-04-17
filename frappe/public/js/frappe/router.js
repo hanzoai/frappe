@@ -179,11 +179,7 @@ frappe.router = {
 			// route
 			route = await this.set_doctype_route(route);
 		} else {
-			// Standard routes like ["Form", "DocType", "name"], ["List", "DocType"],
-			// ["Tree", "DocType"] etc. do not go through set_doctype_route, so
-			// doctype_layout is never reset here. Explicitly clear it so that a stale
-			// layout from a previous slug-based navigation is not carried over to an
-			// unrelated form.
+			// Clear stale layout — standard routes skip set_doctype_route where it's normally reset.
 			this.doctype_layout = null;
 		}
 
@@ -232,8 +228,6 @@ frappe.router = {
 				route = ["List", doctype_route.doctype, "List"];
 			}
 
-			// Determine active layout from route_options (in-app nav) or URL search param
-			// (direct link / page reload). Match by exact name against boot data.
 			const from_route_options = frappe.route_options?.layout;
 			const from_url = new URLSearchParams(window.location.search).get("layout");
 			const layout_param = from_route_options || from_url;
@@ -247,7 +241,6 @@ frappe.router = {
 				if (from_route_options) delete frappe.route_options.layout;
 			}
 
-			// Keep URL in sync with the resolved layout
 			const _url = new URL(window.location.href);
 			if (this.doctype_layout) {
 				_url.searchParams.set("layout", this.doctype_layout);

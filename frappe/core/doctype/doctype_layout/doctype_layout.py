@@ -105,10 +105,9 @@ class DocTypeLayout(Document):
 		return {"added": added, "removed": removed}
 
 	def _ensure_layout_link_field(self):
-		"""Create a system-generated Link field 'doctype_layout' on the target doctype
-		if one does not already exist. Used for user permissions and list filtering."""
+		"""Add 'doctype_layout' custom Link field to target doctype if absent."""
 		if frappe.get_meta(self.document_type).istable:
-			return  # child tables don't need this field
+			return
 
 		fieldname = "doctype_layout"
 		if frappe.db.exists("Custom Field", {"dt": self.document_type, "fieldname": fieldname}):
@@ -129,7 +128,7 @@ class DocTypeLayout(Document):
 		).insert(ignore_permissions=True)
 
 	def _cleanup_layout_link_field_if_unused(self):
-		"""Remove the 'doctype_layout' custom field when no layouts remain for this doctype."""
+		"""Remove 'doctype_layout' custom field if no layouts remain for this doctype."""
 		remaining = frappe.db.count(
 			"DocType Layout",
 			{"document_type": self.document_type, "name": ["!=", self.name]},
@@ -182,7 +181,7 @@ class DocTypeLayout(Document):
 		return removed
 
 	def get_effective_fields(self) -> list[dict]:
-		"""Return the merged field list, applying based_on inheritance if set."""
+		"""Return merged field list with based_on inheritance applied."""
 		own_fields = {f.fieldname: f.as_dict() for f in self.fields}
 
 		if not self.based_on:
@@ -191,12 +190,10 @@ class DocTypeLayout(Document):
 		parent_doc = frappe.get_doc("DocType Layout", self.based_on)
 		parent_fields = {f.fieldname: f.as_dict() for f in parent_doc.fields}
 
-		# Build ordered list: use own order if available, otherwise parent order
 		merged: dict[str, dict] = {}
 		for fieldname, pf in parent_fields.items():
 			merged[fieldname] = pf.copy()
 			if fieldname in own_fields:
-				# child overrides specific props
 				for prop in OVERRIDABLE_FIELD_PROPS:
 					child_val = own_fields[fieldname].get(prop)
 					if child_val not in (None, "", 0):
@@ -210,14 +207,8 @@ class DocTypeLayout(Document):
 		return list(merged.values())
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Whitelist API
-# ──────────────────────────────────────────────────────────────────────────────
-
-
 @frappe.whitelist()
 def get_layouts_for_doctype(doctype: str) -> list[dict]:
-	"""Return all DocType Layouts defined for a DocType (safe for Desk Users)."""
 	fields = [
 		"name",
 		"title",

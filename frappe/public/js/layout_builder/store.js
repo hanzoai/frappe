@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 
-// Field properties that can be overridden per layout
 export const OVERRIDE_PROPS = [
 	{ fieldname: "label", label: "Label", fieldtype: "Data", description: "Override the field label for this layout" },
 	{ fieldname: "hidden", label: "Hidden", fieldtype: "Check", description: "Hide this field in the layout" },
@@ -18,30 +17,19 @@ export const OVERRIDE_PROPS = [
 	{ fieldname: "read_only_depends_on", label: "Read Only Depends On", fieldtype: "Data" },
 ];
 
-// The subset that apply only to non-structural fields
 export const STRUCTURAL_TYPES = new Set(["Section Break", "Column Break", "Tab Break"]);
 
 export const useLayoutBuilderStore = defineStore("layout-builder-store", () => {
-	/** The Frappe frm object for the DocType Layout document */
 	let frm = ref(null);
-	/** doctype_layout doc (frm.doc) */
 	let doc = ref(null);
-	/** The flat list of layout field rows (frm.doc.fields) rendered in order */
 	let fields = ref([]);
-	/** Currently selected field row (DocType Layout Field row object) */
 	let selected_field = ref(null);
-	/** Whether any unsaved changes exist */
 	let dirty = ref(false);
 
-	// ── Computed ────────────────────────────────────────────────────────────────
-
-	/** docfield_map for the parent DocType, keyed by fieldname */
 	let base_meta = computed(() => {
 		if (!doc.value?.document_type) return {};
 		return frappe.meta.docfield_map[doc.value.document_type] || {};
 	});
-
-	// ── Actions ──────────────────────────────────────────────────────────────────
 
 	function init(_frm) {
 		frm.value = _frm;
@@ -49,7 +37,6 @@ export const useLayoutBuilderStore = defineStore("layout-builder-store", () => {
 		reload();
 	}
 
-	/** Re-read from frm.doc.fields (called after sync or after_save) */
 	function reload() {
 		fields.value = (frm.value.doc.fields || []).slice().sort((a, b) => a.idx - b.idx);
 		selected_field.value = null;
@@ -64,18 +51,15 @@ export const useLayoutBuilderStore = defineStore("layout-builder-store", () => {
 		selected_field.value = null;
 	}
 
-	/** Write a property change on the selected/given layout field row back into frm.doc */
 	function update_field(fieldname, prop, value) {
 		const row = (frm.value.doc.fields || []).find((f) => f.fieldname === fieldname);
 		if (!row) return;
 		row[prop] = value;
-		// also update the reactive copy in fields[]
 		const reactive_row = fields.value.find((f) => f.fieldname === fieldname);
 		if (reactive_row) reactive_row[prop] = value;
 		mark_dirty();
 	}
 
-	/** Reorder frm.doc.fields to match the current drag-drop order in fields[] */
 	function reorder(new_order_fieldnames) {
 		const by_name = {};
 		(frm.value.doc.fields || []).forEach((f) => { by_name[f.fieldname] = f; });
@@ -84,7 +68,6 @@ export const useLayoutBuilderStore = defineStore("layout-builder-store", () => {
 			if (f) f.idx = i + 1;
 			return f;
 		}).filter(Boolean);
-		// keep fields[] in sync
 		fields.value = frm.value.doc.fields.slice();
 		mark_dirty();
 	}

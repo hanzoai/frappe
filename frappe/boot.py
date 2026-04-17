@@ -440,8 +440,6 @@ def get_additional_filters_from_hooks():
 
 
 def add_layouts(bootinfo):
-	# Include enough fields for the toolbar layout switcher.
-	# Keep the list lean — it is loaded for every desk session.
 	bootinfo.doctype_layouts = frappe.get_all(
 		"DocType Layout",
 		fields=[

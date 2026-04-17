@@ -38,15 +38,8 @@ frappe.ui.form.Form = class FrappeForm {
 		this.events = {};
 		this.fetch_dict = {};
 		this.parent = parent;
-		// Use frappe.get_doc to read from locals["DocType Layout"][name] — the layout
-		// document is already loaded by FormFactory via frappe.model.with_doc before
-		// the form is constructed. frappe.get_meta only reads locals["DocType"] so it
-		// would always return null here.
-		//
-		// Also verify document_type matches this form's doctype: frappe.router.doctype_layout
-		// is not reset for direct "Form/..." navigation routes, so it can carry a stale
-		// layout name from a previous form visit. Applying a layout for a different doctype
-		// would render the form with no fields and crash.
+		// frappe.get_doc (not frappe.get_meta) because the layout doc is loaded via
+		// frappe.model.with_doc; also guards against a stale name from a prior navigation.
 		this.doctype_layout = (() => {
 			if (!doctype_layout_name) return null;
 			const layout = frappe.get_doc("DocType Layout", doctype_layout_name);
@@ -633,22 +626,13 @@ frappe.ui.form.Form = class FrappeForm {
 			this.layout.show_message();
 
 			frappe.run_serially([
-				// evaluate layout conditions first so the correct layout is active
-				// before the header (toolbar menu) and fields are rendered
+				// resolve layout before toolbar and fields render
 				() => this._resolve_layout(),
-				// header must be refreshed before client methods
-				// because add_custom_button
 				() => this.refresh_header(switched),
-				// trigger global trigger
-				// to use this
 				() => $(document).trigger("form-refresh", [this]),
-				// fields
 				() => this.refresh_fields(),
-				// call trigger
 				() => this.script_manager.trigger("refresh"),
-				// apply layout overrides (print format, email template, workflow)
 				() => this.apply_layout_defaults(),
-				// call onload post render for callbacks to be fired
 				() => {
 					if (this.cscript.is_onload) {
 						this.onload_post_render();
@@ -690,14 +674,11 @@ frappe.ui.form.Form = class FrappeForm {
 		);
 		if (!layouts.length) return;
 
-		// If the user has explicitly chosen a layout (or default view) via the
-		// switcher, honour that choice instead of re-evaluating conditions.
 		// undefined = no override (use conditions); null = default; "name" = pinned.
 		let matched_name;
 		if (this._layout_user_override !== undefined) {
 			matched_name = this._layout_user_override;
 		} else {
-			// Evaluate each condition expression with `doc` in scope
 			let matched = null;
 			for (const l of layouts) {
 				try {
@@ -713,12 +694,9 @@ frappe.ui.form.Form = class FrappeForm {
 			}
 			matched_name = matched ? matched.name : null;
 		}
-		// Compare against what is currently *rendered*, not what's stored in doc.
-		// They diverge on initial load when doc.doctype_layout is set from a
-		// previous save but this.doctype_layout is still null.
+		// Compare rendered (not doc.doctype_layout) — they diverge on initial load.
 		const rendered_name = this.doctype_layout?.name || null;
 
-		// Always sync the doc field and URL, regardless of whether layout changed
 		this.doc.doctype_layout = matched_name || "";
 		const _url = new URL(window.location.href);
 		if (matched_name) {
@@ -728,10 +706,7 @@ frappe.ui.form.Form = class FrappeForm {
 		}
 		history.replaceState(history.state, "", _url.toString());
 
-		if (matched_name === rendered_name) {
-			// Already showing the correct layout — no DOM rebuild needed
-			return;
-		}
+		if (matched_name === rendered_name) return;
 
 		const apply = (layout_doc) => {
 			this.doctype_layout = layout_doc || null;
@@ -743,7 +718,6 @@ frappe.ui.form.Form = class FrappeForm {
 			return;
 		}
 
-		// Load the layout doc then rebuild
 		return new Promise((resolve) => {
 			this._resolving_layout = true;
 			frappe.model.with_doc("DocType Layout", matched_name, () => {
@@ -754,21 +728,10 @@ frappe.ui.form.Form = class FrappeForm {
 		});
 	}
 
-	/**
-	 * Tear down the current layout DOM and rebuild it with this.doctype_layout.
-	 * Preserves the dashboard by detaching and re-inserting it.
-	 */
 	_rebuild_layout() {
 		const old_wrapper = this.layout.wrapper;
-
-		// Grids registered on the old layout are now stale — clear so switch_doc
-		// doesn't iterate over detached grid objects with no .grid property.
 		this.grids = [];
-
-		// Detach the dashboard element so it survives the DOM teardown
 		const $dashboard = $(this.dashboard?.parent).detach();
-
-		// Build the new layout
 		this.layout = new frappe.ui.form.Layout({
 			parent: this.body,
 			doctype: this.doctype,
@@ -779,7 +742,6 @@ frappe.ui.form.Form = class FrappeForm {
 		});
 		this.layout.make();
 
-		// Re-insert dashboard in the correct slot (first show_dashboard tab, or top of page)
 		let dashboard_added = false;
 		if (this.layout.tabs.length) {
 			this.layout.tabs.every((tab) => {
@@ -799,7 +761,6 @@ frappe.ui.form.Form = class FrappeForm {
 
 		old_wrapper.remove();
 
-		// Clear stale active-tab reference so set_tab_as_active() picks the first visible tab
 		if (this.active_tab_map) delete this.active_tab_map[this.docname];
 
 		this.layout.doc = this.doc;
@@ -814,7 +775,6 @@ frappe.ui.form.Form = class FrappeForm {
 		this._layout_print_format = layout?.default_print_format || null;
 		this._layout_email_template = layout?.default_email_template || null;
 
-		// Let the toolbar know to refresh its layout indicator
 		this.toolbar && this.toolbar.refresh_layout_indicator && this.toolbar.refresh_layout_indicator();
 	}
 

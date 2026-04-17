@@ -1,25 +1,8 @@
 // Copyright (c) 2020, Frappe Technologies and contributors
 // For license information, please see license.txt
 
-/* ─────────────────────────────────────────────────────────────────────────────
- * DocType Layout – visual layout builder
- *
- * Uses the same Form Builder UI (form_builder.bundle.js) with is_layout=true
- * so the canvas/drag-drop/properties panel reuse the existing infrastructure.
- *  • Drag-and-drop reordering via vuedraggable
- *  • Selected field → properties panel (overrideable props only)
- *  • Per-field overrides: label, hidden, reqd, read_only, bold, allow_in_quick_entry,
- *    in_list_view, in_standard_filter, default, description,
- *    depends_on, mandatory_depends_on, read_only_depends_on
- *  • Adding/removing fields and structural changes are disabled
- *  • "Sync Fields" fetches latest fields from the DocType definition
- * ───────────────────────────────────────────────────────────────────────────── */
-
 frappe.ui.form.on("DocType Layout", {
-	// ── lifecycle ──────────────────────────────────────────────────────────────
-
 	onload(frm) {
-		// Full-width page so the Form Builder canvas has maximum horizontal space
 		frm.page.wrapper.addClass("doctype-layout-full-width");
 		if (!document.getElementById("doctype-layout-fw-style")) {
 			const style = document.createElement("style");
@@ -39,7 +22,6 @@ frappe.ui.form.on("DocType Layout", {
 		frm.events.render_builder(frm);
 	},
 
-	// Re-render when user switches to the Form tab
 	tab_break_form(frm) {
 		frm.events.render_builder(frm);
 	},
@@ -79,8 +61,6 @@ frappe.ui.form.on("DocType Layout", {
 		}
 	},
 
-	// ── buttons ────────────────────────────────────────────────────────────────
-
 	add_buttons(frm) {
 		if (!frm.is_new()) {
 			frm.add_custom_button(__("Go to {0} List", [frm.doc.title || frm.doc.name]), () => {
@@ -97,8 +77,6 @@ frappe.ui.form.on("DocType Layout", {
 			}
 		});
 	},
-
-	// ── sync helper ────────────────────────────────────────────────────────────
 
 	async sync_fields(frm, notify) {
 		frappe.dom.freeze(__("Fetching fields…"));
@@ -125,21 +103,17 @@ frappe.ui.form.on("DocType Layout", {
 		}
 	},
 
-	// ── visual builder ─────────────────────────────────────────────────────────
-
 	render_builder(frm) {
 		if (!frm.doc.document_type) return;
 
 		const wrapper = $(frm.fields_dict["form_builder"].wrapper).parent().parent().parent().parent();
 
-		// If a builder is already live for this frm, just reload its store
 		if (frappe.layout_builder?.store && frappe.layout_builder.frm === frm) {
 			frappe.layout_builder.setup_page_actions();
 			frappe.layout_builder.store.fetch();
 			return;
 		}
 
-		// Re-use an existing builder instance (different frm, same page lifecycle)
 		if (frappe.layout_builder) {
 			frappe.layout_builder.$wrapper = wrapper;
 			frappe.layout_builder.frm = frm;

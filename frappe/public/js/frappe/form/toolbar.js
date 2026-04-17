@@ -663,14 +663,7 @@ frappe.ui.form.Toolbar = class Toolbar {
 		}
 	}
 
-	/**
-	 * Layout switcher — shows a menu item that lists all DocType Layouts for the
-	 * current DocType.  Selecting one navigates to the layout route, preserving the
-	 * current document name.  A "Default View" option resets to the base doctype route.
-	 * A small indicator badge in the form title area shows the active layout name.
-	 */
 	add_layout_switcher() {
-		// Only show if there are known layouts for this doctype
 		const available_layouts = (frappe.boot.doctype_layouts || []).filter(
 			(l) => l.document_type === this.frm.doctype
 		);
@@ -678,10 +671,8 @@ frappe.ui.form.Toolbar = class Toolbar {
 
 		this.page.add_divider();
 
-		// Active layout (if any)
 		const active_layout_name = this.frm.doctype_layout?.name || null;
 
-		// "Default View" — remove the active layout
 		if (active_layout_name) {
 			this.page.add_menu_item(
 				__("Default View"),
@@ -713,11 +704,7 @@ frappe.ui.form.Toolbar = class Toolbar {
 		this.refresh_layout_indicator();
 	}
 
-	/**
-	 * Show or remove the active-layout badge near the document title.
-	 */
 	refresh_layout_indicator() {
-		// Remove any previous indicator
 		this.page.$title_area.find(".layout-indicator").remove();
 
 		if (!this.frm.doctype_layout) return;

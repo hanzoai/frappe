@@ -89,9 +89,6 @@ frappe.ui.form.Layout = class Layout {
 	}
 
 	get_fields_from_layout() {
-		// Properties from a DocType Layout Field row that take priority over the base
-		// DocField when non-empty / truthy.  "label" is always applied (empty string
-		// falls back to original label via || below).
 		const OVERRIDE_PROPS = [
 			"hidden",
 			"reqd",
@@ -114,11 +111,8 @@ frappe.ui.form.Layout = class Layout {
 
 			const docfield = copy_dict(base);
 
-			// Label: use layout override if supplied, otherwise keep original
 			docfield.label = f.label || docfield.label;
-
-			// Use truthy check so Check fields defaulting to 0 in the layout row
-			// don't accidentally override the base field's value.
+			// truthy check: avoid overriding Check fields that default to 0
 			for (const prop of OVERRIDE_PROPS) {
 				if (f[prop]) {
 					docfield[prop] = f[prop];
@@ -548,8 +542,7 @@ frappe.ui.form.Layout = class Layout {
 	attach_doc_and_docfields(refresh) {
 		let me = this;
 
-		// Build fieldname → layout-row map once so we can re-apply overrides after
-		// every refresh() without losing them (frappe.meta returns the shared base df).
+		// Build once per refresh; frappe.meta returns the shared base df so we must copy.
 		const layout_row_map = {};
 		if (me.doctype_layout?.fields) {
 			for (const f of me.doctype_layout.fields) {
@@ -576,7 +569,6 @@ frappe.ui.form.Layout = class Layout {
 				);
 				if (base_df) {
 					if (has_layout) {
-						// Copy to avoid mutating shared frappe.meta
 						const fresh_df = copy_dict(base_df);
 						const layout_row = layout_row_map[fresh_df.fieldname];
 						if (layout_row) {
