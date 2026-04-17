@@ -452,7 +452,6 @@ def add_layouts(bootinfo):
 			"is_standard",
 			"default_print_format",
 			"default_email_template",
-			"default_workflow",
 			"condition",
 		],
 	)

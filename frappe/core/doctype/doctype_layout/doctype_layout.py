@@ -45,7 +45,6 @@ class DocTypeLayout(Document):
 		condition: DF.Code | None
 		default_email_template: DF.Link | None
 		default_print_format: DF.Link | None
-		default_workflow: DF.Link | None
 		document_type: DF.Link
 		fields: DF.Table[DocTypeLayoutField]
 		is_child_table: DF.Check
@@ -227,7 +226,6 @@ def get_layouts_for_doctype(doctype: str) -> list[dict]:
 		"is_standard",
 		"default_print_format",
 		"default_email_template",
-		"default_workflow",
 	]
 	return frappe.get_all(
 		"DocType Layout",
