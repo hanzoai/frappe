@@ -89,10 +89,42 @@ frappe.ui.form.Layout = class Layout {
 	}
 
 	get_fields_from_layout() {
+		// Properties from a DocType Layout Field row that take priority over the base
+		// DocField when non-empty / truthy.  "label" is always applied (empty string
+		// falls back to original label via || below).
+		const OVERRIDE_PROPS = [
+			"hidden",
+			"reqd",
+			"read_only",
+			"bold",
+			"allow_in_quick_entry",
+			"in_list_view",
+			"in_standard_filter",
+			"default",
+			"description",
+			"depends_on",
+			"mandatory_depends_on",
+			"read_only_depends_on",
+		];
+
 		const fields = [];
 		for (let f of this.doctype_layout.fields) {
-			const docfield = copy_dict(frappe.meta.docfield_map[this.doctype][f.fieldname]);
-			docfield.label = f.label;
+			const base = frappe.meta.docfield_map[this.doctype][f.fieldname];
+			if (!base) continue;
+
+			const docfield = copy_dict(base);
+
+			// Label: use layout override if supplied, otherwise keep original
+			docfield.label = f.label || docfield.label;
+
+			// Use truthy check so Check fields defaulting to 0 in the layout row
+			// don't accidentally override the base field's value.
+			for (const prop of OVERRIDE_PROPS) {
+				if (f[prop]) {
+					docfield[prop] = f[prop];
+				}
+			}
+
 			fields.push(docfield);
 		}
 		return fields;
@@ -515,15 +547,51 @@ frappe.ui.form.Layout = class Layout {
 
 	attach_doc_and_docfields(refresh) {
 		let me = this;
+
+		// Build fieldname → layout-row map once so we can re-apply overrides after
+		// every refresh() without losing them (frappe.meta returns the shared base df).
+		const layout_row_map = {};
+		if (me.doctype_layout?.fields) {
+			for (const f of me.doctype_layout.fields) {
+				layout_row_map[f.fieldname] = f;
+			}
+		}
+		const has_layout = Object.keys(layout_row_map).length > 0;
+		const LAYOUT_OVERRIDE_PROPS = [
+			"hidden", "reqd", "read_only", "bold",
+			"allow_in_quick_entry", "in_list_view", "in_standard_filter",
+			"default", "description", "depends_on", "mandatory_depends_on",
+			"read_only_depends_on",
+		];
+
 		for (let i = 0, l = this.fields_list.length; i < l; i++) {
 			let fieldobj = this.fields_list[i];
 			if (me.doc) {
 				fieldobj.doc = me.doc;
 				fieldobj.doctype = me.doc.doctype;
 				fieldobj.docname = me.doc.name;
-				fieldobj.df =
-					frappe.meta.get_docfield(me.doc.doctype, fieldobj.df.fieldname, me.doc.name) ||
-					fieldobj.df;
+
+				const base_df = frappe.meta.get_docfield(
+					me.doc.doctype, fieldobj.df.fieldname, me.doc.name
+				);
+				if (base_df) {
+					if (has_layout) {
+						// Copy to avoid mutating shared frappe.meta
+						const fresh_df = copy_dict(base_df);
+						const layout_row = layout_row_map[fresh_df.fieldname];
+						if (layout_row) {
+							if (layout_row.label) fresh_df.label = layout_row.label;
+							for (const prop of LAYOUT_OVERRIDE_PROPS) {
+								if (layout_row[prop]) {
+									fresh_df[prop] = layout_row[prop];
+								}
+							}
+						}
+						fieldobj.df = fresh_df;
+					} else {
+						fieldobj.df = base_df;
+					}
+				}
 			}
 			refresh && fieldobj.df && fieldobj.refresh && fieldobj.refresh();
 		}

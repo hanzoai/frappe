@@ -742,8 +742,44 @@ export default class Grid {
 			this.docfields = this.df.fields;
 		}
 
+		this._apply_layout_child_overrides();
+
 		this.docfields.forEach((df) => {
 			this.fields_map[df.fieldname] = df;
+		});
+	}
+
+	_apply_layout_child_overrides() {
+		const layout = this.frm?.doctype_layout;
+		if (!layout?.child_tables?.length || !this.df?.fieldname) return;
+
+		const table_fn = this.df.fieldname;
+		const entry = layout.child_tables.find((r) => r.table_fieldname === table_fn);
+		if (!entry?.child_layout) return;
+
+		const child_layout = frappe.get_doc("DocType Layout", entry.child_layout);
+		if (!child_layout?.fields?.length) return;
+
+		const OVERRIDE_PROPS = [
+			"hidden", "reqd", "read_only", "bold",
+			"allow_in_quick_entry", "in_list_view", "in_standard_filter",
+			"default", "description", "depends_on", "mandatory_depends_on", "read_only_depends_on",
+		];
+		const override_map = Object.fromEntries(child_layout.fields.map((f) => [f.fieldname, f]));
+
+		this.docfields = this.docfields.map((df) => {
+			const o = override_map[df.fieldname];
+			if (!o) return df;
+			const copy = Object.assign({}, df);
+			if (o.label) copy.label = o.label;
+			for (const prop of OVERRIDE_PROPS) {
+				// Use truthy check so Check fields defaulting to 0 in the layout row
+				// don't accidentally override the base field's value (e.g. in_list_view: 1).
+				if (o[prop]) {
+					copy[prop] = o[prop];
+				}
+			}
+			return copy;
 		});
 	}
 

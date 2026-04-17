@@ -42,6 +42,7 @@ IMPORTABLE_DOCTYPES = [
 	("custom", "custom_field"),
 	("custom", "property_setter"),
 	("printing", "letter_head"),
+	("core", "doctype_layout"),
 ]
 
 

@@ -66,7 +66,6 @@ frappe.ui.form.Toolbar = class Toolbar {
 			title = this.frm.docname;
 		}
 
-		var me = this;
 		title = __(title);
 		this.page.set_title(title);
 		if (this.frm.meta.title_field) {
@@ -380,6 +379,7 @@ frappe.ui.form.Toolbar = class Toolbar {
 		this.add_auto_repeat();
 		this.page.add_divider();
 		this.make_customize_buttons();
+		this.add_layout_switcher();
 	}
 
 	add_discard() {
@@ -661,6 +661,73 @@ frappe.ui.form.Toolbar = class Toolbar {
 				);
 			}
 		}
+	}
+
+	/**
+	 * Layout switcher — shows a menu item that lists all DocType Layouts for the
+	 * current DocType.  Selecting one navigates to the layout route, preserving the
+	 * current document name.  A "Default View" option resets to the base doctype route.
+	 * A small indicator badge in the form title area shows the active layout name.
+	 */
+	add_layout_switcher() {
+		// Only show if there are known layouts for this doctype
+		const available_layouts = (frappe.boot.doctype_layouts || []).filter(
+			(l) => l.document_type === this.frm.doctype
+		);
+		if (!available_layouts.length) return;
+
+		this.page.add_divider();
+
+		// Active layout (if any)
+		const active_layout_name = this.frm.doctype_layout?.name || null;
+
+		// "Default View" — remove the active layout
+		if (active_layout_name) {
+			this.page.add_menu_item(
+				__("Default View"),
+				() => {
+					this.frm._layout_user_override = null;
+					this.frm.refresh();
+				},
+				true
+			);
+		}
+
+		for (const layout of available_layouts) {
+			const is_active = layout.name === active_layout_name;
+			const label = is_active
+				? `${__(layout.title || layout.name)} ✓`
+				: __(layout.title || layout.name);
+
+			this.page.add_menu_item(
+				label,
+				() => {
+					if (is_active) return;
+					this.frm._layout_user_override = layout.name;
+					this.frm.refresh();
+				},
+				true
+			);
+		}
+
+		this.refresh_layout_indicator();
+	}
+
+	/**
+	 * Show or remove the active-layout badge near the document title.
+	 */
+	refresh_layout_indicator() {
+		// Remove any previous indicator
+		this.page.$title_area.find(".layout-indicator").remove();
+
+		if (!this.frm.doctype_layout) return;
+
+		const layout = this.frm.doctype_layout;
+		const title = layout.title || layout.name;
+		const $badge = $(
+			`<span class="layout-indicator indicator-pill no-indicator-dot gray whitespace-nowrap ms-2"><span>${frappe.utils.escape_html(__(title))}</span></span>`
+		);
+		this.page.$title_area.find(".indicator-pill").first().after($badge);
 	}
 
 	can_repeat() {
