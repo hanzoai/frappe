@@ -46,15 +46,21 @@ frappe.ui.menu = class ContextMenu {
 	make() {
 		this.template.empty();
 		this.menu_items_to_show = [];
-		this.menu_items.forEach((f) => {
-			f.condition =
-				f.condition ||
+		this.menu_items.forEach((item) => {
+			item.condition =
+				item.condition ||
 				function () {
 					return true;
 				};
-			if (f.condition()) {
-				this.add_menu_item(f);
-				this.menu_items_to_show.push(f);
+			let render = false;
+			if (typeof item.condition == "function") {
+				render = item.condition();
+			} else {
+				render = frappe.utils.eval(item.condition);
+			}
+			if (render) {
+				this.add_menu_item(item);
+				this.menu_items_to_show.push(item);
 			}
 		});
 
@@ -103,10 +109,13 @@ frappe.ui.menu = class ContextMenu {
 						${iconMarkup}
 					</div>
 					<span class="menu-item-title">${__(item.label)}</span>
-					<div class="menu-item-icon" style="margin-left:auto">
-						${item.items && item.items.length ? frappe.utils.icon(`chevron-${chevron_direction}`) : ""}
-					</div>
-
+					${
+						item.items && item.items.length
+							? `<div class="menu-item-icon" style="margin-left:auto">
+						${frappe.utils.icon(`chevron-${chevron_direction}`)}
+					</div>`
+							: ""
+					}
 				</a>
 			</div>`);
 			if (!item.url) {
@@ -130,7 +139,9 @@ frappe.ui.menu = class ContextMenu {
 								me.current_menu = null;
 							} else {
 								// this ensures the other nested item would close before opening the next one
+								me.current_menu.nested_menus.forEach((m) => m.hide());
 								me.current_menu.hide();
+								me.current_menu = null;
 								me.nested_menus.forEach((menu) => {
 									if (menu.parent.get(0) == this) {
 										me.current_menu = menu;
@@ -164,7 +175,22 @@ frappe.ui.menu = class ContextMenu {
 		if (item.items) {
 			let nested_menu = this.handle_nested_menu(item_wrapper, item);
 			this.nested_menus.push(nested_menu);
+			me.handle_submenu_hover(item_wrapper);
 		}
+	}
+	handle_submenu_hover(item_wrapper) {
+		const me = this;
+
+		$(item_wrapper).on("mouseenter", function (event) {
+			me.nested_menus.forEach((menu) => {
+				if (menu.parent.get(0) === this) {
+					me.current_menu = menu;
+					menu.show(event);
+				} else {
+					menu.hide();
+				}
+			});
+		});
 	}
 
 	handle_nested_menu(item_wrapper, item) {
@@ -231,6 +257,11 @@ frappe.ui.menu = class ContextMenu {
 	hide() {
 		this.template.css("display", "none");
 		this.visible = false;
+		if (this.nested_menus && this.nested_menus.length) {
+			this.nested_menus.forEach((menu) => {
+				menu.hide();
+			});
+		}
 	}
 	mouseX(evt) {
 		if (evt.pageX) {

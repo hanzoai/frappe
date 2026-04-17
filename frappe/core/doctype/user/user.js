@@ -3,7 +3,7 @@ frappe.ui.form.on("User", {
 		frm.set_query("default_workspace", () => {
 			return {
 				filters: {
-					for_user: ["in", [null, frappe.session.user]],
+					for_user: ["in", ["", frappe.session.user]],
 					title: ["!=", "Welcome Workspace"],
 				},
 			};
@@ -201,18 +201,19 @@ frappe.ui.form.on("User", {
 										},
 									],
 									primary_action: (values) => {
-										d.hide();
 										if (values.new_password !== values.confirm_password) {
 											frappe.throw(__("Passwords do not match!"));
 										}
-										frappe.call(
-											"frappe.integrations.doctype.ldap_settings.ldap_settings.reset_password",
-											{
-												user: frm.doc.email,
-												password: values.new_password,
-												logout: values.logout_sessions,
-											}
-										);
+										return frappe
+											.call(
+												"frappe.integrations.doctype.ldap_settings.ldap_settings.reset_password",
+												{
+													user: frm.doc.email,
+													password: values.new_password,
+													logout: values.logout_sessions,
+												}
+											)
+											.then(() => d.hide());
 									},
 								});
 								d.show();
@@ -440,9 +441,6 @@ frappe.ui.form.on("User Role Profile", {
 					frm.roles_editor.show();
 				}
 			});
-			if (frm.roles_editor) {
-				$(".deselect-all, .select-all").prop("disabled", true);
-			}
 		}
 	},
 	role_profiles_remove: function (frm) {
@@ -450,7 +448,6 @@ frappe.ui.form.on("User Role Profile", {
 			if (frm.roles_editor) {
 				frm.roles_editor.disable = 0;
 				frm.roles_editor.show();
-				$(".deselect-all, .select-all").prop("disabled", false);
 			}
 		}
 	},
