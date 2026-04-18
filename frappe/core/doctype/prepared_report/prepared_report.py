@@ -9,6 +9,7 @@ from typing import Any
 from rq import get_current_job
 
 import frappe
+from frappe import _
 from frappe.database.utils import dangerously_reconnect_on_connection_abort
 from frappe.desk.form.load import get_attachments
 from frappe.desk.query_report import generate_report_result
