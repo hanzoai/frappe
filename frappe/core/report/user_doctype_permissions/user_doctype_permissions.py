@@ -25,7 +25,6 @@ PERM_TYPES = [
 
 def execute(filters=None):
 	user = filters.pop("user")
-
 	return get_columns(), get_data(user)
 
 
