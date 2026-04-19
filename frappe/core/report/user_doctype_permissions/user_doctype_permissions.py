@@ -3,6 +3,7 @@
 
 from collections import defaultdict
 
+import frappe
 from frappe import _, unscrub
 from frappe.permissions import get_valid_perms
 
@@ -24,6 +25,7 @@ PERM_TYPES = [
 
 def execute(filters=None):
 	user = filters.pop("user")
+	extend_perm_types_with_custom_perm_types()
 	return get_columns(), get_data(user)
 
 
@@ -92,3 +94,11 @@ def get_data(user: str) -> list[list]:
 		result.append(row)
 
 	return result
+
+
+def extend_perm_types_with_custom_perm_types() -> list[str]:
+	"""Extend the list of permission types with custom permission types."""
+
+	global PERM_TYPES
+	custom_perm_types = frappe.get_all("Permission Type", pluck="perm_type")
+	PERM_TYPES += custom_perm_types
