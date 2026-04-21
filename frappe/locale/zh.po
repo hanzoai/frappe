@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: frappe\n"
 "Report-Msgid-Bugs-To: developers@frappe.io\n"
 "POT-Creation-Date: 2026-01-02 22:45+0000\n"
-"PO-Revision-Date: 2026-01-21 10:33\n"
+"PO-Revision-Date: 2026-04-17 11:47\n"
 "Last-Translator: developers@frappe.io\n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -1494,7 +1494,7 @@ msgstr "添加新标签页"
 
 #: frappe/utils/password_strength.py:187
 msgid "Add numbers or special characters."
-msgstr ""
+msgstr "添加数字或特殊字符。"
 
 #: frappe/public/js/print_format_builder/PrintFormatSection.vue:125
 msgid "Add page break"
@@ -2872,7 +2872,7 @@ msgstr "附加文档打印件"
 #. Label of a Select field in DocType 'Notification'
 #: frappe/email/doctype/notification/notification.json
 msgid "Attach Files"
-msgstr ""
+msgstr "附加文件"
 
 #. Option for the 'Type' (Select) field in DocType 'DocField'
 #. Option for the 'Field Type' (Select) field in DocType 'Custom Field'
@@ -2965,7 +2965,7 @@ msgstr "附件已移除"
 #. Label of a Section Break field in DocType 'Notification'
 #: frappe/email/doctype/notification/notification.json
 msgid "Attachment Settings"
-msgstr ""
+msgstr "附件设置"
 
 #. Label of a Code field in DocType 'Email Queue'
 #. Label of a Table field in DocType 'Newsletter'
@@ -3242,7 +3242,7 @@ msgstr "启用自动链接需先开启接收邮件功能"
 
 #: frappe/email/doctype/email_queue/email_queue.js:44
 msgid "Automatic sending of emails is disabled via site config."
-msgstr ""
+msgstr "通过站点配置已禁用自动发送电子邮件。"
 
 #. Description of a DocType
 #: frappe/automation/doctype/assignment_rule/assignment_rule.json
@@ -5385,7 +5385,7 @@ msgstr "常见姓名容易被猜中"
 
 #: frappe/utils/password_strength.py:186
 msgid "Common words are easy to guess."
-msgstr ""
+msgstr "常见的词汇很容易被猜到。"
 
 #. Name of a DocType
 #. Option for the 'Communication Type' (Select) field in DocType
@@ -5404,7 +5404,7 @@ msgstr "通讯"
 #. Label of a Datetime field in DocType 'Communication Link'
 #: frappe/core/doctype/communication_link/communication_link.json
 msgid "Communication Date"
-msgstr ""
+msgstr "沟通日期"
 
 #. Name of a DocType
 #: frappe/core/doctype/communication_link/communication_link.json
@@ -7882,7 +7882,7 @@ msgstr "文档类型链接"
 
 #: frappe/public/js/form_builder/components/Field.vue:162
 msgid "DocType Missing"
-msgstr ""
+msgstr "单据类型缺失"
 
 #. Name of a DocType
 #. Option for the 'Applied On' (Select) field in DocType 'Property Setter'
@@ -10228,7 +10228,7 @@ msgstr "正在获取默认全局搜索文档。"
 
 #: frappe/website/doctype/web_form/web_form.js:165
 msgid "Fetching fields from {0}..."
-msgstr ""
+msgstr "正在从 {0} 获取字段..."
 
 #. Label of a Select field in DocType 'Assignment Rule'
 #. Label of a Select field in DocType 'Document Naming Rule Condition'
@@ -10540,7 +10540,7 @@ msgstr "不允许的文件类型{0}"
 
 #: frappe/public/js/frappe/file_uploader/FileUploader.vue:615
 msgid "File upload failed."
-msgstr ""
+msgstr "文件上传失败。"
 
 #: frappe/core/doctype/file/file.py:366 frappe/core/doctype/file/file.py:433
 msgid "File {0} does not exist"
@@ -11251,7 +11251,7 @@ msgstr "从"
 #. Label of a Select field in DocType 'Notification'
 #: frappe/email/doctype/notification/notification.json
 msgid "From Attach Field"
-msgstr ""
+msgstr "从附件字段"
 
 #. Label of a Date field in DocType 'Dashboard Chart'
 #: frappe/desk/doctype/dashboard_chart/dashboard_chart.json
@@ -11271,7 +11271,7 @@ msgstr "从文档类型"
 #. Option for the 'Attach Files' (Select) field in DocType 'Notification'
 #: frappe/email/doctype/notification/notification.json
 msgid "From Field"
-msgstr ""
+msgstr "从字段"
 
 #. Label of a Data field in DocType 'Communication'
 #: frappe/core/doctype/communication/communication.json
@@ -13485,7 +13485,7 @@ msgstr "凭证无效"
 
 #: frappe/email/smtp.py:138
 msgid "Invalid Credentials for Email Account: {0}"
-msgstr ""
+msgstr "电子邮箱帐号的凭据无效: {0}"
 
 #: frappe/utils/data.py:106 frappe/utils/data.py:255
 msgid "Invalid Date"
@@ -17462,7 +17462,7 @@ msgstr "路径{0}未找到模板"
 
 #: frappe/core/page/permission_manager/permission_manager.js:357
 msgid "No user has the role <strong>{0}</strong>"
-msgstr ""
+msgstr "没有用户拥有角色 <strong>{0}</strong>"
 
 #: frappe/public/js/frappe/form/controls/multiselect_list.js:257
 msgid "No values to show"
@@ -18053,11 +18053,11 @@ msgstr "OTP发行方名称"
 #. Label of a Small Text field in DocType 'System Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "OTP SMS Template"
-msgstr ""
+msgstr "OTP短信模板"
 
 #: frappe/core/doctype/system_settings/system_settings.py:163
 msgid "OTP SMS Template must contain <code>{0}</code> placeholder to insert the OTP."
-msgstr ""
+msgstr "OTP短信模板必须包含 <code>{0}</code> 占位符以插入OTP。"
 
 #: frappe/twofactor.py:455
 msgid "OTP Secret Reset - {0}"
@@ -18071,7 +18071,7 @@ msgstr "OTP密钥已重置，下次登录需重新注册"
 #. Settings'
 #: frappe/core/doctype/system_settings/system_settings.json
 msgid "OTP placeholder should be defined as <code>{{ otp }}</code> "
-msgstr ""
+msgstr "OTP占位符应定义为 <code>{{ otp }}</code> "
 
 #: frappe/templates/includes/login/login.js:363
 msgid "OTP setup using OTP App was not completed. Please contact Administrator."
@@ -19028,7 +19028,7 @@ msgstr "未找到{0}{1}{2}的密码"
 
 #: frappe/core/doctype/user/user.py:1206
 msgid "Password requirements not met"
-msgstr ""
+msgstr "不满足密码要求"
 
 #: frappe/core/doctype/user/user.py:1040
 msgid "Password reset instructions have been sent to your email"
@@ -19107,7 +19107,7 @@ msgstr "私钥文件路径"
 
 #: frappe/modules/utils.py:209
 msgid "Path {0} is not within module {1}"
-msgstr ""
+msgstr "路径 {0} 不在模块 {1} 内"
 
 #: frappe/website/path_resolver.py:202
 msgid "Path {0} it not a valid path"
@@ -19772,7 +19772,7 @@ msgstr "请为{0}指定有效的父文档类型"
 
 #: frappe/email/doctype/notification/notification.py:96
 msgid "Please specify the field from which to attach files"
-msgstr ""
+msgstr "请指定用于附加文件的字段"
 
 #: frappe/email/doctype/notification/notification.py:90
 msgid "Please specify which date field must be checked"
