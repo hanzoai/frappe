@@ -10,13 +10,8 @@ from urllib.parse import parse_qs, urlparse
 
 import cssutils
 import pdfkit
-<<<<<<< HEAD
-=======
 import pdfkit.api
 from pdfkit.pdfkit import PDFKit as OriginalPDFKit
-
-pdfkit.source.unicode = str  # NOTE: upstream bug; PYTHONOPTIMIZE=1 optimized this away
->>>>>>> 69018ad4b5 (fix: disable meta tag parsing in pdfkit)
 from bs4 import BeautifulSoup
 from packaging.version import Version
 from pypdf import PdfReader, PdfWriter, errors
