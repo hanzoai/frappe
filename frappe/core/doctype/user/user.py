@@ -1043,6 +1043,9 @@ def has_email_account(email: str):
 
 @frappe.whitelist(allow_guest=False)
 def get_email_awaiting(user: str):
+	if user != frappe.session.user:
+		frappe.has_permission("User", "read", doc=user, throw=True)
+
 	return frappe.get_all(
 		"User Email",
 		fields=["email_account", "email_id"],
