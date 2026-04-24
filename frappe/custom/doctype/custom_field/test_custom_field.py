@@ -8,14 +8,10 @@ from frappe.custom.doctype.custom_field.custom_field import (
 	delete_custom_fields,
 	rename_fieldname,
 )
-<<<<<<< HEAD
+from frappe.custom.doctype.property_setter.property_setter import make_property_setter
 from frappe.tests.utils import FrappeTestCase
 
 test_records = frappe.get_test_records("Custom Field")
-=======
-from frappe.custom.doctype.property_setter.property_setter import make_property_setter
-from frappe.tests import IntegrationTestCase
->>>>>>> 9a75ff6fd3 (test: enhance delete_custom_fields test to cover multiple deletion methods)
 
 
 class TestCustomField(FrappeTestCase):
