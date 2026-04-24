@@ -667,6 +667,7 @@
    "label": "Sender Name Field"
   },
   {
+   "depends_on": "eval:!doc.istable",
    "fieldname": "permissions_tab",
    "fieldtype": "Tab Break",
    "label": "Permissions"
@@ -802,7 +803,7 @@
    "link_fieldname": "document_type"
   }
  ],
- "modified": "2026-04-13 21:50:34.942938",
+ "modified": "2026-04-20 16:06:57.212832",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "DocType",
@@ -833,6 +834,7 @@
  ],
  "route": "doctype",
  "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
  "search_fields": "module",
  "show_name_in_global_search": 1,
  "sort_field": "creation",

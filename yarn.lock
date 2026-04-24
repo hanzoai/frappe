@@ -1433,10 +1433,10 @@ frappe-charts@2.0.0-rc27:
   resolved "https://registry.yarnpkg.com/frappe-charts/-/frappe-charts-2.0.0-rc27.tgz#a04737d36bcce5381b25ad48896c43b02eb62852"
   integrity sha512-J4WCrHYB6oR4Dfu28aaCxlUu64C/V+qJlNE1E0xpya2/yCeqDZ8LA6pS63SBMOdV2CTP8cJ6Isk5m+rZi9gElA==
 
-frappe-datatable@1.19.2:
-  version "1.19.2"
-  resolved "https://registry.yarnpkg.com/frappe-datatable/-/frappe-datatable-1.19.2.tgz#6a9748c9130d6f2e38a51c4d6e8fa7604e2190d0"
-  integrity sha512-ZkRxa5FOpXKo880LOgz10du2JdOhPcQXUXj0WSTg0qjlri/PRDdxEh0Fe9oIuMQVLOi9n7bp2WEzXQe/PjAqRg==
+frappe-datatable@1.20.2:
+  version "1.20.2"
+  resolved "https://registry.yarnpkg.com/frappe-datatable/-/frappe-datatable-1.20.2.tgz#5cea64425bf35855ec5f14d916ff4ec2b4ca2bbf"
+  integrity sha512-XaN96/woV/VyRsWQgnbRmi1XV3lrnZkUWRP9ANNRkJSmniYddJVQKt7K9w6Ilq+vclNvJX96iQc7B6m77w1xXg==
   dependencies:
     hyperlist "^1.0.0-beta"
     lodash "^4.17.5"
@@ -1948,9 +1948,9 @@ localforage@^1.10.0, localforage@^1.8.1:
     lie "3.1.1"
 
 lodash-es@^4.17.21:
-  version "4.17.23"
-  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.23.tgz#58c4360fd1b5d33afc6c0bbd3d1149349b1138e0"
-  integrity sha512-kVI48u3PZr38HdYz98UmfPnXl2DXrpdctLrFLCd3kOx1xUkOmpFPx7gCWWM5MPkL/fD8zb+Ph0QzjGFs4+hHWg==
+  version "4.18.1"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.18.1.tgz#b962eeb80d9d983a900bf342961fb7418ca10b1d"
+  integrity sha512-J8xewKD/Gk22OZbhpOVSwcs60zhd95ESDwezOFuA3/099925PdHJ7OFHNTGtajL3AlZkykD32HykiMo+BIBI8A==
 
 lodash.camelcase@^4.3.0:
   version "4.3.0"

@@ -232,6 +232,7 @@ class User(Document):
 		self.check_enable_disable()
 		self.ensure_unique_roles()
 		self.ensure_unique_role_profiles()
+		self.sync_role_profile_name()
 		self.remove_all_roles_for_guest()
 		self.validate_username()
 		self.remove_disabled_roles()
@@ -277,11 +278,11 @@ class User(Document):
 	def move_role_profile_name_to_role_profiles(self):
 		"""This handles old role_profile_name field if programatically set.
 
-		This behaviour will be remoed in future versions."""
+		This behaviour will be removed in future versions."""
 		if not self.role_profile_name:
 			return
 
-		current_role_profiles = [r.role_profile for r in self.role_profiles]
+		current_role_profiles = {r.role_profile for r in self.role_profiles}
 		if self.role_profile_name in current_role_profiles:
 			self.role_profile_name = None
 			return
@@ -295,6 +296,10 @@ class User(Document):
 		)
 		self.append("role_profiles", {"role_profile": self.role_profile_name})
 		self.role_profile_name = None
+
+	def sync_role_profile_name(self):
+		"""Keep deprecated role_profile_name in sync for list view display."""
+		self.role_profile_name = self.role_profiles[0].role_profile if self.role_profiles else None
 
 	def validate_allowed_modules(self):
 		if self.module_profile:
@@ -359,7 +364,7 @@ class User(Document):
 	def clean_name(self):
 		for field in ("first_name", "middle_name", "last_name"):
 			if field_value := self.get(field):
-				self.set(field, sanitize_html(field_value, always_sanitize=True))
+				self.set(field, sanitize_html(field_value, always_sanitize=True, disallowed_tags="*"))
 
 	def set_full_name(self):
 		self.full_name = " ".join(p for p in [self.first_name, self.middle_name, self.last_name] if p)
@@ -645,18 +650,16 @@ class User(Document):
 		frappe.db.delete("List Filter", {"for_user": self.name})
 
 		# Remove user from Note's Seen By table
-		seen_notes = frappe.get_all("Note", filters=[["Note Seen By", "user", "=", self.name]], pluck="name")
-		for note_id in seen_notes:
-			note = frappe.get_doc("Note", note_id)
+		seen_notes = frappe.get_docs("Note", filters=[["Note Seen By", "user", "=", self.name]])
+		for note in seen_notes:
 			for row in note.seen_by:
 				if row.user == self.name:
 					note.remove(row)
 			note.save(ignore_permissions=True)
 
 		# Unlink user from all of its invitation docs
-		invites = frappe.db.get_all("User Invitation", filters={"email": self.name}, pluck="name")
-		for invite in invites:
-			invite_doc = frappe.get_doc("User Invitation", invite)
+		invites = frappe.get_docs("User Invitation", filters={"email": self.name})
+		for invite_doc in invites:
 			invite_doc.user = None
 			invite_doc.save(ignore_permissions=True)
 
@@ -1154,25 +1157,32 @@ def sign_up(email: str, full_name: str, redirect_to: str) -> tuple[int, str]:
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=get_password_reset_limit, seconds=60 * 60)
-def reset_password(user: str) -> str:
+def reset_password(user: str) -> None:
+	# Always return the same generic response regardless of whether the user
+	# exists, is disabled, or is restricted. This prevents username enumeration
+	# via different messages or HTTP status codes (CWE-204).
+
 	try:
-		user: User = frappe.get_doc("User", user)
-		if user.name == "Administrator":
-			return "not allowed"
-		if not user.enabled:
-			return "disabled"
-
-		user.validate_reset_password()
-		user._reset_password(send_email=True)
-
-		return frappe.msgprint(
-			msg=_("Password reset instructions have been sent to {}'s email").format(user.full_name),
-			title=_("Password Email Sent"),
-		)
+		user_doc: User = frappe.get_doc("User", user)
+		if user_doc.name != "Administrator" and user_doc.enabled:
+			user_doc.validate_reset_password()
+			user_doc._reset_password(send_email=True)
+		# For Administrator or disabled users: silently skip — same response below
 	except frappe.DoesNotExistError:
-		frappe.local.response["http_status_code"] = 404
 		frappe.clear_messages()
-		return "not found"
+	except frappe.OutgoingEmailError:
+		frappe.clear_messages()
+		frappe.log_error(title="Password reset email could not be sent", message=frappe.get_traceback())
+	except Exception:
+		frappe.clear_messages()
+		frappe.log_error(title="Password reset failed unexpectedly", message=frappe.get_traceback())
+
+	frappe.msgprint(
+		msg=_(
+			"If this email is registered with us, we have sent password reset instructions to it. Please check your inbox."
+		),
+		title=_("Password Reset"),
+	)
 
 
 @frappe.whitelist()

@@ -276,6 +276,7 @@ frappe.ui.Sidebar = class Sidebar {
 
 			this.setup_onboarding();
 		});
+		this.store_last_show_sidebar_for_item();
 	}
 	add_card(card) {
 		if (this.cards && this.cards.find((i) => i.title === card.title)) return;
@@ -298,6 +299,7 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 	setup_events() {
 		const me = this;
+		this.setup_reload();
 		frappe.router.on("change", function (router) {
 			if (frappe.route_options.sidebar) {
 				frappe.app.sidebar.setup(frappe.route_options.sidebar);
@@ -311,6 +313,12 @@ frappe.ui.Sidebar = class Sidebar {
 		});
 		$(document).on("form-refresh", function () {
 			frappe.app.sidebar.toggle();
+		});
+
+		frappe.ui.keys.add_shortcut({
+			shortcut: "ctrl+/",
+			action: () => me.toggle_width(),
+			description: __("Toggle sidebar"),
 		});
 	}
 
@@ -328,14 +336,22 @@ frappe.ui.Sidebar = class Sidebar {
 		this.wrapper = $(
 			frappe.render_template("sidebar", {
 				expanded: this.sidebar_expanded,
-				avatar: frappe.avatar(frappe.session.user, "avatar-medium"),
+				avatar: frappe.avatar(frappe.session.user, "avatar-medium-2"),
 				navbar_settings: frappe.boot.navbar_settings,
 			})
 		).prependTo("body");
 		this.$sidebar = this.wrapper.find(".sidebar-items");
 
+		this.wrapper.find(".body-sidebar .sidebar-resize-handle").on("click", () => {
+			this.toggle_width();
+		});
+
 		this.wrapper.find(".body-sidebar .collapse-sidebar-link").on("click", () => {
 			this.toggle_width();
+		});
+
+		this.wrapper.find(".body-sidebar .about-sidebar-link").on("click", () => {
+			frappe.ui.toolbar.show_about();
 		});
 
 		this.wrapper.find(".overlay").on("click", () => {
@@ -427,6 +443,7 @@ frappe.ui.Sidebar = class Sidebar {
 	make_sidebar() {
 		this.empty();
 		this.wrapper.find(".collapse-sidebar-link").removeClass("hidden");
+		this.wrapper.find(".about-sidebar-link").removeClass("hidden");
 		if (this.editor.edit_mode) {
 			this.create_sidebar(this.editor.new_sidebar_items);
 		} else {
@@ -455,6 +472,7 @@ frappe.ui.Sidebar = class Sidebar {
 			);
 			this.wrapper.find(".sidebar-items").append(no_items_message);
 			this.wrapper.find(".collapse-sidebar-link").addClass("hidden");
+			this.wrapper.find(".about-sidebar-link").addClass("hidden");
 		}
 		if (this.edit_mode) {
 			$(".edit-menu").removeClass("hidden");
@@ -483,6 +501,7 @@ frappe.ui.Sidebar = class Sidebar {
 			standard: true,
 			type: "Button",
 			class: "sidebar-notification hidden",
+			suffix: "<span class='sidebar-notification-count hidden' aria-live='polite'></span>",
 			onClick: () => {
 				const $dropdown = this.wrapper.find(".dropdown-notifications");
 				$dropdown.toggleClass("hidden");
@@ -559,13 +578,12 @@ frappe.ui.Sidebar = class Sidebar {
 		let direction;
 		if (this.sidebar_expanded) {
 			this.wrapper.addClass("expanded");
-			// this.sidebar_expanded = false
 			direction = "right";
 			$('[data-toggle="tooltip"]').tooltip("dispose");
 			this.wrapper.find(".avatar-name-email").show();
+			this.wrapper.find(".about-sidebar-link").show();
 		} else {
 			this.wrapper.removeClass("expanded");
-			// this.sidebar_expanded = true
 			direction = "left";
 			$('[data-toggle="tooltip"]').tooltip({
 				boundary: "window",
@@ -573,6 +591,7 @@ frappe.ui.Sidebar = class Sidebar {
 				trigger: "hover",
 			});
 			this.wrapper.find(".avatar-name-email").hide();
+			this.wrapper.find(".about-sidebar-link").hide();
 		}
 
 		localStorage.setItem("sidebar-expanded", this.sidebar_expanded);
@@ -627,6 +646,7 @@ frappe.ui.Sidebar = class Sidebar {
 		try {
 			let route = frappe.get_route();
 			let view, entity_name;
+			let sidebar_item_map = JSON.parse(localStorage.getItem("sidebar_item_map"));
 			switch (route.length) {
 				case 1:
 					view = "Page";
@@ -658,10 +678,18 @@ frappe.ui.Sidebar = class Sidebar {
 				this.set_active_workspace_item();
 				return;
 			}
+			if (sidebar_item_map && sidebar_item_map[entity_name]) {
+				this.setup(sidebar_item_map[entity_name][0]);
+				return;
+			}
+			if (this.sidebar_title && sidebars.includes(this.sidebar_title)) {
+				this.set_active_workspace_item();
+				return;
+			}
 			if (module) {
 				sidebars = this.filter_sidebars_from_app(
 					sidebars,
-					frappe.boot.module_app[module.toLowerCase()]
+					frappe.boot.module_app[module.toLowerCase().replace(/[ -]/g, "_")]
 				);
 			}
 			if (sidebars.length == 1) {
@@ -748,5 +776,23 @@ frappe.ui.Sidebar = class Sidebar {
 			});
 		});
 		return sidebars;
+	}
+	setup_reload() {
+		const me = this;
+		this.item_sidebar_map = {};
+		$(window).on("beforeunload", function () {
+			me.store_last_show_sidebar_for_item();
+		});
+	}
+	store_last_show_sidebar_for_item() {
+		const me = this;
+		if (frappe.app.sidebar.active_item) {
+			let active_item = frappe.app.sidebar.active_item.parent().data("id");
+			if (!me.item_sidebar_map[active_item]) {
+				me.item_sidebar_map[active_item] = [];
+			}
+			me.item_sidebar_map[active_item].push(me.sidebar_title);
+			localStorage.setItem("sidebar_item_map", JSON.stringify(me.item_sidebar_map));
+		}
 	}
 };
