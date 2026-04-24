@@ -264,11 +264,7 @@ def check_permission_and_not_submitted(doc):
 
 def get_linked_docs(doc, method="Delete") -> list[dict]:
 	"""
-<<<<<<< HEAD
-	Raises excption if the given doc(dt, dn) is linked in another record.
-=======
 	Return a list of documents that are statically linked to the given document.
->>>>>>> f0ef9295bd (fix: add get_dynamic_linked_docs & get_linked_docs utils)
 	"""
 	from frappe.model.rename_doc import get_link_fields
 
