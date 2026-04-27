@@ -1,11 +1,7 @@
 import frappe
 from frappe import format
-<<<<<<< HEAD
 from frappe.tests.utils import FrappeTestCase
-=======
-from frappe.tests import IntegrationTestCase
 from frappe.utils.formatters import format_value
->>>>>>> 7693e6970d (test(formatter): add test to check escaping)
 
 
 class TestFormatter(FrappeTestCase):
