@@ -98,11 +98,15 @@ def delete_property_setter(doc_type, property, field_name=None, row_name=None):
 		filters["row_name"] = row_name
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	frappe.db.delete("Property Setter", filters)
 =======
 	property_setters = frappe.db.get_values("Property Setter", filters)
 	for ps in property_setters:
 		frappe.get_doc("Property Setter", ps).delete(ignore_permissions=True, force=True)
+=======
+	_delete_property_setters(filters)
+>>>>>>> 8d328e2f94 (refactor: Simplify property setter deletion logic and enforce required fields)
 
 
 def bulk_delete_property_setters(property_setters: list[dict], bypass_hooks: bool = False):
@@ -119,11 +123,17 @@ def bulk_delete_property_setters(property_setters: list[dict], bypass_hooks: boo
 	    {"doctype": "ToDo", "fieldname": "status", "property": "read_only"},
 	]
 	```
+
+	---
+
+	Note: `doctype` and `fieldname` are mandatory.
 	"""
 	field_map = {
 		"doctype": "doc_type",
 		"fieldname": "field_name",
 	}
+
+	doctypes_to_clear = set()
 
 	for property_setter in property_setters:
 		filters = property_setter.copy()
@@ -135,16 +145,29 @@ def bulk_delete_property_setters(property_setters: list[dict], bypass_hooks: boo
 		if not filters:
 			continue
 
+		if not filters.get("doc_type") or not filters.get("field_name"):
+			frappe.throw(_("`doctype` and `fieldname` are required for deleting property setters."))
+
 		if bypass_hooks:
 			frappe.db.delete("Property Setter", filters)
-
-			if filters.get("doc_type"):
-				frappe.clear_cache(doctype=filters["doc_type"])
+			doctypes_to_clear.add(filters["doc_type"])
 		else:
-			property_setter_names = frappe.get_all("Property Setter", filters=filters, pluck="name")
+			_delete_property_setters(filters)
 
+<<<<<<< HEAD
 			for property_setter_name in property_setter_names:
 				frappe.get_doc("Property Setter", property_setter_name).delete(
 					ignore_permissions=True, force=True
 				)
 >>>>>>> 2de9ecc033 (refactor: Add bulk delete utility for property setters)
+=======
+	for doctype in doctypes_to_clear:
+		frappe.clear_cache(doctype=doctype)
+
+
+def _delete_property_setters(filters: dict):
+	property_setters = frappe.get_all("Property Setter", filters=filters, pluck="name")
+
+	for ps in property_setters:
+		frappe.get_doc("Property Setter", ps).delete(ignore_permissions=True, force=True)
+>>>>>>> 8d328e2f94 (refactor: Simplify property setter deletion logic and enforce required fields)
