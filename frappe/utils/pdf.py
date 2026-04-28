@@ -11,9 +11,9 @@ from urllib.parse import parse_qs, urlparse
 import cssutils
 import pdfkit
 import pdfkit.api
-from pdfkit.pdfkit import PDFKit as OriginalPDFKit
 from bs4 import BeautifulSoup
 from packaging.version import Version
+from pdfkit.pdfkit import PDFKit as OriginalPDFKit
 from pypdf import PdfReader, PdfWriter, errors
 
 import frappe
