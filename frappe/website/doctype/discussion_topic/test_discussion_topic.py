@@ -1,20 +1,12 @@
 # Copyright (c) 2021, FOSS United and Contributors
 # See license.txt
 
-<<<<<<< HEAD
-# import frappe
-from frappe.tests.utils import FrappeTestCase
-
-
-class TestDiscussionTopic(FrappeTestCase):
-	pass
-=======
 import frappe
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 from frappe.website.doctype.discussion_topic.discussion_topic import submit_discussion
 
 
-class TestDiscussionTopic(IntegrationTestCase):
+class TestDiscussionTopic(FrappeTestCase):
 	def test_edit_discussion_reply(self):
 		"""Test whether editing a reply is restricted to the owner."""
 		topic_name = submit_discussion("User", "Administrator", "Original", "Title")
@@ -29,4 +21,3 @@ class TestDiscussionTopic(IntegrationTestCase):
 		frappe.set_user("Administrator")
 		submit_discussion("User", "Administrator", "Changed!", "Title", reply_name=reply_name)
 		self.assertEqual(frappe.db.get_value("Discussion Reply", reply_name, "reply"), "Changed!")
->>>>>>> a9d98723b4 (test: add test to check if reply is restricted to owner)
