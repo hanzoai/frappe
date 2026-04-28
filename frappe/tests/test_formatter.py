@@ -1,11 +1,6 @@
 import frappe
 from frappe import format
-<<<<<<< HEAD
 from frappe.tests.utils import FrappeTestCase
-from frappe.utils.formatters import format_value
-=======
-from frappe.tests import IntegrationTestCase
->>>>>>> 9bcac62d98 (fix(standard_macros): escape fields in standard print format template)
 
 
 class TestFormatter(FrappeTestCase):
