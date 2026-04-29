@@ -1,22 +1,13 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: MIT. See LICENSE
-<<<<<<< HEAD
-from frappe.tests.utils import FrappeTestCase
-
-# test_records = frappe.get_test_records('Property Setter')
-
-
-class TestPropertySetter(FrappeTestCase):
-	pass
-=======
 import frappe
 from frappe.custom.doctype.property_setter.property_setter import (
 	bulk_delete_property_setters,
 )
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 
 
-class TestPropertySetter(IntegrationTestCase):
+class TestPropertySetter(FrappeTestCase):
 	def test_bulk_delete_property_setters(self):
 		doctype = "ToDo"
 		fieldname = "status"
@@ -55,4 +46,3 @@ class TestPropertySetter(IntegrationTestCase):
 		# 2
 		bulk_delete_property_setters([{"doc_type": doctype, "field_name": fieldname, "property": property_2}])
 		self.assertFalse(property_setter_exists(property_2))
->>>>>>> fdf74f32b9 (test: Add test for bulk deletion of property setters)
