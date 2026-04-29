@@ -108,6 +108,11 @@ frappe.search.AwesomeBar = class AwesomeBar {
 						)
 					);
 				}
+				if (d.type == "sidebar") {
+					d.route_options = {
+						sidebar: d.description,
+					};
+				}
 				if (d.type == "Desktop Icon") {
 					target = frappe.utils.get_route_for_icon(d.icon_data);
 					d.route = target;
@@ -160,8 +165,10 @@ frappe.search.AwesomeBar = class AwesomeBar {
 					);
 					me.options = me.options.concat(frappe.search.utils.get_frequent_links());
 				}
-
-				awesomplete.list = me.deduplicate(me.options);
+				let options = me.deduplicate(me.options);
+				awesomplete.options_with_desc = me.create_options_with_descriptions(options);
+				Awesomplete.prototype._itemCursor = 0;
+				awesomplete.list = options;
 			}, 50)
 		);
 
@@ -217,6 +224,18 @@ frappe.search.AwesomeBar = class AwesomeBar {
 				$input.trigger("blur");
 			}
 		});
+	}
+	create_options_with_descriptions(options) {
+		let options_with_desc = {};
+		options.forEach((opt) => {
+			if (opt.description) {
+				if (!options_with_desc[opt.value]) {
+					options_with_desc[opt.value] = [];
+				}
+				options_with_desc[opt.value].push(opt);
+			}
+		});
+		return options_with_desc;
 	}
 
 	set_specifics(txt, end_txt) {
@@ -274,7 +293,7 @@ frappe.search.AwesomeBar = class AwesomeBar {
 
 				var str_route =
 					typeof option.route === "string" ? option.route : option.route.join("/");
-				if (routes.indexOf(str_route) === -1) {
+				if (option.description || routes.indexOf(str_route) === -1) {
 					out.push(option);
 					routes.push(str_route);
 				} else {

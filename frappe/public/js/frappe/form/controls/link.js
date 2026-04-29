@@ -1067,9 +1067,17 @@ frappe.ui.form.ControlLink = class ControlLink extends frappe.ui.form.ControlDat
 };
 
 if (Awesomplete) {
+	Awesomplete.prototype._itemCursor = 0;
 	Awesomplete.prototype.get_item = function (value) {
-		return this._list.find(function (item) {
+		var matches = this._list.filter(function (item) {
 			return item.value === value;
 		});
+
+		if (matches.length === 0) return null;
+
+		var item = matches[this._itemCursor % matches.length];
+		this._itemCursor++;
+
+		return item;
 	};
 }
