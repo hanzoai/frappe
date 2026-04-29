@@ -77,7 +77,7 @@ def follow_document(doctype: str, doc_name: str, user: str) -> Document | bool:
 
 @frappe.whitelist()
 def unfollow_document(doctype: str, doc_name: str, user: str) -> bool:
-	if user != frappe.session.user:
+	if user != frappe.session.user and not frappe.has_permission("Document Follow", "write"):
 		frappe.throw(_("You can only unfollow documents for yourself."), frappe.PermissionError)
 
 	doc = frappe.get_all(
