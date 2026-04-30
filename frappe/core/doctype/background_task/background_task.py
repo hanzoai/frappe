@@ -33,7 +33,13 @@ class BackgroundTask(Document):
 		user: DF.Link
 	# end: auto-generated types
 
-	pass
+	def after_insert(self):
+		frappe.publish_realtime(
+			event="task_update",
+			message={"task_id": self.task_id, "task_name": self.task_name, "status": "Queued"},
+			user=self.user,
+			after_commit=True,
+		)
 
 
 @frappe.whitelist()

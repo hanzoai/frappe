@@ -60,13 +60,7 @@ def enqueue_task(
 		doc.ref_docname = ref_docname
 	doc.insert(ignore_permissions=True)
 
-	def _publish_and_enqueue():
-		frappe.publish_realtime(
-			event="task_update",
-			message={"task_id": task_id, "task_name": task_name, "status": "Queued"},
-			user=user,
-		)
-
+	def _enqueue():
 		if frappe.db.get_value("Background Task", {"task_id": task_id}, "status") == "Cancelled":
 			return
 
@@ -88,9 +82,9 @@ def enqueue_task(
 		)
 
 	if enqueue_after_commit:
-		frappe.db.after_commit.add(_publish_and_enqueue)
+		frappe.db.after_commit.add(_enqueue)
 	else:
-		_publish_and_enqueue()
+		_enqueue()
 
 	return task_id
 
