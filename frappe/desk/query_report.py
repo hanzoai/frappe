@@ -595,7 +595,7 @@ def add_total_row(result, columns, meta=None, is_tree=False, parent_field=None):
 	else:
 		first_col_fieldtype = columns[0].get("fieldtype")
 
-	if first_col_fieldtype not in ["Currency", "Int", "Float", "Percent", "Date"]:
+	if first_col_fieldtype not in ["Currency", "Int", "Float", "Percent", "Date", "Datetime", "Time"]:
 		total_row[0] = _("Total")
 
 	result.append(total_row)
