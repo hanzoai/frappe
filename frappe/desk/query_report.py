@@ -553,9 +553,6 @@ def get_xlsx_styles(metadata: XLSXMetadata, report_name: str | None = None) -> d
 	return styles
 
 
-NON_LABELABLE_FIELDTYPES = ("Currency", "Int", "Float", "Percent", "Date", "Datetime", "Time")
-
-
 def add_total_row(
 	result,
 	columns,
@@ -625,7 +622,8 @@ def add_total_row(
 	else:
 		first_col_fieldtype = columns[0].get("fieldtype")
 
-	if first_col_fieldtype not in NON_LABELABLE_FIELDTYPES:
+	unsupported_col_types = ("Currency", "Int", "Float", "Percent", "Date", "Datetime", "Time")
+	if first_col_fieldtype not in unsupported_col_types:
 		total_row[0] = _("Total")
 
 	result.append(total_row)
