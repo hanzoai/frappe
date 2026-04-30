@@ -1,11 +1,13 @@
 import time
 from collections.abc import Callable
+from typing import TYPE_CHECKING
 from uuid import uuid4
 
 import frappe
 from frappe import _
 
-PUBLISH_THROTTLE_SECONDS = 0.2
+if TYPE_CHECKING:
+	from frappe.core.doctype.background_task.background_task import BackgroundTask
 
 
 def enqueue_task(
@@ -26,7 +28,7 @@ def enqueue_task(
 	at_front: bool = False,
 	at_front_when_starved: bool = False,
 	**kwargs,
-) -> str:
+) -> "BackgroundTask":
 	"""A wrapper around frappe.enqueue. Enqueue a background job with user-facing tracking"""
 	if isinstance(method, Callable):
 		method_name = f"{method.__module__}.{method.__qualname__}"
@@ -86,10 +88,10 @@ def enqueue_task(
 	else:
 		_enqueue()
 
-	return task_id
+	return doc
 
 
-def get_current_task() -> "TaskHandle | None":
+def get_current_task() -> "BackgroundTask | None":
 	return getattr(frappe.local, "_current_task_handle", None)
 
 
@@ -98,93 +100,18 @@ def get_task_status(task_id: str) -> dict | None:
 	return frappe.db.get_value("Background Task", {"task_id": task_id}, fields, as_dict=True)
 
 
-class TaskHandle:
-	"""Handle for publishing updates from within a running background task"""
-
-	def __init__(self, task_id: str, user: str, task_name: str):
-		self.task_id = task_id
-		self.user = user
-		self.task_name = task_name
-		self._last_published: float = 0.0
-
-	def update_stage(self, stage: str) -> None:
-		"""Publish a stage description without numeric progress"""
-		self._publish({"task_id": self.task_id, "task_name": self.task_name, "stage": stage})
-
-	def publish_progress(self, percent: int | float, stage: str | None = None) -> None:
-		"""Publish numeric progress (0-100)"""
-		now = time.monotonic()
-		if percent < 100 and (now - self._last_published) < PUBLISH_THROTTLE_SECONDS:
-			return
-		self._last_published = now
-
-		message: dict = {"task_id": self.task_id, "task_name": self.task_name, "progress": percent}
-		if stage:
-			message["stage"] = stage
-		self._publish(message)
-
-	def store_result(self, result) -> None:
-		"""Store a JSON result of the task in DB"""
-		frappe.db.set_value(
-			"Background Task",
-			{"task_id": self.task_id},
-			"result",
-			frappe.as_json(result),
-			update_modified=False,
-		)
-
-	def attach_file(
-		self,
-		file_name: str,
-		content: bytes,
-		is_private: bool = True,
-		doctype: str | None = None,
-		docname: str | None = None,
-	) -> str:
-		"""Attach a file to a document (defaults to the background task) and return its file URL"""
-		if not (doctype and docname):
-			ref_doctype, ref_docname = frappe.db.get_value(
-				"Background Task", {"task_id": self.task_id}, ["ref_doctype", "ref_docname"]
-			)
-			if ref_doctype and ref_docname:
-				doctype, docname = ref_doctype, ref_docname
-
-		file_doc = frappe.get_doc(
-			{
-				"doctype": "File",
-				"file_name": file_name,
-				"attached_to_doctype": doctype or "Background Task",
-				"attached_to_name": docname or self.task_id,
-				"content": content,
-				"is_private": int(is_private),
-			}
-		)
-		file_doc.insert(ignore_permissions=True)
-		return file_doc.file_url
-
-	def _publish(self, message: dict) -> None:
-		frappe.publish_realtime(event="task_update", message=message, user=self.user)
-
-
 def _execute_task(task_id: str, target_method: str | Callable, task_user: str, **kwargs):
 	"""Internal wrapper run by the background worker"""
-	task_doc_filters = {"task_id": task_id}
-	task_name = frappe.db.get_value("Background Task", task_doc_filters, "task_name")
-	if frappe.db.get_value("Background Task", task_doc_filters, "status") == "Cancelled":
+	task_doc = frappe.get_doc("Background Task", {"task_id": task_id})
+	if task_doc.status == "Cancelled":
 		return
 
-	handle = TaskHandle(task_id, task_user, task_name)
-	frappe.local._current_task_handle = handle
+	frappe.local._current_task_handle = task_doc
 
-	frappe.db.set_value(
-		"Background Task",
-		task_doc_filters,
-		{"status": "Running", "started_at": frappe.utils.now()},
-		update_modified=False,
-	)
+	task_doc.db_set({"status": "Running", "started_at": frappe.utils.now()})
 	frappe.db.commit()
 
-	handle._publish({"task_id": task_id, "task_name": task_name, "status": "Running"})
+	task_doc._publish({"task_id": task_id, "task_name": task_doc.task_name, "status": "Running"})
 
 	try:
 		if isinstance(target_method, str):
@@ -199,27 +126,26 @@ def _execute_task(task_id: str, target_method: str | Callable, task_user: str, *
 			except Exception:
 				pass
 
-		frappe.db.set_value("Background Task", task_doc_filters, values, update_modified=False)
+		task_doc.db_set(values)
 		frappe.db.commit()
-		handle._publish({"task_id": task_id, "task_name": task_name, "status": "Completed", "progress": 100})
+		task_doc._publish(
+			{"task_id": task_id, "task_name": task_doc.task_name, "status": "Completed", "progress": 100}
+		)
 
 		return result
 
 	except Exception:
 		frappe.db.rollback()
-		frappe.db.set_value(
-			"Background Task",
-			task_doc_filters,
+		task_doc.db_set(
 			{
 				"status": "Failed",
 				"exception": frappe.get_traceback(with_context=True),
 				"ended_at": frappe.utils.now(),
-			},
-			update_modified=False,
+			}
 		)
 		frappe.db.commit()
 
-		handle._publish({"task_id": task_id, "task_name": task_name, "status": "Failed"})
+		task_doc._publish({"task_id": task_id, "task_name": task_doc.task_name, "status": "Failed"})
 
 		raise
 

@@ -47,32 +47,31 @@ class IntegrationTestBackgroundTask(IntegrationTestCase):
 		super().tearDown()
 
 	def test_enqueue_and_success_lifecycle(self):
-		task_id = enqueue_task(sample_task, task_name="Test success", value=42)
-		self.assertEqual(get_task_status(task_id)["status"], "Queued")
+		doc = enqueue_task(sample_task, task_name="Test success", value=42)
+		self.assertEqual(get_task_status(doc.task_id)["status"], "Queued")
 
-		_execute_task(task_id, sample_task, frappe.session.user, value=42)
+		_execute_task(doc.task_id, sample_task, frappe.session.user, value=42)
 
-		doc = frappe.get_doc("Background Task", {"task_id": task_id})
+		doc.reload()
 		self.assertEqual(doc.status, "Completed")
 		self.assertIn("42", doc.result)
 
 	def test_failed_task_stores_exception(self):
-		task_id = enqueue_task(failing_task)
+		doc = enqueue_task(failing_task, task_name="Test failure")
 		with self.assertRaises(ValueError):
-			_execute_task(task_id, failing_task, frappe.session.user)
+			_execute_task(doc.task_id, failing_task, frappe.session.user)
 
-		doc = frappe.get_doc("Background Task", {"task_id": task_id})
+		doc.reload()
 		self.assertEqual(doc.status, "Failed")
 		self.assertIn("Intentional test failure", doc.exception)
 
 	def test_attach_file_links_file_to_task(self):
-		task_id = enqueue_task(sample_task_with_attachment)
-		_execute_task(task_id, sample_task_with_attachment, frappe.session.user)
+		doc = enqueue_task(sample_task_with_attachment, task_name="Test attachment")
+		_execute_task(doc.task_id, sample_task_with_attachment, frappe.session.user)
 
-		task_doc = frappe.get_doc("Background Task", {"task_id": task_id})
 		attached_files = frappe.get_all(
 			"File",
-			filters={"attached_to_doctype": "Background Task", "attached_to_name": task_doc.name},
+			filters={"attached_to_doctype": "Background Task", "attached_to_name": doc.name},
 			pluck="name",
 		)
 		self.assertTrue(len(attached_files) > 0)
@@ -81,12 +80,13 @@ class IntegrationTestBackgroundTask(IntegrationTestCase):
 		test_doctype = new_doctype().insert()
 		test_doc = frappe.get_doc({"doctype": test_doctype.name}).insert()
 
-		task_id = enqueue_task(
+		task = enqueue_task(
 			sample_task_with_attachment,
+			task_name="Test attachment with ref",
 			ref_doctype=test_doctype.name,
 			ref_docname=test_doc.name,
 		)
-		_execute_task(task_id, sample_task_with_attachment, frappe.session.user)
+		_execute_task(task.task_id, sample_task_with_attachment, frappe.session.user)
 
 		attached_files = frappe.get_all(
 			"File",
@@ -99,16 +99,16 @@ class IntegrationTestBackgroundTask(IntegrationTestCase):
 	def test_stop_task_cancels_queued_task(self, mock_job_fetch):
 		from frappe.core.doctype.background_task.background_task import stop_task
 
-		task_id = enqueue_task(sample_task, enqueue_after_commit=False)
+		doc = enqueue_task(sample_task, task_name="Test stop", enqueue_after_commit=False)
 
 		# Cancel the queued task
-		stop_task(task_id)
+		stop_task(doc.task_id)
 
-		doc = frappe.get_doc("Background Task", {"task_id": task_id})
+		doc.reload()
 		self.assertEqual(doc.status, "Cancelled")
 
 		# If execute is called (worker picking it up later), it should abort early
-		_execute_task(task_id, sample_task, frappe.session.user)
+		_execute_task(doc.task_id, sample_task, frappe.session.user)
 
 		doc.reload()
 		self.assertEqual(doc.status, "Cancelled")

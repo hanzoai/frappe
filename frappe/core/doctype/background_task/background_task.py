@@ -1,8 +1,13 @@
 # Copyright (c) 2026, Frappe Technologies and contributors
 # For license information, please see license.txt
 
+import time
+from collections.abc import Callable
+
 import frappe
 from frappe.model.document import Document
+
+PUBLISH_THROTTLE_SECONDS = 0.2
 
 
 class BackgroundTask(Document):
@@ -33,6 +38,10 @@ class BackgroundTask(Document):
 		user: DF.Link
 	# end: auto-generated types
 
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self._last_published: float = 0.0
+
 	def after_insert(self):
 		frappe.publish_realtime(
 			event="task_update",
@@ -40,6 +49,55 @@ class BackgroundTask(Document):
 			user=self.user,
 			after_commit=True,
 		)
+
+	def update_stage(self, stage: str) -> None:
+		"""Publish a stage description without numeric progress"""
+		self._publish({"task_id": self.task_id, "task_name": self.task_name, "stage": stage})
+
+	def publish_progress(self, percent: int | float, stage: str | None = None) -> None:
+		"""Publish numeric progress (0-100)"""
+		now = time.monotonic()
+		if percent < 100 and (now - self._last_published) < PUBLISH_THROTTLE_SECONDS:
+			return
+		self._last_published = now
+
+		message: dict = {"task_id": self.task_id, "task_name": self.task_name, "progress": percent}
+		if stage:
+			message["stage"] = stage
+		self._publish(message)
+
+	def store_result(self, result) -> None:
+		"""Store a JSON result of the task in DB"""
+		self.db_set("result", frappe.as_json(result))
+
+	def attach_file(
+		self,
+		file_name: str,
+		content: bytes,
+		is_private: bool = True,
+		doctype: str | None = None,
+		docname: str | None = None,
+	) -> str:
+		"""Attach a file to a document (defaults to the background task) and return its file URL"""
+		if not (doctype and docname):
+			if self.ref_doctype and self.ref_docname:
+				doctype, docname = self.ref_doctype, self.ref_docname
+
+		file_doc = frappe.get_doc(
+			{
+				"doctype": "File",
+				"file_name": file_name,
+				"attached_to_doctype": doctype or "Background Task",
+				"attached_to_name": docname or self.name,
+				"content": content,
+				"is_private": int(is_private),
+			}
+		)
+		file_doc.insert(ignore_permissions=True)
+		return file_doc.file_url
+
+	def _publish(self, message: dict) -> None:
+		frappe.publish_realtime(event="task_update", message=message, user=self.user)
 
 
 @frappe.whitelist()
