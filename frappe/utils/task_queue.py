@@ -14,12 +14,11 @@ def enqueue_task(
 	task_name: str | None = None,
 	queue: str = "default",
 	timeout: int | None = None,
-	event: str | None = None,
 	ref_doctype: str | None = None,
 	ref_docname: str | None = None,
 	deduplicate: bool = False,
 	job_id: str | None = None,
-	enqueue_after_commit: bool = False,
+	enqueue_after_commit: bool = True,
 	now: bool = False,
 	on_success: Callable | None = None,
 	on_failure: Callable | None = None,
@@ -45,25 +44,23 @@ def enqueue_task(
 	except Exception:
 		arguments_json = None
 
-	def _create_and_enqueue():
-		doc = frappe.new_doc("Background Task")
-		doc.task_id = task_id
-		doc.job_id = job_id or task_id
-		doc.task_name = task_name
-		doc.status = "Queued"
-		doc.user = user
-		doc.method = method_name
-		doc.arguments = arguments_json
-		doc.queue = queue
-		doc.show_progress_bar = show_progress_bar
-		if ref_doctype:
-			doc.ref_doctype = ref_doctype
-		if ref_docname:
-			doc.ref_docname = ref_docname
-		doc.insert(ignore_permissions=True)
-		if enqueue_after_commit:
-			frappe.db.commit()
+	doc = frappe.new_doc("Background Task")
+	doc.task_id = task_id
+	doc.job_id = job_id or task_id
+	doc.task_name = task_name
+	doc.status = "Queued"
+	doc.user = user
+	doc.method = method_name
+	doc.arguments = arguments_json
+	doc.queue = queue
+	doc.show_progress_bar = show_progress_bar
+	if ref_doctype:
+		doc.ref_doctype = ref_doctype
+	if ref_docname:
+		doc.ref_docname = ref_docname
+	doc.insert(ignore_permissions=True)
 
+	def _publish_and_enqueue():
 		frappe.publish_realtime(
 			event="task_update",
 			message={"task_id": task_id, "task_name": task_name, "status": "Queued"},
@@ -77,7 +74,6 @@ def enqueue_task(
 			_execute_task,
 			queue=queue,
 			timeout=timeout,
-			event=event,
 			deduplicate=deduplicate,
 			job_id=job_id or task_id,
 			on_success=on_success,
@@ -92,9 +88,9 @@ def enqueue_task(
 		)
 
 	if enqueue_after_commit:
-		frappe.db.after_commit.add(_create_and_enqueue)
+		frappe.db.after_commit.add(_publish_and_enqueue)
 	else:
-		_create_and_enqueue()
+		_publish_and_enqueue()
 
 	return task_id
 
@@ -179,7 +175,7 @@ class TaskHandle:
 def _execute_task(task_id: str, target_method: str | Callable, task_user: str, **kwargs):
 	"""Internal wrapper run by the background worker"""
 	task_doc_filters = {"task_id": task_id}
-	task_name = frappe.db.get_value("Background Task", task_doc_filters, "task_name") or "Background Task"
+	task_name = frappe.db.get_value("Background Task", task_doc_filters, "task_name")
 	if frappe.db.get_value("Background Task", task_doc_filters, "status") == "Cancelled":
 		return
 
