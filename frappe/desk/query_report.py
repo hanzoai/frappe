@@ -533,7 +533,37 @@ def build_xlsx_data(
 	return result, column_widths
 
 
+<<<<<<< HEAD
 def add_total_row(result, columns, meta=None, is_tree=False, parent_field=None):
+=======
+def get_xlsx_styles(metadata: XLSXMetadata, report_name: str | None = None) -> dict | None:
+	"""
+	Returns styles for XLSX export.
+
+	If report_name is provided, it tries to fetch styles defined in the report's module.
+	"""
+	styles = None
+	if report_name:
+		report = frappe.get_doc("Report", report_name)
+		styles = report.get_xlsx_styles_from_module(metadata)
+
+	if not styles:
+		styles = XLSXStyleBuilder(metadata).result
+
+	return styles
+
+
+NON_LABELABLE_FIELDTYPES = ("Currency", "Int", "Float", "Percent", "Date", "Datetime", "Time")
+
+
+def add_total_row(
+	result,
+	columns,
+	meta=None,
+	is_tree=False,
+	parent_field=None,
+) -> list[dict | list[Any]]:
+>>>>>>> eb76248c99 (refactor: extract non-labelable fieldtypes to constant)
 	total_row = [""] * len(columns)
 	has_percent = []
 
@@ -595,7 +625,7 @@ def add_total_row(result, columns, meta=None, is_tree=False, parent_field=None):
 	else:
 		first_col_fieldtype = columns[0].get("fieldtype")
 
-	if first_col_fieldtype not in ["Currency", "Int", "Float", "Percent", "Date", "Datetime", "Time"]:
+	if first_col_fieldtype not in NON_LABELABLE_FIELDTYPES:
 		total_row[0] = _("Total")
 
 	result.append(total_row)
