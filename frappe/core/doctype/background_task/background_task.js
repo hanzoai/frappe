@@ -36,9 +36,7 @@ frappe.ui.form.on("Background Task", {
 					frm.reload_doc();
 				},
 			});
-		})
-			.removeClass("btn-default")
-			.addClass("btn-danger");
+		});
 
 		frm.task_update_handler = (data) => {
 			if (data.task_id !== frm.doc.task_id) return;

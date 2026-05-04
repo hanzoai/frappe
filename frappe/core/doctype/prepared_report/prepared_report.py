@@ -77,7 +77,7 @@ class PreparedReport(Document):
 	def after_insert(self):
 		timeout = frappe.get_value("Report", self.report_name, "timeout")
 
-		task_id = frappe.enqueue_task(
+		task = frappe.enqueue_task(
 			generate_report,
 			task_name=_("Generate Prepared Report: {0}").format(self.report_name),
 			queue="long",
@@ -89,7 +89,7 @@ class PreparedReport(Document):
 			ref_docname=self.name,
 			prepared_report=self.name,
 		)
-		self.db_set("job_id", task_id, update_modified=False)
+		self.db_set("job_id", task.task_id, update_modified=False)
 
 	def get_prepared_data(self, with_file_name=False):
 		attachments = get_attachments(self.doctype, self.name)

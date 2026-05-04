@@ -519,7 +519,7 @@ frappe.ui.Sidebar = class Sidebar {
 			icon: "server",
 			standard: true,
 			type: "Button",
-			class: "sidebar-background-tasks",
+			class: "sidebar-background-tasks hidden",
 			onClick: () => {
 				this.wrapper.find(".dropdown-notifications").addClass("hidden");
 				this.wrapper.find(".dropdown-background-tasks").toggleClass("hidden");
