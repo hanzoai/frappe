@@ -137,3 +137,55 @@ def stop_task(task_id: str):
 		message={"task_id": task.task_id, "status": "Cancelled", "task_name": task.task_name},
 		user=task.user,
 	)
+
+
+@frappe.whitelist()
+def retry_task(task_id: str):
+	task_name = frappe.db.get_value("Background Task", {"task_id": task_id}, "name")
+	if not task_name:
+		raise frappe.DoesNotExistError(frappe._("Background Task {0} not found").format(task_id))
+
+	task = frappe.get_doc("Background Task", task_name)
+
+	is_owner = task.user == frappe.session.user
+	is_system_manager = "System Manager" in frappe.get_roles(frappe.session.user)
+	if not (is_owner or is_system_manager):
+		raise frappe.PermissionError(frappe._("Not permitted"))
+
+	if task.status not in ("Failed", "Cancelled"):
+		raise frappe.InvalidStatusError(frappe._("Task can only be retried if failed or cancelled"))
+
+	task.db_set(
+		{
+			"status": "Queued",
+			"exception": None,
+			"result": None,
+			"progress": 0,
+			"stage": None,
+			"started_at": None,
+			"ended_at": None,
+		}
+	)
+
+	import json
+
+	from frappe.utils.task_queue import _execute_task
+
+	arguments = json.loads(task.arguments) if task.arguments else {}
+
+	frappe.enqueue(
+		_execute_task,
+		queue=task.queue or "default",
+		job_id=task.job_id or task.task_id,
+		at_front=False,
+		task_id=task.task_id,
+		target_method=task.method,
+		task_user=task.user,
+		**arguments,
+	)
+
+	frappe.publish_realtime(
+		event="task_update",
+		message={"task_id": task.task_id, "status": "Queued", "task_name": task.task_name},
+		user=task.user,
+	)

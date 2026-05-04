@@ -38,6 +38,21 @@ frappe.ui.form.on("Background Task", {
 			});
 		});
 
+		if (["Failed", "Cancelled"].includes(frm.doc.status)) {
+			frm.add_custom_button(__("Retry Task"), () => {
+				frappe.call({
+					method: "frappe.core.doctype.background_task.background_task.retry_task",
+					args: { task_id: frm.doc.task_id },
+					callback: () => {
+						frm.reload_doc();
+					},
+				});
+			})
+				.removeClass("btn-default")
+				.addClass("btn-primary");
+			return;
+		}
+
 		frm.task_update_handler = (data) => {
 			if (data.task_id !== frm.doc.task_id) return;
 

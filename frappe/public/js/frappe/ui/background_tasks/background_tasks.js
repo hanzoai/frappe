@@ -81,6 +81,16 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 			});
 		});
 
+		this.dropdown.on("click", ".btn-retry-task", (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			let task_id = $(e.currentTarget).data("task-id");
+			frappe.call({
+				method: "frappe.core.doctype.background_task.background_task.retry_task",
+				args: { task_id: task_id },
+			});
+		});
+
 		// Listen for realtime updates to refresh list and show alerts
 		frappe.realtime.on("task_update", (data) => {
 			let task = this.db_tasks.find((t) => t.task_id === data.task_id);
@@ -255,7 +265,18 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 			`;
 		}
 
-		return $(`<a class="bg-task-item ${cancellable_class}" data-name="${task.name}" data-task-id="${task.task_id}">
+		let retry_btn = "";
+		let retryable_class = "";
+		if (task.status === "Failed" || task.status === "Cancelled") {
+			retryable_class = "retryable";
+			retry_btn = `
+				<button class="btn btn-xs btn-retry-task" data-task-id="${task.task_id}">
+					${__("Retry")}
+				</button>
+			`;
+		}
+
+		return $(`<a class="bg-task-item ${cancellable_class} ${retryable_class}" data-name="${task.name}" data-task-id="${task.task_id}">
 			<div class="bg-task-header">
 				<div class="bg-task-title">
 					<span>${task_title}</span>
@@ -265,6 +286,7 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 						${task.status}
 					</div>
 					${cancel_btn}
+					${retry_btn}
 				</div>
 			</div>
 			${progress_bar}
