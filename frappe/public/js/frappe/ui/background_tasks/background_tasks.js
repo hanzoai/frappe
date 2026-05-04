@@ -220,15 +220,14 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 
 	get_task_html(task) {
 		const status_colors = {
-			Running: { bg: "bg-primary", text: "running" },
-			Completed: { bg: "bg-success", text: "completed" },
-			Failed: { bg: "bg-danger", text: "failed" },
-			Queued: { bg: "bg-warning", text: "queued" },
-			Cancelled: { bg: "bg-secondary", text: "cancelled" },
+			Running: { bg: "bg-primary", color: "blue" },
+			Completed: { bg: "bg-success", color: "green" },
+			Failed: { bg: "bg-danger", color: "red" },
+			Queued: { bg: "bg-warning", color: "orange" },
+			Cancelled: { bg: "bg-secondary", color: "gray" },
 		};
 
-		const { bg: bg_class, text: status_class } =
-			status_colors[task.status] || status_colors["Running"];
+		const { bg: bg_class, color } = status_colors[task.status] || status_colors["Running"];
 		let progress = task.progress || 0;
 
 		let progress_bar = "";
@@ -282,7 +281,7 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 					<span>${task_title}</span>
 				</div>
 				<div class="bg-task-actions" style="display: flex; align-items: center; justify-content: flex-end; min-width: 60px; flex-shrink: 0;">
-					<div class="status-badge ${status_class}">
+					<div class="indicator-pill ${color} no-indicator-dot whitespace-nowrap status-badge">
 						${task.status}
 					</div>
 					${cancel_btn}

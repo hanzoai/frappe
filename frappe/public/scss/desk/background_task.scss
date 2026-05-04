@@ -100,43 +100,6 @@
 					-webkit-box-orient: vertical;
 					line-height: 1.5;
 				}
-
-				.status-badge {
-					flex-shrink: 0;
-					display: inline-flex;
-					justify-content: center;
-					align-items: center;
-					padding: 2px 8px;
-					border-radius: var(--border-radius-sm, 4px);
-					font-size: 11px;
-					font-weight: 500;
-					letter-spacing: 0.02em;
-
-					&.queued {
-						background-color: var(--alert-bg-warning, var(--bg-warning, #fffbeb));
-						color: var(--alert-text-warning, var(--text-warning, #d97706));
-					}
-
-					&.running {
-						background-color: var(--alert-bg-info, var(--bg-info, #eff6ff));
-						color: var(--alert-text-info, var(--text-blue, #2563eb));
-					}
-
-					&.completed {
-						background-color: var(--alert-bg-success, var(--bg-success, #ecfdf5));
-						color: var(--alert-text-success, var(--text-success, #059669));
-					}
-
-					&.failed {
-						background-color: var(--alert-bg-danger, var(--bg-danger, #fef2f2));
-						color: var(--alert-text-danger, var(--text-danger, #dc2626));
-					}
-
-					&.cancelled {
-						background-color: var(--alert-bg-secondary, var(--bg-gray-100, #f3f4f6));
-						color: var(--alert-text-secondary, var(--text-muted, #6b7280));
-					}
-				}
 			}
 
 			&.cancellable {
