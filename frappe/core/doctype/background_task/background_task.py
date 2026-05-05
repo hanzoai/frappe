@@ -96,6 +96,14 @@ class BackgroundTask(Document):
 		file_doc.insert(ignore_permissions=True)
 		return file_doc.file_url
 
+	@staticmethod
+	def clear_old_logs(days=7):
+		from frappe.query_builder import DocType, Interval
+		from frappe.query_builder.functions import Now
+
+		doctype = DocType("Background Task")
+		frappe.db.delete(doctype, filters=(doctype.creation < (Now() - Interval(days=days))))
+
 	def _publish(self, message: dict) -> None:
 		frappe.publish_realtime(event="task_update", message=message, user=self.user)
 		# Cache latest progress/stage for fast lookup on page load
