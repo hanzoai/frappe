@@ -170,23 +170,13 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 	}
 
 	update_tasks() {
-		frappe.db
-			.get_list("Background Task", {
-				fields: [
-					"name",
-					"task_id",
-					"task_name",
-					"status",
-					"stage",
-					"progress",
-					"show_progress_bar",
-					"creation",
-				],
-				limit: 15,
-				order_by: "creation desc",
+		frappe
+			.call({
+				method: "frappe.core.doctype.background_task.background_task.get_recent_tasks",
+				args: { limit: 15 },
 			})
-			.then((tasks) => {
-				this.db_tasks = tasks || [];
+			.then((r) => {
+				this.db_tasks = r.message || [];
 				this.has_fetched = true;
 				this.render_tasks(this.db_tasks);
 			});

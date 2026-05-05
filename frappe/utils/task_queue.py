@@ -97,7 +97,13 @@ def get_current_task() -> "BackgroundTask | None":
 
 def get_task_status(task_id: str) -> dict | None:
 	fields = ["status", "progress", "stage", "result", "exception", "started_at", "ended_at"]
-	return frappe.db.get_value("Background Task", {"task_id": task_id}, fields, as_dict=True)
+	status = frappe.db.get_value("Background Task", {"task_id": task_id}, fields, as_dict=True)
+	if not status:
+		return None
+	cached = frappe.cache.get_value(f"background_task:{task_id}")
+	if cached:
+		status.update({k: v for k, v in cached.items() if v is not None})
+	return status
 
 
 def _execute_task(task_id: str, target_method: str | Callable, task_user: str, **kwargs):
@@ -151,3 +157,4 @@ def _execute_task(task_id: str, target_method: str | Callable, task_user: str, *
 
 	finally:
 		frappe.local._current_task_handle = None
+		frappe.cache.delete_value(f"background_task:{task_id}")

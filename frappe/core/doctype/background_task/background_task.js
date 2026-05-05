@@ -7,6 +7,21 @@ frappe.ui.form.on("Background Task", {
 			frm.task_update_handler = null;
 		}
 
+		if (["Failed", "Cancelled"].includes(frm.doc.status)) {
+			frm.add_custom_button(__("Retry Task"), () => {
+				frappe.call({
+					method: "frappe.core.doctype.background_task.background_task.retry_task",
+					args: { task_id: frm.doc.task_id },
+					callback: () => {
+						frm.reload_doc();
+					},
+				});
+			})
+				.removeClass("btn-default")
+				.addClass("btn-primary");
+			return;
+		}
+
 		if (!["Queued", "Running"].includes(frm.doc.status)) {
 			return;
 		}
@@ -38,20 +53,21 @@ frappe.ui.form.on("Background Task", {
 			});
 		});
 
-		if (["Failed", "Cancelled"].includes(frm.doc.status)) {
-			frm.add_custom_button(__("Retry Task"), () => {
-				frappe.call({
-					method: "frappe.core.doctype.background_task.background_task.retry_task",
-					args: { task_id: frm.doc.task_id },
-					callback: () => {
-						frm.reload_doc();
-					},
-				});
-			})
-				.removeClass("btn-default")
-				.addClass("btn-primary");
-			return;
-		}
+		frappe.call({
+			method: "frappe.core.doctype.background_task.background_task.get_cached_task_status",
+			args: { task_id: frm.doc.task_id },
+			callback: (r) => {
+				if (!r.message) return;
+				let cached = r.message;
+				if (cached.progress !== undefined && $bar) {
+					$bar.css("width", cached.progress + "%");
+				}
+				if (cached.stage) {
+					frm.dashboard.clear_headline();
+					frm.dashboard.set_headline(cached.stage);
+				}
+			},
+		});
 
 		frm.task_update_handler = (data) => {
 			if (data.task_id !== frm.doc.task_id) return;

@@ -98,6 +98,43 @@ class BackgroundTask(Document):
 
 	def _publish(self, message: dict) -> None:
 		frappe.publish_realtime(event="task_update", message=message, user=self.user)
+		# Cache latest progress/stage for fast lookup on page load
+		cache_key = f"background_task:{self.task_id}"
+		cached = frappe.cache.get_value(cache_key) or {}
+		cached.update(
+			{k: v for k, v in message.items() if k not in ("task_id", "task_name") and v is not None}
+		)
+		frappe.cache.set_value(cache_key, cached, expires_in_sec=3600)
+
+
+@frappe.whitelist()
+def get_recent_tasks(limit: int = 15) -> list[dict]:
+	fields = [
+		"name",
+		"task_id",
+		"task_name",
+		"status",
+		"stage",
+		"progress",
+		"show_progress_bar",
+		"creation",
+	]
+	tasks = frappe.get_list("Background Task", fields=fields, limit=limit, order_by="creation desc")
+	for task in tasks:
+		cached = frappe.cache.get_value(f"background_task:{task.task_id}")
+		if cached:
+			if cached.get("progress") is not None:
+				task["progress"] = cached["progress"]
+			if cached.get("stage") is not None:
+				task["stage"] = cached["stage"]
+			if cached.get("status") is not None:
+				task["status"] = cached["status"]
+	return tasks
+
+
+@frappe.whitelist()
+def get_cached_task_status(task_id: str) -> dict | None:
+	return frappe.cache.get_value(f"background_task:{task_id}")
 
 
 @frappe.whitelist()
@@ -131,6 +168,7 @@ def stop_task(task_id: str):
 		send_stop_job_command(connection=conn, job_id=rq_job_id)
 
 	task.db_set("status", "Cancelled")
+	frappe.cache.delete_value(f"background_task:{task.task_id}")
 
 	frappe.publish_realtime(
 		event="task_update",
@@ -166,6 +204,7 @@ def retry_task(task_id: str):
 			"ended_at": None,
 		}
 	)
+	frappe.cache.delete_value(f"background_task:{task.task_id}")
 
 	import json
 
