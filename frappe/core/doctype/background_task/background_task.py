@@ -125,6 +125,8 @@ def get_recent_tasks(limit: int = 15) -> list[dict]:
 		"stage",
 		"progress",
 		"show_progress_bar",
+		"allow_user_cancellation",
+		"allow_user_retry",
 		"creation",
 	]
 	tasks = frappe.get_list("Background Task", fields=fields, limit=limit, order_by="creation desc")
@@ -157,6 +159,9 @@ def stop_task(task_id: str):
 	is_system_manager = "System Manager" in frappe.get_roles(frappe.session.user)
 	if not (is_owner or is_system_manager):
 		raise frappe.PermissionError(frappe._("Not permitted"))
+
+	if not task.allow_user_cancellation and not is_system_manager:
+		raise frappe.PermissionError(frappe._("Cancellation is not allowed for this task"))
 
 	if task.status not in ("Queued", "Running"):
 		raise frappe.InvalidStatusError(frappe._("Task is not queued or running"))
@@ -197,6 +202,9 @@ def retry_task(task_id: str):
 	is_system_manager = "System Manager" in frappe.get_roles(frappe.session.user)
 	if not (is_owner or is_system_manager):
 		raise frappe.PermissionError(frappe._("Not permitted"))
+
+	if not task.allow_user_retry and not is_system_manager:
+		raise frappe.PermissionError(frappe._("Retry is not allowed for this task"))
 
 	if task.status not in ("Failed", "Cancelled"):
 		raise frappe.InvalidStatusError(frappe._("Task can only be retried if failed or cancelled"))

@@ -25,6 +25,8 @@ def enqueue_task(
 	on_success: Callable | None = None,
 	on_failure: Callable | None = None,
 	show_progress_bar: bool = True,
+	allow_user_cancellation: bool = True,
+	allow_user_retry: bool = True,
 	at_front: bool = False,
 	at_front_when_starved: bool = False,
 	**kwargs,
@@ -56,6 +58,8 @@ def enqueue_task(
 	doc.arguments = arguments_json
 	doc.queue = queue
 	doc.show_progress_bar = show_progress_bar
+	doc.allow_user_cancellation = allow_user_cancellation
+	doc.allow_user_retry = allow_user_retry
 	if ref_doctype:
 		doc.ref_doctype = ref_doctype
 	if ref_docname:

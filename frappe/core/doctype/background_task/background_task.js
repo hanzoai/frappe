@@ -8,17 +8,19 @@ frappe.ui.form.on("Background Task", {
 		}
 
 		if (["Failed", "Cancelled"].includes(frm.doc.status)) {
-			frm.add_custom_button(__("Retry Task"), () => {
-				frappe.call({
-					method: "frappe.core.doctype.background_task.background_task.retry_task",
-					args: { task_id: frm.doc.task_id },
-					callback: () => {
-						frm.reload_doc();
-					},
-				});
-			})
-				.removeClass("btn-default")
-				.addClass("btn-primary");
+			if (frm.doc.allow_user_retry) {
+				frm.add_custom_button(__("Retry Task"), () => {
+					frappe.call({
+						method: "frappe.core.doctype.background_task.background_task.retry_task",
+						args: { task_id: frm.doc.task_id },
+						callback: () => {
+							frm.reload_doc();
+						},
+					});
+				})
+					.removeClass("btn-default")
+					.addClass("btn-primary");
+			}
 			return;
 		}
 
@@ -43,15 +45,17 @@ frappe.ui.form.on("Background Task", {
 			? frm.dashboard.progress_area.body.find(".progress-bar")
 			: null;
 
-		frm.add_custom_button(__("Cancel Task"), () => {
-			frappe.call({
-				method: "frappe.core.doctype.background_task.background_task.stop_task",
-				args: { task_id: frm.doc.task_id },
-				callback: () => {
-					frm.reload_doc();
-				},
+		if (frm.doc.allow_user_cancellation) {
+			frm.add_custom_button(__("Cancel Task"), () => {
+				frappe.call({
+					method: "frappe.core.doctype.background_task.background_task.stop_task",
+					args: { task_id: frm.doc.task_id },
+					callback: () => {
+						frm.reload_doc();
+					},
+				});
 			});
-		});
+		}
 
 		frappe.call({
 			method: "frappe.core.doctype.background_task.background_task.get_cached_task_status",

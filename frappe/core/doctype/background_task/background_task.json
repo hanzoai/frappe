@@ -137,6 +137,20 @@
    "label": "Status and Progress"
   },
   {
+   "default": "1",
+   "fieldname": "allow_user_cancellation",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Allow User Cancellation"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_user_retry",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Allow User Retry"
+  },
+  {
    "fieldname": "column_break_ljxx",
    "fieldtype": "Column Break"
   },

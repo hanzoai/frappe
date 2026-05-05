@@ -137,6 +137,8 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 							"stage",
 							"progress",
 							"show_progress_bar",
+							"allow_user_cancellation",
+							"allow_user_retry",
 							"creation",
 						],
 						limit: 1,
@@ -243,7 +245,10 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 
 		let cancel_btn = "";
 		let cancellable_class = "";
-		if (task.status === "Queued" || task.status === "Running") {
+		if (
+			(task.status === "Queued" || task.status === "Running") &&
+			task.allow_user_cancellation !== 0
+		) {
 			cancellable_class = "cancellable";
 			cancel_btn = `
 				<button class="btn btn-xs btn-icon btn-cancel-task" data-task-id="${task.task_id}" title="${__(
@@ -256,7 +261,10 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 
 		let retry_btn = "";
 		let retryable_class = "";
-		if (task.status === "Failed" || task.status === "Cancelled") {
+		if (
+			(task.status === "Failed" || task.status === "Cancelled") &&
+			task.allow_user_retry !== 0
+		) {
 			retryable_class = "retryable";
 			retry_btn = `
 				<button class="btn btn-xs btn-retry-task" data-task-id="${task.task_id}">
