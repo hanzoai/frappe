@@ -55,7 +55,7 @@ frappe.ui.form.on("Prepared Report", {
 						callback: function () {
 							frappe.msgprint(
 								__(
-									"Your CSV file is being generated and will appear in the Attachments section once ready. Additionally, you will get notified when the file is available for download."
+									"Your CSV file is being generated and will appear in the Attachments section once ready."
 								)
 							);
 						},

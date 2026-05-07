@@ -111,7 +111,7 @@ class PreparedReport(Document):
 
 def generate_report(prepared_report):
 	update_job_id(prepared_report)
-	task_handle = get_current_task()
+	task = get_current_task()
 
 	instance: PreparedReport = frappe.get_doc("Prepared Report", prepared_report)
 	report = frappe.get_doc("Report", instance.report_name)
@@ -121,8 +121,7 @@ def generate_report(prepared_report):
 	try:
 		report.custom_columns = []
 
-		if task_handle:
-			task_handle.update_stage(_("Loading report configuration"))
+		task.update_stage(_("Loading report configuration"))
 
 		if report.report_type == "Custom Report":
 			custom_report_doc = report
@@ -133,12 +132,10 @@ def generate_report(prepared_report):
 				if data:
 					report.custom_columns = data["columns"]
 
-		if task_handle:
-			task_handle.update_stage(_("Generating report data"))
+		task.update_stage(_("Generating report data"))
 		result = generate_report_result(report=report, filters=instance.filters, user=instance.owner)
 
-		if task_handle:
-			task_handle.update_stage(_("Saving report output"))
+		task.update_stage(_("Saving report output"))
 		create_json_gz_file(result, instance.doctype, instance.name, instance.report_name)
 
 		instance.status = "Completed"
@@ -357,7 +354,15 @@ def has_permission(doc, user):
 @frappe.whitelist()
 def enqueue_json_to_csv_conversion(prepared_report_name: str):
 	"""Call this to enqueue the conversion in background."""
-	enqueue(method=convert_json_to_csv, queue="long", prepared_report_name=prepared_report_name)
+	frappe.enqueue_task(
+		convert_json_to_csv,
+		task_name=_("Convert to CSV: {0}").format(prepared_report_name),
+		queue="long",
+		show_progress_bar=False,
+		ref_doctype="Prepared Report",
+		ref_docname=prepared_report_name,
+		prepared_report_name=prepared_report_name,
+	)
 
 
 def convert_json_to_csv(prepared_report_name):
@@ -365,6 +370,10 @@ def convert_json_to_csv(prepared_report_name):
 
 	import csv
 	from io import StringIO
+
+	task = get_current_task()
+
+	task.update_stage(_("Loading report data"))
 
 	doc = frappe.get_doc("Prepared Report", prepared_report_name)
 	json_content, file_name = doc.get_prepared_data(with_file_name=True)
@@ -382,6 +391,8 @@ def convert_json_to_csv(prepared_report_name):
 		frappe.log_error("Columns or result is empty", "CSV Conversion")
 		return
 
+	task.update_stage(_("Converting to CSV"))
+
 	fieldnames = [col.get("fieldname") for col in columns if col.get("fieldname")]
 
 	output = StringIO()
@@ -391,6 +402,8 @@ def convert_json_to_csv(prepared_report_name):
 		writer.writerow({key: row.get(key, "") for key in fieldnames})
 
 	csv_content = output.getvalue().encode("utf-8")
+
+	task.update_stage(_("Saving CSV file"))
 
 	_file = frappe.get_doc(
 		{
