@@ -139,10 +139,12 @@ def _execute_task(
 
 	frappe.local._current_task_handle = task_doc
 
+	is_retry = task_doc.status == "Running"
 	task_doc.db_set({"status": "Running", "started_at": frappe.utils.now()})
 	frappe.db.commit()
 
-	task_doc._publish({"task_id": task_id, "task_name": task_doc.task_name, "status": "Running"})
+	if not is_retry:
+		task_doc._publish({"task_id": task_id, "task_name": task_doc.task_name, "status": "Running"})
 
 	try:
 		if isinstance(target_method, str):
