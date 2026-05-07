@@ -35,6 +35,10 @@ def failing_task():
 	raise ValueError("Intentional test failure")
 
 
+def _always_raise(*args, **kwargs):
+	raise RuntimeError("callback error")
+
+
 class IntegrationTestBackgroundTask(IntegrationTestCase):
 	def setUp(self):
 		super().setUp()
@@ -125,13 +129,10 @@ class IntegrationTestBackgroundTask(IntegrationTestCase):
 		self.assertIsInstance(call_kwargs["exception"], ValueError)
 
 	def test_callback_failure_does_not_change_task_status(self):
-		def crashing_callback():
-			raise RuntimeError("oops")
-
-		doc = enqueue_task(sample_task, value=1)
-		with patch("frappe.get_attr", return_value=crashing_callback):
-			_execute_task(doc.task_id, sample_task, frappe.session.user, task_on_success="some.path", value=1)
-
+		doc = enqueue_task(sample_task, on_success=_always_raise, value=1)
+		_execute_task(
+			doc.task_id, sample_task, frappe.session.user, task_on_success=doc.on_success_callback, value=1
+		)
 		doc.reload()
 		self.assertEqual(doc.status, "Completed")
 
@@ -144,9 +145,7 @@ class IntegrationTestBackgroundTask(IntegrationTestCase):
 			received["result"] = result
 
 		task_doc = enqueue_task(sample_task, value=5)
-
-		with patch("frappe.get_attr", return_value=capture_result):
-			_run_callback("some.path", task_doc, task_kwargs={"value": 5}, result={"value": 5})
+		_run_callback(capture_result, task_doc, task_kwargs={"value": 5}, result={"value": 5})
 
 		self.assertEqual(received["result"], {"value": 5})
 		self.assertNotIn("task", received)
@@ -161,9 +160,7 @@ class IntegrationTestBackgroundTask(IntegrationTestCase):
 			received.update(kwargs)
 
 		task_doc = enqueue_task(sample_task, value=5)
-
-		with patch("frappe.get_attr", return_value=capture_all):
-			_run_callback("some.path", task_doc, task_kwargs={"value": 5}, result={"value": 5})
+		_run_callback(capture_all, task_doc, task_kwargs={"value": 5}, result={"value": 5})
 
 		self.assertIn("task", received)
 		self.assertIn("result", received)
@@ -185,6 +182,55 @@ class IntegrationTestBackgroundTask(IntegrationTestCase):
 		call_kwargs = self.mock_enqueue.call_args.kwargs
 		self.assertEqual(call_kwargs["task_on_success"], doc.on_success_callback)
 		self.assertEqual(call_kwargs["task_on_failure"], doc.on_failure_callback)
+
+	def test_rq_retry_passed_when_configured(self):
+		from rq import Retry
+
+		enqueue_task(failing_task, retry_on=(ValueError,), max_retries=3)
+
+		retry_arg = self.mock_enqueue.call_args.kwargs["retry"]
+		self.assertIsInstance(retry_arg, Retry)
+		self.assertEqual(retry_arg.max, 3)
+
+	def test_rq_retry_not_passed_when_unconfigured(self):
+		enqueue_task(failing_task)
+		self.assertIsNone(self.mock_enqueue.call_args.kwargs["retry"])
+
+	def test_retriable_exception_keeps_status_running(self):
+		doc = enqueue_task(failing_task, retry_on=(ValueError,), max_retries=3)
+
+		fake_job = type("FakeJob", (), {"retries_left": 3})()
+		with patch("frappe.utils.task_queue._current_rq_job", return_value=fake_job):
+			with self.assertRaises(ValueError):
+				_execute_task(doc.task_id, failing_task, frappe.session.user, task_retry_on=(ValueError,))
+
+		doc.reload()
+		self.assertEqual(doc.status, "Running")
+		self.assertIsNone(doc.exception)
+		self.assertEqual(fake_job.retries_left, 3)
+
+	def test_non_retriable_exception_marks_failed_and_zeros_retries(self):
+		doc = enqueue_task(failing_task, retry_on=(KeyError,), max_retries=3)
+
+		fake_job = type("FakeJob", (), {"retries_left": 3})()
+		with patch("frappe.utils.task_queue._current_rq_job", return_value=fake_job):
+			with self.assertRaises(ValueError):
+				_execute_task(doc.task_id, failing_task, frappe.session.user, task_retry_on=(KeyError,))
+
+		doc.reload()
+		self.assertEqual(doc.status, "Failed")
+		self.assertEqual(fake_job.retries_left, 0)
+
+	def test_retries_exhausted_marks_failed(self):
+		doc = enqueue_task(failing_task, retry_on=(ValueError,), max_retries=3)
+
+		fake_job = type("FakeJob", (), {"retries_left": 0})()
+		with patch("frappe.utils.task_queue._current_rq_job", return_value=fake_job):
+			with self.assertRaises(ValueError):
+				_execute_task(doc.task_id, failing_task, frappe.session.user, task_retry_on=(ValueError,))
+
+		doc.reload()
+		self.assertEqual(doc.status, "Failed")
 
 	@patch("rq.job.Job.fetch")
 	def test_stop_task_cancels_queued_task(self, mock_job_fetch):

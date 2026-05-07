@@ -25,6 +25,8 @@ def enqueue_task(
 	now: bool = False,
 	on_success: Callable | None = None,
 	on_failure: Callable | None = None,
+	retry_on: tuple[type[Exception], ...] = (),
+	max_retries: int = 0,
 	show_progress_bar: bool = True,
 	allow_user_cancellation: bool = True,
 	allow_user_retry: bool = True,
@@ -40,6 +42,12 @@ def enqueue_task(
 
 	on_success_path = _callback_path(on_success)
 	on_failure_path = _callback_path(on_failure)
+
+	rq_retry = None
+	if retry_on and max_retries > 0:
+		from rq import Retry
+
+		rq_retry = Retry(max=max_retries)
 
 	if not task_name:
 		task_name = method_name
@@ -87,11 +95,13 @@ def enqueue_task(
 			at_front=at_front,
 			now=now,
 			at_front_when_starved=at_front_when_starved,
+			retry=rq_retry,
 			task_id=task_id,
 			target_method=method,
 			task_user=user,
 			task_on_success=on_success_path,
 			task_on_failure=on_failure_path,
+			task_retry_on=retry_on,
 			**kwargs,
 		)
 
@@ -124,6 +134,7 @@ def _execute_task(
 	task_user: str,
 	task_on_success: str | None = None,
 	task_on_failure: str | None = None,
+	task_retry_on: tuple[type[Exception], ...] = (),
 	**kwargs,
 ):
 	"""Internal wrapper run by the background worker"""
@@ -164,6 +175,12 @@ def _execute_task(
 
 	except Exception as exc:
 		frappe.db.rollback()
+
+		if _should_retry(exc, task_retry_on):
+			raise
+
+		_disable_rq_retry()
+
 		task_doc.db_set(
 			{
 				"status": "Failed",
@@ -185,6 +202,28 @@ def _execute_task(
 		frappe.cache.delete_value(f"background_task:{task_id}")
 
 
+def _should_retry(exc: Exception, retry_on: tuple[type[Exception], ...]) -> bool:
+	if not retry_on or not isinstance(exc, retry_on):
+		return False
+	job = _current_rq_job()
+	return bool(job and getattr(job, "retries_left", None) and job.retries_left > 0)
+
+
+def _disable_rq_retry() -> None:
+	job = _current_rq_job()
+	if job and getattr(job, "retries_left", None):
+		job.retries_left = 0
+
+
+def _current_rq_job():
+	try:
+		from rq import get_current_job
+
+		return get_current_job()
+	except Exception:
+		return None
+
+
 def _callback_path(fn: Callable | str | None) -> str | None:
 	if fn is None:
 		return None
@@ -193,9 +232,9 @@ def _callback_path(fn: Callable | str | None) -> str | None:
 	return f"{fn.__module__}.{fn.__qualname__}"
 
 
-def _run_callback(callback: str, task_doc: "BackgroundTask", task_kwargs: dict, **outcome):
+def _run_callback(callback: str | Callable, task_doc: "BackgroundTask", task_kwargs: dict, **outcome):
 	try:
-		fn = frappe.get_attr(callback)
+		fn = frappe.get_attr(callback) if isinstance(callback, str) else callback
 		context = {"task": task_doc, **outcome, **task_kwargs}
 		sig = inspect.signature(fn)
 		has_var_keyword = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values())
