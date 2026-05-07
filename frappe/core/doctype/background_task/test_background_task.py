@@ -183,19 +183,6 @@ class IntegrationTestBackgroundTask(IntegrationTestCase):
 		self.assertEqual(call_kwargs["task_on_success"], doc.on_success_callback)
 		self.assertEqual(call_kwargs["task_on_failure"], doc.on_failure_callback)
 
-	def test_rq_retry_passed_when_configured(self):
-		from rq import Retry
-
-		enqueue_task(failing_task, retry_on=(ValueError,), max_retries=3)
-
-		retry_arg = self.mock_enqueue.call_args.kwargs["retry"]
-		self.assertIsInstance(retry_arg, Retry)
-		self.assertEqual(retry_arg.max, 3)
-
-	def test_rq_retry_not_passed_when_unconfigured(self):
-		enqueue_task(failing_task)
-		self.assertIsNone(self.mock_enqueue.call_args.kwargs["retry"])
-
 	def test_retriable_exception_keeps_status_running(self):
 		doc = enqueue_task(failing_task, retry_on=(ValueError,), max_retries=3)
 

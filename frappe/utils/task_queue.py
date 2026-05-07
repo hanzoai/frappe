@@ -42,12 +42,7 @@ def enqueue_task(
 
 	on_success_path = _callback_path(on_success)
 	on_failure_path = _callback_path(on_failure)
-
-	rq_retry = None
-	if retry_on and max_retries > 0:
-		from rq import Retry
-
-		rq_retry = Retry(max=max_retries)
+	rq_retry = _build_rq_retry(retry_on, max_retries)
 
 	if not task_name:
 		task_name = method_name
@@ -200,6 +195,14 @@ def _execute_task(
 	finally:
 		frappe.local._current_task_handle = None
 		frappe.cache.delete_value(f"background_task:{task_id}")
+
+
+def _build_rq_retry(retry_on: tuple[type[Exception], ...], max_retries: int):
+	if retry_on and max_retries > 0:
+		from rq import Retry
+
+		return Retry(max=max_retries)
+	return None
 
 
 def _should_retry(exc: Exception, retry_on: tuple[type[Exception], ...]) -> bool:
