@@ -95,6 +95,97 @@ class IntegrationTestBackgroundTask(IntegrationTestCase):
 		)
 		self.assertTrue(len(attached_files) > 0)
 
+	def test_on_success_callback_is_called(self):
+		doc = enqueue_task(sample_task, on_success=sample_task, value=42)
+
+		with patch("frappe.utils.task_queue._run_callback") as mock_callback:
+			_execute_task(
+				doc.task_id,
+				sample_task,
+				frappe.session.user,
+				task_on_success=doc.on_success_callback,
+				value=42,
+			)
+
+		mock_callback.assert_called_once()
+		_, call_kwargs = mock_callback.call_args
+		self.assertEqual(call_kwargs["result"], {"value": 42})
+
+	def test_on_failure_callback_is_called(self):
+		doc = enqueue_task(failing_task, on_failure=sample_task)
+
+		with patch("frappe.utils.task_queue._run_callback") as mock_callback:
+			with self.assertRaises(ValueError):
+				_execute_task(
+					doc.task_id, failing_task, frappe.session.user, task_on_failure=doc.on_failure_callback
+				)
+
+		mock_callback.assert_called_once()
+		_, call_kwargs = mock_callback.call_args
+		self.assertIsInstance(call_kwargs["exception"], ValueError)
+
+	def test_callback_failure_does_not_change_task_status(self):
+		def crashing_callback():
+			raise RuntimeError("oops")
+
+		doc = enqueue_task(sample_task, value=1)
+		with patch("frappe.get_attr", return_value=crashing_callback):
+			_execute_task(doc.task_id, sample_task, frappe.session.user, task_on_success="some.path", value=1)
+
+		doc.reload()
+		self.assertEqual(doc.status, "Completed")
+
+	def test_callback_receives_only_declared_params(self):
+		from frappe.utils.task_queue import _run_callback
+
+		received = {}
+
+		def capture_result(result):
+			received["result"] = result
+
+		task_doc = enqueue_task(sample_task, value=5)
+
+		with patch("frappe.get_attr", return_value=capture_result):
+			_run_callback("some.path", task_doc, task_kwargs={"value": 5}, result={"value": 5})
+
+		self.assertEqual(received["result"], {"value": 5})
+		self.assertNotIn("task", received)
+		self.assertNotIn("value", received)
+
+	def test_callback_var_keyword_receives_full_context(self):
+		from frappe.utils.task_queue import _run_callback
+
+		received = {}
+
+		def capture_all(**kwargs):
+			received.update(kwargs)
+
+		task_doc = enqueue_task(sample_task, value=5)
+
+		with patch("frappe.get_attr", return_value=capture_all):
+			_run_callback("some.path", task_doc, task_kwargs={"value": 5}, result={"value": 5})
+
+		self.assertIn("task", received)
+		self.assertIn("result", received)
+		self.assertIn("value", received)
+
+	def test_callbacks_stored_as_dotted_paths(self):
+		doc = enqueue_task(sample_task, on_success=sample_task, on_failure=failing_task)
+		self.assertIn("sample_task", doc.on_success_callback)
+		self.assertIn("failing_task", doc.on_failure_callback)
+
+	def test_retry_passes_stored_callbacks(self):
+		from frappe.core.doctype.background_task.background_task import retry_task
+
+		doc = enqueue_task(failing_task, on_success=sample_task, on_failure=sample_task)
+		doc.db_set("status", "Failed")
+
+		retry_task(doc.task_id)
+
+		call_kwargs = self.mock_enqueue.call_args.kwargs
+		self.assertEqual(call_kwargs["task_on_success"], doc.on_success_callback)
+		self.assertEqual(call_kwargs["task_on_failure"], doc.on_failure_callback)
+
 	@patch("rq.job.Job.fetch")
 	def test_stop_task_cancels_queued_task(self, mock_job_fetch):
 		from frappe.core.doctype.background_task.background_task import stop_task

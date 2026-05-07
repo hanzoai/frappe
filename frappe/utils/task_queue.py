@@ -1,3 +1,4 @@
+import inspect
 import time
 from collections.abc import Callable
 from typing import TYPE_CHECKING
@@ -37,6 +38,9 @@ def enqueue_task(
 	else:
 		method_name = method
 
+	on_success_path = _callback_path(on_success)
+	on_failure_path = _callback_path(on_failure)
+
 	if not task_name:
 		task_name = method_name
 
@@ -64,6 +68,10 @@ def enqueue_task(
 		doc.ref_doctype = ref_doctype
 	if ref_docname:
 		doc.ref_docname = ref_docname
+	if on_success_path:
+		doc.on_success_callback = on_success_path
+	if on_failure_path:
+		doc.on_failure_callback = on_failure_path
 	doc.insert(ignore_permissions=True)
 
 	def _enqueue():
@@ -76,14 +84,14 @@ def enqueue_task(
 			timeout=timeout,
 			deduplicate=deduplicate,
 			job_id=job_id or task_id,
-			on_success=on_success,
-			on_failure=on_failure,
 			at_front=at_front,
 			now=now,
 			at_front_when_starved=at_front_when_starved,
 			task_id=task_id,
 			target_method=method,
 			task_user=user,
+			task_on_success=on_success_path,
+			task_on_failure=on_failure_path,
 			**kwargs,
 		)
 
@@ -110,7 +118,14 @@ def get_task_status(task_id: str) -> dict | None:
 	return status
 
 
-def _execute_task(task_id: str, target_method: str | Callable, task_user: str, **kwargs):
+def _execute_task(
+	task_id: str,
+	target_method: str | Callable,
+	task_user: str,
+	task_on_success: str | None = None,
+	task_on_failure: str | None = None,
+	**kwargs,
+):
 	"""Internal wrapper run by the background worker"""
 	task_doc = frappe.get_doc("Background Task", {"task_id": task_id})
 	if task_doc.status == "Cancelled":
@@ -142,9 +157,12 @@ def _execute_task(task_id: str, target_method: str | Callable, task_user: str, *
 			{"task_id": task_id, "task_name": task_doc.task_name, "status": "Completed", "progress": 100}
 		)
 
+		if task_on_success:
+			_run_callback(task_on_success, task_doc, result=result, task_kwargs=kwargs)
+
 		return result
 
-	except Exception:
+	except Exception as exc:
 		frappe.db.rollback()
 		task_doc.db_set(
 			{
@@ -157,8 +175,32 @@ def _execute_task(task_id: str, target_method: str | Callable, task_user: str, *
 
 		task_doc._publish({"task_id": task_id, "task_name": task_doc.task_name, "status": "Failed"})
 
+		if task_on_failure:
+			_run_callback(task_on_failure, task_doc, exception=exc, task_kwargs=kwargs)
+
 		raise
 
 	finally:
 		frappe.local._current_task_handle = None
 		frappe.cache.delete_value(f"background_task:{task_id}")
+
+
+def _callback_path(fn: Callable | str | None) -> str | None:
+	if fn is None:
+		return None
+	if isinstance(fn, str):
+		return fn
+	return f"{fn.__module__}.{fn.__qualname__}"
+
+
+def _run_callback(callback: str, task_doc: "BackgroundTask", task_kwargs: dict, **outcome):
+	try:
+		fn = frappe.get_attr(callback)
+		context = {"task": task_doc, **outcome, **task_kwargs}
+		sig = inspect.signature(fn)
+		has_var_keyword = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values())
+		fn(**context if has_var_keyword else {k: v for k, v in context.items() if k in sig.parameters})
+	except Exception:
+		frappe.db.rollback()
+		frappe.log_error(title=f"Background task callback failed for {task_doc.task_name}")
+		frappe.db.commit()

@@ -21,6 +21,8 @@ class BackgroundTask(Document):
 
 		arguments: DF.JSON | None
 		ended_at: DF.Datetime | None
+		on_failure_callback: DF.Data | None
+		on_success_callback: DF.Data | None
 		exception: DF.LongText | None
 		method: DF.Data
 		progress: DF.Percent
@@ -236,6 +238,8 @@ def retry_task(task_id: str):
 		task_id=task.task_id,
 		target_method=task.method,
 		task_user=task.user,
+		task_on_success=task.on_success_callback,
+		task_on_failure=task.on_failure_callback,
 		**arguments,
 	)
 

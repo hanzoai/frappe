@@ -27,6 +27,8 @@
   "ref_docname",
   "arguments_section",
   "arguments",
+  "on_success_callback",
+  "on_failure_callback",
   "results__errors_section",
   "result",
   "exception",
@@ -81,6 +83,20 @@
    "fieldname": "arguments",
    "fieldtype": "JSON",
    "label": "Arguments",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "on_success_callback",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "On Success Callback",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "on_failure_callback",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "On Failure Callback",
    "permlevel": 1
   },
   {
