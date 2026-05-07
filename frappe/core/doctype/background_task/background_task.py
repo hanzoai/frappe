@@ -169,7 +169,7 @@ def stop_task(task_id: str):
 		raise frappe.InvalidStatusError(frappe._("Task is not queued or running"))
 
 	from rq.command import send_stop_job_command
-	from rq.job import Job
+	from rq.job import Job, JobStatus
 
 	from frappe.utils.background_jobs import create_job_id, get_redis_conn
 
@@ -177,10 +177,10 @@ def stop_task(task_id: str):
 	rq_job_id = create_job_id(task.job_id or task.task_id)
 	job = Job.fetch(rq_job_id, connection=conn)
 
-	if task.status == "Queued":
-		job.cancel()
-	elif task.status == "Running":
+	if job.get_status(refresh=True) == JobStatus.STARTED:
 		send_stop_job_command(connection=conn, job_id=rq_job_id)
+	else:
+		job.cancel()
 
 	task.db_set("status", "Cancelled")
 	frappe.cache.delete_value(f"background_task:{task.task_id}")

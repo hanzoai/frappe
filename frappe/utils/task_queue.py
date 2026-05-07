@@ -178,6 +178,9 @@ def _execute_task(
 
 		_disable_rq_retry()
 
+		if frappe.db.get_value("Background Task", {"task_id": task_id}, "status") == "Cancelled":
+			raise
+
 		task_doc.db_set(
 			{
 				"status": "Failed",
