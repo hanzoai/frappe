@@ -1417,8 +1417,9 @@ class Engine:
 
 	def _raise_permission_error(self, doctype=None):
 		frappe.throw(
-			_("Insufficient Permission for {0}").format(frappe.bold(doctype or self.doctype)),
-			frappe.PermissionError,
+			title=_("Permission Error"),
+			msg=_("Insufficient Permission for {0}").format(frappe.bold(doctype or self.doctype)),
+			exc=frappe.PermissionError,
 		)
 
 	def apply_field_permissions(self):
