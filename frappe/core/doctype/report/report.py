@@ -393,23 +393,6 @@ class Report(Document):
 		if not cint(frappe.conf.developer_mode):
 			frappe.throw(_("Standard reports can only be created in developer mode."))
 
-	def validate_default_print_format(self):
-		pf = frappe.db.get_value(
-			"Print Format",
-			self.default_print_format,
-			["report", "print_format_for", "print_format_type", "disabled"],
-			as_dict=True,
-		)
-
-		if (
-			not pf
-			or pf.report != self.name
-			or pf.print_format_for != "Report"
-			or pf.print_format_type != "JS"
-			or pf.disabled
-		):
-			frappe.throw(_("Selected Print Format is invalid for this Report."))
-
 	@frappe.whitelist()
 	def toggle_disable(self, disable: bool):
 		if not self.has_permission("write"):
