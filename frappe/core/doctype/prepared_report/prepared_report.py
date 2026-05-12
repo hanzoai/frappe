@@ -138,9 +138,8 @@ def generate_report(prepared_report):
 
 		create_json_gz_file(result, instance.doctype, instance.name, instance.report_name)
 
-		# Can have an option to create a json option
-		# if report.export_in_csv:
-		# 	enqueue_json_to_csv_conversion(result, instance.doctype, instance.name, instance.report_name)
+		if report.generate_csv:
+			enqueue_json_to_csv_conversion(result, instance.doctype, instance.name, instance.report_name)
 
 		instance.status = "Completed"
 

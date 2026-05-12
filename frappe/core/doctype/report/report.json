@@ -18,6 +18,7 @@
   "add_total_row",
   "disabled",
   "prepared_report",
+  "generate_csv",
   "add_translate_data",
   "timeout",
   "filters_section",
