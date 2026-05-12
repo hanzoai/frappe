@@ -86,19 +86,29 @@ class PreparedReport(Document):
 			at_front_when_starved=True,
 		)
 
-	def get_prepared_data(self, with_file_name=False):
+	def get_prepared_data(self, with_file_name=False, send_json=False):
 		attachments = get_attachments(self.doctype, self.name)
 		if not attachments:
 			frappe.throw(_("No attachment found for the prepared report"), title=_("Attachment Not Found"))
 
 		attachment = None
+
+		def check_attachment_condition(f, send_json=send_json):
+			if send_json:
+				return f.file_name.endswith(".json.gz")
+			return f.file_name.startswith("csv_") and f.file_name.endswith(".csv")
+
 		for f in attachments or []:
-			if f.file_url.endswith(".gz"):
+			if check_attachment_condition(f, send_json):
 				attachment = f
 				break
 
 		attached_file = frappe.get_doc("File", attachment.name)
-
+		is_csv = attachment.file_name.startswith("csv_")
+		if is_csv and not send_json:
+			if with_file_name:
+				return (attached_file.get_content(), attachment.file_name)
+			return attached_file.get_content()
 		if with_file_name:
 			return (gzip.decompress(attached_file.get_content()), attachment.file_name)
 		return gzip.decompress(attached_file.get_content())
@@ -125,7 +135,12 @@ def generate_report(prepared_report):
 					report.custom_columns = data["columns"]
 
 		result = generate_report_result(report=report, filters=instance.filters, user=instance.owner)
+
 		create_json_gz_file(result, instance.doctype, instance.name, instance.report_name)
+
+		# Can have an option to create a json option
+		# if report.export_in_csv:
+		# 	enqueue_json_to_csv_conversion(result, instance.doctype, instance.name, instance.report_name)
 
 		instance.status = "Completed"
 
