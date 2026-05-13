@@ -86,26 +86,27 @@ class PreparedReport(Document):
 			at_front_when_starved=True,
 		)
 
-	def get_prepared_data(self, with_file_name=False, send_json=False):
+	def get_prepared_data(self, with_file_name=False, format="json"):
 		attachments = get_attachments(self.doctype, self.name)
 		if not attachments:
 			frappe.throw(_("No attachment found for the prepared report"), title=_("Attachment Not Found"))
 
 		attachment = None
+		is_format_json = format == "json"
 
-		def check_attachment_condition(f, send_json=send_json):
-			if send_json:
+		def check_attachment_condition(f, is_format_json=is_format_json):
+			if is_format_json:
 				return f.file_name.endswith(".json.gz")
 			return f.file_name.startswith("csv_") and f.file_name.endswith(".csv")
 
 		for f in attachments or []:
-			if check_attachment_condition(f, send_json):
+			if check_attachment_condition(f, is_format_json):
 				attachment = f
 				break
 
 		attached_file = frappe.get_doc("File", attachment.name)
 		is_csv = attachment.file_name.startswith("csv_")
-		if is_csv and not send_json:
+		if is_csv and not is_format_json:
 			if with_file_name:
 				return (attached_file.get_content(), attachment.file_name)
 			return attached_file.get_content()
@@ -322,7 +323,7 @@ def download_attachment(dn: str):
 	if not pr.has_permission("read"):
 		frappe.throw(frappe._("Cannot Download Report due to insufficient permissions"))
 
-	data, file_name = pr.get_prepared_data(with_file_name=True)
+	data, file_name = pr.get_prepared_data(with_file_name=True, format="csv")
 	frappe.local.response.filename = file_name[:-3]
 	frappe.local.response.filecontent = data
 	frappe.local.response.type = "binary"
@@ -375,7 +376,7 @@ def convert_json_to_csv(prepared_report_name):
 	from io import StringIO
 
 	doc = frappe.get_doc("Prepared Report", prepared_report_name)
-	json_content, file_name = doc.get_prepared_data(with_file_name=True, send_json=True)
+	json_content, file_name = doc.get_prepared_data(with_file_name=True)
 
 	if not json_content:
 		frappe.log_error(f"No JSON content found for {prepared_report_name}", "CSV Conversion")
