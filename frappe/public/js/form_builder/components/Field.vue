@@ -1,7 +1,7 @@
 <script setup>
 import EditableInput from "./EditableInput.vue";
 import { useStore } from "../store";
-import { move_children_to_parent, clone_field } from "../utils";
+import { clone_field } from "../utils";
 import { ref, computed, onMounted } from "vue";
 import AddFieldButton from "./AddFieldButton.vue";
 import { useMagicKeys, whenever } from "@vueuse/core";
@@ -43,12 +43,6 @@ function remove_field() {
 	store.form.selected_field = null;
 }
 
-function move_fields_to_column() {
-	let current_section = store.current_tab.sections.find((section) =>
-		section.columns.find((column) => column == props.column)
-	);
-	move_children_to_parent(props, "column", "field", current_section);
-}
 
 function duplicate_field() {
 	let duplicate_field = clone_field(props.field);
@@ -238,18 +232,8 @@ onMounted(() => selected.value && label_input.value.focus_on_label());
 						:column="column"
 						:field="field"
 					>
-						<div v-html="frappe.utils.icon('add', 'sm')" />
+						<div v-html="frappe.utils.icon('plus', 'sm')" />
 					</AddFieldButton>
-					<button
-						v-if="!store.is_layout_form && column.fields.indexOf(field)"
-						class="btn btn-xs btn-icon"
-						:title="
-							__('Move the current field and the following fields to a new column')
-						"
-						@click="move_fields_to_column"
-					>
-						<div v-html="frappe.utils.icon('move', 'sm')" />
-					</button>
 					<button
 						v-if="!store.is_layout_form"
 						class="btn btn-xs btn-icon"

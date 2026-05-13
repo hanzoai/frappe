@@ -133,6 +133,22 @@ frappe.ui.form.on("DocType Layout", {
 				customize: false,
 				is_layout: true,
 			});
+			// The form_builder HTML field gets .hide-control from base_control.refresh()
+			// because it renders no visible input. Removing it and marking its enclosing
+			// section visible-section ensures subsequent refresh_sections() calls (e.g.
+			// from frm.refresh_field) keep the Parent Layout tab shown.
+			// We avoid calling refresh_sections() globally here — it re-evaluates all tabs
+			// and incorrectly hides the Details tab for child DocType layouts.
+			const $fb_wrapper = frm.fields_dict?.form_builder?.$wrapper;
+			$fb_wrapper?.removeClass("hide-control");
+			$fb_wrapper
+				?.closest(".form-section")
+				?.removeClass("empty-section")
+				?.addClass("visible-section");
+			// refresh_tabs() only hides tabs, never shows them. toggle(true) removes
+			// Bootstrap's .hide class from both the tab link and the tab pane.
+			const form_tab = frm.layout?.tabs?.find((t) => t.df.fieldname === "tab_break_form");
+			form_tab?.toggle(true);
 		});
 	},
 });
