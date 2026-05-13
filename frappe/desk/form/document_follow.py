@@ -16,10 +16,11 @@ if TYPE_CHECKING:
 
 
 @frappe.whitelist()
-def update_follow(doctype: str, doc_name: str, following: bool):
+def update_follow(doctype: str, doc_name: str, following: bool | str):
 	following = frappe.utils.sbool(following)
 	if following:
-		return (follow_document(doctype, doc_name, frappe.session.user) and True) or False
+		is_following = follow_document(doctype, doc_name, frappe.session.user)
+		return bool(is_following)
 	else:
 		unfollow_document(doctype, doc_name, frappe.session.user)
 		return False
