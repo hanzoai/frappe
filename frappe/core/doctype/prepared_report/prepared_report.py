@@ -139,7 +139,7 @@ def generate_report(prepared_report):
 		create_json_gz_file(result, instance.doctype, instance.name, instance.report_name)
 
 		if report.generate_csv:
-			enqueue_json_to_csv_conversion(result, instance.doctype, instance.name, instance.report_name)
+			enqueue_json_to_csv_conversion(prepared_report)
 
 		instance.status = "Completed"
 
@@ -375,7 +375,7 @@ def convert_json_to_csv(prepared_report_name):
 	from io import StringIO
 
 	doc = frappe.get_doc("Prepared Report", prepared_report_name)
-	json_content, file_name = doc.get_prepared_data(with_file_name=True)
+	json_content, file_name = doc.get_prepared_data(with_file_name=True, send_json=True)
 
 	if not json_content:
 		frappe.log_error(f"No JSON content found for {prepared_report_name}", "CSV Conversion")
