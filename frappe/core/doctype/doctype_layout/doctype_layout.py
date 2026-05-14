@@ -11,24 +11,6 @@ if TYPE_CHECKING:
 	from frappe.core.doctype.docfield.docfield import DocField
 
 
-# Field properties that can be overridden per layout
-OVERRIDABLE_FIELD_PROPS = (
-	"label",
-	"hidden",
-	"reqd",
-	"read_only",
-	"bold",
-	"allow_in_quick_entry",
-	"in_list_view",
-	"in_standard_filter",
-	"default",
-	"description",
-	"depends_on",
-	"mandatory_depends_on",
-	"read_only_depends_on",
-)
-
-
 class DocTypeLayout(Document):
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
@@ -199,32 +181,6 @@ class DocTypeLayout(Document):
 				self.remove(field_details)
 				removed.append(field_details.as_dict())
 		return removed
-
-	def get_effective_fields(self) -> list[dict]:
-		"""Return merged field list with based_on inheritance applied."""
-		own_fields = {f.fieldname: f.as_dict() for f in self.fields}
-
-		if not self.based_on:
-			return list(own_fields.values())
-
-		parent_doc = frappe.get_doc("DocType Layout", self.based_on)
-		parent_fields = {f.fieldname: f.as_dict() for f in parent_doc.fields}
-
-		merged: dict[str, dict] = {}
-		for fieldname, pf in parent_fields.items():
-			merged[fieldname] = pf.copy()
-			if fieldname in own_fields:
-				for prop in OVERRIDABLE_FIELD_PROPS:
-					child_val = own_fields[fieldname].get(prop)
-					if child_val not in (None, "", 0):
-						merged[fieldname][prop] = child_val
-
-		# add any extra fields defined in child but not in parent
-		for fieldname, of in own_fields.items():
-			if fieldname not in merged:
-				merged[fieldname] = of
-
-		return list(merged.values())
 
 
 @frappe.whitelist()
