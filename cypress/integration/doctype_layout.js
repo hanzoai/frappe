@@ -93,9 +93,11 @@ context("DocType Layout", () => {
 		cy.get(".layout-indicator").should("contain.text", "Compact");
 		// URLSearchParams encodes spaces as '+'; encodeURIComponent uses '%20'.
 		// Match either form to stay robust across browser/polyfill differences.
-		cy.location("search").should("satisfy", (s) =>
-			s.includes(`layout=${COMPACT.replace(/ /g, "+")}`) ||
-			s.includes(`layout=${encodeURIComponent(COMPACT)}`)
+		cy.location("search").should(
+			"satisfy",
+			(s) =>
+				s.includes(`layout=${COMPACT.replace(/ /g, "+")}`) ||
+				s.includes(`layout=${encodeURIComponent(COMPACT)}`)
 		);
 
 		// Overrides applied
@@ -133,9 +135,11 @@ context("DocType Layout", () => {
 		cy.click_doc_primary_button("Save");
 
 		cy.get(".layout-indicator").should("contain.text", "Special");
-		cy.location("search").should("satisfy", (s) =>
-			s.includes(`layout=${SPECIAL.replace(/ /g, "+")}`) ||
-			s.includes(`layout=${encodeURIComponent(SPECIAL)}`)
+		cy.location("search").should(
+			"satisfy",
+			(s) =>
+				s.includes(`layout=${SPECIAL.replace(/ /g, "+")}`) ||
+				s.includes(`layout=${encodeURIComponent(SPECIAL)}`)
 		);
 		cy.get("[data-fieldname='description'] .clearfix label").should(
 			"contain.text",

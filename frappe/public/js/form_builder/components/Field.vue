@@ -43,7 +43,6 @@ function remove_field() {
 	store.form.selected_field = null;
 }
 
-
 function duplicate_field() {
 	let duplicate_field = clone_field(props.field);
 
