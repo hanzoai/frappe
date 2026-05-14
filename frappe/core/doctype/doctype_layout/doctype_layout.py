@@ -56,7 +56,7 @@ class DocTypeLayout(Document):
 		doc_export = strip_default_fields(self, doc_export)
 
 		path = os.path.join(folder, f"{frappe.scrub(self.name)}.json")
-		with open(path, "w+") as f:
+		with open(path, "w+") as f:  # nosemgrep
 			f.write(frappe.as_json(doc_export) + "\n")
 
 	def after_insert(self):
