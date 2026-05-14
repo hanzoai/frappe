@@ -133,22 +133,22 @@ frappe.ui.form.on("DocType Layout", {
 				customize: false,
 				is_layout: true,
 			});
-			// The form_builder HTML field gets .hide-control from base_control.refresh()
-			// because it renders no visible input. Removing it and marking its enclosing
-			// section visible-section ensures subsequent refresh_sections() calls (e.g.
-			// from frm.refresh_field) keep the Parent Layout tab shown.
-			// We avoid calling refresh_sections() globally here — it re-evaluates all tabs
-			// and incorrectly hides the Details tab for child DocType layouts.
-			const $fb_wrapper = frm.fields_dict?.form_builder?.$wrapper;
-			$fb_wrapper?.removeClass("hide-control");
-			$fb_wrapper
-				?.closest(".form-section")
-				?.removeClass("empty-section")
-				?.addClass("visible-section");
-			// refresh_tabs() only hides tabs, never shows them. toggle(true) removes
-			// Bootstrap's .hide class from both the tab link and the tab pane.
+
+			// tab.refresh() is invoked by refresh_tabs() on every layout.refresh() and
+			// frm.refresh_field() call. It hides the tab when all its sections appear
+			// empty — which always happens here because the form_builder HTML control
+			// has no visible input and base_control.refresh() permanently adds .hide-control.
+			// Override the instance method so the tab stays visible whenever the layout
+			// builder is active, regardless of what the section scan finds.
 			const form_tab = frm.layout?.tabs?.find((t) => t.df.fieldname === "tab_break_form");
-			form_tab?.toggle(true);
+			if (form_tab) {
+				const _orig_tab_refresh = form_tab.refresh.bind(form_tab);
+				form_tab.refresh = function () {
+					_orig_tab_refresh();
+					if (frappe.layout_builder) this.toggle(true);
+				};
+				form_tab.toggle(true);
+			}
 		});
 	},
 });

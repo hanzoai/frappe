@@ -2,9 +2,6 @@ import target_doctype from "../fixtures/layout_target_doctype";
 
 const TARGET = target_doctype.name;
 const SLUG = TARGET.toLowerCase().replace(/ /g, "-");
-const COMPACT = `Compact ${TARGET}`;
-const SPECIAL = `Special ${TARGET}`;
-
 // Shared saved doc used across switcher tests (menu is hidden for __islocal docs)
 let TEST_DOC_NAME;
 
@@ -15,11 +12,10 @@ context("DocType Layout", () => {
 		cy.insert_doc("DocType", target_doctype, true);
 
 		// Wipe any layouts from a previous run so field rows are deterministic
-		cy.remove_doc("DocType Layout", COMPACT, true);
-		cy.remove_doc("DocType Layout", SPECIAL, true);
+		cy.remove_doc("DocType Layout", "Compact", true);
+		cy.remove_doc("DocType Layout", "Special", true);
 
 		cy.insert_doc("DocType Layout", {
-			name: COMPACT,
 			title: "Compact",
 			document_type: TARGET,
 			fields: [
@@ -31,7 +27,6 @@ context("DocType Layout", () => {
 		});
 
 		cy.insert_doc("DocType Layout", {
-			name: SPECIAL,
 			title: "Special",
 			document_type: TARGET,
 			condition: "doc.is_special == 1",
@@ -53,7 +48,7 @@ context("DocType Layout", () => {
 	});
 
 	it("DocType Layout form: Sync Fields populates rows and Form Builder renders", () => {
-		cy.visit(`/desk/doctype-layout/${encodeURIComponent(COMPACT)}`);
+		cy.visit("/desk/doctype-layout/Compact");
 		cy.get("body").should("have.attr", "data-ajax-state", "complete");
 
 		// Field rows set via API in before() should already be present
@@ -73,6 +68,9 @@ context("DocType Layout", () => {
 		// frm.dirty() + frm.refresh_field() cause an async re-render; wait for the
 		// "Not Saved" pill to appear before querying the tab.
 		cy.get(".title-area .indicator-pill").should("contain.text", "Not Saved");
+
+		// Wait for the form builder bundle to load and initialize before clicking the tab.
+		// cy.window().its("frappe").its("layout_builder").should("exist");
 		cy.findByRole("tab", { name: "Parent Layout" }).click();
 		cy.get(".form-builder-container").should("exist");
 	});
@@ -91,14 +89,7 @@ context("DocType Layout", () => {
 		cy.get(".menu-btn-group .dropdown-menu li").contains("Compact").click();
 
 		cy.get(".layout-indicator").should("contain.text", "Compact");
-		// URLSearchParams encodes spaces as '+'; encodeURIComponent uses '%20'.
-		// Match either form to stay robust across browser/polyfill differences.
-		cy.location("search").should(
-			"satisfy",
-			(s) =>
-				s.includes(`layout=${COMPACT.replace(/ /g, "+")}`) ||
-				s.includes(`layout=${encodeURIComponent(COMPACT)}`)
-		);
+		cy.location("search").should("include", "layout=Compact");
 
 		// Overrides applied
 		cy.get("[data-fieldname='data1'] .clearfix label").should(
@@ -135,12 +126,7 @@ context("DocType Layout", () => {
 		cy.click_doc_primary_button("Save");
 
 		cy.get(".layout-indicator").should("contain.text", "Special");
-		cy.location("search").should(
-			"satisfy",
-			(s) =>
-				s.includes(`layout=${SPECIAL.replace(/ /g, "+")}`) ||
-				s.includes(`layout=${encodeURIComponent(SPECIAL)}`)
-		);
+		cy.location("search").should("include", "layout=Special");
 		cy.get("[data-fieldname='description'] .clearfix label").should(
 			"contain.text",
 			"Special Notes"

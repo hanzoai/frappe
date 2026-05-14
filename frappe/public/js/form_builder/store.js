@@ -168,10 +168,15 @@ export const useStore = defineStore("form-builder-store", () => {
 
 		form.value.selected_field = null;
 
+		// Capture dirty state before nextTick so a concurrent frm.dirty() call
+		// (e.g. from sync_fields) is not erased by the post-fetch cleanup.
+		const was_frm_dirty = !!frm.value.doc.__unsaved;
 		nextTick(() => {
 			dirty.value = false;
-			frm.value.doc.__unsaved = 0;
-			frm.value.page.clear_indicator();
+			if (!was_frm_dirty) {
+				frm.value.doc.__unsaved = 0;
+				frm.value.page.clear_indicator();
+			}
 			read_only.value = false;
 			preview.value = false;
 		});
