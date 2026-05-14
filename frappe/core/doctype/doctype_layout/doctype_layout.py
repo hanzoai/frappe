@@ -58,7 +58,6 @@ class DocTypeLayout(Document):
 		path = os.path.join(folder, f"{frappe.scrub(self.name)}.json")
 		with open(path, "w+") as f:
 			f.write(frappe.as_json(doc_export) + "\n")
-		print(f"Wrote DocType Layout {self.name} to {path}")
 
 	def after_insert(self):
 		self.ensure_layout_link_field()
