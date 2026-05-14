@@ -105,14 +105,15 @@ class PreparedReport(Document):
 				break
 
 		attached_file = frappe.get_doc("File", attachment.name)
-		is_csv = attachment.file_name.startswith("csv_")
-		if is_csv and not is_format_json:
-			if with_file_name:
-				return (attached_file.get_content(), attachment.file_name)
-			return attached_file.get_content()
+		file_to_send = None
+		if is_format_json:
+			file_to_send = gzip.decompress(attached_file.get_content())
+		else:
+			file_to_send = attached_file.get_content()
+
 		if with_file_name:
-			return (gzip.decompress(attached_file.get_content()), attachment.file_name)
-		return gzip.decompress(attached_file.get_content())
+			return (file_to_send, attachment.file_name)
+		return file_to_send
 
 
 def generate_report(prepared_report):
@@ -318,12 +319,12 @@ def create_json_gz_file(data, dt, dn, report_name):
 
 
 @frappe.whitelist()
-def download_attachment(dn: str):
+def download_attachment(dn: str, format: str):
 	pr = frappe.get_doc("Prepared Report", dn)
 	if not pr.has_permission("read"):
 		frappe.throw(frappe._("Cannot Download Report due to insufficient permissions"))
 
-	data, file_name = pr.get_prepared_data(with_file_name=True, format="csv")
+	data, file_name = pr.get_prepared_data(with_file_name=True, format=format)
 	frappe.local.response.filename = file_name[:-3]
 	frappe.local.response.filecontent = data
 	frappe.local.response.type = "binary"
