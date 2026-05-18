@@ -45,7 +45,7 @@ frappe.ui.form.on("Background Task", {
 			? frm.dashboard.progress_area.body.find(".progress-bar")
 			: null;
 
-		if (frm.doc.allow_user_cancellation) {
+		if (frm.doc.status == "Queued" || frm.doc.allow_user_cancellation) {
 			frm.add_custom_button(__("Cancel Task"), () => {
 				frappe.call({
 					method: "frappe.core.doctype.background_task.background_task.stop_task",

@@ -246,8 +246,8 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 		let cancel_btn = "";
 		let cancellable_class = "";
 		if (
-			(task.status === "Queued" || task.status === "Running") &&
-			task.allow_user_cancellation !== 0
+			task.status === "Queued" ||
+			(task.status === "Running" && task.allow_user_cancellation !== 0)
 		) {
 			cancellable_class = "cancellable";
 			cancel_btn = `

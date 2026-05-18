@@ -162,7 +162,8 @@ def stop_task(task_id: str):
 	if not (is_owner or is_system_manager):
 		raise frappe.PermissionError(frappe._("Not permitted"))
 
-	if not task.allow_user_cancellation and not is_system_manager:
+	is_stoppable = task.status == "Queued" or (task.status == "Running" and task.allow_user_cancellation)
+	if not is_stoppable and not is_system_manager:
 		raise frappe.PermissionError(frappe._("Cancellation is not allowed for this task"))
 
 	if task.status not in ("Queued", "Running"):
