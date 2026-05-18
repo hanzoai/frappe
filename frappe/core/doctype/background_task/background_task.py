@@ -103,8 +103,21 @@ class BackgroundTask(Document):
 		from frappe.query_builder import DocType, Interval
 		from frappe.query_builder.functions import Now
 
-		doctype = DocType("Background Task")
-		frappe.db.delete(doctype, filters=(doctype.creation < (Now() - Interval(days=days))))
+		BgTask = DocType("Background Task")
+		File = DocType("File")
+		cutoff = Now() - Interval(days=days)
+
+		frappe.db.delete(
+			File,
+			filters=(
+				(File.attached_to_doctype == "Background Task")
+				& File.attached_to_name.isin(
+					frappe.qb.from_(BgTask).select(BgTask.name).where(BgTask.creation < cutoff)
+				)
+			),
+		)
+
+		frappe.db.delete(BgTask, filters=(BgTask.creation < cutoff))
 
 	def _publish(self, message: dict) -> None:
 		frappe.publish_realtime(event="task_update", message=message, user=self.user)
