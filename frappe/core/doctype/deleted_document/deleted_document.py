@@ -39,6 +39,7 @@ class DeletedDocument(Document):
 
 @frappe.whitelist()
 def restore(name: str | int, alert: bool = True):
+	frappe.only_for("System Manager")
 	deleted = frappe.get_doc("Deleted Document", name)
 
 	if deleted.restored:
@@ -70,6 +71,7 @@ def restore(name: str | int, alert: bool = True):
 
 @frappe.whitelist()
 def bulk_restore(docnames: str | list[str]):
+	frappe.only_for("System Manager")
 	docnames = frappe.parse_json(docnames)
 	message = _("Restoring Deleted Document")
 	restored, invalid, failed = [], [], []
