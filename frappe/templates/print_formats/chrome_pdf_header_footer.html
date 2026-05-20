@@ -10,25 +10,39 @@
 			body {
 				margin: 0 !important;
 				border: 0 !important;
-				padding-top: 1mm !important;
-			}
-			.letter-head,
-			.letter-head-footer {
-				margin-top: -12mm !important;
+				padding: 0 !important;
 			}
 			/* Dont show explicit links for <a> tags */
 			@media print {
-				/* padding is added to simulate old wkhtmltopdf format prints */
+				/*
+				 * No body padding-top / wrapper padding here: any extra vertical
+				 * space pushes the bottom of each wrapper off the page because
+				 * paperHeight is calculated from the wrapper's measured height.
+				 * The wkhtmltopdf-era 1mm padding shifted doc.name and pagination
+				 * onto the next page on multi-page PDFs.
+				 */
 				.wrapper {
 					box-sizing: border-box;
-					padding: 1mm 0 1mm !important;
-					page-break-after: always !important;
+					padding: 0 !important;
+					margin: 0 !important;
 				}
 				[document-status] {
 					margin-bottom: 0 !important;
 				}
 				a[href]:after {
 					content: none;
+				}
+				/*
+				 * Prevent any child element (e.g. letterhead with wkhtmltopdf-era
+				 * page-break-after:always) from splitting a single wrapper clone
+				 * across multiple PDF pages.  Only the .wrapper itself carries the
+				 * deliberate break-after used by _build_numbered_pages_html.
+				 */
+				.wrapper * {
+					page-break-after: auto !important;
+					break-after: auto !important;
+					page-break-before: auto !important;
+					break-before: auto !important;
 				}
 			}
 		</style>

@@ -149,17 +149,24 @@ class Browser:
 		head = soup.find("head").contents
 		styles = soup.find_all("style")
 
-		# set header and footer content ( not waiting for it to load yet).
+		# Use networkIdle so get_element_height() measures the wrapper AFTER any
+		# letterhead <img> has finished loading. Without networkIdle, header_height
+		# is measured before the image expands the wrapper, paperHeight is set too
+		# small, and wrapper content overflows onto the next page (doc.name and
+		# pagination get pushed forward by ~image-height per page).
+		header_footer_wait = ["load", "DOMContentLoaded", "networkIdle"]
 		if self.header_page:
 			self.header_page.wait_for_navigate()
 			self.header_page.set_content(
-				self.get_rendered_header_footer(self.header_content, "header", head, styles, css=[])
+				self.get_rendered_header_footer(self.header_content, "header", head, styles, css=[]),
+				wait_for=header_footer_wait,
 			)
 
 		if self.footer_page:
 			self.footer_page.wait_for_navigate()
 			self.footer_page.set_content(
-				self.get_rendered_header_footer(self.footer_content, "footer", head, styles, css=[])
+				self.get_rendered_header_footer(self.footer_content, "footer", head, styles, css=[]),
+				wait_for=header_footer_wait,
 			)
 		if self.header_page:
 			self.header_page.wait_for_set_content()
