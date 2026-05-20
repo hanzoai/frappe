@@ -25,18 +25,24 @@
 				</div>
 			</div>
 			<div class="align-center flex standard-items-section">
-				{% if frappe.is_mobile() %}
-					<div class="search-bar text-muted hidden">
-						<div
-							class="navbar-modal-search-mobile"
-							placeholder="Search for type a command"
-						>
-							<span class="search-icon">
-								<svg class="icon icon-sm"><use href="#icon-search"></use></svg>
-							</span>
-						</div>
+				<div id="small-search-button" class="search-bar text-muted hidden">
+					<div
+						class="navbar-modal-search-mobile"
+						placeholder="Search for type a command"
+					>
+						<span class="search-icon">
+							<svg class="icon icon-sm"><use href="#icon-search"></use></svg>
+						</span>
 					</div>
-				{% endif %}
+				</div>
+				<!-- Big Search Button (hidden) -->
+				<button id="full-search-button" class="btn btn-default btn-sm navbar-modal-search-mobile hidden" aria-label="{{ __("Search") }}">
+					<svg class="icon icon-sm">
+						<use href="#icon-search"></use>
+					</svg>
+					<span class="ml-2">{%= __("Search") %}</span>
+				</button>
+
 				<div class="flex col page-actions justify-content-end {% if frappe.is_mobile() %} pl-0 {% endif %}">
 					<!-- buttons -->
 					{% if (frappe.boot.read_only) { %}
