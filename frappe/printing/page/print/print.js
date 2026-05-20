@@ -278,9 +278,9 @@ frappe.ui.form.PrintView = class {
 
 		if (is_custom_format) {
 			if (print_format.print_format_builder_beta) {
-				frappe.set_route("print-format-builder-beta", print_format.name);
-			} else {
 				frappe.set_route("print-format-builder", print_format.name);
+			} else {
+				frappe.set_route("print-format-builder-classic", print_format.name);
 			}
 			return;
 		}
@@ -299,22 +299,23 @@ frappe.ui.form.PrintView = class {
 					fieldtype: "Read Only",
 					default: print_format.name || "Standard",
 				},
-				{
-					label: __("Use the new Print Format Builder"),
-					fieldname: "beta",
-					fieldtype: "Check",
-				},
 			],
 			(data) => {
-				frappe.route_options = {
-					make_new: true,
-					doctype: this.frm.doctype,
-					name: data.print_format_name,
-					based_on: data.based_on,
-					beta: data.beta,
-				};
-				frappe.set_route("print-format-builder");
-				this.print_format_selector.val(data.print_format_name);
+				frappe.call({
+					method: "frappe.printing.page.print_format_builder_classic.print_format_builder_classic.create_custom_format",
+					args: {
+						doctype: this.frm.doctype,
+						name: data.print_format_name,
+						based_on: data.based_on,
+						beta: true,
+					},
+					callback: (r) => {
+						if (r.message) {
+							frappe.set_route("print-format-builder", r.message.name);
+							this.print_format_selector.val(data.print_format_name);
+						}
+					},
+				});
 			},
 			__("New Custom Print Format"),
 			__("Start")
@@ -355,13 +356,20 @@ frappe.ui.form.PrintView = class {
 					},
 				],
 				(data) => {
-					frappe.route_options = {
-						make_new: true,
-						doctype: this.frm.doctype,
-						name: data.print_format_name,
-						based_on: data.based_on,
-					};
-					frappe.set_route("print-format-builder");
+					frappe.call({
+						method: "frappe.printing.page.print_format_builder_classic.print_format_builder_classic.create_custom_format",
+						args: {
+							doctype: this.frm.doctype,
+							name: data.print_format_name,
+							based_on: data.based_on,
+							beta: true,
+						},
+						callback: (r) => {
+							if (r.message) {
+								frappe.set_route("print-format-builder", r.message.name);
+							}
+						},
+					});
 				},
 				__("New Custom Print Format"),
 				__("Start")
