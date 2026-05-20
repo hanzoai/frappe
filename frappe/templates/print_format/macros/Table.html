@@ -25,7 +25,9 @@
 					{%- set _is_img_field = column.fieldtype in ("Attach Image", "Image") or (column.fieldtype == "Attach" and frappe.utils.is_image(_img_src)) -%}
 					{%- set _is_safe = _img_src.startswith("/") or _img_src.startswith("http://") or _img_src.startswith("https://") -%}
 					{%- if _is_img_field and _is_safe -%}
-						<img src="{{ _img_src|e }}" alt="{{ _(column.label or '')|e }}" style="max-width: 100%; max-height: 100px;" />
+						{# Downsample server-side so a 5000x5000 stock photo doesn't bloat the PDF to multiple MB. #}
+						{%- set _thumb_src = frappe.utils.get_image_thumbnail_uri(_img_src) -%}
+						<img src="{{ _thumb_src|e }}" alt="{{ _(column.label or '')|e }}" style="max-width: 100%; max-height: 100px;" />
 					{%- else -%}
 						{{ row.get_formatted(column.fieldname) }}
 					{%- endif -%}
