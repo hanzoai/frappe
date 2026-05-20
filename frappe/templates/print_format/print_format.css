@@ -96,12 +96,21 @@ body {
 	text-align: right;
 }
 
-.table-row {
-	page-break-inside: avoid;
-}
-
 .page-break {
 	page-break-after: always;
+}
+
+/* Let tall child-table rows flow across pages (override Bootstrap's
+   tr { page-break-inside: avoid }). Keep thead { display: table-header-group }
+   intact so the column headers still repeat on each new page. */
+@media print {
+	.child-table tr {
+		page-break-inside: auto;
+		break-inside: auto;
+	}
+	.child-table thead {
+		display: table-header-group;
+	}
 }
 
 .document-header {
