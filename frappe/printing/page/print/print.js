@@ -691,7 +691,9 @@ frappe.ui.form.PrintView = class {
 				print_format: print_format.name,
 				letterhead: this.get_letterhead(),
 			});
-			let w = window.open(`/api/method/frappe.utils.weasyprint.download_pdf?${params}`);
+			let w = window.open(
+				`/api/method/frappe.utils.print_format_generator.download_pdf?${params}`
+			);
 			if (!w) {
 				frappe.msgprint(__("Please enable pop-ups"));
 				return;
