@@ -21,7 +21,7 @@ frappe.search.AwesomeBar = class AwesomeBar {
 		let $search_element = $(element);
 
 		let search_modal = new frappe.get_modal("Search", "");
-
+		this.search_modal = search_modal;
 		search_modal.removeClass("fade");
 		search_modal.on("shown.bs.modal", () => {
 			const input = search_modal.find("#navbar-search").get(0);
@@ -80,6 +80,13 @@ frappe.search.AwesomeBar = class AwesomeBar {
 
 			this.setup_event_listeners(search_modal);
 		});
+	}
+
+	open(search_modal) {
+		const modal = search_modal || this.search_modal;
+		if (!modal) return;
+		modal.modal("show");
+		this.setup_event_listeners(modal);
 	}
 
 	setup_event_listeners(search_modal) {
