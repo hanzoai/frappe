@@ -137,6 +137,14 @@ class Browser:
 		# open header and footer pages
 		self._open_header_footer_pages()
 
+		# Inject update_page_no.js into <head> BEFORE capturing head contents so
+		# clone_and_update is available in both the body page and the header/footer
+		# page contexts (the header template renders {% for tag in head %}).
+		script_path = frappe.get_app_path("frappe", "utils", "pdf_generator", "update_page_no.js")
+		script_tag = soup.new_tag("script")
+		script_tag.append(soup.new_string(frappe.read_file(script_path)))
+		soup.head.append(script_tag)
+
 		# get tags to pass to header template.
 		head = soup.find("head").contents
 		styles = soup.find_all("style")
@@ -363,18 +371,32 @@ class Browser:
 		if not self.header_page and not self.footer_page:
 			return
 		total_pages = len(self.body_pdf.pages)
-		# function is added to html from update_page_no.js
-		if self.header_page:
-			if self.is_header_dynamic:
+
+		if self.header_page and self.is_header_dynamic:
+			if self.is_print_designer:
 				self.header_page.evaluate(
-					f"clone_and_update('{'#header-render-container' if self.is_print_designer else '.wrapper'}', {total_pages}, {1 if self.is_print_designer else 0}, 'Header', 1);",
+					f"clone_and_update('#header-render-container', {total_pages}, 1, 'Header', 1);",
+					await_promise=True,
+				)
+			else:
+				# Use the same JS clone_and_update approach as print_designer.
+				# The script was injected into <head> in prepare_header_footer so
+				# clone_and_update is already available in the header page context.
+				# This avoids page-break-after:always artifacts from Python cloning.
+				self.header_page.evaluate(
+					f"clone_and_update('.wrapper', {total_pages}, 0, 'Header', 1);",
 					await_promise=True,
 				)
 
-		if self.footer_page:
-			if self.is_footer_dynamic:
+		if self.footer_page and self.is_footer_dynamic:
+			if self.is_print_designer:
 				self.footer_page.evaluate(
-					f"clone_and_update('{'#footer-render-container' if self.is_print_designer else '.wrapper'}', {total_pages}, {1 if self.is_print_designer else 0}, 'Footer', 1);",
+					f"clone_and_update('#footer-render-container', {total_pages}, 1, 'Footer', 1);",
+					await_promise=True,
+				)
+			else:
+				self.footer_page.evaluate(
+					f"clone_and_update('.wrapper', {total_pages}, 0, 'Footer', 1);",
 					await_promise=True,
 				)
 
