@@ -471,5 +471,9 @@ frappe.search.AwesomeBar = class AwesomeBar {
 		$(document).on("page-change", function (event, data) {
 			me.setup_correct_button(data);
 		});
+
+		$(document).on("form-refresh", function (event, data) {
+			me.setup_correct_button(data.wrapper);
+		});
 	}
 };

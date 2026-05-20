@@ -557,19 +557,6 @@ frappe.ui.Sidebar = class Sidebar {
 	add_standard_items(items) {
 		if (this.standard_items_setup) return;
 		this.standard_items = [];
-		if (!frappe.is_mobile()) {
-			this.standard_items.push({
-				label: __("Search"),
-				icon: "search",
-				standard: true,
-				type: "Button",
-				id: "navbar-modal-search",
-				suffix: {
-					keyboard_shortcut: "Ctrl+K",
-				},
-				class: "navbar-search-bar hidden",
-			});
-		}
 		this.standard_items.push({
 			label: __("Notification"),
 			icon: "bell",
