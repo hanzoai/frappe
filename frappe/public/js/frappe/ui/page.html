@@ -36,12 +36,22 @@
 					</div>
 				</div>
 				{% if(!frappe.is_mobile()) { %}
-				<button id="full-search-button" class="btn btn-default btn-sm navbar-modal-search-mobile hidden" aria-label="{{ __("Search") }}">
-					<svg class="icon icon-sm">
-						<use href="#icon-search"></use>
-					</svg>
-					<span class="ml-2">{%= __("Search") %}</span>
+				<button id="full-search-button" class="btn btn-default btn-sm navbar-modal-search-mobile hidden justify-between" aria-label="{{ __("Search") }}">
+					<div class="flex align-items-center">
+						<svg class="icon icon-sm">
+							<use href="#icon-search"></use>
+						</svg>
+						<span class="ml-2">{%= __("Search") %}</span>
+					</div>
+					<span class="desktop-keyboard-shortcut">
+					{% if(frappe.utils.is_mac()) { %}
+						⌘K
+					{% } else { %}
+						Ctrl+K
+					{% } %}
+                    </span>
 				</button>
+
 				{% } %}
 				<div class="flex col page-actions justify-content-end {% if frappe.is_mobile() %} pl-0 {% endif %}">
 					<!-- buttons -->
