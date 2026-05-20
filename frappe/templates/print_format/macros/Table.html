@@ -19,7 +19,16 @@
 			<tr class="table-row {{ loop.cycle('odd', 'even') }}" data-idx="{{ row.idx }}">
 				{% for column in columns %}
 				<td class="column-value" width="{{ column.width }}%" {{ field_attributes(column) }}>
-					{{ row.get_formatted(column.fieldname) }}
+					{# Render image-bearing fieldtypes as <img>; only http(s)/relative URLs allowed. #}
+					{%- set _img_src = (row.get(column.options) if column.fieldtype == "Image" else row.get(column.fieldname)) -%}
+					{%- set _img_src = (_img_src or "")|string|trim -%}
+					{%- set _is_img_field = column.fieldtype in ("Attach Image", "Image") or (column.fieldtype == "Attach" and frappe.utils.is_image(_img_src)) -%}
+					{%- set _is_safe = _img_src.startswith("/") or _img_src.startswith("http://") or _img_src.startswith("https://") -%}
+					{%- if _is_img_field and _is_safe -%}
+						<img src="{{ _img_src|e }}" alt="{{ _(column.label or '')|e }}" style="max-width: 100%; max-height: 100px;" />
+					{%- else -%}
+						{{ row.get_formatted(column.fieldname) }}
+					{%- endif -%}
 				</td>
 				{% endfor %}
 			</tr>
