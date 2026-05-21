@@ -43,8 +43,21 @@ context("Print Format Builder — create flow", () => {
 
 		cy.visit("/app/print-format-builder");
 		cy.get_open_dialog().should("be.visible");
+
+		// The print_format_name field has depends_on: action === 'Create' and
+		// the dialog runs set_value('action', 'Create') *after* show(), so
+		// the depends_on reveal races with the first keystroke and
+		// cy.fill_field drops the leading 'C'. Set the value via .invoke('val')
+		// and trigger input/change so Frappe's Control picks it up without
+		// going through the keyboard simulator at all.
 		cy.fill_field("doctype", "ToDo", "Link");
-		cy.fill_field("print_format_name", PF_NAME, "Data");
+		cy.get_open_dialog()
+			.find('[data-fieldname="print_format_name"] input:visible')
+			.should("be.enabled")
+			.invoke("val", PF_NAME)
+			.trigger("input")
+			.trigger("change");
+
 		cy.get_open_dialog().find(".btn-primary").contains("Create").click();
 
 		// frappe.client.insert returns the inserted doc — inspect it directly
