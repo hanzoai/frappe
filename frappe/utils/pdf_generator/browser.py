@@ -137,23 +137,16 @@ class Browser:
 		# open header and footer pages
 		self._open_header_footer_pages()
 
-		# Inject update_page_no.js into <head> BEFORE capturing head contents so
-		# clone_and_update is available in both the body page and the header/footer
-		# page contexts (the header template renders {% for tag in head %}).
-		script_path = frappe.get_app_path("frappe", "utils", "pdf_generator", "update_page_no.js")
-		script_tag = soup.new_tag("script")
-		script_tag.append(soup.new_string(frappe.read_file(script_path)))
-		soup.head.append(script_tag)
+		# Inject clone_and_update into <head> so it's available in the header /
+		# footer page contexts that the template renders via {% for tag in head %}.
+		self._inject_page_no_script(soup)
 
 		# get tags to pass to header template.
 		head = soup.find("head").contents
 		styles = soup.find_all("style")
 
-		# Use networkIdle so get_element_height() measures the wrapper AFTER any
-		# letterhead <img> has finished loading. Without networkIdle, header_height
-		# is measured before the image expands the wrapper, paperHeight is set too
-		# small, and wrapper content overflows onto the next page (doc.name and
-		# pagination get pushed forward by ~image-height per page).
+		# Wait for networkIdle so get_element_height() measures the wrapper *after*
+		# any letterhead <img> has loaded — otherwise paperHeight is set too small.
 		header_footer_wait = ["load", "DOMContentLoaded", "networkIdle"]
 		if self.header_page:
 			self.header_page.wait_for_navigate()
@@ -190,6 +183,15 @@ class Browser:
 		for html_id in ["header-html", "footer-html"]:
 			for tag in soup.find_all(id=html_id):
 				tag.extract()
+
+	def _inject_page_no_script(self, soup):
+		"""Inject update_page_no.js into <head> so clone_and_update() is available
+		to the body page and to the header/footer pages (which pick up <head>
+		contents via the chrome_pdf_header_footer template)."""
+		path = frappe.get_app_path("frappe", "utils", "pdf_generator", "update_page_no.js")
+		tag = soup.new_tag("script")
+		tag.append(soup.new_string(frappe.read_file(path)))
+		soup.head.append(tag)
 
 	def try_async_header_footer_pdf(self):
 		if self.header_page and not self.is_header_dynamic:

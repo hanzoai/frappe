@@ -7,20 +7,14 @@
 		{%- endfor %}
 
 		<style>
+			/* No body / wrapper padding: paperHeight is calculated from the wrapper's
+			   measured height, so any extra vertical space pushes content off the page. */
 			body {
 				margin: 0 !important;
 				border: 0 !important;
 				padding: 0 !important;
 			}
-			/* Dont show explicit links for <a> tags */
 			@media print {
-				/*
-				 * No body padding-top / wrapper padding here: any extra vertical
-				 * space pushes the bottom of each wrapper off the page because
-				 * paperHeight is calculated from the wrapper's measured height.
-				 * The wkhtmltopdf-era 1mm padding shifted doc.name and pagination
-				 * onto the next page on multi-page PDFs.
-				 */
 				.wrapper {
 					box-sizing: border-box;
 					padding: 0 !important;
@@ -32,12 +26,7 @@
 				a[href]:after {
 					content: none;
 				}
-				/*
-				 * Prevent any child element (e.g. letterhead with wkhtmltopdf-era
-				 * page-break-after:always) from splitting a single wrapper clone
-				 * across multiple PDF pages.  Only the .wrapper itself carries the
-				 * deliberate break-after used by _build_numbered_pages_html.
-				 */
+				/* Block child elements from forcing a page break inside a wrapper clone. */
 				.wrapper * {
 					page-break-after: auto !important;
 					break-after: auto !important;

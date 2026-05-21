@@ -29,6 +29,17 @@ def get_html(doctype, name, print_format, letterhead=None):
 class PrintFormatGenerator:
 	"""Generate a PDF of a Document using Chromium-based rendering."""
 
+	_TOP_POSITIONS: ClassVar[set[str]] = {"top_left", "top_center", "top_right"}
+	_BOTTOM_POSITIONS: ClassVar[set[str]] = {"bottom_left", "bottom_center", "bottom_right"}
+	_ALIGN_MAP: ClassVar[dict[str, str]] = {
+		"top_left": "left",
+		"top_center": "center",
+		"top_right": "right",
+		"bottom_left": "left",
+		"bottom_center": "center",
+		"bottom_right": "right",
+	}
+
 	def __init__(self, print_format, doc, letterhead=None):
 		self.print_format = frappe.get_doc("Print Format", print_format)
 		self.doc = doc
@@ -63,6 +74,8 @@ class PrintFormatGenerator:
 			}
 		)
 
+	# ----- HTML preview (browser printview) ------------------------------
+
 	def get_html_preview(self):
 		header_html, footer_html = self.get_header_footer_html()
 		self.context.header = header_html
@@ -81,61 +94,79 @@ class PrintFormatGenerator:
 			footer_html = frappe.render_template("templates/print_format/print_footer.html", self.context)
 		return header_html, footer_html
 
+	# ----- PDF (Chrome) --------------------------------------------------
+
 	def render_pdf(self):
-		"""Return PDF bytes using Chromium renderer."""
+		"""Return PDF bytes using the Chromium renderer."""
 		from frappe.utils.pdf import get_chrome_pdf
 
-		html = self._build_html_for_chrome()
-		options = self._get_margin_options()
+		pf = self.print_format
+		options = {
+			"margin-top": f"{pf.margin_top}mm",
+			"margin-bottom": f"{pf.margin_bottom}mm",
+			"margin-left": f"{pf.margin_left}mm",
+			"margin-right": f"{pf.margin_right}mm",
+		}
 		return get_chrome_pdf(
-			print_format=self.print_format.name,
-			html=html,
+			print_format=pf.name,
+			html=self._build_html_for_chrome(),
 			options=options,
 			output=None,
 			pdf_generator="chrome",
 		)
 
-	_TOP_POSITIONS: ClassVar[set[str]] = {"top_left", "top_center", "top_right"}
-	_BOTTOM_POSITIONS: ClassVar[set[str]] = {"bottom_left", "bottom_center", "bottom_right"}
-	_ALIGN_MAP: ClassVar[dict[str, str]] = {
-		"top_left": "left",
-		"top_center": "center",
-		"top_right": "right",
-		"bottom_left": "left",
-		"bottom_center": "center",
-		"bottom_right": "right",
-	}
-
 	def _build_html_for_chrome(self):
-		"""Build HTML for Chrome rendering.
-
-		When repeat_header_footer is on: wrap header/footer in #header-html / #footer-html so
-		Chrome extracts them as overlay pages shown on every page.
-		When off: render them inline so they appear as body content (first/last page only).
-		Page numbers are only supported in overlay mode; inline mode omits them.
+		"""Build the body HTML with header/footer wrapped in ``#header-html`` /
+		``#footer-html`` so the Chrome PDF pipeline extracts them as overlays
+		that repeat on every page.
 		"""
 		self.context.for_chrome = True
 		self.context.header_height = 0
 		self.context.footer_height = 0
 
-		# Always use overlay mode for print_format_builder_beta so the header/footer
-		# repeat on every page, regardless of the global "Repeat Header and Footer" setting.
-		repeat = 1
-
-		header = self._render_chrome_header(with_page_number=repeat)
-		footer = self._render_chrome_footer(with_page_number=repeat)
-
-		if repeat:
-			self.context.header = f'<div id="header-html">{header}</div>' if header else ""
-			self.context.footer = f'<div id="footer-html">{footer}</div>' if footer else ""
-		else:
-			# Inline: shows on first page (header) and last page (footer) naturally
-			self.context.header = header or ""
-			self.context.footer = footer or ""
-
+		header = self._render_overlay("header")
+		footer = self._render_overlay("footer")
+		self.context.header = f'<div id="header-html">{header}</div>' if header else ""
+		self.context.footer = f'<div id="footer-html">{footer}</div>' if footer else ""
 		return self.get_main_html()
 
-	def _page_number_html(self, position):
+	def _render_overlay(self, kind: str) -> str | None:
+		"""Render the header or footer content for the Chrome overlay.
+
+		``kind`` is ``"header"`` or ``"footer"``. Page-number HTML is inserted
+		at the top for header positions and at the bottom for footer positions
+		so ``Top *`` / ``Bottom *`` actually appear where the name suggests.
+		"""
+		is_header = kind == "header"
+		page_pos = (self.print_format.page_number or "").lower().replace(" ", "_")
+		valid_positions = self._TOP_POSITIONS if is_header else self._BOTTOM_POSITIONS
+		wants_page_no = page_pos in valid_positions
+
+		if is_header:
+			letterhead_html = self.letterhead and self.letterhead.content
+		else:
+			letterhead_html = self.letterhead and self.letterhead.footer
+		layout_html = self.layout.get(kind)
+
+		if not (letterhead_html or layout_html or wants_page_no):
+			return None
+
+		page_no_html = self._page_number_html(page_pos) if wants_page_no else None
+		ctx = {"doc": self.context.doc}
+
+		# For headers the page number goes ABOVE the letterhead, for footers BELOW.
+		parts = []
+		if is_header and page_no_html:
+			parts.append(page_no_html)
+		if letterhead_html:
+			parts.append(frappe.render_template(letterhead_html, ctx))
+		if layout_html:
+			parts.append(frappe.render_template(layout_html, ctx))
+		if not is_header and page_no_html:
+			parts.append(page_no_html)
+		return "\n".join(parts) or None
+
+	def _page_number_html(self, position: str) -> str:
 		align = self._ALIGN_MAP.get(position, "center")
 		return (
 			f'<div style="text-align:{align};font-size:10px;padding:2px 0;">'
@@ -145,52 +176,7 @@ class PrintFormatGenerator:
 			"</div>"
 		)
 
-	def _render_chrome_header(self, with_page_number=True):
-		"""Render header content for Chrome (no position:fixed CSS)."""
-		page_pos = (self.print_format.page_number or "").lower().replace(" ", "_")
-		wants_page_no = with_page_number and page_pos in self._TOP_POSITIONS
-		has_content = self.letterhead or self.layout.get("header")
-
-		if not has_content and not wants_page_no:
-			return None
-
-		parts = []
-		# Page number goes FIRST in the header so "Top Left/Center/Right" actually
-		# renders above the letterhead and document-header, not squeezed underneath.
-		if wants_page_no:
-			parts.append(self._page_number_html(page_pos))
-		if self.letterhead and self.letterhead.content:
-			parts.append(frappe.render_template(self.letterhead.content, {"doc": self.context.doc}))
-		if self.layout.get("header"):
-			parts.append(frappe.render_template(self.layout["header"], {"doc": self.context.doc}))
-		return "\n".join(parts) or None
-
-	def _render_chrome_footer(self, with_page_number=True):
-		"""Render footer content for Chrome (no position:fixed CSS)."""
-		page_pos = (self.print_format.page_number or "").lower().replace(" ", "_")
-		wants_page_no = with_page_number and page_pos in self._BOTTOM_POSITIONS
-		has_content = self.layout.get("footer") or (self.letterhead and self.letterhead.footer)
-
-		if not has_content and not wants_page_no:
-			return None
-
-		parts = []
-		if self.layout.get("footer"):
-			parts.append(frappe.render_template(self.layout["footer"], {"doc": self.context.doc}))
-		if self.letterhead and self.letterhead.footer:
-			parts.append(frappe.render_template(self.letterhead.footer, {"doc": self.context.doc}))
-		if wants_page_no:
-			parts.append(self._page_number_html(page_pos))
-		return "\n".join(parts) or None
-
-	def _get_margin_options(self):
-		pf = self.print_format
-		return {
-			"margin-top": f"{pf.margin_top}mm",
-			"margin-bottom": f"{pf.margin_bottom}mm",
-			"margin-left": f"{pf.margin_left}mm",
-			"margin-right": f"{pf.margin_right}mm",
-		}
+	# ----- layout normalisation ------------------------------------------
 
 	def get_layout(self, print_format):
 		layout = frappe.parse_json(print_format.format_data)
@@ -209,15 +195,7 @@ class PrintFormatGenerator:
 		return layout
 
 	def process_margin_texts(self, layout):
-		margin_text_keys = [
-			"top_left",
-			"top_center",
-			"top_right",
-			"bottom_left",
-			"bottom_center",
-			"bottom_right",
-		]
-		for key in margin_text_keys:
+		for key in (*self._TOP_POSITIONS, *self._BOTTOM_POSITIONS):
 			text = layout.get("text_" + key)
 			if text and "{{" in text:
 				layout["text_" + key] = frappe.render_template(text, self.context)
