@@ -5,6 +5,8 @@ frappe.pages["print-format-builder"].on_page_load = function (wrapper) {
 		single_column: true,
 	});
 
+	frappe.breadcrumbs.add("Setup", "Print Format");
+
 	// hot reload in development
 	if (frappe.boot.developer_mode) {
 		frappe.hot_update = frappe.hot_update || [];
