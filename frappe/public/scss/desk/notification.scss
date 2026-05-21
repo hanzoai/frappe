@@ -361,6 +361,9 @@
 @include media-breakpoint-down(sm) {
 	.dropdown-notifications {
 		.notifications-list {
+			position: fixed;
+			left: 0;
+			z-index: 1300;
 			max-height: 100vh;
 			min-width: 100vw;
 			width: calc(90vw - 60px);
