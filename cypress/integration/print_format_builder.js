@@ -47,21 +47,16 @@ context("Print Format Builder — create flow", () => {
 		cy.fill_field("print_format_name", PF_NAME, "Data");
 		cy.get_open_dialog().find(".btn-primary").contains("Create").click();
 
-		cy.wait("@insert").its("response.statusCode").should("eq", 200);
-
-		cy.window().then((win) =>
-			cy
-				.wrap(
-					win.frappe.db.get_value("Print Format", PF_NAME, [
-						"print_format_builder_beta",
-						"doc_type",
-					])
-				)
-				.then(({ message }) => {
-					expect(Number(message.print_format_builder_beta)).to.equal(1);
-					expect(message.doc_type).to.equal("ToDo");
-				})
-		);
+		// frappe.client.insert returns the inserted doc — inspect it directly
+		// rather than round-tripping through frappe.db.get_value (which can
+		// strip fields the user can't read in list view).
+		cy.wait("@insert").then((interception) => {
+			expect(interception.response.statusCode).to.equal(200);
+			const doc = interception.response.body.message;
+			expect(doc.name).to.equal(PF_NAME);
+			expect(doc.doc_type).to.equal("ToDo");
+			expect(Number(doc.print_format_builder_beta)).to.equal(1);
+		});
 	});
 
 	// 3. Loading the builder for an existing format and saving a change
@@ -95,18 +90,13 @@ context("Print Format Builder — create flow", () => {
 		// dirty pill appears
 		cy.get(".indicator-pill.orange", { timeout: 5000 }).should("contain", "Not Saved");
 
-		// Save via the page's primary action
+		// Save via the page's primary action; assert the saved doc reflects
+		// the new margin (frappe.client.save returns the persisted doc).
 		cy.contains(".page-actions .primary-action", "Save").click({ force: true });
-		cy.wait("@save").its("response.statusCode").should("eq", 200);
+		cy.wait("@save").then((interception) => {
+			expect(interception.response.statusCode).to.equal(200);
+			expect(Number(interception.response.body.message.margin_top)).to.equal(9);
+		});
 		cy.get(".indicator-pill.orange").should("not.exist");
-
-		// value persisted
-		cy.window().then((win) =>
-			cy
-				.wrap(win.frappe.db.get_value("Print Format", PF_NAME, "margin_top"))
-				.then(({ message }) => {
-					expect(Number(message.margin_top)).to.equal(9);
-				})
-		);
 	});
 });
