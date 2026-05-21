@@ -20,6 +20,10 @@ frappe.pages["print-format-builder-classic"].on_page_show = function (wrapper) {
 			frappe.route_options = null;
 			frappe.print_format_builder.refresh();
 		}
+	} else {
+		// No route arg and no route_options — classic builder is edit-only,
+		// so redirect to the new builder's create/edit dialog.
+		frappe.print_format_builder.show_start();
 	}
 };
 

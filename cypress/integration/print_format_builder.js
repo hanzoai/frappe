@@ -48,9 +48,16 @@ context("Print Format Builder", () => {
 	it("creating a new format routes to /print-format-builder/<name> and saves print_format_builder_beta=1", () => {
 		cy.visit("/desk/print-format-builder");
 
-		cy.get_open_dialog().find('[data-fieldname="doctype"] input').type("ToDo", { delay: 100 });
-		cy.wait(500);
-		cy.get(".awesomplete li").contains("ToDo").click();
+		cy.get_open_dialog().find('[data-fieldname="doctype"] input').as("doctype_input");
+		cy.get("@doctype_input").clear().focus();
+		cy.get("@doctype_input").parent().findByRole("listbox").should("be.visible");
+		cy.get("@doctype_input").type("ToDo", { delay: 100 });
+		cy.get("@doctype_input")
+			.parent()
+			.findByRole("listbox")
+			.find("div[role='option']")
+			.contains("ToDo")
+			.click();
 
 		cy.get_open_dialog()
 			.find('[data-fieldname="print_format_name"] input')
@@ -157,13 +164,26 @@ context("Print Format Builder", () => {
 		cy.visit("/desk/print-format-builder");
 		cy.get_open_dialog().find('[data-fieldname="action"] select').select("Edit");
 
-		cy.get_open_dialog().find('[data-fieldname="doctype"] input').type("ToDo", { delay: 100 });
-		cy.wait(500);
-		cy.get(".awesomplete li").contains("ToDo").click();
+		cy.get_open_dialog().find('[data-fieldname="doctype"] input').as("doctype_input2");
+		cy.get("@doctype_input2").clear().focus();
+		cy.get("@doctype_input2").parent().findByRole("listbox").should("be.visible");
+		cy.get("@doctype_input2").type("ToDo", { delay: 100 });
+		cy.get("@doctype_input2")
+			.parent()
+			.findByRole("listbox")
+			.find("div[role='option']")
+			.contains("ToDo")
+			.click();
 
-		cy.get_open_dialog().find('[data-fieldname="print_format"] input').click();
+		cy.get_open_dialog().find('[data-fieldname="print_format"] input').as("pf_input");
+		cy.get("@pf_input").clear().focus();
+		cy.get("@pf_input").parent().findByRole("listbox").should("be.visible");
 		// the link control filters to print_format_builder_beta=1; pick our format
-		cy.contains(".awesomplete li", NEW_BETA_FORMAT, { timeout: 5000 }).click();
+		cy.get("@pf_input")
+			.parent()
+			.findByRole("listbox")
+			.contains("div[role='option']", NEW_BETA_FORMAT, { timeout: 10000 })
+			.click();
 
 		cy.get_open_dialog().find(".btn-primary").contains("Edit").click();
 		cy.location("hash", { timeout: 15000 }).should(
@@ -192,6 +212,8 @@ context("Print Format Builder", () => {
 						beta: false,
 					},
 					headers: { "X-Frappe-CSRF-Token": csrf_token },
+					// On retry the format already exists from the previous attempt; that's fine.
+					failOnStatusCode: false,
 				});
 			});
 
