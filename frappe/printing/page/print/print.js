@@ -299,6 +299,12 @@ frappe.ui.form.PrintView = class {
 					fieldtype: "Read Only",
 					default: print_format.name || "Standard",
 				},
+				{
+					label: __("Use the new Print Format Builder"),
+					fieldname: "beta",
+					fieldtype: "Check",
+					default: 1,
+				},
 			],
 			(data) => {
 				frappe.call({
@@ -307,11 +313,14 @@ frappe.ui.form.PrintView = class {
 						doctype: this.frm.doctype,
 						name: data.print_format_name,
 						based_on: data.based_on,
-						beta: true,
+						beta: Boolean(data.beta),
 					},
 					callback: (r) => {
 						if (r.message) {
-							frappe.set_route("print-format-builder", r.message.name);
+							let route = r.message.print_format_builder_beta
+								? "print-format-builder"
+								: "print-format-builder-classic";
+							frappe.set_route(route, r.message.name);
 							this.print_format_selector.val(data.print_format_name);
 						}
 					},
@@ -354,6 +363,12 @@ frappe.ui.form.PrintView = class {
 						fieldtype: "Read Only",
 						default: print_format.name || "Standard",
 					},
+					{
+						label: __("Use the new Print Format Builder"),
+						fieldname: "beta",
+						fieldtype: "Check",
+						default: 1,
+					},
 				],
 				(data) => {
 					frappe.call({
@@ -362,11 +377,14 @@ frappe.ui.form.PrintView = class {
 							doctype: this.frm.doctype,
 							name: data.print_format_name,
 							based_on: data.based_on,
-							beta: true,
+							beta: Boolean(data.beta),
 						},
 						callback: (r) => {
 							if (r.message) {
-								frappe.set_route("print-format-builder", r.message.name);
+								let route = r.message.print_format_builder_beta
+									? "print-format-builder"
+									: "print-format-builder-classic";
+								frappe.set_route(route, r.message.name);
 							}
 						},
 					});

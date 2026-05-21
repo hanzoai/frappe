@@ -3,10 +3,8 @@ import frappe
 
 @frappe.whitelist()
 def create_custom_format(
-	doctype: str, name: str | int, based_on: str = "Standard", beta: str | int | bool = True
+	doctype: str, name: str | int, based_on: str = "Standard", beta: str | int | bool = False
 ):
-	# beta defaults to True so new formats use the modern print format builder;
-	# pass beta=False explicitly to create a classic-builder format.
 	doc = frappe.new_doc("Print Format")
 	doc.doc_type = doctype
 	doc.name = name
