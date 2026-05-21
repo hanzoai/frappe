@@ -62,12 +62,16 @@ context("Print Format Builder — create flow", () => {
 	// 3. Loading the builder for an existing format and saving a change
 	//    (creates the doc via API up-front so this test doesn't depend on #2)
 	it("loads the builder and Save persists a margin change", () => {
+		// Pre-populate format_data so PrintFormatBuilder.vue's onMounted
+		// auto-save doesn't fire on first load (that auto-save's follow-up
+		// fetch would otherwise overwrite our typed value before we click Save).
 		cy.insert_doc(
 			"Print Format",
 			{
 				name: PF_NAME,
 				doc_type: "ToDo",
 				print_format_builder_beta: 1,
+				format_data: JSON.stringify({ header: "", sections: [] }),
 			},
 			true
 		);
@@ -75,16 +79,22 @@ context("Print Format Builder — create flow", () => {
 		cy.intercept("POST", "api/method/frappe.client.save").as("save");
 		cy.visit(`/app/print-format-builder/${encodeURIComponent(PF_NAME)}`);
 
-		// PrintFormatBuilder.vue only renders the subtree once
-		// print_format + meta + layout are all loaded — give it time.
 		cy.contains(".sidebar-menu h5", "Page Margins", { timeout: 30000 }).should("be.visible");
 
-		// change Top margin to 9
+		// Make sure no auto-save / freeze overlay is still in flight before we type.
+		cy.get(".freeze").should("not.exist");
+		cy.get(".indicator-pill.orange").should("not.exist");
+
+		// Change Top margin to 9. Explicit change trigger because the Vue
+		// input uses `@change` on a one-way `:value` binding and Cypress's
+		// .blur() alone doesn't always emit a synthetic change event that
+		// the Vue listener picks up.
 		cy.contains(".margin-controls label", "Top")
 			.closest(".form-group")
 			.find('input[type="number"]')
 			.clear()
 			.type("9")
+			.trigger("change")
 			.blur();
 
 		// dirty pill appears
