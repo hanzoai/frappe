@@ -17,6 +17,8 @@ from frappe.utils import strip_html
 
 
 class Workspace(Document):
+	_DOCTYPE_NAME = "Workspace"
+
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 

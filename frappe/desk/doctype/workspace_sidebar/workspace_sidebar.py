@@ -16,6 +16,8 @@ from frappe.utils.caching import site_cache
 
 
 class WorkspaceSidebar(Document):
+	_DOCTYPE_NAME = "Workspace Sidebar"
+
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
