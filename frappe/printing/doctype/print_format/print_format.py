@@ -8,7 +8,7 @@ import frappe.utils
 from frappe import _
 from frappe.model.document import Document
 from frappe.utils.jinja import validate_template
-from frappe.utils.weasyprint import download_pdf, get_html
+from frappe.utils.print_format_generator import download_pdf, get_html
 
 
 class PrintFormat(Document):

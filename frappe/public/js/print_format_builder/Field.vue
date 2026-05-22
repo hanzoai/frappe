@@ -253,10 +253,6 @@ watch(
 	flex: none;
 }
 
-.field-actions .btn {
-	opacity: 0;
-}
-
 .field-actions .btn-icon {
 	box-shadow: none;
 }
@@ -267,10 +263,6 @@ watch(
 
 .btn-icon:hover {
 	background-color: white;
-}
-
-.field:hover .btn {
-	opacity: 1;
 }
 
 .table-controls {
