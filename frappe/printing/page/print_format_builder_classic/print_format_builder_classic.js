@@ -68,7 +68,14 @@ frappe.PrintFormatBuilder = class PrintFormatBuilder {
 	}
 	show_start() {
 		// Classic builder is kept only for editing pre-existing formats. New
-		// formats are always created via the modern builder.
+		// formats are always created via the modern builder. But the
+		// constructor calls refresh() (and therefore show_start()) before
+		// on_page_show has had a chance to fetch the doc and assign
+		// this.print_format. If the route already has a doc name we're
+		// mid-load — sit tight and let on_page_show finish; otherwise
+		// redirect to the modern builder's create dialog.
+		let route = frappe.get_route();
+		if (route.length > 1) return;
 		frappe.set_route("print-format-builder");
 	}
 	start_edit_print_format() {
