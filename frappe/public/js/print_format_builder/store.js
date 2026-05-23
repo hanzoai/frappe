@@ -107,6 +107,9 @@ export function getStore(print_format_name) {
 	function change_letterhead(_letterhead) {
 		return frappe.db.get_doc("Letter Head", _letterhead).then((doc) => {
 			letterhead.value = doc;
+			if (print_format.value) {
+				print_format.value.letter_head = _letterhead;
+			}
 		});
 	}
 
