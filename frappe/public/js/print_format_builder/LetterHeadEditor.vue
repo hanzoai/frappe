@@ -224,6 +224,13 @@ onMounted(() => {
 	if (!letterhead.value && !layout.value?.letter_head) {
 		const lh_name = frappe.boot.sysdefaults.letter_head;
 		if (lh_name) set_letterhead(lh_name);
+	} else if (letterhead.value?.image) {
+		// letterhead was pre-loaded by fetch() — still need to initialize
+		// aspect_ratio and range_input_field so the slider works
+		get_image_dimensions(letterhead.value.image).then(({ width, height }) => {
+			aspect_ratio.value = width / height;
+			range_input_field.value = aspect_ratio.value > 1 ? "image_width" : "image_height";
+		});
 	}
 
 	watch(
