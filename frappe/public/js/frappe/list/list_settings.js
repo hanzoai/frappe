@@ -162,23 +162,21 @@ export default class ListSettings {
 
 		fields_html.html(`
 			<div class="form-group">
-				<div class="clearfix">
-					<label class="control-label" style="padding-right: 0px;">${__("Fields")}</label>
-					<label class="text-extra-muted float-right">
-						<a class="add-new-fields text-muted">
+				<div class="row flex-fill align-items-center px-1 mb-2">
+					<div class="col-1"></div>
+					<div class="col d-flex align-items-center justify-content-between px-0">
+						<label class="control-label mb-0" style="padding-right: 0;">${__("Fields")}</label>
+						<a class="add-new-fields text-muted" style="font-size: var(--text-xs); white-space: nowrap;">
 							${__("+ Add / Remove Fields")}
 						</a>
-					</label>
-				</div>
-				<div class="row flex-fill mb-1 px-1" style="font-size: var(--text-xs); color: var(--text-muted);">
-					<div class="col"></div>
-					<div class="col-2 text-right pr-2">
+					</div>
+					<div class="col-2 text-right pr-2" style="font-size: var(--text-xs); color: var(--text-muted); white-space: nowrap;">
 						${__("Width (px)")}
 						<span
 							class="ml-1"
 							title="${__("You can also drag column borders directly in the list view to resize")}"
 							style="cursor: help;"
-						>${frappe.utils.icon("information", "xs")}</span>
+						>${frappe.utils.icon("info", "xs")}</span>
 					</div>
 					<div class="col-1"></div>
 				</div>
