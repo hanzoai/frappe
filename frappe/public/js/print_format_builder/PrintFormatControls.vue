@@ -1,19 +1,14 @@
 <template>
-	<div class="sidebar-wrapper" :class="{ collapsed }">
-		<button
-			class="sidebar-toggle-btn"
-			@click="collapsed = !collapsed"
-			:title="collapsed ? __('Show sidebar') : __('Hide sidebar')"
-		>
-			<svg class="icon icon-sm">
-				<use
-					:href="collapsed ? '#icon-panel-right-open' : '#icon-panel-right-close'"
-				></use>
-			</svg>
-		</button>
-		<div v-if="!collapsed" class="form-sidebar">
+	<div class="sidebar-wrapper">
+		<div class="form-sidebar">
 			<details class="sidebar-section" open>
-				<summary class="sidebar-section-title">{{ __("Page Settings") }}</summary>
+				<summary class="sidebar-section-title">
+					{{ __("Page Settings") }}
+					<span
+						class="chevron-icon"
+						v-html="frappe.utils.icon('chevron-down', 'sm')"
+					></span>
+				</summary>
 				<div class="sidebar-section-body">
 					<div class="margin-controls">
 						<div class="form-group" v-for="df in margins" :key="df.fieldname">
@@ -58,7 +53,13 @@
 			</details>
 
 			<details class="sidebar-section" open>
-				<summary class="sidebar-section-title">{{ __("Fields") }}</summary>
+				<summary class="sidebar-section-title">
+					{{ __("Fields") }}
+					<span
+						class="chevron-icon"
+						v-html="frappe.utils.icon('chevron-down', 'sm')"
+					></span>
+				</summary>
 				<div class="sidebar-section-body">
 					<input
 						class="mb-2 form-control form-control-sm"
@@ -156,7 +157,6 @@ import { computed, onMounted, ref, watch, inject } from "vue";
 
 let search_text = ref("");
 let google_fonts = ref([]);
-let collapsed = ref(false);
 
 let store = inject("$store");
 let { meta, print_format, layout } = useStore();
@@ -297,34 +297,8 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 
 <style scoped>
 .sidebar-wrapper {
-	width: 220px;
+	width: 260px;
 	flex-shrink: 0;
-	transition: width 0.2s ease;
-}
-
-.sidebar-wrapper.collapsed {
-	width: 36px;
-}
-
-.sidebar-toggle-btn {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 28px;
-	height: 28px;
-	margin-bottom: 0.5rem;
-	border: 1px solid var(--border-color);
-	border-radius: var(--border-radius);
-	background: var(--bg-light-gray);
-	color: var(--text-muted);
-	cursor: pointer;
-	box-shadow: none;
-	padding: 0;
-}
-
-.sidebar-toggle-btn:hover {
-	background: var(--gray-200);
-	color: var(--text-color);
 }
 
 .form-control {
@@ -332,13 +306,13 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 }
 
 .margin-controls {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
+	display: flex;
 	gap: 0.4rem;
 	margin-bottom: 0.5rem;
 }
 
 .margin-controls .form-group {
+	flex: 1;
 	margin-bottom: 0;
 }
 
@@ -364,14 +338,14 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	justify-content: space-between;
 }
 
-.sidebar-section-title::after {
-	content: "▾";
-	font-size: 10px;
+.chevron-icon {
 	color: var(--text-muted);
 	transition: transform 0.15s;
+	display: flex;
+	align-items: center;
 }
 
-details:not([open]) .sidebar-section-title::after {
+details:not([open]) .chevron-icon {
 	transform: rotate(-90deg);
 }
 
