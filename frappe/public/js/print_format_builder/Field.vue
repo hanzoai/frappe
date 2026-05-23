@@ -1,5 +1,10 @@
 <template>
-	<div class="field" v-show="!df.remove" :title="df.fieldname" @click="editing = true">
+	<div
+		class="field"
+		v-show="!df.remove"
+		:title="df.label || df.fieldname"
+		@click="editing = true"
+	>
 		<div class="drag-handle field-drag-handle">
 			<svg class="icon icon-xs"><use href="#icon-drag"></use></svg>
 		</div>
@@ -190,15 +195,17 @@ watch(
 <style scoped>
 .field {
 	display: flex;
-	align-items: flex-start;
+	align-items: center;
 	gap: 0.25rem;
 	width: 100%;
+	min-width: 0;
 	background-color: var(--bg-light-gray);
 	border-radius: var(--border-radius);
 	border: 1px dashed var(--gray-400);
 	padding: 0.4rem 0.5rem;
 	font-size: var(--text-sm);
 	cursor: default;
+	overflow: hidden;
 }
 
 .field:focus-within {
@@ -211,7 +218,6 @@ watch(
 	color: var(--gray-400);
 	display: flex;
 	align-items: center;
-	padding-top: 1px;
 	flex-shrink: 0;
 }
 

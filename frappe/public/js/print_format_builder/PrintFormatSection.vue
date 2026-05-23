@@ -295,11 +295,13 @@ function toggle_orientation() {
 
 .drag-container {
 	flex: 1;
+	min-width: 0;
 	min-height: 2.5rem;
 	border-radius: var(--border-radius);
 	display: flex;
 	flex-direction: column;
 	gap: 0.4rem;
+	overflow: hidden;
 }
 
 .empty-drop-zone {
