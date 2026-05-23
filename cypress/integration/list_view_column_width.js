@@ -32,10 +32,12 @@ function getColumnWidth(fieldname) {
 		.invoke("outerWidth");
 }
 
-// Helper — simulate a drag-to-resize by dispatching native MouseEvents so that
-// jQuery's $(document) listeners (used by setup_column_resize) receive them.
+// Helper — simulate drag-to-resize using jQuery $.Event so that both the
+// delegated mousedown handler on $result and the document-level
+// mousemove/mouseup handlers receive events with the right pageX values.
 function dragResizeColumn(fieldname, deltaX) {
 	cy.window().then((win) => {
+		const $ = win.$;
 		const handle = win.document.querySelector(
 			`.list-row-head .list-row-col[data-fieldname="${fieldname}"] .list-col-resize-handle`
 		);
@@ -44,33 +46,11 @@ function dragResizeColumn(fieldname, deltaX) {
 		const rect = handle.getBoundingClientRect();
 		const startX = rect.left + rect.width / 2;
 
-		handle.dispatchEvent(
-			new win.MouseEvent("mousedown", {
-				bubbles: true,
-				cancelable: true,
-				button: 0,
-				clientX: startX,
-				pageX: startX,
-			})
-		);
-
-		win.document.dispatchEvent(
-			new win.MouseEvent("mousemove", {
-				bubbles: true,
-				cancelable: true,
-				clientX: startX + deltaX,
-				pageX: startX + deltaX,
-			})
-		);
-
-		win.document.dispatchEvent(
-			new win.MouseEvent("mouseup", {
-				bubbles: true,
-				cancelable: true,
-				clientX: startX + deltaX,
-				pageX: startX + deltaX,
-			})
-		);
+		// Trigger mousedown on the handle so jQuery's delegated handler on $result fires.
+		$(handle).trigger($.Event("mousedown", { pageX: startX, which: 1, button: 0 }));
+		// Trigger mousemove and mouseup on document where the drag listeners are registered.
+		$(win.document).trigger($.Event("mousemove", { pageX: startX + deltaX }));
+		$(win.document).trigger($.Event("mouseup", { pageX: startX + deltaX }));
 	});
 }
 
@@ -90,9 +70,10 @@ context("List View — Column Widths", () => {
 	// ─── 1. DocField width is applied ────────────────────────────────────────────
 
 	it("applies width defined in DocField to the column", () => {
+		// frappe.client.set_value accepts a JSON filter string as the `name` argument
 		cy.call("frappe.client.set_value", {
 			doctype: "DocField",
-			filters: { parent: DOCTYPE, fieldname: "module" },
+			name: JSON.stringify({ parent: DOCTYPE, fieldname: "module" }),
 			fieldname: "width",
 			value: "200",
 		});
@@ -105,7 +86,7 @@ context("List View — Column Widths", () => {
 		// Cleanup
 		cy.call("frappe.client.set_value", {
 			doctype: "DocField",
-			filters: { parent: DOCTYPE, fieldname: "module" },
+			name: JSON.stringify({ parent: DOCTYPE, fieldname: "module" }),
 			fieldname: "width",
 			value: "",
 		});
@@ -116,13 +97,19 @@ context("List View — Column Widths", () => {
 	it("saves and applies column width set in List View Settings dialog", () => {
 		openListSettings();
 
-		cy.get(".fields_order")
-			.filter('[data-fieldname="module"]')
-			.find("input.form-control")
+		// Scope to the modal to avoid ambiguous matches outside the dialog
+		cy.get(".modal-dialog")
+			.find('[data-fieldname="module"] input.form-control')
 			.clear()
 			.type("180");
 
 		cy.findByRole("button", { name: "Save" }).click();
+
+		// Wait for the dialog to close (it hides in the save callback)
+		cy.get(".modal-dialog").should("not.be.visible");
+
+		// Reload so fresh render applies the persisted width via setup_columns()
+		cy.reload();
 		cy.wait(500);
 
 		getColumnWidth("module").should("be.closeTo", 180, 15);
@@ -216,7 +203,7 @@ context("List View — Column Widths", () => {
 		// DocField says 150 px
 		cy.call("frappe.client.set_value", {
 			doctype: "DocField",
-			filters: { parent: DOCTYPE, fieldname: "module" },
+			name: JSON.stringify({ parent: DOCTYPE, fieldname: "module" }),
 			fieldname: "width",
 			value: "150",
 		});
@@ -244,7 +231,7 @@ context("List View — Column Widths", () => {
 		// Cleanup
 		cy.call("frappe.client.set_value", {
 			doctype: "DocField",
-			filters: { parent: DOCTYPE, fieldname: "module" },
+			name: JSON.stringify({ parent: DOCTYPE, fieldname: "module" }),
 			fieldname: "width",
 			value: "",
 		});
