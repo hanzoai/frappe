@@ -29,7 +29,7 @@ defineEmits(["insert"]);
 .section-insert-line {
 	flex: 1;
 	height: 1.5px;
-	background: var(--primary);
+	background: var(--gray-400);
 	border-radius: 1px;
 }
 
@@ -38,9 +38,9 @@ defineEmits(["insert"]);
 	width: 18px;
 	height: 18px;
 	border-radius: 50%;
-	border: 1.5px solid var(--primary);
+	border: 1.5px solid var(--gray-400);
 	background: white;
-	color: var(--primary);
+	color: var(--gray-600);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -51,7 +51,8 @@ defineEmits(["insert"]);
 }
 
 .section-insert-btn:hover {
-	background: var(--primary);
-	color: white;
+	background: var(--gray-200);
+	color: var(--gray-800);
+	border-color: var(--gray-500);
 }
 </style>

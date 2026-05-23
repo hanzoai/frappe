@@ -106,18 +106,15 @@ const props = defineProps(["section"]);
 function set_columns(n) {
 	const current = props.section.columns.length;
 	if (n === current) return;
-	if (n > current) {
-		for (let i = current; i < n; i++) {
-			props.section.columns.push({ label: "", fields: [] });
-		}
-	} else {
-		// merge extra column fields into the last kept column
-		const removed = props.section.columns.splice(n);
-		const last = props.section.columns[n - 1];
-		for (const col of removed) {
-			last.fields = [...last.fields, ...col.fields];
-		}
-	}
+
+	// collect all fields preserving order
+	const all_fields = props.section.columns.flatMap((col) => col.fields);
+
+	// build n fresh columns and distribute fields round-robin
+	const new_columns = Array.from({ length: n }, () => ({ label: "", fields: [] }));
+	all_fields.forEach((field, i) => new_columns[i % n].fields.push(field));
+
+	props.section.columns = new_columns;
 }
 
 function toggle_page_break() {
