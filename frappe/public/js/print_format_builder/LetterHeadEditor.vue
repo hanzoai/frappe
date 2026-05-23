@@ -183,12 +183,7 @@ function upload_image() {
 	});
 }
 function set_letterhead(_letterhead) {
-	store.value.change_letterhead(_letterhead).then(() => {
-		get_image_dimensions(letterhead.value.image).then(({ width, height }) => {
-			aspect_ratio.value = width / height;
-			range_input_field.value = aspect_ratio.value > 1 ? "image_width" : "image_height";
-		});
-	});
+	store.value.change_letterhead(_letterhead);
 }
 function create_letterhead() {
 	let d = new frappe.ui.Dialog({
@@ -219,20 +214,13 @@ function create_letterhead() {
 }
 // mounted
 onMounted(() => {
-	// fetch() already loads the letterhead from format_data; only fall back
-	// to the system default on a brand-new print format that has none set
+	// brand-new print format with no letter head stored — load system default
 	if (!letterhead.value && !layout.value?.letter_head) {
 		const lh_name = frappe.boot.sysdefaults.letter_head;
 		if (lh_name) set_letterhead(lh_name);
-	} else if (letterhead.value?.image) {
-		// letterhead was pre-loaded by fetch() — still need to initialize
-		// aspect_ratio and range_input_field so the slider works
-		get_image_dimensions(letterhead.value.image).then(({ width, height }) => {
-			aspect_ratio.value = width / height;
-			range_input_field.value = aspect_ratio.value > 1 ? "image_width" : "image_height";
-		});
 	}
 
+	// maintain aspect ratio while the user drags the slider
 	watch(
 		() => {
 			return letterhead.value ? letterhead.value[range_input_field.value] : null;
@@ -250,7 +238,22 @@ onMounted(() => {
 	);
 });
 
-// watch
+// initialize slider state whenever the letterhead is set or replaced
+// (covers: pre-loaded by fetch, changed by user, loaded via system default)
+watch(
+	letterhead,
+	(lh) => {
+		if (lh?.image) {
+			get_image_dimensions(lh.image).then(({ width, height }) => {
+				aspect_ratio.value = width / height;
+				range_input_field.value = aspect_ratio.value > 1 ? "image_width" : "image_height";
+			});
+		}
+	},
+	{ immediate: true }
+);
+
+// update content HTML whenever image dimensions or alignment change
 watch(
 	letterhead,
 	() => {
