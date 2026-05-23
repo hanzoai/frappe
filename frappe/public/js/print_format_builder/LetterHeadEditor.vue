@@ -103,7 +103,7 @@ import { get_image_dimensions } from "./utils";
 import { ref, watch, onMounted } from "vue";
 
 // mixin
-let { letterhead, store, print_format } = useStore();
+let { letterhead, store, layout } = useStore();
 
 // variables
 let range_input_field = ref(null);
@@ -219,8 +219,10 @@ function create_letterhead() {
 }
 // mounted
 onMounted(() => {
-	if (!letterhead.value) {
-		const lh_name = print_format.value?.letter_head || frappe.boot.sysdefaults.letter_head;
+	// fetch() already loads the letterhead from format_data; only fall back
+	// to the system default on a brand-new print format that has none set
+	if (!letterhead.value && !layout.value?.letter_head) {
+		const lh_name = frappe.boot.sysdefaults.letter_head;
 		if (lh_name) set_letterhead(lh_name);
 	}
 
