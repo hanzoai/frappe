@@ -221,17 +221,36 @@
 
 .list-col-resize-handle {
 	position: absolute;
-	right: 0;
+	right: -8px;
 	top: 0;
 	bottom: 0;
-	width: 4px;
+	width: 16px;
 	cursor: col-resize;
 	user-select: none;
-	z-index: 1;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-	&:hover {
-		background-color: var(--border-color);
+	&::before {
+		content: "";
+		width: 2px;
+		height: 40%;
+		border-radius: 2px;
+		background-color: var(--gray-400);
+		opacity: 0;
+		transition: opacity 0.15s, height 0.15s, background-color 0.15s;
 	}
+
+	&:hover::before {
+		opacity: 1;
+		height: 65%;
+		background-color: var(--primary);
+	}
+}
+
+.list-row-head .list-row-col:hover .list-col-resize-handle::before {
+	opacity: 0.4;
 }
 
 body.list-col-resizing {
