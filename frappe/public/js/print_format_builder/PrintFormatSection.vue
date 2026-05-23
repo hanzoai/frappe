@@ -40,7 +40,7 @@
 						:title="__('Toggle label orientation (Left→Right)')"
 						@click.stop="toggle_orientation"
 					>
-						<span v-html="frappe.utils.icon('align-justify', 'sm')"></span>
+						<span v-html="frappe.utils.icon('arrow-right-left', 'sm')"></span>
 					</button>
 					<button
 						class="btn btn-xs btn-icon toolbar-btn"
@@ -89,11 +89,15 @@
 										@click.stop="remove_column(i)"
 										v-html="frappe.utils.icon('x', 'xs')"
 									></button>
-									<span
-										class="text-muted"
-										v-html="frappe.utils.icon('plus', 'sm')"
-									></span>
-									<span class="text-muted">{{ __("Drop fields here") }}</span>
+									<div class="empty-drop-zone-hint">
+										<span
+											class="text-muted"
+											v-html="frappe.utils.icon('plus', 'sm')"
+										></span>
+										<span class="text-muted">{{
+											__("Drop fields here")
+										}}</span>
+									</div>
 								</div>
 							</template>
 						</draggable>
@@ -322,15 +326,19 @@ function toggle_orientation() {
 .empty-drop-zone {
 	position: relative;
 	display: flex;
-	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	gap: 0.25rem;
 	min-height: 3rem;
 	border: 1.5px dashed var(--gray-300);
 	border-radius: var(--border-radius);
 	color: var(--text-muted);
 	font-size: var(--text-xs);
+}
+
+.empty-drop-zone-hint {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
 }
 
 .empty-col-remove {
