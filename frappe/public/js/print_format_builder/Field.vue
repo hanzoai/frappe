@@ -5,9 +5,7 @@
 		:title="df.label || df.fieldname"
 		@click="editing = true"
 	>
-		<div class="drag-handle field-drag-handle">
-			<svg class="icon icon-xs"><use href="#icon-drag"></use></svg>
-		</div>
+		<div class="drag-handle field-drag-handle" v-html="frappe.utils.icon('drag', 'xs')"></div>
 		<div class="field-body">
 			<div class="field-content">
 				<div
@@ -38,9 +36,8 @@
 						v-if="df.fieldtype == 'HTML'"
 						class="btn btn-xs btn-icon"
 						@click.stop="edit_html"
-					>
-						<svg class="icon icon-sm"><use href="#icon-edit"></use></svg>
-					</button>
+						v-html="frappe.utils.icon('edit', 'sm')"
+					></button>
 					<button
 						v-if="df.fieldtype == 'Table'"
 						class="btn btn-xs btn-default"
@@ -48,9 +45,11 @@
 					>
 						{{ __("Columns") }}
 					</button>
-					<button class="btn btn-xs btn-icon" @click.stop="df['remove'] = true">
-						<svg class="icon icon-sm"><use href="#icon-x"></use></svg>
-					</button>
+					<button
+						class="btn btn-xs btn-icon"
+						@click.stop="df['remove'] = true"
+						v-html="frappe.utils.icon('x', 'sm')"
+					></button>
 				</div>
 			</div>
 		</div>

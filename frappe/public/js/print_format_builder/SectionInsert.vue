@@ -1,9 +1,11 @@
 <template>
 	<div class="section-insert" @click="$emit('insert')">
 		<div class="section-insert-line"></div>
-		<button class="section-insert-btn" :title="__('Add section here')">
-			<svg class="icon icon-xs"><use href="#icon-plus"></use></svg>
-		</button>
+		<button
+			class="section-insert-btn"
+			:title="__('Add section here')"
+			v-html="frappe.utils.icon('plus', 'xs')"
+		></button>
 		<div class="section-insert-line"></div>
 	</div>
 </template>

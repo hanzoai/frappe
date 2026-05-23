@@ -3,9 +3,11 @@
 		<div class="print-format-section">
 			<div class="section-toolbar">
 				<div class="section-toolbar-left">
-					<div class="drag-handle section-drag-handle" title="Drag to reorder">
-						<svg class="icon icon-sm"><use href="#icon-drag"></use></svg>
-					</div>
+					<div
+						class="drag-handle section-drag-handle"
+						title="Drag to reorder"
+						v-html="frappe.utils.icon('drag', 'sm')"
+					></div>
 					<input
 						class="input-section-label"
 						type="text"
@@ -38,7 +40,7 @@
 						:title="__('Toggle label orientation (Left→Right)')"
 						@click.stop="toggle_orientation"
 					>
-						<svg class="icon icon-sm"><use href="#icon-align-justify"></use></svg>
+						<span v-html="frappe.utils.icon('align-justify', 'sm')"></span>
 					</button>
 					<button
 						class="btn btn-xs btn-icon toolbar-btn"
@@ -48,14 +50,14 @@
 						"
 						@click.stop="toggle_page_break"
 					>
-						<svg class="icon icon-sm"><use href="#icon-separator-vertical"></use></svg>
+						<span v-html="frappe.utils.icon('separator-vertical', 'sm')"></span>
 					</button>
 					<button
 						class="btn btn-xs btn-icon toolbar-btn toolbar-btn-danger"
 						:title="__('Remove section')"
 						@click.stop="section['remove'] = true"
 					>
-						<svg class="icon icon-sm"><use href="#icon-x"></use></svg>
+						<span v-html="frappe.utils.icon('x', 'sm')"></span>
 					</button>
 				</div>
 			</div>
@@ -85,14 +87,12 @@
 										class="btn btn-xs btn-icon empty-col-remove"
 										:title="__('Remove column')"
 										@click.stop="remove_column(i)"
-									>
-										<svg class="icon icon-xs">
-											<use href="#icon-x"></use>
-										</svg>
-									</button>
-									<svg class="icon icon-sm text-muted">
-										<use href="#icon-plus"></use>
-									</svg>
+										v-html="frappe.utils.icon('x', 'xs')"
+									></button>
+									<span
+										class="text-muted"
+										v-html="frappe.utils.icon('plus', 'sm')"
+									></span>
 									<span class="text-muted">{{ __("Drop fields here") }}</span>
 								</div>
 							</template>

@@ -86,9 +86,10 @@
 										@click="add_to_layout(element)"
 									>
 										<span>{{ element.label }}</span>
-										<svg class="icon icon-xs text-muted">
-											<use href="#icon-plus"></use>
-										</svg>
+										<span
+											class="text-muted"
+											v-html="frappe.utils.icon('plus', 'xs')"
+										></span>
 									</div>
 								</template>
 							</draggable>
@@ -110,9 +111,10 @@
 										@click="add_to_layout(element)"
 									>
 										<span>{{ element.label }}</span>
-										<svg class="icon icon-xs text-muted">
-											<use href="#icon-plus"></use>
-										</svg>
+										<span
+											class="text-muted"
+											v-html="frappe.utils.icon('plus', 'xs')"
+										></span>
 									</div>
 								</template>
 							</draggable>
