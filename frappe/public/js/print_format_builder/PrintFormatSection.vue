@@ -55,7 +55,7 @@
 						:title="__('Remove section')"
 						@click.stop="section['remove'] = true"
 					>
-						<svg class="icon icon-sm"><use href="#icon-delete"></use></svg>
+						<svg class="icon icon-sm"><use href="#icon-x"></use></svg>
 					</button>
 				</div>
 			</div>
@@ -80,6 +80,16 @@
 									v-if="column.fields.filter((f) => !f.remove).length === 0"
 									class="empty-drop-zone"
 								>
+									<button
+										v-if="section.columns.length > 1"
+										class="btn btn-xs btn-icon empty-col-remove"
+										:title="__('Remove column')"
+										@click.stop="remove_column(i)"
+									>
+										<svg class="icon icon-xs">
+											<use href="#icon-x"></use>
+										</svg>
+									</button>
 									<svg class="icon icon-sm text-muted">
 										<use href="#icon-plus"></use>
 									</svg>
@@ -115,6 +125,11 @@ function set_columns(n) {
 	all_fields.forEach((field, i) => new_columns[i % n].fields.push(field));
 
 	props.section.columns = new_columns;
+}
+
+function remove_column(index) {
+	if (props.section.columns.length <= 1) return;
+	props.section.columns.splice(index, 1);
 }
 
 function toggle_page_break() {
@@ -305,6 +320,7 @@ function toggle_orientation() {
 }
 
 .empty-drop-zone {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -315,6 +331,26 @@ function toggle_orientation() {
 	border-radius: var(--border-radius);
 	color: var(--text-muted);
 	font-size: var(--text-xs);
+}
+
+.empty-col-remove {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	padding: 2px;
+	box-shadow: none;
+	color: var(--gray-500);
+	opacity: 0;
+	transition: opacity 0.1s;
+}
+
+.empty-drop-zone:hover .empty-col-remove {
+	opacity: 1;
+}
+
+.empty-col-remove:hover {
+	background: var(--red-50);
+	color: var(--red-500);
 }
 
 .page-break-indicator {
