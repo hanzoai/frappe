@@ -222,12 +222,11 @@
 .list-col-resize-handle {
 	position: absolute;
 	right: -8px;
-	top: 10%;
-	bottom: 10%;
+	top: 0;
+	bottom: 0;
 	width: 16px;
 	cursor: col-resize;
 	user-select: none;
-	z-index: 2;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -253,7 +252,7 @@
 
 // Darken & grow all separators when cursor enters the header row
 .list-row-head:hover .list-col-resize-handle::before {
-	background-color: var(--gray-700);
+	background-color: var(--gray-600);
 	width: 3px;
 	height: 80%;
 	opacity: 0.7;
