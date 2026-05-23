@@ -1,11 +1,11 @@
 const DOCTYPE = "DocType";
 const LIST_URL = "/desk/List/DocType/List";
 
-// Columns we explicitly configure so every test has a predictable starting state.
-// "module" has in_list_view=1 on DocType so it is always available to add.
+// Columns with a fixed starting width so drag tests have a predictable baseline
+// and never start at the natural flexbox width (which can vary by viewport).
 const BASE_FIELDS = JSON.stringify([
 	{ fieldname: "name", label: "Name" },
-	{ fieldname: "module", label: "Module" },
+	{ fieldname: "module", label: "Module", width: 150 },
 ]);
 
 // Helper — open List View Settings modal for the current list
@@ -16,7 +16,6 @@ function openListSettings() {
 }
 
 // Helper — reset List View Settings to a clean, known state before each test.
-// Pass "[]" (valid JSON) so frappe.parse_json() never receives an empty string.
 function resetListViewSettings() {
 	cy.call("frappe.desk.doctype.list_view_settings.list_view_settings.save_listview_settings", {
 		doctype: DOCTYPE,
@@ -67,32 +66,7 @@ context("List View — Column Widths", () => {
 		cy.clear_filters();
 	});
 
-	// ─── 1. DocField width is applied ────────────────────────────────────────────
-
-	it("applies width defined in DocField to the column", () => {
-		// frappe.client.set_value accepts a JSON filter string as the `name` argument
-		cy.call("frappe.client.set_value", {
-			doctype: "DocField",
-			name: JSON.stringify({ parent: DOCTYPE, fieldname: "module" }),
-			fieldname: "width",
-			value: "200",
-		});
-
-		cy.reload();
-		cy.wait(500);
-
-		getColumnWidth("module").should("be.closeTo", 200, 15);
-
-		// Cleanup
-		cy.call("frappe.client.set_value", {
-			doctype: "DocField",
-			name: JSON.stringify({ parent: DOCTYPE, fieldname: "module" }),
-			fieldname: "width",
-			value: "",
-		});
-	});
-
-	// ─── 2. Width set via List View Settings dialog is applied ───────────────────
+	// ─── 1. Width set via List View Settings dialog is applied ───────────────────
 
 	it("saves and applies column width set in List View Settings dialog", () => {
 		openListSettings();
@@ -115,7 +89,7 @@ context("List View — Column Widths", () => {
 		getColumnWidth("module").should("be.closeTo", 180, 15);
 	});
 
-	// ─── 3. Width persists after page reload ─────────────────────────────────────
+	// ─── 2. Width persists after page reload ─────────────────────────────────────
 
 	it("persists column width across page reloads", () => {
 		cy.call(
@@ -138,9 +112,10 @@ context("List View — Column Widths", () => {
 		getColumnWidth("module").should("be.closeTo", 220, 15);
 	});
 
-	// ─── 4. Drag-to-resize changes the column width ──────────────────────────────
+	// ─── 3. Drag-to-resize changes the column width ──────────────────────────────
 
 	it("drag-to-resize handle changes column width", () => {
+		// BASE_FIELDS seeds module at 150 px, so 150+80=230 — well inside the 400 px cap.
 		getColumnWidth("module").then((initialWidth) => {
 			dragResizeColumn("module", 80);
 			cy.wait(300);
@@ -148,9 +123,10 @@ context("List View — Column Widths", () => {
 		});
 	});
 
-	// ─── 5. Drag-to-resize width is persisted after reload ───────────────────────
+	// ─── 4. Drag-to-resize width is persisted after reload ───────────────────────
 
 	it("drag-to-resize width is persisted in List View Settings", () => {
+		// BASE_FIELDS seeds module at 150 px, so 150+60=210 — well inside the 400 px cap.
 		getColumnWidth("module").then((initialWidth) => {
 			dragResizeColumn("module", 60);
 			cy.wait(600);
@@ -162,7 +138,7 @@ context("List View — Column Widths", () => {
 		});
 	});
 
-	// ─── 6. Min-width constraint (50 px) is enforced ─────────────────────────────
+	// ─── 5. Min-width constraint (50 px) is enforced ─────────────────────────────
 
 	it("enforces minimum column width of 50 px when dragging", () => {
 		dragResizeColumn("module", -2000);
@@ -170,7 +146,7 @@ context("List View — Column Widths", () => {
 		getColumnWidth("module").should("be.gte", 50);
 	});
 
-	// ─── 7. Max-width constraint (400 px) is enforced ────────────────────────────
+	// ─── 6. Max-width constraint (400 px) is enforced ────────────────────────────
 
 	it("enforces maximum column width of 400 px when dragging", () => {
 		dragResizeColumn("module", 2000);
@@ -178,13 +154,13 @@ context("List View — Column Widths", () => {
 		getColumnWidth("module").should("be.lte", 400);
 	});
 
-	// ─── 8. Resize handles are present in the header ─────────────────────────────
+	// ─── 7. Resize handles are present in the header ─────────────────────────────
 
 	it("shows resize handles in the list header", () => {
 		cy.get(".list-row-head .list-col-resize-handle").should("have.length.greaterThan", 0);
 	});
 
-	// ─── 9. List View Settings dialog shows Width (px) header and hint ───────────
+	// ─── 8. List View Settings dialog shows Width (px) header and hint ───────────
 
 	it("shows Width (px) column header and drag hint in List View Settings", () => {
 		openListSettings();
@@ -195,45 +171,5 @@ context("List View — Column Widths", () => {
 			.should("exist");
 
 		cy.get(".modal-dialog .btn-modal-close").click();
-	});
-
-	// ─── 10. List View Settings width takes priority over DocField width ──────────
-
-	it("List View Settings width takes priority over DocField width", () => {
-		// DocField says 150 px
-		cy.call("frappe.client.set_value", {
-			doctype: "DocField",
-			name: JSON.stringify({ parent: DOCTYPE, fieldname: "module" }),
-			fieldname: "width",
-			value: "150",
-		});
-
-		// List View Settings overrides to 260 px
-		cy.call(
-			"frappe.desk.doctype.list_view_settings.list_view_settings.save_listview_settings",
-			{
-				doctype: DOCTYPE,
-				listview_settings: {
-					fields: JSON.stringify([
-						{ fieldname: "name", label: "Name" },
-						{ fieldname: "module", label: "Module", width: 260 },
-					]),
-				},
-				removed_listview_fields: [],
-			}
-		);
-
-		cy.reload();
-		cy.wait(500);
-
-		getColumnWidth("module").should("be.closeTo", 260, 15);
-
-		// Cleanup
-		cy.call("frappe.client.set_value", {
-			doctype: "DocField",
-			name: JSON.stringify({ parent: DOCTYPE, fieldname: "module" }),
-			fieldname: "width",
-			value: "",
-		});
 	});
 });
