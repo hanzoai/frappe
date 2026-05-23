@@ -279,6 +279,12 @@ body.list-col-resizing {
 		position: relative;
 	}
 
+	// Right-aligned columns have text flush against the right edge where the
+	// resize handle sits — add breathing room so they don't look glued together
+	.list-row-col.text-right > span {
+		padding-right: 14px;
+	}
+
 	.list-subject {
 		font-weight: normal;
 	}
