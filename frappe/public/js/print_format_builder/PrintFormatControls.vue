@@ -1,6 +1,17 @@
 <template>
-	<div style="width: 220px">
-		<div class="form-sidebar">
+	<div class="sidebar-wrapper" :class="{ collapsed }">
+		<button
+			class="sidebar-toggle-btn"
+			@click="collapsed = !collapsed"
+			:title="collapsed ? __('Show sidebar') : __('Hide sidebar')"
+		>
+			<svg class="icon icon-sm">
+				<use
+					:href="collapsed ? '#icon-panel-right-open' : '#icon-panel-right-close'"
+				></use>
+			</svg>
+		</button>
+		<div v-if="!collapsed" class="form-sidebar">
 			<details class="sidebar-section" open>
 				<summary class="sidebar-section-title">{{ __("Page Settings") }}</summary>
 				<div class="sidebar-section-body">
@@ -145,6 +156,7 @@ import { computed, onMounted, ref, watch, inject } from "vue";
 
 let search_text = ref("");
 let google_fonts = ref([]);
+let collapsed = ref(false);
 
 let store = inject("$store");
 let { meta, print_format, layout } = useStore();
@@ -284,18 +296,49 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 </script>
 
 <style scoped>
+.sidebar-wrapper {
+	width: 220px;
+	flex-shrink: 0;
+	transition: width 0.2s ease;
+}
+
+.sidebar-wrapper.collapsed {
+	width: 36px;
+}
+
+.sidebar-toggle-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	margin-bottom: 0.5rem;
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius);
+	background: var(--bg-light-gray);
+	color: var(--text-muted);
+	cursor: pointer;
+	box-shadow: none;
+	padding: 0;
+}
+
+.sidebar-toggle-btn:hover {
+	background: var(--gray-200);
+	color: var(--text-color);
+}
+
 .form-control {
 	background: var(--control-bg-on-gray);
 }
 
 .margin-controls {
-	display: flex;
-	gap: 0.5rem;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.4rem;
 	margin-bottom: 0.5rem;
 }
 
 .margin-controls .form-group {
-	flex: 1;
 	margin-bottom: 0;
 }
 
