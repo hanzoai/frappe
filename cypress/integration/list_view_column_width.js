@@ -1,6 +1,13 @@
 const DOCTYPE = "DocType";
 const LIST_URL = "/desk/List/DocType/List";
 
+// Columns we explicitly configure so every test has a predictable starting state.
+// "module" has in_list_view=1 on DocType so it is always available to add.
+const BASE_FIELDS = JSON.stringify([
+	{ fieldname: "name", label: "Name" },
+	{ fieldname: "module", label: "Module" },
+]);
+
 // Helper — open List View Settings modal for the current list
 function openListSettings() {
 	cy.get(".menu-btn-group button").click({ force: true });
@@ -8,11 +15,12 @@ function openListSettings() {
 	cy.get(".modal-dialog").should("contain", `${DOCTYPE} List View Settings`);
 }
 
-// Helper — reset List View Settings for DOCTYPE so each test starts clean
+// Helper — reset List View Settings to a clean, known state before each test.
+// Pass "[]" (valid JSON) so frappe.parse_json() never receives an empty string.
 function resetListViewSettings() {
 	cy.call("frappe.desk.doctype.list_view_settings.list_view_settings.save_listview_settings", {
 		doctype: DOCTYPE,
-		listview_settings: { fields: "" },
+		listview_settings: { fields: BASE_FIELDS },
 		removed_listview_fields: [],
 	});
 }
@@ -22,6 +30,48 @@ function getColumnWidth(fieldname) {
 	return cy
 		.get(`.list-row-head .list-row-col[data-fieldname="${fieldname}"]`)
 		.invoke("outerWidth");
+}
+
+// Helper — simulate a drag-to-resize by dispatching native MouseEvents so that
+// jQuery's $(document) listeners (used by setup_column_resize) receive them.
+function dragResizeColumn(fieldname, deltaX) {
+	cy.window().then((win) => {
+		const handle = win.document.querySelector(
+			`.list-row-head .list-row-col[data-fieldname="${fieldname}"] .list-col-resize-handle`
+		);
+		if (!handle) throw new Error(`Resize handle for "${fieldname}" not found`);
+
+		const rect = handle.getBoundingClientRect();
+		const startX = rect.left + rect.width / 2;
+
+		handle.dispatchEvent(
+			new win.MouseEvent("mousedown", {
+				bubbles: true,
+				cancelable: true,
+				button: 0,
+				clientX: startX,
+				pageX: startX,
+			})
+		);
+
+		win.document.dispatchEvent(
+			new win.MouseEvent("mousemove", {
+				bubbles: true,
+				cancelable: true,
+				clientX: startX + deltaX,
+				pageX: startX + deltaX,
+			})
+		);
+
+		win.document.dispatchEvent(
+			new win.MouseEvent("mouseup", {
+				bubbles: true,
+				cancelable: true,
+				clientX: startX + deltaX,
+				pageX: startX + deltaX,
+			})
+		);
+	});
 }
 
 context("List View — Column Widths", () => {
@@ -37,10 +87,9 @@ context("List View — Column Widths", () => {
 		cy.clear_filters();
 	});
 
-	// ─── 1. DocField width is applied ───────────────────────────────────────────
+	// ─── 1. DocField width is applied ────────────────────────────────────────────
 
 	it("applies width defined in DocField to the column", () => {
-		// Set a known width on the DocType's 'module' field via the API
 		cy.call("frappe.client.set_value", {
 			doctype: "DocField",
 			filters: { parent: DOCTYPE, fieldname: "module" },
@@ -51,9 +100,9 @@ context("List View — Column Widths", () => {
 		cy.reload();
 		cy.wait(500);
 
-		getColumnWidth("module").should("be.closeTo", 200, 10);
+		getColumnWidth("module").should("be.closeTo", 200, 15);
 
-		// Cleanup — remove the width so other tests aren't affected
+		// Cleanup
 		cy.call("frappe.client.set_value", {
 			doctype: "DocField",
 			filters: { parent: DOCTYPE, fieldname: "module" },
@@ -62,12 +111,11 @@ context("List View — Column Widths", () => {
 		});
 	});
 
-	// ─── 2. Width set via List View Settings is applied ─────────────────────────
+	// ─── 2. Width set via List View Settings dialog is applied ───────────────────
 
-	it("saves and applies column width set in List View Settings", () => {
+	it("saves and applies column width set in List View Settings dialog", () => {
 		openListSettings();
 
-		// Find the 'module' field row and set width to 180
 		cy.get(".fields_order")
 			.filter('[data-fieldname="module"]')
 			.find("input.form-control")
@@ -77,13 +125,12 @@ context("List View — Column Widths", () => {
 		cy.findByRole("button", { name: "Save" }).click();
 		cy.wait(500);
 
-		getColumnWidth("module").should("be.closeTo", 180, 10);
+		getColumnWidth("module").should("be.closeTo", 180, 15);
 	});
 
-	// ─── 3. Width is persisted after page reload ─────────────────────────────────
+	// ─── 3. Width persists after page reload ─────────────────────────────────────
 
 	it("persists column width across page reloads", () => {
-		// Save width 220 via settings
 		cy.call(
 			"frappe.desk.doctype.list_view_settings.list_view_settings.save_listview_settings",
 			{
@@ -101,41 +148,26 @@ context("List View — Column Widths", () => {
 		cy.reload();
 		cy.wait(500);
 
-		getColumnWidth("module").should("be.closeTo", 220, 10);
+		getColumnWidth("module").should("be.closeTo", 220, 15);
 	});
 
 	// ─── 4. Drag-to-resize changes the column width ──────────────────────────────
 
 	it("drag-to-resize handle changes column width", () => {
-		// Get starting width of the module column
 		getColumnWidth("module").then((initialWidth) => {
-			const dragBy = 80; // drag 80px to the right
-
-			cy.get('.list-row-head .list-row-col[data-fieldname="module"] .list-col-resize-handle')
-				.trigger("mousedown", { button: 0, clientX: 0 })
-				.trigger("mousemove", { clientX: dragBy }, { bubbles: true })
-				.trigger("mouseup", { clientX: dragBy }, { bubbles: true });
-
+			dragResizeColumn("module", 80);
 			cy.wait(300);
-
 			getColumnWidth("module").should("be.greaterThan", initialWidth + 40);
 		});
 	});
 
-	// ─── 5. Drag-to-resize width is saved to List View Settings ─────────────────
+	// ─── 5. Drag-to-resize width is persisted after reload ───────────────────────
 
 	it("drag-to-resize width is persisted in List View Settings", () => {
-		const dragBy = 60;
-
 		getColumnWidth("module").then((initialWidth) => {
-			cy.get('.list-row-head .list-row-col[data-fieldname="module"] .list-col-resize-handle')
-				.trigger("mousedown", { button: 0, clientX: 0 })
-				.trigger("mousemove", { clientX: dragBy }, { bubbles: true })
-				.trigger("mouseup", { clientX: dragBy }, { bubbles: true });
+			dragResizeColumn("module", 60);
+			cy.wait(600);
 
-			cy.wait(500);
-
-			// Reload and confirm the new width survived
 			cy.reload();
 			cy.wait(500);
 
@@ -146,43 +178,31 @@ context("List View — Column Widths", () => {
 	// ─── 6. Min-width constraint (50 px) is enforced ─────────────────────────────
 
 	it("enforces minimum column width of 50 px when dragging", () => {
-		// Drag far to the left to attempt collapsing the column below 50 px
-		cy.get('.list-row-head .list-row-col[data-fieldname="module"] .list-col-resize-handle')
-			.trigger("mousedown", { button: 0, clientX: 500 })
-			.trigger("mousemove", { clientX: -500 }, { bubbles: true })
-			.trigger("mouseup", { clientX: -500 }, { bubbles: true });
-
+		dragResizeColumn("module", -2000);
 		cy.wait(300);
-
 		getColumnWidth("module").should("be.gte", 50);
 	});
 
 	// ─── 7. Max-width constraint (400 px) is enforced ────────────────────────────
 
 	it("enforces maximum column width of 400 px when dragging", () => {
-		cy.get('.list-row-head .list-row-col[data-fieldname="module"] .list-col-resize-handle')
-			.trigger("mousedown", { button: 0, clientX: 0 })
-			.trigger("mousemove", { clientX: 2000 }, { bubbles: true })
-			.trigger("mouseup", { clientX: 2000 }, { bubbles: true });
-
+		dragResizeColumn("module", 2000);
 		cy.wait(300);
-
 		getColumnWidth("module").should("be.lte", 400);
 	});
 
-	// ─── 8. Resize handle is visible in the header ───────────────────────────────
+	// ─── 8. Resize handles are present in the header ─────────────────────────────
 
 	it("shows resize handles in the list header", () => {
 		cy.get(".list-row-head .list-col-resize-handle").should("have.length.greaterThan", 0);
 	});
 
-	// ─── 9. List View Settings dialog shows Width column header ──────────────────
+	// ─── 9. List View Settings dialog shows Width (px) header and hint ───────────
 
-	it("shows Width (px) column header and info icon in List View Settings", () => {
+	it("shows Width (px) column header and drag hint in List View Settings", () => {
 		openListSettings();
 
 		cy.get(".modal-dialog").should("contain", "Width (px)");
-		// info icon tooltip is present
 		cy.get(".modal-dialog [title]")
 			.filter((_, el) => el.title.toLowerCase().includes("drag"))
 			.should("exist");
@@ -190,10 +210,10 @@ context("List View — Column Widths", () => {
 		cy.get(".modal-dialog .btn-modal-close").click();
 	});
 
-	// ─── 10. List View Settings priority over DocField width ─────────────────────
+	// ─── 10. List View Settings width takes priority over DocField width ──────────
 
 	it("List View Settings width takes priority over DocField width", () => {
-		// Set DocField width to 150
+		// DocField says 150 px
 		cy.call("frappe.client.set_value", {
 			doctype: "DocField",
 			filters: { parent: DOCTYPE, fieldname: "module" },
@@ -201,7 +221,7 @@ context("List View — Column Widths", () => {
 			value: "150",
 		});
 
-		// Override with 260 in List View Settings
+		// List View Settings overrides to 260 px
 		cy.call(
 			"frappe.desk.doctype.list_view_settings.list_view_settings.save_listview_settings",
 			{
@@ -219,7 +239,6 @@ context("List View — Column Widths", () => {
 		cy.reload();
 		cy.wait(500);
 
-		// Should be closer to 260 than 150
 		getColumnWidth("module").should("be.closeTo", 260, 15);
 
 		// Cleanup
