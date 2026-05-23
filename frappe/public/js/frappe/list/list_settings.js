@@ -170,6 +170,18 @@ export default class ListSettings {
 						</a>
 					</label>
 				</div>
+				<div class="row flex-fill mb-1 px-1" style="font-size: var(--text-xs); color: var(--text-muted);">
+					<div class="col"></div>
+					<div class="col-2 text-right pr-2">
+						${__("Width (px)")}
+						<span
+							class="ml-1"
+							title="${__("You can also drag column borders directly in the list view to resize")}"
+							style="cursor: help;"
+						>${frappe.utils.icon("information", "xs")}</span>
+					</div>
+					<div class="col-1"></div>
+				</div>
 				<div class="control-input-wrapper">
 				${fields}
 				</div>
