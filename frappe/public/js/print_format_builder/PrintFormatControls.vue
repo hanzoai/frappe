@@ -52,7 +52,7 @@
 				</div>
 			</details>
 
-			<details class="sidebar-section" open>
+			<details class="sidebar-section fields-section" open>
 				<summary class="sidebar-section-title">
 					{{ __("Fields") }}
 					<span
@@ -93,7 +93,7 @@
 								</template>
 							</draggable>
 						</div>
-						<div class="field-group mt-2">
+						<div class="field-group field-group-grow mt-2">
 							<div class="field-group-label">{{ __("Document Fields") }}</div>
 							<draggable
 								class="fields-container"
@@ -299,6 +299,9 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 .sidebar-wrapper {
 	width: 260px;
 	flex-shrink: 0;
+	height: calc(100vh - 95px);
+	display: flex;
+	flex-direction: column;
 }
 
 .form-control {
@@ -349,6 +352,35 @@ details:not([open]) .chevron-icon {
 	transform: rotate(-90deg);
 }
 
+.form-sidebar {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	min-height: 0;
+}
+
+.fields-section {
+	min-height: 0;
+}
+
+.fields-section[open] {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	min-height: 0;
+}
+
+.fields-section > .sidebar-section-body {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	min-height: 0;
+	padding-bottom: 0;
+}
+
 .sidebar-section-body {
 	padding-bottom: 0.75rem;
 }
@@ -357,6 +389,12 @@ details:not([open]) .chevron-icon {
 	display: flex;
 	flex-direction: column;
 	gap: 0;
+}
+
+.field-group-grow {
+	flex: 1;
+	min-height: 0;
+	overflow: hidden;
 }
 
 .field-group-label {
@@ -370,8 +408,9 @@ details:not([open]) .chevron-icon {
 }
 
 .fields-container {
-	max-height: calc(100vh - 36rem);
+	flex: 1;
 	overflow-y: auto;
+	min-height: 0;
 }
 
 .sidebar-field {
