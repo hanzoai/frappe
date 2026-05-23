@@ -35,7 +35,11 @@ export default class ListSettings {
 		});
 		me.dialog.set_values(me.settings);
 		me.dialog.set_primary_action(__("Save"), () => {
+			me.update_fields();
 			let values = me.dialog.get_values();
+			// update_fields() populates me.fields synchronously but set_value() is async,
+			// so bypass the dialog model and use me.fields directly.
+			values.fields = JSON.stringify(me.fields);
 
 			frappe.show_alert({
 				message: __("Saving"),
@@ -101,9 +105,11 @@ export default class ListSettings {
 		let wrapper = fields_html.$wrapper[0];
 		let fields = ``;
 
-		const listview_columns = (me.listview.columns = me.listview.columns.filter(
-			(col) => col.type !== "Tag"
-		));
+		me.listview.columns = me.listview.columns.filter((col) => col.type !== "Tag");
+		const columnByFieldname = {};
+		me.listview.columns.forEach((col) => {
+			if (col.df?.fieldname) columnByFieldname[col.df.fieldname] = col;
+		});
 
 		for (let idx in me.fields) {
 			if (idx == parseInt(this.max_number_of_fields)) {
@@ -136,7 +142,11 @@ export default class ListSettings {
 								class="form-control text-right"
 								data-fieldname="${me.fields[idx].fieldname}"
 								style="background-color: var(--modal-bg); height: 22px;"
-								value="${cint(listview_columns[idx]?.df?.width)}"
+								value="${
+									cint(me.fields[idx].width) ||
+									cint(columnByFieldname[me.fields[idx].fieldname]?.df?.width) ||
+									""
+								}"
 							>
 						</div>
 
@@ -228,10 +238,18 @@ export default class ListSettings {
 		me.fields = [];
 
 		for (let idx = 0; idx < fields_order.length; idx++) {
-			me.fields.push({
-				fieldname: fields_order.item(idx).getAttribute("data-fieldname"),
-				label: __(fields_order.item(idx).getAttribute("data-label")),
-			});
+			let el = fields_order.item(idx);
+			let fieldname = el.getAttribute("data-fieldname");
+			let width_input = el.querySelector(
+				`input.form-control[data-fieldname="${fieldname}"]`
+			);
+			let width = width_input ? cint(width_input.value) : 0;
+			let field = {
+				fieldname: fieldname,
+				label: __(el.getAttribute("data-label")),
+			};
+			if (width) field.width = width;
+			me.fields.push(field);
 		}
 
 		me.dialog.set_value("fields", JSON.stringify(me.fields));

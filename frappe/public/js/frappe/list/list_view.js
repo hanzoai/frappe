@@ -500,6 +500,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 					fields_order.push(column);
 					break;
 				} else if (column.type == "Field" && field.fieldname === column.df.fieldname) {
+					if (field.width) column.df.width = field.width;
 					fields_order.push(column);
 					break;
 				}
@@ -1033,27 +1034,8 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			css_class += " bold";
 		}
 
-		if (!frappe.is_mobile()) {
-			/**
-			 * Calculates the width of a text element based on its length.
-			 * If the length of the text is not available, it defaults to a length of 22.5.
-			 */
-			if (cint(col.df.width)) {
-				this.column_max_widths[fieldname] = cint(col.df.width);
-			}
-			// let textLength = $(column_html).text()?.trim()?.length || 22.5;
-			// let calculatedWidth = (textLength * 10) / 1.3 + (col.type == "Subject" ? 30 : 0);
-
-			// /**
-			//  * Updates the `column_max_widths` object by setting the maximum width for a specific column (fieldname).
-			//  * If no width is set for the column, or the newly calculated width exceeds the current width, the width is updated.
-			//  */
-			// if (
-			// 	!this.column_max_widths[fieldname] ||
-			// 	calculatedWidth > this.column_max_widths[fieldname]
-			// ) {
-			// 	this.column_max_widths[fieldname] = calculatedWidth;
-			// }
+		if (!frappe.is_mobile() && cint(col.df?.width)) {
+			this.column_max_widths[fieldname] = cint(col.df.width);
 		}
 
 		return `
@@ -1070,12 +1052,15 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	 */
 	apply_column_widths() {
 		if (this.list_view_settings?.disable_scrolling) return;
+		const MIN_WIDTH = 150;
+		const MAX_WIDTH = 400;
 		Object.entries(this.column_max_widths).forEach(([fieldname, width]) => {
+			const clamped = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, width));
 			$(
 				`.list-view .frappe-list .result .level-left .list-row-col[data-fieldname="${fieldname}"]`
 			).css({
-				width: width,
-				flex: `0 0 ${width}px`,
+				width: clamped,
+				flex: `0 0 ${clamped}px`,
 			});
 		});
 	}
