@@ -34,6 +34,13 @@ export default class ListSettings {
 			fields: list_view_settings.fields,
 		});
 		me.dialog.set_values(me.settings);
+
+		// Collapse the unlabelled section that wraps fields_html — it adds
+		// an empty section-head + default section-body margins with no content.
+		const $fields_section = me.dialog.$wrapper.find('[data-fieldname="section_break_evqq"]');
+		$fields_section.find(".section-head").hide();
+		$fields_section.find("> .section-body").css({ "margin-top": 0, "padding-top": 0 });
+
 		me.dialog.set_primary_action(__("Save"), () => {
 			me.update_fields();
 			let values = me.dialog.get_values();
