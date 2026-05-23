@@ -162,15 +162,18 @@ export default class ListSettings {
 
 		fields_html.html(`
 			<div class="form-group">
-				<div class="d-flex align-items-center justify-content-between mb-1">
-					<label class="control-label mb-0" style="padding-right: 0;">${__("Fields")}</label>
+				<div class="text-right mb-1">
 					<a class="add-new-fields text-muted" style="font-size: var(--text-xs); white-space: nowrap;">
 						${__("+ Add / Remove Fields")}
 					</a>
 				</div>
 				<div class="row flex-fill px-1 mb-1" style="font-size: var(--text-xs); color: var(--text-muted);">
 					<div class="col-1"></div>
-					<div class="col px-0"></div>
+					<div class="col px-0">
+						<label class="control-label mb-0" style="padding-right: 0; font-size: var(--text-xs);">${__(
+							"Fields"
+						)}</label>
+					</div>
 					<div class="col-2 text-right pr-2" style="white-space: nowrap;">
 						${__("Width (px)")}
 						<span
