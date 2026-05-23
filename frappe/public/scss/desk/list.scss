@@ -219,6 +219,30 @@
 	cursor: default;
 }
 
+.list-col-resize-handle {
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 4px;
+	cursor: col-resize;
+	user-select: none;
+	z-index: 1;
+
+	&:hover {
+		background-color: var(--border-color);
+	}
+}
+
+body.list-col-resizing {
+	cursor: col-resize !important;
+	user-select: none;
+
+	* {
+		cursor: col-resize !important;
+	}
+}
+
 .list-row-head {
 	@extend .list-row;
 	cursor: default;
@@ -226,6 +250,10 @@
 	border-radius: var(--border-radius);
 	height: var(--list-row-height);
 	padding-inline: var(--padding-sm);
+
+	.list-row-col {
+		position: relative;
+	}
 
 	.list-subject {
 		font-weight: normal;

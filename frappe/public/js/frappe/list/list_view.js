@@ -638,6 +638,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 				this.$result.find(".list-liked-by-me").addClass("liked");
 			}
 		}
+		this.setup_column_resize();
 	}
 
 	render_skeleton() {
@@ -645,6 +646,96 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			'<div><input type="checkbox" class="render-list-checkbox"/></div>'
 		);
 		this.$result.append($row);
+	}
+
+	setup_column_resize() {
+		if (frappe.is_mobile()) return;
+
+		// Clean up any previous listeners to avoid duplicates on re-render
+		this.$result.off("mousedown.list-col-resize");
+		$(document).off("mousemove.list-col-resize mouseup.list-col-resize");
+
+		let isDragging = false;
+		let fieldname = null;
+		let startX = 0;
+		let startWidth = 0;
+
+		this.$result.on(
+			"mousedown.list-col-resize",
+			".list-row-head .list-col-resize-handle",
+			(e) => {
+				e.preventDefault();
+				const $col = $(e.target).closest(".list-row-col");
+				fieldname = $col.attr("data-fieldname");
+				if (!fieldname || fieldname === "undefined") return;
+
+				isDragging = true;
+				startX = e.pageX;
+				startWidth = $col.outerWidth();
+				$("body").addClass("list-col-resizing");
+			}
+		);
+
+		$(document).on("mousemove.list-col-resize", (e) => {
+			if (!isDragging || !fieldname) return;
+			const newWidth = Math.max(50, Math.min(400, startWidth + (e.pageX - startX)));
+			this.$result.find(`.list-row-col[data-fieldname="${fieldname}"]`).css({
+				width: newWidth,
+				flex: `0 0 ${newWidth}px`,
+			});
+		});
+
+		$(document).on("mouseup.list-col-resize", (e) => {
+			if (!isDragging) return;
+			isDragging = false;
+			$("body").removeClass("list-col-resizing");
+
+			if (fieldname) {
+				const newWidth = Math.max(50, Math.min(400, startWidth + (e.pageX - startX)));
+				this.column_max_widths[fieldname] = newWidth;
+				this.save_column_width(fieldname, newWidth);
+			}
+			fieldname = null;
+		});
+	}
+
+	save_column_width(fieldname, width) {
+		let fields;
+
+		if (this.list_view_settings?.fields) {
+			fields = JSON.parse(this.list_view_settings.fields);
+		} else {
+			// No saved field order yet — build it from current columns
+			fields = this.columns
+				.filter((col) => col.type !== "Tag")
+				.map((col) => {
+					if (col.type === "Status") {
+						return { fieldname: "status_field", label: __("Status") };
+					}
+					return { fieldname: col.df?.fieldname, label: col.df?.label || "" };
+				})
+				.filter((f) => f.fieldname);
+		}
+
+		const field = fields.find((f) => f.fieldname === fieldname);
+		if (field) {
+			field.width = width;
+		}
+
+		frappe.call({
+			method: "frappe.desk.doctype.list_view_settings.list_view_settings.save_listview_settings",
+			args: {
+				doctype: this.doctype,
+				listview_settings: {
+					...(this.list_view_settings || {}),
+					fields: JSON.stringify(fields),
+				},
+				removed_listview_fields: [],
+			},
+			callback: (r) => {
+				this.list_view_settings = r.message.listview_settings;
+			},
+		});
 	}
 
 	before_render() {
@@ -778,7 +869,11 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 				}
 
 				const headerFieldname = col.type === "Status" ? "status_field" : col.df?.fieldname;
-				return `<div class="${classes}" data-fieldname="${headerFieldname}">${html}</div>
+				const resizeHandle =
+					headerFieldname && col.type !== "Tag"
+						? `<div class="list-col-resize-handle"></div>`
+						: "";
+				return `<div class="${classes}" data-fieldname="${headerFieldname}">${html}${resizeHandle}</div>
 			`;
 			})
 			.join("");
