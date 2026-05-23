@@ -497,6 +497,10 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 				let column = this.columns[col];
 
 				if (column.type == "Status" && field.fieldname == "status_field") {
+					if (field.width) {
+						column.df = column.df || { fieldname: "status_field" };
+						column.df.width = field.width;
+					}
 					fields_order.push(column);
 					break;
 				} else if (column.type == "Field" && field.fieldname === column.df.fieldname) {
@@ -773,7 +777,8 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 					html = `<span ${attrs}>${label}</span>`;
 				}
 
-				return `<div class="${classes}" data-fieldname="${col.df?.fieldname}">${html}</div>
+				const headerFieldname = col.type === "Status" ? "status_field" : col.df?.fieldname;
+				return `<div class="${classes}" data-fieldname="${headerFieldname}">${html}</div>
 			`;
 			})
 			.join("");
@@ -893,9 +898,13 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 
 	get_column_html(col, doc, show_in_mobile) {
 		if (col.type === "Status" || col.df?.options == "Workflow State") {
+			const fieldname = col.type === "Status" ? "status_field" : col.df?.fieldname;
+			if (!frappe.is_mobile() && cint(col.df?.width)) {
+				this.column_max_widths[fieldname] = cint(col.df.width);
+			}
 			let show_workflow_state = col.df?.options == "Workflow State";
 			return `
-				<div class="list-row-col hidden-xs ellipsis">
+				<div class="list-row-col hidden-xs ellipsis" data-fieldname="${fieldname}">
 					${this.get_indicator_html(doc, show_workflow_state)}
 				</div>
 			`;
@@ -1052,7 +1061,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	 */
 	apply_column_widths() {
 		if (this.list_view_settings?.disable_scrolling) return;
-		const MIN_WIDTH = 150;
+		const MIN_WIDTH = 50;
 		const MAX_WIDTH = 400;
 		Object.entries(this.column_max_widths).forEach(([fieldname, width]) => {
 			const clamped = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, width));
