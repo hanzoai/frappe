@@ -18,6 +18,11 @@
 </head>
 <body>
 	{{ header or '' }}
+	{%- if layout.header -%}
+	<div class="document-header-content">
+		{{ frappe.render_template(layout.header, {'doc': doc}) }}
+	</div>
+	{%- endif -%}
 	{% for section in layout.sections %}
 	<div class="section {{ resolve_class({'page-break': section.page_break}) }}">
 		{% if section.label %}
@@ -35,6 +40,11 @@
 		</div>
 	</div>
 	{% endfor %}
+	{%- if layout.footer -%}
+	<div class="document-footer-content">
+		{{ frappe.render_template(layout.footer, {'doc': doc}) }}
+	</div>
+	{%- endif -%}
 	{{ footer or '' }}
 </body>
 </html>

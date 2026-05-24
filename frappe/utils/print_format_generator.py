@@ -88,9 +88,9 @@ class PrintFormatGenerator:
 
 	def get_header_footer_html(self):
 		header_html = footer_html = None
-		if self.letterhead or self.layout.get("header"):
+		if self.letterhead:
 			header_html = frappe.render_template("templates/print_format/print_header.html", self.context)
-		if self.letterhead or self.layout.get("footer"):
+		if self.letterhead:
 			footer_html = frappe.render_template("templates/print_format/print_footer.html", self.context)
 		return header_html, footer_html
 
@@ -146,9 +146,8 @@ class PrintFormatGenerator:
 			letterhead_html = self.letterhead and self.letterhead.content
 		else:
 			letterhead_html = self.letterhead and self.letterhead.footer
-		layout_html = self.layout.get(kind)
 
-		if not (letterhead_html or layout_html or wants_page_no):
+		if not (letterhead_html or wants_page_no):
 			return None
 
 		page_no_html = self._page_number_html(page_pos) if wants_page_no else None
@@ -160,8 +159,6 @@ class PrintFormatGenerator:
 			parts.append(page_no_html)
 		if letterhead_html:
 			parts.append(frappe.render_template(letterhead_html, ctx))
-		if layout_html:
-			parts.append(frappe.render_template(layout_html, ctx))
 		if not is_header and page_no_html:
 			parts.append(page_no_html)
 		return "\n".join(parts) or None
