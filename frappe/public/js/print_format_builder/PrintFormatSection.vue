@@ -65,7 +65,28 @@
 			<div class="section-columns">
 				<template v-for="(column, i) in section.columns" :key="i">
 					<div class="column-divider" v-if="i > 0"></div>
-					<div class="column">
+					<div
+						class="column"
+						:class="{ 'column-align-right': column.align === 'right' }"
+					>
+						<div v-if="section.columns.length > 1" class="column-toolbar">
+							<button
+								class="btn btn-xs btn-icon column-align-btn"
+								:class="{ active: column.align === 'right' }"
+								:title="
+									column.align === 'right'
+										? __('Aligned right — click to reset')
+										: __('Align column to the right')
+								"
+								@click.stop="toggle_column_align(column)"
+								v-html="
+									frappe.utils.icon(
+										column.align === 'right' ? 'align-right' : 'align-left',
+										'xs'
+									)
+								"
+							></button>
+						</div>
 						<draggable
 							class="drag-container"
 							v-model="column.fields"
@@ -143,6 +164,10 @@ function toggle_page_break() {
 function toggle_orientation() {
 	props.section["field_orientation"] =
 		props.section.field_orientation === "left-right" ? "" : "left-right";
+}
+
+function toggle_column_align(column) {
+	column.align = column.align === "right" ? "" : "right";
 }
 </script>
 
@@ -303,6 +328,44 @@ function toggle_orientation() {
 	flex: 1;
 	min-width: 0;
 	display: flex;
+	flex-direction: column;
+}
+
+.column-align-right {
+	margin-left: auto;
+}
+
+.column-toolbar {
+	display: flex;
+	justify-content: flex-end;
+	padding: 0 0 0.25rem 0;
+	opacity: 0;
+	transition: opacity 0.15s;
+	min-height: 1.5rem;
+}
+
+.column:hover .column-toolbar,
+.column-align-right .column-toolbar {
+	opacity: 1;
+}
+
+.column-align-btn {
+	padding: 2px 4px;
+	box-shadow: none;
+	color: var(--gray-400);
+	border-radius: var(--border-radius-sm);
+	font-size: 10px;
+}
+
+.column-align-btn:hover {
+	background: var(--gray-200);
+	color: var(--text-color);
+}
+
+.column-align-btn.active {
+	background: var(--blue-50);
+	color: var(--blue-500);
+	opacity: 1 !important;
 }
 
 .column-divider {
@@ -320,7 +383,7 @@ function toggle_orientation() {
 	display: flex;
 	flex-direction: column;
 	gap: 0.4rem;
-	overflow: hidden;
+	overflow: visible;
 }
 
 .empty-drop-zone {

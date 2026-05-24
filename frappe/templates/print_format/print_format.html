@@ -44,7 +44,7 @@
 
 		<div class="section-columns row">
 			{% for column in section.columns %}
-			<div class="column col">
+			<div class="column col{{ ' col-align-right' if column.align == 'right' else '' }}">
 				{% for df in column.fields %}
 				{{ macros.render_field(df, doc) }}
 				{% endfor %}

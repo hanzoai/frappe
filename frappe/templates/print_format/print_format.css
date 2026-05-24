@@ -193,6 +193,11 @@ body {
 	}
 }
 
+/* Column right-align: push the column to the far right within its row */
+.col-align-right {
+	margin-left: auto !important;
+}
+
 .document-header {
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
