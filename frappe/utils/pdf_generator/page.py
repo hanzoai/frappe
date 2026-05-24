@@ -262,24 +262,41 @@ class Page:
 		return start_wait
 
 	def get_element_height(self, selector="body"):
+		if not self.is_print_designer:
+			selector = ".wrapper"
+
+		# Measure visual height via JavaScript so that floated children are included
+		# even when the container is float-collapsed (height=0 in the box model).
+		# DOM.getBoxModel can return 0 for containers whose only children are floated;
+		# finding the max getBoundingClientRect().bottom across all descendants is
+		# reliable regardless of BFC / overflow state.
+		js = f"""(function() {{
+			var el = document.querySelector('{selector}');
+			if (!el) return 0;
+			var top = el.getBoundingClientRect().top;
+			var maxBottom = top;
+			var nodes = el.querySelectorAll('*');
+			for (var i = 0; i < nodes.length; i++) {{
+				var b = nodes[i].getBoundingClientRect().bottom;
+				if (b > maxBottom) maxBottom = b;
+			}}
+			return Math.round(maxBottom - top);
+		}})()"""
 		try:
-			if not self.is_print_designer:
-				selector = ".wrapper"
-			self.send("DOM.enable")
-			doc_result, doc_error = self.send("DOM.getDocument")
-			if doc_error:
-				raise RuntimeError(f"Error getting document node: {doc_error}")
-			doc_node_id = doc_result["root"]["nodeId"]
-			result, error = self.send("DOM.querySelector", {"nodeId": doc_node_id, "selector": selector})
-			if error:
-				raise RuntimeError(f"Error querying selector: {error}")
-			node_id = result["nodeId"]
-			result, error = self.send("DOM.getBoxModel", {"nodeId": node_id})
-			if error:
-				raise RuntimeError(f"Error getting computed style: {error}")
-			height = result["model"]["height"]
-		finally:
-			self.send("DOM.disable")
+			result = self.evaluate(js)
+			height = result.get("result", {}).get("value", 0) or 0
+		except Exception:
+			# Fallback to DOM.getBoxModel if JS evaluation fails
+			try:
+				self.send("DOM.enable")
+				doc_result, _err = self.send("DOM.getDocument")
+				doc_node_id = doc_result["root"]["nodeId"]
+				result, _err = self.send("DOM.querySelector", {"nodeId": doc_node_id, "selector": selector})
+				node_id = result["nodeId"]
+				result, _err = self.send("DOM.getBoxModel", {"nodeId": node_id})
+				height = result["model"]["height"]
+			finally:
+				self.send("DOM.disable")
 		return height
 
 	def add_page_size_css(self):

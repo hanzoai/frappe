@@ -14,12 +14,18 @@
 				border: 0 !important;
 				padding: 0 !important;
 			}
-			/* overflow:hidden creates a BFC so floated letterhead children
-			   (logo left / company name right) are included in the measured height.
-			   Must be outside @media print: DOM.getBoxModel runs in screen mode,
-			   so print-only rules don't apply during height measurement. */
+			/* Contain floated letterhead children (logo left / company name right)
+			   so height measurement includes them.
+			   display:flow-root = modern BFC; overflow:hidden = legacy BFC fallback;
+			   ::after clearfix = last-resort fallback for unusual letterhead CSS. */
 			.wrapper {
+				display: flow-root;
 				overflow: hidden;
+			}
+			.wrapper::after {
+				content: "";
+				display: table;
+				clear: both;
 			}
 			@media print {
 				.wrapper {

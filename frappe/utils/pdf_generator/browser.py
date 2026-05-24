@@ -339,10 +339,15 @@ class Browser:
 
 		if self.footer_page:
 			footer_height = self.footer_height
+			# Mirror header: paperHeight must include the margin so Chrome has room
+			# to render content above the marginBottom gap. Without this, marginBottom
+			# clips content because the page isn't tall enough to hold both.
+			footer_with_bottom_margin = footer_height + margin_bottom
 			self.footer_page.options["paperHeight"] = (
-				convert_uom(footer_height, "px", "in", only_number=True) if footer_height else 0
+				convert_uom(footer_with_bottom_margin, "px", "in", only_number=True)
+				if footer_with_bottom_margin
+				else 0
 			)
-			footer_with_bottom_margin = self.footer_height + margin_bottom
 
 		margin_bottom = convert_uom(margin_bottom, "px", "in", only_number=True)
 
