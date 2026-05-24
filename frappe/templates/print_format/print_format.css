@@ -193,11 +193,33 @@ body {
 	}
 }
 
-/* Invisible flex spacer injected before right-aligned columns.
-   The spacer has flex:1 (same as .col) so it absorbs all available space,
-   pushing the actual column to the right edge — no margin/flex hacks needed. */
-.col-spacer {
-	padding: 0;
+/*
+ * Column right-align layout modes
+ *
+ * row-col-space-between (2+ cols, at least one right-aligned):
+ *   Columns sit at natural content width. justify-content:space-between
+ *   pushes the leftmost to the left edge and rightmost to the right edge.
+ *   No empty-box spacer needed.
+ *
+ * row-col-right-end (1 col, right-aligned):
+ *   Single column is pushed to the right edge with justify-content:flex-end.
+ */
+.row-col-space-between {
+	justify-content: space-between !important;
+}
+
+.row-col-space-between .col {
+	flex: none !important;
+	max-width: 48% !important;
+}
+
+.row-col-right-end {
+	justify-content: flex-end !important;
+}
+
+.row-col-right-end .col {
+	flex: none !important;
+	max-width: 50% !important;
 }
 
 .document-header {

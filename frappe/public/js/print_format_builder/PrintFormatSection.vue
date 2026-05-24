@@ -62,17 +62,19 @@
 				</div>
 			</div>
 
-			<div class="section-columns">
+			<div
+				class="section-columns"
+				:class="{
+					'cols-space-between':
+						section.columns.some((c) => c.align === 'right') &&
+						section.columns.length > 1,
+					'cols-right-end':
+						section.columns.some((c) => c.align === 'right') &&
+						section.columns.length === 1,
+				}"
+			>
 				<template v-for="(column, i) in section.columns" :key="i">
-					<!-- For right-aligned columns: inject a flex spacer that pushes
-					     the column to the right. The spacer takes all available space,
-					     so the actual column sits at the right edge. -->
-					<template v-if="column.align === 'right'">
-						<div v-if="i > 0" class="column-divider"></div>
-						<div class="column column-spacer"></div>
-						<div class="column-divider"></div>
-					</template>
-					<div v-else-if="i > 0" class="column-divider"></div>
+					<div v-if="i > 0" class="column-divider"></div>
 					<div
 						class="column"
 						:class="{ 'column-align-right': column.align === 'right' }"
@@ -342,17 +344,25 @@ function toggle_column_align(column) {
 	flex-direction: column;
 }
 
-/* Right-aligned column sits at the right edge — no special flex needed here
-   because the .column-spacer sibling takes all available space first. */
-.column-align-right {
-	flex: 1;
+/* 2+ columns, at least one right-aligned: push left/right to opposite edges */
+.cols-space-between {
+	justify-content: space-between;
 }
 
-/* Invisible flex spacer injected before right-aligned columns */
-.column-spacer {
-	flex: 1;
-	min-width: 0;
-	pointer-events: none;
+.cols-space-between .column {
+	flex: none;
+	min-width: 30%;
+	max-width: 48%;
+}
+
+/* 1 column right-aligned: push it to the right edge */
+.cols-right-end {
+	justify-content: flex-end;
+}
+
+.cols-right-end .column {
+	flex: none;
+	max-width: 50%;
 }
 
 .column-toolbar {

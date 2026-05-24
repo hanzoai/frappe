@@ -42,12 +42,18 @@
 		<div class="section-label">{{ _(section.label) }}</div>
 		{% endif %}
 
-		<div class="section-columns row">
+		{#- Detect right-aligned columns to pick the right row layout class -#}
+		{%- set ns2 = namespace(has_right=false) -%}
+		{%- for col in section.columns -%}{%- if col.align == 'right' -%}{%- set ns2.has_right = true -%}{%- endif -%}{%- endfor -%}
+		{%- if ns2.has_right and section.columns | length == 1 -%}
+			{%- set row_layout = 'row-col-right-end' -%}
+		{%- elif ns2.has_right -%}
+			{%- set row_layout = 'row-col-space-between' -%}
+		{%- else -%}
+			{%- set row_layout = '' -%}
+		{%- endif -%}
+		<div class="section-columns row {{ row_layout }}">
 			{% for column in section.columns %}
-			{%- if column.align == 'right' -%}
-			{#- Flex spacer: takes all available space, pushing the column to the right -#}
-			<div class="col col-spacer"></div>
-			{%- endif -%}
 			<div class="column col">
 				{% for df in column.fields %}
 				{{ macros.render_field(df, doc) }}
