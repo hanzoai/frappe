@@ -194,12 +194,14 @@ body {
 }
 
 /*
- * Column right-align: flex:none (don't grow) + margin-left:auto pushes column
- * to the far right. flex:1 + margin-left:auto has no effect because flex:1
- * already consumes all free space, leaving nothing for the auto margin.
+ * Column right-align: fix flex-basis at 50% so the column never wraps (Bootstrap
+ * .row uses flex-wrap:wrap, so flex:none with auto basis can overflow and wrap).
+ * margin-left:auto pushes the column to the far right of the remaining space.
+ * In a 1-col section: right half only. In a 2-col section: same 50/50 layout
+ * but the right column is explicitly anchored to the right.
  */
 .col-align-right {
-	flex: none !important;
+	flex: 0 0 50% !important;
 	margin-left: auto !important;
 }
 

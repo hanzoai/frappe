@@ -75,8 +75,8 @@
 								:class="{ active: column.align === 'right' }"
 								:title="
 									column.align === 'right'
-										? __('Aligned right — click to reset')
-										: __('Align column to the right')
+										? __('Aligned right — click to reset to left')
+										: __('Push column to the right')
 								"
 								@click.stop="toggle_column_align(column)"
 							>
@@ -86,10 +86,13 @@
 											column.align === 'right'
 												? 'align-right'
 												: 'align-left',
-											'sm'
+											'xs'
 										)
 									"
 								></span>
+								<span>{{
+									column.align === "right" ? __("Right") : __("Left")
+								}}</span>
 							</button>
 						</div>
 						<draggable
@@ -337,54 +340,50 @@ function toggle_column_align(column) {
 }
 
 /*
- * Right-align: don't grow (flex: none), rely on margin-left: auto to push right.
- * flex: 1 + margin-left: auto has no effect because flex: 1 consumes all free space.
- * With flex: none, the column takes content width and auto-margin pushes it right.
+ * Right-align: flex 0 0 50% fixes the width to half the row so margin-left:auto
+ * can push it right without other flex siblings consuming all available space.
+ * For a single right-aligned column, the 50% + auto margin = column floats to
+ * the right half of the section. For a 2-col section, it behaves like the
+ * normal 50/50 split.
  */
 .column-align-right {
-	flex: none;
-	min-width: 30%;
+	flex: 0 0 50%;
 	margin-left: auto;
 }
 
 .column-toolbar {
 	display: flex;
 	justify-content: flex-end;
-	padding: 0 0 0.2rem 0;
-	min-height: 1.4rem;
+	padding: 0 0 0.25rem 0;
+	min-height: 1.6rem;
 }
 
 .column-align-btn {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	padding: 2px 5px;
-	border: 1px solid transparent;
+	gap: 2px;
+	padding: 2px 6px;
+	border: 1px solid var(--border-color);
 	border-radius: var(--border-radius-sm);
-	background: transparent;
+	background: var(--gray-50);
 	color: var(--gray-500);
 	cursor: pointer;
 	line-height: 1;
-	opacity: 0;
-	transition: opacity 0.15s, background 0.1s, color 0.1s;
-}
-
-.column:hover .column-align-btn,
-.column-align-right .column-align-btn {
-	opacity: 1;
+	font-size: var(--text-xs);
+	white-space: nowrap;
 }
 
 .column-align-btn:hover {
 	background: var(--gray-100);
-	border-color: var(--border-color);
+	border-color: var(--gray-400);
 	color: var(--text-color);
 }
 
 .column-align-btn.active {
 	background: var(--blue-50);
-	border-color: var(--blue-200);
+	border-color: var(--blue-300);
 	color: var(--blue-500);
-	opacity: 1;
 }
 
 .column-divider {
