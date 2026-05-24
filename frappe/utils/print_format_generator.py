@@ -118,16 +118,13 @@ class PrintFormatGenerator:
 	def _build_html_for_chrome(self):
 		"""Build the body HTML for the Chrome PDF pipeline.
 
-		Only the letterhead (and page numbers) go into ``#header-html`` /
-		``#footer-html``.  The Browser class renders those divs as a separate page,
-		measures the wrapper height via ``DOM.getBoxModel``, and merges them on top
-		of every body page.  Keeping only the letterhead in the overlay ensures the
-		height measurement is reliable.
+		``layout.header`` / ``layout.footer`` (the user-defined header/footer
+		template from the builder) are included in ``#header-html`` /
+		``#footer-html`` so they repeat on every PDF page alongside the letterhead.
 
-		``layout.header`` / ``layout.footer`` are rendered as normal block elements
-		at the very top / bottom of the body HTML.  They appear on page 1 only in the
-		PDF, which matches industry-standard invoice design (company letterhead repeats
-		every page; document title / number appears once at the top).
+		The ``chrome_pdf_header_footer.html`` template adds ``overflow: hidden``
+		to ``.wrapper`` so ``DOM.getBoxModel`` correctly measures the full height
+		even when the letterhead uses floated elements (logo left, company name right).
 		"""
 		self.context.for_chrome = True
 		self.context.header_height = 0
@@ -138,29 +135,18 @@ class PrintFormatGenerator:
 		self.context.header = f'<div id="header-html">{header}</div>' if header else ""
 		self.context.footer = f'<div id="footer-html">{footer}</div>' if footer else ""
 
-		# Render layout.header / layout.footer once in the body (page 1 only).
-		ctx = {"doc": self.context.doc}
-		layout_header = self.layout.get("header") if self.layout else None
-		layout_footer = self.layout.get("footer") if self.layout else None
-		self.context.chrome_layout_header = (
-			'<div class="document-header-content">' + frappe.render_template(layout_header, ctx) + "</div>"
-			if layout_header
-			else ""
-		)
-		self.context.chrome_layout_footer = (
-			'<div class="document-footer-content">' + frappe.render_template(layout_footer, ctx) + "</div>"
-			if layout_footer
-			else ""
-		)
+		# layout.header / layout.footer are now in the overlay (repeat every page).
+		self.context.chrome_layout_header = ""
+		self.context.chrome_layout_footer = ""
 
 		return self.get_main_html()
 
 	def _render_overlay(self, kind: str) -> str | None:
-		"""Render only the letterhead (and page number) for the Chrome overlay.
+		"""Render letterhead, layout.header/footer, and page number for the Chrome overlay.
 
-		``layout.header`` / ``layout.footer`` are intentionally excluded — mixing
-		them into the overlay causes unreliable height measurement when the letterhead
-		uses floated or absolutely-positioned elements.
+		All three are included so they repeat on every PDF page.  Height measurement
+		is reliable because ``chrome_pdf_header_footer.html`` applies ``overflow: hidden``
+		to ``.wrapper``, creating a BFC that contains floated letterhead children.
 		"""
 		is_header = kind == "header"
 		page_pos = (self.print_format.page_number or "").lower().replace(" ", "_")
@@ -169,10 +155,12 @@ class PrintFormatGenerator:
 
 		if is_header:
 			letterhead_html = self.letterhead and self.letterhead.content
+			layout_template = self.layout.get("header") if self.layout else None
 		else:
 			letterhead_html = self.letterhead and self.letterhead.footer
+			layout_template = self.layout.get("footer") if self.layout else None
 
-		if not (letterhead_html or wants_page_no):
+		if not (letterhead_html or wants_page_no or layout_template):
 			return None
 
 		page_no_html = self._page_number_html(page_pos) if wants_page_no else None
@@ -183,6 +171,12 @@ class PrintFormatGenerator:
 			parts.append(page_no_html)
 		if letterhead_html:
 			parts.append(frappe.render_template(letterhead_html, ctx))
+		if layout_template:
+			parts.append(
+				'<div class="document-header-content">'
+				+ frappe.render_template(layout_template, ctx)
+				+ "</div>"
+			)
 		if not is_header and page_no_html:
 			parts.append(page_no_html)
 		return "\n".join(parts) or None

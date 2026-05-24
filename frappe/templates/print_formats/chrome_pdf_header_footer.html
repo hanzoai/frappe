@@ -19,6 +19,11 @@
 					box-sizing: border-box;
 					padding: 0 !important;
 					margin: 0 !important;
+					/* Create a BFC so floated letterhead children (logo left,
+					   company name right) are included in the measured height.
+					   Without this, DOM.getBoxModel returns 0 for float-only
+					   containers and body content overlaps the header. */
+					overflow: hidden;
 				}
 				[document-status] {
 					margin-bottom: 0 !important;
