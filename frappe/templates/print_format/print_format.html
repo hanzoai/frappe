@@ -44,7 +44,11 @@
 
 		<div class="section-columns row">
 			{% for column in section.columns %}
-			<div class="column col{{ ' col-align-right' if column.align == 'right' else '' }}">
+			{%- if column.align == 'right' -%}
+			{#- Flex spacer: takes all available space, pushing the column to the right -#}
+			<div class="col col-spacer"></div>
+			{%- endif -%}
+			<div class="column col">
 				{% for df in column.fields %}
 				{{ macros.render_field(df, doc) }}
 				{% endfor %}

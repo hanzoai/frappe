@@ -193,20 +193,11 @@ body {
 	}
 }
 
-/*
- * Column right-align: float the column to the right edge.
- *   flex: none   — take natural content width (don't grow like Bootstrap .col)
- *   max-width: 50% — prevent wrapping if content is very wide
- *   margin-left: auto — consume all free space on the left → column sits at right
- *
- * Best used in a 1-column section: the single column floats to the right half.
- * In a 2-column section with a left column (flex:1), the left column expands
- * to fill the gap and the right column sits at its natural width on the right.
- */
-.col-align-right {
-	flex: none !important;
-	max-width: 50% !important;
-	margin-left: auto !important;
+/* Invisible flex spacer injected before right-aligned columns.
+   The spacer has flex:1 (same as .col) so it absorbs all available space,
+   pushing the actual column to the right edge — no margin/flex hacks needed. */
+.col-spacer {
+	padding: 0;
 }
 
 .document-header {

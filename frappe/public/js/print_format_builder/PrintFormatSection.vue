@@ -64,7 +64,15 @@
 
 			<div class="section-columns">
 				<template v-for="(column, i) in section.columns" :key="i">
-					<div class="column-divider" v-if="i > 0"></div>
+					<!-- For right-aligned columns: inject a flex spacer that pushes
+					     the column to the right. The spacer takes all available space,
+					     so the actual column sits at the right edge. -->
+					<template v-if="column.align === 'right'">
+						<div v-if="i > 0" class="column-divider"></div>
+						<div class="column column-spacer"></div>
+						<div class="column-divider"></div>
+					</template>
+					<div v-else-if="i > 0" class="column-divider"></div>
 					<div
 						class="column"
 						:class="{ 'column-align-right': column.align === 'right' }"
@@ -334,15 +342,17 @@ function toggle_column_align(column) {
 	flex-direction: column;
 }
 
-/*
- * Right-align: in the builder we only show a visual indicator — no flex changes.
- * Changing flex here causes overflow when multiple columns are right-aligned
- * (each at 50% + the divider pushes total > 100%). The actual float-right
- * effect is applied in print_format.css for the PDF/preview output.
- */
+/* Right-aligned column sits at the right edge — no special flex needed here
+   because the .column-spacer sibling takes all available space first. */
 .column-align-right {
-	border-top: 2px solid var(--blue-300);
-	border-radius: 0 0 var(--border-radius) var(--border-radius);
+	flex: 1;
+}
+
+/* Invisible flex spacer injected before right-aligned columns */
+.column-spacer {
+	flex: 1;
+	min-width: 0;
+	pointer-events: none;
 }
 
 .column-toolbar {
