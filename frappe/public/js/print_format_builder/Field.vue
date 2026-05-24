@@ -59,7 +59,7 @@
 					:class="{ 'table-col-chip--invalid': tf.invalid_width }"
 					v-for="tf in df.table_columns"
 					:key="tf.fieldname"
-					:title="tf.width ? tf.width + '%' : ''"
+					:title="tf.label || tf.fieldname"
 				>
 					{{ tf.label || tf.fieldname }}
 				</span>
@@ -71,10 +71,7 @@
 					{{ __("No columns configured") }}
 				</span>
 			</div>
-			<button
-				class="btn btn-xs btn-default configure-columns-btn"
-				@click.stop="configure_columns"
-			>
+			<button class="configure-columns-btn" @click.stop="configure_columns">
 				<span v-html="frappe.utils.icon('settings-2', 'xs')"></span>
 				{{ __("Configure Columns") }}
 			</button>
@@ -338,7 +335,7 @@ watch(
 	font-size: var(--text-xs);
 	color: var(--text-color);
 	white-space: nowrap;
-	max-width: 120px;
+	max-width: 100px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
@@ -354,5 +351,21 @@ watch(
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
+	font-size: var(--text-xs);
+	font-weight: 500;
+	color: var(--text-muted);
+	background: transparent;
+	border: 1px solid var(--gray-300);
+	border-radius: var(--border-radius);
+	padding: 3px 8px;
+	cursor: pointer;
+	transition: color 0.15s, border-color 0.15s, background 0.15s;
+	line-height: 1.4;
+}
+
+.configure-columns-btn:hover {
+	color: var(--primary);
+	border-color: var(--primary);
+	background: var(--primary-light);
 }
 </style>
