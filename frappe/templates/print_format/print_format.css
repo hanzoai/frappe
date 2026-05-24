@@ -64,35 +64,107 @@ body {
 }
 
 .section:not(:first-child) {
-	margin-top: 1rem;
+	margin-top: 1.5rem;
 }
 
 .section-label {
-	font-size: 1.2rem;
-	font-weight: 600;
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: #1a1a1a;
+	padding-bottom: 0.35rem;
+	margin-bottom: 0.75rem;
+	border-bottom: 1.5px solid #e2e2e2;
 }
 
 .field + .field {
 	margin-top: 0.5rem;
 }
 
+/* Stacked (default): muted label above value */
 .field .label {
-	font-weight: bold;
+	font-size: 0.75em;
+	font-weight: 600;
+	color: #6b7280;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	margin-bottom: 0.1rem;
 }
 
+.field .value {
+	color: #111827;
+}
+
+/* Left-right: label takes 40%, value takes 60% for better wrapping */
 .field.left-right {
 	display: flex;
+	align-items: baseline;
+	gap: 0.5rem;
 }
 
 .field.left-right .label {
-	width: 50%;
+	width: 40%;
+	flex-shrink: 0;
+	font-size: 0.8em;
+	font-weight: 600;
+	color: #374151;
+	text-transform: none;
+	letter-spacing: 0;
+	padding-top: 0.05rem;
 }
 
 .field.left-right .value {
-	width: 50%;
+	width: 60%;
+	flex: 1;
 }
 
-.child-table [data-fieldtype="Currency"] {
+/* Child table */
+.child-table {
+	margin-top: 0.5rem;
+}
+
+.child-table > .label {
+	font-size: 0.8em;
+	font-weight: 600;
+	color: #6b7280;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	margin-bottom: 0.4rem;
+}
+
+.child-table .table {
+	font-size: 0.9em;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.child-table .table th {
+	background-color: #f3f4f6;
+	color: #374151;
+	font-weight: 600;
+	font-size: 0.85em;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	padding: 0.45rem 0.6rem;
+	border: 1px solid #e5e7eb;
+}
+
+.child-table .table td {
+	padding: 0.45rem 0.6rem;
+	border: 1px solid #e5e7eb;
+	vertical-align: top;
+}
+
+.child-table .table .odd {
+	background-color: #ffffff;
+}
+
+.child-table .table .even {
+	background-color: #f9fafb;
+}
+
+.child-table [data-fieldtype="Currency"],
+.child-table [data-fieldtype="Float"],
+.child-table [data-fieldtype="Int"] {
 	text-align: right;
 }
 
@@ -115,7 +187,7 @@ body {
 .document-header {
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
-	border-bottom-color: var(--gray-300);
+	border-bottom-color: #e5e7eb;
 }
 
 .field[data-fieldtype="Rating"] .rating-star {
