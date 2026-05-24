@@ -70,24 +70,56 @@
 						:class="{ 'column-align-right': column.align === 'right' }"
 					>
 						<div v-if="section.columns.length > 1" class="column-toolbar">
-							<!-- Only show the align toggle; no "← Left" label on default cols -->
-							<button
-								v-if="column.align === 'right'"
-								class="column-align-btn active"
-								:title="__('Aligned right — click to reset')"
-								@click.stop="toggle_column_align(column)"
+							<!-- Segmented align control: always shows both options, active one highlighted -->
+							<div
+								class="column-align-group"
+								:title="__('Column position in print output')"
 							>
-								<span class="column-align-icon">→</span>
-								<span>{{ __("Right") }}</span>
-							</button>
-							<button
-								v-else
-								class="column-align-btn"
-								:title="__('Push this column to the right')"
-								@click.stop="toggle_column_align(column)"
-							>
-								<span class="column-align-icon">→</span>
-							</button>
+								<button
+									class="col-align-btn"
+									:class="{ active: column.align !== 'right' }"
+									:title="__('Default — column at its natural position')"
+									@click.stop="set_column_align(column, '')"
+								>
+									<!-- align-left: 3 horizontal lines, all anchored at left -->
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="14"
+										height="11"
+										viewBox="0 0 14 11"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round"
+									>
+										<line x1="0" y1="1" x2="14" y2="1" />
+										<line x1="0" y1="5.5" x2="9" y2="5.5" />
+										<line x1="0" y1="10" x2="11" y2="10" />
+									</svg>
+								</button>
+								<button
+									class="col-align-btn"
+									:class="{ active: column.align === 'right' }"
+									:title="__('Push this column to the right edge in print')"
+									@click.stop="set_column_align(column, 'right')"
+								>
+									<!-- align-right: 3 horizontal lines, all anchored at right -->
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="14"
+										height="11"
+										viewBox="0 0 14 11"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.5"
+										stroke-linecap="round"
+									>
+										<line x1="0" y1="1" x2="14" y2="1" />
+										<line x1="5" y1="5.5" x2="14" y2="5.5" />
+										<line x1="3" y1="10" x2="14" y2="10" />
+									</svg>
+								</button>
+							</div>
 						</div>
 						<draggable
 							class="drag-container"
@@ -168,8 +200,8 @@ function toggle_orientation() {
 		props.section.field_orientation === "left-right" ? "" : "left-right";
 }
 
-function toggle_column_align(column) {
-	column.align = column.align === "right" ? "" : "right";
+function set_column_align(column, value) {
+	column.align = value;
 }
 </script>
 
@@ -340,36 +372,39 @@ function toggle_column_align(column) {
 	min-height: 1.6rem;
 }
 
-.column-align-btn {
+/* Segmented control — same pattern as Word / Google Docs alignment buttons */
+.column-align-group {
+	display: inline-flex;
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius-sm);
+	overflow: hidden;
+	background: var(--gray-50);
+}
+
+.col-align-btn {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	gap: 3px;
-	padding: 2px 7px;
-	border: 1px solid var(--border-color);
-	border-radius: var(--border-radius-sm);
-	background: var(--gray-50);
-	color: var(--gray-500);
+	padding: 3px 6px;
+	border: none;
+	border-radius: 0;
+	background: transparent;
 	cursor: pointer;
-	line-height: 1;
-	font-size: var(--text-xs);
-	white-space: nowrap;
-}
-
-.column-align-icon {
-	font-size: 11px;
+	color: var(--gray-400);
 	line-height: 1;
 }
 
-.column-align-btn:hover {
+.col-align-btn:not(:first-child) {
+	border-left: 1px solid var(--border-color);
+}
+
+.col-align-btn:hover {
 	background: var(--gray-100);
-	border-color: var(--gray-400);
-	color: var(--text-color);
+	color: var(--gray-600);
 }
 
-.column-align-btn.active {
+.col-align-btn.active {
 	background: var(--blue-50);
-	border-color: var(--blue-300);
 	color: var(--blue-500);
 }
 
