@@ -193,8 +193,13 @@ body {
 	}
 }
 
-/* Column right-align: push the column to the far right within its row */
+/*
+ * Column right-align: flex:none (don't grow) + margin-left:auto pushes column
+ * to the far right. flex:1 + margin-left:auto has no effect because flex:1
+ * already consumes all free space, leaving nothing for the auto margin.
+ */
 .col-align-right {
+	flex: none !important;
 	margin-left: auto !important;
 }
 

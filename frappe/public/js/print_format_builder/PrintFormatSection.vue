@@ -71,7 +71,7 @@
 					>
 						<div v-if="section.columns.length > 1" class="column-toolbar">
 							<button
-								class="btn btn-xs btn-icon column-align-btn"
+								class="column-align-btn"
 								:class="{ active: column.align === 'right' }"
 								:title="
 									column.align === 'right'
@@ -79,13 +79,18 @@
 										: __('Align column to the right')
 								"
 								@click.stop="toggle_column_align(column)"
-								v-html="
-									frappe.utils.icon(
-										column.align === 'right' ? 'align-right' : 'align-left',
-										'xs'
-									)
-								"
-							></button>
+							>
+								<span
+									v-html="
+										frappe.utils.icon(
+											column.align === 'right'
+												? 'align-right'
+												: 'align-left',
+											'sm'
+										)
+									"
+								></span>
+							</button>
 						</div>
 						<draggable
 							class="drag-container"
@@ -331,41 +336,55 @@ function toggle_column_align(column) {
 	flex-direction: column;
 }
 
+/*
+ * Right-align: don't grow (flex: none), rely on margin-left: auto to push right.
+ * flex: 1 + margin-left: auto has no effect because flex: 1 consumes all free space.
+ * With flex: none, the column takes content width and auto-margin pushes it right.
+ */
 .column-align-right {
+	flex: none;
+	min-width: 30%;
 	margin-left: auto;
 }
 
 .column-toolbar {
 	display: flex;
 	justify-content: flex-end;
-	padding: 0 0 0.25rem 0;
-	opacity: 0;
-	transition: opacity 0.15s;
-	min-height: 1.5rem;
-}
-
-.column:hover .column-toolbar,
-.column-align-right .column-toolbar {
-	opacity: 1;
+	padding: 0 0 0.2rem 0;
+	min-height: 1.4rem;
 }
 
 .column-align-btn {
-	padding: 2px 4px;
-	box-shadow: none;
-	color: var(--gray-400);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2px 5px;
+	border: 1px solid transparent;
 	border-radius: var(--border-radius-sm);
-	font-size: 10px;
+	background: transparent;
+	color: var(--gray-500);
+	cursor: pointer;
+	line-height: 1;
+	opacity: 0;
+	transition: opacity 0.15s, background 0.1s, color 0.1s;
+}
+
+.column:hover .column-align-btn,
+.column-align-right .column-align-btn {
+	opacity: 1;
 }
 
 .column-align-btn:hover {
-	background: var(--gray-200);
+	background: var(--gray-100);
+	border-color: var(--border-color);
 	color: var(--text-color);
 }
 
 .column-align-btn.active {
 	background: var(--blue-50);
+	border-color: var(--blue-200);
 	color: var(--blue-500);
-	opacity: 1 !important;
+	opacity: 1;
 }
 
 .column-divider {
