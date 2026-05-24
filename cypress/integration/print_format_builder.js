@@ -99,7 +99,10 @@ context("Print Format Builder — create flow", () => {
 		cy.intercept("POST", "api/method/frappe.client.save").as("save");
 		cy.visit(`/app/print-format-builder/${encodeURIComponent(PF_NAME)}`);
 
-		cy.contains(".sidebar-menu h5", "Page Margins", { timeout: 30000 }).should("be.visible");
+		// Sidebar uses <details class="sidebar-section"> / <summary class="sidebar-section-title">
+		// with the label "Page Settings" (not .sidebar-menu h5 / "Page Margins").
+		// Wait for the margin controls to confirm the builder has fully rendered.
+		cy.get(".margin-controls", { timeout: 30000 }).should("be.visible");
 
 		// Make sure no auto-save / freeze overlay is still in flight before we type.
 		cy.get(".freeze").should("not.exist");
