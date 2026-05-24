@@ -74,30 +74,35 @@
 				}"
 			>
 				<template v-for="(column, i) in section.columns" :key="i">
-					<div v-if="i > 0" class="column-divider"></div>
+					<!-- Hide divider when space-between is active — the divider is a
+					     flex item and would be placed in the center by space-between,
+					     creating a visible gap. The space-between gap is the separator. -->
+					<div
+						v-if="i > 0 && !section.columns.some((c) => c.align === 'right')"
+						class="column-divider"
+					></div>
 					<div
 						class="column"
 						:class="{ 'column-align-right': column.align === 'right' }"
 					>
 						<div v-if="section.columns.length > 1" class="column-toolbar">
+							<!-- Only show the align toggle; no "← Left" label on default cols -->
 							<button
-								class="column-align-btn"
-								:class="{ active: column.align === 'right' }"
-								:title="
-									column.align === 'right'
-										? __('Aligned right — click to reset to left')
-										: __(
-												'Push column to the right (useful in 1-column sections)'
-										  )
-								"
+								v-if="column.align === 'right'"
+								class="column-align-btn active"
+								:title="__('Aligned right — click to reset')"
 								@click.stop="toggle_column_align(column)"
 							>
-								<span class="column-align-icon">{{
-									column.align === "right" ? "→" : "←"
-								}}</span>
-								<span>{{
-									column.align === "right" ? __("Right") : __("Left")
-								}}</span>
+								<span class="column-align-icon">→</span>
+								<span>{{ __("Right") }}</span>
+							</button>
+							<button
+								v-else
+								class="column-align-btn"
+								:title="__('Push this column to the right')"
+								@click.stop="toggle_column_align(column)"
+							>
+								<span class="column-align-icon">→</span>
 							</button>
 						</div>
 						<draggable
