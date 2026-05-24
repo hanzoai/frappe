@@ -265,28 +265,36 @@ class Page:
 		if not self.is_print_designer:
 			selector = ".wrapper"
 
-		# Measure visual height via JavaScript so that floated children are included
-		# even when the container is float-collapsed (height=0 in the box model).
-		# DOM.getBoxModel can return 0 for containers whose only children are floated;
-		# finding the max getBoundingClientRect().bottom across all descendants is
-		# reliable regardless of BFC / overflow state.
+		# Primary: use the wrapper's own getBoundingClientRect().height.
+		# With display:flow-root on .wrapper (chrome_pdf_header_footer.html) the BFC
+		# guarantees floated children are included in the layout height, so this is
+		# the correct rendered height.
+		#
+		# Fallback (height==0, e.g. unusual letterhead that defeats display:flow-root):
+		# walk in-flow descendants and return the farthest bottom edge.
+		# Absolutely/fixed-positioned descendants are skipped so they can't
+		# inflate the measurement beyond the actual visual content.
 		js = f"""(function() {{
-			var el = document.querySelector('{selector}');
-			if (!el) return 0;
-			var top = el.getBoundingClientRect().top;
+			var wrapper = document.querySelector('{selector}');
+			if (!wrapper) return 0;
+			var h = wrapper.getBoundingClientRect().height;
+			if (h > 0) return Math.ceil(h);
+			var top = wrapper.getBoundingClientRect().top;
 			var maxBottom = top;
-			var nodes = el.querySelectorAll('*');
+			var nodes = wrapper.querySelectorAll('*');
 			for (var i = 0; i < nodes.length; i++) {{
+				var pos = window.getComputedStyle(nodes[i]).position;
+				if (pos === 'absolute' || pos === 'fixed') continue;
 				var b = nodes[i].getBoundingClientRect().bottom;
 				if (b > maxBottom) maxBottom = b;
 			}}
-			return Math.round(maxBottom - top);
+			return Math.ceil(maxBottom - top);
 		}})()"""
 		try:
 			result = self.evaluate(js)
 			height = result.get("result", {}).get("value", 0) or 0
 		except Exception:
-			# Fallback to DOM.getBoxModel if JS evaluation fails
+			# Fallback to DOM.getBoxModel if JS evaluation fails entirely
 			try:
 				self.send("DOM.enable")
 				doc_result, _err = self.send("DOM.getDocument")
