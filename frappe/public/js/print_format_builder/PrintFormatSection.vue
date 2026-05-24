@@ -335,15 +335,14 @@ function toggle_column_align(column) {
 }
 
 /*
- * Right-align: flex 0 0 50% fixes the width to half the row so margin-left:auto
- * can push it right without other flex siblings consuming all available space.
- * For a single right-aligned column, the 50% + auto margin = column floats to
- * the right half of the section. For a 2-col section, it behaves like the
- * normal 50/50 split.
+ * Right-align: in the builder we only show a visual indicator — no flex changes.
+ * Changing flex here causes overflow when multiple columns are right-aligned
+ * (each at 50% + the divider pushes total > 100%). The actual float-right
+ * effect is applied in print_format.css for the PDF/preview output.
  */
 .column-align-right {
-	flex: 0 0 50%;
-	margin-left: auto;
+	border-top: 2px solid var(--blue-300);
+	border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
 .column-toolbar {

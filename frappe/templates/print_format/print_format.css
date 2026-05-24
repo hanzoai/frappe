@@ -194,14 +194,18 @@ body {
 }
 
 /*
- * Column right-align: fix flex-basis at 50% so the column never wraps (Bootstrap
- * .row uses flex-wrap:wrap, so flex:none with auto basis can overflow and wrap).
- * margin-left:auto pushes the column to the far right of the remaining space.
- * In a 1-col section: right half only. In a 2-col section: same 50/50 layout
- * but the right column is explicitly anchored to the right.
+ * Column right-align: float the column to the right edge.
+ *   flex: none   — take natural content width (don't grow like Bootstrap .col)
+ *   max-width: 50% — prevent wrapping if content is very wide
+ *   margin-left: auto — consume all free space on the left → column sits at right
+ *
+ * Best used in a 1-column section: the single column floats to the right half.
+ * In a 2-column section with a left column (flex:1), the left column expands
+ * to fill the gap and the right column sits at its natural width on the right.
  */
 .col-align-right {
-	flex: 0 0 50% !important;
+	flex: none !important;
+	max-width: 50% !important;
 	margin-left: auto !important;
 }
 
