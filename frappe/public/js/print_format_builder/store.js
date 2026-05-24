@@ -96,6 +96,9 @@ export function getStore(print_format_name) {
 				}
 			})
 			.then(() => fetch())
+			.then(() => {
+				frappe.show_alert({ message: __("Saved"), indicator: "green" });
+			})
 			.always(() => {
 				frappe.dom.unfreeze();
 			});
