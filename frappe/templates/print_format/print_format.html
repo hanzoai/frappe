@@ -18,11 +18,6 @@
 </head>
 <body>
 	{{ header or '' }}
-	{%- if layout.header -%}
-	<div class="document-header-content">
-		{{ frappe.render_template(layout.header, {'doc': doc}) }}
-	</div>
-	{%- endif -%}
 	{% for section in layout.sections %}
 	{#- Skip labelled sections where every data field is empty -#}
 	{%- set ns = namespace(has_content=false) -%}
@@ -53,11 +48,6 @@
 	</div>
 	{%- endif -%}
 	{% endfor %}
-	{%- if layout.footer -%}
-	<div class="document-footer-content">
-		{{ frappe.render_template(layout.footer, {'doc': doc}) }}
-	</div>
-	{%- endif -%}
 	{{ footer or '' }}
 </body>
 </html>
