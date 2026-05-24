@@ -74,10 +74,19 @@ body {
 	padding-bottom: 0.35rem;
 	margin-bottom: 0.75rem;
 	border-bottom: 1.5px solid #e2e2e2;
+	/* Don't let the section heading sit alone at the bottom of a page */
+	break-after: avoid;
+	page-break-after: avoid;
 }
 
 .field + .field {
 	margin-top: 0.5rem;
+}
+
+/* Keep field label and value on the same page */
+.field {
+	break-inside: avoid;
+	page-break-inside: avoid;
 }
 
 /* Stacked (default): muted label above value */
