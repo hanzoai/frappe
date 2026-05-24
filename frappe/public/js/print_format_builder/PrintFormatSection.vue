@@ -76,20 +76,15 @@
 								:title="
 									column.align === 'right'
 										? __('Aligned right — click to reset to left')
-										: __('Push column to the right')
+										: __(
+												'Push column to the right (useful in 1-column sections)'
+										  )
 								"
 								@click.stop="toggle_column_align(column)"
 							>
-								<span
-									v-html="
-										frappe.utils.icon(
-											column.align === 'right'
-												? 'align-right'
-												: 'align-left',
-											'xs'
-										)
-									"
-								></span>
+								<span class="column-align-icon">{{
+									column.align === "right" ? "→" : "←"
+								}}</span>
 								<span>{{
 									column.align === "right" ? __("Right") : __("Left")
 								}}</span>
@@ -362,8 +357,8 @@ function toggle_column_align(column) {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	gap: 2px;
-	padding: 2px 6px;
+	gap: 3px;
+	padding: 2px 7px;
 	border: 1px solid var(--border-color);
 	border-radius: var(--border-radius-sm);
 	background: var(--gray-50);
@@ -372,6 +367,11 @@ function toggle_column_align(column) {
 	line-height: 1;
 	font-size: var(--text-xs);
 	white-space: nowrap;
+}
+
+.column-align-icon {
+	font-size: 11px;
+	line-height: 1;
 }
 
 .column-align-btn:hover {
