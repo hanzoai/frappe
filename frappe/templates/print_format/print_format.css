@@ -126,6 +126,26 @@ body {
 	flex: 1;
 }
 
+/* layout.header / layout.footer fixed overlays (Chrome PDF only).
+   position:fixed makes Chrome PDF repeat them on every page.
+   The body page already starts below the letterhead overlay, so top:0
+   places these elements immediately below the letterhead on every page. */
+.document-header-fixed {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+}
+
+.document-footer-fixed {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+}
+
 /* Child table */
 .child-table {
 	margin-top: 0.5rem;

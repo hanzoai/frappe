@@ -116,9 +116,20 @@ class PrintFormatGenerator:
 		)
 
 	def _build_html_for_chrome(self):
-		"""Build the body HTML with header/footer wrapped in ``#header-html`` /
-		``#footer-html`` so the Chrome PDF pipeline extracts them as overlays
-		that repeat on every page.
+		"""Build the body HTML for the Chrome PDF pipeline.
+
+		The letterhead (and page numbers) go into ``#header-html`` / ``#footer-html``
+		so the Browser class extracts them, measures their height precisely, and
+		merges them as overlays on every page.
+
+		``layout.header`` / ``layout.footer`` are intentionally kept OUT of the
+		overlay divs.  Mixing them in with the letterhead causes the
+		``DOM.getBoxModel`` height measurement to become unreliable (absolute/fixed
+		children are excluded from box-model height, causing overflow artefacts).
+		Instead they are rendered as ``position: fixed`` elements inside the body:
+		Chrome PDF treats fixed elements as repeating on every page, and the body
+		page already starts below the letterhead, so ``top: 0`` places them
+		immediately below the letterhead on every page.
 		"""
 		self.context.for_chrome = True
 		self.context.header_height = 0
@@ -128,14 +139,30 @@ class PrintFormatGenerator:
 		footer = self._render_overlay("footer")
 		self.context.header = f'<div id="header-html">{header}</div>' if header else ""
 		self.context.footer = f'<div id="footer-html">{footer}</div>' if footer else ""
+
+		# Inject layout.header / layout.footer as fixed elements that repeat on
+		# every page without interfering with the letterhead overlay height.
+		ctx = {"doc": self.context.doc}
+		layout_header = self.layout.get("header") if self.layout else None
+		layout_footer = self.layout.get("footer") if self.layout else None
+		self.context.layout_header_fixed = (
+			'<div class="document-header-fixed">' + frappe.render_template(layout_header, ctx) + "</div>"
+			if layout_header
+			else ""
+		)
+		self.context.layout_footer_fixed = (
+			'<div class="document-footer-fixed">' + frappe.render_template(layout_footer, ctx) + "</div>"
+			if layout_footer
+			else ""
+		)
+
 		return self.get_main_html()
 
 	def _render_overlay(self, kind: str) -> str | None:
-		"""Render the header or footer content for the Chrome overlay.
+		"""Render the **letterhead** (and optional page number) for the Chrome overlay.
 
-		``kind`` is ``"header"`` or ``"footer"``. Page-number HTML is inserted
-		at the top for header positions and at the bottom for footer positions
-		so ``Top *`` / ``Bottom *`` actually appear where the name suggests.
+		``layout.header`` / ``layout.footer`` are deliberately excluded here — see
+		``_build_html_for_chrome`` for the rationale.
 		"""
 		is_header = kind == "header"
 		page_pos = (self.print_format.page_number or "").lower().replace(" ", "_")
@@ -144,12 +171,10 @@ class PrintFormatGenerator:
 
 		if is_header:
 			letterhead_html = self.letterhead and self.letterhead.content
-			layout_html = self.layout.get("header") if self.layout else None
 		else:
 			letterhead_html = self.letterhead and self.letterhead.footer
-			layout_html = self.layout.get("footer") if self.layout else None
 
-		if not (letterhead_html or layout_html or wants_page_no):
+		if not (letterhead_html or wants_page_no):
 			return None
 
 		page_no_html = self._page_number_html(page_pos) if wants_page_no else None
@@ -161,12 +186,6 @@ class PrintFormatGenerator:
 			parts.append(page_no_html)
 		if letterhead_html:
 			parts.append(frappe.render_template(letterhead_html, ctx))
-		if layout_html:
-			parts.append(
-				f'<div class="document-{"header" if is_header else "footer"}-content">'
-				+ frappe.render_template(layout_html, ctx)
-				+ "</div>"
-			)
 		if not is_header and page_no_html:
 			parts.append(page_no_html)
 		return "\n".join(parts) or None
