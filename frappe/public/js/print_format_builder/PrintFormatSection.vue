@@ -62,25 +62,9 @@
 				</div>
 			</div>
 
-			<div
-				class="section-columns"
-				:class="{
-					'cols-space-between':
-						section.columns.some((c) => c.align === 'right') &&
-						section.columns.length > 1,
-					'cols-right-end':
-						section.columns.some((c) => c.align === 'right') &&
-						section.columns.length === 1,
-				}"
-			>
+			<div class="section-columns">
 				<template v-for="(column, i) in section.columns" :key="i">
-					<!-- Hide divider when space-between is active — the divider is a
-					     flex item and would be placed in the center by space-between,
-					     creating a visible gap. The space-between gap is the separator. -->
-					<div
-						v-if="i > 0 && !section.columns.some((c) => c.align === 'right')"
-						class="column-divider"
-					></div>
+					<div v-if="i > 0" class="column-divider"></div>
 					<div
 						class="column"
 						:class="{ 'column-align-right': column.align === 'right' }"
@@ -347,27 +331,6 @@ function toggle_column_align(column) {
 	min-width: 0;
 	display: flex;
 	flex-direction: column;
-}
-
-/* 2+ columns, at least one right-aligned: push left/right to opposite edges */
-.cols-space-between {
-	justify-content: space-between;
-}
-
-.cols-space-between .column {
-	flex: none;
-	min-width: 30%;
-	max-width: 48%;
-}
-
-/* 1 column right-aligned: push it to the right edge */
-.cols-right-end {
-	justify-content: flex-end;
-}
-
-.cols-right-end .column {
-	flex: none;
-	max-width: 50%;
 }
 
 .column-toolbar {
