@@ -1,67 +1,83 @@
 <template>
 	<div
 		class="field"
+		:class="{ 'field--table': df.fieldtype == 'Table' }"
 		v-show="!df.remove"
 		:title="df.label || df.fieldname"
 		@click="editing = true"
 	>
-		<div class="drag-handle field-drag-handle" v-html="frappe.utils.icon('drag', 'xs')"></div>
-		<div class="field-body">
-			<div class="field-content">
-				<div
-					class="custom-html"
-					v-if="df.fieldtype == 'HTML' && df.html"
-					v-html="df.html"
-				></div>
-				<div class="custom-html" v-else-if="df.fieldtype == 'Field Template'">
-					{{ df.label }}
+		<div class="field-row">
+			<div
+				class="drag-handle field-drag-handle"
+				v-html="frappe.utils.icon('drag', 'xs')"
+			></div>
+			<div class="field-body">
+				<div class="field-content">
+					<div
+						class="custom-html"
+						v-if="df.fieldtype == 'HTML' && df.html"
+						v-html="df.html"
+					></div>
+					<div class="custom-html" v-else-if="df.fieldtype == 'Field Template'">
+						{{ df.label }}
+					</div>
+					<input
+						v-else-if="editing && df.fieldtype != 'HTML'"
+						ref="label_input"
+						class="label-input"
+						type="text"
+						:placeholder="__('Label')"
+						v-model="df.label"
+						@keydown.enter="editing = false"
+						@blur="editing = false"
+					/>
+					<span v-else-if="df.label">{{ df.label }}</span>
+					<i class="text-muted" v-else>{{ __("No Label") }} ({{ df.fieldname }})</i>
 				</div>
-				<input
-					v-else-if="editing && df.fieldtype != 'HTML'"
-					ref="label_input"
-					class="label-input"
-					type="text"
-					:placeholder="__('Label')"
-					v-model="df.label"
-					@keydown.enter="editing = false"
-					@blur="editing = false"
-				/>
-				<span v-else-if="df.label">{{ df.label }}</span>
-				<i class="text-muted" v-else>{{ __("No Label") }} ({{ df.fieldname }})</i>
-			</div>
-			<div class="field-meta">
-				<span class="fieldtype-badge">{{ short_fieldtype }}</span>
-				<div class="field-actions">
-					<button
-						v-if="df.fieldtype == 'HTML'"
-						class="btn btn-xs btn-icon"
-						@click.stop="edit_html"
-						v-html="frappe.utils.icon('edit', 'sm')"
-					></button>
-					<button
-						v-if="df.fieldtype == 'Table'"
-						class="btn btn-xs btn-default"
-						@click.stop="configure_columns"
-					>
-						{{ __("Columns") }}
-					</button>
-					<button
-						class="btn btn-xs btn-icon"
-						@click.stop="df['remove'] = true"
-						v-html="frappe.utils.icon('x', 'sm')"
-					></button>
+				<div class="field-meta">
+					<span class="fieldtype-badge">{{ short_fieldtype }}</span>
+					<div class="field-actions">
+						<button
+							v-if="df.fieldtype == 'HTML'"
+							class="btn btn-xs btn-icon"
+							@click.stop="edit_html"
+							v-html="frappe.utils.icon('edit', 'sm')"
+						></button>
+						<button
+							class="btn btn-xs btn-icon"
+							@click.stop="df['remove'] = true"
+							v-html="frappe.utils.icon('x', 'sm')"
+						></button>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div v-if="df.fieldtype == 'Table'" class="table-controls row no-gutters">
-			<div
-				class="table-column"
-				:style="{ width: tf.width + '%' }"
-				v-for="(tf, i) in df.table_columns"
-				:key="tf.fieldname"
-			>
-				<div class="table-field">{{ tf.label }}</div>
+		<div v-if="df.fieldtype == 'Table'" class="table-preview">
+			<div class="table-columns-list">
+				<span
+					class="table-col-chip"
+					:class="{ 'table-col-chip--invalid': tf.invalid_width }"
+					v-for="tf in df.table_columns"
+					:key="tf.fieldname"
+					:title="tf.width ? tf.width + '%' : ''"
+				>
+					{{ tf.label || tf.fieldname }}
+				</span>
+				<span
+					v-if="!df.table_columns || !df.table_columns.length"
+					class="text-muted"
+					style="font-size: var(--text-xs)"
+				>
+					{{ __("No columns configured") }}
+				</span>
 			</div>
+			<button
+				class="btn btn-xs btn-default configure-columns-btn"
+				@click.stop="configure_columns"
+			>
+				<span v-html="frappe.utils.icon('settings-2', 'xs')"></span>
+				{{ __("Configure Columns") }}
+			</button>
 		</div>
 	</div>
 </template>
@@ -194,8 +210,8 @@ watch(
 <style scoped>
 .field {
 	display: flex;
-	align-items: center;
-	gap: 0.25rem;
+	flex-direction: column;
+	gap: 0;
 	width: 100%;
 	min-width: 0;
 	background-color: var(--bg-light-gray);
@@ -210,6 +226,14 @@ watch(
 .field:focus-within {
 	border-style: solid;
 	border-color: var(--gray-600);
+}
+
+.field-row {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+	width: 100%;
+	min-width: 0;
 }
 
 .field-drag-handle {
@@ -288,25 +312,47 @@ watch(
 	outline: none;
 }
 
-.table-controls {
-	display: flex;
+/* Table field preview */
+.table-preview {
 	margin-top: 0.5rem;
-	width: 100%;
+	padding-top: 0.5rem;
+	border-top: 1px solid var(--gray-300);
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
 }
 
-.table-column {
-	position: relative;
+.table-columns-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
 }
 
-.table-field {
-	text-align: left;
-	width: 100%;
-	background-color: white;
-	border-radius: var(--border-radius);
-	border: 1px dashed var(--gray-400);
-	padding: 0.25rem 0.5rem;
-	font-size: var(--text-sm);
+.table-col-chip {
+	display: inline-flex;
+	align-items: center;
+	background: white;
+	border: 1px solid var(--gray-300);
+	border-radius: var(--border-radius-sm);
+	padding: 1px 6px;
+	font-size: var(--text-xs);
+	color: var(--text-color);
 	white-space: nowrap;
+	max-width: 120px;
 	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.table-col-chip--invalid {
+	border-color: var(--red-300);
+	color: var(--red-500);
+	background: var(--red-50);
+}
+
+.configure-columns-btn {
+	align-self: flex-start;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
 }
 </style>
