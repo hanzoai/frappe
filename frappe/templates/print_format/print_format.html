@@ -18,15 +18,6 @@
 </head>
 <body>
 	{{ header or '' }}
-	{#- Chrome PDF: layout.header/footer injected as position:fixed elements that repeat every page -#}
-	{{ layout_header_fixed or '' }}
-	{{ layout_footer_fixed or '' }}
-	{#- HTML preview: render layout.header once at the top of the document body -#}
-	{%- if not for_chrome and layout.header -%}
-	<div class="document-header-content">
-		{{ frappe.render_template(layout.header, {'doc': doc}) }}
-	</div>
-	{%- endif -%}
 	{% for section in layout.sections %}
 	{#- Skip labelled sections where every data field is empty -#}
 	{%- set ns = namespace(has_content=false) -%}
