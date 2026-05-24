@@ -14,16 +14,18 @@
 				border: 0 !important;
 				padding: 0 !important;
 			}
+			/* overflow:hidden creates a BFC so floated letterhead children
+			   (logo left / company name right) are included in the measured height.
+			   Must be outside @media print: DOM.getBoxModel runs in screen mode,
+			   so print-only rules don't apply during height measurement. */
+			.wrapper {
+				overflow: hidden;
+			}
 			@media print {
 				.wrapper {
 					box-sizing: border-box;
 					padding: 0 !important;
 					margin: 0 !important;
-					/* Create a BFC so floated letterhead children (logo left,
-					   company name right) are included in the measured height.
-					   Without this, DOM.getBoxModel returns 0 for float-only
-					   containers and body content overlaps the header. */
-					overflow: hidden;
 				}
 				[document-status] {
 					margin-bottom: 0 !important;
