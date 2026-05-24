@@ -326,8 +326,7 @@ watch(
 }
 
 .table-col-chip {
-	display: inline-flex;
-	align-items: center;
+	display: inline-block;
 	background: white;
 	border: 1px solid var(--gray-300);
 	border-radius: var(--border-radius-sm);
@@ -338,6 +337,7 @@ watch(
 	max-width: 100px;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	vertical-align: middle;
 }
 
 .table-col-chip--invalid {
@@ -354,18 +354,24 @@ watch(
 	font-size: var(--text-xs);
 	font-weight: 500;
 	color: var(--text-muted);
-	background: transparent;
-	border: 1px solid var(--gray-300);
+	background: var(--gray-50, #f8f8f8);
+	border: 1px solid var(--gray-200);
 	border-radius: var(--border-radius);
 	padding: 3px 8px;
 	cursor: pointer;
+	outline: none;
 	transition: color 0.15s, border-color 0.15s, background 0.15s;
 	line-height: 1.4;
 }
 
 .configure-columns-btn:hover {
-	color: var(--primary);
-	border-color: var(--primary);
-	background: var(--primary-light);
+	color: var(--gray-800);
+	border-color: var(--gray-400);
+	background: var(--gray-100);
+}
+
+.configure-columns-btn:focus {
+	outline: none;
+	box-shadow: none;
 }
 </style>
