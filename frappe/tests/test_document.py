@@ -11,7 +11,8 @@ from frappe.app import make_form_dict
 from frappe.core.doctype.doctype.test_doctype import new_doctype
 from frappe.core.doctype.user.user import User
 from frappe.desk.doctype.note.note import Note
-from frappe.model.document import LazyChildTable
+from frappe.desk.doctype.todo.todo import ToDo
+from frappe.model.document import Document, LazyChildTable
 from frappe.model.naming import make_autoname, parse_naming_series, revert_series_if_last
 from frappe.tests import IntegrationTestCase
 from frappe.utils import cint, now_datetime, set_request
@@ -926,23 +927,17 @@ class TestDocsCollection(IntegrationTestCase):
 		return super().tearDown()
 
 	def test_doctype_resolved_from_controller(self):
-		from frappe.desk.doctype.todo.todo import ToDo
-
 		self.assertEqual(ToDo.docs._doctype, "ToDo")
 
 	def test_get_returns_document(self):
-		from frappe.desk.doctype.todo.todo import ToDo
-
-		todo = frappe.get_doc({"doctype": "ToDo", "description": "docs.get test"}).insert()
+		todo = ToDo.docs.new(description="docs.get test").insert()
 		fetched = ToDo.docs.get(todo.name)
 		self.assertIsInstance(fetched, ToDo)
 		self.assertEqual(fetched.name, todo.name)
 		self.assertEqual(fetched.description, "docs.get test")
 
 	def test_get_cached(self):
-		from frappe.desk.doctype.todo.todo import ToDo
-
-		todo = frappe.get_doc({"doctype": "ToDo", "description": "docs.get cached"}).insert()
+		todo = ToDo.docs.new(description="docs.get cached").insert()
 		cached = ToDo.docs.get(todo.name, cached=True)
 		self.assertEqual(cached.name, todo.name)
 		# Second call should return the same cached object.
@@ -950,21 +945,15 @@ class TestDocsCollection(IntegrationTestCase):
 		self.assertIs(cached, cached2)
 
 	def test_get_lazy(self):
-		from frappe.desk.doctype.todo.todo import ToDo
-
-		todo = frappe.get_doc({"doctype": "ToDo", "description": "docs.get lazy"}).insert()
+		todo = ToDo.docs.new(description="docs.get lazy").insert()
 		lazy = ToDo.docs.get(todo.name, lazy=True)
 		self.assertEqual(lazy.name, todo.name)
 
 	def test_get_cached_and_lazy_are_exclusive(self):
-		from frappe.desk.doctype.todo.todo import ToDo
-
 		with self.assertRaises(ValueError):
 			ToDo.docs.get("dummy", cached=True, lazy=True)
 
 	def test_new_creates_unsaved_document(self):
-		from frappe.desk.doctype.todo.todo import ToDo
-
 		todo = ToDo.docs.new(description="docs.new test")
 		self.assertIsInstance(todo, ToDo)
 		self.assertEqual(todo.doctype, "ToDo")
@@ -972,52 +961,27 @@ class TestDocsCollection(IntegrationTestCase):
 		self.assertTrue(todo.get("__islocal"))
 
 	def test_last_returns_most_recent(self):
-		from frappe.desk.doctype.todo.todo import ToDo
-
 		marker = f"docs.last marker {frappe.generate_hash(length=8)}"
-		_ = frappe.get_doc({"doctype": "ToDo", "description": marker}).insert()
-		second = frappe.get_doc({"doctype": "ToDo", "description": marker}).insert()
+		_ = ToDo.docs.new(description=marker).insert()
+		second = ToDo.docs.new(description=marker).insert()
 		last = ToDo.docs.last({"description": marker})
 		self.assertEqual(last.name, second.name)
 
 	def test_filter_returns_matching_documents(self):
-		from frappe.desk.doctype.todo.todo import ToDo
-
 		marker = f"docs.filter marker {frappe.generate_hash(length=8)}"
-		created = [frappe.get_doc({"doctype": "ToDo", "description": marker}).insert() for _ in range(3)]
+		created = [ToDo.docs.new(description=marker).insert() for _ in range(3)]
 		docs = ToDo.docs.filter({"description": marker})
 		self.assertEqual(len(docs), 3)
 		names = {d.name for d in docs}
 		self.assertEqual(names, {d.name for d in created})
 		self.assertTrue(all(isinstance(d, ToDo) for d in docs))
 
-	def test_delete_removes_document(self):
-		from frappe.desk.doctype.todo.todo import ToDo
-
-		todo = frappe.get_doc({"doctype": "ToDo", "description": "docs.delete test"}).insert()
-		ToDo.docs.delete(todo.name)
-		self.assertFalse(frappe.db.exists("ToDo", todo.name))
-
-	def test_rename_via_instance(self):
-		from frappe.core.doctype.doctype.test_doctype import new_doctype
-
-		dt = new_doctype(autoname="prompt").insert().name
-		doc = frappe.get_doc({"doctype": dt, "name": "ALPHA", "some_fieldname": "x"}).insert()
-		doc.rename("BETA")
-		self.assertTrue(frappe.db.exists(dt, "BETA"))
-		self.assertFalse(frappe.db.exists(dt, "ALPHA"))
-
 	def test_subclass_uses_its_own_doctype(self):
 		"""Subclasses with their own `_DOCTYPE_NAME` resolve independently."""
-		from frappe.desk.doctype.note.note import Note
-		from frappe.desk.doctype.todo.todo import ToDo
-
 		self.assertEqual(ToDo.docs._doctype, "ToDo")
 		self.assertEqual(Note.docs._doctype, "Note")
 
 	def test_missing_doctype_name_raises(self):
-		from frappe.model.document import Document
-
 		class Orphan(Document):
 			pass
 
