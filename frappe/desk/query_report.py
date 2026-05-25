@@ -11,6 +11,7 @@ import frappe
 import frappe.desk.reportview
 from frappe import _
 from frappe.core.utils import ljust_list
+from frappe.desk.form.load import get_attachments
 from frappe.desk.reportview import clean_params, parse_json
 from frappe.model.utils import render_include
 from frappe.modules import get_module_path, scrub
@@ -241,6 +242,7 @@ def run(
 			else:
 				dn = ""
 			result = get_prepared_report_result(report, filters, dn, user)
+			result["attachments"] = get_attachments("Prepared Report", dn)
 		else:
 			result = generate_report_result(report, filters, user, custom_columns, is_tree, parent_field)
 			add_data_to_monitor(report=report.reference_report or report.name)
