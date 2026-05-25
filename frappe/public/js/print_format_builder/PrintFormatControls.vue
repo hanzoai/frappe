@@ -393,7 +393,7 @@ details:not([open]) .chevron-icon {
 .sidebar-field .icon {
 	opacity: 0;
 	transition: opacity 0.1s;
-	margin-left: auto;
+	margin-right: 0;
 	flex-shrink: 0;
 }
 
