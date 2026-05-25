@@ -333,6 +333,8 @@ def get_doc_permission_check(doc: "Document", check_permission: str | bool | Non
 class DocsCollection[T]:
 	"""APIs to manage collections of documents."""
 
+	__slots__ = ("_owner_cls",)
+
 	def __set_name__(self, owner: type, name: str) -> None:
 		self._owner_cls = owner
 
@@ -342,7 +344,7 @@ class DocsCollection[T]:
 		bound._owner_cls = owner or self._owner_cls
 		return bound
 
-	@cached_property
+	@property
 	def _doctype(self) -> str:
 		doctype = getattr(self._owner_cls, "_DOCTYPE_NAME", None)
 		if not doctype:
