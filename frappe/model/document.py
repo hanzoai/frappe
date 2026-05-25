@@ -359,7 +359,7 @@ class DocsCollection[T]:
 		cached: bool = False,
 		lazy: bool = False,
 		for_update: bool = False,
-		check_permission: str | bool | None = None,
+		check_permission: str | bool | None = None,  # TODO: Default to true?
 	) -> T:
 		"""Fetch a single document of this DocType by name (or filter dict)."""
 		if cached and lazy:
@@ -368,12 +368,11 @@ class DocsCollection[T]:
 		if not isinstance(name, str | int | None):
 			raise ValueError("`name` has to be a string or integer or None.")
 
-		doctype = self._doctype
 		if lazy:
-			return get_lazy_doc(doctype, name, for_update=for_update, check_permission=check_permission)
+			return get_lazy_doc(self._doctype, name, for_update=for_update, check_permission=check_permission)
 		if cached:
-			return get_cached_doc(doctype, name)
-		return get_doc(doctype, name, for_update=for_update, check_permission=check_permission)
+			return get_cached_doc(self._doctype, name)
+		return get_doc(self._doctype, name, for_update=for_update, check_permission=check_permission)
 
 	def last(
 		self,
@@ -413,25 +412,6 @@ class DocsCollection[T]:
 	def new(self, **kwargs) -> T:
 		"""Create a new (unsaved) document with the given field values."""
 		return new_doc(self._doctype, **kwargs)
-
-	def delete(
-		self,
-		name: str | int,
-		*,
-		force: bool = False,
-		ignore_permissions: bool = False,
-		ignore_missing: bool = True,
-		delete_permanently: bool = False,
-	) -> None:
-		"""Delete a document of this DocType."""
-		frappe.delete_doc(
-			self._doctype,
-			name,
-			force=force,
-			ignore_permissions=ignore_permissions,
-			ignore_missing=ignore_missing,
-			delete_permanently=delete_permanently,
-		)
 
 
 class Document(BaseDocument):
