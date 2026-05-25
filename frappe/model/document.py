@@ -7,7 +7,7 @@ import time
 import warnings
 from collections.abc import Generator, Iterable
 from contextlib import contextmanager
-from functools import wraps
+from functools import cached_property, wraps
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Any, Literal, Optional, Self, TypeAlias, Union, overload, override
 
@@ -347,7 +347,7 @@ class DocsCollection[T]:
 		bound._owner_cls = owner or self._owner_cls
 		return bound
 
-	@property
+	@cached_property
 	def _doctype(self) -> str:
 		doctype = getattr(self._owner_cls, "_DOCTYPE_NAME", None)
 		if not doctype:
