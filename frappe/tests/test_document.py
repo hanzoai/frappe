@@ -921,6 +921,10 @@ class TestDocsCollection(IntegrationTestCase):
 	controller class that declares `_DOCTYPE_NAME`.
 	"""
 
+	def tearDown(self):
+		frappe.db.rollback()
+		return super().tearDown()
+
 	def test_doctype_resolved_from_controller(self):
 		from frappe.desk.doctype.todo.todo import ToDo
 
@@ -930,36 +934,27 @@ class TestDocsCollection(IntegrationTestCase):
 		from frappe.desk.doctype.todo.todo import ToDo
 
 		todo = frappe.get_doc({"doctype": "ToDo", "description": "docs.get test"}).insert()
-		try:
-			fetched = ToDo.docs.get(todo.name)
-			self.assertIsInstance(fetched, ToDo)
-			self.assertEqual(fetched.name, todo.name)
-			self.assertEqual(fetched.description, "docs.get test")
-		finally:
-			todo.delete()
+		fetched = ToDo.docs.get(todo.name)
+		self.assertIsInstance(fetched, ToDo)
+		self.assertEqual(fetched.name, todo.name)
+		self.assertEqual(fetched.description, "docs.get test")
 
 	def test_get_cached(self):
 		from frappe.desk.doctype.todo.todo import ToDo
 
 		todo = frappe.get_doc({"doctype": "ToDo", "description": "docs.get cached"}).insert()
-		try:
-			cached = ToDo.docs.get(todo.name, cached=True)
-			self.assertEqual(cached.name, todo.name)
-			# Second call should return the same cached object.
-			cached2 = ToDo.docs.get(todo.name, cached=True)
-			self.assertIs(cached, cached2)
-		finally:
-			todo.delete()
+		cached = ToDo.docs.get(todo.name, cached=True)
+		self.assertEqual(cached.name, todo.name)
+		# Second call should return the same cached object.
+		cached2 = ToDo.docs.get(todo.name, cached=True)
+		self.assertIs(cached, cached2)
 
 	def test_get_lazy(self):
 		from frappe.desk.doctype.todo.todo import ToDo
 
 		todo = frappe.get_doc({"doctype": "ToDo", "description": "docs.get lazy"}).insert()
-		try:
-			lazy = ToDo.docs.get(todo.name, lazy=True)
-			self.assertEqual(lazy.name, todo.name)
-		finally:
-			todo.delete()
+		lazy = ToDo.docs.get(todo.name, lazy=True)
+		self.assertEqual(lazy.name, todo.name)
 
 	def test_get_cached_and_lazy_are_exclusive(self):
 		from frappe.desk.doctype.todo.todo import ToDo
@@ -971,42 +966,30 @@ class TestDocsCollection(IntegrationTestCase):
 		from frappe.desk.doctype.todo.todo import ToDo
 
 		todo = ToDo.docs.new(description="docs.new test")
-		try:
-			self.assertIsInstance(todo, ToDo)
-			self.assertEqual(todo.doctype, "ToDo")
-			self.assertEqual(todo.description, "docs.new test")
-			self.assertTrue(todo.get("__islocal"))
-		finally:
-			if not todo.get("__islocal"):
-				todo.delete()
+		self.assertIsInstance(todo, ToDo)
+		self.assertEqual(todo.doctype, "ToDo")
+		self.assertEqual(todo.description, "docs.new test")
+		self.assertTrue(todo.get("__islocal"))
 
 	def test_last_returns_most_recent(self):
 		from frappe.desk.doctype.todo.todo import ToDo
 
 		marker = f"docs.last marker {frappe.generate_hash(length=8)}"
-		first = frappe.get_doc({"doctype": "ToDo", "description": marker}).insert()
+		_ = frappe.get_doc({"doctype": "ToDo", "description": marker}).insert()
 		second = frappe.get_doc({"doctype": "ToDo", "description": marker}).insert()
-		try:
-			last = ToDo.docs.last({"description": marker})
-			self.assertEqual(last.name, second.name)
-		finally:
-			first.delete()
-			second.delete()
+		last = ToDo.docs.last({"description": marker})
+		self.assertEqual(last.name, second.name)
 
 	def test_filter_returns_matching_documents(self):
 		from frappe.desk.doctype.todo.todo import ToDo
 
 		marker = f"docs.filter marker {frappe.generate_hash(length=8)}"
 		created = [frappe.get_doc({"doctype": "ToDo", "description": marker}).insert() for _ in range(3)]
-		try:
-			docs = ToDo.docs.filter({"description": marker})
-			self.assertEqual(len(docs), 3)
-			names = {d.name for d in docs}
-			self.assertEqual(names, {d.name for d in created})
-			self.assertTrue(all(isinstance(d, ToDo) for d in docs))
-		finally:
-			for d in created:
-				d.delete()
+		docs = ToDo.docs.filter({"description": marker})
+		self.assertEqual(len(docs), 3)
+		names = {d.name for d in docs}
+		self.assertEqual(names, {d.name for d in created})
+		self.assertTrue(all(isinstance(d, ToDo) for d in docs))
 
 	def test_delete_removes_document(self):
 		from frappe.desk.doctype.todo.todo import ToDo
@@ -1019,13 +1002,10 @@ class TestDocsCollection(IntegrationTestCase):
 		from frappe.core.doctype.doctype.test_doctype import new_doctype
 
 		dt = new_doctype(autoname="prompt").insert().name
-		try:
-			doc = frappe.get_doc({"doctype": dt, "name": "ALPHA", "some_fieldname": "x"}).insert()
-			doc.rename("BETA")
-			self.assertTrue(frappe.db.exists(dt, "BETA"))
-			self.assertFalse(frappe.db.exists(dt, "ALPHA"))
-		finally:
-			frappe.delete_doc("DocType", dt, force=True)
+		doc = frappe.get_doc({"doctype": dt, "name": "ALPHA", "some_fieldname": "x"}).insert()
+		doc.rename("BETA")
+		self.assertTrue(frappe.db.exists(dt, "BETA"))
+		self.assertFalse(frappe.db.exists(dt, "ALPHA"))
 
 	def test_subclass_uses_its_own_doctype(self):
 		"""Subclasses with their own `_DOCTYPE_NAME` resolve independently."""
