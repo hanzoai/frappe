@@ -21,6 +21,7 @@ frappe.ui.form.on("Print Format", {
 		frm.trigger("render_buttons");
 		frm.toggle_display("standard", frappe.boot.developer_mode);
 		frm.trigger("hide_absolute_value_field");
+		frm.trigger("set_chrome_for_builder");
 	},
 	render_buttons: function (frm) {
 		frm.page.clear_inner_toolbar();
@@ -66,6 +67,19 @@ frappe.ui.form.on("Print Format", {
 		frm.set_value("show_section_headings", value);
 		frm.set_value("line_breaks", value);
 		frm.trigger("render_buttons");
+		frm.trigger("set_chrome_for_builder");
+	},
+	print_format_builder_beta: function (frm) {
+		frm.trigger("set_chrome_for_builder");
+	},
+	set_chrome_for_builder: function (frm) {
+		const is_builder = frm.doc.print_format_builder_beta;
+		const is_custom = frm.doc.custom_format;
+		const should_force_chrome = is_builder && (frm.is_new() || !is_custom);
+		if (should_force_chrome) {
+			frm.set_value("pdf_generator", "chrome");
+		}
+		frm.set_df_property("pdf_generator", "read_only", should_force_chrome ? 1 : 0);
 	},
 	doc_type: function (frm) {
 		frm.trigger("hide_absolute_value_field");

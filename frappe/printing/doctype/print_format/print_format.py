@@ -64,6 +64,9 @@ class PrintFormat(Document):
 		if self.print_format_for == "Report":
 			self.custom_format = 1
 
+		if self.print_format_builder_beta and not self.custom_format:
+			self.pdf_generator = "chrome"
+
 	def get_html(self, docname, letterhead=None):
 		return get_html(self.doc_type, docname, self.name, letterhead)
 

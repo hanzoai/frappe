@@ -17,17 +17,19 @@ context("Print Format Builder — create flow", () => {
 	});
 
 	afterEach(() => {
-		// best-effort cleanup — DELETE swallows 404 / 417 via failOnStatusCode
-		cy.window()
-			.its("frappe.csrf_token")
-			.then((csrf_token) => {
-				cy.request({
-					method: "DELETE",
-					url: `/api/resource/Print Format/${encodeURIComponent(PF_NAME)}`,
-					headers: { "X-Frappe-CSRF-Token": csrf_token },
-					failOnStatusCode: false,
-				});
+		// best-effort cleanup — DELETE swallows 404 / 417 via failOnStatusCode.
+		// Use .then() with optional-chaining so we never block on csrf_token
+		// being absent (e.g. when the test failed before visiting a frappe page).
+		cy.window().then((win) => {
+			const csrf_token = win.frappe?.csrf_token;
+			if (!csrf_token) return;
+			cy.request({
+				method: "DELETE",
+				url: `/api/resource/Print Format/${encodeURIComponent(PF_NAME)}`,
+				headers: { "X-Frappe-CSRF-Token": csrf_token },
+				failOnStatusCode: false,
 			});
+		});
 	});
 
 	// 1. Page loads with the Create-or-Edit dialog
@@ -75,6 +77,11 @@ context("Print Format Builder — create flow", () => {
 	// 3. Loading the builder for an existing format and saving a change
 	//    (creates the doc via API up-front so this test doesn't depend on #2)
 	it("loads the builder and Save persists a margin change", () => {
+		// Navigate to a stable frappe page so frappe.csrf_token is available
+		// before cy.insert_doc tries to read it. Without this, the previous
+		// test's SPA navigation may leave the window in a mid-transition state.
+		cy.visit("/app");
+
 		// Pre-populate format_data so PrintFormatBuilder.vue's onMounted
 		// auto-save doesn't fire on first load (that auto-save's follow-up
 		// fetch would otherwise overwrite our typed value before we click Save).
@@ -92,7 +99,10 @@ context("Print Format Builder — create flow", () => {
 		cy.intercept("POST", "api/method/frappe.client.save").as("save");
 		cy.visit(`/app/print-format-builder/${encodeURIComponent(PF_NAME)}`);
 
-		cy.contains(".sidebar-menu h5", "Page Margins", { timeout: 30000 }).should("be.visible");
+		// Sidebar uses <details class="sidebar-section"> / <summary class="sidebar-section-title">
+		// with the label "Page Settings" (not .sidebar-menu h5 / "Page Margins").
+		// Wait for the margin controls to confirm the builder has fully rendered.
+		cy.get(".margin-controls", { timeout: 30000 }).should("be.visible");
 
 		// Make sure no auto-save / freeze overlay is still in flight before we type.
 		cy.get(".freeze").should("not.exist");
