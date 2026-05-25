@@ -987,3 +987,8 @@ class TestDocsCollection(IntegrationTestCase):
 
 		with self.assertRaises(AttributeError):
 			Orphan.docs._doctype
+
+	def test_not_accessible_via_instances(self):
+		todo = ToDo.docs.new(description="docs instance access")
+		with self.assertRaises(AttributeError):
+			todo.docs

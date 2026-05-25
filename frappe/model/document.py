@@ -339,6 +339,10 @@ class DocsCollection[T]:
 		self._owner_cls = owner
 
 	def __get__(self, instance, owner: type | None = None) -> "DocsCollection[T]":
+		if instance is not None:
+			raise AttributeError(
+				f"`docs` isn't accessible via {type(instance).__name__} instances; use the class instead."
+			)
 		# Bind the actual accessing class so subclasses report their own doctype.
 		bound = DocsCollection.__new__(DocsCollection)
 		bound._owner_cls = owner or self._owner_cls
