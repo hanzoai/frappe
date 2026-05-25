@@ -1,5 +1,5 @@
 <template>
-	<div v-if="shouldRender" style="display: flex; width: 100%">
+	<div v-if="shouldRender" class="d-flex w-100">
 		<div style="padding: var(--padding-md)">
 			<PrintFormatControls />
 		</div>
