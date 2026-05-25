@@ -122,10 +122,11 @@ class PrintFormatGenerator:
 		layout header/footer are placed in ``#header-html`` / ``#footer-html``
 		overlay divs so they repeat on every PDF page.
 
-		When ``repeat_header_footer`` is disabled, the same content is rendered
-		inline in the body via ``chrome_layout_header`` / ``chrome_layout_footer``
-		so it appears only once (page 1 / last page).  Page-number spans are
-		omitted because they only work inside the overlay mechanism.
+		When ``repeat_header_footer`` is disabled:
+		  - Letterhead + layout header/footer → rendered inline in the body
+		    (appear on page 1 / last page only via ``chrome_layout_header/footer``).
+		  - Page numbers → still placed in a minimal ``#header-html`` / ``#footer-html``
+		    overlay so they continue to repeat on every page if the user enabled them.
 		"""
 		self.context.for_chrome = True
 		self.context.header_height = 0
@@ -141,13 +142,25 @@ class PrintFormatGenerator:
 			self.context.chrome_layout_header = ""
 			self.context.chrome_layout_footer = ""
 		else:
-			# No repeat — render inline; page numbers omitted (overlay-only feature).
-			self.context.header = ""
-			self.context.footer = ""
+			# Letterhead + layout content → inline (once only, no repeat).
 			self.context.chrome_layout_header = self._render_overlay("header", with_page_no=False) or ""
 			self.context.chrome_layout_footer = self._render_overlay("footer", with_page_no=False) or ""
+			# Page numbers → minimal overlay so they still repeat on every page.
+			page_no_header = self._render_page_no_overlay("header")
+			page_no_footer = self._render_page_no_overlay("footer")
+			self.context.header = f'<div id="header-html">{page_no_header}</div>' if page_no_header else ""
+			self.context.footer = f'<div id="footer-html">{page_no_footer}</div>' if page_no_footer else ""
 
 		return self.get_main_html()
+
+	def _render_page_no_overlay(self, kind: str) -> str | None:
+		"""Return only the page-number HTML for kind ('header'/'footer'), or None."""
+		is_header = kind == "header"
+		page_pos = (self.print_format.page_number or "").lower().replace(" ", "_")
+		valid_positions = self._TOP_POSITIONS if is_header else self._BOTTOM_POSITIONS
+		if page_pos not in valid_positions:
+			return None
+		return self._page_number_html(page_pos)
 
 	def _render_overlay(self, kind: str, with_page_no: bool = True) -> str | None:
 		"""Render letterhead, layout.header/footer, and page number for the Chrome overlay.

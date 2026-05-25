@@ -172,8 +172,10 @@ class Browser:
 			self.is_header_dynamic = self.is_page_no_used(self.header_content)
 			del self.header_content
 		else:
-			# bad implicit setting of margin #backwards-compatibility
-			options["margin-top"] = "15mm"
+			# Fallback only when the caller did not explicitly pass margin-top.
+			# If margin-top is already set (e.g. from PrintFormatGenerator), keep it.
+			if "margin-top" not in options:
+				options["margin-top"] = "15mm"
 
 		if self.footer_page:
 			self.footer_page.wait_for_set_content()
@@ -181,8 +183,9 @@ class Browser:
 			self.is_footer_dynamic = self.is_page_no_used(self.footer_content)
 			del self.footer_content
 		else:
-			# bad implicit setting of margin #backwards-compatibility
-			options["margin-bottom"] = "15mm"
+			# Fallback only when the caller did not explicitly pass margin-bottom.
+			if "margin-bottom" not in options:
+				options["margin-bottom"] = "15mm"
 
 		# Remove instances of them from main content for render_template
 		for html_id in ["header-html", "footer-html"]:
