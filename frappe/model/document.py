@@ -330,8 +330,117 @@ def get_doc_permission_check(doc: "Document", check_permission: str | bool | Non
 	return doc
 
 
+class DocsCollection[T]:
+	"""Class-level descriptor exposing typed, doctype-scoped document operations.
+
+	Accessed as `MyDocType.docs` on any `Document` subclass. The descriptor reads
+	`_DOCTYPE_NAME` from the owning controller class to determine which DocType
+	to operate on, removing the need to pass the doctype string at every call site.
+	"""
+
+	def __set_name__(self, owner: type, name: str) -> None:
+		self._owner_cls = owner
+
+	def __get__(self, instance, owner: type | None = None) -> "DocsCollection[T]":
+		# Bind the actual accessing class so subclasses report their own doctype.
+		bound = DocsCollection.__new__(DocsCollection)
+		bound._owner_cls = owner or self._owner_cls
+		return bound
+
+	@property
+	def _doctype(self) -> str:
+		doctype = getattr(self._owner_cls, "_DOCTYPE_NAME", None)
+		if not doctype:
+			raise AttributeError(
+				f"{self._owner_cls.__name__} does not define `_DOCTYPE_NAME`; "
+				"controller class must declare its DocType name to use `docs`."
+			)
+		return doctype
+
+	def get(
+		self,
+		name: str | int | dict | None = None,
+		*,
+		cached: bool = False,
+		lazy: bool = False,
+		for_update: bool = False,
+		check_permission: str | bool | None = None,
+	) -> T:
+		"""Fetch a single document of this DocType by name (or filter dict)."""
+		if cached and lazy:
+			raise ValueError("`cached` and `lazy` are mutually exclusive")
+
+		doctype = self._doctype
+		if lazy:
+			return get_lazy_doc(doctype, name, for_update=for_update, check_permission=check_permission)
+		if cached:
+			return get_cached_doc(doctype, name)
+		return get_doc(doctype, name, for_update=for_update, check_permission=check_permission)
+
+	def last(
+		self,
+		filters: FilterSignature | None = None,
+		order_by: str = "creation desc",
+		*,
+		for_update: bool = False,
+	) -> T:
+		"""Return the most recently created document, optionally filtered."""
+		return get_last_doc(self._doctype, filters=filters, order_by=order_by, for_update=for_update)
+
+	def filter(
+		self,
+		filters: dict | None = None,
+		*,
+		chunk_size: int = 1000,
+		limit: int | None = None,
+		limit_start: int = 0,
+		order_by: str = "creation asc",
+		as_iterator: bool = False,
+		for_update: bool = False,
+		distinct: bool = False,
+	) -> list[T] | Generator[T]:
+		"""Return all documents matching `filters`."""
+		return get_docs(
+			self._doctype,
+			filters=filters,
+			chunk_size=chunk_size,
+			limit=limit,
+			limit_start=limit_start,
+			order_by=order_by,
+			as_iterator=as_iterator,
+			for_update=for_update,
+			distinct=distinct,
+		)
+
+	def new(self, **kwargs) -> T:
+		"""Create a new (unsaved) document with the given field values."""
+		return new_doc(self._doctype, **kwargs)
+
+	def delete(
+		self,
+		name: str | int,
+		*,
+		force: bool = False,
+		ignore_permissions: bool = False,
+		ignore_missing: bool = True,
+		delete_permanently: bool = False,
+	) -> None:
+		"""Delete a document of this DocType."""
+		frappe.delete_doc(
+			self._doctype,
+			name,
+			force=force,
+			ignore_permissions=ignore_permissions,
+			ignore_missing=ignore_missing,
+			delete_permanently=delete_permanently,
+		)
+
+
 class Document(BaseDocument):
 	"""All controllers inherit from `Document`."""
+
+	_DOCTYPE_NAME: str | None = None
+	docs: "DocsCollection[Self]" = DocsCollection()
 
 	doctype: DF.Data
 	name: DF.Data | None
