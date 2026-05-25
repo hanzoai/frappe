@@ -9,7 +9,7 @@ from collections.abc import Generator, Iterable
 from contextlib import contextmanager
 from functools import cached_property, wraps
 from types import MappingProxyType
-from typing import TYPE_CHECKING, Any, Literal, Optional, Self, TypeAlias, Union, overload, override
+from typing import TYPE_CHECKING, Any, ClassVar, Literal, Optional, Self, TypeAlias, Union, overload, override
 
 from werkzeug.exceptions import NotFound
 
@@ -331,12 +331,7 @@ def get_doc_permission_check(doc: "Document", check_permission: str | bool | Non
 
 
 class DocsCollection[T]:
-	"""Class-level descriptor exposing typed, doctype-scoped document operations.
-
-	Accessed as `MyDocType.docs` on any `Document` subclass. The descriptor reads
-	`_DOCTYPE_NAME` from the owning controller class to determine which DocType
-	to operate on, removing the need to pass the doctype string at every call site.
-	"""
+	"""APIs to manage collections of documents."""
 
 	def __set_name__(self, owner: type, name: str) -> None:
 		self._owner_cls = owner
@@ -359,7 +354,7 @@ class DocsCollection[T]:
 
 	def get(
 		self,
-		name: str | int | dict | None = None,
+		name: str | int | None = None,
 		*,
 		cached: bool = False,
 		lazy: bool = False,
@@ -369,6 +364,9 @@ class DocsCollection[T]:
 		"""Fetch a single document of this DocType by name (or filter dict)."""
 		if cached and lazy:
 			raise ValueError("`cached` and `lazy` are mutually exclusive")
+
+		if not isinstance(name, str | int | None):
+			raise ValueError("`name` has to be a string or integer or None.")
 
 		doctype = self._doctype
 		if lazy:
@@ -439,7 +437,7 @@ class DocsCollection[T]:
 class Document(BaseDocument):
 	"""All controllers inherit from `Document`."""
 
-	_DOCTYPE_NAME: str | None = None
+	_DOCTYPE_NAME: ClassVar[str | None] = None
 	docs: "DocsCollection[Self]" = DocsCollection()
 
 	doctype: DF.Data
