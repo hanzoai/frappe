@@ -4,7 +4,7 @@
 		:class="{ 'field--table': df.fieldtype == 'Table', 'field--selected': is_selected }"
 		v-show="!df.remove"
 		:title="df.label || df.fieldname"
-		@click="select_field"
+		@click.stop="select_field"
 	>
 		<div class="field-row">
 			<div

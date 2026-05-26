@@ -3,13 +3,15 @@
 		<!-- Header -->
 		<div class="pfb-inspector-head">
 			<div class="pfb-inspector-eyebrow">{{ __("Inspector") }}</div>
-			<div class="pfb-inspector-title">
-				<span class="pfb-inspector-kind">{{
-					selected_field ? __("Field") : __("Canvas")
-				}}</span>
-				<span class="pfb-inspector-name text-muted" v-if="selected_field">
-					{{ selected_field.label || selected_field.fieldname }}
-				</span>
+			<div class="pfb-inspector-title-row">
+				<div class="pfb-inspector-title">
+					<span class="pfb-inspector-kind">{{
+						selected_field ? __("Field") : __("Canvas")
+					}}</span>
+					<span class="pfb-inspector-name" v-if="selected_field">
+						{{ selected_field.label || selected_field.fieldname }}
+					</span>
+				</div>
 			</div>
 		</div>
 
@@ -23,80 +25,168 @@
 
 		<!-- Field properties -->
 		<template v-else>
-			<!-- Section: Field -->
-			<div class="pfb-insp-section">
-				<div class="pfb-insp-section-label">{{ __("Field") }}</div>
+			<!-- Tab bar -->
+			<div class="pfb-insp-tabs">
+				<button
+					v-for="tab in inspector_tabs"
+					:key="tab.id"
+					class="pfb-insp-tab"
+					:class="{ active: activeInspectorTab === tab.id }"
+					@click="activeInspectorTab = tab.id"
+				>
+					{{ tab.label }}
+				</button>
+			</div>
 
-				<!-- Source (read-only) -->
-				<div class="pfb-insp-row">
-					<span class="pfb-insp-label">{{ __("Source") }}</span>
-					<div class="pfb-source-display">
-						<span class="pfb-source-name">
-							{{ selected_field.label || selected_field.fieldname }}
-						</span>
-						<span class="fieldtype-badge">{{ short_fieldtype }}</span>
+			<!-- Properties tab -->
+			<div v-if="activeInspectorTab === 'properties'" class="pfb-insp-body">
+				<!-- FIELD section -->
+				<div class="pfb-insp-section">
+					<div class="pfb-insp-section-head" @click="toggle_section('field')">
+						<span class="pfb-insp-section-label">{{ __("Field") }}</span>
+						<span
+							class="pfb-insp-chevron"
+							:class="{ collapsed: !sections_open.field }"
+							v-html="frappe.utils.icon('chevron-down', 'xs')"
+						></span>
+					</div>
+
+					<div v-show="sections_open.field" class="pfb-insp-section-body">
+						<!-- Source (read-only) -->
+						<div class="pfb-insp-row">
+							<span class="pfb-insp-label">{{ __("Source") }}</span>
+							<div class="pfb-source-display">
+								<span class="pfb-source-name">
+									{{ selected_field.label || selected_field.fieldname }}
+								</span>
+								<span class="pfb-type-badge">{{ short_fieldtype }}</span>
+							</div>
+						</div>
+
+						<!-- Label -->
+						<div class="pfb-insp-row pfb-insp-row--col">
+							<span class="pfb-insp-label">{{ __("Label") }}</span>
+							<input
+								class="pfb-insp-input"
+								type="text"
+								:placeholder="__('Field label')"
+								v-model="selected_field.label"
+							/>
+						</div>
+
+						<!-- Show label -->
+						<div class="pfb-insp-row">
+							<span class="pfb-insp-label">{{ __("Show label") }}</span>
+							<div class="pfb-seg">
+								<button
+									v-for="opt in show_label_opts"
+									:key="opt.value"
+									:class="{ active: current_show_label === opt.value }"
+									@click="selected_field.show_label = opt.value"
+								>
+									{{ opt.label }}
+								</button>
+							</div>
+						</div>
+
+						<!-- Align -->
+						<div class="pfb-insp-row">
+							<span class="pfb-insp-label">{{ __("Align") }}</span>
+							<div class="pfb-seg">
+								<button
+									v-for="opt in align_opts"
+									:key="opt.value"
+									:class="{ active: current_align === opt.value }"
+									:title="opt.title"
+									@click="selected_field.align = opt.value"
+									v-html="opt.icon"
+								></button>
+							</div>
+						</div>
 					</div>
 				</div>
 
-				<!-- Label -->
-				<div class="pfb-insp-row pfb-insp-row--full">
-					<span class="pfb-insp-label">{{ __("Label") }}</span>
-					<input
-						class="form-control form-control-sm"
-						type="text"
-						:placeholder="__('Field label')"
-						v-model="selected_field.label"
-					/>
-				</div>
-
-				<!-- Show label -->
-				<div class="pfb-insp-row">
-					<span class="pfb-insp-label">{{ __("Show label") }}</span>
-					<div class="pfb-seg">
-						<button
-							v-for="opt in show_label_opts"
-							:key="opt.value"
-							:class="{ active: current_show_label === opt.value }"
-							@click="selected_field.show_label = opt.value"
-						>
-							{{ opt.label }}
-						</button>
+				<!-- FORMAT section -->
+				<div class="pfb-insp-section">
+					<div class="pfb-insp-section-head" @click="toggle_section('format')">
+						<span class="pfb-insp-section-label">{{ __("Format") }}</span>
+						<span
+							class="pfb-insp-chevron"
+							:class="{ collapsed: !sections_open.format }"
+							v-html="frappe.utils.icon('chevron-down', 'xs')"
+						></span>
+					</div>
+					<div v-show="sections_open.format" class="pfb-insp-section-body">
+						<p class="pfb-insp-hint text-muted">
+							{{ __("Additional formatting options coming soon.") }}
+						</p>
 					</div>
 				</div>
 
-				<!-- Align -->
-				<div class="pfb-insp-row">
-					<span class="pfb-insp-label">{{ __("Align") }}</span>
-					<div class="pfb-seg">
-						<button
-							v-for="opt in align_opts"
-							:key="opt.value"
-							:class="{ active: current_align === opt.value }"
-							:title="opt.title"
-							@click="selected_field.align = opt.value"
-							v-html="opt.icon"
-						></button>
+				<!-- VISIBILITY section -->
+				<div class="pfb-insp-section">
+					<div class="pfb-insp-section-head" @click="toggle_section('visibility')">
+						<span class="pfb-insp-section-label">{{ __("Visibility") }}</span>
+						<span
+							class="pfb-insp-chevron"
+							:class="{ collapsed: !sections_open.visibility }"
+							v-html="frappe.utils.icon('chevron-down', 'xs')"
+						></span>
 					</div>
+					<div v-show="sections_open.visibility" class="pfb-insp-section-body">
+						<p class="pfb-insp-hint text-muted">
+							{{ __("Conditional visibility coming soon.") }}
+						</p>
+					</div>
+				</div>
+
+				<!-- Actions -->
+				<div class="pfb-insp-actions">
+					<button class="btn btn-xs btn-danger-subtle" @click="remove_field">
+						<span v-html="frappe.utils.icon('x', 'xs')"></span>
+						{{ __("Remove field") }}
+					</button>
 				</div>
 			</div>
 
-			<!-- Section: remove -->
-			<div class="pfb-insp-section pfb-insp-section--actions">
-				<button class="btn btn-xs btn-danger-subtle" @click="remove_field">
-					<span v-html="frappe.utils.icon('x', 'xs')"></span>
-					{{ __("Remove field") }}
-				</button>
+			<!-- Style tab (placeholder) -->
+			<div
+				v-else-if="activeInspectorTab === 'style'"
+				class="pfb-insp-body pfb-insp-placeholder"
+			>
+				<p class="text-muted">{{ __("Style overrides coming soon.") }}</p>
+			</div>
+
+			<!-- Logic tab (placeholder) -->
+			<div
+				v-else-if="activeInspectorTab === 'logic'"
+				class="pfb-insp-body pfb-insp-placeholder"
+			>
+				<p class="text-muted">{{ __("Conditional logic coming soon.") }}</p>
 			</div>
 		</template>
 	</div>
 </template>
 
 <script setup>
-import { computed, inject } from "vue";
+import { computed, inject, ref } from "vue";
 
 let store = inject("$store");
 
 let selected_field = computed(() => store.selected_field.value);
+let activeInspectorTab = ref("properties");
+
+const inspector_tabs = [
+	{ id: "properties", label: __("Properties") },
+	{ id: "style", label: __("Style") },
+	{ id: "logic", label: __("Logic") },
+];
+
+const sections_open = ref({ field: true, format: false, visibility: false });
+
+function toggle_section(name) {
+	sections_open.value[name] = !sections_open.value[name];
+}
 
 let short_fieldtype = computed(() => {
 	if (!selected_field.value) return "";
@@ -152,7 +242,7 @@ function remove_field() {
 
 <style scoped>
 .pfb-inspector {
-	width: 260px;
+	width: 280px;
 	flex-shrink: 0;
 	height: calc(100vh - 95px);
 	overflow-y: auto;
@@ -164,7 +254,7 @@ function remove_field() {
 
 /* ── Header ─────────────────────────────────────────────── */
 .pfb-inspector-head {
-	padding: 12px 12px 10px;
+	padding: 12px 14px 10px;
 	border-bottom: 1px solid var(--border-color);
 	flex-shrink: 0;
 }
@@ -175,7 +265,7 @@ function remove_field() {
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
 	color: var(--text-muted);
-	margin-bottom: 2px;
+	margin-bottom: 3px;
 }
 
 .pfb-inspector-title {
@@ -185,12 +275,13 @@ function remove_field() {
 }
 
 .pfb-inspector-kind {
-	font-size: var(--text-base);
-	font-weight: 600;
+	font-size: var(--text-lg);
+	font-weight: 700;
 }
 
 .pfb-inspector-name {
-	font-size: var(--text-sm);
+	font-size: var(--text-base);
+	color: var(--text-muted);
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -208,32 +299,111 @@ function remove_field() {
 	font-size: var(--text-sm);
 }
 
-/* ── Sections ────────────────────────────────────────────── */
-.pfb-insp-section {
-	padding: 12px;
+/* ── Inspector tabs ──────────────────────────────────────── */
+.pfb-insp-tabs {
+	display: flex;
+	padding: 8px 10px 0;
+	gap: 2px;
 	border-bottom: 1px solid var(--border-color);
+	flex-shrink: 0;
+	background: var(--gray-50);
+}
+
+.pfb-insp-tab {
+	flex: 1;
+	padding: 6px 4px 8px;
+	font-size: var(--text-sm);
+	font-weight: 500;
+	border: none;
+	background: transparent;
+	color: var(--text-muted);
+	cursor: pointer;
+	border-radius: var(--border-radius) var(--border-radius) 0 0;
+	position: relative;
+	transition: color 0.12s;
+}
+
+.pfb-insp-tab:hover {
+	color: var(--text-color);
+}
+
+.pfb-insp-tab.active {
+	color: var(--text-color);
+	font-weight: 600;
+}
+
+.pfb-insp-tab.active::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background: var(--gray-700);
+	border-radius: 2px 2px 0 0;
+}
+
+/* ── Inspector body ──────────────────────────────────────── */
+.pfb-insp-body {
+	flex: 1;
+	overflow-y: auto;
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+}
+
+/* ── Collapsible sections ────────────────────────────────── */
+.pfb-insp-section {
+	border-bottom: 1px solid var(--border-color);
+}
+
+.pfb-insp-section-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 14px;
+	cursor: pointer;
+	user-select: none;
+}
+
+.pfb-insp-section-head:hover {
+	background: var(--gray-50);
 }
 
 .pfb-insp-section-label {
 	font-size: 10px;
-	font-weight: 600;
+	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.08em;
 	color: var(--text-muted);
 }
 
+.pfb-insp-chevron {
+	display: flex;
+	align-items: center;
+	color: var(--gray-400);
+	transition: transform 0.15s;
+}
+
+.pfb-insp-chevron.collapsed {
+	transform: rotate(-90deg);
+}
+
+.pfb-insp-section-body {
+	padding: 4px 14px 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
 /* ── Rows ────────────────────────────────────────────────── */
 .pfb-insp-row {
 	display: grid;
-	grid-template-columns: 72px 1fr;
+	grid-template-columns: 80px 1fr;
 	align-items: center;
 	gap: 8px;
 }
 
-.pfb-insp-row--full {
+.pfb-insp-row--col {
 	grid-template-columns: 1fr;
 	gap: 4px;
 }
@@ -248,7 +418,7 @@ function remove_field() {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 4px 8px;
+	padding: 5px 8px;
 	border: 1px solid var(--border-color);
 	border-radius: var(--border-radius);
 	background: var(--gray-50);
@@ -262,7 +432,7 @@ function remove_field() {
 	white-space: nowrap;
 }
 
-.fieldtype-badge {
+.pfb-type-badge {
 	font-size: 10px;
 	color: var(--text-muted);
 	background: var(--gray-100);
@@ -271,6 +441,23 @@ function remove_field() {
 	padding: 1px 5px;
 	white-space: nowrap;
 	flex-shrink: 0;
+}
+
+/* ── Input ───────────────────────────────────────────────── */
+.pfb-insp-input {
+	width: 100%;
+	padding: 6px 8px;
+	font-size: var(--text-sm);
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius);
+	background: var(--fg-color);
+	color: var(--text-color);
+	outline: none;
+	box-sizing: border-box;
+}
+
+.pfb-insp-input:focus {
+	border-color: var(--gray-500);
 }
 
 /* ── Segmented control ───────────────────────────────────── */
@@ -285,7 +472,7 @@ function remove_field() {
 
 .pfb-seg button {
 	flex: 1;
-	padding: 4px 6px;
+	padding: 5px 6px;
 	font-size: 11px;
 	font-weight: 500;
 	border: none;
@@ -314,10 +501,23 @@ function remove_field() {
 	box-shadow: var(--shadow-xs);
 }
 
+/* ── Hint / placeholder ──────────────────────────────────── */
+.pfb-insp-hint {
+	font-size: var(--text-sm);
+	line-height: 1.5;
+}
+
+.pfb-insp-placeholder {
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+	text-align: center;
+}
+
 /* ── Actions ─────────────────────────────────────────────── */
-.pfb-insp-section--actions {
+.pfb-insp-actions {
+	padding: 12px 14px;
 	margin-top: auto;
-	border-bottom: none;
 	border-top: 1px solid var(--border-color);
 }
 
@@ -329,7 +529,7 @@ function remove_field() {
 	background: transparent;
 	border: 1px solid var(--red-200);
 	border-radius: var(--border-radius);
-	padding: 4px 8px;
+	padding: 5px 10px;
 	font-size: var(--text-sm);
 	cursor: pointer;
 }
