@@ -258,10 +258,8 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 		) {
 			cancellable_class = "cancellable";
 			cancel_btn = `
-				<button class="btn btn-xs btn-icon btn-cancel-task" data-task-id="${task.task_id}" title="${__(
-				"Cancel Task"
-			)}">
-					${frappe.utils.icon("close", "sm")}
+				<button class="btn btn-xs btn-cancel-task" data-task-id="${task.task_id}">
+					${__("Cancel")}
 				</button>
 			`;
 		}

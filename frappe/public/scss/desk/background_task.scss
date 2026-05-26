@@ -120,17 +120,14 @@
 
 					.btn-cancel-task {
 						display: flex;
-						color: var(--text-light-muted, #d1d5db);
-
-						svg {
-							stroke-width: 0.5px;
-							width: 16px;
-							height: 16px;
-						}
+						font-size: var(--text-xs);
+						font-weight: 500;
+						padding: 2px 8px;
 
 						&:hover {
-							color: var(--text-color);
-							background-color: transparent;
+							background-color: var(--fg-hover-color);
+							text-decoration: underline;
+							text-underline-offset: 3px;
 						}
 					}
 				}
@@ -175,23 +172,6 @@
 
 				&:not(:empty) + .progress {
 					margin-top: 8px;
-				}
-			}
-
-			.btn-cancel-task {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				color: var(--text-muted);
-				transition: color 0.2s ease, background-color 0.2s ease;
-				padding: 2px;
-				margin: 0;
-				height: 20px;
-				width: 20px;
-
-				&:hover {
-					color: var(--text-color);
-					background-color: var(--fg-hover-color);
 				}
 			}
 
