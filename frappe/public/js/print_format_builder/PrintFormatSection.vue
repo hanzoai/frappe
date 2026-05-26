@@ -37,58 +37,6 @@
 						class="column"
 						:class="{ 'column-align-right': column.align === 'right' }"
 					>
-						<div v-if="section.columns.length > 1" class="column-toolbar">
-							<!-- Segmented align control: always shows both options, active one highlighted -->
-							<div
-								class="column-align-group"
-								:title="__('Column position in print output')"
-							>
-								<button
-									class="col-align-btn"
-									:class="{ active: column.align !== 'right' }"
-									:title="__('Default — column at its natural position')"
-									@click.stop="set_column_align(column, '')"
-								>
-									<!-- align-left: 3 horizontal lines, all anchored at left -->
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="14"
-										height="11"
-										viewBox="0 0 14 11"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="1.5"
-										stroke-linecap="round"
-									>
-										<line x1="0" y1="1" x2="14" y2="1" />
-										<line x1="0" y1="5.5" x2="9" y2="5.5" />
-										<line x1="0" y1="10" x2="11" y2="10" />
-									</svg>
-								</button>
-								<button
-									class="col-align-btn"
-									:class="{ active: column.align === 'right' }"
-									:title="__('Push this column to the right edge in print')"
-									@click.stop="set_column_align(column, 'right')"
-								>
-									<!-- align-right: 3 horizontal lines, all anchored at right -->
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="14"
-										height="11"
-										viewBox="0 0 14 11"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="1.5"
-										stroke-linecap="round"
-									>
-										<line x1="0" y1="1" x2="14" y2="1" />
-										<line x1="5" y1="5.5" x2="14" y2="5.5" />
-										<line x1="3" y1="10" x2="14" y2="10" />
-									</svg>
-								</button>
-							</div>
-						</div>
 						<draggable
 							class="drag-container"
 							v-model="column.fields"
@@ -309,50 +257,6 @@ function set_column_align(column, value) {
 	min-width: 0;
 	display: flex;
 	flex-direction: column;
-}
-
-.column-toolbar {
-	display: flex;
-	justify-content: flex-end;
-	padding: 0 0 0.25rem 0;
-	min-height: 1.6rem;
-}
-
-/* Segmented control — same pattern as Word / Google Docs alignment buttons */
-.column-align-group {
-	display: inline-flex;
-	border: 1px solid var(--border-color);
-	border-radius: var(--border-radius-sm);
-	overflow: hidden;
-	background: var(--gray-50);
-}
-
-.col-align-btn {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	padding: 3px 6px;
-	border: none;
-	border-radius: 0;
-	background: transparent;
-	cursor: pointer;
-	color: var(--gray-400);
-	line-height: 1;
-}
-
-.col-align-btn:not(:first-child) {
-	border-left: 1px solid var(--border-color);
-}
-
-.col-align-btn:hover {
-	background: var(--gray-100);
-	color: var(--gray-600);
-}
-
-.col-align-btn.active {
-	background: var(--fg-color);
-	color: var(--text-color);
-	box-shadow: var(--shadow-xs);
 }
 
 .column-divider {
