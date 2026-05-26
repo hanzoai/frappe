@@ -50,10 +50,25 @@ import LetterHeadEditor from "./LetterHeadEditor.vue";
 import PrintFormatSection from "./PrintFormatSection.vue";
 import SectionInsert from "./SectionInsert.vue";
 import { useStore } from "./store";
-import { computed, inject, watch } from "vue";
+import { computed, inject, watch, nextTick } from "vue";
 
 let { layout, letterhead, print_format } = useStore();
 let store = inject("$store");
+
+watch(
+	() => store.scroll_to_section.value,
+	(section) => {
+		if (!section) return;
+		nextTick(() => {
+			const els = document.querySelectorAll("[data-pfb-section]");
+			const idx = layout.value.sections.indexOf(section);
+			if (idx >= 0 && els[idx]) {
+				els[idx].scrollIntoView({ behavior: "smooth", block: "start" });
+			}
+			store.scroll_to_section.value = null;
+		});
+	}
+);
 
 function add_section_at(index) {
 	layout.value.sections.splice(index, 0, {

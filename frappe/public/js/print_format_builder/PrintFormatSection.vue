@@ -1,5 +1,5 @@
 <template>
-	<div class="print-format-section-container" v-if="!section.remove">
+	<div class="print-format-section-container" v-if="!section.remove" data-pfb-section>
 		<div class="print-format-section">
 			<div class="section-toolbar">
 				<div class="section-toolbar-left">

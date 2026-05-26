@@ -1,8 +1,6 @@
 <template>
 	<div v-if="shouldRender" class="builder-root">
-		<div style="padding: var(--padding-md)">
-			<PrintFormatControls />
-		</div>
+		<PrintFormatControls />
 		<div class="print-format-container">
 			<KeepAlive>
 				<component :is="Preview" v-if="show_preview" />

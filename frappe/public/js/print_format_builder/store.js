@@ -11,6 +11,7 @@ export function getStore(print_format_name) {
 	let layout = ref(null);
 	let dirty = ref(false);
 	let edit_letterhead = ref(false);
+	let scroll_to_section = ref(null);
 
 	// methods
 	function fetch() {
@@ -146,6 +147,7 @@ export function getStore(print_format_name) {
 		layout,
 		dirty,
 		edit_letterhead,
+		scroll_to_section,
 		fetch,
 		update,
 		save_changes,

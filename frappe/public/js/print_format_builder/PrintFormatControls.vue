@@ -1,150 +1,216 @@
 <template>
-	<div class="sidebar-wrapper">
-		<div class="form-sidebar">
-			<details class="sidebar-section" open>
-				<summary class="sidebar-section-title">
-					{{ __("Page Settings") }}
-					<span
-						class="chevron-icon"
-						v-html="frappe.utils.icon('chevron-down', 'sm')"
-					></span>
-				</summary>
-				<div class="sidebar-section-body">
-					<div class="margin-controls">
-						<div class="form-group" v-for="df in margins" :key="df.fieldname">
-							<label class="control-label">{{ df.label }}</label>
-							<input
-								type="number"
-								class="form-control form-control-sm"
-								:value="print_format[df.fieldname]"
-								min="0"
-								@change="(e) => update_margin(df.fieldname, e.target.value)"
-							/>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label">{{ __("Google Font") }}</label>
-						<select class="form-control form-control-sm" v-model="print_format.font">
-							<option v-for="font in google_fonts" :value="font">{{ font }}</option>
-						</select>
-					</div>
-					<div class="form-group">
-						<label class="control-label">{{ __("Font Size") }}</label>
-						<input
-							type="number"
-							class="form-control form-control-sm"
-							placeholder="12, 13, 14"
-							:value="print_format.font_size"
-							@change="(e) => (print_format.font_size = parseFloat(e.target.value))"
-						/>
-					</div>
-					<div class="form-group">
-						<label class="control-label">{{ __("Page Number") }}</label>
-						<select
-							class="form-control form-control-sm"
-							v-model="print_format.page_number"
+	<div class="pfb-sidebar">
+		<!-- Tab bar -->
+		<div class="pfb-tabbar">
+			<button
+				v-for="tab in tabs"
+				:key="tab.id"
+				class="pfb-tab"
+				:class="{ active: activeTab === tab.id }"
+				:title="tab.label"
+				@click="activeTab = tab.id"
+			>
+				<span class="pfb-tab-icon" v-html="frappe.utils.icon(tab.icon, 'sm')"></span>
+				<span class="pfb-tab-label">{{ tab.label }}</span>
+			</button>
+		</div>
+
+		<!-- ── Fields ────────────────────────────────────────── -->
+		<div v-if="activeTab === 'fields'" class="pfb-tab-body">
+			<input
+				class="pfb-search form-control form-control-sm"
+				type="text"
+				:placeholder="__('Search fields')"
+				v-model="search_text"
+			/>
+
+			<div
+				v-for="group in field_groups"
+				:key="group.label || '__root__'"
+				class="pfb-field-group"
+			>
+				<div v-if="group.label" class="pfb-group-label">{{ group.label }}</div>
+				<draggable
+					:list="group.fields"
+					:group="{ name: 'fields', pull: 'clone', put: false }"
+					:sort="false"
+					:clone="clone_field"
+					item-key="fieldname"
+				>
+					<template #item="{ element }">
+						<div
+							class="pfb-field-row"
+							:title="element.fieldname"
+							@click="add_to_layout(element)"
 						>
-							<option v-for="p in page_number_positions" :value="p.value">
-								{{ p.label }}
-							</option>
-						</select>
-					</div>
-				</div>
-			</details>
-
-			<details class="sidebar-section fields-section" open>
-				<summary class="sidebar-section-title">
-					{{ __("Fields") }}
-					<span
-						class="chevron-icon"
-						v-html="frappe.utils.icon('chevron-down', 'sm')"
-					></span>
-				</summary>
-				<div class="sidebar-section-body">
-					<input
-						class="mb-2 form-control form-control-sm"
-						type="text"
-						:placeholder="__('Search fields')"
-						v-model="search_text"
-					/>
-
-					<!-- When NOT searching: show two labeled groups -->
-					<template v-if="!search_text">
-						<div v-if="layout_fields.length" class="field-group">
-							<div class="field-group-label">{{ __("Layout") }}</div>
-							<draggable
-								:list="layout_fields"
-								:group="{ name: 'fields', pull: 'clone', put: false }"
-								:sort="false"
-								:clone="clone_field"
-								item-key="fieldname"
-							>
-								<template #item="{ element }">
-									<div
-										class="sidebar-field"
-										:title="element.fieldname"
-										@click="add_to_layout(element)"
-									>
-										<span>{{ element.label }}</span>
-										<svg class="icon icon-xs text-muted">
-											<use href="#icon-plus"></use>
-										</svg>
-									</div>
-								</template>
-							</draggable>
-						</div>
-						<div class="field-group mt-2">
-							<div class="field-group-label">{{ __("Document Fields") }}</div>
-							<draggable
-								class="fields-container"
-								:list="doc_fields"
-								:group="{ name: 'fields', pull: 'clone', put: false }"
-								:sort="false"
-								:clone="clone_field"
-								item-key="fieldname"
-							>
-								<template #item="{ element }">
-									<div
-										class="sidebar-field"
-										:title="element.fieldname"
-										@click="add_to_layout(element)"
-									>
-										<span>{{ element.label }}</span>
-										<svg class="icon icon-xs text-muted">
-											<use href="#icon-plus"></use>
-										</svg>
-									</div>
-								</template>
-							</draggable>
+							<span class="pfb-field-label">{{ element.label }}</span>
+							<svg class="icon icon-xs text-muted pfb-plus-icon">
+								<use href="#icon-plus"></use>
+							</svg>
 						</div>
 					</template>
+				</draggable>
+			</div>
 
-					<!-- When searching: flat list of all matching fields -->
-					<template v-else>
-						<draggable
-							class="fields-container"
-							:list="all_fields"
-							:group="{ name: 'fields', pull: 'clone', put: false }"
-							:sort="false"
-							:clone="clone_field"
-							item-key="fieldname"
+			<div v-if="!field_groups.length" class="pfb-empty">
+				{{ __("No fields match your search.") }}
+			</div>
+		</div>
+
+		<!-- ── Blocks ─────────────────────────────────────────── -->
+		<div v-else-if="activeTab === 'blocks'" class="pfb-tab-body">
+			<div class="pfb-group-label">{{ __("Layout blocks") }}</div>
+			<draggable
+				:list="blocks"
+				:group="{ name: 'fields', pull: 'clone', put: false }"
+				:sort="false"
+				:clone="clone_field"
+				item-key="fieldname"
+			>
+				<template #item="{ element }">
+					<div
+						class="pfb-block-card"
+						:title="element.desc"
+						@click="add_to_layout(element)"
+					>
+						<span
+							class="pfb-block-icon"
+							v-html="frappe.utils.icon(element.icon, 'sm')"
+						></span>
+						<div class="pfb-block-info">
+							<div class="pfb-block-name">{{ element.label }}</div>
+							<div class="pfb-block-desc text-muted">{{ element.desc }}</div>
+						</div>
+					</div>
+				</template>
+			</draggable>
+		</div>
+
+		<!-- ── Templates ─────────────────────────────────────── -->
+		<div v-else-if="activeTab === 'templates'" class="pfb-tab-body">
+			<div v-if="!print_templates_list.length" class="pfb-templates-empty">
+				<div class="pfb-empty">
+					{{ __("No field templates for this document type.") }}
+				</div>
+				<p class="pfb-templates-hint text-muted">
+					{{
+						__(
+							"Field templates let you render specific fields with custom Jinja/HTML, e.g. a custom items table layout."
+						)
+					}}
+				</p>
+				<a :href="new_template_link" target="_blank" class="btn btn-xs btn-secondary mt-2">
+					{{ __("Create Field Template") }}
+				</a>
+			</div>
+
+			<template v-else>
+				<div class="pfb-group-label">
+					{{ __("Field Templates") }}
+					<a
+						:href="'/app/print-format-field-template'"
+						target="_blank"
+						class="pfb-manage-link text-muted"
+					>
+						{{ __("Manage") }}
+					</a>
+				</div>
+				<draggable
+					:list="print_templates_list"
+					:group="{ name: 'fields', pull: 'clone', put: false }"
+					:sort="false"
+					:clone="clone_field"
+					item-key="fieldname"
+				>
+					<template #item="{ element }">
+						<div
+							class="pfb-template-card"
+							:title="element.fieldname"
+							@click="add_to_layout(element)"
 						>
-							<template #item="{ element }">
-								<div
-									class="sidebar-field"
-									:title="element.fieldname"
-									@click="add_to_layout(element)"
-								>
-									<span>{{ element.label }}</span>
-									<svg class="icon icon-xs text-muted">
-										<use href="#icon-plus"></use>
-									</svg>
+							<div class="pfb-template-thumb">
+								<svg class="icon icon-sm text-muted">
+									<use href="#icon-table"></use>
+								</svg>
+							</div>
+							<div class="pfb-template-info">
+								<div class="pfb-template-name">{{ element.display_label }}</div>
+								<div class="pfb-template-field text-muted">
+									{{ element.field_label || __("Custom block") }}
 								</div>
-							</template>
-						</draggable>
+							</div>
+							<svg class="icon icon-xs text-muted pfb-plus-icon">
+								<use href="#icon-plus"></use>
+							</svg>
+						</div>
 					</template>
+				</draggable>
+				<div class="pfb-templates-hint text-muted mt-2">
+					{{ __("Drag or click to add a field template to the last section.") }}
 				</div>
-			</details>
+			</template>
+		</div>
+
+		<!-- ── Outline ────────────────────────────────────────── -->
+		<div v-else-if="activeTab === 'outline'" class="pfb-tab-body">
+			<div v-if="!visible_sections.length" class="pfb-empty">
+				{{ __("No sections yet. Add sections to the canvas.") }}
+			</div>
+			<div
+				v-for="(section, i) in visible_sections"
+				:key="i"
+				class="pfb-outline-item"
+				@click="scroll_to(section)"
+			>
+				<span class="pfb-outline-idx text-muted">{{ i + 1 }}</span>
+				<span class="pfb-outline-label">
+					{{ section.label || __("Untitled section") }}
+				</span>
+			</div>
+		</div>
+
+		<!-- ── Format ─────────────────────────────────────────── -->
+		<div v-else-if="activeTab === 'format'" class="pfb-tab-body">
+			<div class="pfb-group-label">{{ __("Page margins (mm)") }}</div>
+			<div class="pfb-margin-grid">
+				<div class="pfb-margin-cell" v-for="df in margins" :key="df.fieldname">
+					<label class="pfb-margin-label control-label">{{ df.label }}</label>
+					<input
+						type="number"
+						class="form-control form-control-sm"
+						:value="print_format[df.fieldname]"
+						min="0"
+						@change="(e) => update_margin(df.fieldname, e.target.value)"
+					/>
+				</div>
+			</div>
+
+			<div class="pfb-group-label mt-3">{{ __("Font") }}</div>
+			<div class="form-group">
+				<label class="control-label">{{ __("Google Font") }}</label>
+				<select class="form-control form-control-sm" v-model="print_format.font">
+					<option v-for="font in google_fonts" :value="font">{{ font }}</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="control-label">{{ __("Font Size (pt)") }}</label>
+				<input
+					type="number"
+					class="form-control form-control-sm"
+					placeholder="12, 13, 14"
+					:value="print_format.font_size"
+					@change="(e) => (print_format.font_size = parseFloat(e.target.value))"
+				/>
+			</div>
+
+			<div class="pfb-group-label mt-3">{{ __("Page number") }}</div>
+			<div class="form-group">
+				<select class="form-control form-control-sm" v-model="print_format.page_number">
+					<option v-for="p in page_number_positions" :value="p.value">
+						{{ p.label }}
+					</option>
+				</select>
+			</div>
 		</div>
 	</div>
 </template>
@@ -155,12 +221,54 @@ import { get_table_columns, pluck } from "./utils";
 import { useStore } from "./store";
 import { computed, onMounted, ref, watch, inject } from "vue";
 
+// state
 let search_text = ref("");
 let google_fonts = ref([]);
+let activeTab = ref("fields");
 
+// store
 let store = inject("$store");
 let { meta, print_format, layout } = useStore();
 
+// ── tab definitions ───────────────────────────────────────
+const tabs = computed(() => [
+	{ id: "fields", label: __("Fields"), icon: "list" },
+	{ id: "blocks", label: __("Blocks"), icon: "blocks" },
+	{ id: "templates", label: __("Templates"), icon: "table" },
+	{ id: "outline", label: __("Outline"), icon: "layout-list" },
+	{ id: "format", label: __("Format"), icon: "settings" },
+]);
+
+// ── blocks tab items ──────────────────────────────────────
+const blocks = computed(() => [
+	{
+		label: __("Custom HTML"),
+		fieldname: "custom_html",
+		fieldtype: "HTML",
+		html: "",
+		custom: 1,
+		icon: "code",
+		desc: __("Raw HTML or Jinja template"),
+	},
+	{
+		label: __("Spacer"),
+		fieldname: "spacer",
+		fieldtype: "Spacer",
+		custom: 1,
+		icon: "minus",
+		desc: __("Vertical whitespace"),
+	},
+	{
+		label: __("Divider"),
+		fieldname: "divider",
+		fieldtype: "Divider",
+		custom: 1,
+		icon: "minus",
+		desc: __("Horizontal rule"),
+	},
+]);
+
+// ── helpers ────────────────────────────────────────────────
 function update_margin(fieldname, value) {
 	value = parseFloat(value);
 	if (value < 0) value = 0;
@@ -200,70 +308,91 @@ function build_field(df) {
 		fieldtype: df.fieldtype,
 		options: df.options,
 	};
-	if (df.fieldtype == "Table") {
+	if (df.fieldtype === "Table") {
 		out.table_columns = get_table_columns(df);
 	}
 	return out;
 }
 
-let all_fields = computed(() => {
-	const special = [
-		{
-			label: __("Custom HTML"),
-			fieldname: "custom_html",
-			fieldtype: "HTML",
-			html: "",
-			custom: 1,
-		},
-		{ label: __("ID (name)"), fieldname: "name", fieldtype: "Data" },
-		{ label: __("Spacer"), fieldname: "spacer", fieldtype: "Spacer", custom: 1 },
-		{ label: __("Divider"), fieldname: "divider", fieldtype: "Divider", custom: 1 },
-		...print_templates.value,
-	];
-	const doc = meta.value.fields
-		.filter((df) => !["Section Break", "Column Break"].includes(df.fieldtype))
-		.map(build_field);
+function scroll_to(section) {
+	store.scroll_to_section.value = section;
+}
 
-	return [...special, ...doc].filter((df) => {
-		if (!search_text.value) return true;
-		const q = search_text.value.toLowerCase();
-		return (
-			df.fieldname.toLowerCase().includes(q) ||
-			(df.label && df.label.toLowerCase().includes(q))
-		);
+// ── computed: field groups (by section break labels) ────────
+let field_groups = computed(() => {
+	const q = search_text.value.toLowerCase();
+
+	// Seed with ID (name) field
+	const groups = [{ label: null, fields: [] }];
+	let current = groups[0];
+
+	// Always show ID field first
+	const id_field = build_field({
+		label: __("ID (name)"),
+		fieldname: "name",
+		fieldtype: "Data",
 	});
+	if (!q || "id name".includes(q)) {
+		current.fields.push(id_field);
+	}
+
+	for (const df of meta.value.fields) {
+		if (df.fieldtype === "Section Break") {
+			if (df.label) {
+				current = { label: df.label, fields: [] };
+				groups.push(current);
+			}
+			continue;
+		}
+		if (df.fieldtype === "Column Break") continue;
+		if (frappe.model.no_value_type.includes(df.fieldtype)) continue;
+
+		if (q) {
+			const match =
+				(df.fieldname || "").toLowerCase().includes(q) ||
+				(df.label || "").toLowerCase().includes(q);
+			if (!match) continue;
+		}
+
+		current.fields.push(build_field(df));
+	}
+
+	return groups.filter((g) => g.fields.length);
 });
 
-let layout_fields = computed(() =>
-	all_fields.value.filter(
-		(df) => df.custom || ["HTML", "Spacer", "Divider", "Field Template"].includes(df.fieldtype)
-	)
-);
-
-let doc_fields = computed(() =>
-	all_fields.value.filter(
-		(df) =>
-			!df.custom && !["HTML", "Spacer", "Divider", "Field Template"].includes(df.fieldtype)
-	)
-);
-
-let print_templates = computed(() => {
-	let templates = print_format.value.__onload?.print_templates || [];
+// ── computed: templates tab ────────────────────────────────
+let print_templates_list = computed(() => {
+	const templates = print_format.value.__onload?.print_templates || [];
 	return templates.map((template) => {
 		let df;
+		let field_label = null;
 		if (template.field) {
 			df = frappe.meta.get_docfield(meta.value.name, template.field);
+			field_label = df ? __(df.label, null, df.parent) : template.field;
 		} else {
 			df = { label: template.name, fieldname: frappe.scrub(template.name) };
 		}
 		return {
-			label: `${__(df.label, null, df.parent)} (${__("Field Template")})`,
-			fieldname: df.fieldname + "_template",
+			name: template.name,
+			display_label: template.name,
+			fieldname: (df?.fieldname || frappe.scrub(template.name)) + "_template",
 			fieldtype: "Field Template",
 			field_template: template.name,
+			field_label,
 		};
 	});
 });
+
+// ── computed: outline tab ──────────────────────────────────
+let visible_sections = computed(() => {
+	if (!layout.value) return [];
+	return layout.value.sections.filter((s) => !s.remove);
+});
+
+// ── computed: misc ─────────────────────────────────────────
+let new_template_link = computed(
+	() => `/app/print-format-field-template/new?document_type=${meta.value?.name || ""}`
+);
 
 let margins = computed(() => [
 	{ label: __("Top"), fieldname: "margin_top" },
@@ -282,6 +411,7 @@ let page_number_positions = computed(() => [
 	{ label: __("Bottom Right"), value: "Bottom Right" },
 ]);
 
+// ── lifecycle ──────────────────────────────────────────────
 onMounted(() => {
 	let method = "frappe.printing.page.print_format_builder.print_format_builder.get_google_fonts";
 	frappe.call(method).then((r) => {
@@ -296,108 +426,311 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 </script>
 
 <style scoped>
-.sidebar-wrapper {
+/* ── Sidebar shell ───────────────────────────────────────── */
+.pfb-sidebar {
 	width: 260px;
 	flex-shrink: 0;
 	height: calc(100vh - 95px);
-	overflow-y: auto;
-}
-
-.form-control {
-	background: var(--control-bg-on-gray);
-}
-
-.margin-controls {
-	display: flex;
-	gap: 0.4rem;
-	margin-bottom: 0.5rem;
-}
-
-.margin-controls .form-group {
-	flex: 1;
-	margin-bottom: 0;
-}
-
-.margin-controls .control-label {
-	font-size: 10px;
-	margin-bottom: 2px;
-}
-
-.sidebar-section {
-	border-bottom: 1px solid var(--border-color);
-	margin-bottom: 0.25rem;
-}
-
-.sidebar-section-title {
-	font-size: var(--text-sm);
-	font-weight: 600;
-	padding: 0.5rem 0;
-	cursor: pointer;
-	user-select: none;
-	list-style: none;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.chevron-icon {
-	color: var(--text-muted);
-	transition: transform 0.15s;
-	display: flex;
-	align-items: center;
-}
-
-details:not([open]) .chevron-icon {
-	transform: rotate(-90deg);
-}
-
-.sidebar-section-body {
-	padding-bottom: 0.75rem;
-}
-
-.field-group {
 	display: flex;
 	flex-direction: column;
-	gap: 0;
+	border-right: 1px solid var(--border-color);
+	background: var(--fg-color);
 }
 
-.field-group-label {
-	font-size: 10px;
-	font-weight: 600;
-	text-transform: uppercase;
-	color: var(--text-muted);
-	letter-spacing: 0.05em;
-	margin-bottom: 0.25rem;
-	margin-top: 0.25rem;
-}
-
-.sidebar-field {
+/* ── Tab bar ─────────────────────────────────────────────── */
+.pfb-tabbar {
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	width: 100%;
-	background-color: var(--bg-light-gray);
-	border-radius: var(--border-radius);
-	border: 1px dashed var(--gray-400);
-	padding: 0.4rem 0.6rem;
-	font-size: var(--text-sm);
-	cursor: grab;
-	margin-top: 0.35rem;
-}
-
-.sidebar-field:hover {
-	background-color: var(--gray-100);
-	border-color: var(--gray-500);
-}
-
-.sidebar-field .icon {
-	opacity: 0;
-	transition: opacity 0.1s;
-	margin-right: 0;
+	padding: 6px 6px 0;
+	gap: 2px;
+	border-bottom: 1px solid var(--border-color);
 	flex-shrink: 0;
 }
 
-.sidebar-field:hover .icon {
+.pfb-tab {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	padding: 6px 2px 8px;
+	border: none;
+	background: transparent;
+	border-radius: var(--border-radius) var(--border-radius) 0 0;
+	color: var(--text-muted);
+	cursor: pointer;
+	transition: color 0.12s, background 0.12s;
+	font-size: 10px;
+	font-weight: 500;
+	position: relative;
+}
+
+.pfb-tab:hover {
+	color: var(--text-color);
+	background: var(--gray-100);
+}
+
+.pfb-tab.active {
+	color: var(--primary);
+	background: var(--fg-color);
+}
+
+.pfb-tab.active::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background: var(--primary);
+	border-radius: 2px 2px 0 0;
+}
+
+.pfb-tab-icon {
+	display: flex;
+	align-items: center;
+	line-height: 1;
+}
+
+.pfb-tab-label {
+	line-height: 1;
+}
+
+/* ── Tab body ─────────────────────────────────────────────── */
+.pfb-tab-body {
+	flex: 1;
+	overflow-y: auto;
+	padding: 10px;
+}
+
+/* ── Search ──────────────────────────────────────────────── */
+.pfb-search {
+	margin-bottom: 8px;
+	background: var(--control-bg-on-gray);
+}
+
+/* ── Group label ─────────────────────────────────────────── */
+.pfb-group-label {
+	font-size: 10px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--text-muted);
+	margin: 8px 0 4px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.pfb-group-label:first-child {
+	margin-top: 0;
+}
+
+/* ── Field row (Fields tab) ──────────────────────────────── */
+.pfb-field-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 6px 8px;
+	border-radius: var(--border-radius);
+	border: 1px dashed var(--gray-400);
+	background: var(--gray-50);
+	font-size: var(--text-sm);
+	cursor: grab;
+	margin-top: 4px;
+	gap: 6px;
+}
+
+.pfb-field-row:hover {
+	background: var(--gray-100);
+	border-color: var(--gray-500);
+}
+
+.pfb-field-label {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.pfb-plus-icon {
+	opacity: 0;
+	flex-shrink: 0;
+	transition: opacity 0.1s;
+}
+
+.pfb-field-row:hover .pfb-plus-icon,
+.pfb-template-card:hover .pfb-plus-icon {
 	opacity: 1;
+}
+
+/* ── Block card (Blocks tab) ─────────────────────────────── */
+.pfb-block-card {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 10px;
+	border-radius: var(--border-radius);
+	border: 1px solid var(--border-color);
+	background: var(--gray-50);
+	cursor: grab;
+	margin-top: 6px;
+}
+
+.pfb-block-card:hover {
+	background: var(--gray-100);
+	border-color: var(--gray-500);
+}
+
+.pfb-block-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border-radius: var(--border-radius);
+	background: var(--gray-200);
+	flex-shrink: 0;
+}
+
+.pfb-block-info {
+	min-width: 0;
+}
+
+.pfb-block-name {
+	font-size: var(--text-sm);
+	font-weight: 500;
+}
+
+.pfb-block-desc {
+	font-size: 10px;
+	margin-top: 1px;
+}
+
+/* ── Template card (Templates tab) ──────────────────────── */
+.pfb-template-card {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 10px;
+	border-radius: var(--border-radius);
+	border: 1px solid var(--border-color);
+	background: var(--gray-50);
+	cursor: grab;
+	margin-top: 6px;
+}
+
+.pfb-template-card:hover {
+	background: var(--gray-100);
+	border-color: var(--gray-500);
+}
+
+.pfb-template-thumb {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: var(--border-radius);
+	background: var(--gray-200);
+	flex-shrink: 0;
+}
+
+.pfb-template-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.pfb-template-name {
+	font-size: var(--text-sm);
+	font-weight: 500;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.pfb-template-field {
+	font-size: 10px;
+	margin-top: 1px;
+}
+
+.pfb-templates-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 16px 0;
+}
+
+.pfb-templates-hint {
+	font-size: 11px;
+	line-height: 1.5;
+	margin-top: 6px;
+}
+
+.pfb-manage-link {
+	font-size: 10px;
+	font-weight: 400;
+	text-transform: none;
+	letter-spacing: 0;
+}
+
+/* ── Outline tab ─────────────────────────────────────────── */
+.pfb-outline-item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 8px;
+	border-radius: var(--border-radius);
+	cursor: pointer;
+	margin-top: 2px;
+	font-size: var(--text-sm);
+}
+
+.pfb-outline-item:hover {
+	background: var(--gray-100);
+}
+
+.pfb-outline-idx {
+	font-size: 10px;
+	font-variant-numeric: tabular-nums;
+	min-width: 18px;
+	text-align: right;
+}
+
+.pfb-outline-label {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* ── Format tab ──────────────────────────────────────────── */
+.pfb-margin-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 6px;
+	margin-bottom: 6px;
+}
+
+.pfb-margin-cell {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.pfb-margin-label {
+	font-size: 10px;
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.pfb-empty {
+	color: var(--text-muted);
+	font-size: var(--text-sm);
+	text-align: center;
+	padding: 16px 8px;
+}
+
+.pfb-field-group:not(:last-child) {
+	margin-bottom: 4px;
 }
 </style>
