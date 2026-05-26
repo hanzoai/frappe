@@ -16,14 +16,32 @@
 		</div>
 
 		<!-- ── Fields ────────────────────────────────────────── -->
-		<div v-if="activeTab === 'fields'" class="pfb-tab-body">
-			<input
-				class="pfb-search form-control form-control-sm"
-				type="text"
-				:placeholder="__('Search fields')"
-				v-model="search_text"
-			/>
+		<div v-if="activeTab === 'fields'" class="pfb-tab-body pfb-fields-tab">
+			<!-- Search -->
+			<div class="pfb-search-wrap">
+				<svg class="icon icon-xs pfb-search-icon text-muted">
+					<use href="#icon-search"></use>
+				</svg>
+				<input
+					ref="search_input"
+					class="pfb-search"
+					type="text"
+					:placeholder="__('Search fields...')"
+					v-model="search_text"
+				/>
+				<kbd class="pfb-search-kbd" @click="focus_search">/</kbd>
+			</div>
 
+			<!-- Header -->
+			<div class="pfb-fields-header">
+				<span class="pfb-fields-header-title">
+					{{ __("DOCUMENT FIELDS") }}
+					<span class="pfb-fields-header-sep">·</span>
+					{{ (meta.name || "").toUpperCase() }}
+				</span>
+			</div>
+
+			<!-- Groups -->
 			<div
 				v-for="group in field_groups"
 				:key="group.label || '__root__'"
@@ -43,10 +61,12 @@
 							:title="element.fieldname"
 							@click="add_to_layout(element)"
 						>
+							<span
+								class="pfb-field-drag"
+								v-html="frappe.utils.icon('drag', 'xs')"
+							></span>
 							<span class="pfb-field-label">{{ element.label }}</span>
-							<svg class="icon icon-xs text-muted pfb-plus-icon">
-								<use href="#icon-plus"></use>
-							</svg>
+							<span class="pfb-field-type">{{ element.fieldtype }}</span>
 						</div>
 					</template>
 				</draggable>
@@ -241,12 +261,18 @@
 import draggable from "vuedraggable";
 import { get_table_columns, pluck } from "./utils";
 import { useStore } from "./store";
-import { computed, onMounted, ref, watch, inject } from "vue";
+import { computed, onMounted, nextTick, ref, watch, inject } from "vue";
 
 // state
 let search_text = ref("");
 let google_fonts = ref([]);
 let activeTab = ref("fields");
+let search_input = ref(null);
+
+function focus_search() {
+	activeTab.value = "fields";
+	nextTick(() => search_input.value?.focus());
+}
 
 // store
 let store = inject("$store");
@@ -459,6 +485,17 @@ onMounted(() => {
 			google_fonts.value.push(print_format.value.font);
 		}
 	});
+
+	document.addEventListener("keydown", (e) => {
+		if (
+			e.key === "/" &&
+			document.activeElement.tagName !== "INPUT" &&
+			document.activeElement.tagName !== "TEXTAREA"
+		) {
+			e.preventDefault();
+			focus_search();
+		}
+	});
 });
 
 watch(print_format, () => (store.dirty.value = true), { deep: true });
@@ -541,10 +578,70 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	padding: 10px;
 }
 
-/* ── Search ──────────────────────────────────────────────── */
+/* ── Search (Fields tab) ─────────────────────────────────── */
+.pfb-fields-tab {
+	padding: 0;
+}
+
+.pfb-search-wrap {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 10px;
+	border-bottom: 1px solid var(--border-color);
+}
+
+.pfb-search-icon {
+	flex-shrink: 0;
+	color: var(--gray-500);
+}
+
 .pfb-search {
-	margin-bottom: 8px;
-	background: var(--control-bg-on-gray);
+	flex: 1;
+	border: none;
+	background: transparent;
+	font-size: var(--text-sm);
+	color: var(--text-color);
+	outline: none;
+	padding: 0;
+	min-width: 0;
+}
+
+.pfb-search::placeholder {
+	color: var(--gray-400);
+}
+
+.pfb-search-kbd {
+	flex-shrink: 0;
+	font-family: inherit;
+	font-size: 10px;
+	color: var(--gray-400);
+	background: var(--gray-100);
+	border: 1px solid var(--gray-300);
+	border-radius: 3px;
+	padding: 1px 5px;
+	cursor: pointer;
+	line-height: 1.6;
+}
+
+/* ── Fields header ───────────────────────────────────────── */
+.pfb-fields-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 10px 4px;
+}
+
+.pfb-fields-header-title {
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	color: var(--text-muted);
+}
+
+.pfb-fields-header-sep {
+	margin: 0 4px;
+	opacity: 0.5;
 }
 
 /* ── Group label ─────────────────────────────────────────── */
@@ -554,34 +651,41 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	text-transform: uppercase;
 	letter-spacing: 0.06em;
 	color: var(--text-muted);
-	margin: 8px 0 4px;
+	padding: 8px 10px 2px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-}
-
-.pfb-group-label:first-child {
-	margin-top: 0;
 }
 
 /* ── Field row (Fields tab) ──────────────────────────────── */
 .pfb-field-row {
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
-	padding: 6px 8px;
-	border-radius: var(--border-radius);
-	border: 1px dashed var(--gray-400);
-	background: var(--gray-50);
+	gap: 8px;
+	padding: 7px 10px;
 	font-size: var(--text-sm);
 	cursor: grab;
-	margin-top: 4px;
-	gap: 6px;
+	border-bottom: 1px solid var(--gray-100);
+}
+
+.pfb-field-row:last-child {
+	border-bottom: none;
 }
 
 .pfb-field-row:hover {
-	background: var(--gray-100);
-	border-color: var(--gray-500);
+	background: var(--gray-50);
+}
+
+.pfb-field-drag {
+	display: flex;
+	align-items: center;
+	color: var(--gray-300);
+	flex-shrink: 0;
+	transition: color 0.1s;
+}
+
+.pfb-field-row:hover .pfb-field-drag {
+	color: var(--gray-500);
 }
 
 .pfb-field-label {
@@ -590,6 +694,18 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	font-weight: 450;
+}
+
+.pfb-field-type {
+	font-size: 10px;
+	color: var(--gray-500);
+	background: var(--gray-100);
+	border: 1px solid var(--gray-200);
+	border-radius: var(--border-radius-sm);
+	padding: 2px 6px;
+	white-space: nowrap;
+	flex-shrink: 0;
 }
 
 .pfb-plus-icon {
@@ -598,7 +714,6 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	transition: opacity 0.1s;
 }
 
-.pfb-field-row:hover .pfb-plus-icon,
 .pfb-template-card:hover .pfb-plus-icon {
 	opacity: 1;
 }
@@ -773,7 +888,15 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	padding: 16px 8px;
 }
 
-.pfb-field-group:not(:last-child) {
-	margin-bottom: 4px;
+.pfb-fields-tab .pfb-empty {
+	padding: 24px 16px;
+}
+
+.pfb-field-group {
+	border-bottom: 1px solid var(--gray-100);
+}
+
+.pfb-field-group:last-child {
+	border-bottom: none;
 }
 </style>
