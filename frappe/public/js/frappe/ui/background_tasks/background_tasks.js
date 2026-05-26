@@ -7,7 +7,7 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 	}
 
 	make() {
-		this.wrapper.find(".sidebar-background-tasks").removeClass("hidden");
+		this.button = this.wrapper.find(".sidebar-background-tasks");
 		this.dropdown = this.wrapper.find(".dropdown-background-tasks");
 		this.dropdown_list = this.dropdown.find(".background-tasks-list");
 		this.header_items = this.dropdown_list.find(".bg-tasks-header-items");
@@ -16,6 +16,11 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 
 		this.setup_headers();
 		this.setup_dropdown_events();
+		this.update_tasks();
+	}
+
+	toggle_button_visibility() {
+		this.button.toggleClass("hidden", !this.db_tasks || this.db_tasks.length === 0);
 	}
 
 	setup_headers() {
@@ -147,6 +152,7 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 						if (tasks && tasks.length) {
 							this.db_tasks.unshift(tasks[0]);
 							if (this.db_tasks.length > 15) this.db_tasks.pop();
+							this.toggle_button_visibility();
 							if (!this.dropdown.hasClass("hidden")) {
 								this.render_tasks(this.db_tasks);
 							}
@@ -180,6 +186,7 @@ frappe.ui.BackgroundTasks = class BackgroundTasks {
 			.then((r) => {
 				this.db_tasks = r.message || [];
 				this.has_fetched = true;
+				this.toggle_button_visibility();
 				this.render_tasks(this.db_tasks);
 			});
 	}
