@@ -152,6 +152,12 @@
 		</div>
 		<div class="page-break-indicator" v-if="section.page_break">
 			<span>— {{ __("Page Break") }} —</span>
+			<button
+				class="btn btn-xs page-break-remove"
+				:title="__('Remove page break')"
+				@click.stop="section.page_break = false"
+				v-html="frappe.utils.icon('x', 'xs')"
+			></button>
 		</div>
 	</div>
 </template>
@@ -458,7 +464,10 @@ function set_column_align(column, value) {
 }
 
 .page-break-indicator {
-	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.4rem;
 	color: var(--text-muted);
 	font-size: var(--text-xs);
 	font-style: italic;
@@ -466,5 +475,17 @@ function set_column_align(column, value) {
 	border-top: 1px dashed var(--gray-300);
 	border-bottom: 1px dashed var(--gray-300);
 	margin: 0.25rem 0;
+}
+
+.page-break-remove {
+	padding: 1px 3px;
+	box-shadow: none;
+	color: var(--gray-500);
+	line-height: 1;
+}
+
+.page-break-remove:hover {
+	background: var(--red-50);
+	color: var(--red-500);
 }
 </style>
