@@ -86,7 +86,14 @@ function on_section_add(evt) {
 	if (section && section.page_break && section.columns.every((c) => !c.fields.length)) {
 		layout.value.sections.splice(newIndex, 1);
 		const prev = layout.value.sections[newIndex - 1];
-		if (prev) prev.page_break = !prev.page_break;
+		if (prev) {
+			prev.page_break = !prev.page_break;
+		} else {
+			frappe.show_alert(
+				{ message: __("Page break must follow a section"), indicator: "orange" },
+				3
+			);
+		}
 	}
 }
 
