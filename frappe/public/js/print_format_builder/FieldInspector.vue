@@ -12,12 +12,91 @@
 		</div>
 
 		<!-- Empty state -->
-		<div v-if="!selected_field && !selected_section" class="pfb-inspector-empty">
+		<div
+			v-if="!selected_field && !selected_section && !selected_letterhead"
+			class="pfb-inspector-empty"
+		>
 			<svg class="icon icon-md text-muted" style="margin-bottom: 8px">
 				<use href="#icon-cursor-text"></use>
 			</svg>
 			<p class="text-muted">{{ __("Click a field to edit its properties") }}</p>
 		</div>
+
+		<!-- ── Letter Head inspector ──────────────────────────────── -->
+		<template v-else-if="selected_letterhead">
+			<div class="pfb-insp-body">
+				<div class="pfb-insp-section">
+					<div class="pfb-insp-section-head" @click="toggle('lh_image')">
+						<span class="pfb-insp-section-label">{{ __("Image") }}</span>
+						<span
+							class="pfb-insp-chevron"
+							:class="{ collapsed: !open.lh_image }"
+							v-html="frappe.utils.icon('chevron-down', 'xs')"
+						></span>
+					</div>
+					<div v-show="open.lh_image" class="pfb-insp-section-body">
+						<template v-if="letterhead">
+							<!-- Alignment -->
+							<div class="pfb-insp-row">
+								<span class="pfb-insp-label">{{ __("Align") }}</span>
+								<div class="pfb-seg">
+									<button
+										v-for="dir in ['Left', 'Center', 'Right']"
+										:key="dir"
+										:class="{ active: lh_align === dir }"
+										@click="letterhead.align = dir"
+									>
+										{{ __(dir) }}
+									</button>
+								</div>
+							</div>
+							<!-- Size slider -->
+							<div v-if="letterhead.image" class="pfb-insp-row pfb-insp-row--col">
+								<span class="pfb-insp-label">{{ __("Size") }}</span>
+								<input
+									class="pfb-lh-slider"
+									type="range"
+									min="20"
+									:max="lh_size_max"
+									:value="lh_size"
+									@input="(e) => lh_set_size(e.target.value)"
+								/>
+							</div>
+							<!-- Actions -->
+							<div class="pfb-lh-actions">
+								<button class="btn btn-xs btn-default" @click="lh_upload_image">
+									<span v-html="frappe.utils.icon('upload', 'xs')"></span>
+									{{
+										letterhead.image ? __("Change Image") : __("Upload Image")
+									}}
+								</button>
+								<button
+									class="btn btn-xs btn-default"
+									@click="lh_change_letterhead"
+								>
+									{{ __("Change Letter Head") }}
+								</button>
+							</div>
+						</template>
+						<template v-else>
+							<p class="pfb-insp-hint text-muted">
+								{{ __("No letter head selected.") }}
+							</p>
+							<button class="btn btn-xs btn-default" @click="lh_create_letterhead">
+								{{ __("Create Letter Head") }}
+							</button>
+							<button
+								class="btn btn-xs btn-default"
+								style="margin-top: 4px"
+								@click="lh_change_letterhead"
+							>
+								{{ __("Select Letter Head") }}
+							</button>
+						</template>
+					</div>
+				</div>
+			</div>
+		</template>
 
 		<!-- ── Table field inspector ───────────────────────────────── -->
 		<template v-else-if="selected_field && is_table_field">
@@ -502,13 +581,20 @@
 </template>
 
 <script setup>
-import { computed, inject, ref } from "vue";
+import { computed, inject, ref, watch } from "vue";
 import draggable from "vuedraggable";
+import { useStore } from "./store";
+import { get_image_dimensions } from "./utils";
 
 let store = inject("$store");
+let { letterhead } = useStore();
+
+let lh_aspect_ratio = ref(null);
+let lh_range_field = ref(null);
 
 let selected_field = computed(() => store.selected_field.value);
 let selected_section = computed(() => store.selected_section.value);
+let selected_letterhead = computed(() => store.selected_letterhead.value);
 
 let active_tab = ref("properties");
 
@@ -524,6 +610,7 @@ const section_tabs = [
 ];
 
 const open = ref({
+	lh_image: true,
 	f_field: true,
 	f_format: false,
 	f_visibility: false,
@@ -543,6 +630,7 @@ function toggle(key) {
 let is_table_field = computed(() => selected_field.value?.fieldtype === "Table");
 
 let inspector_kind = computed(() => {
+	if (selected_letterhead.value) return __("Letter Head");
 	if (selected_field.value) {
 		if (selected_field.value.fieldtype === "Table") return __("Table");
 		return __("Field");
@@ -552,6 +640,7 @@ let inspector_kind = computed(() => {
 });
 
 let inspector_subtitle = computed(() => {
+	if (selected_letterhead.value) return letterhead.value?.name || "";
 	if (selected_field.value) return selected_field.value.label || selected_field.value.fieldname;
 	if (selected_section.value) return selected_section.value.label || __("Untitled section");
 	return "";
@@ -608,6 +697,97 @@ function remove_field() {
 		store.selected_field.value = null;
 	}
 }
+
+// ── Letter Head helpers ────────────────────────────────────
+let lh_align = computed(() => letterhead.value?.align ?? "Left");
+let lh_size = computed(() =>
+	lh_range_field.value === "image_width"
+		? letterhead.value?.image_width ?? 200
+		: letterhead.value?.image_height ?? 80
+);
+let lh_size_max = computed(() => (lh_range_field.value === "image_width" ? 700 : 500));
+
+function lh_set_size(val) {
+	if (!letterhead.value) return;
+	const v = parseFloat(val);
+	letterhead.value[lh_range_field.value] = v;
+	// maintain aspect ratio
+	if (lh_aspect_ratio.value) {
+		const other = lh_range_field.value === "image_width" ? "image_height" : "image_width";
+		letterhead.value[other] =
+			other === "image_width" ? lh_aspect_ratio.value * v : v / lh_aspect_ratio.value;
+	}
+}
+
+function lh_upload_image() {
+	new frappe.ui.FileUploader({
+		folder: "Home/Attachments",
+		on_success: (file_doc) => {
+			get_image_dimensions(file_doc.file_url).then(({ width, height }) => {
+				lh_aspect_ratio.value = width / height;
+				lh_range_field.value = lh_aspect_ratio.value > 1 ? "image_width" : "image_height";
+				let new_width = width > 200 ? 200 : width;
+				let new_height = new_width / lh_aspect_ratio.value;
+				if (new_height > 80) {
+					new_height = 80;
+					new_width = lh_aspect_ratio.value * new_height;
+				}
+				letterhead.value["image"] = file_doc.file_url;
+				letterhead.value["image_width"] = new_width;
+				letterhead.value["image_height"] = new_height;
+			});
+		},
+	});
+}
+
+function lh_change_letterhead() {
+	let d = new frappe.ui.Dialog({
+		title: __("Change Letter Head"),
+		fields: [
+			{
+				label: __("Letter Head"),
+				fieldname: "letterhead",
+				fieldtype: "Link",
+				options: "Letter Head",
+			},
+		],
+		primary_action: ({ letterhead: lh }) => {
+			if (lh) store.change_letterhead(lh);
+			d.hide();
+		},
+	});
+	d.show();
+}
+
+function lh_create_letterhead() {
+	let d = new frappe.ui.Dialog({
+		title: __("Create Letter Head"),
+		fields: [{ label: __("Letter Head Name"), fieldname: "name", fieldtype: "Data" }],
+		primary_action: ({ name }) => {
+			return frappe.db
+				.insert({ doctype: "Letter Head", letter_head_name: name, source: "Image" })
+				.then((doc) => {
+					d.hide();
+					store.change_letterhead(doc.name);
+				});
+		},
+	});
+	d.show();
+}
+
+// Initialize lh_range_field when inspector opens for letterhead
+watch(
+	selected_letterhead,
+	(active) => {
+		if (active && letterhead.value?.image) {
+			get_image_dimensions(letterhead.value.image).then(({ width, height }) => {
+				lh_aspect_ratio.value = width / height;
+				lh_range_field.value = lh_aspect_ratio.value > 1 ? "image_width" : "image_height";
+			});
+		}
+	},
+	{ immediate: true }
+);
 
 // ── Table helpers ──────────────────────────────────────────
 let table_style = computed(() => selected_field.value?.table_style ?? "lined");
@@ -1234,5 +1414,17 @@ function adjust_padding(side, delta) {
 
 .pfb-insp-col-count {
 	font-size: 11px;
+}
+
+/* ── Letter Head inspector ───────────────────────────────── */
+.pfb-lh-slider {
+	width: 100%;
+	accent-color: var(--primary);
+}
+
+.pfb-lh-actions {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
 }
 </style>

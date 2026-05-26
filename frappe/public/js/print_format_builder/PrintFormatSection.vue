@@ -111,6 +111,7 @@ let is_selected = computed(() => store.selected_section.value === props.section)
 function select_section() {
 	store.selected_section.value = props.section;
 	store.selected_field.value = null;
+	store.selected_letterhead.value = false;
 }
 
 function set_columns(n) {

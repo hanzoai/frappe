@@ -238,6 +238,7 @@ function format_cell(row, col) {
 
 function select_field() {
 	store.selected_field.value = props.df;
+	store.selected_letterhead.value = false;
 	if (props.df.fieldtype !== "HTML") {
 		editing.value = true;
 	}
