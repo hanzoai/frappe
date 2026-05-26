@@ -11,6 +11,12 @@
 					<div ref="doc_picker_ref" class="canvas-doc-picker"></div>
 				</div>
 				<div class="canvas-toolbar-right">
+					<span v-if="!$store.preview_doc.value" class="canvas-no-data-hint">
+						<svg class="icon icon-xs" style="margin-right: 4px; opacity: 0.5">
+							<use href="#icon-alert-circle"></use>
+						</svg>
+						{{ __("Pick a record above for a live preview") }}
+					</span>
 					<button
 						v-if="$store.preview_doc_name.value"
 						class="canvas-clear-btn"
@@ -174,6 +180,14 @@ defineExpose({ toggle_preview, $store });
 	display: flex;
 	align-items: center;
 	gap: 6px;
+}
+
+.canvas-no-data-hint {
+	display: flex;
+	align-items: center;
+	font-size: 11px;
+	color: var(--text-muted);
+	white-space: nowrap;
 }
 
 .canvas-clear-btn {
