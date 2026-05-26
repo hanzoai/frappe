@@ -36,6 +36,7 @@
 							<tr
 								v-for="(row, i) in (preview_doc[df.fieldname] || []).slice(0, 4)"
 								:key="i"
+								:class="i % 2 === 0 ? 'odd' : 'even'"
 							>
 								<td v-for="col in df.table_columns" :key="col.fieldname">
 									<img
@@ -44,7 +45,7 @@
 										class="preview-table-img"
 										:alt="col.label || col.fieldname"
 									/>
-									<span v-else>{{ row[col.fieldname] ?? "" }}</span>
+									<span v-else>{{ format_cell(row, col) }}</span>
 								</td>
 							</tr>
 							<tr v-if="!preview_doc[df.fieldname]?.length">
@@ -209,6 +210,23 @@ let preview_value = computed(() => {
 const IMAGE_FIELDTYPES = new Set(["Attach Image", "Image"]);
 function is_image_field(col) {
 	return IMAGE_FIELDTYPES.has(col?.fieldtype);
+}
+
+function format_cell(row, col) {
+	const raw = row[col.fieldname];
+	if (raw === null || raw === undefined || raw === "") return "";
+	if (col.fieldtype === "Check") return raw ? __("Yes") : __("No");
+	try {
+		const formatted = frappe.format(raw, col, { only_value: true }, row);
+		if (typeof formatted === "string" && formatted.includes("<")) {
+			const tmp = document.createElement("div");
+			tmp.innerHTML = formatted;
+			return tmp.textContent || tmp.innerText || String(raw);
+		}
+		return formatted;
+	} catch {
+		return String(raw);
+	}
 }
 
 function select_field() {
@@ -614,33 +632,52 @@ watch(
 	padding: 2px;
 }
 
-/* Preview table */
+/* Preview table — matches PDF print_format.css child-table style */
 .field-preview-table {
 	width: 100%;
+	margin-top: 0.5rem;
+}
+
+.field-preview-table > .field-preview-label {
+	font-size: 0.8em;
+	font-weight: 600;
+	color: #6b7280;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	margin-bottom: 0.4rem;
 }
 
 .preview-table {
 	width: 100%;
 	border-collapse: collapse;
-	font-size: 11px;
-	margin-top: 4px;
+	font-size: 0.9em;
 }
 
 .preview-table th {
-	text-align: left;
+	background-color: #f3f4f6;
+	color: #374151;
 	font-weight: 600;
-	color: var(--gray-500);
-	border-bottom: 1px solid var(--gray-300);
-	padding: 3px 4px;
-	font-size: 10px;
+	font-size: 0.85em;
 	text-transform: uppercase;
 	letter-spacing: 0.03em;
+	padding: 0.45rem 0.6rem;
+	border: 1px solid #e5e7eb;
+	text-align: left;
 }
 
 .preview-table td {
-	padding: 3px 4px;
-	border-bottom: 1px solid var(--gray-100);
-	color: var(--text-color);
+	padding: 0.45rem 0.6rem;
+	border: 1px solid #e5e7eb;
+	vertical-align: top;
+	color: #111827;
+}
+
+.preview-table tr.odd td {
+	background-color: #ffffff;
+}
+
+.preview-table tr.even td {
+	background-color: #f9fafb;
 }
 
 .preview-table-img {
