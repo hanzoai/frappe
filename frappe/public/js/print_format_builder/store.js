@@ -15,6 +15,7 @@ export function getStore(print_format_name) {
 	let selected_field = ref(null);
 	let selected_section = ref(null);
 	let selected_letterhead = ref(false);
+	let selected_lh_footer = ref(false);
 	let preview_doc = ref(null);
 	let preview_doc_name = ref(null);
 
@@ -32,6 +33,7 @@ export function getStore(print_format_name) {
 					selected_field.value = null;
 					selected_section.value = null;
 					selected_letterhead.value = false;
+					selected_lh_footer.value = false;
 
 					// load the letter head stored in format_data, if any
 					const lh_name = layout.value?.letter_head;
@@ -172,6 +174,7 @@ export function getStore(print_format_name) {
 		selected_field,
 		selected_section,
 		selected_letterhead,
+		selected_lh_footer,
 		preview_doc,
 		preview_doc_name,
 		load_preview_doc,

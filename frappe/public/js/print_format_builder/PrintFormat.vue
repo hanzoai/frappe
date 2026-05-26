@@ -39,12 +39,7 @@
 			@change="layout.footer = $event"
 			:button-label="__('Edit Footer')"
 		/>
-		<HTMLEditor
-			v-if="letterhead"
-			:value="letterhead.footer"
-			@change="update_letterhead_footer"
-			:button-label="__('Edit Letter Head Footer')"
-		/>
+		<LetterHeadFooterEditor v-if="letterhead" />
 	</div>
 </template>
 
@@ -52,6 +47,7 @@
 import draggable from "vuedraggable";
 import HTMLEditor from "./HTMLEditor.vue";
 import LetterHeadEditor from "./LetterHeadEditor.vue";
+import LetterHeadFooterEditor from "./LetterHeadFooterEditor.vue";
 import PrintFormatSection from "./PrintFormatSection.vue";
 import SectionInsert from "./SectionInsert.vue";
 import { useStore } from "./store";
@@ -99,10 +95,6 @@ function on_section_add(evt) {
 			);
 		}
 	}
-}
-
-function update_letterhead_footer(val) {
-	letterhead.value.footer = val;
 }
 
 let rootStyles = computed(() => {

@@ -5,7 +5,15 @@
 			<div class="pfb-inspector-eyebrow">{{ __("Inspector") }}</div>
 			<div class="pfb-inspector-title">
 				<span class="pfb-inspector-kind">{{ inspector_kind }}</span>
-				<span class="pfb-inspector-name" v-if="selected_field || selected_section">
+				<span
+					class="pfb-inspector-name"
+					v-if="
+						selected_field ||
+						selected_section ||
+						selected_letterhead ||
+						selected_lh_footer
+					"
+				>
 					{{ inspector_subtitle }}
 				</span>
 			</div>
@@ -13,7 +21,9 @@
 
 		<!-- Empty state -->
 		<div
-			v-if="!selected_field && !selected_section && !selected_letterhead"
+			v-if="
+				!selected_field && !selected_section && !selected_letterhead && !selected_lh_footer
+			"
 			class="pfb-inspector-empty"
 		>
 			<svg class="icon icon-md text-muted" style="margin-bottom: 8px">
@@ -21,6 +31,39 @@
 			</svg>
 			<p class="text-muted">{{ __("Click a field to edit its properties") }}</p>
 		</div>
+
+		<!-- ── Letter Head Footer inspector ──────────────────────── -->
+		<template v-else-if="selected_lh_footer">
+			<div class="pfb-insp-body">
+				<div class="pfb-insp-section">
+					<div class="pfb-insp-section-head" @click="toggle('lh_footer')">
+						<span class="pfb-insp-section-label">{{ __("Footer") }}</span>
+						<span
+							class="pfb-insp-chevron"
+							:class="{ collapsed: !open.lh_footer }"
+							v-html="frappe.utils.icon('chevron-down', 'xs')"
+						></span>
+					</div>
+					<div v-show="open.lh_footer" class="pfb-insp-section-body">
+						<div
+							v-if="letterhead && letterhead.footer"
+							class="pfb-lh-footer-preview"
+							v-html="letterhead.footer"
+						></div>
+						<div v-else class="pfb-insp-hint text-muted">
+							{{ __("No footer content yet.") }}
+						</div>
+						<button
+							class="btn btn-xs btn-default pfb-lh-edit-btn"
+							@click="lh_edit_footer"
+						>
+							<span v-html="frappe.utils.icon('edit', 'xs')"></span>
+							{{ __("Edit Footer") }}
+						</button>
+					</div>
+				</div>
+			</div>
+		</template>
 
 		<!-- ── Letter Head inspector ──────────────────────────────── -->
 		<template v-else-if="selected_letterhead">
@@ -595,6 +638,7 @@ let lh_range_field = ref(null);
 let selected_field = computed(() => store.selected_field.value);
 let selected_section = computed(() => store.selected_section.value);
 let selected_letterhead = computed(() => store.selected_letterhead.value);
+let selected_lh_footer = computed(() => store.selected_lh_footer.value);
 
 let active_tab = ref("properties");
 
@@ -611,6 +655,7 @@ const section_tabs = [
 
 const open = ref({
 	lh_image: true,
+	lh_footer: true,
 	f_field: true,
 	f_format: false,
 	f_visibility: false,
@@ -630,6 +675,7 @@ function toggle(key) {
 let is_table_field = computed(() => selected_field.value?.fieldtype === "Table");
 
 let inspector_kind = computed(() => {
+	if (selected_lh_footer.value) return __("Letter Head");
 	if (selected_letterhead.value) return __("Letter Head");
 	if (selected_field.value) {
 		if (selected_field.value.fieldtype === "Table") return __("Table");
@@ -640,6 +686,7 @@ let inspector_kind = computed(() => {
 });
 
 let inspector_subtitle = computed(() => {
+	if (selected_lh_footer.value) return __("Footer");
 	if (selected_letterhead.value) return letterhead.value?.name || "";
 	if (selected_field.value) return selected_field.value.label || selected_field.value.fieldname;
 	if (selected_section.value) return selected_section.value.label || __("Untitled section");
@@ -772,6 +819,29 @@ function lh_create_letterhead() {
 				});
 		},
 	});
+	d.show();
+}
+
+function lh_edit_footer() {
+	let d = new frappe.ui.Dialog({
+		title: __("Edit Letter Head Footer"),
+		fields: [
+			{
+				label: __("Footer"),
+				fieldname: "footer",
+				fieldtype: "HTML Editor",
+				min_lines: 8,
+				max_lines: 20,
+			},
+		],
+		primary_action_label: __("Save"),
+		primary_action: ({ footer }) => {
+			letterhead.value.footer = frappe.dom.remove_script_and_style(footer);
+			letterhead.value._dirty = true;
+			d.hide();
+		},
+	});
+	d.set_value("footer", letterhead.value?.footer || "");
 	d.show();
 }
 
@@ -1426,5 +1496,23 @@ function adjust_padding(side, delta) {
 	display: flex;
 	flex-direction: column;
 	gap: 6px;
+}
+
+.pfb-lh-footer-preview {
+	font-size: var(--text-sm);
+	color: var(--text-muted);
+	padding: 6px 8px;
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius);
+	background: var(--gray-50);
+	max-height: 80px;
+	overflow: hidden;
+	margin-bottom: 6px;
+}
+
+.pfb-lh-edit-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
 }
 </style>

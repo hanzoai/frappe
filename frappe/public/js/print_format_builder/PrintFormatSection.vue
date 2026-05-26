@@ -112,6 +112,7 @@ function select_section() {
 	store.selected_section.value = props.section;
 	store.selected_field.value = null;
 	store.selected_letterhead.value = false;
+	store.selected_lh_footer.value = false;
 }
 
 function set_columns(n) {

@@ -25,6 +25,7 @@ let range_input_field = ref(null);
 
 function select_letterhead() {
 	raw_store.selected_letterhead.value = true;
+	raw_store.selected_lh_footer.value = false;
 	raw_store.selected_field.value = null;
 	raw_store.selected_section.value = null;
 }
