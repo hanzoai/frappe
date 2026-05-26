@@ -1,80 +1,154 @@
 <template>
 	<div
 		class="field"
-		:class="{ 'field--table': df.fieldtype == 'Table', 'field--selected': is_selected }"
+		:class="{
+			'field--table': df.fieldtype == 'Table',
+			'field--selected': is_selected,
+			'field--preview': !!preview_doc,
+		}"
 		v-show="!df.remove"
 		:title="df.label || df.fieldname"
 		@click.stop="select_field"
 	>
-		<div class="field-row">
-			<div
-				class="drag-handle field-drag-handle"
-				v-html="frappe.utils.icon('drag', 'xs')"
-			></div>
-			<div class="field-body">
-				<div class="field-content">
-					<div
-						class="custom-html"
-						v-if="df.fieldtype == 'HTML' && df.html"
-						v-html="df.html"
-					></div>
-					<div class="custom-html" v-else-if="df.fieldtype == 'Field Template'">
+		<!-- ── Preview mode: show actual doc values ─────────── -->
+		<template v-if="preview_doc">
+			<div class="field-preview-wrap">
+				<!-- Handle HTML fields -->
+				<div
+					v-if="df.fieldtype == 'HTML' && df.html"
+					class="custom-html"
+					v-html="df.html"
+				></div>
+				<div v-else-if="df.fieldtype == 'Spacer'" class="field-preview-spacer"></div>
+				<div v-else-if="df.fieldtype == 'Divider'" class="field-preview-divider"></div>
+				<!-- Table field -->
+				<div v-else-if="df.fieldtype == 'Table'" class="field-preview-table">
+					<div v-if="df.label" class="field-preview-label">{{ df.label }}</div>
+					<table class="preview-table">
+						<thead>
+							<tr>
+								<th v-for="col in df.table_columns" :key="col.fieldname">
+									{{ col.label || col.fieldname }}
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr
+								v-for="(row, i) in (preview_doc[df.fieldname] || []).slice(0, 4)"
+								:key="i"
+							>
+								<td v-for="col in df.table_columns" :key="col.fieldname">
+									{{ row[col.fieldname] ?? "" }}
+								</td>
+							</tr>
+							<tr v-if="!preview_doc[df.fieldname]?.length">
+								<td
+									:colspan="df.table_columns?.length || 1"
+									class="text-muted"
+									style="text-align: center; font-size: 11px; padding: 6px"
+								>
+									{{ __("No rows") }}
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- Regular field -->
+				<div v-else>
+					<div v-if="df.label && df.show_label !== 'hide'" class="field-preview-label">
 						{{ df.label }}
 					</div>
-					<input
-						v-else-if="editing && df.fieldtype != 'HTML'"
-						ref="label_input"
-						class="label-input"
-						type="text"
-						:placeholder="__('Label')"
-						v-model="df.label"
-						@keydown.enter="editing = false"
-						@blur="editing = false"
-					/>
-					<span v-else-if="df.label">{{ df.label }}</span>
-					<i class="text-muted" v-else>{{ __("No Label") }} ({{ df.fieldname }})</i>
-				</div>
-				<div class="field-meta">
-					<span class="fieldtype-badge">{{ short_fieldtype }}</span>
-					<div class="field-actions">
-						<button
-							v-if="df.fieldtype == 'HTML'"
-							class="btn btn-xs btn-icon"
-							@click.stop="edit_html"
-							v-html="frappe.utils.icon('edit', 'sm')"
-						></button>
-						<button
-							class="btn btn-xs btn-icon"
-							@click.stop="df['remove'] = true"
-							v-html="frappe.utils.icon('x', 'sm')"
-						></button>
+					<div class="field-preview-value" :class="{ 'text-muted': !preview_value }">
+						{{ preview_value || "—" }}
 					</div>
 				</div>
 			</div>
-		</div>
-		<div v-if="df.fieldtype == 'Table'" class="table-preview">
-			<div class="table-columns-list">
-				<span
-					class="table-col-chip"
-					:class="{ 'table-col-chip--invalid': tf.invalid_width }"
-					v-for="tf in df.table_columns"
-					:key="tf.fieldname"
-					:title="tf.label || tf.fieldname"
-				>
-					{{ tf.label || tf.fieldname }}
-				</span>
-				<span
-					v-if="!df.table_columns || !df.table_columns.length"
-					class="text-muted no-columns-hint"
-				>
-					{{ __("No columns configured") }}
-				</span>
+			<!-- Drag + remove overlay (top-right corner on hover) -->
+			<div class="field-preview-actions">
+				<div
+					class="drag-handle field-drag-handle"
+					v-html="frappe.utils.icon('drag', 'xs')"
+				></div>
+				<button
+					class="btn btn-xs btn-icon"
+					@click.stop="df['remove'] = true"
+					v-html="frappe.utils.icon('x', 'xs')"
+				></button>
 			</div>
-			<button class="configure-columns-btn" @click.stop="configure_columns">
-				<span v-html="frappe.utils.icon('settings-2', 'xs')"></span>
-				{{ __("Configure Columns") }}
-			</button>
-		</div>
+		</template>
+
+		<!-- ── Builder mode: labels + controls ──────────────── -->
+		<template v-else>
+			<div class="field-row">
+				<div
+					class="drag-handle field-drag-handle"
+					v-html="frappe.utils.icon('drag', 'xs')"
+				></div>
+				<div class="field-body">
+					<div class="field-content">
+						<div
+							class="custom-html"
+							v-if="df.fieldtype == 'HTML' && df.html"
+							v-html="df.html"
+						></div>
+						<div class="custom-html" v-else-if="df.fieldtype == 'Field Template'">
+							{{ df.label }}
+						</div>
+						<input
+							v-else-if="editing && df.fieldtype != 'HTML'"
+							ref="label_input"
+							class="label-input"
+							type="text"
+							:placeholder="__('Label')"
+							v-model="df.label"
+							@keydown.enter="editing = false"
+							@blur="editing = false"
+						/>
+						<span v-else-if="df.label">{{ df.label }}</span>
+						<i class="text-muted" v-else>{{ __("No Label") }} ({{ df.fieldname }})</i>
+					</div>
+					<div class="field-meta">
+						<span class="fieldtype-badge">{{ short_fieldtype }}</span>
+						<div class="field-actions">
+							<button
+								v-if="df.fieldtype == 'HTML'"
+								class="btn btn-xs btn-icon"
+								@click.stop="edit_html"
+								v-html="frappe.utils.icon('edit', 'sm')"
+							></button>
+							<button
+								class="btn btn-xs btn-icon"
+								@click.stop="df['remove'] = true"
+								v-html="frappe.utils.icon('x', 'sm')"
+							></button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div v-if="df.fieldtype == 'Table'" class="table-preview">
+				<div class="table-columns-list">
+					<span
+						class="table-col-chip"
+						:class="{ 'table-col-chip--invalid': tf.invalid_width }"
+						v-for="tf in df.table_columns"
+						:key="tf.fieldname"
+						:title="tf.label || tf.fieldname"
+					>
+						{{ tf.label || tf.fieldname }}
+					</span>
+					<span
+						v-if="!df.table_columns || !df.table_columns.length"
+						class="text-muted no-columns-hint"
+					>
+						{{ __("No columns configured") }}
+					</span>
+				</div>
+				<button class="configure-columns-btn" @click.stop="configure_columns">
+					<span v-html="frappe.utils.icon('settings-2', 'xs')"></span>
+					{{ __("Configure Columns") }}
+				</button>
+			</div>
+		</template>
 	</div>
 </template>
 
@@ -89,6 +163,18 @@ let editing = ref(false);
 let label_input = ref(null);
 
 let is_selected = computed(() => store.selected_field.value === props.df);
+let preview_doc = computed(() => store.preview_doc.value);
+
+let preview_value = computed(() => {
+	if (!preview_doc.value || !props.df.fieldname) return null;
+	const raw = preview_doc.value[props.df.fieldname];
+	if (raw === null || raw === undefined || raw === "") return null;
+	try {
+		return frappe.format(raw, props.df, { only_value: true }, preview_doc.value);
+	} catch {
+		return String(raw);
+	}
+});
 
 function select_field() {
 	store.selected_field.value = props.df;
@@ -392,5 +478,109 @@ watch(
 
 .no-columns-hint {
 	font-size: var(--text-xs);
+}
+
+/* ── Preview mode ────────────────────────────────────────── */
+.field--preview {
+	border: 1px solid transparent;
+	background: transparent;
+	padding: 0;
+	position: relative;
+}
+
+.field--preview:hover {
+	border-color: var(--gray-200);
+	background: var(--gray-50);
+}
+
+.field--preview.field--selected {
+	border-style: solid;
+	border-color: var(--primary);
+	background: var(--fg-color);
+	box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.field-preview-wrap {
+	padding: 2px 4px;
+	width: 100%;
+}
+
+.field-preview-label {
+	font-size: 0.72em;
+	font-weight: 600;
+	color: var(--gray-500);
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	margin-bottom: 1px;
+}
+
+.field-preview-value {
+	font-size: var(--text-sm);
+	color: var(--text-color);
+	word-break: break-word;
+}
+
+.field-preview-spacer {
+	height: 12px;
+}
+
+.field-preview-divider {
+	height: 1px;
+	background: var(--gray-300);
+	margin: 4px 0;
+}
+
+/* Preview actions — drag + remove — hidden until hover/selected */
+.field-preview-actions {
+	display: none;
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	gap: 2px;
+	background: var(--fg-color);
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius-sm);
+	padding: 1px 2px;
+	align-items: center;
+	box-shadow: var(--shadow-xs);
+}
+
+.field--preview:hover .field-preview-actions,
+.field--preview.field--selected .field-preview-actions {
+	display: flex;
+}
+
+.field-preview-actions .btn-icon {
+	box-shadow: none;
+	padding: 2px;
+}
+
+/* Preview table */
+.field-preview-table {
+	width: 100%;
+}
+
+.preview-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 11px;
+	margin-top: 4px;
+}
+
+.preview-table th {
+	text-align: left;
+	font-weight: 600;
+	color: var(--gray-500);
+	border-bottom: 1px solid var(--gray-300);
+	padding: 3px 4px;
+	font-size: 10px;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+
+.preview-table td {
+	padding: 3px 4px;
+	border-bottom: 1px solid var(--gray-100);
+	color: var(--text-color);
 }
 </style>

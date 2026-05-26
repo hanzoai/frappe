@@ -14,6 +14,8 @@ export function getStore(print_format_name) {
 	let scroll_to_section = ref(null);
 	let selected_field = ref(null);
 	let selected_section = ref(null);
+	let preview_doc = ref(null);
+	let preview_doc_name = ref(null);
 
 	// methods
 	function fetch() {
@@ -113,6 +115,17 @@ export function getStore(print_format_name) {
 	function reset_changes() {
 		fetch();
 	}
+	function load_preview_doc(name) {
+		if (!name) {
+			preview_doc.value = null;
+			preview_doc_name.value = null;
+			return;
+		}
+		preview_doc_name.value = name;
+		frappe.db.get_doc(print_format.value.doc_type, name).then((doc) => {
+			preview_doc.value = doc;
+		});
+	}
 	function get_layout() {
 		if (print_format.value) {
 			if (typeof print_format.value.format_data == "string") {
@@ -156,6 +169,9 @@ export function getStore(print_format_name) {
 		scroll_to_section,
 		selected_field,
 		selected_section,
+		preview_doc,
+		preview_doc_name,
+		load_preview_doc,
 		fetch,
 		update,
 		save_changes,
