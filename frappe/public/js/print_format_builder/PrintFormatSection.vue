@@ -46,7 +46,10 @@
 							handle=".drag-handle"
 						>
 							<template #item="{ element }">
-								<Field :df="element" />
+								<Field
+									:df="element"
+									:field_orientation="section.field_orientation"
+								/>
 							</template>
 							<template #footer>
 								<div

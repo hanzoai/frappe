@@ -60,7 +60,11 @@
 					</table>
 				</div>
 				<!-- Regular field -->
-				<div v-else :style="{ textAlign: df.align || 'left' }">
+				<div
+					v-else
+					:style="{ textAlign: df.align || 'left' }"
+					:class="{ 'field-preview-lr': field_orientation === 'left-right' }"
+				>
 					<div v-if="df.label && df.show_label !== 'hide'" class="field-preview-label">
 						{{ df.label }}
 					</div>
@@ -91,7 +95,11 @@
 
 		<!-- ── Builder mode: labels + controls ──────────────── -->
 		<template v-else>
-			<div class="field-row" :style="{ textAlign: df.align || 'left' }">
+			<div
+				class="field-row"
+				:style="{ textAlign: df.align || 'left' }"
+				:class="{ 'field-row--lr': field_orientation === 'left-right' }"
+			>
 				<div
 					class="drag-handle field-drag-handle"
 					v-html="frappe.utils.icon('drag', 'xs')"
@@ -168,7 +176,7 @@
 import ConfigureColumnsVue from "./ConfigureColumns.vue";
 import { createApp, ref, nextTick, watch, computed, inject } from "vue";
 
-const props = defineProps(["df"]);
+const props = defineProps(["df", "field_orientation"]);
 
 let store = inject("$store");
 let editing = ref(false);
@@ -507,6 +515,12 @@ watch(
 	font-size: var(--text-xs);
 }
 
+/* ── Left-right label orientation (builder mode) ────────── */
+.field-row--lr {
+	flex-direction: row;
+	align-items: center;
+}
+
 /* ── Preview mode ────────────────────────────────────────── */
 .field--preview {
 	border: 1px solid transparent;
@@ -539,6 +553,24 @@ watch(
 	text-transform: uppercase;
 	letter-spacing: 0.04em;
 	margin-bottom: 1px;
+}
+
+/* Left-right: label and value side by side */
+.field-preview-lr {
+	display: flex;
+	align-items: baseline;
+	gap: 6px;
+}
+
+.field-preview-lr .field-preview-label {
+	flex-shrink: 0;
+	margin-bottom: 0;
+	white-space: nowrap;
+}
+
+.field-preview-lr .field-preview-value {
+	flex: 1;
+	min-width: 0;
 }
 
 .field-preview-value {
