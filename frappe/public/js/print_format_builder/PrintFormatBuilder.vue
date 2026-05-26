@@ -101,6 +101,15 @@ function init_doc_picker() {
 	});
 	doc_picker_ref.value.querySelector(".control-label")?.remove();
 	doc_picker_ref.value.querySelector(".form-group")?.style.setProperty("margin", "0");
+
+	// Auto-select the first available record so preview is ready immediately
+	frappe.db.get_list(meta?.name, { limit: 1, fields: ["name"] }).then((rows) => {
+		if (rows?.length) {
+			const first = rows[0].name;
+			doc_picker_ctrl.value?.set_value(first);
+			$store.value.load_preview_doc(first);
+		}
+	});
 }
 
 // mounted
