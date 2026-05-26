@@ -215,8 +215,7 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 .pfb-clean-preview :deep(.section-toolbar),
 .pfb-clean-preview :deep(.section-insert),
 .pfb-clean-preview :deep(.field-preview-actions),
-.pfb-clean-preview :deep(.configure-columns-btn),
-.pfb-clean-preview .zone-divider {
+.pfb-clean-preview :deep(.configure-columns-btn) {
 	display: none !important;
 }
 
