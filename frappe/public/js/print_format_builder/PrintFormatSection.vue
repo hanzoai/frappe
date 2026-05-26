@@ -43,16 +43,6 @@
 						<span v-html="frappe.utils.icon('arrow-right-left', 'sm')"></span>
 					</button>
 					<button
-						class="btn btn-xs btn-icon toolbar-btn"
-						:class="{ active: section.page_break }"
-						:title="
-							section.page_break ? __('Remove page break') : __('Add page break')
-						"
-						@click.stop="toggle_page_break"
-					>
-						<span v-html="frappe.utils.icon('separator-vertical', 'sm')"></span>
-					</button>
-					<button
 						class="btn btn-xs btn-icon toolbar-btn toolbar-btn-danger"
 						:title="__('Remove section')"
 						@click.stop="section['remove'] = true"

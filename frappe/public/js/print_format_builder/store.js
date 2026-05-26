@@ -12,6 +12,7 @@ export function getStore(print_format_name) {
 	let dirty = ref(false);
 	let edit_letterhead = ref(false);
 	let scroll_to_section = ref(null);
+	let selected_field = ref(null);
 
 	// methods
 	function fetch() {
@@ -24,6 +25,7 @@ export function getStore(print_format_name) {
 					print_format.value = _print_format;
 					layout.value = get_layout();
 					edit_letterhead.value = false;
+					selected_field.value = null;
 
 					// load the letter head stored in format_data, if any
 					const lh_name = layout.value?.letter_head;
@@ -74,6 +76,8 @@ export function getStore(print_format_name) {
 								"table_columns",
 								"html",
 								"field_template",
+								"show_label",
+								"align",
 							]);
 						});
 					return column;
@@ -148,6 +152,7 @@ export function getStore(print_format_name) {
 		dirty,
 		edit_letterhead,
 		scroll_to_section,
+		selected_field,
 		fetch,
 		update,
 		save_changes,

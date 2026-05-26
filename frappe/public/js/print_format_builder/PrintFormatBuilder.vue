@@ -1,12 +1,13 @@
 <template>
 	<div v-if="shouldRender" class="builder-root">
 		<PrintFormatControls />
-		<div class="print-format-container">
+		<div class="print-format-container" @click="clear_selection">
 			<KeepAlive>
 				<component :is="Preview" v-if="show_preview" />
 				<component :is="PrintFormat" v-else />
 			</KeepAlive>
 		</div>
+		<FieldInspector v-if="!show_preview" />
 	</div>
 </template>
 
@@ -14,6 +15,7 @@
 import PrintFormat from "./PrintFormat.vue";
 import Preview from "./Preview.vue";
 import PrintFormatControls from "./PrintFormatControls.vue";
+import FieldInspector from "./FieldInspector.vue";
 import { getStore } from "./store";
 import { computed, ref, onMounted, provide } from "vue";
 
@@ -51,6 +53,10 @@ onMounted(() => {
 		}
 	});
 });
+
+function clear_selection() {
+	$store.value.selected_field.value = null;
+}
 
 defineExpose({ toggle_preview, $store });
 </script>

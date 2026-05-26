@@ -1,10 +1,10 @@
 <template>
 	<div
 		class="field"
-		:class="{ 'field--table': df.fieldtype == 'Table' }"
+		:class="{ 'field--table': df.fieldtype == 'Table', 'field--selected': is_selected }"
 		v-show="!df.remove"
 		:title="df.label || df.fieldname"
-		@click="editing = true"
+		@click="select_field"
 	>
 		<div class="field-row">
 			<div
@@ -80,12 +80,22 @@
 
 <script setup>
 import ConfigureColumnsVue from "./ConfigureColumns.vue";
-import { createApp, ref, nextTick, watch, computed } from "vue";
+import { createApp, ref, nextTick, watch, computed, inject } from "vue";
 
 const props = defineProps(["df"]);
 
+let store = inject("$store");
 let editing = ref(false);
 let label_input = ref(null);
+
+let is_selected = computed(() => store.selected_field.value === props.df);
+
+function select_field() {
+	store.selected_field.value = props.df;
+	if (props.df.fieldtype !== "HTML") {
+		editing.value = true;
+	}
+}
 
 let short_fieldtype = computed(() => {
 	const map = {
@@ -222,6 +232,12 @@ watch(
 .field:focus-within {
 	border-style: solid;
 	border-color: var(--gray-600);
+}
+
+.field--selected {
+	border-style: solid;
+	border-color: var(--primary);
+	box-shadow: 0 0 0 2px var(--primary-light);
 }
 
 .field-row {

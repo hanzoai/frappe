@@ -59,9 +59,9 @@
 
 		<!-- ── Blocks ─────────────────────────────────────────── -->
 		<div v-else-if="activeTab === 'blocks'" class="pfb-tab-body">
-			<div class="pfb-group-label">{{ __("Layout blocks") }}</div>
+			<div class="pfb-group-label">{{ __("Content") }}</div>
 			<draggable
-				:list="blocks"
+				:list="draggable_blocks"
 				:group="{ name: 'fields', pull: 'clone', put: false }"
 				:sort="false"
 				:clone="clone_field"
@@ -84,6 +84,22 @@
 					</div>
 				</template>
 			</draggable>
+
+			<div class="pfb-group-label mt-3">{{ __("Page") }}</div>
+			<div
+				class="pfb-block-card pfb-block-card--click"
+				:title="__('Force a new page')"
+				@click="add_page_break"
+			>
+				<span
+					class="pfb-block-icon"
+					v-html="frappe.utils.icon('scissors-line-dashed', 'sm')"
+				></span>
+				<div class="pfb-block-info">
+					<div class="pfb-block-name">{{ __("Page Break") }}</div>
+					<div class="pfb-block-desc text-muted">{{ __("Force a new page") }}</div>
+				</div>
+			</div>
 		</div>
 
 		<!-- ── Templates ─────────────────────────────────────── -->
@@ -240,7 +256,7 @@ const tabs = computed(() => [
 ]);
 
 // ── blocks tab items ──────────────────────────────────────
-const blocks = computed(() => [
+const draggable_blocks = [
 	{
 		label: __("Custom HTML"),
 		fieldname: "custom_html",
@@ -266,7 +282,7 @@ const blocks = computed(() => [
 		icon: "minus",
 		desc: __("Horizontal rule"),
 	},
-]);
+];
 
 // ── helpers ────────────────────────────────────────────────
 function update_margin(fieldname, value) {
@@ -316,6 +332,15 @@ function build_field(df) {
 
 function scroll_to(section) {
 	store.scroll_to_section.value = section;
+}
+
+function add_page_break() {
+	if (!layout.value) return;
+	layout.value.sections.push({
+		label: "",
+		columns: [{ label: "", fields: [] }],
+		page_break: true,
+	});
 }
 
 // ── computed: field groups (by section break labels) ────────
@@ -580,6 +605,10 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 .pfb-block-card:hover {
 	background: var(--gray-100);
 	border-color: var(--gray-500);
+}
+
+.pfb-block-card--click {
+	cursor: pointer;
 }
 
 .pfb-block-icon {
