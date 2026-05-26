@@ -17,6 +17,7 @@
 			item-key="id"
 			handle=".section-drag-handle"
 			filter=".section-columns, .column, .field"
+			@add="on_section_add"
 		>
 			<template #item="{ element, index }">
 				<div class="section-with-insert">
@@ -75,6 +76,18 @@ function add_section_at(index) {
 		label: "",
 		columns: [{ label: "", fields: [] }],
 	});
+}
+
+function on_section_add(evt) {
+	const { newIndex } = evt;
+	const section = layout.value.sections[newIndex];
+	// If a page-break placeholder was dropped, convert it: remove the placeholder
+	// and toggle page_break on the section that now precedes it.
+	if (section && section.page_break && section.columns.every((c) => !c.fields.length)) {
+		layout.value.sections.splice(newIndex, 1);
+		const prev = layout.value.sections[newIndex - 1];
+		if (prev) prev.page_break = !prev.page_break;
+	}
 }
 
 function update_letterhead_footer(val) {
