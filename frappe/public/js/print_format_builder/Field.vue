@@ -40,7 +40,10 @@
 							>
 								<td v-for="col in df.table_columns" :key="col.fieldname">
 									<img
-										v-if="is_image_field(col) && row[col.fieldname]"
+										v-if="
+											is_image_field(col, row[col.fieldname]) &&
+											row[col.fieldname]
+										"
 										:src="row[col.fieldname]"
 										class="preview-table-img"
 										:alt="col.label || col.fieldname"
@@ -71,7 +74,7 @@
 					</div>
 					<div class="field-preview-value" :class="{ 'text-muted': !preview_value }">
 						<img
-							v-if="is_image_field(df) && preview_value"
+							v-if="is_image_field(df, preview_value) && preview_value"
 							:src="preview_value"
 							class="preview-field-img"
 							:alt="df.label || df.fieldname"
@@ -207,9 +210,13 @@ let preview_value = computed(() => {
 	}
 });
 
-const IMAGE_FIELDTYPES = new Set(["Attach Image", "Image"]);
-function is_image_field(col) {
-	return IMAGE_FIELDTYPES.has(col?.fieldtype);
+const IMAGE_FIELDTYPES = new Set(["Attach Image", "Image", "Attach"]);
+const IMAGE_EXTENSIONS = /\.(png|jpe?g|gif|webp|svg|bmp|ico)(\?.*)?$/i;
+function is_image_field(col, value) {
+	if (IMAGE_FIELDTYPES.has(col?.fieldtype)) return true;
+	// Heuristic: any field whose value looks like an image URL
+	if (value && typeof value === "string" && IMAGE_EXTENSIONS.test(value)) return true;
+	return false;
 }
 
 function format_cell(row, col) {
