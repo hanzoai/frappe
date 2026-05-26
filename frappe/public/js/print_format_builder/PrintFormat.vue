@@ -186,10 +186,17 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 
 /* Strip section borders/backgrounds — render like a print section */
 .pfb-clean-preview :deep(.print-format-section) {
-	border: none;
-	border-radius: 0;
+	border: 1px solid transparent;
+	border-radius: var(--border-radius);
 	background: transparent;
 	overflow: visible;
+	transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+/* Selected section: subtle primary outline, no fill */
+.pfb-clean-preview :deep(.print-format-section.section--selected) {
+	border-color: var(--primary);
+	box-shadow: 0 0 0 2px var(--primary-light);
 }
 
 .pfb-clean-preview :deep(.print-format-section-container) {
