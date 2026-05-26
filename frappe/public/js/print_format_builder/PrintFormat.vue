@@ -1,5 +1,9 @@
 <template>
-	<div class="print-format-main" :style="rootStyles">
+	<div
+		class="print-format-main"
+		:style="rootStyles"
+		:class="{ 'pfb-clean-preview': !!store.preview_doc.value }"
+	>
 		<div :style="page_number_style">{{ __("1 of 2") }}</div>
 
 		<LetterHeadEditor type="Header" />
@@ -167,5 +171,58 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 .section-with-insert {
 	display: flex;
 	flex-direction: column;
+}
+
+/* ── Clean preview mode (when live data is loaded) ───────── */
+
+/* Hide all editor chrome */
+.pfb-clean-preview :deep(.section-toolbar),
+.pfb-clean-preview :deep(.section-insert),
+.pfb-clean-preview :deep(.page-break-indicator),
+.pfb-clean-preview :deep(.field-preview-actions),
+.pfb-clean-preview :deep(.configure-columns-btn) {
+	display: none !important;
+}
+
+/* Strip section borders/backgrounds — render like a print section */
+.pfb-clean-preview :deep(.print-format-section) {
+	border: none;
+	border-radius: 0;
+	background: transparent;
+	overflow: visible;
+}
+
+.pfb-clean-preview :deep(.print-format-section-container) {
+	margin-bottom: 0;
+}
+
+/* Remove field dashed box styling */
+.pfb-clean-preview :deep(.field--preview) {
+	border: none;
+	background: transparent;
+	padding: 0;
+}
+
+.pfb-clean-preview :deep(.field--preview:hover) {
+	border: none;
+	background: transparent;
+}
+
+.pfb-clean-preview :deep(.field--preview.field--selected) {
+	border: 1px solid var(--primary);
+	border-radius: var(--border-radius-sm);
+	background: transparent;
+	box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+/* Keep section columns padding */
+.pfb-clean-preview :deep(.section-columns) {
+	padding: 0.5rem 0;
+}
+
+/* Remove drag container min-height gaps */
+.pfb-clean-preview :deep(.drag-container) {
+	min-height: 0;
+	gap: 0.15rem;
 }
 </style>
