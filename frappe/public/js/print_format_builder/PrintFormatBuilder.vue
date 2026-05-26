@@ -12,10 +12,7 @@
 				</div>
 				<div class="canvas-toolbar-right">
 					<span v-if="!$store.preview_doc.value" class="canvas-no-data-hint">
-						<svg class="icon icon-xs" style="margin-right: 4px; opacity: 0.5">
-							<use href="#icon-alert-circle"></use>
-						</svg>
-						{{ __("Pick a record above for a live preview") }}
+						← {{ __("Pick a record to see real values") }}
 					</span>
 					<button
 						v-if="$store.preview_doc_name.value"
@@ -185,9 +182,14 @@ defineExpose({ toggle_preview, $store });
 .canvas-no-data-hint {
 	display: flex;
 	align-items: center;
+	gap: 4px;
 	font-size: 11px;
 	color: var(--text-muted);
 	white-space: nowrap;
+	background: var(--yellow-50, #fefce8);
+	border: 1px solid var(--yellow-200, #fde68a);
+	border-radius: var(--border-radius);
+	padding: 3px 8px;
 }
 
 .canvas-clear-btn {
