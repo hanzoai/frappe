@@ -7,7 +7,7 @@
 		<div :style="page_number_style">{{ __("1 of 2") }}</div>
 
 		<LetterHeadEditor type="Header" />
-		<PrintFormatSection :section="layout.header" :is_header="true" />
+		<PrintFormatSection :section="layout.header" :is_header="true" zone="header" />
 
 		<draggable
 			class="sections-container"
@@ -30,7 +30,7 @@
 			</template>
 		</draggable>
 
-		<PrintFormatSection :section="layout.footer" :is_header="true" />
+		<PrintFormatSection :section="layout.footer" :is_header="true" zone="footer" />
 		<LetterHeadFooterEditor v-if="letterhead" />
 	</div>
 </template>

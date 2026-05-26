@@ -13,6 +13,9 @@
 						title="Drag to reorder"
 						v-html="frappe.utils.icon('drag', 'sm')"
 					></div>
+					<span v-if="zone" class="zone-badge">{{
+						zone === "header" ? __("Header") : __("Footer")
+					}}</span>
 					<input
 						class="input-section-label"
 						type="text"
@@ -104,7 +107,7 @@ import draggable from "vuedraggable";
 import Field from "./Field.vue";
 import { computed, inject } from "vue";
 
-const props = defineProps(["section", "is_header"]);
+const props = defineProps(["section", "is_header", "zone"]);
 
 let store = inject("$store");
 
@@ -207,6 +210,20 @@ function set_column_align(column, value) {
 
 .section-drag-handle:hover {
 	color: var(--gray-600);
+}
+
+.zone-badge {
+	font-size: 10px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.07em;
+	color: var(--text-muted);
+	background: var(--gray-100);
+	border: 1px solid var(--gray-300);
+	border-radius: var(--border-radius-sm);
+	padding: 1px 6px;
+	white-space: nowrap;
+	flex-shrink: 0;
 }
 
 .input-section-label {
