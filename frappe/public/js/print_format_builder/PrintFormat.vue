@@ -178,9 +178,13 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 /* Hide all editor chrome */
 .pfb-clean-preview :deep(.section-toolbar),
 .pfb-clean-preview :deep(.section-insert),
-.pfb-clean-preview :deep(.page-break-indicator),
 .pfb-clean-preview :deep(.field-preview-actions),
 .pfb-clean-preview :deep(.configure-columns-btn) {
+	display: none !important;
+}
+
+/* Keep page break visible but strip the remove button */
+.pfb-clean-preview :deep(.page-break-remove) {
 	display: none !important;
 }
 
