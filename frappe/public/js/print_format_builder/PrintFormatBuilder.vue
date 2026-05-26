@@ -12,13 +12,13 @@
 				</div>
 				<div class="canvas-toolbar-right">
 					<button
-						v-if="$store.value.preview_doc_name.value"
+						v-if="$store.preview_doc_name.value"
 						class="canvas-clear-btn"
 						:title="__('Clear preview data')"
 						@click="clear_preview_doc"
 						v-html="frappe.utils.icon('x', 'xs')"
 					></button>
-					<span v-if="$store.value.preview_doc.value" class="canvas-preview-badge">{{
+					<span v-if="$store.preview_doc.value" class="canvas-preview-badge">{{
 						__("Live")
 					}}</span>
 				</div>
