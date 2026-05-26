@@ -379,7 +379,6 @@ frappe.ui.form.Toolbar = class Toolbar {
 		this.add_auto_repeat();
 		this.page.add_divider();
 		this.make_customize_buttons();
-		this.add_layout_switcher();
 	}
 
 	add_discard() {
@@ -661,62 +660,6 @@ frappe.ui.form.Toolbar = class Toolbar {
 				);
 			}
 		}
-	}
-
-	add_layout_switcher() {
-		const available_layouts = (frappe.boot.doctype_layouts || []).filter(
-			(l) => l.document_type === this.frm.doctype
-		);
-		if (!available_layouts.length) return;
-
-		this.page.add_divider();
-
-		const active_layout_name = this.frm.doctype_layout?.name || null;
-
-		if (active_layout_name) {
-			this.page.add_menu_item(
-				__("Default View"),
-				() => {
-					this.frm._layout_user_override = null;
-					this.frm.refresh();
-				},
-				true
-			);
-		}
-
-		for (const layout of available_layouts) {
-			const is_active = layout.name === active_layout_name;
-			const label = is_active
-				? `${__(layout.title || layout.name)} ✓`
-				: __(layout.title || layout.name);
-
-			this.page.add_menu_item(
-				label,
-				() => {
-					if (is_active) return;
-					this.frm._layout_user_override = layout.name;
-					this.frm.refresh();
-				},
-				true
-			);
-		}
-
-		this.refresh_layout_indicator();
-	}
-
-	refresh_layout_indicator() {
-		this.page.$title_area.find(".layout-indicator").remove();
-
-		if (!this.frm.doctype_layout) return;
-
-		const layout = this.frm.doctype_layout;
-		const title = layout.title || layout.name;
-		const $badge = $(
-			`<span class="layout-indicator indicator-pill no-indicator-dot gray whitespace-nowrap ms-2"><span>${frappe.utils.escape_html(
-				__(title)
-			)}</span></span>`
-		);
-		this.page.$title_area.find(".indicator-pill").first().after($badge);
 	}
 
 	can_repeat() {

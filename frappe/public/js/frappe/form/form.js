@@ -548,8 +548,6 @@ frappe.ui.form.Form = class FrappeForm {
 		frappe.ui.form.close_grid_form();
 		this.viewers && this.viewers.parent.empty();
 		this.docname = docname;
-		// Reset user layout override so conditions re-evaluate for the new doc
-		this._layout_user_override = undefined;
 		this.setup_docinfo_change_listener();
 	}
 
@@ -674,30 +672,22 @@ frappe.ui.form.Form = class FrappeForm {
 		);
 		if (!layouts.length) return;
 
-		// undefined = no override (use conditions); null = default; "name" = pinned.
-		let matched_name;
-		if (this._layout_user_override !== undefined) {
-			matched_name = this._layout_user_override;
-		} else {
-			let matched = null;
-			for (const l of layouts) {
-				try {
-					// eslint-disable-next-line no-new-func
-					const result = new Function("doc", `return !!(${l.condition})`)(this.doc);
-					if (result) {
-						matched = l;
-						break;
-					}
-				} catch (e) {
-					console.warn(`DocType Layout condition error (${l.name}):`, e);
+		let matched = null;
+		for (const l of layouts) {
+			try {
+				// eslint-disable-next-line no-new-func
+				const result = new Function("doc", `return !!(${l.condition})`)(this.doc);
+				if (result) {
+					matched = l;
+					break;
 				}
+			} catch (e) {
+				console.warn(`DocType Layout condition error (${l.name}):`, e);
 			}
-			matched_name = matched ? matched.name : null;
 		}
-		// Compare rendered (not doc.doctype_layout) — they diverge on initial load.
+		const matched_name = matched ? matched.name : null;
 		const rendered_name = this.doctype_layout?.name || null;
 
-		this.doc.doctype_layout = matched_name || "";
 		const _url = new URL(window.location.href);
 		if (matched_name) {
 			_url.searchParams.set("layout", matched_name);
@@ -774,10 +764,6 @@ frappe.ui.form.Form = class FrappeForm {
 		const layout = this.doctype_layout;
 		this._layout_print_format = layout?.default_print_format || null;
 		this._layout_email_template = layout?.default_email_template || null;
-
-		this.toolbar &&
-			this.toolbar.refresh_layout_indicator &&
-			this.toolbar.refresh_layout_indicator();
 	}
 
 	onload_post_render() {
@@ -905,6 +891,11 @@ frappe.ui.form.Form = class FrappeForm {
 		this.viewers.refresh();
 
 		this.dashboard.refresh();
+		const _route_key = frappe.breadcrumbs.current_page();
+		const _crumb = frappe.breadcrumbs.all[_route_key];
+		if (_crumb) {
+			_crumb.layout_name = this.doctype_layout?.name || null;
+		}
 		frappe.breadcrumbs.update();
 
 		this.show_submit_message();
