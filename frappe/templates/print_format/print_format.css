@@ -144,12 +144,29 @@ body {
 }
 
 /* Field-level alignment */
+.field.field-align-center {
+	text-align: center;
+}
+
 .field.field-align-center .value {
 	text-align: center;
 }
 
+.field.field-align-right {
+	text-align: right;
+}
+
 .field.field-align-right .value {
 	text-align: right;
+}
+
+/* In left-right orientation, alignment applies to the whole flex row */
+.field.left-right.field-align-right {
+	justify-content: flex-end;
+}
+
+.field.left-right.field-align-center {
+	justify-content: center;
 }
 
 /* Child table */
