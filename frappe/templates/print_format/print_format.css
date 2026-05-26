@@ -103,15 +103,16 @@ body {
 	color: #111827;
 }
 
-/* Left-right: label takes 40%, value takes 60% for better wrapping */
-.field.left-right {
+/* Left-right (section-level): label takes 40%, value takes 60% */
+.field.left-right,
+.field.field-inline {
 	display: flex;
 	align-items: baseline;
 	gap: 0.5rem;
 }
 
-.field.left-right .label {
-	width: 40%;
+.field.left-right .label,
+.field.field-inline .label {
 	flex-shrink: 0;
 	font-size: 0.8em;
 	font-weight: 600;
@@ -121,9 +122,34 @@ body {
 	padding-top: 0.05rem;
 }
 
+.field.left-right .label {
+	width: 40%;
+}
+
+.field.field-inline .label {
+	width: auto;
+}
+
+.field.field-inline .label::after {
+	content: ":";
+}
+
 .field.left-right .value {
 	width: 60%;
 	flex: 1;
+}
+
+.field.field-inline .value {
+	flex: 1;
+}
+
+/* Field-level alignment */
+.field.field-align-center .value {
+	text-align: center;
+}
+
+.field.field-align-right .value {
+	text-align: right;
 }
 
 /* Child table */
