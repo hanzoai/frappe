@@ -19,6 +19,178 @@
 			<p class="text-muted">{{ __("Click a field to edit its properties") }}</p>
 		</div>
 
+		<!-- ── Table field inspector ───────────────────────────────── -->
+		<template v-else-if="selected_field && is_table_field">
+			<div class="pfb-insp-tabs">
+				<button
+					v-for="tab in field_tabs"
+					:key="tab.id"
+					class="pfb-insp-tab"
+					:class="{ active: active_tab === tab.id }"
+					@click="active_tab = tab.id"
+				>
+					{{ tab.label }}
+				</button>
+			</div>
+
+			<div v-if="active_tab === 'properties'" class="pfb-insp-body">
+				<!-- TABLE section -->
+				<div class="pfb-insp-section">
+					<div class="pfb-insp-section-head" @click="toggle('t_table')">
+						<span class="pfb-insp-section-label">{{ __("Table") }}</span>
+						<span
+							class="pfb-insp-chevron"
+							:class="{ collapsed: !open.t_table }"
+							v-html="frappe.utils.icon('chevron-down', 'xs')"
+						></span>
+					</div>
+					<div v-show="open.t_table" class="pfb-insp-section-body">
+						<!-- Source -->
+						<div class="pfb-insp-row">
+							<span class="pfb-insp-label">{{ __("Source") }}</span>
+							<div class="pfb-source-display">
+								<span class="pfb-source-name">{{
+									selected_field.label || selected_field.fieldname
+								}}</span>
+								<span class="pfb-type-badge">{{ __("Table") }}</span>
+							</div>
+						</div>
+						<!-- Title -->
+						<div class="pfb-insp-row pfb-insp-row--col">
+							<span class="pfb-insp-label">{{ __("Title") }}</span>
+							<input
+								class="pfb-insp-input"
+								type="text"
+								:placeholder="__('Table title')"
+								v-model="selected_field.label"
+							/>
+						</div>
+						<!-- Style -->
+						<div class="pfb-insp-row">
+							<span class="pfb-insp-label">{{ __("Style") }}</span>
+							<div class="pfb-seg">
+								<button
+									v-for="s in ['lined', 'striped', 'plain']"
+									:key="s"
+									:class="{ active: table_style === s }"
+									@click="selected_field.table_style = s"
+								>
+									{{ __(s[0].toUpperCase() + s.slice(1)) }}
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- COLUMNS section -->
+				<div class="pfb-insp-section">
+					<div class="pfb-insp-section-head" @click="toggle('t_columns')">
+						<span class="pfb-insp-section-label">{{ __("Columns") }}</span>
+						<div style="display: flex; align-items: center; gap: 8px">
+							<span class="pfb-insp-col-count text-muted">{{
+								(selected_field.table_columns || []).length
+							}}</span>
+							<span
+								class="pfb-insp-chevron"
+								:class="{ collapsed: !open.t_columns }"
+								v-html="frappe.utils.icon('chevron-down', 'xs')"
+							></span>
+						</div>
+					</div>
+					<div v-show="open.t_columns">
+						<!-- Column list -->
+						<draggable
+							:list="selected_field.table_columns"
+							handle=".pfb-col-drag"
+							:animation="150"
+							item-key="fieldname"
+							class="pfb-col-list"
+						>
+							<template #item="{ element: col, index: ci }">
+								<div class="pfb-col-row">
+									<span
+										class="pfb-col-drag"
+										v-html="frappe.utils.icon('drag', 'xs')"
+									></span>
+									<span class="pfb-col-label" :title="col.fieldname">{{
+										col.label || col.fieldname
+									}}</span>
+									<input
+										class="pfb-col-width-input"
+										type="number"
+										min="5"
+										max="100"
+										v-model.number="col.width"
+										@blur="clamp_width(col)"
+										:title="__('Width %')"
+									/>
+									<span class="pfb-col-width-unit">%</span>
+									<button
+										class="pfb-col-remove"
+										@click="remove_table_column(ci)"
+										:title="__('Remove column')"
+										v-html="frappe.utils.icon('x', 'xs')"
+									></button>
+								</div>
+							</template>
+						</draggable>
+						<!-- Add column picker -->
+						<div class="pfb-col-add-row" v-if="available_columns.length">
+							<select class="pfb-col-add-select" v-model="add_col_select">
+								<option value="" disabled>{{ __("+ Add column...") }}</option>
+								<option
+									v-for="col in available_columns"
+									:key="col.fieldname"
+									:value="col.fieldname"
+								>
+									{{ col.label || col.fieldname }}
+								</option>
+							</select>
+							<button
+								class="pfb-col-add-btn"
+								@click="add_table_column"
+								:disabled="!add_col_select"
+								v-html="frappe.utils.icon('plus', 'xs')"
+							></button>
+						</div>
+						<div
+							v-else
+							class="pfb-insp-hint text-muted"
+							style="padding: 8px 14px 10px"
+						>
+							{{ __("All available columns added.") }}
+						</div>
+					</div>
+				</div>
+
+				<!-- BEHAVIOR section -->
+				<div class="pfb-insp-section">
+					<div class="pfb-insp-section-head" @click="toggle('t_behavior')">
+						<span class="pfb-insp-section-label">{{ __("Behavior") }}</span>
+						<span
+							class="pfb-insp-chevron"
+							:class="{ collapsed: !open.t_behavior }"
+							v-html="frappe.utils.icon('chevron-down', 'xs')"
+						></span>
+					</div>
+					<div v-show="open.t_behavior" class="pfb-insp-section-body">
+						<p class="pfb-insp-hint text-muted">{{ __("Coming soon.") }}</p>
+					</div>
+				</div>
+
+				<div class="pfb-insp-actions">
+					<button class="btn btn-xs btn-danger-subtle" @click="remove_field">
+						<span v-html="frappe.utils.icon('x', 'xs')"></span>
+						{{ __("Remove table") }}
+					</button>
+				</div>
+			</div>
+
+			<div v-else class="pfb-insp-body pfb-insp-placeholder">
+				<p class="text-muted">{{ __("Coming soon.") }}</p>
+			</div>
+		</template>
+
 		<!-- ── Field inspector ─────────────────────────────────── -->
 		<template v-else-if="selected_field">
 			<div class="pfb-insp-tabs">
@@ -331,6 +503,7 @@
 
 <script setup>
 import { computed, inject, ref } from "vue";
+import draggable from "vuedraggable";
 
 let store = inject("$store");
 
@@ -357,6 +530,9 @@ const open = ref({
 	s_section: true,
 	s_style: true,
 	s_visibility: false,
+	t_table: true,
+	t_columns: true,
+	t_behavior: false,
 });
 
 function toggle(key) {
@@ -364,8 +540,13 @@ function toggle(key) {
 }
 
 // ── Inspector header ───────────────────────────────────────
+let is_table_field = computed(() => selected_field.value?.fieldtype === "Table");
+
 let inspector_kind = computed(() => {
-	if (selected_field.value) return __("Field");
+	if (selected_field.value) {
+		if (selected_field.value.fieldtype === "Table") return __("Table");
+		return __("Field");
+	}
 	if (selected_section.value) return __("Section");
 	return __("Canvas");
 });
@@ -426,6 +607,59 @@ function remove_field() {
 		selected_field.value.remove = true;
 		store.selected_field.value = null;
 	}
+}
+
+// ── Table helpers ──────────────────────────────────────────
+let table_style = computed(() => selected_field.value?.table_style ?? "lined");
+let available_columns = computed(() => {
+	if (!selected_field.value?.options) return [];
+	const meta = frappe.get_meta(selected_field.value.options);
+	if (!meta) return [];
+	const existing = new Set((selected_field.value.table_columns || []).map((c) => c.fieldname));
+	const standard = [{ label: __("Sr No."), fieldname: "idx", fieldtype: "Data" }];
+	return standard
+		.concat(
+			meta.fields.filter(
+				(f) => !frappe.model.no_value_type.includes(f.fieldtype) && f.fieldname !== "name"
+			)
+		)
+		.filter((f) => !existing.has(f.fieldname));
+});
+
+let add_col_select = ref("");
+
+function add_table_column() {
+	if (!add_col_select.value) return;
+	const fieldname = add_col_select.value;
+	const meta = frappe.get_meta(selected_field.value.options);
+	let col;
+	if (fieldname === "idx") {
+		col = { label: __("Sr No."), fieldname: "idx", fieldtype: "Data", width: 10 };
+	} else {
+		const df = meta?.fields.find((f) => f.fieldname === fieldname);
+		if (!df) return;
+		col = {
+			label: df.label,
+			fieldname: df.fieldname,
+			fieldtype: df.fieldtype,
+			options: df.options,
+			width: 10,
+		};
+	}
+	if (!selected_field.value.table_columns) selected_field.value.table_columns = [];
+	selected_field.value.table_columns.push(col);
+	add_col_select.value = "";
+	// trigger reactivity
+	selected_field.value.table_columns = [...selected_field.value.table_columns];
+}
+
+function remove_table_column(idx) {
+	selected_field.value.table_columns.splice(idx, 1);
+	selected_field.value.table_columns = [...selected_field.value.table_columns];
+}
+
+function clamp_width(col) {
+	col.width = Math.max(5, Math.min(100, parseInt(col.width) || 10));
 }
 
 // ── Section helpers ────────────────────────────────────────
@@ -865,5 +1099,140 @@ function adjust_padding(side, delta) {
 .btn-danger-subtle:hover {
 	background: var(--red-50);
 	border-color: var(--red-300);
+}
+
+/* ── Table column list ───────────────────────────────────── */
+.pfb-col-list {
+	padding: 4px 0;
+}
+
+.pfb-col-row {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 5px 14px;
+	border-bottom: 1px solid var(--gray-100);
+}
+
+.pfb-col-row:last-child {
+	border-bottom: none;
+}
+
+.pfb-col-drag {
+	cursor: grab;
+	color: var(--gray-300);
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.pfb-col-drag:hover {
+	color: var(--gray-500);
+}
+
+.pfb-col-label {
+	flex: 1;
+	font-size: var(--text-sm);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.pfb-col-width-input {
+	width: 40px;
+	padding: 2px 4px;
+	font-size: 11px;
+	text-align: right;
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius-sm);
+	background: var(--fg-color);
+	flex-shrink: 0;
+}
+
+.pfb-col-width-input:focus {
+	outline: none;
+	border-color: var(--gray-500);
+}
+
+/* hide number spin arrows */
+.pfb-col-width-input::-webkit-inner-spin-button,
+.pfb-col-width-input::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+}
+
+.pfb-col-width-unit {
+	font-size: 10px;
+	color: var(--text-muted);
+	flex-shrink: 0;
+}
+
+.pfb-col-remove {
+	display: flex;
+	align-items: center;
+	padding: 2px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	color: var(--gray-300);
+	border-radius: var(--border-radius-sm);
+	flex-shrink: 0;
+}
+
+.pfb-col-remove:hover {
+	background: var(--red-50);
+	color: var(--red-500);
+}
+
+.pfb-col-add-row {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 14px 10px;
+	border-top: 1px solid var(--gray-100);
+}
+
+.pfb-col-add-select {
+	flex: 1;
+	font-size: var(--text-sm);
+	padding: 4px 6px;
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius);
+	background: var(--fg-color);
+	color: var(--text-color);
+	outline: none;
+	min-width: 0;
+}
+
+.pfb-col-add-select:focus {
+	border-color: var(--gray-500);
+}
+
+.pfb-col-add-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 26px;
+	height: 26px;
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius);
+	background: var(--gray-50);
+	cursor: pointer;
+	color: var(--text-muted);
+	flex-shrink: 0;
+}
+
+.pfb-col-add-btn:hover:not(:disabled) {
+	background: var(--gray-100);
+	color: var(--text-color);
+	border-color: var(--gray-400);
+}
+
+.pfb-col-add-btn:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.pfb-insp-col-count {
+	font-size: 11px;
 }
 </style>
