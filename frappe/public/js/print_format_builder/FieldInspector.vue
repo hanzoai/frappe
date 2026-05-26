@@ -353,13 +353,13 @@
 									:class="{ active: section_show_label !== 'hide' }"
 									@click="selected_section.show_label = 'show'"
 								>
-									{{ __("On") }}
+									{{ __("Yes") }}
 								</button>
 								<button
 									:class="{ active: section_show_label === 'hide' }"
 									@click="selected_section.show_label = 'hide'"
 								>
-									{{ __("Off") }}
+									{{ __("No") }}
 								</button>
 							</div>
 						</div>

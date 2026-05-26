@@ -232,4 +232,9 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	min-height: 0;
 	gap: 0.15rem;
 }
+
+/* Show section title in clean preview */
+.pfb-clean-preview :deep(.section-title-display) {
+	display: block;
+}
 </style>

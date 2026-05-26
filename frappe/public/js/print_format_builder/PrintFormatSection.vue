@@ -30,6 +30,12 @@
 				</div>
 			</div>
 
+			<div
+				v-if="section.label && section.show_label !== 'hide'"
+				class="section-title-display"
+			>
+				{{ section.label }}
+			</div>
 			<div class="section-columns">
 				<template v-for="(column, i) in section.columns" :key="i">
 					<div v-if="i > 0" class="column-divider"></div>
@@ -246,6 +252,17 @@ function set_column_align(column, value) {
 .toolbar-btn-danger:hover {
 	background: var(--red-50);
 	color: var(--red-500);
+}
+
+/* Section title — hidden in editor (toolbar shows it), revealed via parent :deep() */
+.section-title-display {
+	display: none;
+	font-size: var(--text-sm);
+	font-weight: 600;
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	padding: 0.5rem 0.75rem 0;
 }
 
 .section-columns {
