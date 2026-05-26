@@ -229,14 +229,15 @@ class PrintFormatGenerator:
 					df["renderer"] = renderers.get(fieldtype) or fieldtype.replace(" ", "")
 					df["section"] = section
 
-		# Also process header section if it's a dict (not legacy HTML string)
-		header = layout.get("header")
-		if isinstance(header, dict) and "columns" in header:
-			for column in header.get("columns", []):
-				for df in column.get("fields", []):
-					fieldtype = df.get("fieldtype", "Data")
-					df["renderer"] = renderers.get(fieldtype) or fieldtype.replace(" ", "")
-					df["section"] = header
+		# Also process header/footer zones if they are section objects
+		for zone_key in ("header", "footer"):
+			zone = layout.get(zone_key)
+			if isinstance(zone, dict) and "columns" in zone:
+				for column in zone.get("columns", []):
+					for df in column.get("fields", []):
+						fieldtype = df.get("fieldtype", "Data")
+						df["renderer"] = renderers.get(fieldtype) or fieldtype.replace(" ", "")
+						df["section"] = zone
 
 		return layout
 

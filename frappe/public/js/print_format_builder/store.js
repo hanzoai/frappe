@@ -29,10 +29,9 @@ export function getStore(print_format_name) {
 					meta.value = frappe.get_meta(_print_format.doc_type);
 					print_format.value = _print_format;
 					layout.value = get_layout();
-					// Migrate legacy string header to section object
-					if (!layout.value.header || typeof layout.value.header === "string") {
-						layout.value.header = { columns: [{ label: "", fields: [] }] };
-					}
+					// Migrate legacy string header/footer to section objects
+					layout.value.header = migrate_to_section(layout.value.header);
+					layout.value.footer = migrate_to_section(layout.value.footer);
 					edit_letterhead.value = false;
 					selected_field.value = null;
 					selected_section.value = null;
@@ -54,6 +53,27 @@ export function getStore(print_format_name) {
 				});
 			});
 		});
+	}
+	function migrate_to_section(value) {
+		if (value && typeof value === "object" && value.columns) return value;
+		const old_html = typeof value === "string" && value.trim() ? value : null;
+		return {
+			columns: [
+				{
+					label: "",
+					fields: old_html
+						? [
+								{
+									fieldtype: "HTML",
+									fieldname: "_zone_html",
+									label: "",
+									html: old_html,
+								},
+						  ]
+						: [],
+				},
+			],
+		};
 	}
 	function update({ fieldname, value }) {
 		print_format.value[fieldname] = value;
@@ -97,27 +117,30 @@ export function getStore(print_format_name) {
 				return section;
 			});
 
-		// Clean up header section fields
-		if (layout.value.header && layout.value.header.columns) {
-			layout.value.header.columns = layout.value.header.columns.map((column) => {
+		// Clean up header/footer section fields
+		const zone_pluck_keys = [
+			"label",
+			"fieldname",
+			"fieldtype",
+			"options",
+			"table_columns",
+			"html",
+			"field_template",
+			"show_label",
+			"align",
+		];
+		function clean_zone(zone) {
+			if (!zone || !zone.columns) return zone;
+			zone.columns = zone.columns.map((column) => {
 				column.fields = column.fields
 					.filter((df) => !df.remove)
-					.map((df) =>
-						pluck(df, [
-							"label",
-							"fieldname",
-							"fieldtype",
-							"options",
-							"table_columns",
-							"html",
-							"field_template",
-							"show_label",
-							"align",
-						])
-					);
+					.map((df) => pluck(df, zone_pluck_keys));
 				return column;
 			});
+			return zone;
 		}
+		layout.value.header = clean_zone(layout.value.header);
+		layout.value.footer = clean_zone(layout.value.footer);
 
 		print_format.value.format_data = JSON.stringify(layout.value);
 

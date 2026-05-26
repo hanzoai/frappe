@@ -30,18 +30,13 @@
 			</template>
 		</draggable>
 
-		<HTMLEditor
-			:value="layout.footer"
-			@change="layout.footer = $event"
-			:button-label="__('Edit Footer')"
-		/>
+		<PrintFormatSection :section="layout.footer" :is_header="true" />
 		<LetterHeadFooterEditor v-if="letterhead" />
 	</div>
 </template>
 
 <script setup>
 import draggable from "vuedraggable";
-import HTMLEditor from "./HTMLEditor.vue";
 import LetterHeadEditor from "./LetterHeadEditor.vue";
 import LetterHeadFooterEditor from "./LetterHeadFooterEditor.vue";
 import PrintFormatSection from "./PrintFormatSection.vue";
