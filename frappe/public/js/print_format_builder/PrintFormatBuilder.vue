@@ -56,6 +56,7 @@ onMounted(() => {
 
 function clear_selection() {
 	$store.value.selected_field.value = null;
+	$store.value.selected_section.value = null;
 }
 
 defineExpose({ toggle_preview, $store });

@@ -13,6 +13,7 @@ export function getStore(print_format_name) {
 	let edit_letterhead = ref(false);
 	let scroll_to_section = ref(null);
 	let selected_field = ref(null);
+	let selected_section = ref(null);
 
 	// methods
 	function fetch() {
@@ -26,6 +27,7 @@ export function getStore(print_format_name) {
 					layout.value = get_layout();
 					edit_letterhead.value = false;
 					selected_field.value = null;
+					selected_section.value = null;
 
 					// load the letter head stored in format_data, if any
 					const lh_name = layout.value?.letter_head;
@@ -153,6 +155,7 @@ export function getStore(print_format_name) {
 		edit_letterhead,
 		scroll_to_section,
 		selected_field,
+		selected_section,
 		fetch,
 		update,
 		save_changes,

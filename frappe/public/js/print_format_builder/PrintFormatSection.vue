@@ -1,6 +1,10 @@
 <template>
 	<div class="print-format-section-container" v-if="!section.remove" data-pfb-section>
-		<div class="print-format-section">
+		<div
+			class="print-format-section"
+			:class="{ 'section--selected': is_selected }"
+			@click.stop="select_section"
+		>
 			<div class="section-toolbar">
 				<div class="section-toolbar-left">
 					<div
@@ -165,8 +169,18 @@
 <script setup>
 import draggable from "vuedraggable";
 import Field from "./Field.vue";
+import { computed, inject } from "vue";
 
 const props = defineProps(["section"]);
+
+let store = inject("$store");
+
+let is_selected = computed(() => store.selected_section.value === props.section);
+
+function select_section() {
+	store.selected_section.value = props.section;
+	store.selected_field.value = null;
+}
 
 function set_columns(n) {
 	const current = props.section.columns.length;
@@ -215,6 +229,12 @@ function set_column_align(column, value) {
 	border: 1px solid var(--dark-border-color);
 	border-radius: var(--border-radius);
 	overflow: hidden;
+	cursor: default;
+}
+
+.section--selected {
+	border-color: var(--primary);
+	box-shadow: 0 0 0 2px var(--primary-light);
 }
 
 .section-toolbar {

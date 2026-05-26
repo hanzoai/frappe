@@ -37,8 +37,17 @@
 		{%- endfor -%}
 	{%- endfor -%}
 	{%- if not section.label or ns.has_content -%}
-	<div class="section {{ resolve_class({'page-break': section.page_break}) }}">
-		{% if section.label %}
+	{#- Build inline style for section background + padding -#}
+	{%- set ns3 = namespace(section_style='') -%}
+	{%- if section.background -%}
+		{%- set ns3.section_style = ns3.section_style + 'background:' + section.background + ';' -%}
+	{%- endif -%}
+	{%- if section.padding -%}
+		{%- set p = section.padding -%}
+		{%- set ns3.section_style = ns3.section_style + 'padding:' + (p.top or 0)|string + 'px ' + (p.right or 0)|string + 'px ' + (p.bottom or 0)|string + 'px ' + (p.left or 0)|string + 'px;' -%}
+	{%- endif -%}
+	<div class="section {{ resolve_class({'page-break': section.page_break}) }}"{% if ns3.section_style %} style="{{ ns3.section_style }}"{% endif %}>
+		{% if section.label and section.show_label != 'hide' %}
 		<div class="section-label">{{ _(section.label) }}</div>
 		{% endif %}
 
@@ -52,7 +61,8 @@
 		{%- else -%}
 			{%- set row_layout = '' -%}
 		{%- endif -%}
-		<div class="section-columns row {{ row_layout }}">
+		{%- set col_gap = (section.gap if section.gap is defined and section.gap != None else 20)|string + 'px' -%}
+		<div class="section-columns row {{ row_layout }}" style="gap:{{ col_gap }}">
 			{% for column in section.columns %}
 			<div class="column col">
 				{% for df in column.fields %}
