@@ -6,17 +6,19 @@ import resource
 from contextlib import suppress
 from typing import Any
 
+from rq import get_current_job
+from rq.command import send_stop_job_command
+from rq.exceptions import InvalidJobOperation
+
 import frappe
 from frappe import _
-from frappe.core.doctype.background_task.background_task import stop_task
 from frappe.database.utils import dangerously_reconnect_on_connection_abort
 from frappe.desk.form.load import get_attachments
 from frappe.desk.query_report import generate_report_result
 from frappe.model.document import Document
 from frappe.monitor import add_data_to_monitor
 from frappe.utils import add_to_date, now
-from frappe.utils.background_jobs import enqueue
-from frappe.utils.task_queue import get_current_task
+from frappe.utils.background_jobs import enqueue, get_redis_conn
 
 # If prepared report runs for longer than this time it's automatically considered as failed
 FAILURE_THRESHOLD = 6 * 60 * 60
@@ -69,27 +71,20 @@ class PreparedReport(Document):
 		if self.status not in ("Started", "Queued"):
 			return
 
-		if self.job_id:
-			with suppress(Exception):
-				stop_task(self.job_id)
-				return
+		with suppress(Exception):
+			job = frappe.get_doc("RQ Job", self.job_id)
+			job.stop_job() if self.status == "Started" else job.delete()
 
 	def after_insert(self):
 		timeout = frappe.get_value("Report", self.report_name, "timeout")
-
-		task = frappe.enqueue_task(
+		enqueue(
 			generate_report,
-			task_name=_("Generate Prepared Report: {0}").format(self.report_name),
 			queue="long",
+			prepared_report=self.name,
 			timeout=timeout or REPORT_TIMEOUT,
 			enqueue_after_commit=True,
 			at_front_when_starved=True,
-			show_progress_bar=False,
-			ref_doctype=self.doctype,
-			ref_docname=self.name,
-			prepared_report=self.name,
 		)
-		self.db_set("job_id", task.task_id, update_modified=False)
 
 	def get_prepared_data(self, with_file_name=False):
 		attachments = get_attachments(self.doctype, self.name)
@@ -111,7 +106,6 @@ class PreparedReport(Document):
 
 def generate_report(prepared_report):
 	update_job_id(prepared_report)
-	task = get_current_task()
 
 	instance: PreparedReport = frappe.get_doc("Prepared Report", prepared_report)
 	report = frappe.get_doc("Report", instance.report_name)
@@ -120,8 +114,6 @@ def generate_report(prepared_report):
 
 	try:
 		report.custom_columns = []
-
-		task.update_stage(_("Loading report configuration"))
 
 		if report.report_type == "Custom Report":
 			custom_report_doc = report
@@ -132,13 +124,22 @@ def generate_report(prepared_report):
 				if data:
 					report.custom_columns = data["columns"]
 
-		task.update_stage(_("Generating report data"))
 		result = generate_report_result(report=report, filters=instance.filters, user=instance.owner)
-
-		task.update_stage(_("Saving report output"))
 		create_json_gz_file(result, instance.doctype, instance.name, instance.report_name)
 
 		instance.status = "Completed"
+
+		frappe.get_doc(
+			{
+				"doctype": "Notification Log",
+				"subject": f"{instance.report_name} report is ready.",
+				"for_user": frappe.session.user,
+				"type": "Alert",
+				"document_type": "Report",
+				"document_name": report.name,
+				"link": f"/desk/query-report/{report.name}?prepared_report_name={instance.name}",
+			}
+		).insert(ignore_permissions=True)
 
 	except Exception:
 		# we need to ensure that error gets stored
@@ -168,13 +169,13 @@ def _save_error(instance, error):
 
 
 def update_job_id(prepared_report):
-	task = get_current_task()
+	job = get_current_job()
 
 	frappe.db.set_value(
 		"Prepared Report",
 		prepared_report,
 		{
-			"job_id": task and task.task_id,
+			"job_id": job and job.id,
 			"status": "Started",
 		},
 	)
@@ -203,23 +204,19 @@ def stop_prepared_report(report_name: str):
 	prepared_report.check_permission("write")
 
 	job_id = prepared_report.job_id
-	if not job_id:
-		frappe.throw(_("No running job found for this report."))
+	if not job_id.startswith(frappe.local.site):
+		frappe.throw(f"Invalid job_id: must start with {frappe.local.site}")
 
 	try:
-		stop_task(job_id)
-	except Exception:
-		frappe.log_error(
-			title="Prepared Report Stop Failed",
-			message=frappe.get_traceback(with_context=True),
+		send_stop_job_command(connection=get_redis_conn(), job_id=job_id)
+		frappe.db.set_value(
+			"Prepared Report",
+			prepared_report.name,
+			{"status": "Cancelled"},
 		)
-		raise
-
-	frappe.db.set_value(
-		"Prepared Report",
-		prepared_report.name,
-		{"status": "Cancelled"},
-	)
+		frappe.msgprint(_("Job stopped successfully"), alert=True, indicator="green")
+	except InvalidJobOperation:
+		frappe.msgprint(_("Job is not running."), title=_("Invalid Operation"))
 
 
 def process_filters_for_prepared_report(filters: dict[str, Any] | str) -> str:
@@ -354,15 +351,7 @@ def has_permission(doc, user):
 @frappe.whitelist()
 def enqueue_json_to_csv_conversion(prepared_report_name: str):
 	"""Call this to enqueue the conversion in background."""
-	frappe.enqueue_task(
-		convert_json_to_csv,
-		task_name=_("Convert to CSV: {0}").format(prepared_report_name),
-		queue="long",
-		show_progress_bar=False,
-		ref_doctype="Prepared Report",
-		ref_docname=prepared_report_name,
-		prepared_report_name=prepared_report_name,
-	)
+	enqueue(method=convert_json_to_csv, queue="long", prepared_report_name=prepared_report_name)
 
 
 def convert_json_to_csv(prepared_report_name):
@@ -370,10 +359,6 @@ def convert_json_to_csv(prepared_report_name):
 
 	import csv
 	from io import StringIO
-
-	task = get_current_task()
-
-	task.update_stage(_("Loading report data"))
 
 	doc = frappe.get_doc("Prepared Report", prepared_report_name)
 	json_content, file_name = doc.get_prepared_data(with_file_name=True)
@@ -391,19 +376,18 @@ def convert_json_to_csv(prepared_report_name):
 		frappe.log_error("Columns or result is empty", "CSV Conversion")
 		return
 
-	task.update_stage(_("Converting to CSV"))
-
 	fieldnames = [col.get("fieldname") for col in columns if col.get("fieldname")]
 
 	output = StringIO()
 	writer = csv.DictWriter(output, fieldnames=fieldnames)
 	writer.writeheader()
 	for row in result:
-		writer.writerow({key: row.get(key, "") for key in fieldnames})
+		if isinstance(row, dict):
+			writer.writerow({key: row.get(key, "") for key in fieldnames})
+		else:
+			writer.writerow({field: row[idx] for idx, field in enumerate(fieldnames)})
 
 	csv_content = output.getvalue().encode("utf-8")
-
-	task.update_stage(_("Saving CSV file"))
 
 	_file = frappe.get_doc(
 		{

@@ -73,13 +73,9 @@ class TestPreparedReport(IntegrationTestCase):
 			self.wait_for_status(doc, "Started")
 			job_id = doc.job_id
 
-			from frappe.core.doctype.background_task.background_task import stop_task
-
-			stop_task(job_id)
+			doc.delete()
 			time.sleep(1)
-
-			rq_job_id = f"{frappe.local.site}||{job_id}"
-			job = frappe.get_doc("RQ Job", rq_job_id)
+			job = frappe.get_doc("RQ Job", job_id)
 			self.assertEqual(job.status, "stopped")
 
 
