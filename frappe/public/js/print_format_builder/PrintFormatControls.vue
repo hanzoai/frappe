@@ -254,28 +254,6 @@
 				</select>
 			</div>
 		</div>
-
-		<!-- ── Sample Data picker ─────────────────────────────── -->
-		<div class="pfb-sample-data">
-			<div class="pfb-sample-data-header">
-				<span class="pfb-sample-data-label">{{ __("SAMPLE DATA") }}</span>
-				<button
-					v-if="store.preview_doc_name.value"
-					class="pfb-sample-data-clear"
-					:title="__('Clear sample data')"
-					@click="clear_preview_doc"
-					v-html="frappe.utils.icon('x', 'xs')"
-				></button>
-			</div>
-			<div ref="doc_picker_ref" class="pfb-sample-data-picker"></div>
-			<div v-if="store.preview_doc.value" class="pfb-sample-data-info">
-				<span
-					class="pfb-sample-data-dot"
-					v-html="frappe.utils.icon('circle', 'xs')"
-				></span>
-				<span class="pfb-sample-data-name">{{ store.preview_doc_name.value }}</span>
-			</div>
-		</div>
 	</div>
 </template>
 
@@ -290,13 +268,6 @@ let search_text = ref("");
 let google_fonts = ref([]);
 let activeTab = ref("fields");
 let search_input = ref(null);
-let doc_picker_ref = ref(null);
-let doc_picker_ctrl = ref(null);
-
-function clear_preview_doc() {
-	store.load_preview_doc(null);
-	doc_picker_ctrl.value?.set_value("");
-}
 
 function focus_search() {
 	activeTab.value = "fields";
@@ -515,24 +486,6 @@ onMounted(() => {
 		}
 	});
 
-	// Sample data doc picker
-	doc_picker_ctrl.value = frappe.ui.form.make_control({
-		parent: doc_picker_ref.value,
-		df: {
-			fieldname: "preview_doc",
-			fieldtype: "Link",
-			options: meta.value?.name,
-			placeholder: __("Pick a {0}...", [__(meta.value?.name || "document")]),
-			change: () => {
-				const name = doc_picker_ctrl.value.get_value();
-				store.load_preview_doc(name);
-			},
-		},
-		render_input: true,
-	});
-	// hide label
-	doc_picker_ref.value.querySelector(".control-label")?.remove();
-
 	document.addEventListener("keydown", (e) => {
 		if (
 			e.key === "/" &&
@@ -558,70 +511,6 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	flex-direction: column;
 	border-right: 1px solid var(--border-color);
 	background: var(--fg-color);
-}
-
-/* ── Sample data picker ──────────────────────────────────── */
-.pfb-sample-data {
-	flex-shrink: 0;
-	border-top: 1px solid var(--border-color);
-	background: var(--gray-50);
-	padding: 8px 10px;
-}
-
-.pfb-sample-data-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: 4px;
-}
-
-.pfb-sample-data-label {
-	font-size: 9px;
-	font-weight: 700;
-	letter-spacing: 0.1em;
-	color: var(--text-muted);
-}
-
-.pfb-sample-data-clear {
-	padding: 1px 3px;
-	border: none;
-	background: transparent;
-	cursor: pointer;
-	color: var(--gray-400);
-	display: flex;
-	align-items: center;
-}
-
-.pfb-sample-data-clear:hover {
-	color: var(--gray-600);
-}
-
-.pfb-sample-data-picker :deep(.form-group) {
-	margin: 0;
-}
-
-.pfb-sample-data-picker :deep(.control-input) {
-	font-size: var(--text-sm);
-}
-
-.pfb-sample-data-info {
-	display: flex;
-	align-items: center;
-	gap: 4px;
-	margin-top: 4px;
-	color: var(--green-600);
-	font-size: var(--text-xs);
-}
-
-.pfb-sample-data-dot {
-	display: flex;
-	align-items: center;
-}
-
-.pfb-sample-data-name {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
 }
 
 /* ── Tab bar ─────────────────────────────────────────────── */
