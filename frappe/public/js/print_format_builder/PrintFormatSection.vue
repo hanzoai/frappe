@@ -18,34 +18,8 @@
 						:placeholder="__('Section Title')"
 						v-model="section.label"
 					/>
-					<span
-						v-if="section.field_orientation == 'left-right'"
-						class="orientation-badge"
-						:title="__('Labels left, values right')"
-					>
-						L→V
-					</span>
 				</div>
 				<div class="section-toolbar-right">
-					<div class="column-layout-buttons" :title="__('Number of columns')">
-						<button
-							v-for="n in [1, 2, 3, 4]"
-							:key="n"
-							class="btn btn-xs column-btn"
-							:class="{ active: section.columns.length === n }"
-							@click.stop="set_columns(n)"
-						>
-							{{ n }}
-						</button>
-					</div>
-					<button
-						class="btn btn-xs btn-icon toolbar-btn"
-						:class="{ active: section.field_orientation == 'left-right' }"
-						:title="__('Toggle label orientation (Left→Right)')"
-						@click.stop="toggle_orientation"
-					>
-						<span v-html="frappe.utils.icon('arrow-right-left', 'sm')"></span>
-					</button>
 					<button
 						class="btn btn-xs btn-icon toolbar-btn toolbar-btn-danger"
 						:title="__('Remove section')"
@@ -299,52 +273,6 @@ function set_column_align(column, value) {
 	font-style: italic;
 	font-weight: normal;
 	color: var(--gray-400);
-}
-
-.orientation-badge {
-	font-size: 10px;
-	color: var(--text-muted);
-	background: var(--gray-100);
-	border: 1px solid var(--border-color);
-	border-radius: var(--border-radius-sm);
-	padding: 1px 4px;
-	white-space: nowrap;
-}
-
-.column-layout-buttons {
-	display: flex;
-	background: var(--gray-100);
-	border: 1px solid var(--border-color);
-	border-radius: var(--border-radius);
-	overflow: hidden;
-}
-
-.column-btn {
-	padding: 2px 6px;
-	font-size: 11px;
-	font-weight: 500;
-	border: none;
-	border-radius: 0;
-	background: transparent;
-	box-shadow: none;
-	color: var(--text-muted);
-	min-width: 20px;
-}
-
-.column-btn:not(:first-child) {
-	border-left: 1px solid var(--border-color);
-}
-
-.column-btn:hover {
-	background: var(--gray-200);
-	color: var(--text-color);
-}
-
-.column-btn.active {
-	background: var(--fg-color);
-	color: var(--text-color);
-	font-weight: 600;
-	box-shadow: var(--shadow-xs);
 }
 
 .toolbar-btn {

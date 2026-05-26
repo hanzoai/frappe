@@ -207,6 +207,25 @@
 							</div>
 						</div>
 
+						<!-- Orientation -->
+						<div class="pfb-insp-row">
+							<span class="pfb-insp-label">{{ __("Label side") }}</span>
+							<div class="pfb-seg">
+								<button
+									:class="{ active: section_orientation !== 'left-right' }"
+									@click="selected_section.field_orientation = ''"
+								>
+									{{ __("Top") }}
+								</button>
+								<button
+									:class="{ active: section_orientation === 'left-right' }"
+									@click="selected_section.field_orientation = 'left-right'"
+								>
+									{{ __("Left") }}
+								</button>
+							</div>
+						</div>
+
 						<!-- Gap -->
 						<div class="pfb-insp-row">
 							<span class="pfb-insp-label">{{ __("Gap") }}</span>
@@ -411,6 +430,7 @@ function remove_field() {
 
 // ── Section helpers ────────────────────────────────────────
 let section_show_label = computed(() => selected_section.value?.show_label ?? "show");
+let section_orientation = computed(() => selected_section.value?.field_orientation ?? "");
 let section_gap = computed(() => selected_section.value?.gap ?? 20);
 let section_bg = computed(() => selected_section.value?.background ?? "");
 let section_padding = computed(() => ({
