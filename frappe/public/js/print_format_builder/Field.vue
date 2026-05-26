@@ -60,7 +60,7 @@
 					</table>
 				</div>
 				<!-- Regular field -->
-				<div v-else>
+				<div v-else :style="{ textAlign: df.align || 'left' }">
 					<div v-if="df.label && df.show_label !== 'hide'" class="field-preview-label">
 						{{ df.label }}
 					</div>
@@ -91,7 +91,7 @@
 
 		<!-- ── Builder mode: labels + controls ──────────────── -->
 		<template v-else>
-			<div class="field-row">
+			<div class="field-row" :style="{ textAlign: df.align || 'left' }">
 				<div
 					class="drag-handle field-drag-handle"
 					v-html="frappe.utils.icon('drag', 'xs')"
