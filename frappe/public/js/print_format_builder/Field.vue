@@ -169,8 +169,18 @@ let preview_value = computed(() => {
 	if (!preview_doc.value || !props.df.fieldname) return null;
 	const raw = preview_doc.value[props.df.fieldname];
 	if (raw === null || raw === undefined || raw === "") return null;
+	const ft = props.df.fieldtype;
+	// Check fields return an <input> element from frappe.format — handle directly
+	if (ft === "Check") return raw ? __("Yes") : __("No");
 	try {
-		return frappe.format(raw, props.df, { only_value: true }, preview_doc.value);
+		const formatted = frappe.format(raw, props.df, { only_value: true }, preview_doc.value);
+		// If frappe.format returned HTML markup, extract the text content
+		if (typeof formatted === "string" && formatted.includes("<")) {
+			const tmp = document.createElement("div");
+			tmp.innerHTML = formatted;
+			return tmp.textContent || tmp.innerText || String(raw);
+		}
+		return formatted;
 	} catch {
 		return String(raw);
 	}
