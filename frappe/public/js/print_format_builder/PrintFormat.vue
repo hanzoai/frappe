@@ -183,11 +183,6 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	display: none !important;
 }
 
-/* Keep page break visible but strip the remove button */
-.pfb-clean-preview :deep(.page-break-remove) {
-	display: none !important;
-}
-
 /* Strip section borders/backgrounds — render like a print section */
 .pfb-clean-preview :deep(.print-format-section) {
 	border: 1px solid transparent;
