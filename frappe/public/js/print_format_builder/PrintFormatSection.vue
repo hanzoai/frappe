@@ -8,6 +8,7 @@
 			<div class="section-toolbar">
 				<div class="section-toolbar-left">
 					<div
+						v-if="!is_header"
 						class="drag-handle section-drag-handle"
 						title="Drag to reorder"
 						v-html="frappe.utils.icon('drag', 'sm')"
@@ -21,6 +22,7 @@
 				</div>
 				<div class="section-toolbar-right">
 					<button
+						v-if="!is_header"
 						class="btn btn-xs btn-icon toolbar-btn toolbar-btn-danger"
 						:title="__('Remove section')"
 						@click.stop="section['remove'] = true"
@@ -102,7 +104,7 @@ import draggable from "vuedraggable";
 import Field from "./Field.vue";
 import { computed, inject } from "vue";
 
-const props = defineProps(["section"]);
+const props = defineProps(["section", "is_header"]);
 
 let store = inject("$store");
 

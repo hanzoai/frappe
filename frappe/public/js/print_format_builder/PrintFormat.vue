@@ -7,11 +7,7 @@
 		<div :style="page_number_style">{{ __("1 of 2") }}</div>
 
 		<LetterHeadEditor type="Header" />
-		<HTMLEditor
-			:value="layout.header"
-			@change="layout.header = $event"
-			:button-label="__('Edit Header')"
-		/>
+		<PrintFormatSection :section="layout.header" :is_header="true" />
 
 		<draggable
 			class="sections-container"

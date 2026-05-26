@@ -29,6 +29,10 @@ export function getStore(print_format_name) {
 					meta.value = frappe.get_meta(_print_format.doc_type);
 					print_format.value = _print_format;
 					layout.value = get_layout();
+					// Migrate legacy string header to section object
+					if (!layout.value.header || typeof layout.value.header === "string") {
+						layout.value.header = { columns: [{ label: "", fields: [] }] };
+					}
 					edit_letterhead.value = false;
 					selected_field.value = null;
 					selected_section.value = null;
@@ -92,6 +96,28 @@ export function getStore(print_format_name) {
 				});
 				return section;
 			});
+
+		// Clean up header section fields
+		if (layout.value.header && layout.value.header.columns) {
+			layout.value.header.columns = layout.value.header.columns.map((column) => {
+				column.fields = column.fields
+					.filter((df) => !df.remove)
+					.map((df) =>
+						pluck(df, [
+							"label",
+							"fieldname",
+							"fieldtype",
+							"options",
+							"table_columns",
+							"html",
+							"field_template",
+							"show_label",
+							"align",
+						])
+					);
+				return column;
+			});
+		}
 
 		print_format.value.format_data = JSON.stringify(layout.value);
 

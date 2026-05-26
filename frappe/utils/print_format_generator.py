@@ -228,6 +228,16 @@ class PrintFormatGenerator:
 					fieldtype = df["fieldtype"]
 					df["renderer"] = renderers.get(fieldtype) or fieldtype.replace(" ", "")
 					df["section"] = section
+
+		# Also process header section if it's a dict (not legacy HTML string)
+		header = layout.get("header")
+		if isinstance(header, dict) and "columns" in header:
+			for column in header.get("columns", []):
+				for df in column.get("fields", []):
+					fieldtype = df.get("fieldtype", "Data")
+					df["renderer"] = renderers.get(fieldtype) or fieldtype.replace(" ", "")
+					df["section"] = header
+
 		return layout
 
 	def process_margin_texts(self, layout):
