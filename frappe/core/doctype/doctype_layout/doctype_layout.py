@@ -37,6 +37,18 @@ class DocTypeLayout(Document):
 		title: DF.Data
 	# end: auto-generated types
 
+	@classmethod
+	def prepare_for_import(cls, docdict: dict) -> None:
+		"""Delete any record with the same title but a different name.
+
+		Needed when migrating sites that were created before autoname changed
+		from 'prompt' to 'field:title' — old records carry a prompted name
+		while the JSON carries the title-derived name.
+		"""
+		existing_name = frappe.db.get_value("DocType Layout", {"title": docdict.get("title")}, "name")
+		if existing_name and existing_name != docdict.get("name"):
+			frappe.delete_doc("DocType Layout", existing_name, force=True)
+
 	def on_update(self):
 		if not frappe.flags.in_import and self.is_standard and frappe.conf.developer_mode:
 			self._export_to_doctype_dir()
@@ -58,12 +70,6 @@ class DocTypeLayout(Document):
 		path = os.path.join(folder, f"{frappe.scrub(self.name)}.json")
 		with open(path, "w+") as f:  # nosemgrep
 			f.write(frappe.as_json(doc_export) + "\n")
-
-	def after_insert(self):
-		self.ensure_layout_link_field()
-
-	def on_trash(self):
-		self.cleanup_layout_link_field_if_unused()
 
 	def validate(self):
 		if self.is_standard and not frappe.conf.developer_mode and not frappe.flags.in_migrate:
@@ -104,44 +110,6 @@ class DocTypeLayout(Document):
 			field.idx = index + 1
 
 		return {"added": added, "removed": removed}
-
-	def ensure_layout_link_field(self):
-		"""Add 'doctype_layout' custom Link field to target doctype if absent."""
-		if frappe.get_meta(self.document_type).istable:
-			return
-
-		fieldname = "doctype_layout"
-		if frappe.db.exists("Custom Field", {"dt": self.document_type, "fieldname": fieldname}):
-			return
-
-		frappe.get_doc(
-			{
-				"doctype": "Custom Field",
-				"dt": self.document_type,
-				"fieldname": fieldname,
-				"label": "Layout",
-				"fieldtype": "Link",
-				"options": "DocType Layout",
-				"read_only": 1,
-				"no_copy": 1,
-				"in_standard_filter": 1,
-			}
-		).insert(ignore_permissions=True)
-
-	def cleanup_layout_link_field_if_unused(self):
-		"""Remove 'doctype_layout' custom field if no layouts remain for this doctype."""
-		remaining = frappe.db.count(
-			"DocType Layout",
-			{"document_type": self.document_type, "name": ["!=", self.name]},
-		)
-		if remaining:
-			return
-
-		custom_field = frappe.db.get_value(
-			"Custom Field", {"dt": self.document_type, "fieldname": "doctype_layout"}
-		)
-		if custom_field:
-			frappe.delete_doc("Custom Field", custom_field, ignore_permissions=True)
 
 	def add_fields(self, added_fields: list[str], doctype_fields: list["DocField"]) -> list[dict]:
 		added = []
