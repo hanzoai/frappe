@@ -86,20 +86,26 @@
 			</draggable>
 
 			<div class="pfb-group-label mt-3">{{ __("Page") }}</div>
-			<div
-				class="pfb-block-card pfb-block-card--click"
-				:title="__('Force a new page')"
-				@click="add_page_break"
+			<draggable
+				:list="page_break_block"
+				:group="{ name: 'sections', pull: 'clone', put: false }"
+				:sort="false"
+				:clone="clone_as_section"
+				item-key="fieldname"
 			>
-				<span
-					class="pfb-block-icon"
-					v-html="frappe.utils.icon('scissors-line-dashed', 'sm')"
-				></span>
-				<div class="pfb-block-info">
-					<div class="pfb-block-name">{{ __("Page Break") }}</div>
-					<div class="pfb-block-desc text-muted">{{ __("Force a new page") }}</div>
-				</div>
-			</div>
+				<template #item="{ element }">
+					<div class="pfb-block-card" :title="element.desc" @click="add_page_break">
+						<span
+							class="pfb-block-icon"
+							v-html="frappe.utils.icon('scissors-line-dashed', 'sm')"
+						></span>
+						<div class="pfb-block-info">
+							<div class="pfb-block-name">{{ element.label }}</div>
+							<div class="pfb-block-desc text-muted">{{ element.desc }}</div>
+						</div>
+					</div>
+				</template>
+			</draggable>
 		</div>
 
 		<!-- ── Templates ─────────────────────────────────────── -->
@@ -256,6 +262,14 @@ const tabs = computed(() => [
 ]);
 
 // ── blocks tab items ──────────────────────────────────────
+const page_break_block = [
+	{
+		label: __("Page Break"),
+		fieldname: "page_break",
+		desc: __("Force a new page"),
+	},
+];
+
 const draggable_blocks = [
 	{
 		label: __("Custom HTML"),
@@ -334,13 +348,13 @@ function scroll_to(section) {
 	store.scroll_to_section.value = section;
 }
 
+function clone_as_section() {
+	return { label: "", columns: [{ label: "", fields: [] }], page_break: true };
+}
+
 function add_page_break() {
 	if (!layout.value) return;
-	layout.value.sections.push({
-		label: "",
-		columns: [{ label: "", fields: [] }],
-		page_break: true,
-	});
+	layout.value.sections.push(clone_as_section());
 }
 
 // ── computed: field groups (by section break labels) ────────
