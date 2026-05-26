@@ -7,7 +7,13 @@
 		<div :style="page_number_style">{{ __("1 of 2") }}</div>
 
 		<LetterHeadEditor type="Header" />
+		<div class="zone-divider zone-divider--header">
+			<span class="zone-divider-label">{{ __("Header") }}</span>
+		</div>
 		<PrintFormatSection :section="layout.header" :is_header="true" zone="header" />
+		<div class="zone-divider zone-divider--body">
+			<span class="zone-divider-label">{{ __("Body") }}</span>
+		</div>
 
 		<draggable
 			class="sections-container"
@@ -30,6 +36,9 @@
 			</template>
 		</draggable>
 
+		<div class="zone-divider zone-divider--footer">
+			<span class="zone-divider-label">{{ __("Footer") }}</span>
+		</div>
 		<PrintFormatSection :section="layout.footer" :is_header="true" zone="footer" />
 		<LetterHeadFooterEditor v-if="letterhead" />
 	</div>
@@ -151,6 +160,50 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	margin-bottom: 1rem;
 }
 
+/* ── Zone dividers ────────────────────────────────────────── */
+.zone-divider {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0.75rem 0 0.5rem;
+}
+
+.zone-divider::before,
+.zone-divider::after {
+	content: "";
+	flex: 1;
+	height: 1px;
+	background: var(--gray-300);
+}
+
+.zone-divider-label {
+	font-size: 10px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	white-space: nowrap;
+	padding: 2px 8px;
+	border-radius: var(--border-radius-sm);
+}
+
+.zone-divider--header .zone-divider-label {
+	color: var(--blue-500);
+	background: var(--blue-50);
+	border: 1px solid var(--blue-200);
+}
+
+.zone-divider--body .zone-divider-label {
+	color: var(--text-muted);
+	background: var(--gray-100);
+	border: 1px solid var(--gray-300);
+}
+
+.zone-divider--footer .zone-divider-label {
+	color: var(--blue-500);
+	background: var(--blue-50);
+	border: 1px solid var(--blue-200);
+}
+
 .section-with-insert {
 	display: flex;
 	flex-direction: column;
@@ -162,7 +215,8 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 .pfb-clean-preview :deep(.section-toolbar),
 .pfb-clean-preview :deep(.section-insert),
 .pfb-clean-preview :deep(.field-preview-actions),
-.pfb-clean-preview :deep(.configure-columns-btn) {
+.pfb-clean-preview :deep(.configure-columns-btn),
+.pfb-clean-preview .zone-divider {
 	display: none !important;
 }
 
