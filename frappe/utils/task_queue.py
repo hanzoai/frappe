@@ -1,5 +1,3 @@
-import inspect
-import time
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 from uuid import uuid4
@@ -241,6 +239,8 @@ def _callback_path(fn: Callable | str | None) -> str | None:
 
 
 def _run_callback(callback: str | Callable, task_doc: "BackgroundTask", task_kwargs: dict, **outcome):
+	import inspect
+
 	try:
 		fn = frappe.get_attr(callback) if isinstance(callback, str) else callback
 		context = {"task": task_doc, **outcome, **task_kwargs}
