@@ -38,7 +38,13 @@
 								:key="i"
 							>
 								<td v-for="col in df.table_columns" :key="col.fieldname">
-									{{ row[col.fieldname] ?? "" }}
+									<img
+										v-if="is_image_field(col) && row[col.fieldname]"
+										:src="row[col.fieldname]"
+										class="preview-table-img"
+										:alt="col.label || col.fieldname"
+									/>
+									<span v-else>{{ row[col.fieldname] ?? "" }}</span>
 								</td>
 							</tr>
 							<tr v-if="!preview_doc[df.fieldname]?.length">
@@ -59,7 +65,13 @@
 						{{ df.label }}
 					</div>
 					<div class="field-preview-value" :class="{ 'text-muted': !preview_value }">
-						{{ preview_value || "—" }}
+						<img
+							v-if="is_image_field(df) && preview_value"
+							:src="preview_value"
+							class="preview-field-img"
+							:alt="df.label || df.fieldname"
+						/>
+						<span v-else>{{ preview_value || "—" }}</span>
 					</div>
 				</div>
 			</div>
@@ -185,6 +197,11 @@ let preview_value = computed(() => {
 		return String(raw);
 	}
 });
+
+const IMAGE_FIELDTYPES = new Set(["Attach Image", "Image"]);
+function is_image_field(col) {
+	return IMAGE_FIELDTYPES.has(col?.fieldtype);
+}
 
 function select_field() {
 	store.selected_field.value = props.df;
@@ -592,5 +609,21 @@ watch(
 	padding: 3px 4px;
 	border-bottom: 1px solid var(--gray-100);
 	color: var(--text-color);
+}
+
+.preview-table-img {
+	width: 32px;
+	height: 32px;
+	object-fit: cover;
+	border-radius: var(--border-radius-sm);
+	display: block;
+}
+
+.preview-field-img {
+	max-width: 100%;
+	max-height: 80px;
+	object-fit: contain;
+	border-radius: var(--border-radius-sm);
+	display: block;
 }
 </style>
