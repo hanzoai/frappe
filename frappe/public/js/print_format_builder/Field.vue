@@ -24,10 +24,20 @@
 				<!-- Table field -->
 				<div v-else-if="df.fieldtype == 'Table'" class="field-preview-table">
 					<div v-if="df.label" class="field-preview-label">{{ df.label }}</div>
-					<table class="preview-table">
+					<table
+						class="preview-table"
+						:class="{
+							'preview-table--borderless': df.table_bordered === false,
+							'preview-table--plain-header': df.table_header === 'plain',
+						}"
+					>
 						<thead>
 							<tr>
-								<th v-for="col in df.table_columns" :key="col.fieldname">
+								<th
+									v-for="col in df.table_columns"
+									:key="col.fieldname"
+									:class="numeric_align_class(col)"
+								>
 									{{ col.label || col.fieldname }}
 								</th>
 							</tr>
@@ -38,7 +48,11 @@
 								:key="i"
 								:class="i % 2 === 0 ? 'odd' : 'even'"
 							>
-								<td v-for="col in df.table_columns" :key="col.fieldname">
+								<td
+									v-for="col in df.table_columns"
+									:key="col.fieldname"
+									:class="numeric_align_class(col)"
+								>
 									<img
 										v-if="
 											is_image_field(col, row[col.fieldname]) &&
@@ -219,6 +233,11 @@ function is_image_field(col, value) {
 	return false;
 }
 
+const NUMERIC_FIELDTYPES = new Set(["Currency", "Float", "Int", "Percent"]);
+function numeric_align_class(col) {
+	return NUMERIC_FIELDTYPES.has(col?.fieldtype) ? "col-numeric" : "";
+}
+
 function format_cell(row, col) {
 	const raw = row[col.fieldname];
 	if (raw === null || raw === undefined || raw === "") return "";
@@ -384,8 +403,8 @@ watch(
 
 .field--selected {
 	border-style: solid;
-	border-color: var(--primary);
-	box-shadow: 0 0 0 2px var(--primary-light);
+	border-color: var(--gray-500);
+	box-shadow: 0 0 0 2px var(--gray-200);
 }
 
 .field-row {
@@ -563,9 +582,9 @@ watch(
 
 .field--preview.field--selected {
 	border-style: solid;
-	border-color: var(--primary);
+	border-color: var(--gray-500);
 	background: var(--fg-color);
-	box-shadow: 0 0 0 2px var(--primary-light);
+	box-shadow: 0 0 0 2px var(--gray-200);
 }
 
 .field-preview-wrap {
@@ -641,7 +660,7 @@ watch(
 	padding: 2px;
 }
 
-/* Preview table — matches PDF print_format.css child-table style */
+/* Preview table — exact PDF print_format.css child-table style */
 .field-preview-table {
 	width: 100%;
 	margin-top: 0.5rem;
@@ -650,7 +669,7 @@ watch(
 .field-preview-table > .field-preview-label {
 	font-size: 0.8em;
 	font-weight: 600;
-	color: #6b7280;
+	color: var(--text-muted);
 	text-transform: uppercase;
 	letter-spacing: 0.03em;
 	margin-bottom: 0.4rem;
@@ -662,30 +681,51 @@ watch(
 	font-size: 0.9em;
 }
 
+/* ── Default: bordered + styled header (matches PDF) ─── */
 .preview-table th {
-	background-color: #f3f4f6;
-	color: #374151;
-	font-weight: 700;
-	font-size: 0.82em;
+	background-color: var(--gray-100);
+	color: var(--text-color);
+	font-weight: 600;
+	font-size: 0.85em;
 	text-transform: uppercase;
-	letter-spacing: 0.04em;
-	padding: 0.5rem 0.65rem;
-	border: 1px solid #d1d5db;
+	letter-spacing: 0.03em;
+	padding: 0.45rem 0.6rem;
+	border: 1px solid var(--gray-200);
 	text-align: left;
-	white-space: nowrap;
 }
 
 .preview-table td {
-	padding: 0.5rem 0.65rem;
-	border: 1px solid #d1d5db;
-	vertical-align: middle;
-	color: #111827;
-	font-size: 0.9em;
+	padding: 0.45rem 0.6rem;
+	border: 1px solid var(--gray-200);
+	vertical-align: top;
+	color: var(--text-color);
 }
 
-.preview-table tr.odd td,
+/* Alternating rows — same as PDF */
+.preview-table tr.odd td {
+	background-color: var(--fg-color);
+}
+
 .preview-table tr.even td {
-	background-color: #ffffff;
+	background-color: var(--gray-50);
+}
+
+/* Numeric columns right-aligned — same as PDF */
+.preview-table .col-numeric {
+	text-align: right;
+}
+
+/* ── Borderless variant ──────────────────────────────── */
+.preview-table--borderless th,
+.preview-table--borderless td {
+	border: none;
+	border-bottom: 1px solid var(--gray-200);
+}
+
+/* ── Plain header variant ───────────────────────────── */
+.preview-table--plain-header th {
+	background-color: transparent;
+	border-bottom: 2px solid var(--gray-300);
 }
 
 .preview-table-img {
