@@ -347,41 +347,60 @@
 								<span class="pfb-type-badge">{{ short_fieldtype }}</span>
 							</div>
 						</div>
-						<div class="pfb-insp-row pfb-insp-row--col">
-							<span class="pfb-insp-label">{{ __("Label") }}</span>
-							<input
-								class="pfb-insp-input"
-								type="text"
-								:placeholder="__('Field label')"
-								v-model="selected_field.label"
-							/>
-						</div>
-						<div class="pfb-insp-row">
-							<span class="pfb-insp-label">{{ __("Show label") }}</span>
-							<div class="pfb-seg">
-								<button
-									v-for="opt in show_label_opts"
-									:key="opt.value"
-									:class="{ active: current_show_label === opt.value }"
-									@click="selected_field.show_label = opt.value"
-								>
-									{{ opt.label }}
-								</button>
+						<template v-if="is_html_field">
+							<div
+								class="pfb-html-preview"
+								v-if="selected_field.html"
+								v-html="selected_field.html"
+							></div>
+							<div v-else class="pfb-insp-hint text-muted">
+								{{ __("No HTML content yet.") }}
 							</div>
-						</div>
-						<div class="pfb-insp-row">
-							<span class="pfb-insp-label">{{ __("Align") }}</span>
-							<div class="pfb-seg">
-								<button
-									v-for="opt in align_opts"
-									:key="opt.value"
-									:class="{ active: current_align === opt.value }"
-									:title="opt.title"
-									@click="selected_field.align = opt.value"
-									v-html="opt.icon"
-								></button>
+							<button
+								class="btn btn-xs btn-default pfb-lh-edit-btn"
+								@click="edit_html_field"
+							>
+								<span v-html="frappe.utils.icon('edit', 'xs')"></span>
+								{{ __("Edit HTML") }}
+							</button>
+						</template>
+						<template v-else>
+							<div class="pfb-insp-row pfb-insp-row--col">
+								<span class="pfb-insp-label">{{ __("Label") }}</span>
+								<input
+									class="pfb-insp-input"
+									type="text"
+									:placeholder="__('Field label')"
+									v-model="selected_field.label"
+								/>
 							</div>
-						</div>
+							<div class="pfb-insp-row">
+								<span class="pfb-insp-label">{{ __("Show label") }}</span>
+								<div class="pfb-seg">
+									<button
+										v-for="opt in show_label_opts"
+										:key="opt.value"
+										:class="{ active: current_show_label === opt.value }"
+										@click="selected_field.show_label = opt.value"
+									>
+										{{ opt.label }}
+									</button>
+								</div>
+							</div>
+							<div class="pfb-insp-row">
+								<span class="pfb-insp-label">{{ __("Align") }}</span>
+								<div class="pfb-seg">
+									<button
+										v-for="opt in align_opts"
+										:key="opt.value"
+										:class="{ active: current_align === opt.value }"
+										:title="opt.title"
+										@click="selected_field.align = opt.value"
+										v-html="opt.icon"
+									></button>
+								</div>
+							</div>
+						</template>
 					</div>
 				</div>
 
@@ -673,6 +692,7 @@ function toggle(key) {
 
 // ── Inspector header ───────────────────────────────────────
 let is_table_field = computed(() => selected_field.value?.fieldtype === "Table");
+let is_html_field = computed(() => selected_field.value?.fieldtype === "HTML");
 
 let inspector_kind = computed(() => {
 	if (selected_lh_footer.value) return __("Letter Head");
@@ -743,6 +763,28 @@ function remove_field() {
 		selected_field.value.remove = true;
 		store.selected_field.value = null;
 	}
+}
+
+function edit_html_field() {
+	let d = new frappe.ui.Dialog({
+		title: __("Edit HTML"),
+		fields: [
+			{
+				label: __("HTML"),
+				fieldname: "html",
+				fieldtype: "HTML Editor",
+				min_lines: 8,
+				max_lines: 20,
+			},
+		],
+		primary_action_label: __("Save"),
+		primary_action: ({ html }) => {
+			selected_field.value.html = frappe.dom.remove_script_and_style(html);
+			d.hide();
+		},
+	});
+	d.set_value("html", selected_field.value?.html || "");
+	d.show();
 }
 
 // ── Letter Head helpers ────────────────────────────────────
@@ -1514,5 +1556,18 @@ function adjust_padding(side, delta) {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
+}
+
+/* ── HTML field inline preview ───────────────────────────── */
+.pfb-html-preview {
+	font-size: var(--text-sm);
+	color: var(--text-muted);
+	padding: 6px 8px;
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius);
+	background: var(--gray-50);
+	max-height: 100px;
+	overflow: hidden;
+	margin-bottom: 2px;
 }
 </style>
