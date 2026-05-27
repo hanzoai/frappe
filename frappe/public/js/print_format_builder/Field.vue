@@ -665,35 +665,34 @@ watch(
 .preview-table th {
 	background-color: #f3f4f6;
 	color: #374151;
-	font-weight: 600;
-	font-size: 0.85em;
+	font-weight: 700;
+	font-size: 0.82em;
 	text-transform: uppercase;
-	letter-spacing: 0.03em;
-	padding: 0.45rem 0.6rem;
-	border: 1px solid #e5e7eb;
+	letter-spacing: 0.04em;
+	padding: 0.5rem 0.65rem;
+	border: 1px solid #d1d5db;
 	text-align: left;
+	white-space: nowrap;
 }
 
 .preview-table td {
-	padding: 0.45rem 0.6rem;
-	border: 1px solid #e5e7eb;
-	vertical-align: top;
+	padding: 0.5rem 0.65rem;
+	border: 1px solid #d1d5db;
+	vertical-align: middle;
 	color: #111827;
+	font-size: 0.9em;
 }
 
-.preview-table tr.odd td {
+.preview-table tr.odd td,
+.preview-table tr.even td {
 	background-color: #ffffff;
 }
 
-.preview-table tr.even td {
-	background-color: #f9fafb;
-}
-
 .preview-table-img {
-	width: 32px;
-	height: 32px;
-	object-fit: cover;
-	border-radius: var(--border-radius-sm);
+	width: auto;
+	height: 60px;
+	max-width: 80px;
+	object-fit: contain;
 	display: block;
 }
 

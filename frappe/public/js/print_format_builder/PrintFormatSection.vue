@@ -164,7 +164,7 @@ function set_column_align(column, value) {
 
 .print-format-section {
 	background-color: var(--fg-color);
-	border: 1px solid var(--dark-border-color);
+	border: 1px solid var(--border-color);
 	border-radius: var(--border-radius);
 	overflow: hidden;
 	cursor: default;
