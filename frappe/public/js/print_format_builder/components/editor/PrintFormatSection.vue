@@ -283,8 +283,6 @@ function set_column_align(column, value) {
 	font-size: var(--text-sm);
 	font-weight: 600;
 	color: var(--text-muted);
-	text-transform: uppercase;
-	letter-spacing: 0.06em;
 	padding: 0.5rem 0.75rem 0;
 }
 
@@ -385,6 +383,14 @@ function set_column_align(column, value) {
 }
 
 /* ── Label case: uppercase (mirrors print_format.css rules for builder canvas) */
+
+/* section-title-display is in this same component — plain scoped selector */
+.print-format-section.label-uppercase .section-title-display {
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+/* field-preview-* and preview-table are inside child Field.vue — need :deep() */
 .print-format-section.label-uppercase :deep(.field-preview-label) {
 	text-transform: uppercase;
 	letter-spacing: 0.04em;
@@ -398,10 +404,5 @@ function set_column_align(column, value) {
 .print-format-section.label-uppercase :deep(.preview-table th) {
 	text-transform: uppercase;
 	letter-spacing: 0.03em;
-}
-
-.print-format-section.label-uppercase :deep(.section-title-display) {
-	text-transform: uppercase;
-	letter-spacing: 0.06em;
 }
 </style>
