@@ -71,6 +71,8 @@ body {
 	font-size: 1.1rem;
 	font-weight: 700;
 	color: #1a1a1a;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
 	padding-bottom: 0.35rem;
 	margin-bottom: 0.75rem;
 	border-bottom: 1.5px solid #e2e2e2;
@@ -333,6 +335,11 @@ body {
 }
 
 /* ── Label case: normal (opt-out from uppercase) ─────────── */
+.label-normal .section-label {
+	text-transform: none;
+	letter-spacing: 0;
+}
+
 .label-normal .field .label {
 	text-transform: none;
 	letter-spacing: 0;

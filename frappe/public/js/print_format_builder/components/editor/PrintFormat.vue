@@ -273,4 +273,15 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 .pfb-clean-preview :deep(.section-title-display) {
 	display: block;
 }
+
+/* Label case: normal — remove uppercase from section titles in builder canvas */
+.label-normal :deep(.section-title-display) {
+	text-transform: none;
+	letter-spacing: 0;
+}
+
+/* Label case: normal — remove uppercase from section label input in builder */
+.label-normal :deep(.input-section-label) {
+	text-transform: none;
+}
 </style>
