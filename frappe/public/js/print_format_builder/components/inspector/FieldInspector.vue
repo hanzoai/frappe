@@ -681,8 +681,8 @@
 <script setup>
 import { computed, inject, ref, watch } from "vue";
 import draggable from "vuedraggable";
-import { useStore } from "./store";
-import { get_image_dimensions } from "./utils";
+import { useStore } from "../../stores";
+import { get_image_dimensions } from "../../utils";
 
 let store = inject("$store");
 let { letterhead } = useStore();

@@ -13,7 +13,7 @@
 
 <script setup>
 import { inject } from "vue";
-import { useStore } from "./store";
+import { useStore } from "../../stores";
 
 let { letterhead } = useStore();
 let store = inject("$store");

@@ -38,11 +38,11 @@
 </template>
 
 <script setup>
-import PrintFormat from "./PrintFormat.vue";
-import Preview from "./Preview.vue";
-import PrintFormatControls from "./PrintFormatControls.vue";
-import FieldInspector from "./FieldInspector.vue";
-import { getStore } from "./store";
+import PrintFormat from "./components/editor/PrintFormat.vue";
+import Preview from "./components/Preview.vue";
+import PrintFormatControls from "./components/PrintFormatControls.vue";
+import FieldInspector from "./components/inspector/FieldInspector.vue";
+import { getStore } from "./stores";
 import { computed, ref, onMounted, provide, nextTick } from "vue";
 
 // props

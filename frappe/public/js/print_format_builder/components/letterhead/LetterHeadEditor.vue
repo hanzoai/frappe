@@ -13,8 +13,8 @@
 </template>
 
 <script setup>
-import { useStore } from "./store";
-import { get_image_dimensions } from "./utils";
+import { useStore } from "../../stores";
+import { get_image_dimensions } from "../../utils";
 import { ref, watch, onMounted, inject } from "vue";
 
 let { letterhead, store, layout } = useStore();

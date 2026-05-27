@@ -192,7 +192,7 @@
 </template>
 
 <script setup>
-import ConfigureColumnsVue from "./ConfigureColumns.vue";
+import ConfigureColumnsVue from "../inspector/ConfigureColumns.vue";
 import { createApp, ref, nextTick, watch, computed, inject } from "vue";
 
 const props = defineProps(["df", "field_orientation"]);

@@ -46,11 +46,11 @@
 
 <script setup>
 import draggable from "vuedraggable";
-import LetterHeadEditor from "./LetterHeadEditor.vue";
-import LetterHeadFooterEditor from "./LetterHeadFooterEditor.vue";
+import LetterHeadEditor from "../letterhead/LetterHeadEditor.vue";
+import LetterHeadFooterEditor from "../letterhead/LetterHeadFooterEditor.vue";
 import PrintFormatSection from "./PrintFormatSection.vue";
 import SectionInsert from "./SectionInsert.vue";
-import { useStore } from "./store";
+import { useStore } from "../../stores";
 import { computed, inject, watch, nextTick } from "vue";
 
 let { layout, letterhead, print_format } = useStore();

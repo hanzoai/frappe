@@ -1,4 +1,4 @@
-import { create_default_layout, pluck } from "./utils";
+import { create_default_layout, pluck } from "../utils";
 import { watch, ref, inject, computed, nextTick } from "vue";
 
 export function getStore(print_format_name) {

@@ -259,8 +259,8 @@
 
 <script setup>
 import draggable from "vuedraggable";
-import { get_table_columns, pluck } from "./utils";
-import { useStore } from "./store";
+import { get_table_columns, pluck } from "../utils";
+import { useStore } from "../stores";
 import { computed, onMounted, nextTick, ref, watch, inject } from "vue";
 
 // state
