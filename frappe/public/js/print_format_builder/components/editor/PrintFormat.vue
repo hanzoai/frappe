@@ -279,9 +279,4 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	text-transform: none;
 	letter-spacing: 0;
 }
-
-/* Label case: normal — remove uppercase from section label input in builder */
-.label-normal :deep(.input-section-label) {
-	text-transform: none;
-}
 </style>
