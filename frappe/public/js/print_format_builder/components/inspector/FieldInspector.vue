@@ -41,31 +41,90 @@
 		<!-- ── Letter Head Footer inspector ──────────────────────── -->
 		<template v-else-if="selected_lh_footer">
 			<div class="pfb-insp-body">
-				<div class="pfb-insp-section">
-					<div class="pfb-insp-section-head" @click="toggle('lh_footer')">
-						<span class="pfb-insp-section-label">{{ __("Footer") }}</span>
+				<!-- HTML section — shown when footer uses Jinja2 -->
+				<div class="pfb-insp-section" v-if="lh_footer_has_jinja">
+					<div class="pfb-insp-section-head" @click="toggle('lhf_html')">
+						<span class="pfb-insp-section-label">{{ __("HTML") }}</span>
 						<span
 							class="pfb-insp-chevron"
-							:class="{ collapsed: !open.lh_footer }"
+							:class="{ collapsed: !open.lhf_html }"
 							v-html="frappe.utils.icon('chevron-down', 'xs')"
 						></span>
 					</div>
-					<div v-show="open.lh_footer" class="pfb-insp-section-body">
+					<div v-show="open.lhf_html" class="pfb-insp-section-body">
 						<div
+							class="pfb-html-preview"
 							v-if="letterhead && letterhead.footer"
-							class="pfb-lh-footer-preview"
 							v-html="letterhead.footer"
 						></div>
-						<div v-else class="pfb-insp-hint text-muted">
-							{{ __("No footer content yet.") }}
-						</div>
 						<button
 							class="btn btn-xs btn-default pfb-lh-edit-btn"
 							@click="lh_edit_footer"
 						>
 							<span v-html="frappe.utils.icon('edit', 'xs')"></span>
-							{{ __("Edit Footer") }}
+							{{ __("Edit HTML") }}
 						</button>
+					</div>
+				</div>
+
+				<!-- Image section -->
+				<div class="pfb-insp-section">
+					<div class="pfb-insp-section-head" @click="toggle('lhf_image')">
+						<span class="pfb-insp-section-label">{{ __("Image") }}</span>
+						<span
+							class="pfb-insp-chevron"
+							:class="{ collapsed: !open.lhf_image }"
+							v-html="frappe.utils.icon('chevron-down', 'xs')"
+						></span>
+					</div>
+					<div v-show="open.lhf_image" class="pfb-insp-section-body">
+						<template v-if="letterhead">
+							<!-- Alignment -->
+							<div class="pfb-insp-row">
+								<span class="pfb-insp-label">{{ __("Align") }}</span>
+								<div class="pfb-seg">
+									<button
+										v-for="dir in ['Left', 'Center', 'Right']"
+										:key="dir"
+										:class="{ active: lhf_align === dir }"
+										@click="letterhead.footer_align = dir"
+									>
+										{{ __(dir) }}
+									</button>
+								</div>
+							</div>
+							<!-- Size slider -->
+							<div
+								v-if="letterhead.footer_image"
+								class="pfb-insp-row pfb-insp-row--col"
+							>
+								<span class="pfb-insp-label">{{ __("Size") }}</span>
+								<input
+									class="pfb-lh-slider"
+									type="range"
+									min="20"
+									:max="lhf_size_max"
+									:value="lhf_size"
+									@input="(e) => lhf_set_size(e.target.value)"
+								/>
+							</div>
+							<!-- Actions -->
+							<div class="pfb-lh-actions">
+								<button class="btn btn-xs btn-default" @click="lhf_upload_image">
+									<span v-html="frappe.utils.icon('upload', 'xs')"></span>
+									{{
+										letterhead.footer_image
+											? __("Change Image")
+											: __("Upload Image")
+									}}
+								</button>
+							</div>
+						</template>
+						<template v-else>
+							<p class="pfb-insp-hint text-muted">
+								{{ __("No letter head selected.") }}
+							</p>
+						</template>
 					</div>
 				</div>
 			</div>
@@ -763,6 +822,8 @@ const open = ref({
 	lh_html: true,
 	lh_image: true,
 	lh_footer: true,
+	lhf_html: true,
+	lhf_image: true,
 	f_field: true,
 	f_format: false,
 	f_visibility: false,
@@ -1032,6 +1093,77 @@ function lh_edit_footer() {
 		},
 	});
 }
+
+// ── Letter Head Footer image helpers ──────────────────────
+let lhf_aspect_ratio = ref(null);
+let lhf_range_field = ref("footer_image_width");
+
+let lh_footer_has_jinja = computed(() => {
+	const c = letterhead.value?.footer ?? "";
+	return c.includes("{{") || c.includes("{%");
+});
+
+let lhf_align = computed(() => letterhead.value?.footer_align ?? "Left");
+let lhf_size = computed(() =>
+	lhf_range_field.value === "footer_image_width"
+		? letterhead.value?.footer_image_width ?? 200
+		: letterhead.value?.footer_image_height ?? 80
+);
+let lhf_size_max = computed(() => (lhf_range_field.value === "footer_image_width" ? 700 : 500));
+
+function lhf_set_size(val) {
+	if (!letterhead.value) return;
+	const v = parseFloat(val);
+	letterhead.value[lhf_range_field.value] = v;
+	if (lhf_aspect_ratio.value) {
+		const other =
+			lhf_range_field.value === "footer_image_width"
+				? "footer_image_height"
+				: "footer_image_width";
+		letterhead.value[other] =
+			other === "footer_image_width"
+				? lhf_aspect_ratio.value * v
+				: v / lhf_aspect_ratio.value;
+	}
+}
+
+function lhf_upload_image() {
+	new frappe.ui.FileUploader({
+		folder: "Home/Attachments",
+		on_success: (file_doc) => {
+			get_image_dimensions(file_doc.file_url).then(({ width, height }) => {
+				lhf_aspect_ratio.value = width / height;
+				lhf_range_field.value =
+					lhf_aspect_ratio.value > 1 ? "footer_image_width" : "footer_image_height";
+				let new_width = width > 200 ? 200 : width;
+				let new_height = new_width / lhf_aspect_ratio.value;
+				if (new_height > 80) {
+					new_height = 80;
+					new_width = lhf_aspect_ratio.value * new_height;
+				}
+				letterhead.value["footer_image"] = file_doc.file_url;
+				letterhead.value["footer_image_width"] = new_width;
+				letterhead.value["footer_image_height"] = new_height;
+				letterhead.value["footer_source"] = "Image";
+				letterhead.value._dirty = true;
+			});
+		},
+	});
+}
+
+watch(
+	selected_lh_footer,
+	(active) => {
+		if (active && letterhead.value?.footer_image) {
+			get_image_dimensions(letterhead.value.footer_image).then(({ width, height }) => {
+				lhf_aspect_ratio.value = width / height;
+				lhf_range_field.value =
+					lhf_aspect_ratio.value > 1 ? "footer_image_width" : "footer_image_height";
+			});
+		}
+	},
+	{ immediate: true }
+);
 
 // Initialize lh_range_field when inspector opens for letterhead
 watch(

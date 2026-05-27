@@ -8,7 +8,7 @@
 	>
 		<div :style="page_number_style">{{ __("1 of 2") }}</div>
 
-		<LetterHeadEditor type="Header" />
+		<LetterHeadZoneEditor zone="header" />
 		<div class="zone-divider zone-divider--header">
 			<span class="zone-divider-label">{{ __("Header") }}</span>
 		</div>
@@ -42,14 +42,13 @@
 			<span class="zone-divider-label">{{ __("Footer") }}</span>
 		</div>
 		<PrintFormatSection :section="layout.footer" :is_header="true" zone="footer" />
-		<LetterHeadFooterEditor v-if="letterhead" />
+		<LetterHeadZoneEditor v-if="letterhead" zone="footer" />
 	</div>
 </template>
 
 <script setup>
 import draggable from "vuedraggable";
-import LetterHeadEditor from "../letterhead/LetterHeadEditor.vue";
-import LetterHeadFooterEditor from "../letterhead/LetterHeadFooterEditor.vue";
+import LetterHeadZoneEditor from "../letterhead/LetterHeadZoneEditor.vue";
 import PrintFormatSection from "./PrintFormatSection.vue";
 import SectionInsert from "./SectionInsert.vue";
 import { useStore } from "../../stores";
