@@ -1,6 +1,6 @@
 <template>
 	<div v-if="shouldRender" class="builder-root">
-		<PrintFormatControls v-show="sidebar_open" />
+		<PrintFormatControls />
 		<div class="canvas-area">
 			<!-- Canvas toolbar: sample data picker -->
 			<div class="canvas-toolbar">
@@ -50,7 +50,6 @@ const props = defineProps(["print_format_name"]);
 
 // variables
 let show_preview = ref(false);
-let sidebar_open = ref(true);
 let doc_picker_ref = ref(null);
 let doc_picker_ctrl = ref(null);
 
@@ -121,13 +120,6 @@ onMounted(() => {
 			$store.value.save_changes();
 		}
 		nextTick(init_doc_picker);
-	});
-
-	document.addEventListener("keydown", (e) => {
-		if (e.key === "/" && (e.ctrlKey || e.metaKey)) {
-			e.preventDefault();
-			sidebar_open.value = !sidebar_open.value;
-		}
 	});
 });
 
