@@ -230,8 +230,8 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 
 /* Selected section: subtle primary outline, no fill */
 .pfb-clean-preview :deep(.print-format-section.section--selected) {
-	border-color: var(--primary);
-	box-shadow: 0 0 0 2px var(--primary-light);
+	border-color: var(--gray-500);
+	box-shadow: 0 0 0 2px var(--gray-200);
 }
 
 .pfb-clean-preview :deep(.print-format-section-container) {
@@ -251,10 +251,10 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 }
 
 .pfb-clean-preview :deep(.field--preview.field--selected) {
-	border: 1px solid var(--primary);
+	border: 1px solid var(--gray-500);
 	border-radius: var(--border-radius-sm);
 	background: transparent;
-	box-shadow: 0 0 0 2px var(--primary-light);
+	box-shadow: 0 0 0 2px var(--gray-200);
 }
 
 /* Keep section columns padding */
