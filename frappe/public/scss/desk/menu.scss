@@ -29,7 +29,7 @@
 		align-items: center;
 		overflow: hidden;
 		gap: var(--margin-sm);
-		.menu-item-icon {
+		.frappe-menu-item-icon {
 			line-height: 0px;
 			.app-logo,
 			img {
@@ -61,7 +61,7 @@
 	}
 }
 
-.menu-item-icon {
+.frappe-menu-item-icon {
 	width: var(--menu-icon-size);
 	height: var(--menu-icon-size);
 	& .icon-container {

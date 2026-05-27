@@ -98,7 +98,7 @@ frappe.ui.menu = class ContextMenu {
 				item.action ? `return ${item.action}` : ""
 			}">
 				<a>
-					<div class="menu-item-icon" ${!(iconMarkup != "") ? "hidden" : ""}>
+					<div class="frappe-menu-item-icon" ${!(iconMarkup != "") ? "hidden" : ""}>
 						${iconMarkup}
 					</div>
 					<span class="menu-item-title">${__(item.label)}</span>
@@ -111,7 +111,7 @@ frappe.ui.menu = class ContextMenu {
 					}
 					${
 						item.items && item.items.length
-							? `<div class="menu-item-icon" style="margin-left:auto">
+							? `<div class="frappe-menu-item-icon" style="margin-left:auto">
 						${frappe.utils.icon(`chevron-${chevron_direction}`)}
 					</div>`
 							: ""
