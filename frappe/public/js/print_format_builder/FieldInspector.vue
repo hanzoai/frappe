@@ -813,11 +813,6 @@ function open_html_split_dialog({ title, initial_html, on_save }) {
 		ctrl.set_value(initial_html || "");
 		d._html_ctrl = ctrl;
 
-		// remove expand button
-		host.querySelectorAll("button").forEach((btn) => {
-			if (btn.textContent.trim().toLowerCase() === "expand") btn.remove();
-		});
-
 		// initial preview
 		if (preview) preview.innerHTML = initial_html || "";
 
@@ -1675,12 +1670,6 @@ function adjust_padding(side, delta) {
 	margin: 0;
 	display: flex;
 	flex-direction: column;
-}
-
-/* hide the Expand button */
-.pfb-html-ctrl-host .btn-open-fullscreen,
-.pfb-html-ctrl-host .code-expand-btn {
-	display: none;
 }
 
 .pfb-html-ctrl-host .CodeMirror {
