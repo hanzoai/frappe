@@ -162,6 +162,12 @@
 				left: 100%;
 			}
 		}
+
+		.dropdown-background-tasks {
+			.background-tasks-list {
+				left: 100%;
+			}
+		}
 	}
 }
 
@@ -229,10 +235,9 @@
 			overflow: hidden;
 			transition-property: none;
 			.standard-items-sections {
-				.dropdown-notifications {
-					.notifications-list {
-						left: 0;
-					}
+				.dropdown-notifications .notifications-list,
+				.dropdown-background-tasks .background-tasks-list {
+					left: 0;
 				}
 			}
 		}
