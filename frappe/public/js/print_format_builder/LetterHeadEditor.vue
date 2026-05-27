@@ -105,7 +105,7 @@ defineExpose({ aspect_ratio, range_input_field });
 	padding: 1rem;
 	margin-bottom: 1rem;
 	cursor: pointer;
-	transition: border-color 0.15s, box-shadow 0.15s;
+	transition: border-color 0.15s;
 }
 
 .letterhead:hover {
@@ -114,7 +114,6 @@ defineExpose({ aspect_ratio, range_input_field });
 
 .letterhead--selected {
 	border-color: var(--primary);
-	box-shadow: 0 0 0 2px var(--primary-light);
 }
 
 .letterhead-empty {

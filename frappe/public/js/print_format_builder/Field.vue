@@ -404,7 +404,6 @@ watch(
 .field--selected {
 	border-style: solid;
 	border-color: var(--gray-500);
-	box-shadow: 0 0 0 2px var(--gray-200);
 }
 
 .field-row {
@@ -584,7 +583,6 @@ watch(
 	border-style: solid;
 	border-color: var(--gray-500);
 	background: var(--fg-color);
-	box-shadow: 0 0 0 2px var(--gray-200);
 }
 
 .field-preview-wrap {

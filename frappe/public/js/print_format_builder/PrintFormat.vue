@@ -225,13 +225,12 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	border-radius: var(--border-radius);
 	background: transparent;
 	overflow: visible;
-	transition: border-color 0.15s, box-shadow 0.15s;
+	transition: border-color 0.15s;
 }
 
 /* Selected section: subtle primary outline, no fill */
 .pfb-clean-preview :deep(.print-format-section.section--selected) {
 	border-color: var(--gray-500);
-	box-shadow: 0 0 0 2px var(--gray-200);
 }
 
 .pfb-clean-preview :deep(.print-format-section-container) {
@@ -254,7 +253,6 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	border: 1px solid var(--gray-500);
 	border-radius: var(--border-radius-sm);
 	background: transparent;
-	box-shadow: 0 0 0 2px var(--gray-200);
 }
 
 /* Keep section columns padding */

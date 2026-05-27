@@ -172,7 +172,6 @@ function set_column_align(column, value) {
 
 .section--selected {
 	border-color: var(--gray-500);
-	box-shadow: 0 0 0 2px var(--gray-200);
 }
 
 .section-toolbar {
