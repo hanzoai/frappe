@@ -68,6 +68,36 @@
 		<!-- ── Letter Head inspector ──────────────────────────────── -->
 		<template v-else-if="selected_letterhead">
 			<div class="pfb-insp-body">
+				<!-- HTML section — shown when letterhead uses Jinja2 content -->
+				<div class="pfb-insp-section" v-if="lh_has_jinja">
+					<div class="pfb-insp-section-head" @click="toggle('lh_html')">
+						<span class="pfb-insp-section-label">{{ __("HTML") }}</span>
+						<span
+							class="pfb-insp-chevron"
+							:class="{ collapsed: !open.lh_html }"
+							v-html="frappe.utils.icon('chevron-down', 'xs')"
+						></span>
+					</div>
+					<div v-show="open.lh_html" class="pfb-insp-section-body">
+						<div
+							class="pfb-html-preview"
+							v-if="letterhead.content"
+							v-html="letterhead.content"
+						></div>
+						<button
+							class="btn btn-xs btn-default pfb-lh-edit-btn"
+							@click="lh_edit_html_content"
+						>
+							<span v-html="frappe.utils.icon('edit', 'xs')"></span>
+							{{ __("Edit HTML") }}
+						</button>
+						<div class="pfb-lh-save-hint">
+							<span v-html="frappe.utils.icon('alert-circle', 'xs')"></span>
+							{{ __("Changes are saved to the Letter Head document.") }}
+						</div>
+					</div>
+				</div>
+
 				<div class="pfb-insp-section">
 					<div class="pfb-insp-section-head" @click="toggle('lh_image')">
 						<span class="pfb-insp-section-label">{{ __("Image") }}</span>
@@ -728,6 +758,7 @@ const section_tabs = [
 ];
 
 const open = ref({
+	lh_html: true,
 	lh_image: true,
 	lh_footer: true,
 	f_field: true,
@@ -897,6 +928,22 @@ function edit_html_field() {
 }
 
 // ── Letter Head helpers ────────────────────────────────────
+let lh_has_jinja = computed(() => {
+	const c = letterhead.value?.content ?? "";
+	return c.includes("{{") || c.includes("{%");
+});
+
+function lh_edit_html_content() {
+	open_html_split_dialog({
+		title: __("Edit Letter Head HTML"),
+		initial_html: letterhead.value?.content || "",
+		on_save: (html) => {
+			letterhead.value.content = html;
+			letterhead.value._dirty = true;
+		},
+	});
+}
+
 let lh_align = computed(() => letterhead.value?.align ?? "Left");
 let lh_size = computed(() =>
 	lh_range_field.value === "image_width"
@@ -1662,6 +1709,20 @@ function adjust_padding(side, delta) {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
+}
+
+.pfb-lh-save-hint {
+	display: flex;
+	align-items: flex-start;
+	gap: 5px;
+	font-size: 11px;
+	color: var(--text-muted);
+	background: var(--yellow-50, #fefce8);
+	border: 1px solid var(--yellow-200, #fde68a);
+	border-radius: var(--border-radius);
+	padding: 5px 8px;
+	line-height: 1.4;
+	margin-top: 2px;
 }
 
 /* ── HTML field inline preview (inspector sidebar) ───────── */
