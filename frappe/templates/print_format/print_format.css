@@ -206,12 +206,49 @@ body {
 	vertical-align: top;
 }
 
-.child-table .table .odd {
+/* lined (default): no row alternation */
+.child-table--lined .table .odd,
+.child-table--lined .table .even {
 	background-color: #ffffff;
 }
 
-.child-table .table .even {
+/* striped: alternating rows */
+.child-table--striped .table .odd {
+	background-color: #ffffff;
+}
+
+.child-table--striped .table .even {
 	background-color: #f9fafb;
+}
+
+/* plain: no borders, bottom dividers only */
+.child-table--plain .table th,
+.child-table--plain .table td {
+	border: none;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.child-table--plain .table th {
+	background-color: transparent;
+	border-bottom: 2px solid #d1d5db;
+}
+
+.child-table--plain .table .odd,
+.child-table--plain .table .even {
+	background-color: #ffffff;
+}
+
+/* borderless variant */
+.child-table--borderless .table th,
+.child-table--borderless .table td {
+	border: none;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+/* plain header variant */
+.child-table--plain-header .table th {
+	background-color: transparent;
+	border-bottom: 2px solid #d1d5db;
 }
 
 .child-table [data-fieldtype="Currency"],

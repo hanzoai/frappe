@@ -187,6 +187,20 @@
 								v-model="selected_field.label"
 							/>
 						</div>
+						<!-- Style -->
+						<div class="pfb-insp-row">
+							<span class="pfb-insp-label">{{ __("Style") }}</span>
+							<div class="pfb-seg">
+								<button
+									v-for="s in table_style_opts"
+									:key="s.value"
+									:class="{ active: table_style === s.value }"
+									@click="selected_field.table_style = s.value"
+								>
+									{{ s.label }}
+								</button>
+							</div>
+						</div>
 						<!-- Bordered -->
 						<div class="pfb-insp-row">
 							<span class="pfb-insp-label">{{ __("Bordered") }}</span>
@@ -966,8 +980,15 @@ watch(
 );
 
 // ── Table helpers ──────────────────────────────────────────
+let table_style = computed(() => selected_field.value?.table_style ?? "lined");
 let table_bordered = computed(() => selected_field.value?.table_bordered ?? true);
 let table_header = computed(() => selected_field.value?.table_header ?? "styled");
+
+const table_style_opts = [
+	{ value: "lined", label: __("Lined") },
+	{ value: "striped", label: __("Striped") },
+	{ value: "plain", label: __("Plain") },
+];
 let available_columns = computed(() => {
 	if (!selected_field.value?.options) return [];
 	const meta = frappe.get_meta(selected_field.value.options);

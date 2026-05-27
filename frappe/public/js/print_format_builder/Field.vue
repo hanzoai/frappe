@@ -27,6 +27,7 @@
 					<table
 						class="preview-table"
 						:class="{
+							[`preview-table--${df.table_style || 'lined'}`]: true,
 							'preview-table--borderless': df.table_bordered === false,
 							'preview-table--plain-header': df.table_header === 'plain',
 						}"
@@ -699,13 +700,36 @@ watch(
 	color: var(--text-color);
 }
 
-/* Alternating rows — same as PDF */
-.preview-table tr.odd td {
+/* lined (default): no alternating rows */
+.preview-table--lined tr.odd td,
+.preview-table--lined tr.even td {
 	background-color: var(--fg-color);
 }
 
-.preview-table tr.even td {
+/* striped: alternating row background */
+.preview-table--striped tr.odd td {
+	background-color: var(--fg-color);
+}
+
+.preview-table--striped tr.even td {
 	background-color: var(--gray-50);
+}
+
+/* plain: no borders, bottom divider only */
+.preview-table--plain th,
+.preview-table--plain td {
+	border: none;
+	border-bottom: 1px solid var(--gray-200);
+}
+
+.preview-table--plain th {
+	background-color: transparent;
+	border-bottom: 2px solid var(--gray-300);
+}
+
+.preview-table--plain tr.odd td,
+.preview-table--plain tr.even td {
+	background-color: var(--fg-color);
 }
 
 /* Numeric columns right-aligned — same as PDF */
