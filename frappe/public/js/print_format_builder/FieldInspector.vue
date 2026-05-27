@@ -765,9 +765,9 @@ function remove_field() {
 	}
 }
 
-function edit_html_field() {
+function open_html_split_dialog({ title, initial_html, on_save }) {
 	let d = new frappe.ui.Dialog({
-		title: __("Edit HTML"),
+		title,
 		size: "extra-large",
 		fields: [
 			{
@@ -776,7 +776,7 @@ function edit_html_field() {
 				options: `<div class="pfb-html-split">
 					<div class="pfb-html-split-pane pfb-html-split-editor">
 						<div class="pfb-html-split-label">${__("HTML")}</div>
-						<div class="pfb-html-codemirror-host"></div>
+						<div class="pfb-html-ctrl-host"></div>
 					</div>
 					<div class="pfb-html-split-divider"></div>
 					<div class="pfb-html-split-pane pfb-html-split-preview">
@@ -788,39 +788,57 @@ function edit_html_field() {
 		],
 		primary_action_label: __("Save"),
 		primary_action: () => {
-			if (d._html_editor) {
-				selected_field.value.html = frappe.dom.remove_script_and_style(
-					d._html_editor.getValue()
-				);
-			}
+			const val = d._html_ctrl?.get_value?.() ?? "";
+			on_save(frappe.dom.remove_script_and_style(val));
 			d.hide();
 		},
 	});
 	d.show();
 
 	setTimeout(() => {
-		const host = d.$wrapper.find(".pfb-html-codemirror-host")[0];
+		const host = d.$wrapper.find(".pfb-html-ctrl-host")[0];
 		const preview = d.$wrapper.find(".pfb-html-preview-content")[0];
 		if (!host) return;
 
-		const cm = CodeMirror(host, {
-			value: selected_field.value?.html || "",
-			mode: "htmlmixed",
-			theme: "default",
-			lineNumbers: true,
-			lineWrapping: true,
-			autofocus: true,
+		const ctrl = frappe.ui.form.make_control({
+			parent: host,
+			df: {
+				fieldtype: "Code",
+				fieldname: "html_code",
+				options: "HTML",
+				show_label: false,
+			},
+			render_input: true,
 		});
-		d._html_editor = cm;
+		ctrl.set_value(initial_html || "");
+		d._html_ctrl = ctrl;
 
-		function update_preview() {
-			if (preview) preview.innerHTML = cm.getValue();
-		}
-		update_preview();
-		cm.on("change", frappe.utils.debounce(update_preview, 150));
-		// give CodeMirror correct dimensions after dialog layout settles
-		setTimeout(() => cm.refresh(), 50);
+		// initial preview
+		if (preview) preview.innerHTML = initial_html || "";
+
+		// real-time preview via CodeMirror change event
+		setTimeout(() => {
+			if (ctrl.editor) {
+				ctrl.editor.on(
+					"change",
+					frappe.utils.debounce(() => {
+						if (preview) preview.innerHTML = ctrl.editor.getValue();
+					}, 150)
+				);
+				ctrl.editor.refresh();
+			}
+		}, 300);
 	}, 200);
+}
+
+function edit_html_field() {
+	open_html_split_dialog({
+		title: __("Edit HTML"),
+		initial_html: selected_field.value?.html || "",
+		on_save: (html) => {
+			selected_field.value.html = html;
+		},
+	});
 }
 
 // ── Letter Head helpers ────────────────────────────────────
@@ -901,61 +919,14 @@ function lh_create_letterhead() {
 }
 
 function lh_edit_footer() {
-	let d = new frappe.ui.Dialog({
+	open_html_split_dialog({
 		title: __("Edit Letter Head Footer"),
-		size: "extra-large",
-		fields: [
-			{
-				fieldname: "split_layout",
-				fieldtype: "HTML",
-				options: `<div class="pfb-html-split">
-					<div class="pfb-html-split-pane pfb-html-split-editor">
-						<div class="pfb-html-split-label">${__("HTML")}</div>
-						<div class="pfb-html-codemirror-host"></div>
-					</div>
-					<div class="pfb-html-split-divider"></div>
-					<div class="pfb-html-split-pane pfb-html-split-preview">
-						<div class="pfb-html-split-label">${__("Preview")}</div>
-						<div class="pfb-html-preview-content"></div>
-					</div>
-				</div>`,
-			},
-		],
-		primary_action_label: __("Save"),
-		primary_action: () => {
-			if (d._html_editor) {
-				letterhead.value.footer = frappe.dom.remove_script_and_style(
-					d._html_editor.getValue()
-				);
-				letterhead.value._dirty = true;
-			}
-			d.hide();
+		initial_html: letterhead.value?.footer || "",
+		on_save: (html) => {
+			letterhead.value.footer = html;
+			letterhead.value._dirty = true;
 		},
 	});
-	d.show();
-
-	setTimeout(() => {
-		const host = d.$wrapper.find(".pfb-html-codemirror-host")[0];
-		const preview = d.$wrapper.find(".pfb-html-preview-content")[0];
-		if (!host) return;
-
-		const cm = CodeMirror(host, {
-			value: letterhead.value?.footer || "",
-			mode: "htmlmixed",
-			theme: "default",
-			lineNumbers: true,
-			lineWrapping: true,
-			autofocus: true,
-		});
-		d._html_editor = cm;
-
-		function update_preview() {
-			if (preview) preview.innerHTML = cm.getValue();
-		}
-		update_preview();
-		cm.on("change", frappe.utils.debounce(update_preview, 150));
-		setTimeout(() => cm.refresh(), 50);
-	}, 200);
 }
 
 // Initialize lh_range_field when inspector opens for letterhead
@@ -1679,22 +1650,37 @@ function adjust_padding(side, delta) {
 	flex-shrink: 0;
 }
 
-.pfb-html-codemirror-host {
+.pfb-html-ctrl-host {
 	flex: 1;
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
 }
 
-.pfb-html-codemirror-host .CodeMirror {
+.pfb-html-ctrl-host .frappe-control {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.pfb-html-ctrl-host .form-group {
+	flex: 1;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.pfb-html-ctrl-host .CodeMirror {
 	flex: 1;
 	height: 100%;
 	font-size: 13px;
 	font-family: var(--monospace-font-family, monospace);
 	border: none;
+	border-radius: 0;
 }
 
-.pfb-html-codemirror-host .CodeMirror-scroll {
+.pfb-html-ctrl-host .CodeMirror-scroll {
 	height: 100%;
 }
 
