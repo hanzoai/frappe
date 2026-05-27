@@ -585,6 +585,25 @@
 								<button @click="adjust_gap(4)">+</button>
 							</div>
 						</div>
+
+						<!-- Label case -->
+						<div class="pfb-insp-row">
+							<span class="pfb-insp-label">{{ __("Label case") }}</span>
+							<div class="pfb-seg">
+								<button
+									:class="{ active: section_label_case !== 'uppercase' }"
+									@click="selected_section.label_case = 'normal'"
+								>
+									{{ __("Normal") }}
+								</button>
+								<button
+									:class="{ active: section_label_case === 'uppercase' }"
+									@click="selected_section.label_case = 'uppercase'"
+								>
+									{{ __("UPPER") }}
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -1044,6 +1063,7 @@ function clamp_width(col) {
 let section_show_label = computed(() => selected_section.value?.show_label ?? "show");
 let section_orientation = computed(() => selected_section.value?.field_orientation ?? "");
 let section_gap = computed(() => selected_section.value?.gap ?? 20);
+let section_label_case = computed(() => selected_section.value?.label_case ?? "normal");
 let section_bg = computed(() => selected_section.value?.background ?? "");
 let section_padding = computed(() => ({
 	top: selected_section.value?.padding?.top ?? 0,
