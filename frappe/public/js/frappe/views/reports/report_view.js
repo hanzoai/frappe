@@ -1815,6 +1815,14 @@ frappe.views.ReportView = class ReportView extends frappe.views.ListView {
 			});
 		}
 
+		if (this.report_doc && this.report_doc.documentation_url) {
+			items.push({
+				label: __("Documentation"),
+				action: () => window.open(this.report_doc.documentation_url),
+				standard: true,
+			});
+		}
+
 		items.push({
 			label: __("Setup Auto Email"),
 			action: () => {
