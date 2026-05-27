@@ -4,7 +4,6 @@
 		:style="rootStyles"
 		:class="{
 			'pfb-clean-preview': !!store.preview_doc.value,
-			'label-normal': layout.value?.label_case === 'normal',
 		}"
 	>
 		<div :style="page_number_style">{{ __("1 of 2") }}</div>
@@ -274,9 +273,9 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	display: block;
 }
 
-/* Label case: normal — remove uppercase from section titles in builder canvas */
-.label-normal :deep(.section-title-display) {
-	text-transform: none;
-	letter-spacing: 0;
+/* Label case: uppercase — apply to section title display in builder canvas */
+:deep(.label-uppercase .section-title-display) {
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
 }
 </style>

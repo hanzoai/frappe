@@ -16,7 +16,7 @@
 	<style>{{ print_format.css }}</style>
 	{%- endif -%}
 </head>
-<body class="{{ 'label-normal' if layout.label_case == 'normal' else '' }}">
+<body>
 	{{ header or '' }}
 	{#- Chrome PDF: layout.header rendered once as a body element (page 1 only, reliable height) -#}
 	{{ chrome_layout_header or '' }}
@@ -29,7 +29,7 @@
 	{%- for col in layout.header.columns -%}{%- for df in col.get('fields', []) -%}{%- set ns_h.has_fields = true -%}{%- endfor -%}{%- endfor -%}
 	{%- if ns_h.has_fields -%}
 	{%- set col_gap = (layout.header.gap if layout.header.gap is defined and layout.header.gap != None else 20)|string + 'px' -%}
-	<div class="section document-header-content">
+	<div class="section document-header-content {{ 'label-uppercase' if layout.header.label_case == 'uppercase' else '' }}">
 	<div class="section-columns row" style="gap:{{ col_gap }}">
 	{%- for column in layout.header.columns %}
 	<div class="column col">
@@ -63,7 +63,7 @@
 		{%- set p = section.padding -%}
 		{%- set ns3.section_style = ns3.section_style + 'padding:' + (p.top or 0)|string + 'px ' + (p.right or 0)|string + 'px ' + (p.bottom or 0)|string + 'px ' + (p.left or 0)|string + 'px;' -%}
 	{%- endif -%}
-	<div class="section {{ resolve_class({'page-break': section.page_break}) }}"{% if ns3.section_style %} style="{{ ns3.section_style }}"{% endif %}>
+	<div class="section {{ resolve_class({'page-break': section.page_break}) }} {{ 'label-uppercase' if section.label_case == 'uppercase' else '' }}"{% if ns3.section_style %} style="{{ ns3.section_style }}"{% endif %}>
 		{% if section.label and section.show_label != 'hide' %}
 		<div class="section-label">{{ _(section.label) }}</div>
 		{% endif %}
@@ -102,7 +102,7 @@
 	{%- for col in layout.footer.columns -%}{%- for df in col.get('fields', []) -%}{%- set ns_f.has_fields = true -%}{%- endfor -%}{%- endfor -%}
 	{%- if ns_f.has_fields -%}
 	{%- set col_gap_f = (layout.footer.gap if layout.footer.gap is defined and layout.footer.gap != None else 20)|string + 'px' -%}
-	<div class="section document-footer-content">
+	<div class="section document-footer-content {{ 'label-uppercase' if layout.footer.label_case == 'uppercase' else '' }}">
 	<div class="section-columns row" style="gap:{{ col_gap_f }}">
 	{%- for column in layout.footer.columns %}
 	<div class="column col">

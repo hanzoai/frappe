@@ -71,8 +71,6 @@ body {
 	font-size: 1.1rem;
 	font-weight: 700;
 	color: #1a1a1a;
-	text-transform: uppercase;
-	letter-spacing: 0.04em;
 	padding-bottom: 0.35rem;
 	margin-bottom: 0.75rem;
 	border-bottom: 1.5px solid #e2e2e2;
@@ -96,8 +94,6 @@ body {
 	font-size: 0.75em;
 	font-weight: 600;
 	color: #6b7280;
-	text-transform: uppercase;
-	letter-spacing: 0.03em;
 	margin-bottom: 0.1rem;
 }
 
@@ -180,8 +176,6 @@ body {
 	font-size: 0.8em;
 	font-weight: 600;
 	color: #6b7280;
-	text-transform: uppercase;
-	letter-spacing: 0.03em;
 	margin-bottom: 0.4rem;
 }
 
@@ -196,8 +190,6 @@ body {
 	color: #374151;
 	font-weight: 600;
 	font-size: 0.85em;
-	text-transform: uppercase;
-	letter-spacing: 0.03em;
 	padding: 0.45rem 0.6rem;
 	border: 1px solid #e5e7eb !important;
 }
@@ -334,23 +326,23 @@ body {
 	width: 1rem;
 }
 
-/* ── Label case: normal (opt-out from uppercase) ─────────── */
-.label-normal .section-label {
-	text-transform: none;
-	letter-spacing: 0;
+/* ── Label case: uppercase (opt-in per section) ──────────── */
+.label-uppercase .section-label {
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
 }
 
-.label-normal .field .label {
-	text-transform: none;
-	letter-spacing: 0;
+.label-uppercase .field .label {
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
 }
 
-.label-normal .child-table > .label {
-	text-transform: none;
-	letter-spacing: 0;
+.label-uppercase .child-table > .label {
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
 }
 
-.label-normal .child-table .table th {
-	text-transform: none;
-	letter-spacing: 0;
+.label-uppercase .child-table .table th {
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
 }

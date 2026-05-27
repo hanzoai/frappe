@@ -253,25 +253,6 @@
 					</option>
 				</select>
 			</div>
-
-			<div class="pfb-group-label mt-3">{{ __("Labels") }}</div>
-			<div class="pfb-fmt-row">
-				<span class="pfb-fmt-label">{{ __("Case") }}</span>
-				<div class="pfb-seg">
-					<button
-						:class="{ active: label_case === 'uppercase' }"
-						@click="label_case = 'uppercase'"
-					>
-						{{ __("UPPER") }}
-					</button>
-					<button
-						:class="{ active: label_case === 'normal' }"
-						@click="label_case = 'normal'"
-					>
-						{{ __("Normal") }}
-					</button>
-				</div>
-			</div>
 		</div>
 	</div>
 </template>
@@ -296,11 +277,6 @@ function focus_search() {
 // store
 let store = inject("$store");
 let { meta, print_format, layout } = useStore();
-
-const label_case = computed({
-	get: () => layout.value?.label_case || "uppercase",
-	set: (val) => layout.value && (layout.value.label_case = val),
-});
 
 // ── tab definitions ───────────────────────────────────────
 const tabs = computed(() => [
@@ -924,59 +900,5 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 
 .pfb-field-group:last-child {
 	border-bottom: none;
-}
-
-/* ── Segment control (reused from inspector pattern) ─────── */
-.pfb-fmt-row {
-	display: grid;
-	grid-template-columns: 80px 1fr;
-	align-items: center;
-	gap: 8px;
-	margin-bottom: 8px;
-}
-
-.pfb-fmt-label {
-	font-size: var(--text-sm);
-	color: var(--text-muted);
-}
-
-.pfb-seg {
-	display: inline-flex;
-	background: var(--gray-100);
-	border: 1px solid var(--border-color);
-	border-radius: var(--border-radius);
-	overflow: hidden;
-	width: 100%;
-}
-
-.pfb-seg button {
-	flex: 1;
-	padding: 5px 6px;
-	font-size: 11px;
-	font-weight: 500;
-	border: none;
-	border-radius: 0;
-	background: transparent;
-	color: var(--text-muted);
-	cursor: pointer;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	line-height: 1;
-}
-
-.pfb-seg button:not(:first-child) {
-	border-left: 1px solid var(--border-color);
-}
-
-.pfb-seg button:hover {
-	background: var(--gray-200);
-	color: var(--text-color);
-}
-
-.pfb-seg button.active {
-	background: var(--fg-color);
-	color: var(--text-color);
-	box-shadow: var(--shadow-xs);
 }
 </style>

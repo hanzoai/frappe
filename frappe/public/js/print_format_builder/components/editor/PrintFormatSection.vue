@@ -2,7 +2,10 @@
 	<div class="print-format-section-container" v-if="!section.remove" data-pfb-section>
 		<div
 			class="print-format-section"
-			:class="{ 'section--selected': is_selected }"
+			:class="{
+				'section--selected': is_selected,
+				'label-uppercase': section.label_case === 'uppercase',
+			}"
 			@click.stop="select_section"
 		>
 			<div class="section-toolbar">
@@ -24,6 +27,17 @@
 					/>
 				</div>
 				<div class="section-toolbar-right">
+					<button
+						class="btn btn-xs btn-icon toolbar-btn toolbar-btn-aa"
+						:class="{ active: section.label_case === 'uppercase' }"
+						:title="__('Toggle label case')"
+						@click.stop="
+							section.label_case =
+								section.label_case === 'uppercase' ? 'normal' : 'uppercase'
+						"
+					>
+						Aa
+					</button>
 					<button
 						v-if="!is_header"
 						class="btn btn-xs btn-icon toolbar-btn toolbar-btn-danger"
@@ -272,6 +286,13 @@ function set_column_align(column, value) {
 .toolbar-btn-danger:hover {
 	background: var(--red-50);
 	color: var(--red-500);
+}
+
+.toolbar-btn-aa {
+	font-size: 11px;
+	font-weight: 600;
+	padding: 2px 5px;
+	line-height: 1;
 }
 
 /* Section title — hidden in editor (toolbar shows it), revealed via parent :deep() */
