@@ -206,18 +206,18 @@ body {
 	vertical-align: top;
 }
 
-/* lined (default): no row alternation */
-.child-table--lined .table .odd,
-.child-table--lined .table .even {
+/* lined (default): no row alternation — target td directly to beat Bootstrap @media print */
+.child-table--lined .table .odd td,
+.child-table--lined .table .even td {
 	background-color: #ffffff !important;
 }
 
 /* striped: alternating rows */
-.child-table--striped .table .odd {
+.child-table--striped .table .odd td {
 	background-color: #ffffff !important;
 }
 
-.child-table--striped .table .even {
+.child-table--striped .table .even td {
 	background-color: #f9fafb !important;
 }
 
@@ -233,8 +233,8 @@ body {
 	border-bottom: 2px solid #d1d5db !important;
 }
 
-.child-table--plain .table .odd,
-.child-table--plain .table .even {
+.child-table--plain .table .odd td,
+.child-table--plain .table .even td {
 	background-color: #ffffff !important;
 }
 
