@@ -768,23 +768,59 @@ function remove_field() {
 function edit_html_field() {
 	let d = new frappe.ui.Dialog({
 		title: __("Edit HTML"),
+		size: "extra-large",
 		fields: [
 			{
-				label: __("HTML"),
-				fieldname: "html",
-				fieldtype: "HTML Editor",
-				min_lines: 8,
-				max_lines: 20,
+				fieldname: "split_layout",
+				fieldtype: "HTML",
+				options: `<div class="pfb-html-split">
+					<div class="pfb-html-split-pane pfb-html-split-editor">
+						<div class="pfb-html-split-label">${__("HTML")}</div>
+						<div class="pfb-html-codemirror-host"></div>
+					</div>
+					<div class="pfb-html-split-divider"></div>
+					<div class="pfb-html-split-pane pfb-html-split-preview">
+						<div class="pfb-html-split-label">${__("Preview")}</div>
+						<div class="pfb-html-preview-content"></div>
+					</div>
+				</div>`,
 			},
 		],
 		primary_action_label: __("Save"),
-		primary_action: ({ html }) => {
-			selected_field.value.html = frappe.dom.remove_script_and_style(html);
+		primary_action: () => {
+			if (d._html_editor) {
+				selected_field.value.html = frappe.dom.remove_script_and_style(
+					d._html_editor.getValue()
+				);
+			}
 			d.hide();
 		},
 	});
-	d.set_value("html", selected_field.value?.html || "");
 	d.show();
+
+	setTimeout(() => {
+		const host = d.$wrapper.find(".pfb-html-codemirror-host")[0];
+		const preview = d.$wrapper.find(".pfb-html-preview-content")[0];
+		if (!host) return;
+
+		const cm = CodeMirror(host, {
+			value: selected_field.value?.html || "",
+			mode: "htmlmixed",
+			theme: "default",
+			lineNumbers: true,
+			lineWrapping: true,
+			autofocus: true,
+		});
+		d._html_editor = cm;
+
+		function update_preview() {
+			if (preview) preview.innerHTML = cm.getValue();
+		}
+		update_preview();
+		cm.on("change", frappe.utils.debounce(update_preview, 150));
+		// give CodeMirror correct dimensions after dialog layout settles
+		setTimeout(() => cm.refresh(), 50);
+	}, 200);
 }
 
 // ── Letter Head helpers ────────────────────────────────────
@@ -867,24 +903,59 @@ function lh_create_letterhead() {
 function lh_edit_footer() {
 	let d = new frappe.ui.Dialog({
 		title: __("Edit Letter Head Footer"),
+		size: "extra-large",
 		fields: [
 			{
-				label: __("Footer"),
-				fieldname: "footer",
-				fieldtype: "HTML Editor",
-				min_lines: 8,
-				max_lines: 20,
+				fieldname: "split_layout",
+				fieldtype: "HTML",
+				options: `<div class="pfb-html-split">
+					<div class="pfb-html-split-pane pfb-html-split-editor">
+						<div class="pfb-html-split-label">${__("HTML")}</div>
+						<div class="pfb-html-codemirror-host"></div>
+					</div>
+					<div class="pfb-html-split-divider"></div>
+					<div class="pfb-html-split-pane pfb-html-split-preview">
+						<div class="pfb-html-split-label">${__("Preview")}</div>
+						<div class="pfb-html-preview-content"></div>
+					</div>
+				</div>`,
 			},
 		],
 		primary_action_label: __("Save"),
-		primary_action: ({ footer }) => {
-			letterhead.value.footer = frappe.dom.remove_script_and_style(footer);
-			letterhead.value._dirty = true;
+		primary_action: () => {
+			if (d._html_editor) {
+				letterhead.value.footer = frappe.dom.remove_script_and_style(
+					d._html_editor.getValue()
+				);
+				letterhead.value._dirty = true;
+			}
 			d.hide();
 		},
 	});
-	d.set_value("footer", letterhead.value?.footer || "");
 	d.show();
+
+	setTimeout(() => {
+		const host = d.$wrapper.find(".pfb-html-codemirror-host")[0];
+		const preview = d.$wrapper.find(".pfb-html-preview-content")[0];
+		if (!host) return;
+
+		const cm = CodeMirror(host, {
+			value: letterhead.value?.footer || "",
+			mode: "htmlmixed",
+			theme: "default",
+			lineNumbers: true,
+			lineWrapping: true,
+			autofocus: true,
+		});
+		d._html_editor = cm;
+
+		function update_preview() {
+			if (preview) preview.innerHTML = cm.getValue();
+		}
+		update_preview();
+		cm.on("change", frappe.utils.debounce(update_preview, 150));
+		setTimeout(() => cm.refresh(), 50);
+	}, 200);
 }
 
 // Initialize lh_range_field when inspector opens for letterhead
@@ -1558,7 +1629,7 @@ function adjust_padding(side, delta) {
 	gap: 4px;
 }
 
-/* ── HTML field inline preview ───────────────────────────── */
+/* ── HTML field inline preview (inspector sidebar) ───────── */
 .pfb-html-preview {
 	font-size: var(--text-sm);
 	color: var(--text-muted);
@@ -1569,5 +1640,68 @@ function adjust_padding(side, delta) {
 	max-height: 100px;
 	overflow: hidden;
 	margin-bottom: 2px;
+}
+</style>
+
+<style>
+/* ── HTML split editor dialog (global — renders in modal portal) ── */
+.pfb-html-split {
+	display: flex;
+	height: 480px;
+	gap: 0;
+	overflow: hidden;
+	margin: -15px;
+}
+
+.pfb-html-split-pane {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+}
+
+.pfb-html-split-divider {
+	width: 1px;
+	background: var(--border-color);
+	flex-shrink: 0;
+}
+
+.pfb-html-split-label {
+	font-size: 10px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: var(--text-muted);
+	padding: 8px 12px 6px;
+	border-bottom: 1px solid var(--border-color);
+	background: var(--gray-50);
+	flex-shrink: 0;
+}
+
+.pfb-html-codemirror-host {
+	flex: 1;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+.pfb-html-codemirror-host .CodeMirror {
+	flex: 1;
+	height: 100%;
+	font-size: 13px;
+	font-family: var(--monospace-font-family, monospace);
+	border: none;
+}
+
+.pfb-html-codemirror-host .CodeMirror-scroll {
+	height: 100%;
+}
+
+.pfb-html-preview-content {
+	flex: 1;
+	overflow-y: auto;
+	padding: 12px 16px;
+	font-size: var(--text-sm);
 }
 </style>
