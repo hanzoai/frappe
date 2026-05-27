@@ -253,6 +253,27 @@
 					</option>
 				</select>
 			</div>
+
+			<div class="pfb-group-label mt-3">{{ __("Labels") }}</div>
+			<div class="inspector-row">
+				<span class="inspector-label">{{ __("Case") }}</span>
+				<div class="seg-group">
+					<button
+						class="seg-btn"
+						:class="{ active: label_case === 'uppercase' }"
+						@click="label_case = 'uppercase'"
+					>
+						{{ __("UPPER") }}
+					</button>
+					<button
+						class="seg-btn"
+						:class="{ active: label_case === 'normal' }"
+						@click="label_case = 'normal'"
+					>
+						{{ __("Normal") }}
+					</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -277,6 +298,11 @@ function focus_search() {
 // store
 let store = inject("$store");
 let { meta, print_format, layout } = useStore();
+
+const label_case = computed({
+	get: () => layout.value?.label_case || "uppercase",
+	set: (val) => layout.value && (layout.value.label_case = val),
+});
 
 // ── tab definitions ───────────────────────────────────────
 const tabs = computed(() => [

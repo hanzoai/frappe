@@ -2,7 +2,10 @@
 	<div
 		class="print-format-main"
 		:style="rootStyles"
-		:class="{ 'pfb-clean-preview': !!store.preview_doc.value }"
+		:class="{
+			'pfb-clean-preview': !!store.preview_doc.value,
+			'label-normal': layout.value?.label_case === 'normal',
+		}"
 	>
 		<div :style="page_number_style">{{ __("1 of 2") }}</div>
 

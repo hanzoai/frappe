@@ -331,3 +331,19 @@ body {
 .field[data-fieldtype="Check"] #icon-tick {
 	width: 1rem;
 }
+
+/* ── Label case: normal (opt-out from uppercase) ─────────── */
+.label-normal .field .label {
+	text-transform: none;
+	letter-spacing: 0;
+}
+
+.label-normal .child-table > .label {
+	text-transform: none;
+	letter-spacing: 0;
+}
+
+.label-normal .child-table .table th {
+	text-transform: none;
+	letter-spacing: 0;
+}
