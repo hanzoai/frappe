@@ -13,11 +13,11 @@
 		<!-- ── Preview mode: show actual doc values ─────────── -->
 		<template v-if="preview_doc">
 			<div class="field-preview-wrap">
-				<!-- Handle HTML fields -->
+				<!-- Handle HTML fields: render Jinja2 server-side if needed -->
 				<div
 					v-if="df.fieldtype == 'HTML' && df.html"
 					class="custom-html"
-					v-html="df.html"
+					v-html="rendered_html ?? df.html"
 				></div>
 				<div v-else-if="df.fieldtype == 'Spacer'" class="field-preview-spacer"></div>
 				<div v-else-if="df.fieldtype == 'Divider'" class="field-preview-divider"></div>
@@ -200,9 +200,45 @@ const props = defineProps(["df", "field_orientation"]);
 let store = inject("$store");
 let editing = ref(false);
 let label_input = ref(null);
+let rendered_html = ref(null);
+let render_pending = ref(false);
 
 let is_selected = computed(() => store.selected_field.value === props.df);
 let preview_doc = computed(() => store.preview_doc.value);
+
+// Render Jinja2 HTML fields server-side when in preview mode
+watch(
+	[preview_doc, () => props.df.html],
+	async ([doc]) => {
+		const html = props.df.html;
+		if (!doc || !html || props.df.fieldtype !== "HTML") {
+			rendered_html.value = null;
+			return;
+		}
+		if (!html.includes("{{") && !html.includes("{%")) {
+			rendered_html.value = html;
+			return;
+		}
+		if (render_pending.value) return;
+		render_pending.value = true;
+		try {
+			const r = await frappe.call(
+				"frappe.utils.print_format_generator.render_jinja_template",
+				{
+					template: html,
+					doctype: store.meta.value.name,
+					docname: store.preview_doc_name.value,
+				}
+			);
+			rendered_html.value = r.message ?? html;
+		} catch {
+			rendered_html.value = html;
+		} finally {
+			render_pending.value = false;
+		}
+	},
+	{ immediate: true }
+);
 
 let preview_value = computed(() => {
 	if (!preview_doc.value || !props.df.fieldname) return null;
