@@ -489,6 +489,8 @@ onMounted(() => {
 	document.addEventListener("keydown", (e) => {
 		if (
 			e.key === "/" &&
+			!e.ctrlKey &&
+			!e.metaKey &&
 			document.activeElement.tagName !== "INPUT" &&
 			document.activeElement.tagName !== "TEXTAREA"
 		) {
