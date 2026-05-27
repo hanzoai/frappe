@@ -19,6 +19,12 @@
 			</div>
 		</div>
 
+		<!-- Letter Head notice — shown whenever the letterhead is selected -->
+		<div v-if="selected_letterhead || selected_lh_footer" class="pfb-lh-notice">
+			<span v-html="frappe.utils.icon('alert-circle', 'xs')"></span>
+			{{ __("Edits here update the Letter Head document directly.") }}
+		</div>
+
 		<!-- Empty state -->
 		<div
 			v-if="
@@ -91,10 +97,6 @@
 							<span v-html="frappe.utils.icon('edit', 'xs')"></span>
 							{{ __("Edit HTML") }}
 						</button>
-						<div class="pfb-lh-save-hint">
-							<span v-html="frappe.utils.icon('alert-circle', 'xs')"></span>
-							{{ __("Changes are saved to the Letter Head document.") }}
-						</div>
 					</div>
 				</div>
 
@@ -1711,18 +1713,17 @@ function adjust_padding(side, delta) {
 	gap: 4px;
 }
 
-.pfb-lh-save-hint {
+.pfb-lh-notice {
 	display: flex;
-	align-items: flex-start;
-	gap: 5px;
+	align-items: center;
+	gap: 6px;
 	font-size: 11px;
-	color: var(--text-muted);
+	color: var(--yellow-800, #854d0e);
 	background: var(--yellow-50, #fefce8);
-	border: 1px solid var(--yellow-200, #fde68a);
-	border-radius: var(--border-radius);
-	padding: 5px 8px;
+	border-bottom: 1px solid var(--yellow-200, #fde68a);
+	padding: 7px 14px;
+	flex-shrink: 0;
 	line-height: 1.4;
-	margin-top: 2px;
 }
 
 /* ── HTML field inline preview (inspector sidebar) ───────── */
