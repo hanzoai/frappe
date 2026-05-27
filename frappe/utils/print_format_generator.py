@@ -214,7 +214,7 @@ class PrintFormatGenerator:
 <div class="column col">
 {%- for df in column.get('fields', []) -%}
 {%- if df.fieldtype == 'HTML' and df.html -%}
-<div class="custom-html">{{ df.html }}</div>
+<div class="custom-html">{{ frappe.render_template(df.html, {'doc': doc}) }}</div>
 {%- elif df.fieldtype == 'Spacer' -%}
 <div style="height:12px"></div>
 {%- elif df.fieldtype == 'Divider' -%}
