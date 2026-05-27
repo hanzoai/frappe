@@ -193,14 +193,51 @@ class PrintFormatGenerator:
 		if letterhead_html:
 			parts.append(frappe.render_template(letterhead_html, ctx))
 		if layout_template:
-			parts.append(
-				'<div class="document-header-content">'
-				+ frappe.render_template(layout_template, ctx)
-				+ "</div>"
-			)
+			if isinstance(layout_template, str):
+				zone_html = frappe.render_template(layout_template, ctx)
+			else:
+				# Section object — render using the same logic as print_format.html
+				zone_html = self._render_zone_section(layout_template, ctx["doc"])
+			if zone_html:
+				parts.append('<div class="document-header-content">' + zone_html + "</div>")
 		if not is_header and page_no_html:
 			parts.append(page_no_html)
 		return "\n".join(parts) or None
+
+	_ZONE_SECTION_TEMPLATE = """\
+{%- set ns = namespace(has_fields=false) -%}
+{%- for col in section.columns -%}{%- for df in col.get('fields', []) -%}{%- set ns.has_fields = true -%}{%- endfor -%}{%- endfor -%}
+{%- if ns.has_fields -%}
+{%- set col_gap = (section.gap if section.gap is defined and section.gap is not none else 20)|string + 'px' -%}
+<div class="section-columns row" style="gap:{{ col_gap }}">
+{%- for column in section.columns %}
+<div class="column col">
+{%- for df in column.get('fields', []) -%}
+{%- if df.fieldtype == 'HTML' and df.html -%}
+<div class="custom-html">{{ df.html }}</div>
+{%- elif df.fieldtype == 'Spacer' -%}
+<div style="height:12px"></div>
+{%- elif df.fieldtype == 'Divider' -%}
+<hr style="border-top:1px solid #e5e7eb;margin:4px 0"/>
+{%- else -%}
+{%- set _raw = doc.get(df.fieldname) -%}
+{%- if _raw is not none and _raw != '' -%}
+<div class="field-render">
+{%- if df.show_label != 'hide' %}<div class="label">{{ _(df.label or df.fieldname) }}</div>{%- endif -%}
+<div class="value">{{ doc.get_formatted(df.fieldname) }}</div>
+</div>
+{%- endif -%}
+{%- endif -%}
+{%- endfor -%}
+</div>
+{%- endfor %}
+</div>
+{%- endif -%}
+"""
+
+	def _render_zone_section(self, section: dict, doc) -> str:
+		"""Render a header/footer zone section dict to HTML for the Chrome overlay."""
+		return frappe.render_template(self._ZONE_SECTION_TEMPLATE, {"section": section, "doc": doc})
 
 	def _page_number_html(self, position: str) -> str:
 		align = self._ALIGN_MAP.get(position, "center")
