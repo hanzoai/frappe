@@ -22,13 +22,7 @@ import threading
 import warnings
 from collections import defaultdict
 from collections.abc import Callable, Iterable
-from typing import (
-	TYPE_CHECKING,
-	Any,
-	Optional,
-	TypeAlias,
-	Union,
-)
+from typing import TYPE_CHECKING, Any, Optional, TypeAlias, Union
 
 import orjson
 from werkzeug.datastructures import Headers
