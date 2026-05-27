@@ -272,10 +272,4 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 .pfb-clean-preview :deep(.section-title-display) {
 	display: block;
 }
-
-/* Label case: uppercase — apply to section title display in builder canvas */
-:deep(.label-uppercase .section-title-display) {
-	text-transform: uppercase;
-	letter-spacing: 0.06em;
-}
 </style>

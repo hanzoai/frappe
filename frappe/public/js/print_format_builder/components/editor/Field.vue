@@ -595,8 +595,6 @@ watch(
 	font-size: 0.72em;
 	font-weight: 600;
 	color: var(--gray-500);
-	text-transform: uppercase;
-	letter-spacing: 0.04em;
 	margin-bottom: 1px;
 }
 
@@ -669,8 +667,6 @@ watch(
 	font-size: 0.8em;
 	font-weight: 600;
 	color: var(--text-muted);
-	text-transform: uppercase;
-	letter-spacing: 0.03em;
 	margin-bottom: 0.4rem;
 }
 
@@ -686,8 +682,6 @@ watch(
 	color: var(--text-color);
 	font-weight: 600;
 	font-size: 0.85em;
-	text-transform: uppercase;
-	letter-spacing: 0.03em;
 	padding: 0.45rem 0.6rem;
 	border: 1px solid var(--gray-200);
 	text-align: left;

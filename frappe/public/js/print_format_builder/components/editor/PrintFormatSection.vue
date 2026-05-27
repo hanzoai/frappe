@@ -383,4 +383,25 @@ function set_column_align(column, value) {
 	background: var(--red-50);
 	color: var(--red-500);
 }
+
+/* ── Label case: uppercase (mirrors print_format.css rules for builder canvas) */
+.print-format-section.label-uppercase :deep(.field-preview-label) {
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.print-format-section.label-uppercase :deep(.field-preview-table > .field-preview-label) {
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+
+.print-format-section.label-uppercase :deep(.preview-table th) {
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+
+.print-format-section.label-uppercase :deep(.section-title-display) {
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
 </style>
