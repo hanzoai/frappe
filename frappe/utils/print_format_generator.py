@@ -8,6 +8,14 @@ from frappe import _
 
 
 @frappe.whitelist()
+def render_jinja_template(template: str, doctype: str, docname: str) -> str:
+	"""Render a raw Jinja2 template string with doc context (used by the print format builder preview)."""
+	doc = frappe.get_doc(doctype, docname)
+	doc.check_permission("print")
+	return frappe.render_template(template, {"doc": doc})
+
+
+@frappe.whitelist()
 def download_pdf(doctype: str, name: str | int, print_format: str, letterhead: str | None = None):
 	doc = frappe.get_doc(doctype, name)
 	doc.check_permission("print")
