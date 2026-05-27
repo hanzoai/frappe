@@ -247,7 +247,7 @@ export default class Grid {
 
 			// toggle "Add row" button
 			this.wrapper
-				.find(".grid-add-row")
+				.find(".grid-add-row, .grid-add-multiple-rows")
 				.toggleClass(
 					"hidden",
 					num_selected_rows > 0 ||
@@ -269,7 +269,28 @@ export default class Grid {
 			this.refresh_remove_rows_button();
 			this.refresh_edit_rows_button();
 			this.refresh_duplicate_rows_button();
+			this.update_selection_banner();
 		});
+	}
+
+	update_selection_banner() {
+		const num_selected_rows = this.get_selected_children().length;
+
+		let $container = this.wrapper.find(".form-grid-container");
+		let $toast = this.wrapper.find("> .grid-selection-toast");
+		if (num_selected_rows > 0) {
+			if (!$toast.length) {
+				$toast = $(
+					`<div class="grid-selection-toast"><span class="grid-selection-toast__message"></span></div>`
+				).insertAfter($container);
+			}
+			$toast
+				.find(".grid-selection-toast__message")
+				.text(__("{0} row(s) selected", [num_selected_rows]));
+			$toast.show();
+		} else if ($toast.length) {
+			$toast.hide();
+		}
 	}
 
 	/**
@@ -298,6 +319,7 @@ export default class Grid {
 			this.add_new_row(null, null, false, doc, false);
 			this.check_range(doc.name, doc.name, false);
 		});
+		this.update_selection_banner();
 	}
 
 	delete_rows() {
@@ -428,13 +450,7 @@ export default class Grid {
 	);
 
 	get_selected() {
-		return (this.grid_rows || [])
-			.map((row) => {
-				return row.doc.__checked ? row.doc.name : null;
-			})
-			.filter((d) => {
-				return d;
-			});
+		return (this.data || []).filter((doc) => doc.__checked).map((doc) => doc.name);
 	}
 
 	get_selected_children() {
@@ -571,6 +587,7 @@ export default class Grid {
 		this.refresh_duplicate_rows_button();
 
 		this.wrapper.trigger("change");
+		this.update_selection_banner();
 	}
 
 	render_result_rows($rows) {
@@ -880,8 +897,17 @@ export default class Grid {
 
 							//Show the static area and hide field area if it is not the editable row
 							if (row != frappe.ui.form.editable_row) {
-								column.static_area.show();
-								column.field_area && column.field_area.toggle(false);
+								if (
+									row.should_show_button_in_idle_grid_cell &&
+									row.should_show_button_in_idle_grid_cell(column)
+								) {
+									row.make_control(column);
+									column.static_area.hide();
+									column.field_area && column.field_area.toggle(true);
+								} else {
+									column.static_area.show();
+									column.field_area && column.field_area.toggle(false);
+								}
 							}
 							//Hide the static area and show field area if it is the editable row
 							else {
@@ -1102,6 +1128,8 @@ export default class Grid {
 			return;
 		}
 
+		const grid = this;
+
 		const field_mappings = {};
 		editable_fields.forEach((field_doc) => {
 			const field_key = `${field_doc.label}`;
@@ -1111,17 +1139,31 @@ export default class Grid {
 		const field_options = Object.keys(field_mappings).sort((a, b) =>
 			__(cstr(field_mappings[a].label)).localeCompare(cstr(__(field_mappings[b].label)))
 		);
+		const field_autocomplete_options = field_options.map((key) => ({
+			label: __(cstr(field_mappings[key].label)),
+			value: key,
+		}));
 		const status_regex = /status/i;
 		const default_field =
 			field_options.find((value) => status_regex.test(value)) ||
 			field_options.find((value) => field_mappings[value]?.fieldtype === "Select");
 
+		// One child row drives Link get_query(cb, doc, cdt, cdn) / locals lookups in bulk-edit dialog.
+		// Multiple rows selected may diverge — filters follow the first selected row only.
+		const bulk_edit_reference_row = selected_children[0];
+
 		const dialog = new frappe.ui.Dialog({
 			title: __("Bulk Edit"),
+			...(bulk_edit_reference_row && {
+				frm: this.frm,
+				doc: bulk_edit_reference_row,
+				doctype: bulk_edit_reference_row.doctype,
+			}),
 			fields: [
 				{
-					fieldtype: "Select",
-					options: field_options,
+					fieldtype: "Autocomplete",
+					options: field_autocomplete_options,
+					max_items: Infinity,
 					default: default_field,
 					label: __("Field"),
 					fieldname: "field",
@@ -1186,7 +1228,17 @@ export default class Grid {
 			new_df.label = __("Value");
 			new_df.onchange = show_help_text;
 			delete new_df.depends_on;
+
+			const grid_field = grid.get_field(new_df.fieldname);
+			if (grid_field?.get_query) {
+				new_df.get_query = grid_field.get_query;
+			}
+
 			dialogObj.replace_field("value", new_df);
+			// replace_field does not re-run attach_doc; Link needs docname + doctype for set_query third arg.
+			if (bulk_edit_reference_row) {
+				dialogObj.attach_doc_and_docfields(true);
+			}
 			show_help_text();
 		}
 
@@ -1323,7 +1375,9 @@ export default class Grid {
 		if (user_settings && user_settings[this.doctype] && user_settings[this.doctype].length) {
 			this.user_defined_columns = user_settings[this.doctype]
 				.map((row) => {
-					let column = frappe.meta.get_docfield(this.doctype, row.fieldname);
+					let column =
+						this.docfields?.find((d) => d.fieldname === row.fieldname) ||
+						frappe.meta.get_docfield(this.doctype, row.fieldname);
 
 					if (column) {
 						column.in_list_view = 1;

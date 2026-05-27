@@ -11,6 +11,7 @@ import frappe
 import frappe.desk.reportview
 from frappe import _
 from frappe.core.utils import ljust_list
+from frappe.desk.form.load import get_attachments
 from frappe.desk.reportview import clean_params, parse_json
 from frappe.model.utils import render_include
 from frappe.modules import get_module_path, scrub
@@ -99,8 +100,13 @@ def generate_report_result(
 	result = normalize_result(result, columns)
 
 	if report.get("custom_columns"):
-		# saved columns (with custom columns / with different column order)
-		columns = report.custom_columns
+		# keep saved columns still returned by this run, plus user-added
+		# custom columns (`link_field`); drops columns stale after a filter change
+		columns = [
+			column
+			for column in report.custom_columns
+			if column.get("link_field") or column["fieldname"] in report_column_names
+		]
 
 	# unsaved custom_columns
 	if custom_columns:
@@ -236,6 +242,7 @@ def run(
 			else:
 				dn = ""
 			result = get_prepared_report_result(report, filters, dn, user)
+			result["attachments"] = get_attachments("Prepared Report", dn)
 		else:
 			result = generate_report_result(report, filters, user, custom_columns, is_tree, parent_field)
 			add_data_to_monitor(report=report.reference_report or report.name)
@@ -751,7 +758,8 @@ def add_total_row(
 	else:
 		first_col_fieldtype = columns[0].get("fieldtype")
 
-	if first_col_fieldtype not in ["Currency", "Int", "Float", "Percent", "Date"]:
+	unsupported_col_types = ("Currency", "Int", "Float", "Percent", "Date", "Datetime", "Time")
+	if first_col_fieldtype not in unsupported_col_types:
 		total_row[0] = _("Total")
 
 	result.append(total_row)

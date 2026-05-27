@@ -524,16 +524,6 @@ class DesktopPage {
 			awesome_bar.setup(".desktop-search-wrapper #desktop-navbar-modal-search");
 
 			frappe.ui.keys.add_shortcut({
-				shortcut: "ctrl+g",
-				action: function (e) {
-					$(".desktop-search-wrapper #desktop-navbar-modal-search").click();
-					e.preventDefault();
-					return false;
-				},
-				description: __("Open Awesomebar"),
-				ignore_inputs: true,
-			});
-			frappe.ui.keys.add_shortcut({
 				shortcut: "ctrl+k",
 				action: function (e) {
 					$(".desktop-search-wrapper #desktop-navbar-modal-search").click();
@@ -1163,6 +1153,11 @@ class DesktopModal {
 			this.modal.find(".modal-dialog").attr("id", "desktop-modal");
 			this.modal.find(".modal-body").addClass("desktop-modal-body");
 			this.$child_icons_wrapper = this.modal.find(".desktop-modal-body");
+			this.modal.find(".desktop-modal-heading").on("click", (e) => {
+				if (!$(e.target).closest(".modal-title").length) {
+					this.hide();
+				}
+			});
 		} else {
 			this.modal.find(".modal-title").text(icon_title);
 			$(this.modal.find(".modal-body")).empty();

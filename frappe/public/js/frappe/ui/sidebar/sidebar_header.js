@@ -54,7 +54,6 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 			},
 		];
 		if (frappe.boot.desk_settings.notifications) {
-			let is_dark = frappe.ui.get_current_theme() === "dark";
 			this.dropdown_items.push(
 				{
 					label: "Session Defaults",
@@ -70,35 +69,13 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 					action: "frappe.ui.toolbar.clear_cache()",
 					is_standard: 1,
 					icon: "rotate-ccw",
-				},
-				{
-					label: "Toggle Full Width",
-					action: "frappe.ui.toolbar.toggle_full_width()",
-					is_standard: 1,
-					icon: "maximize",
-				},
-				{
-					label: "Toggle Theme",
-					action: "new frappe.ui.ThemeSwitcher().show()",
-					is_standard: 1,
-					icon: is_dark ? "sun" : "moon",
+					shortcut: "Shift+Ctrl+R",
 				},
 				{
 					name: "help",
 					label: "Help",
 					icon: "info",
 					items: this.get_help_siblings(),
-				},
-				{
-					is_divider: true,
-				},
-				{
-					name: "logout",
-					label: "Logout",
-					icon: "logout",
-					onClick: function () {
-						return frappe.app.logout();
-					},
 				}
 			);
 		}
@@ -214,10 +191,14 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 
 		navbar_settings.help_dropdown.forEach((element) => {
 			if (element.hidden) return;
+			if (element.condition && !frappe.utils.eval(element.condition)) return;
 			let dropdown_children = {
 				name: element.name,
 				label: element.item_label,
 			};
+			if (element.action?.includes("frappe.ui.toolbar.show_shortcuts")) {
+				dropdown_children.shortcut = "Shift+/";
+			}
 			if (element.item_type === "Route") {
 				dropdown_children.url = element.route;
 			}
@@ -332,6 +313,13 @@ frappe.ui.SidebarHeader = class SidebarHeader {
 					}
 				</div>
 				<span class="menu-item-title">${item.label}</span>
+				${
+					item.shortcut
+						? `<span class="menu-item-shortcut">${frappe.ui.keys.get_shortcut_label(
+								item.shortcut
+						  )}</span>`
+						: ""
+				}
 			</a>
 		</div>`).appendTo(this.dropdown_menu);
 	}

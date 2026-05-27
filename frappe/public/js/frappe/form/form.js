@@ -139,7 +139,7 @@ frappe.ui.form.Form = class FrappeForm {
 	add_form_keyboard_shortcuts() {
 		// Navigate to next record
 		frappe.ui.keys.add_shortcut({
-			shortcut: "shift+ctrl+right",
+			shortcut: "shift+ctrl+>",
 			action: () => this.navigate_records(0),
 			page: this.page,
 			description: __("Go to next record"),
@@ -149,7 +149,7 @@ frappe.ui.form.Form = class FrappeForm {
 
 		// Navigate to previous record
 		frappe.ui.keys.add_shortcut({
-			shortcut: "shift+ctrl+left",
+			shortcut: "shift+ctrl+<",
 			action: () => this.navigate_records(1),
 			page: this.page,
 			description: __("Go to previous record"),
@@ -1584,11 +1584,12 @@ frappe.ui.form.Form = class FrappeForm {
 				history.replaceState(null, null, url);
 			}
 		} else if (window.location.hash) {
-			if ($(window.location.hash).length) {
-				frappe.utils.scroll_to(window.location.hash, true, 200, null, null, true);
-			} else {
-				this.scroll_to_field(window.location.hash.replace("#", "")) &&
-					history.replaceState(null, null, " ");
+			const id = decodeURIComponent(window.location.hash.substring(1));
+			const element = id && document.getElementById(id);
+			if (element) {
+				frappe.utils.scroll_to(element, true, 200, null, null, true);
+			} else if (id) {
+				this.scroll_to_field(id) && history.replaceState(null, null, " ");
 			}
 		}
 	}

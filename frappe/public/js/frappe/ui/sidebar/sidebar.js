@@ -160,8 +160,8 @@ frappe.ui.Sidebar = class Sidebar {
 
 		this.promotional_banners.forEach((banner) => {
 			let banner_html = $(`
-				<a href="${banner.link}" class="promotional-banner" target="_blank" title="${banner.message}">
-					<span>${banner.title}</span>
+				<a href="${banner.link}" class="promotional-banner px-2" target="_blank" title="${banner.message}">
+					<span class="promotional-banner-title">${banner.title}</span>
 				</a>
 			`);
 
@@ -350,12 +350,71 @@ frappe.ui.Sidebar = class Sidebar {
 			this.toggle_width();
 		});
 
-		this.wrapper.find(".body-sidebar .about-sidebar-link").on("click", () => {
-			frappe.ui.toolbar.show_about();
-		});
-
 		this.wrapper.find(".overlay").on("click", () => {
 			this.close();
+		});
+		this.setup_user_menu();
+	}
+
+	setup_user_menu() {
+		const me = this;
+		const $btn = this.wrapper.find(".sidebar-user-button");
+
+		frappe.ui.create_menu({
+			parent: $btn,
+			open_on_top: true,
+			menu_items: [
+				{
+					name: "my-profile",
+					label: __("My Profile"),
+					icon: "user",
+					onClick: function () {
+						frappe.ui.toolbar.route_to_user();
+					},
+				},
+				{
+					name: "toggle-theme",
+					label: __("Toggle Theme"),
+					icon: frappe.ui.get_current_theme() === "dark" ? "sun" : "moon",
+					onClick: function () {
+						new frappe.ui.ThemeSwitcher().show();
+					},
+				},
+				{
+					name: "toggle-full-width",
+					label: __("Toggle Full Width"),
+					icon: "maximize",
+					onClick: function () {
+						frappe.ui.toolbar.toggle_full_width();
+					},
+				},
+				{
+					name: "toggle-sidebar",
+					label: __("Toggle Sidebar"),
+					icon: "panel-right-open",
+					onClick: function () {
+						me.toggle_width();
+					},
+				},
+				{ is_divider: true },
+				{
+					name: "logout",
+					label: __("Logout"),
+					icon: "logout",
+					onClick: function () {
+						frappe.app.logout();
+					},
+				},
+			],
+			onShow: function () {
+				$btn.addClass("user-menu-active");
+			},
+			onHide: function () {
+				$btn.removeClass("user-menu-active");
+			},
+			onItemClick: function () {
+				$btn.removeClass("user-menu-active");
+			},
 		});
 	}
 
@@ -443,7 +502,6 @@ frappe.ui.Sidebar = class Sidebar {
 	make_sidebar() {
 		this.empty();
 		this.wrapper.find(".collapse-sidebar-link").removeClass("hidden");
-		this.wrapper.find(".about-sidebar-link").removeClass("hidden");
 		if (this.editor.edit_mode) {
 			this.create_sidebar(this.editor.new_sidebar_items);
 		} else {
@@ -462,9 +520,7 @@ frappe.ui.Sidebar = class Sidebar {
 		this.empty();
 		if (items && items.length > 0) {
 			items.forEach((w) => {
-				if (!w.display_depends_on || frappe.utils.eval(w.display_depends_on)) {
-					this.add_item(this.$items_container, w);
-				}
+				this.add_item(this.$items_container, w);
 			});
 		} else {
 			let no_items_message = $(
@@ -472,7 +528,6 @@ frappe.ui.Sidebar = class Sidebar {
 			);
 			this.wrapper.find(".sidebar-items").append(no_items_message);
 			this.wrapper.find(".collapse-sidebar-link").addClass("hidden");
-			this.wrapper.find(".about-sidebar-link").addClass("hidden");
 		}
 		if (this.edit_mode) {
 			$(".edit-menu").removeClass("hidden");
@@ -596,33 +651,37 @@ frappe.ui.Sidebar = class Sidebar {
 	}
 
 	expand_sidebar() {
-		let direction;
 		const is_rtl = frappe.utils.is_rtl();
 		if (this.sidebar_expanded) {
 			this.wrapper.addClass("expanded");
-			direction = is_rtl ? "left" : "right";
 			$('[data-toggle="tooltip"]').tooltip("dispose");
 			this.wrapper.find(".avatar-name-email").show();
-			this.wrapper.find(".about-sidebar-link").show();
 			this.wrapper.find(".onboarding-sidebar span").show();
+			this.wrapper.find(".promotional-banner-title").show();
 		} else {
 			this.wrapper.removeClass("expanded");
-			direction = is_rtl ? "right" : "left";
 			$('[data-toggle="tooltip"]').tooltip({
 				boundary: "window",
 				container: "body",
 				trigger: "hover",
 			});
 			this.wrapper.find(".avatar-name-email").hide();
-			this.wrapper.find(".about-sidebar-link").hide();
 			this.wrapper.find(".onboarding-sidebar span").hide();
+			this.wrapper.find(".promotional-banner-title").hide();
 		}
 
 		localStorage.setItem("sidebar-expanded", this.sidebar_expanded);
+		const chevron_icon = this.sidebar_expanded
+			? is_rtl
+				? "chevron-right"
+				: "chevron-left"
+			: is_rtl
+			? "chevron-left"
+			: "chevron-right";
 		this.wrapper
 			.find(".body-sidebar .collapse-sidebar-link")
 			.find("use")
-			.attr("href", `#icon-panel-${direction}-open`);
+			.attr("href", `#icon-${chevron_icon}`);
 		this.sidebar_header.toggle_width(this.sidebar_expanded);
 		$(document).trigger("sidebar-expand", {
 			sidebar_expand: this.sidebar_expanded,
