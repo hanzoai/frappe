@@ -771,58 +771,6 @@
 					</div>
 				</div>
 
-				<!-- STYLE -->
-				<div class="pfb-insp-section">
-					<div class="pfb-insp-section-head" @click="toggle('s_style')">
-						<span class="pfb-insp-section-label">{{ __("Style") }}</span>
-						<span
-							class="pfb-insp-chevron"
-							:class="{ collapsed: !open.s_style }"
-							v-html="frappe.utils.icon('chevron-down', 'xs')"
-						></span>
-					</div>
-					<div v-show="open.s_style" class="pfb-insp-section-body">
-						<!-- Background -->
-						<div class="pfb-insp-row pfb-insp-row--col">
-							<span class="pfb-insp-label">{{ __("Background") }}</span>
-							<div class="pfb-color-swatches">
-								<button
-									v-for="swatch in bg_swatches"
-									:key="swatch.value"
-									class="pfb-swatch"
-									:class="{ active: section_bg === swatch.value }"
-									:title="swatch.label"
-									:style="swatch.style"
-									@click="selected_section.background = swatch.value"
-								></button>
-							</div>
-						</div>
-
-						<!-- Padding -->
-						<div class="pfb-insp-row pfb-insp-row--col">
-							<span class="pfb-insp-label">{{ __("Padding") }}</span>
-							<div class="pfb-padding-grid">
-								<div
-									v-for="side in ['top', 'right', 'bottom', 'left']"
-									:key="side"
-									class="pfb-padding-cell"
-								>
-									<div class="pfb-padding-label">
-										{{ __(side[0].toUpperCase() + side.slice(1)) }}
-									</div>
-									<div class="pfb-stepper pfb-stepper--sm">
-										<button @click="adjust_padding(side, -4)">−</button>
-										<span class="pfb-stepper-val">{{
-											section_padding[side]
-										}}</span>
-										<button @click="adjust_padding(side, 4)">+</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
 				<!-- VISIBILITY -->
 				<div class="pfb-insp-section">
 					<div class="pfb-insp-section-head" @click="toggle('s_visibility')">
@@ -851,6 +799,66 @@
 						<span v-html="frappe.utils.icon('x', 'xs')"></span>
 						{{ __("Remove section") }}
 					</button>
+				</div>
+			</div>
+
+			<!-- ── Style tab ───────────────────────────────────────── -->
+			<div v-else-if="active_tab === 'style'" class="pfb-insp-body">
+				<!-- Background -->
+				<div class="pfb-insp-section">
+					<div class="pfb-insp-section-head" @click="toggle('s_bg')">
+						<span class="pfb-insp-section-label">{{ __("Background") }}</span>
+						<span
+							class="pfb-insp-chevron"
+							:class="{ collapsed: !open.s_bg }"
+							v-html="frappe.utils.icon('chevron-down', 'xs')"
+						></span>
+					</div>
+					<div v-show="open.s_bg" class="pfb-insp-section-body">
+						<div class="pfb-color-swatches">
+							<button
+								v-for="swatch in bg_swatches"
+								:key="swatch.value"
+								class="pfb-swatch"
+								:class="{ active: section_bg === swatch.value }"
+								:title="swatch.label"
+								:style="swatch.style"
+								@click="selected_section.background = swatch.value"
+							></button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Padding -->
+				<div class="pfb-insp-section">
+					<div class="pfb-insp-section-head" @click="toggle('s_padding')">
+						<span class="pfb-insp-section-label">{{ __("Padding") }}</span>
+						<span
+							class="pfb-insp-chevron"
+							:class="{ collapsed: !open.s_padding }"
+							v-html="frappe.utils.icon('chevron-down', 'xs')"
+						></span>
+					</div>
+					<div v-show="open.s_padding" class="pfb-insp-section-body">
+						<div class="pfb-padding-grid">
+							<div
+								v-for="side in ['top', 'right', 'bottom', 'left']"
+								:key="side"
+								class="pfb-padding-cell"
+							>
+								<div class="pfb-padding-label">
+									{{ __(side[0].toUpperCase() + side.slice(1)) }}
+								</div>
+								<div class="pfb-stepper pfb-stepper--sm">
+									<button @click="adjust_padding(side, -4)">−</button>
+									<span class="pfb-stepper-val">{{
+										section_padding[side]
+									}}</span>
+									<button @click="adjust_padding(side, 4)">+</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -901,7 +909,8 @@ const open = ref({
 	f_format: false,
 	f_visibility: false,
 	s_section: true,
-	s_style: true,
+	s_bg: true,
+	s_padding: true,
 	s_visibility: false,
 	t_table: true,
 	t_columns: true,

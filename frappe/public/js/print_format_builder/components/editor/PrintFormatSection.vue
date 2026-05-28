@@ -6,6 +6,7 @@
 				'section--selected': is_selected,
 				'label-uppercase': section.label_case === 'uppercase',
 			}"
+			:style="section_inline_style"
 			@click.stop="select_section"
 		>
 			<div class="section-toolbar">
@@ -115,6 +116,16 @@ const props = defineProps(["section", "is_header", "zone"]);
 let store = inject("$store");
 
 let is_selected = computed(() => store.selected_section.value === props.section);
+
+let section_inline_style = computed(() => {
+	const style = {};
+	if (props.section.background) style.backgroundColor = props.section.background;
+	if (props.section.padding) {
+		const p = props.section.padding;
+		style.padding = `${p.top || 0}px ${p.right || 0}px ${p.bottom || 0}px ${p.left || 0}px`;
+	}
+	return style;
+});
 
 function select_section() {
 	store.selected_section.value = props.section;
