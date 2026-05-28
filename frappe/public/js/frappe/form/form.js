@@ -899,7 +899,6 @@ frappe.ui.form.Form = class FrappeForm {
 		frappe.breadcrumbs.update();
 
 		this._update_layout_indicator();
-		this._refresh_layout_menu();
 		this.show_submit_message();
 		this.clear_custom_buttons();
 		this.show_web_link();
@@ -918,55 +917,6 @@ frappe.ui.form.Form = class FrappeForm {
 					)}</span>`
 				);
 		}
-	}
-
-	_refresh_layout_menu() {
-		this.page.menu.find("[data-is-layout-item]").closest("li").remove();
-
-		const layouts = (frappe.boot.doctype_layouts || []).filter(
-			(l) => l.document_type === this.doctype
-		);
-		if (!layouts.length) return;
-
-		for (const layout of layouts) {
-			const $a = this.page.add_menu_item(layout.title, () =>
-				this._apply_manual_layout(layout)
-			);
-			$a && $a.attr("data-is-layout-item", "1");
-		}
-		const $default = this.page.add_menu_item(__("Default View"), () =>
-			this._apply_manual_layout(null)
-		);
-		$default && $default.attr("data-is-layout-item", "1");
-	}
-
-	_apply_manual_layout(layout) {
-		const layout_name = layout ? layout.name : null;
-		if ((this.doctype_layout?.name || null) === layout_name) return;
-
-		const url = new URL(window.location.href);
-		if (layout_name) {
-			url.searchParams.set("layout", layout_name);
-		} else {
-			url.searchParams.delete("layout");
-		}
-		history.replaceState(history.state, "", url.toString());
-
-		const apply = (layout_doc) => {
-			this.doctype_layout = layout_doc || null;
-			this._rebuild_layout();
-			this.refresh_fields();
-			this._update_layout_indicator();
-			this._refresh_layout_menu();
-		};
-
-		if (!layout_name) {
-			apply(null);
-			return;
-		}
-		frappe.model.with_doc("DocType Layout", layout_name, () => {
-			apply(frappe.get_doc("DocType Layout", layout_name));
-		});
 	}
 
 	// SAVE

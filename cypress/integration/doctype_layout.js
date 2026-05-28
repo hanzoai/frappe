@@ -2,8 +2,6 @@ import target_doctype from "../fixtures/layout_target_doctype";
 
 const TARGET = target_doctype.name;
 const SLUG = TARGET.toLowerCase().replace(/ /g, "-");
-// Shared saved doc used across switcher tests (menu is hidden for __islocal docs)
-let TEST_DOC_NAME;
 
 context("DocType Layout", () => {
 	before(() => {
@@ -38,11 +36,6 @@ context("DocType Layout", () => {
 			],
 		});
 
-		// Create a saved doc — the toolbar menu is hidden for __islocal (new) docs
-		cy.insert_doc(TARGET, { data1: "switcher-test" }).then((doc) => {
-			TEST_DOC_NAME = doc.name;
-		});
-
 		// Reload so frappe.boot.doctype_layouts includes the newly created layouts
 		cy.visit("/desk");
 	});
@@ -73,45 +66,6 @@ context("DocType Layout", () => {
 		// cy.window().its("frappe").its("layout_builder").should("exist");
 		cy.findByRole("tab", { name: "Parent Layout" }).click();
 		cy.get(".form-builder-container").should("exist");
-	});
-
-	it("Toolbar switcher pins a layout and applies overrides", () => {
-		cy.visit(`/desk/${SLUG}/${TEST_DOC_NAME}`);
-		cy.get("body").should("have.attr", "data-ajax-state", "complete");
-
-		// Base meta — Data 1 unmodified, Data 2 visible
-		cy.get("[data-fieldname='data1'] .clearfix label").should("contain.text", "Data 1");
-		cy.get("[data-fieldname='data2']").should("be.visible");
-		cy.get(".layout-indicator").should("not.exist");
-
-		// Open the form menu and pick Compact
-		cy.get(".menu-btn-group > .btn").click();
-		cy.get(".menu-btn-group .dropdown-menu li").contains("Compact").click();
-
-		cy.get(".layout-indicator").should("contain.text", "Compact");
-		cy.location("search").should("include", "layout=Compact");
-
-		// Overrides applied
-		cy.get("[data-fieldname='data1'] .clearfix label").should(
-			"contain.text",
-			"Compact Data 1"
-		);
-		cy.get("[data-fieldname='data2']").should("not.be.visible");
-	});
-
-	it("'Default View' clears the pinned layout", () => {
-		cy.visit(`/desk/${SLUG}/${TEST_DOC_NAME}`);
-		cy.get(".menu-btn-group > .btn").click();
-		cy.get(".menu-btn-group .dropdown-menu li").contains("Compact").click();
-		cy.get(".layout-indicator").should("contain.text", "Compact");
-
-		cy.get(".menu-btn-group > .btn").click();
-		cy.get(".menu-btn-group .dropdown-menu li").contains("Default View").click();
-
-		cy.get(".layout-indicator").should("not.exist");
-		cy.location("search").should("not.include", "layout=");
-		cy.get("[data-fieldname='data1'] .clearfix label").should("contain.text", "Data 1");
-		cy.get("[data-fieldname='data2']").should("be.visible");
 	});
 
 	it("Condition auto-switches the layout after a matching value is saved", () => {
