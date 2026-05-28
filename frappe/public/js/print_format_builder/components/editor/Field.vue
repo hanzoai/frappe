@@ -98,15 +98,14 @@
 					</div>
 				</div>
 			</div>
-			<!-- Drag handle — always present so fields stay draggable in preview too -->
-			<div
-				class="drag-handle field-drag-handle field-drag-handle--preview"
-				v-html="frappe.utils.icon('drag', 'xs')"
-			></div>
-			<!-- Remove button — hidden in clean-preview via .field-preview-actions -->
+			<!-- Drag + remove — top-right corner on hover; remove button hidden in clean-preview -->
 			<div class="field-preview-actions">
+				<div
+					class="drag-handle field-drag-handle"
+					v-html="frappe.utils.icon('drag', 'xs')"
+				></div>
 				<button
-					class="btn btn-xs btn-icon"
+					class="btn btn-xs btn-icon field-remove-btn"
 					@click.stop="df['remove'] = true"
 					v-html="frappe.utils.icon('x', 'xs')"
 				></button>
@@ -670,27 +669,6 @@ watch(
 }
 
 /* Preview actions — drag + remove — hidden until hover/selected */
-/* Preview drag handle — always in DOM so dragging works even in clean-preview */
-.field-drag-handle--preview {
-	display: none;
-	position: absolute;
-	top: 2px;
-	left: 2px;
-	padding: 2px;
-	background: var(--fg-color);
-	border: 1px solid var(--border-color);
-	border-radius: var(--border-radius-sm);
-	box-shadow: var(--shadow-xs);
-	opacity: 0;
-	transition: opacity 0.12s;
-}
-
-.field--preview:hover .field-drag-handle--preview,
-.field--preview.field--selected .field-drag-handle--preview {
-	display: flex;
-	opacity: 1;
-}
-
 .field-preview-actions {
 	display: none;
 	position: absolute;

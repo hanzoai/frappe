@@ -215,8 +215,12 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 /* Hide all editor chrome */
 .pfb-clean-preview :deep(.section-toolbar),
 .pfb-clean-preview :deep(.section-insert),
-.pfb-clean-preview :deep(.field-preview-actions),
 .pfb-clean-preview :deep(.configure-columns-btn) {
+	display: none !important;
+}
+
+/* In clean-preview: keep the drag handle but hide only the remove button */
+.pfb-clean-preview :deep(.field-remove-btn) {
 	display: none !important;
 }
 
@@ -265,6 +269,18 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 .pfb-clean-preview :deep(.drag-container) {
 	min-height: 0;
 	gap: 0.15rem;
+}
+
+/* Section drag handle in clean-preview: show on hover */
+.pfb-clean-preview :deep(.section-preview-drag) {
+	display: flex;
+}
+
+.pfb-clean-preview :deep(.print-format-section-container:hover .section-preview-drag),
+.pfb-clean-preview :deep(.print-format-section.section--selected ~ .section-preview-drag),
+.pfb-clean-preview
+	:deep(.print-format-section-container:has(.section--selected) .section-preview-drag) {
+	opacity: 1;
 }
 
 /* Section title: match PDF's .section-label look */

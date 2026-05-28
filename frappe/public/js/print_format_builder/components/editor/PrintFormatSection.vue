@@ -1,5 +1,11 @@
 <template>
 	<div class="print-format-section-container" v-if="!section.remove" data-pfb-section>
+		<!-- Section drag handle shown on hover in clean-preview (toolbar is hidden) -->
+		<div
+			v-if="!is_header"
+			class="drag-handle section-drag-handle section-preview-drag"
+			v-html="frappe.utils.icon('drag', 'sm')"
+		></div>
 		<div
 			class="print-format-section"
 			:class="{
@@ -396,6 +402,24 @@ function set_column_align(column, value) {
 .page-break-remove:hover {
 	background: var(--red-50);
 	color: var(--red-500);
+}
+
+/* ── Section preview drag handle (only visible in clean-preview, hidden in edit) ── */
+.section-preview-drag {
+	display: none; /* hidden by default; shown via .pfb-clean-preview :deep() override */
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	z-index: 2;
+	padding: 3px 4px;
+	background: var(--fg-color);
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius-sm);
+	box-shadow: var(--shadow-xs);
+	color: var(--gray-400);
+	cursor: grab;
+	opacity: 0;
+	transition: opacity 0.12s;
 }
 
 /* ── Label case: uppercase (mirrors print_format.css rules for builder canvas) */
