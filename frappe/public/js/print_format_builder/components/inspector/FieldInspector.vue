@@ -744,7 +744,19 @@
 							<span class="pfb-insp-label">{{ __("Gap") }}</span>
 							<div class="pfb-stepper">
 								<button @click="adjust_gap(-4)">−</button>
-								<span class="pfb-stepper-val">{{ section_gap }}</span>
+								<input
+									class="pfb-stepper-input"
+									type="number"
+									min="0"
+									:value="section_gap"
+									@change="
+										(e) =>
+											(selected_section.gap = Math.max(
+												0,
+												parseInt(e.target.value) || 0
+											))
+									"
+								/>
 								<span class="pfb-stepper-unit">px</span>
 								<button @click="adjust_gap(4)">+</button>
 							</div>
@@ -851,9 +863,15 @@
 								</div>
 								<div class="pfb-stepper pfb-stepper--sm">
 									<button @click="adjust_padding(side, -4)">−</button>
-									<span class="pfb-stepper-val">{{
-										section_padding[side]
-									}}</span>
+									<input
+										class="pfb-stepper-input"
+										type="number"
+										min="0"
+										:value="section_padding[side]"
+										@change="
+											(e) => set_padding(side, parseInt(e.target.value) || 0)
+										"
+									/>
 									<button @click="adjust_padding(side, 4)">+</button>
 								</div>
 							</div>
@@ -1372,6 +1390,13 @@ function adjust_padding(side, delta) {
 	const current = selected_section.value.padding[side] ?? 0;
 	selected_section.value.padding[side] = Math.max(0, current + delta);
 }
+
+function set_padding(side, value) {
+	if (!selected_section.value.padding) {
+		selected_section.value.padding = { top: 0, right: 0, bottom: 0, left: 0 };
+	}
+	selected_section.value.padding[side] = Math.max(0, value);
+}
 </script>
 
 <style scoped>
@@ -1677,6 +1702,32 @@ function adjust_padding(side, delta) {
 	border-left: 1px solid var(--border-color);
 	border-right: 1px solid var(--border-color);
 	padding: 4px 4px;
+}
+
+.pfb-stepper-input {
+	flex: 1;
+	min-width: 0;
+	width: 100%;
+	text-align: center;
+	font-size: var(--text-sm);
+	font-weight: 500;
+	border: none;
+	border-left: 1px solid var(--border-color);
+	border-right: 1px solid var(--border-color);
+	background: transparent;
+	color: var(--text-color);
+	padding: 4px 2px;
+	outline: none;
+}
+
+.pfb-stepper-input:focus {
+	background: var(--fg-color);
+}
+
+/* hide number spin arrows */
+.pfb-stepper-input::-webkit-inner-spin-button,
+.pfb-stepper-input::-webkit-outer-spin-button {
+	-webkit-appearance: none;
 }
 
 .pfb-stepper-unit {

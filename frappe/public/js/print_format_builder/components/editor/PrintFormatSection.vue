@@ -45,7 +45,12 @@
 			>
 				{{ section.label }}
 			</div>
-			<div class="section-columns">
+			<div
+				class="section-columns"
+				:style="
+					section.columns.length > 1 && section.gap ? { gap: section.gap + 'px' } : {}
+				"
+			>
 				<template v-for="(column, i) in section.columns" :key="i">
 					<div v-if="i > 0" class="column-divider"></div>
 					<div
