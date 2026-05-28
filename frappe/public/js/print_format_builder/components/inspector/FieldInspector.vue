@@ -41,8 +41,37 @@
 		<!-- ── Letter Head Footer inspector ──────────────────────── -->
 		<template v-else-if="selected_lh_footer">
 			<div class="pfb-insp-body">
-				<!-- HTML section — shown when footer uses Jinja2 -->
-				<div class="pfb-insp-section" v-if="lh_footer_has_jinja">
+				<!-- Zone label -->
+				<div class="pfb-lh-zone-label">
+					<span v-html="frappe.utils.icon('align-bottom', 'xs')"></span>
+					{{ __("Letter Head Footer") }}
+				</div>
+
+				<!-- Based on toggle -->
+				<div class="pfb-insp-section">
+					<div class="pfb-insp-section-body" style="padding-top: 10px">
+						<div class="pfb-insp-row">
+							<span class="pfb-insp-label">{{ __("Based on") }}</span>
+							<div class="pfb-seg">
+								<button
+									:class="{ active: lhf_source === 'Image' }"
+									@click="letterhead && (letterhead.footer_source = 'Image')"
+								>
+									{{ __("Image") }}
+								</button>
+								<button
+									:class="{ active: lhf_source === 'HTML' }"
+									@click="letterhead && (letterhead.footer_source = 'HTML')"
+								>
+									{{ __("HTML") }}
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- HTML section -->
+				<div class="pfb-insp-section" v-if="lhf_source === 'HTML'">
 					<div class="pfb-insp-section-head" @click="toggle('lhf_html')">
 						<span class="pfb-insp-section-label">{{ __("HTML") }}</span>
 						<span
@@ -52,23 +81,33 @@
 						></span>
 					</div>
 					<div v-show="open.lhf_html" class="pfb-insp-section-body">
-						<div
-							class="pfb-html-preview"
-							v-if="letterhead && letterhead.footer"
-							v-html="letterhead.footer"
-						></div>
-						<button
-							class="btn btn-xs btn-default pfb-lh-edit-btn"
-							@click="lh_edit_footer"
-						>
-							<span v-html="frappe.utils.icon('edit', 'xs')"></span>
-							{{ __("Edit HTML") }}
-						</button>
+						<template v-if="letterhead">
+							<div
+								class="pfb-html-preview"
+								v-if="letterhead.footer"
+								v-html="letterhead.footer"
+							></div>
+							<div v-else class="pfb-insp-hint text-muted">
+								{{ __("No HTML content yet.") }}
+							</div>
+							<button
+								class="btn btn-xs btn-default pfb-lh-edit-btn"
+								@click="lh_edit_footer"
+							>
+								<span v-html="frappe.utils.icon('edit', 'xs')"></span>
+								{{ __("Edit HTML") }}
+							</button>
+						</template>
+						<template v-else>
+							<p class="pfb-insp-hint text-muted">
+								{{ __("No letter head selected.") }}
+							</p>
+						</template>
 					</div>
 				</div>
 
 				<!-- Image section -->
-				<div class="pfb-insp-section">
+				<div class="pfb-insp-section" v-if="lhf_source === 'Image'">
 					<div class="pfb-insp-section-head" @click="toggle('lhf_image')">
 						<span class="pfb-insp-section-label">{{ __("Image") }}</span>
 						<span
@@ -133,8 +172,31 @@
 		<!-- ── Letter Head inspector ──────────────────────────────── -->
 		<template v-else-if="selected_letterhead">
 			<div class="pfb-insp-body">
-				<!-- HTML section — shown when letterhead uses Jinja2 content -->
-				<div class="pfb-insp-section" v-if="lh_has_jinja">
+				<!-- Based on toggle -->
+				<div class="pfb-insp-section">
+					<div class="pfb-insp-section-body" style="padding-top: 10px">
+						<div class="pfb-insp-row">
+							<span class="pfb-insp-label">{{ __("Based on") }}</span>
+							<div class="pfb-seg">
+								<button
+									:class="{ active: lh_source === 'Image' }"
+									@click="letterhead && (letterhead.source = 'Image')"
+								>
+									{{ __("Image") }}
+								</button>
+								<button
+									:class="{ active: lh_source === 'HTML' }"
+									@click="letterhead && (letterhead.source = 'HTML')"
+								>
+									{{ __("HTML") }}
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- HTML section -->
+				<div class="pfb-insp-section" v-if="lh_source === 'HTML'">
 					<div class="pfb-insp-section-head" @click="toggle('lh_html')">
 						<span class="pfb-insp-section-label">{{ __("HTML") }}</span>
 						<span
@@ -144,22 +206,33 @@
 						></span>
 					</div>
 					<div v-show="open.lh_html" class="pfb-insp-section-body">
-						<div
-							class="pfb-html-preview"
-							v-if="letterhead.content"
-							v-html="letterhead.content"
-						></div>
-						<button
-							class="btn btn-xs btn-default pfb-lh-edit-btn"
-							@click="lh_edit_html_content"
-						>
-							<span v-html="frappe.utils.icon('edit', 'xs')"></span>
-							{{ __("Edit HTML") }}
-						</button>
+						<template v-if="letterhead">
+							<div
+								class="pfb-html-preview"
+								v-if="letterhead.content"
+								v-html="letterhead.content"
+							></div>
+							<div v-else class="pfb-insp-hint text-muted">
+								{{ __("No HTML content yet.") }}
+							</div>
+							<button
+								class="btn btn-xs btn-default pfb-lh-edit-btn"
+								@click="lh_edit_html_content"
+							>
+								<span v-html="frappe.utils.icon('edit', 'xs')"></span>
+								{{ __("Edit HTML") }}
+							</button>
+						</template>
+						<template v-else>
+							<p class="pfb-insp-hint text-muted">
+								{{ __("No letter head selected.") }}
+							</p>
+						</template>
 					</div>
 				</div>
 
-				<div class="pfb-insp-section">
+				<!-- Image section -->
+				<div class="pfb-insp-section" v-if="lh_source === 'Image'">
 					<div class="pfb-insp-section-head" @click="toggle('lh_image')">
 						<span class="pfb-insp-section-label">{{ __("Image") }}</span>
 						<span
@@ -991,6 +1064,9 @@ function edit_html_field() {
 }
 
 // ── Letter Head helpers ────────────────────────────────────
+let lh_source = computed(() => letterhead.value?.source ?? "Image");
+let lhf_source = computed(() => letterhead.value?.footer_source ?? "Image");
+
 let lh_has_jinja = computed(() => {
 	const c = letterhead.value?.content ?? "";
 	return c.includes("{{") || c.includes("{%");
@@ -1816,6 +1892,21 @@ function adjust_padding(side, delta) {
 }
 
 /* ── Letter Head inspector ───────────────────────────────── */
+.pfb-lh-zone-label {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--blue-500);
+	background: var(--blue-50);
+	border-bottom: 1px solid var(--blue-200);
+	padding: 7px 14px;
+	flex-shrink: 0;
+}
+
 .pfb-lh-slider {
 	width: 100%;
 	accent-color: var(--primary);

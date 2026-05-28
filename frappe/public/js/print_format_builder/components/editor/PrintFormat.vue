@@ -256,9 +256,9 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	background: transparent;
 }
 
-/* Keep section columns padding */
+/* Section columns: no vertical padding in preview (matches PDF) */
 .pfb-clean-preview :deep(.section-columns) {
-	padding: 0.5rem 0;
+	padding: 0;
 }
 
 /* Remove drag container min-height gaps */
@@ -267,8 +267,14 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	gap: 0.15rem;
 }
 
-/* Show section title in clean preview */
+/* Section title: match PDF's .section-label look */
 .pfb-clean-preview :deep(.section-title-display) {
 	display: block;
+	padding: 0 0 0.3rem;
+	margin-bottom: 0.4rem;
+	border-bottom: 1.5px solid var(--border-color);
+	font-size: 1rem;
+	font-weight: 700;
+	color: var(--text-color);
 }
 </style>

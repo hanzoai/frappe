@@ -283,7 +283,7 @@ function set_column_align(column, value) {
 	font-size: var(--text-sm);
 	font-weight: 600;
 	color: var(--text-muted);
-	padding: 0.5rem 0.75rem 0;
+	padding: 0;
 }
 
 .section-columns {
