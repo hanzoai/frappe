@@ -224,39 +224,42 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 	display: none !important;
 }
 
-/* Strip section borders/backgrounds — render like a print section */
+/* Section hover/selected states in clean-preview */
 .pfb-clean-preview :deep(.print-format-section) {
 	border: 1px solid transparent;
 	border-radius: var(--border-radius);
-	background: transparent;
 	overflow: visible;
-	transition: border-color 0.15s;
+	transition: border-color 0.1s;
 }
 
-/* Selected section: subtle primary outline, no fill */
+.pfb-clean-preview :deep(.print-format-section:hover) {
+	border: 1px dashed var(--gray-400);
+}
+
 .pfb-clean-preview :deep(.print-format-section.section--selected) {
-	border-color: var(--gray-500);
+	border: 1px solid var(--gray-500);
 }
 
 .pfb-clean-preview :deep(.print-format-section-container) {
 	margin-bottom: 0;
 }
 
-/* Remove field dashed box styling */
+/* Field hover/selected states in clean-preview */
 .pfb-clean-preview :deep(.field--preview) {
-	border: none;
+	border: 1px solid transparent;
 	background: transparent;
 	padding: 0;
+	border-radius: var(--border-radius-sm);
+	transition: border-color 0.1s;
 }
 
 .pfb-clean-preview :deep(.field--preview:hover) {
-	border: none;
+	border: 1px dashed var(--gray-400);
 	background: transparent;
 }
 
 .pfb-clean-preview :deep(.field--preview.field--selected) {
 	border: 1px solid var(--gray-500);
-	border-radius: var(--border-radius-sm);
 	background: transparent;
 }
 
