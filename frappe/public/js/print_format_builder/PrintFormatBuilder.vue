@@ -6,7 +6,7 @@
 			<div v-if="sidebar_open && !hint_dismissed" class="pfb-sidebar-hint">
 				<span v-html="frappe.utils.icon('solid-info', 'sm', 'pfb-hint-icon')"></span>
 				<span class="pfb-hint-text">{{
-					__("Tip: Close the left sidebar (≡) for more editing space.")
+					__("Tip: Close the left sidebar for more editing space.")
 				}}</span>
 				<button class="pfb-hint-dismiss" @click="dismiss_hint" :aria-label="__('Dismiss')">
 					<span v-html="frappe.utils.icon('close', 'xs')"></span>
