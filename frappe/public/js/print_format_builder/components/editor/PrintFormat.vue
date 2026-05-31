@@ -9,39 +9,44 @@
 		<div :style="page_number_style">{{ __("1 of 2") }}</div>
 
 		<LetterHeadZoneEditor zone="header" />
-		<div class="zone-divider zone-divider--header">
-			<span class="zone-divider-label">{{ __("Header") }}</span>
-		</div>
-		<PrintFormatSection :section="layout.header" :is_header="true" zone="header" />
-		<div class="zone-divider zone-divider--body">
-			<span class="zone-divider-label">{{ __("Body") }}</span>
+
+		<!-- Body wrapper: font size/family applied here so letterhead zones are unaffected -->
+		<div :style="bodyStyles">
+			<div class="zone-divider zone-divider--header">
+				<span class="zone-divider-label">{{ __("Header") }}</span>
+			</div>
+			<PrintFormatSection :section="layout.header" :is_header="true" zone="header" />
+			<div class="zone-divider zone-divider--body">
+				<span class="zone-divider-label">{{ __("Body") }}</span>
+			</div>
+
+			<draggable
+				class="sections-container"
+				v-model="layout.sections"
+				group="sections"
+				:animation="200"
+				item-key="id"
+				handle=".section-drag-handle"
+				filter=".section-columns, .column, .field"
+				@add="on_section_add"
+			>
+				<template #item="{ element, index }">
+					<div class="section-with-insert">
+						<SectionInsert @insert="add_section_at(index)" />
+						<PrintFormatSection :section="element" />
+					</div>
+				</template>
+				<template #footer>
+					<SectionInsert @insert="add_section_at(layout.sections.length)" />
+				</template>
+			</draggable>
+
+			<div class="zone-divider zone-divider--footer">
+				<span class="zone-divider-label">{{ __("Footer") }}</span>
+			</div>
+			<PrintFormatSection :section="layout.footer" :is_header="true" zone="footer" />
 		</div>
 
-		<draggable
-			class="sections-container"
-			v-model="layout.sections"
-			group="sections"
-			:animation="200"
-			item-key="id"
-			handle=".section-drag-handle"
-			filter=".section-columns, .column, .field"
-			@add="on_section_add"
-		>
-			<template #item="{ element, index }">
-				<div class="section-with-insert">
-					<SectionInsert @insert="add_section_at(index)" />
-					<PrintFormatSection :section="element" />
-				</div>
-			</template>
-			<template #footer>
-				<SectionInsert @insert="add_section_at(layout.sections.length)" />
-			</template>
-		</draggable>
-
-		<div class="zone-divider zone-divider--footer">
-			<span class="zone-divider-label">{{ __("Footer") }}</span>
-		</div>
-		<PrintFormatSection :section="layout.footer" :is_header="true" zone="footer" />
 		<LetterHeadZoneEditor v-if="letterhead" zone="footer" />
 	</div>
 </template>
@@ -104,14 +109,17 @@ let rootStyles = computed(() => {
 		margin_bottom = 0,
 		margin_left = 0,
 		margin_right = 0,
-		font_size,
-		font,
 	} = print_format.value;
-	const styles = {
+	return {
 		padding: `${margin_top}mm ${margin_right}mm ${margin_bottom}mm ${margin_left}mm`,
 		width: "210mm",
 		minHeight: "297mm",
 	};
+});
+
+let bodyStyles = computed(() => {
+	const { font_size, font } = print_format.value;
+	const styles = {};
 	if (font_size) styles.fontSize = `${font_size}pt`;
 	if (font) styles.fontFamily = `'${font}', sans-serif`;
 	return styles;
