@@ -132,4 +132,141 @@ context("Print Format Builder — create flow", () => {
 		});
 		cy.get(".indicator-pill.orange").should("not.exist");
 	});
+
+	// 4. Outline tab: clicking a section scrolls to it and selects it
+	it("outline tab selects a section on click", () => {
+		cy.visit("/app");
+
+		cy.insert_doc(
+			"Print Format",
+			{
+				name: PF_NAME,
+				doc_type: "ToDo",
+				print_format_builder_beta: 1,
+				format_data: JSON.stringify({
+					sections: [
+						{ label: "Alpha", columns: [{ label: "", fields: [] }] },
+						{ label: "Beta", columns: [{ label: "", fields: [] }] },
+					],
+					header: { columns: [{ label: "", fields: [] }] },
+					footer: { columns: [{ label: "", fields: [] }] },
+				}),
+			},
+			true
+		);
+
+		cy.visit(`/app/print-format-builder/${encodeURIComponent(PF_NAME)}`);
+
+		// Switch to Outline tab
+		cy.get(".pfb-tab[title='Outline']", { timeout: 30000 }).click();
+		cy.contains(".pfb-outline-item", "Beta").click();
+
+		// Inspector should switch to Section and show "Beta"
+		cy.get(".pfb-inspector").should("contain", "Section");
+		cy.get(".pfb-inspector").should("contain", "Beta");
+
+		// The clicked outline item should be active
+		cy.contains(".pfb-outline-item", "Beta").should("have.class", "active");
+	});
+
+	// 5. Field inspector breadcrumb navigates back to parent section
+	it("field breadcrumb navigates to parent section", () => {
+		cy.visit("/app");
+
+		cy.insert_doc(
+			"Print Format",
+			{
+				name: PF_NAME,
+				doc_type: "ToDo",
+				print_format_builder_beta: 1,
+				format_data: JSON.stringify({
+					sections: [
+						{
+							label: "Details",
+							columns: [
+								{
+									label: "",
+									fields: [
+										{
+											fieldtype: "Data",
+											fieldname: "description",
+											label: "Description",
+										},
+									],
+								},
+							],
+						},
+					],
+					header: { columns: [{ label: "", fields: [] }] },
+					footer: { columns: [{ label: "", fields: [] }] },
+				}),
+			},
+			true
+		);
+
+		cy.visit(`/app/print-format-builder/${encodeURIComponent(PF_NAME)}`);
+
+		// Click the Description field to select it
+		cy.get(".pfb-tab[title='Outline']", { timeout: 30000 }).click();
+		cy.contains(".pfb-outline-item", "Details").click();
+
+		// Now select the field via the canvas
+		cy.get(".print-format-container").click();
+		cy.contains("[data-pfb-section]", "Details")
+			.find(".field--preview")
+			.first()
+			.click({ force: true });
+
+		// Breadcrumb should appear pointing to "Details"
+		cy.get(".pfb-breadcrumb").should("be.visible");
+		cy.get(".pfb-breadcrumb-name").should("contain", "Details");
+
+		// Clicking breadcrumb selects the parent section
+		cy.get(".pfb-breadcrumb-btn").click();
+		cy.get(".pfb-inspector").should("contain", "Section");
+		cy.get(".pfb-inspector").should("contain", "Details");
+		cy.get(".pfb-breadcrumb").should("not.exist");
+	});
+
+	// 6. Format tab: font size change is reflected in canvas
+	it("font size change applies to canvas preview", () => {
+		cy.visit("/app");
+
+		cy.insert_doc(
+			"Print Format",
+			{
+				name: PF_NAME,
+				doc_type: "ToDo",
+				print_format_builder_beta: 1,
+				format_data: JSON.stringify({
+					sections: [],
+					header: { columns: [{ label: "", fields: [] }] },
+					footer: { columns: [{ label: "", fields: [] }] },
+				}),
+			},
+			true
+		);
+
+		cy.intercept("POST", "api/method/frappe.client.save").as("save");
+		cy.visit(`/app/print-format-builder/${encodeURIComponent(PF_NAME)}`);
+
+		cy.get(".pfb-tab[title='Format']", { timeout: 30000 }).click();
+		cy.get(".pfb-margin-grid").should("be.visible");
+
+		// Change font size
+		cy.contains("label", "Font Size")
+			.closest(".form-group")
+			.find("input")
+			.clear()
+			.type("18")
+			.trigger("change")
+			.blur();
+
+		// Body wrapper should have font-size applied
+		cy.get(".print-format-main > div").should(($el) => {
+			const fs = $el.css("font-size");
+			// 18pt ≈ 24px
+			expect(parseInt(fs, 10)).to.be.greaterThan(20);
+		});
+	});
 });
