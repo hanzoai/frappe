@@ -1,9 +1,9 @@
 <template>
 	<div class="pfb-insp-body">
-		<!-- Zone label -->
-		<div class="pfb-lh-zone-label">
-			<span v-html="frappe.utils.icon(zone_icon, 'xs')"></span>
-			{{ __(zone_label) }}
+		<!-- Zone label — footer only (matches original design; header has no zone label) -->
+		<div v-if="zone === 'footer'" class="pfb-lh-zone-label">
+			<span v-html="frappe.utils.icon('align-bottom', 'xs')"></span>
+			{{ __("Letter Head Footer") }}
 		</div>
 
 		<!-- Based on toggle -->
@@ -159,11 +159,6 @@ const width_field = computed(() =>
 const height_field = computed(() =>
 	props.zone === "header" ? "image_height" : "footer_image_height"
 );
-
-const zone_label = computed(() =>
-	props.zone === "header" ? "Letter Head Header" : "Letter Head Footer"
-);
-const zone_icon = computed(() => (props.zone === "header" ? "align-top" : "align-bottom"));
 
 const zone_source = computed(() => letterhead.value?.[source_field.value] ?? "Image");
 const zone_align = computed(() => letterhead.value?.[align_field.value] ?? "Left");

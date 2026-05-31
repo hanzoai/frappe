@@ -652,7 +652,7 @@ import { useStore } from "../../stores";
 import LetterHeadZoneInspector from "./LetterHeadZoneInspector.vue";
 
 let store = inject("$store");
-let { layout } = useStore();
+let { letterhead, layout } = useStore();
 
 let selected_field = computed(() => store.selected_field.value);
 let selected_section = computed(() => store.selected_section.value);
