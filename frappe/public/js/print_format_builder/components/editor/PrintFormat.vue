@@ -124,6 +124,7 @@ let page_number_style = computed(() => {
 		padding: "4px",
 		borderRadius: "var(--border-radius)",
 		border: "1px solid var(--border-color)",
+		fontSize: "11px",
 	};
 	if (print_format.value.page_number.includes("Top")) {
 		style.top = print_format.value.margin_top / 2 + "mm";
