@@ -104,12 +104,17 @@ let rootStyles = computed(() => {
 		margin_bottom = 0,
 		margin_left = 0,
 		margin_right = 0,
+		font_size,
+		font,
 	} = print_format.value;
-	return {
+	const styles = {
 		padding: `${margin_top}mm ${margin_right}mm ${margin_bottom}mm ${margin_left}mm`,
 		width: "210mm",
 		minHeight: "297mm",
 	};
+	if (font_size) styles.fontSize = `${font_size}pt`;
+	if (font) styles.fontFamily = `'${font}', sans-serif`;
+	return styles;
 });
 
 let page_number_style = computed(() => {
