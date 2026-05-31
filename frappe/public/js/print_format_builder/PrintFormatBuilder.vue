@@ -2,17 +2,18 @@
 	<div v-if="shouldRender" class="builder-root">
 		<PrintFormatControls />
 		<div class="canvas-area">
-			<!-- Sidebar-open hint (uses Bootstrap alert classes already in Frappe) -->
-			<div
-				v-if="sidebar_open && !hint_dismissed"
-				class="alert alert-warning pfb-sidebar-hint"
-			>
-				<span>{{ __("Close the sidebar for more canvas space.") }}</span>
-				<a class="btn btn-xs btn-default ml-2" @click.prevent="close_desk_sidebar">{{
-					__("Close sidebar")
-				}}</a>
-				<button class="close ml-auto" @click="dismiss_hint" :aria-label="__('Dismiss')">
-					×
+			<!-- Sidebar-open hint -->
+			<div v-if="sidebar_open && !hint_dismissed" class="pfb-sidebar-hint">
+				<span class="pfb-hint-text">{{
+					__(
+						"The left sidebar is taking up space. Close it for a better editing experience."
+					)
+				}}</span>
+				<button class="btn btn-xs btn-default pfb-hint-btn" @click="close_desk_sidebar">
+					{{ __("Close Sidebar") }}
+				</button>
+				<button class="pfb-hint-dismiss" @click="dismiss_hint" :aria-label="__('Dismiss')">
+					<span v-html="frappe.utils.icon('close', 'xs')"></span>
 				</button>
 			</div>
 
@@ -224,14 +225,39 @@ defineExpose({ toggle_preview, $store });
 /* ── Sidebar hint ────────────────────────────────────────── */
 .pfb-sidebar-hint {
 	flex-shrink: 0;
-	margin: 0;
-	border-radius: 0;
-	border-left: none;
-	border-right: none;
-	border-top: none;
-	padding: 5px 14px;
 	display: flex;
 	align-items: center;
+	gap: 8px;
+	padding: 5px 12px;
+	background: var(--yellow-highlight-color, #fefce8);
+	border-bottom: 1px solid var(--yellow-200, #fde68a);
+	font-size: var(--text-xs);
+	color: var(--yellow-800, #854d0e);
+}
+
+.pfb-hint-text {
+	flex: 1;
+}
+
+.pfb-hint-btn {
+	flex-shrink: 0;
+}
+
+.pfb-hint-dismiss {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	padding: 2px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	color: var(--yellow-600, #ca8a04);
+	border-radius: var(--border-radius-sm);
+	line-height: 1;
+}
+
+.pfb-hint-dismiss:hover {
+	background: var(--yellow-100, #fef9c3);
 }
 
 /* ── Canvas toolbar ──────────────────────────────────────── */
