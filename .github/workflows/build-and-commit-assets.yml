@@ -1,0 +1,52 @@
+name: Build and Commit Assets
+
+on:
+  push:
+    branches:
+      - develop
+      - 'version-*'
+
+# Prevent concurrent runs on the same branch stomping on each other
+concurrency:
+  group: build-assets-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-assets:
+    name: Build JS/CSS and commit to branch
+    runs-on: ubuntu-latest
+    # Skip when the previous commit was our own asset build to avoid loops
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Use a PAT so the push triggers downstream workflows (GITHUB_TOKEN push does not)
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: yarn
+
+      - name: Install JS dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build assets (production)
+        run: yarn run production
+
+      - name: Commit changed bundles
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add frappe/public/dist/
+          if git diff --cached --quiet; then
+            echo "No bundle changes — nothing to commit."
+          else
+            changed=$(git diff --cached --name-only | wc -l | tr -d ' ')
+            git commit -m "build: update assets ($changed files) [skip ci]"
+            git push
+          fi
