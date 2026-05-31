@@ -202,7 +202,8 @@
 				v-for="(section, i) in visible_sections"
 				:key="i"
 				class="pfb-outline-item"
-				@click="scroll_to(section)"
+				:class="{ active: store.selected_section.value === section }"
+				@click="select_section(section)"
 			>
 				<span class="pfb-outline-idx text-muted">{{ i + 1 }}</span>
 				<span class="pfb-outline-label">
@@ -370,8 +371,10 @@ function build_field(df) {
 	return out;
 }
 
-function scroll_to(section) {
+function select_section(section) {
 	store.scroll_to_section.value = section;
+	store.selected_section.value = section;
+	store.selected_field.value = null;
 }
 
 function clone_as_section() {
@@ -848,6 +851,12 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 
 .pfb-outline-item:hover {
 	background: var(--gray-100);
+}
+
+.pfb-outline-item.active {
+	background: var(--blue-50);
+	color: var(--primary);
+	font-weight: 500;
 }
 
 .pfb-outline-idx {

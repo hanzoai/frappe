@@ -196,7 +196,7 @@ function set_column_align(column, value) {
 }
 
 .section--selected {
-	border-color: var(--gray-500);
+	border-color: var(--primary);
 }
 
 .section-toolbar {

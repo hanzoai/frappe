@@ -237,7 +237,7 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 }
 
 .pfb-clean-preview :deep(.print-format-section.section--selected) {
-	border: 1px solid var(--gray-500);
+	border: 1px solid var(--primary);
 }
 
 .pfb-clean-preview :deep(.print-format-section-container) {
@@ -259,7 +259,7 @@ watch(print_format, () => (store.dirty.value = true), { deep: true });
 }
 
 .pfb-clean-preview :deep(.field--preview.field--selected) {
-	border: 1px solid var(--gray-500);
+	border: 1px solid var(--primary);
 	background: transparent;
 }
 
