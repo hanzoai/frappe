@@ -1,58 +1,41 @@
 <template>
-	<div class="print-format-section-container" v-if="!section.remove">
-		<div class="print-format-section">
+	<div class="print-format-section-container" v-if="!section.remove" data-pfb-section>
+		<!-- Section drag handle shown on hover in clean-preview (toolbar is hidden) -->
+		<div
+			v-if="!is_header"
+			class="drag-handle section-drag-handle section-preview-drag"
+			v-html="frappe.utils.icon('drag', 'sm')"
+		></div>
+		<div
+			class="print-format-section"
+			:class="{
+				'section--selected': is_selected,
+				'label-uppercase': section.label_case === 'uppercase',
+			}"
+			:style="section_inline_style"
+			@click.stop="select_section"
+		>
 			<div class="section-toolbar">
 				<div class="section-toolbar-left">
 					<div
+						v-if="!is_header"
 						class="drag-handle section-drag-handle"
 						title="Drag to reorder"
 						v-html="frappe.utils.icon('drag', 'sm')"
 					></div>
+					<span v-if="zone" class="zone-badge">{{
+						zone === "header" ? __("Header") : __("Footer")
+					}}</span>
 					<input
 						class="input-section-label"
 						type="text"
 						:placeholder="__('Section Title')"
 						v-model="section.label"
 					/>
-					<span
-						v-if="section.field_orientation == 'left-right'"
-						class="orientation-badge"
-						:title="__('Labels left, values right')"
-					>
-						L→V
-					</span>
 				</div>
 				<div class="section-toolbar-right">
-					<div class="column-layout-buttons" :title="__('Number of columns')">
-						<button
-							v-for="n in [1, 2, 3, 4]"
-							:key="n"
-							class="btn btn-xs column-btn"
-							:class="{ active: section.columns.length === n }"
-							@click.stop="set_columns(n)"
-						>
-							{{ n }}
-						</button>
-					</div>
 					<button
-						class="btn btn-xs btn-icon toolbar-btn"
-						:class="{ active: section.field_orientation == 'left-right' }"
-						:title="__('Toggle label orientation (Left→Right)')"
-						@click.stop="toggle_orientation"
-					>
-						<span v-html="frappe.utils.icon('arrow-right-left', 'sm')"></span>
-					</button>
-					<button
-						class="btn btn-xs btn-icon toolbar-btn"
-						:class="{ active: section.page_break }"
-						:title="
-							section.page_break ? __('Remove page break') : __('Add page break')
-						"
-						@click.stop="toggle_page_break"
-					>
-						<span v-html="frappe.utils.icon('separator-vertical', 'sm')"></span>
-					</button>
-					<button
+						v-if="!is_header"
 						class="btn btn-xs btn-icon toolbar-btn toolbar-btn-danger"
 						:title="__('Remove section')"
 						@click.stop="section['remove'] = true"
@@ -62,65 +45,24 @@
 				</div>
 			</div>
 
-			<div class="section-columns">
+			<div
+				v-if="section.label && section.show_label !== 'hide'"
+				class="section-title-display"
+			>
+				{{ section.label }}
+			</div>
+			<div
+				class="section-columns"
+				:style="
+					section.columns.length > 1 && section.gap ? { gap: section.gap + 'px' } : {}
+				"
+			>
 				<template v-for="(column, i) in section.columns" :key="i">
 					<div v-if="i > 0" class="column-divider"></div>
 					<div
 						class="column"
 						:class="{ 'column-align-right': column.align === 'right' }"
 					>
-						<div v-if="section.columns.length > 1" class="column-toolbar">
-							<!-- Segmented align control: always shows both options, active one highlighted -->
-							<div
-								class="column-align-group"
-								:title="__('Column position in print output')"
-							>
-								<button
-									class="col-align-btn"
-									:class="{ active: column.align !== 'right' }"
-									:title="__('Default — column at its natural position')"
-									@click.stop="set_column_align(column, '')"
-								>
-									<!-- align-left: 3 horizontal lines, all anchored at left -->
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="14"
-										height="11"
-										viewBox="0 0 14 11"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="1.5"
-										stroke-linecap="round"
-									>
-										<line x1="0" y1="1" x2="14" y2="1" />
-										<line x1="0" y1="5.5" x2="9" y2="5.5" />
-										<line x1="0" y1="10" x2="11" y2="10" />
-									</svg>
-								</button>
-								<button
-									class="col-align-btn"
-									:class="{ active: column.align === 'right' }"
-									:title="__('Push this column to the right edge in print')"
-									@click.stop="set_column_align(column, 'right')"
-								>
-									<!-- align-right: 3 horizontal lines, all anchored at right -->
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										width="14"
-										height="11"
-										viewBox="0 0 14 11"
-										fill="none"
-										stroke="currentColor"
-										stroke-width="1.5"
-										stroke-linecap="round"
-									>
-										<line x1="0" y1="1" x2="14" y2="1" />
-										<line x1="5" y1="5.5" x2="14" y2="5.5" />
-										<line x1="3" y1="10" x2="14" y2="10" />
-									</svg>
-								</button>
-							</div>
-						</div>
 						<draggable
 							class="drag-container"
 							v-model="column.fields"
@@ -130,7 +72,10 @@
 							handle=".drag-handle"
 						>
 							<template #item="{ element }">
-								<Field :df="element" />
+								<Field
+									:df="element"
+									:field_orientation="section.field_orientation"
+								/>
 							</template>
 							<template #footer>
 								<div
@@ -162,6 +107,12 @@
 		</div>
 		<div class="page-break-indicator" v-if="section.page_break">
 			<span>— {{ __("Page Break") }} —</span>
+			<button
+				class="btn btn-xs page-break-remove"
+				:title="__('Remove page break')"
+				@click.stop="section.page_break = false"
+				v-html="frappe.utils.icon('x', 'xs')"
+			></button>
 		</div>
 	</div>
 </template>
@@ -169,8 +120,30 @@
 <script setup>
 import draggable from "vuedraggable";
 import Field from "./Field.vue";
+import { computed, inject } from "vue";
 
-const props = defineProps(["section"]);
+const props = defineProps(["section", "is_header", "zone"]);
+
+let store = inject("$store");
+
+let is_selected = computed(() => store.selected_section.value === props.section);
+
+let section_inline_style = computed(() => {
+	const style = {};
+	if (props.section.background) style.backgroundColor = props.section.background;
+	if (props.section.padding) {
+		const p = props.section.padding;
+		style.padding = `${p.top || 0}px ${p.right || 0}px ${p.bottom || 0}px ${p.left || 0}px`;
+	}
+	return style;
+});
+
+function select_section() {
+	store.selected_section.value = props.section;
+	store.selected_field.value = null;
+	store.selected_letterhead.value = false;
+	store.selected_lh_footer.value = false;
+}
 
 function set_columns(n) {
 	const current = props.section.columns.length;
@@ -216,9 +189,14 @@ function set_column_align(column, value) {
 
 .print-format-section {
 	background-color: var(--fg-color);
-	border: 1px solid var(--dark-border-color);
+	border: 1px solid var(--border-color);
 	border-radius: var(--border-radius);
 	overflow: hidden;
+	cursor: default;
+}
+
+.section--selected {
+	border-color: var(--gray-400);
 }
 
 .section-toolbar {
@@ -258,6 +236,20 @@ function set_column_align(column, value) {
 	color: var(--gray-600);
 }
 
+.zone-badge {
+	font-size: 10px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.07em;
+	color: var(--text-muted);
+	background: var(--gray-100);
+	border: 1px solid var(--gray-300);
+	border-radius: var(--border-radius-sm);
+	padding: 1px 6px;
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+
 .input-section-label {
 	border: 1px solid transparent;
 	border-radius: var(--border-radius);
@@ -285,52 +277,6 @@ function set_column_align(column, value) {
 	color: var(--gray-400);
 }
 
-.orientation-badge {
-	font-size: 10px;
-	color: var(--text-muted);
-	background: var(--gray-100);
-	border: 1px solid var(--border-color);
-	border-radius: var(--border-radius-sm);
-	padding: 1px 4px;
-	white-space: nowrap;
-}
-
-.column-layout-buttons {
-	display: flex;
-	background: var(--gray-100);
-	border: 1px solid var(--border-color);
-	border-radius: var(--border-radius);
-	overflow: hidden;
-}
-
-.column-btn {
-	padding: 2px 6px;
-	font-size: 11px;
-	font-weight: 500;
-	border: none;
-	border-radius: 0;
-	background: transparent;
-	box-shadow: none;
-	color: var(--text-muted);
-	min-width: 20px;
-}
-
-.column-btn:not(:first-child) {
-	border-left: 1px solid var(--border-color);
-}
-
-.column-btn:hover {
-	background: var(--gray-200);
-	color: var(--text-color);
-}
-
-.column-btn.active {
-	background: var(--fg-color);
-	color: var(--text-color);
-	font-weight: 600;
-	box-shadow: var(--shadow-xs);
-}
-
 .toolbar-btn {
 	padding: 3px;
 	box-shadow: none;
@@ -353,6 +299,15 @@ function set_column_align(column, value) {
 	color: var(--red-500);
 }
 
+/* Section title — hidden in editor (toolbar shows it), revealed via parent :deep() */
+.section-title-display {
+	display: none;
+	font-size: var(--text-sm);
+	font-weight: 600;
+	color: var(--text-muted);
+	padding: 0;
+}
+
 .section-columns {
 	display: flex;
 	padding: 0.75rem;
@@ -365,50 +320,6 @@ function set_column_align(column, value) {
 	min-width: 0;
 	display: flex;
 	flex-direction: column;
-}
-
-.column-toolbar {
-	display: flex;
-	justify-content: flex-end;
-	padding: 0 0 0.25rem 0;
-	min-height: 1.6rem;
-}
-
-/* Segmented control — same pattern as Word / Google Docs alignment buttons */
-.column-align-group {
-	display: inline-flex;
-	border: 1px solid var(--border-color);
-	border-radius: var(--border-radius-sm);
-	overflow: hidden;
-	background: var(--gray-50);
-}
-
-.col-align-btn {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	padding: 3px 6px;
-	border: none;
-	border-radius: 0;
-	background: transparent;
-	cursor: pointer;
-	color: var(--gray-400);
-	line-height: 1;
-}
-
-.col-align-btn:not(:first-child) {
-	border-left: 1px solid var(--border-color);
-}
-
-.col-align-btn:hover {
-	background: var(--gray-100);
-	color: var(--gray-600);
-}
-
-.col-align-btn.active {
-	background: var(--fg-color);
-	color: var(--text-color);
-	box-shadow: var(--shadow-xs);
 }
 
 .column-divider {
@@ -468,7 +379,10 @@ function set_column_align(column, value) {
 }
 
 .page-break-indicator {
-	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.4rem;
 	color: var(--text-muted);
 	font-size: var(--text-xs);
 	font-style: italic;
@@ -476,5 +390,59 @@ function set_column_align(column, value) {
 	border-top: 1px dashed var(--gray-300);
 	border-bottom: 1px dashed var(--gray-300);
 	margin: 0.25rem 0;
+}
+
+.page-break-remove {
+	padding: 1px 3px;
+	box-shadow: none;
+	color: var(--gray-500);
+	line-height: 1;
+}
+
+.page-break-remove:hover {
+	background: var(--red-50);
+	color: var(--red-500);
+}
+
+/* ── Section preview drag handle (only visible in clean-preview, hidden in edit) ── */
+.section-preview-drag {
+	display: none; /* hidden by default; shown via .pfb-clean-preview :deep() override */
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	z-index: 2;
+	padding: 3px 4px;
+	background: var(--fg-color);
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius-sm);
+	box-shadow: var(--shadow-xs);
+	color: var(--gray-400);
+	cursor: grab;
+	opacity: 0;
+	transition: opacity 0.12s;
+}
+
+/* ── Label case: uppercase (mirrors print_format.css rules for builder canvas) */
+
+/* section-title-display is in this same component — plain scoped selector */
+.print-format-section.label-uppercase .section-title-display {
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+/* field-preview-* and preview-table are inside child Field.vue — need :deep() */
+.print-format-section.label-uppercase :deep(.field-preview-label) {
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.print-format-section.label-uppercase :deep(.field-preview-table > .field-preview-label) {
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+
+.print-format-section.label-uppercase :deep(.preview-table th) {
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
 }
 </style>

@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { useStore } from "./store";
+import { useStore } from "../stores";
 import { ref, computed, onMounted } from "vue";
 
 // mixin
