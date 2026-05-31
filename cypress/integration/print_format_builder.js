@@ -99,10 +99,10 @@ context("Print Format Builder — create flow", () => {
 		cy.intercept("POST", "api/method/frappe.client.save").as("save");
 		cy.visit(`/app/print-format-builder/${encodeURIComponent(PF_NAME)}`);
 
-		// Sidebar uses <details class="sidebar-section"> / <summary class="sidebar-section-title">
-		// with the label "Page Settings" (not .sidebar-menu h5 / "Page Margins").
-		// Wait for the margin controls to confirm the builder has fully rendered.
-		cy.get(".margin-controls", { timeout: 30000 }).should("be.visible");
+		// Open the Format tab in the sidebar (contains page margin inputs).
+		// Wait for the tab bar to confirm the builder has fully rendered.
+		cy.get(".pfb-tab[title='Format']", { timeout: 30000 }).click();
+		cy.get(".pfb-margin-grid").should("be.visible");
 
 		// Make sure no auto-save / freeze overlay is still in flight before we type.
 		cy.get(".freeze").should("not.exist");
@@ -112,8 +112,8 @@ context("Print Format Builder — create flow", () => {
 		// input uses `@change` on a one-way `:value` binding and Cypress's
 		// .blur() alone doesn't always emit a synthetic change event that
 		// the Vue listener picks up.
-		cy.contains(".margin-controls label", "Top")
-			.closest(".form-group")
+		cy.contains(".pfb-margin-cell label", "Top")
+			.closest(".pfb-margin-cell")
 			.find('input[type="number"]')
 			.clear()
 			.type("9")
