@@ -43,7 +43,7 @@ import Preview from "./components/Preview.vue";
 import PrintFormatControls from "./components/PrintFormatControls.vue";
 import FieldInspector from "./components/inspector/FieldInspector.vue";
 import { getStore } from "./stores";
-import { computed, ref, onMounted, provide, nextTick } from "vue";
+import { computed, ref, onMounted, onUnmounted, provide, nextTick } from "vue";
 
 // props
 const props = defineProps(["print_format_name"]);
@@ -75,6 +75,38 @@ function toggle_preview() {
 function clear_selection() {
 	$store.value.selected_field.value = null;
 	$store.value.selected_section.value = null;
+}
+
+function handle_keydown(e) {
+	if (e.key !== "Escape") return;
+	// Don't intercept if a modal/dialog is open
+	if (document.querySelector(".modal.show, .frappe-dialog:visible")) return;
+
+	const sf = $store.value.selected_field.value;
+	const ss = $store.value.selected_section.value;
+
+	if (sf) {
+		// Navigate up: field → parent section
+		const lv = $store.value.layout.value;
+		const all_sections = [lv?.header, ...(lv?.sections || []), lv?.footer].filter(Boolean);
+		let parent = null;
+		for (const sec of all_sections) {
+			for (const col of sec.columns || []) {
+				if (col.fields?.includes(sf)) {
+					parent = sec;
+					break;
+				}
+			}
+			if (parent) break;
+		}
+		$store.value.selected_field.value = null;
+		$store.value.selected_section.value = parent || null;
+		e.stopPropagation();
+	} else if (ss) {
+		// Navigate up: section → canvas (clear all)
+		$store.value.selected_section.value = null;
+		e.stopPropagation();
+	}
 }
 
 function clear_preview_doc() {
@@ -116,6 +148,7 @@ function init_doc_picker() {
 
 // mounted
 onMounted(() => {
+	document.addEventListener("keydown", handle_keydown);
 	$store.value.fetch().then(() => {
 		if (!$store.value.layout.value) {
 			$store.value.layout.value = $store.value.get_default_layout();
@@ -123,6 +156,10 @@ onMounted(() => {
 		}
 		nextTick(init_doc_picker);
 	});
+});
+
+onUnmounted(() => {
+	document.removeEventListener("keydown", handle_keydown);
 });
 
 defineExpose({ toggle_preview, $store });

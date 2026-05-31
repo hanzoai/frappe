@@ -19,6 +19,21 @@
 			</div>
 		</div>
 
+		<!-- Breadcrumb: navigate up to parent section when a field is selected -->
+		<div v-if="selected_field && parent_section" class="pfb-breadcrumb">
+			<button
+				class="pfb-breadcrumb-btn"
+				@click="select_parent_section"
+				:title="__('Select parent section (Esc)')"
+			>
+				<span v-html="frappe.utils.icon('arrow-up', 'xs')"></span>
+				<span class="pfb-breadcrumb-label">{{ __("Section:") }}</span>
+				<span class="pfb-breadcrumb-name">{{
+					parent_section.label || __("Untitled")
+				}}</span>
+			</button>
+		</div>
+
 		<!-- Letter Head notice — shown whenever the letterhead is selected -->
 		<div v-if="selected_letterhead || selected_lh_footer" class="pfb-lh-notice">
 			<span v-html="frappe.utils.icon('alert-circle', 'xs')"></span>
@@ -894,7 +909,7 @@ import { useStore } from "../../stores";
 import { get_image_dimensions } from "../../utils";
 
 let store = inject("$store");
-let { letterhead } = useStore();
+let { letterhead, layout } = useStore();
 
 let lh_aspect_ratio = ref(null);
 let lh_range_field = ref(null);
@@ -961,6 +976,29 @@ let inspector_subtitle = computed(() => {
 	if (selected_section.value) return selected_section.value.label || __("Untitled section");
 	return "";
 });
+
+// ── Breadcrumb: parent section of the selected field ──────
+let parent_section = computed(() => {
+	if (!selected_field.value || !layout.value) return null;
+	const all_sections = [
+		layout.value.header,
+		...(layout.value.sections || []),
+		layout.value.footer,
+	].filter(Boolean);
+	for (const section of all_sections) {
+		for (const column of section.columns || []) {
+			if (column.fields?.includes(selected_field.value)) return section;
+		}
+	}
+	return null;
+});
+
+function select_parent_section() {
+	if (parent_section.value) {
+		store.selected_section.value = parent_section.value;
+		store.selected_field.value = null;
+	}
+}
 
 // ── Field helpers ──────────────────────────────────────────
 let short_fieldtype = computed(() => {
@@ -1441,6 +1479,44 @@ function set_padding(side, value) {
 .pfb-inspector-name {
 	font-size: var(--text-base);
 	color: var(--text-muted);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* ── Breadcrumb ──────────────────────────────────────────── */
+.pfb-breadcrumb {
+	padding: 4px 10px;
+	border-bottom: 1px solid var(--border-color);
+	background: var(--gray-50);
+}
+
+.pfb-breadcrumb-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 2px 6px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	border-radius: var(--border-radius-sm);
+	color: var(--text-muted);
+	font-size: var(--text-xs);
+	transition: background 0.1s, color 0.1s;
+	max-width: 100%;
+}
+
+.pfb-breadcrumb-btn:hover {
+	background: var(--gray-100);
+	color: var(--blue-500);
+}
+
+.pfb-breadcrumb-label {
+	font-weight: 500;
+	flex-shrink: 0;
+}
+
+.pfb-breadcrumb-name {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
