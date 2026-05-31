@@ -35,9 +35,37 @@
 					<span v-if="$store.preview_doc.value" class="canvas-preview-badge">{{
 						__("Live")
 					}}</span>
+
+					<div class="canvas-zoom-control" role="group" :aria-label="__('Zoom')">
+						<button
+							class="canvas-zoom-btn"
+							:title="__('Zoom out')"
+							:disabled="canvas_zoom <= ZOOM_MIN"
+							@click="zoom_out"
+							v-html="frappe.utils.icon('minus', 'xs')"
+						></button>
+						<button
+							class="canvas-zoom-label"
+							:title="__('Reset zoom')"
+							@click="reset_zoom"
+						>
+							{{ canvas_zoom }}%
+						</button>
+						<button
+							class="canvas-zoom-btn"
+							:title="__('Zoom in')"
+							:disabled="canvas_zoom >= ZOOM_MAX"
+							@click="zoom_in"
+							v-html="frappe.utils.icon('add', 'xs')"
+						></button>
+					</div>
 				</div>
 			</div>
-			<div class="print-format-container" @click="clear_selection">
+			<div
+				class="print-format-container"
+				:style="{ '--pfb-zoom': canvas_zoom / 100 }"
+				@click="clear_selection"
+			>
 				<KeepAlive>
 					<component :is="Preview" v-if="show_preview" />
 					<component :is="PrintFormat" v-else />
@@ -60,6 +88,10 @@ import { computed, ref, onMounted, onUnmounted, provide, nextTick } from "vue";
 const props = defineProps(["print_format_name"]);
 
 const HINT_KEY = "pfb_sidebar_hint_dismissed";
+const ZOOM_KEY = "pfb_canvas_zoom";
+const ZOOM_STEP = 10;
+const ZOOM_MIN = 50;
+const ZOOM_MAX = 150;
 
 // variables
 let show_preview = ref(false);
@@ -67,6 +99,7 @@ let doc_picker_ref = ref(null);
 let doc_picker_ctrl = ref(null);
 let sidebar_open = ref(false);
 let hint_dismissed = ref(localStorage.getItem(HINT_KEY) === "1");
+let canvas_zoom = ref(parseInt(localStorage.getItem(ZOOM_KEY)) || 100);
 let sidebar_observer_ref = null;
 
 // computed
@@ -94,6 +127,25 @@ function clear_selection() {
 }
 
 function handle_keydown(e) {
+	// Zoom shortcuts: Ctrl+= / Ctrl+- / Ctrl+0
+	if (e.ctrlKey || e.metaKey) {
+		if (e.key === "=" || e.key === "+") {
+			e.preventDefault();
+			zoom_in();
+			return;
+		}
+		if (e.key === "-") {
+			e.preventDefault();
+			zoom_out();
+			return;
+		}
+		if (e.key === "0") {
+			e.preventDefault();
+			reset_zoom();
+			return;
+		}
+	}
+
 	if (e.key !== "Escape") return;
 	// Don't intercept if a modal/dialog is open
 	if (document.querySelector(".modal.show, .frappe-dialog:visible")) return;
@@ -123,6 +175,21 @@ function handle_keydown(e) {
 		$store.value.selected_section.value = null;
 		e.stopPropagation();
 	}
+}
+
+function zoom_in() {
+	canvas_zoom.value = Math.min(ZOOM_MAX, canvas_zoom.value + ZOOM_STEP);
+	localStorage.setItem(ZOOM_KEY, canvas_zoom.value);
+}
+
+function zoom_out() {
+	canvas_zoom.value = Math.max(ZOOM_MIN, canvas_zoom.value - ZOOM_STEP);
+	localStorage.setItem(ZOOM_KEY, canvas_zoom.value);
+}
+
+function reset_zoom() {
+	canvas_zoom.value = 100;
+	localStorage.setItem(ZOOM_KEY, 100);
 }
 
 function check_sidebar() {
@@ -342,11 +409,68 @@ defineExpose({ toggle_preview, $store });
 	line-height: 1.4;
 }
 
+/* ── Zoom control ────────────────────────────────────────── */
+.canvas-zoom-control {
+	display: flex;
+	align-items: center;
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius);
+	overflow: hidden;
+}
+
+.canvas-zoom-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	color: var(--text-muted);
+	padding: 0;
+	flex-shrink: 0;
+}
+
+.canvas-zoom-btn:hover:not(:disabled) {
+	background: var(--gray-100);
+	color: var(--text-color);
+}
+
+.canvas-zoom-btn:disabled {
+	opacity: 0.35;
+	cursor: not-allowed;
+}
+
+.canvas-zoom-label {
+	font-size: 11px;
+	font-weight: 500;
+	font-variant-numeric: tabular-nums;
+	color: var(--text-color);
+	background: transparent;
+	border: none;
+	border-left: 1px solid var(--border-color);
+	border-right: 1px solid var(--border-color);
+	padding: 0 6px;
+	height: 24px;
+	min-width: 40px;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.canvas-zoom-label:hover {
+	background: var(--gray-100);
+}
+
 /* ── Canvas scroll area ──────────────────────────────────── */
 .print-format-container {
 	flex: 1;
 	overflow-y: auto;
 	padding-top: 0.5rem;
 	padding-bottom: 4rem;
+}
+
+.print-format-container :deep(.print-format-main) {
+	zoom: var(--pfb-zoom, 1);
 }
 </style>
