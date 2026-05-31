@@ -175,8 +175,7 @@ defineExpose({ aspect_ratio, range_input_field, F });
 }
 
 .lh-zone--selected {
-	border-color: var(--blue-400);
-	box-shadow: 0 0 0 2px var(--blue-100);
+	border-color: var(--gray-400);
 }
 
 .lh-zone:hover {
