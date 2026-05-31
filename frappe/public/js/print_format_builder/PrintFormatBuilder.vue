@@ -2,6 +2,18 @@
 	<div v-if="shouldRender" class="builder-root">
 		<PrintFormatControls />
 		<div class="canvas-area">
+			<!-- Sidebar-open hint -->
+			<div v-if="sidebar_open && !hint_dismissed" class="pfb-sidebar-hint">
+				<span v-html="frappe.utils.icon('sidebar', 'xs')"></span>
+				<span>{{ __("Close the sidebar for more editing space") }}</span>
+				<button class="pfb-hint-action" @click="close_desk_sidebar">
+					{{ __("Close sidebar") }}
+				</button>
+				<button class="pfb-hint-dismiss" @click="dismiss_hint" :title="__('Dismiss')">
+					<span v-html="frappe.utils.icon('x', 'xs')"></span>
+				</button>
+			</div>
+
 			<!-- Canvas toolbar: sample data picker -->
 			<div class="canvas-toolbar">
 				<div class="canvas-toolbar-left">
@@ -48,10 +60,15 @@ import { computed, ref, onMounted, onUnmounted, provide, nextTick } from "vue";
 // props
 const props = defineProps(["print_format_name"]);
 
+const HINT_KEY = "pfb_sidebar_hint_dismissed";
+
 // variables
 let show_preview = ref(false);
 let doc_picker_ref = ref(null);
 let doc_picker_ctrl = ref(null);
+let sidebar_open = ref(false);
+let hint_dismissed = ref(localStorage.getItem(HINT_KEY) === "1");
+let sidebar_observer = null;
 
 // computed
 let $store = computed(() => {
@@ -109,6 +126,29 @@ function handle_keydown(e) {
 	}
 }
 
+function check_sidebar() {
+	const el = document.querySelector(".layout-side-section");
+	sidebar_open.value = el ? el.offsetWidth > 0 : false;
+}
+
+function close_desk_sidebar() {
+	// Frappe's desk sidebar toggle button
+	const btn = document.querySelector(".sidebar-toggle-btn, [data-toggle='sidebar']");
+	if (btn) {
+		btn.click();
+	} else {
+		// Fallback: hide directly
+		const el = document.querySelector(".layout-side-section");
+		if (el) el.style.display = "none";
+	}
+	sidebar_open.value = false;
+}
+
+function dismiss_hint() {
+	hint_dismissed.value = true;
+	localStorage.setItem(HINT_KEY, "1");
+}
+
 function clear_preview_doc() {
 	$store.value.load_preview_doc(null);
 	doc_picker_ctrl.value?.set_value("");
@@ -149,6 +189,14 @@ function init_doc_picker() {
 // mounted
 onMounted(() => {
 	document.addEventListener("keydown", handle_keydown);
+
+	// Detect desk sidebar open/close via ResizeObserver
+	check_sidebar();
+	const sidebar_el = document.querySelector(".layout-side-section");
+	if (sidebar_el) {
+		sidebar_observer = new ResizeObserver(check_sidebar);
+		sidebar_observer.observe(sidebar_el);
+	}
 	$store.value.fetch().then(() => {
 		if (!$store.value.layout.value) {
 			$store.value.layout.value = $store.value.get_default_layout();
@@ -160,6 +208,7 @@ onMounted(() => {
 
 onUnmounted(() => {
 	document.removeEventListener("keydown", handle_keydown);
+	sidebar_observer?.disconnect();
 });
 
 defineExpose({ toggle_preview, $store });
@@ -177,6 +226,52 @@ defineExpose({ toggle_preview, $store });
 	display: flex;
 	flex-direction: column;
 	height: calc(100vh - 95px);
+}
+
+/* ── Sidebar hint ────────────────────────────────────────── */
+.pfb-sidebar-hint {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 5px 14px;
+	background: var(--yellow-50, #fefce8);
+	border-bottom: 1px solid var(--yellow-200, #fde68a);
+	font-size: var(--text-xs);
+	color: var(--yellow-800, #854d0e);
+}
+
+.pfb-hint-action {
+	margin-left: 2px;
+	padding: 2px 8px;
+	border: 1px solid var(--yellow-400, #facc15);
+	border-radius: var(--border-radius-sm);
+	background: transparent;
+	color: var(--yellow-800, #854d0e);
+	font-size: var(--text-xs);
+	font-weight: 500;
+	cursor: pointer;
+	line-height: 1.4;
+}
+
+.pfb-hint-action:hover {
+	background: var(--yellow-100, #fef9c3);
+}
+
+.pfb-hint-dismiss {
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	padding: 2px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	color: var(--yellow-600, #ca8a04);
+	border-radius: var(--border-radius-sm);
+}
+
+.pfb-hint-dismiss:hover {
+	background: var(--yellow-100, #fef9c3);
 }
 
 /* ── Canvas toolbar ──────────────────────────────────────── */
