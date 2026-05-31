@@ -11,7 +11,7 @@
 		<LetterHeadZoneEditor zone="header" />
 
 		<!-- Body wrapper: font size/family applied here so letterhead zones are unaffected -->
-		<div :style="bodyStyles">
+		<div class="pfb-body" :style="bodyStyles">
 			<div class="zone-divider zone-divider--header">
 				<span class="zone-divider-label">{{ __("Header") }}</span>
 			</div>

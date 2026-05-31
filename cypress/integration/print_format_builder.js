@@ -212,10 +212,7 @@ context("Print Format Builder — create flow", () => {
 
 		// Now select the field via the canvas
 		cy.get(".print-format-container").click();
-		cy.contains("[data-pfb-section]", "Details")
-			.find(".field--preview")
-			.first()
-			.click({ force: true });
+		cy.contains("[data-pfb-section]", "Details").find(".field").first().click({ force: true });
 
 		// Breadcrumb should appear pointing to "Details"
 		cy.get(".pfb-breadcrumb").should("be.visible");
@@ -262,8 +259,8 @@ context("Print Format Builder — create flow", () => {
 			.trigger("change")
 			.blur();
 
-		// Body wrapper should have font-size applied
-		cy.get(".print-format-main > div").should(($el) => {
+		// Body wrapper (.pfb-body) should have font-size applied
+		cy.get(".pfb-body").should(($el) => {
 			const fs = $el.css("font-size");
 			// 18pt ≈ 24px
 			expect(parseInt(fs, 10)).to.be.greaterThan(20);
