@@ -4,14 +4,10 @@
 		<div class="canvas-area">
 			<!-- Sidebar-open hint -->
 			<div v-if="sidebar_open && !hint_dismissed" class="pfb-sidebar-hint">
+				<span v-html="frappe.utils.icon('solid-info', 'sm', 'pfb-hint-icon')"></span>
 				<span class="pfb-hint-text">{{
-					__(
-						"The left sidebar is taking up space. Close it for a better editing experience."
-					)
+					__("Tip: Close the left sidebar (≡) for more editing space.")
 				}}</span>
-				<button class="btn btn-xs btn-default pfb-hint-btn" @click="close_desk_sidebar">
-					{{ __("Close Sidebar") }}
-				</button>
 				<button class="pfb-hint-dismiss" @click="dismiss_hint" :aria-label="__('Dismiss')">
 					<span v-html="frappe.utils.icon('close', 'xs')"></span>
 				</button>
@@ -133,11 +129,6 @@ function check_sidebar() {
 	sidebar_open.value = frappe.app?.sidebar?.wrapper?.is(":visible") ?? false;
 }
 
-function close_desk_sidebar() {
-	frappe.app?.sidebar?.toggle();
-	sidebar_open.value = false;
-}
-
 function dismiss_hint() {
 	hint_dismissed.value = true;
 	localStorage.setItem(HINT_KEY, "1");
@@ -227,20 +218,21 @@ defineExpose({ toggle_preview, $store });
 	flex-shrink: 0;
 	display: flex;
 	align-items: center;
-	gap: 8px;
-	padding: 5px 12px;
-	background: var(--yellow-highlight-color, #fefce8);
-	border-bottom: 1px solid var(--yellow-200, #fde68a);
+	gap: 6px;
+	padding: 4px 12px;
+	background: var(--blue-50, #eff6ff);
+	border-bottom: 1px solid var(--blue-100, #dbeafe);
 	font-size: var(--text-xs);
-	color: var(--yellow-800, #854d0e);
+	color: var(--blue-700, #1d4ed8);
+}
+
+.pfb-hint-icon {
+	flex-shrink: 0;
+	opacity: 0.7;
 }
 
 .pfb-hint-text {
 	flex: 1;
-}
-
-.pfb-hint-btn {
-	flex-shrink: 0;
 }
 
 .pfb-hint-dismiss {
@@ -251,13 +243,15 @@ defineExpose({ toggle_preview, $store });
 	border: none;
 	background: transparent;
 	cursor: pointer;
-	color: var(--yellow-600, #ca8a04);
+	color: var(--blue-400, #60a5fa);
 	border-radius: var(--border-radius-sm);
 	line-height: 1;
+	opacity: 0.7;
 }
 
 .pfb-hint-dismiss:hover {
-	background: var(--yellow-100, #fef9c3);
+	opacity: 1;
+	background: var(--blue-100, #dbeafe);
 }
 
 /* ── Canvas toolbar ──────────────────────────────────────── */
