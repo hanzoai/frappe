@@ -6,7 +6,7 @@
 			{{ __("Letter Head Footer") }}
 		</div>
 
-		<!-- Based on toggle -->
+		<!-- Based on toggle + letter head actions -->
 		<div class="pfb-insp-section">
 			<div class="pfb-insp-section-body" style="padding-top: 10px">
 				<div class="pfb-insp-row">
@@ -26,6 +26,25 @@
 						</button>
 					</div>
 				</div>
+				<!-- Letter head selection buttons — always visible for header zone -->
+				<template v-if="zone === 'header'">
+					<div v-if="letterhead" class="pfb-lh-actions" style="margin-top: 4px">
+						<button class="btn btn-xs btn-default" @click="lh_change_letterhead">
+							{{ __("Change Letter Head") }}
+						</button>
+					</div>
+					<div v-else class="pfb-lh-actions" style="margin-top: 4px">
+						<p class="pfb-insp-hint text-muted">
+							{{ __("No letter head selected.") }}
+						</p>
+						<button class="btn btn-xs btn-default" @click="lh_create_letterhead">
+							{{ __("Create Letter Head") }}
+						</button>
+						<button class="btn btn-xs btn-default" @click="lh_change_letterhead">
+							{{ __("Select Letter Head") }}
+						</button>
+					</div>
+				</template>
 			</div>
 		</div>
 
@@ -106,31 +125,12 @@
 							<span v-html="frappe.utils.icon('upload', 'xs')"></span>
 							{{ letterhead[image_field] ? __("Change Image") : __("Upload Image") }}
 						</button>
-						<button
-							v-if="zone === 'header'"
-							class="btn btn-xs btn-default"
-							@click="lh_change_letterhead"
-						>
-							{{ __("Change Letter Head") }}
-						</button>
 					</div>
 				</template>
 				<template v-else>
 					<p class="pfb-insp-hint text-muted">
 						{{ __("No letter head selected.") }}
 					</p>
-					<template v-if="zone === 'header'">
-						<button class="btn btn-xs btn-default" @click="lh_create_letterhead">
-							{{ __("Create Letter Head") }}
-						</button>
-						<button
-							class="btn btn-xs btn-default"
-							style="margin-top: 4px"
-							@click="lh_change_letterhead"
-						>
-							{{ __("Select Letter Head") }}
-						</button>
-					</template>
 				</template>
 			</div>
 		</div>
