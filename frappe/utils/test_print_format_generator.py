@@ -80,7 +80,9 @@ class TestPrintFormatGenerator(IntegrationTestCase):
 
 	def test_new_custom_format_does_not_set_builder_beta(self):
 		"""before_save must NOT enable builder beta for custom HTML formats."""
-		pf = self._make_print_format(custom_format=1, html="<p>custom</p>")
+		# Pass print_format_builder_beta=0 to override the helper's default of 1,
+		# so we can verify before_save doesn't flip it on when custom_format=1.
+		pf = self._make_print_format(custom_format=1, html="<p>custom</p>", print_format_builder_beta=0)
 		self.assertEqual(pf.print_format_builder_beta, 0)
 
 	def test_existing_builder_beta_format_keeps_chrome(self):
@@ -93,12 +95,15 @@ class TestPrintFormatGenerator(IntegrationTestCase):
 
 	def test_report_format_sets_custom_format(self):
 		"""before_save should set custom_format=1 when print_format_for=='Report'."""
+		report_name = frappe.db.get_value("Report", {"report_type": "Query Report"}, "name")
+		if not report_name:
+			self.skipTest("No Query Report found in test database")
 		pf = frappe.get_doc(
 			{
 				"doctype": "Print Format",
 				"name": f"_Test PFG Report {frappe.generate_hash(length=6)}",
 				"print_format_for": "Report",
-				"report": frappe.db.get_value("Report", {"report_type": "Query Report"}, "name"),
+				"report": report_name,
 				"custom_format": 0,
 				"standard": "No",
 				"html": "<p>report</p>",

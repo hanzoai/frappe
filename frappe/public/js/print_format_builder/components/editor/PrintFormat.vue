@@ -128,7 +128,7 @@ let bodyStyles = computed(() => {
 let page_number_style = computed(() => {
 	let style = {
 		position: "absolute",
-		background: "white",
+		background: "var(--fg-color)",
 		padding: "4px",
 		borderRadius: "var(--border-radius)",
 		border: "1px solid var(--border-color)",

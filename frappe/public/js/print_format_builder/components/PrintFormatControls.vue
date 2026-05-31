@@ -262,7 +262,7 @@
 import draggable from "vuedraggable";
 import { get_table_columns, pluck } from "../utils";
 import { useStore } from "../stores";
-import { computed, onMounted, nextTick, ref, watch, inject } from "vue";
+import { computed, onMounted, onUnmounted, nextTick, ref, watch, inject } from "vue";
 
 // state
 let search_text = ref("");
@@ -489,19 +489,25 @@ onMounted(() => {
 		}
 	});
 
-	document.addEventListener("keydown", (e) => {
-		if (
-			e.key === "/" &&
-			!e.ctrlKey &&
-			!e.metaKey &&
-			document.activeElement.tagName !== "INPUT" &&
-			document.activeElement.tagName !== "TEXTAREA"
-		) {
-			e.preventDefault();
-			focus_search();
-		}
-	});
+	document.addEventListener("keydown", handle_slash_key);
 });
+
+onUnmounted(() => {
+	document.removeEventListener("keydown", handle_slash_key);
+});
+
+function handle_slash_key(e) {
+	if (
+		e.key === "/" &&
+		!e.ctrlKey &&
+		!e.metaKey &&
+		document.activeElement.tagName !== "INPUT" &&
+		document.activeElement.tagName !== "TEXTAREA"
+	) {
+		e.preventDefault();
+		focus_search();
+	}
+}
 
 watch(print_format, () => (store.dirty.value = true), { deep: true });
 </script>

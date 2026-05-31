@@ -12,10 +12,11 @@ def render_jinja_template(template: str, doctype: str, docname: str) -> str:
 	"""Render a raw Jinja2 template string with doc context (used by the print format builder preview)."""
 	doc = frappe.get_doc(doctype, docname)
 	doc.check_permission("print")
-	# nosemgrep: frappe-semgrep-rules.rules.security.frappe-ssti
 	# template is rendered inside frappe's SandboxedEnvironment (Jinja2 sandbox).
 	# The caller must hold the "print" permission on the document before reaching this line.
-	return frappe.render_template(template, {"doc": doc})
+	return frappe.render_template(
+		template, {"doc": doc}
+	)  # nosemgrep: frappe-semgrep-rules.rules.security.frappe-ssti
 
 
 @frappe.whitelist()
@@ -101,7 +102,6 @@ class PrintFormatGenerator:
 		header_html = footer_html = None
 		if self.letterhead:
 			header_html = frappe.render_template("templates/print_format/print_header.html", self.context)
-		if self.letterhead:
 			footer_html = frappe.render_template("templates/print_format/print_footer.html", self.context)
 		return header_html, footer_html
 
@@ -205,9 +205,10 @@ class PrintFormatGenerator:
 			parts.append(frappe.render_template(letterhead_html, ctx))
 		if layout_template:
 			if isinstance(layout_template, str):
-				# nosemgrep: frappe-semgrep-rules.rules.security.frappe-ssti
 				# layout_template is persisted header/footer HTML from the stored Print Format document.
-				zone_html = frappe.render_template(layout_template, ctx)
+				zone_html = frappe.render_template(
+					layout_template, ctx
+				)  # nosemgrep: frappe-semgrep-rules.rules.security.frappe-ssti
 			else:
 				# Section object — render using the same logic as print_format.html
 				zone_html = self._render_zone_section(layout_template, ctx["doc"])
@@ -251,9 +252,10 @@ class PrintFormatGenerator:
 
 	def _render_zone_section(self, section: dict, doc) -> str:
 		"""Render a header/footer zone section dict to HTML for the Chrome overlay."""
-		# nosemgrep: frappe-semgrep-rules.rules.security.frappe-ssti
 		# _ZONE_SECTION_TEMPLATE is a hardcoded class-level string constant, not user input.
-		return frappe.render_template(self._ZONE_SECTION_TEMPLATE, {"section": section, "doc": doc})
+		return frappe.render_template(
+			self._ZONE_SECTION_TEMPLATE, {"section": section, "doc": doc}
+		)  # nosemgrep: frappe-semgrep-rules.rules.security.frappe-ssti
 
 	def _page_number_html(self, position: str) -> str:
 		align = self._ALIGN_MAP.get(position, "center")
