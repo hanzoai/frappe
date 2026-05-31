@@ -80,9 +80,23 @@ class TestPrintFormatGenerator(IntegrationTestCase):
 
 	def test_new_custom_format_does_not_set_builder_beta(self):
 		"""before_save must NOT enable builder beta for custom HTML formats."""
-		# Pass print_format_builder_beta=0 to override the helper's default of 1,
-		# so we can verify before_save doesn't flip it on when custom_format=1.
-		pf = self._make_print_format(custom_format=1, html="<p>custom</p>", print_format_builder_beta=0)
+		# Create the doc directly (without format_data) because _make_print_format
+		# always injects format_data, which is in the new dict format and causes
+		# extract_images to fail when print_format_builder_beta=0.
+		name = f"_Test PFG Custom {frappe.generate_hash(length=6)}"
+		pf = frappe.get_doc(
+			{
+				"doctype": "Print Format",
+				"name": name,
+				"doc_type": "ToDo",
+				"print_format_builder_beta": 0,
+				"custom_format": 1,
+				"standard": "No",
+				"html": "<p>custom</p>",
+			}
+		)
+		pf.insert(ignore_permissions=True)
+		self.addCleanup(pf.delete, ignore_permissions=True)
 		self.assertEqual(pf.print_format_builder_beta, 0)
 
 	def test_existing_builder_beta_format_keeps_chrome(self):
@@ -167,18 +181,20 @@ class TestPrintFormatGenerator(IntegrationTestCase):
 		# Simulate no print permission by checking that check_permission raises
 		# when called on a document the user can't print.
 		# We patch check_permission to verify it is actually called.
+		from frappe.model.document import Document
+
 		called = []
-		original = frappe.Document.check_permission
+		original = Document.check_permission
 
 		def fake_check(self_doc, *a, **kw):
 			called.append(a)
 			original(self_doc, *a, **kw)
 
-		frappe.Document.check_permission = fake_check
+		Document.check_permission = fake_check
 		try:
 			render_jinja_template("{{ doc.description }}", "ToDo", todo.name)
 		finally:
-			frappe.Document.check_permission = original
+			Document.check_permission = original
 
 		self.assertTrue(called, "check_permission was never called")
 		self.assertIn("print", called[0])
