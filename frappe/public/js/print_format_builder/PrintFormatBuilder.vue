@@ -286,6 +286,7 @@ defineExpose({ toggle_preview, show_preview, $store });
 
 .builder-root--preview .canvas-area {
 	padding-left: 1.5rem;
+	padding-right: 1.5rem;
 }
 
 /* ── Sidebar hint ────────────────────────────────────────── */
