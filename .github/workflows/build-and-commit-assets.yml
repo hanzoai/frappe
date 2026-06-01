@@ -29,7 +29,15 @@ jobs:
       - name: Install JS dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Create minimal bench structure
+        run: |
+          mkdir -p /tmp/bench/sites /tmp/bench/apps
+          echo "frappe" > /tmp/bench/sites/apps.txt
+          ln -s "$GITHUB_WORKSPACE" /tmp/bench/apps/frappe
+
       - name: Build assets (production)
+        env:
+          FRAPPE_BENCH_ROOT: /tmp/bench
         run: yarn run production
 
       - name: Package assets
