@@ -1,4 +1,4 @@
-name: Build and Commit Assets
+name: Build and Upload Assets
 
 on:
   push:
@@ -6,7 +6,6 @@ on:
       - develop
       - 'version-*'
 
-# Prevent concurrent runs on the same branch stomping on each other
 concurrency:
   group: build-assets-${{ github.ref }}
   cancel-in-progress: true
@@ -16,16 +15,11 @@ permissions:
 
 jobs:
   build-assets:
-    name: Build JS/CSS and commit to branch
+    name: Build JS/CSS and upload to release
     runs-on: ubuntu-latest
-    # Skip when the previous commit was our own asset build to avoid loops
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          # Use a PAT so the push triggers downstream workflows (GITHUB_TOKEN push does not)
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
@@ -38,15 +32,13 @@ jobs:
       - name: Build assets (production)
         run: yarn run production
 
-      - name: Commit changed bundles
+      - name: Package assets
+        run: tar czf frappe-assets.tar.gz -C frappe/public dist
+
+      - name: Upload to rolling release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add frappe/public/dist/
-          if git diff --cached --quiet; then
-            echo "No bundle changes — nothing to commit."
-          else
-            changed=$(git diff --cached --name-only | wc -l | tr -d ' ')
-            git commit -m "build: update assets ($changed files) [skip ci]"
-            git push
-          fi
+          TAG="assets-${GITHUB_REF_NAME//\//-}"
+          gh release create "$TAG" --prerelease --title "Assets: $GITHUB_REF_NAME" --notes "" 2>/dev/null || true
+          gh release upload "$TAG" frappe-assets.tar.gz --clobber
