@@ -619,7 +619,7 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 	_set_breadcrumb_layout(layout_name) {
 		const route_key = frappe.breadcrumbs.current_page();
 		const crumb = frappe.breadcrumbs.all[route_key];
-		if (crumb && crumb.layout_name !== layout_name) {
+		if (crumb && (crumb.layout_name || null) !== layout_name) {
 			crumb.layout_name = layout_name;
 			frappe.breadcrumbs.update();
 		}
