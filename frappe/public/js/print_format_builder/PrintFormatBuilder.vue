@@ -1,5 +1,9 @@
 <template>
-	<div v-if="shouldRender" class="builder-root">
+	<div
+		v-if="shouldRender"
+		class="builder-root"
+		:class="{ 'builder-root--preview': show_preview }"
+	>
 		<PrintFormatControls v-if="!show_preview" />
 		<div class="canvas-area">
 			<!-- Sidebar-open hint -->
@@ -13,8 +17,8 @@
 				</button>
 			</div>
 
-			<!-- Canvas toolbar: sample data picker -->
-			<div class="canvas-toolbar">
+			<!-- Canvas toolbar: sample data picker (hidden in preview mode) -->
+			<div v-if="!show_preview" class="canvas-toolbar">
 				<div class="canvas-toolbar-left">
 					<span class="canvas-toolbar-eyebrow">{{ __("PREVIEW DATA") }}</span>
 				</div>
@@ -278,6 +282,10 @@ defineExpose({ toggle_preview, show_preview, $store });
 	display: flex;
 	flex-direction: column;
 	height: calc(100vh - 95px);
+}
+
+.builder-root--preview .canvas-area {
+	padding-left: 1.5rem;
 }
 
 /* ── Sidebar hint ────────────────────────────────────────── */
