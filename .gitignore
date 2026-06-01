@@ -6,6 +6,7 @@
 *.swp
 *.egg-info
 dist/
+frappe/public/dist
 # build/
 frappe/docs/current
 .vscode
