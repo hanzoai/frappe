@@ -1,6 +1,6 @@
 <template>
 	<div v-if="shouldRender" class="builder-root">
-		<PrintFormatControls />
+		<PrintFormatControls v-if="!show_preview" />
 		<div class="canvas-area">
 			<!-- Sidebar-open hint -->
 			<div v-if="sidebar_open && !hint_dismissed" class="pfb-sidebar-hint">
@@ -263,7 +263,7 @@ onUnmounted(() => {
 	sidebar_observer_ref?.disconnect();
 });
 
-defineExpose({ toggle_preview, $store });
+defineExpose({ toggle_preview, show_preview, $store });
 </script>
 
 <style scoped>
