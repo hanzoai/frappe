@@ -20,7 +20,7 @@ context("DocType Layout", () => {
 				{ fieldname: "data1", label: "Compact Data 1" },
 				{ fieldname: "data2", hidden: 1 },
 				{ fieldname: "is_special" },
-				{ fieldname: "description" },
+				// `description` intentionally omitted so Sync Fields has a field to add
 			],
 		});
 
@@ -44,16 +44,18 @@ context("DocType Layout", () => {
 		cy.visit("/desk/doctype-layout/Compact");
 		cy.get("body").should("have.attr", "data-ajax-state", "complete");
 
-		// Field rows set via API in before() should already be present
+		// Field rows set via API in before() should already be present; `description`
+		// was deliberately left out of the layout.
 		cy.window()
 			.its("cur_frm.doc.fields")
 			.should((rows) => {
 				const names = rows.map((r) => r.fieldname);
-				expect(names).to.include.members(["data1", "data2", "is_special", "description"]);
+				expect(names).to.include.members(["data1", "data2", "is_special"]);
+				expect(names).to.not.include("description");
 			});
 
-		// Sync Fields always reports the auto-added `doctype_layout` custom field
-		// as "Added: Layout"; wait for that modal, then close it.
+		// The missing `description` field is reported as added; wait for the
+		// "Synced Fields" modal, then close it.
 		cy.findByRole("button", { name: "Sync Fields" }).click({ force: true });
 		cy.get(".modal:visible").should("contain.text", "Synced Fields");
 		cy.hide_dialog();
