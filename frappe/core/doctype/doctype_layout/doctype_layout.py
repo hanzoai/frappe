@@ -49,12 +49,6 @@ class DocTypeLayout(Document):
 		if existing_name and existing_name != docdict.get("name"):
 			frappe.delete_doc("DocType Layout", existing_name, force=True)
 
-	def after_insert(self):
-		ensure_layout_link_field(self.document_type)
-
-	def on_trash(self):
-		cleanup_layout_link_field(self.document_type)
-
 	def on_update(self):
 		if not frappe.flags.in_import and self.is_standard and frappe.conf.developer_mode:
 			self._export_to_doctype_dir()
@@ -154,39 +148,6 @@ class DocTypeLayout(Document):
 				self.remove(field_details)
 				removed.append(field_details.as_dict())
 		return removed
-
-
-def ensure_layout_link_field(doctype: str) -> None:
-	"""Add a hidden `doctype_layout` Link custom field to `doctype` if not already present.
-
-	Skipped for child-table DocTypes (istable=1) since they are never shown as standalone forms.
-	"""
-	if frappe.db.get_value("DocType", doctype, "istable"):
-		return
-	if frappe.db.exists("Custom Field", {"dt": doctype, "fieldname": "doctype_layout"}):
-		return
-	frappe.get_doc(
-		{
-			"doctype": "Custom Field",
-			"dt": doctype,
-			"fieldname": "doctype_layout",
-			"label": "DocType Layout",
-			"fieldtype": "Link",
-			"options": "DocType Layout",
-			"hidden": 1,
-			"no_copy": 1,
-		}
-	).insert(ignore_permissions=True)
-
-
-def cleanup_layout_link_field(doctype: str) -> None:
-	"""Remove the `doctype_layout` custom field when no layouts remain for `doctype`."""
-	remaining = frappe.db.count("DocType Layout", {"document_type": doctype})
-	if remaining > 0:
-		return
-	name = frappe.db.get_value("Custom Field", {"dt": doctype, "fieldname": "doctype_layout"}, "name")
-	if name:
-		frappe.delete_doc("Custom Field", name, ignore_permissions=True)
 
 
 @frappe.whitelist()

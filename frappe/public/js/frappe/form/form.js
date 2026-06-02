@@ -658,9 +658,9 @@ frappe.ui.form.Form = class FrappeForm {
 
 	/**
 	 * Evaluate layout conditions against the current doc.
-	 * Finds the first layout whose condition is truthy, writes its name into
-	 * doc.doctype_layout (silently), rebuilds the layout DOM if it changed,
-	 * then the existing refresh chain picks up the new layout.
+	 * Finds the first layout whose condition is truthy, reflects it in the
+	 * `layout` URL param, rebuilds the layout DOM if it changed, then the
+	 * existing refresh chain picks up the new layout.
 	 * Returns a Promise so frappe.run_serially awaits it.
 	 */
 	_resolve_layout() {
