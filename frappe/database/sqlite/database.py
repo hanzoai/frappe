@@ -143,7 +143,15 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 		return sqlite3.connect(db_path, detect_types=sqlite3.PARSE_DECLTYPES, timeout=15)
 
 	def get_db_path(self):
-		return Path(frappe.get_site_path()) / "db" / f"{self.cur_db_name}.db"
+		# Per-org (== per-tenant) resolution. Returns the base site db unless
+		# `db_per_org` is enabled and a validated org is in request context, in
+		# which case the org-partitioned file `db/org-<slug>.db` is used. The org
+		# slug is strictly allowlisted against path traversal / case-fold
+		# collisions in frappe.database.sqlite.tenant.resolve_db_stem.
+		from frappe.database.sqlite.tenant import resolve_db_stem
+
+		stem = resolve_db_stem(self.cur_db_name)
+		return Path(frappe.get_site_path()) / "db" / f"{stem}.db"
 
 	def set_execution_timeout(self, seconds: int):
 		self.sql(f"PRAGMA busy_timeout = {int(seconds) * 1000}")

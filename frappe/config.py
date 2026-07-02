@@ -88,8 +88,10 @@ def _get_site_config(sites_path: str, site_path: str) -> _dict[str, Any]:
 		# read password
 		config["db_password"] = os.environ.get("FRAPPE_DB_PASSWORD") or config.get("db_password")
 
-	# vice versa for dbname if not defined
-	config["db_name"] = os.environ.get("FRAPPE_DB_NAME") or config.get("db_name") or config["db_user"]
+	# vice versa for dbname if not defined. Use .get() for db_user: it is only
+	# populated for mariadb/postgres above, so on sqlite (no db_user) indexing it
+	# raised KeyError for any site whose config omitted db_name.
+	config["db_name"] = os.environ.get("FRAPPE_DB_NAME") or config.get("db_name") or config.get("db_user")
 
 	# Allow externally extending the config with hooks
 	if extra_config := config.get("extra_config"):
