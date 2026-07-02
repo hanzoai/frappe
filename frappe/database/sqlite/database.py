@@ -1,7 +1,7 @@
 import re
 import sqlite3
 import warnings
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
 from pathlib import Path
 
 import frappe
@@ -15,6 +15,25 @@ from frappe.utils import get_table_name
 
 _PARAM_COMP = re.compile(r"%\([\w]*\)s")
 IMPLICIT_COMMIT_QUERY_TYPES = frozenset(("start", "alter", "drop", "create", "truncate"))
+
+
+def _sqlite_time_to_timedelta(x: bytes):
+	"""Return a TIME column as datetime.timedelta, matching MariaDB/mysqlclient.
+
+	frappe Duration/Time fields are treated as timedelta throughout (callers do
+	``.total_seconds()``); datetime.time would break them and cannot represent
+	durations >= 24h. Accepts "HH:MM:SS(.ffffff)" with an optional leading
+	date part, and empty -> None.
+	"""
+	s = x.decode().strip()
+	if not s:
+		return None
+	s = s.split(" ")[-1]
+	parts = s.split(":")
+	hours = int(parts[0])
+	minutes = int(parts[1]) if len(parts) > 1 else 0
+	seconds = float(parts[2]) if len(parts) > 2 else 0.0
+	return timedelta(hours=hours, minutes=minutes, seconds=seconds)
 
 
 class SequenceGeneratorLimitExceeded(sqlite3.Error):
@@ -140,9 +159,9 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 			"date",
 			lambda x: date.fromisoformat(x.decode().split(" ")[0].split("T")[0]) if x.strip() else None,
 		)
-		sqlite3.register_converter(
-			"time", lambda x: time.fromisoformat(x.decode()) if x.strip() else None
-		)
+		# frappe/MariaDB return TIME columns as datetime.timedelta (Duration
+		# fields call .total_seconds()), so match that instead of datetime.time.
+		sqlite3.register_converter("time", _sqlite_time_to_timedelta)
 		if read_only:
 			return sqlite3.connect(
 				f"file:{db_path}?mode=ro",
