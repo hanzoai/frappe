@@ -130,9 +130,19 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 
 	def create_connection(self, read_only: bool = False):
 		db_path = self.get_db_path()
-		sqlite3.register_converter("timestamp", lambda x: datetime.fromisoformat(x.decode()))
-		sqlite3.register_converter("date", lambda x: date.fromisoformat(x.decode()))
-		sqlite3.register_converter("time", lambda x: time.fromisoformat(x.decode()))
+		# Tolerant converters: frappe may store a datetime string ("YYYY-MM-DD
+		# HH:MM:SS") in a Date column (e.g. app fixtures), or an empty string for
+		# a null value. Strict fromisoformat() would raise, so normalise first.
+		sqlite3.register_converter(
+			"timestamp", lambda x: datetime.fromisoformat(x.decode()) if x.strip() else None
+		)
+		sqlite3.register_converter(
+			"date",
+			lambda x: date.fromisoformat(x.decode().split(" ")[0].split("T")[0]) if x.strip() else None,
+		)
+		sqlite3.register_converter(
+			"time", lambda x: time.fromisoformat(x.decode()) if x.strip() else None
+		)
 		if read_only:
 			return sqlite3.connect(
 				f"file:{db_path}?mode=ro",
