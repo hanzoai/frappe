@@ -1,5 +1,6 @@
 import re
 import sqlite3
+import uuid
 import warnings
 from datetime import date, datetime, time, timedelta
 from pathlib import Path
@@ -162,6 +163,9 @@ class SQLiteDatabase(SQLiteExceptionUtil, Database):
 		# frappe/MariaDB return TIME columns as datetime.timedelta (Duration
 		# fields call .total_seconds()), so match that instead of datetime.time.
 		sqlite3.register_converter("time", _sqlite_time_to_timedelta)
+		# frappe binds uuid.UUID objects directly (mysqlclient/psycopg2 adapt them);
+		# sqlite3 has no native UUID support, so store the canonical string form.
+		sqlite3.register_adapter(uuid.UUID, str)
 		if read_only:
 			return sqlite3.connect(
 				f"file:{db_path}?mode=ro",
