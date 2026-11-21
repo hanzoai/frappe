@@ -2,6 +2,8 @@
 	<img src=".github/framework-logo-new.svg" width="80" height="80"/>
 	<h1>Frappe Framework</h1>
 
+[![Open in Hanzo](https://hanzo.app/badges/open-in-hanzo.svg)](https://hanzo.app/dev/open?repo=github.com/hanzoai/frappe&ref=rescue-stage&action=open) [![Edit with Hanzo](https://hanzo.app/badges/edit-with-hanzo.svg)](https://hanzo.app/dev/open?repo=github.com/hanzoai/frappe&ref=rescue-stage&action=edit)
+
  **Low Code Web Framework For Real World Applications, In Python And JavaScript**
 </div>
 
